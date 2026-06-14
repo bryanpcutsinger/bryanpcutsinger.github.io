@@ -1,0 +1,30 @@
+---
+// Wrap (don't replace) Starlight's default Footer so the prev/next pager,
+// last-updated, and edit-link slots are preserved — then append a navy
+// site-credit bar with Bryan's copyright (FAU style language, own identity).
+import Default from '@astrojs/starlight/components/Footer.astro';
+
+const year = new Date().getFullYear();
+---
+<Default><slot /></Default>
+
+<footer class="fau-site-credit">
+  <p>© {year} Bryan Cutsinger</p>
+</footer>
+
+<style>
+  .fau-site-credit {
+    margin-top: 3rem;
+    border-top: 1px solid var(--fau-gray, #cccccc);
+    background: var(--fau-blue, #003366);
+    color: #ffffff;
+    /* full-bleed across the content column */
+    margin-inline: calc(-1 * var(--sl-content-pad-x, 1rem));
+    padding: 1.25rem var(--sl-content-pad-x, 1rem);
+  }
+  .fau-site-credit p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #ffffff;
+  }
+</style>

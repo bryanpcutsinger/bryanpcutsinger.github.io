@@ -1,0 +1,107 @@
+---
+title: "Claude on the Desktop: Cowork & Code"
+description: "A short, plain-language branch for a non-technical Windows colleague: a pre-read to skim, then a run-of-show for a two-hour working session with Claude's desktop app."
+draft: false
+---
+
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+If you have the Claude desktop app installed on Windows but have only ever used it
+to chat, this branch is for you. It is written for an economics professor and
+department chair who is comfortable with Word, Excel, and a web browser, but who
+is not a programmer and has never touched a command line. You do not need one here.
+
+The desktop app can do far more than answer questions. It can work directly with
+the files on your computer — drafting, organizing, building spreadsheets and slide
+decks, and helping with code — while you stay in charge and approve what it does.
+This branch shows you how to do that safely, with examples drawn from teaching,
+research, and the kind of administrative work a department chair lives with.
+
+## How this branch is organized
+
+This is a deliberately short branch in two parts:
+
+1. A **pre-read** — a handful of pages to skim on your own before a working session.
+   Budget about **30 minutes**. The goal is simply to arrive oriented, not expert.
+2. A **run-of-show** — a plan for a focused, roughly **two-hour** session, written so
+   it also works as a reference you can return to afterward.
+
+<CardGrid>
+  <LinkCard
+    title="Before we meet (pre-read)"
+    description="Skim these pages first — about 30 minutes — to get oriented on the desktop app, Cowork, and how to use it safely."
+    href="/ai/desktop/the-desktop-app/"
+  />
+  <LinkCard
+    title="The 2-hour session"
+    description="A run-of-show for a focused working session, plus a reference you can come back to later."
+    href="/ai/desktop/session-run-of-show/"
+  />
+</CardGrid>
+
+## The three tabs, at a glance
+
+When you open the desktop app you will see three tabs across the top. It helps to
+know what each one is for before you start:
+
+- **Chat** — general conversation, the same back-and-forth you may already know.
+  Chat has **no access to your files**.
+- **Cowork** — an agentic assistant for knowledge work. You connect a folder, give
+  it a goal, and it works through the task in the background, reading and writing
+  files for you. It runs in an **isolated virtual machine** separate from your own
+  operating system, and it shows you a plan and waits for your approval before
+  acting. This branch is **Cowork-first** because it covers the most ground for a
+  non-technical user with no terminal in sight.
+- **Code** — an interactive coding assistant with **direct access to your local
+  files**. You review and approve each change in real time, shown as a visual diff
+  you accept or reject. We give it a brief, honest taste at the end so you know it
+  exists, but Cowork is where most of your day-to-day value will be.
+
+:::note[Cowork and Code need a paid plan]
+Both Cowork and the Code tab require a **paid plan**. The entry option is **Pro**,
+about **$17–$20 per month** (roughly $17/month billed annually, $20 month-to-month),
+which includes Claude Code; higher tiers (Max, Team, Enterprise) add more. The free
+plan does **not** include Cowork or Code. Please confirm your plan before the session
+so we are not stuck at the door. Current details: [claude.com/pricing](https://claude.com/pricing).
+:::
+
+## The pre-read, in order
+
+Skim these before the session. Each is short:
+
+- [The desktop app](/ai/desktop/the-desktop-app/) — the three tabs and how to open the app from the Start menu.
+- [Meet Cowork](/ai/desktop/meet-cowork/) — what Cowork is and what it can do for you.
+- [Using Cowork safely](/ai/desktop/cowork-safely/) — the approval model, deleting files, and where to be careful.
+- [Cowork for economists](/ai/desktop/cowork-for-economists/) — concrete examples across teaching, research, and chairing.
+- [A taste of Code](/ai/desktop/a-taste-of-code/) — what the Code tab is, in case you want it later.
+
+:::tip
+A quick mental model: **Chat** talks, **Cowork** works on your files in a safe
+sandbox and asks before acting, and **Code** edits files directly with you watching.
+You will spend nearly all of your time in Cowork.
+:::
+
+## A note on judgment — this matters most for research
+
+Claude is genuinely useful, but it is not a source of truth. It can **fabricate
+citations, page numbers, quotes, and data values** that look completely plausible.
+Treat anything it produces for a paper, a lecture, or a memo as a draft to be
+checked, and **verify every citation and number against the original source** before
+it leaves your hands. The safety habits in [Using Cowork safely](/ai/desktop/cowork-safely/)
+exist for exactly this reason.
+
+## If you later want the command-line route
+
+This branch keeps you entirely in the desktop app — no terminal. If you ever decide
+you want the more powerful command-line version (the same engine, driven from a
+terminal window), see Anthropic's [Claude Code
+quickstart](https://code.claude.com/docs/en/quickstart) — written for the terminal,
+but the mental model carries over. There is no need to read it to follow this branch.
+
+## Read more on Anthropic's site
+
+- Download or update the app: [claude.com/download](https://claude.com/download)
+- Get started with Cowork: [support.claude.com — Get started with Claude Cowork](https://support.claude.com/en/articles/13345190-get-started-with-claude-cowork)
+
+When you have skimmed the pre-read, head to [the run-of-show](/ai/desktop/session-run-of-show/)
+to see how the session will go.
