@@ -91,7 +91,13 @@ Future sub-sites get added as new Starlight content groups in the same repo.
 ## Deploy
 
 Push to `main` → `.github/workflows/deploy.yml` builds and publishes to Pages.
-No manual deploy step. **Not yet published — see status.**
+No manual deploy step. **LIVE as of 2026-06-13** at
+https://bryanpcutsinger.github.io (repo: GitHub user site
+`bryanpcutsinger/bryanpcutsinger.github.io`, public; Pages source = GitHub Actions).
+The site is **`noindex`ed** for now (a `head` meta in `astro.config.mjs`) while it's
+shared privately — delete that `head` block to allow search indexing at full launch.
+Build action emits a non-blocking warning that its Node 20 sub-actions are deprecated
+(GitHub forces Node 24 ~June 2026) — bump `withastro/action`/checkout versions later.
 
 ## Adding content
 
@@ -174,11 +180,25 @@ No manual deploy step. **Not yet published — see status.**
   verified and was dropped** — do not reintroduce it without a real source.
 - **Phase 2 is deferred** (a signposted "Going further" track: Skills/MCP/subagents,
   model & cost, Git as undo, Codex comparison). See the plan. Not started.
-- **NOT yet published to GitHub. No git repo yet.** Deliberate: finish content
-  first. Do NOT `git init` / create the repo / push until Bryan says it's time.
-  Repo will be a GitHub **user site** named `bryanpcutsinger.github.io` (confirm the
-  username before creating).
-- All guide posts remain `draft: true`. Publishing = flip to `draft: false`.
+- **PUBLISHED to GitHub Pages (2026-06-13).** Live at https://bryanpcutsinger.github.io
+  (public repo `bryanpcutsinger/bryanpcutsinger.github.io`; Pages via GitHub Actions).
+  Only the **Claude on the Desktop (Cowork & Code)** branch + the home splash are live.
+  For a clean, dead-link-free launch with the Mac guide still unfinished, three
+  temporary changes were made (all reversible at full launch):
+  1. **Home splash** (`src/content/docs/index.mdx`) hero button + card now point to
+     `/ai/desktop/` (were `/ai/`).
+  2. **`src/content/docs/ai/index.mdx`** (the Mac-guide overview) set `draft: true` so
+     it isn't built (it linked to draft pages → would 404). Restore to `draft: false`
+     and re-point the home splash when the Mac guide ships.
+  3. The desktop branch's cross-links to the unbuilt Mac-guide pages
+     (`/ai/what-is-claude-code/`, `/ai/trust-safety-integrity/`) were repointed —
+     integrity refs → the branch's own `/ai/desktop/cowork-safely/`; command-line refs
+     → Anthropic's official quickstart. Revisit if you want them to point back at the
+     Mac guide once it's live.
+- **Mac/terminal guide:** all 17 posts remain `draft: true` and its sidebar group
+  stays commented out in `astro.config.mjs`. Publishing it = fill screenshot blockers,
+  flip drafts to `draft: false`, uncomment the sidebar group, restore the home splash +
+  `/ai/` overview, and (optionally) repoint the desktop cross-links back.
 
 ## Notes / TODO
 
