@@ -1,0 +1,68 @@
+---
+// Single variant-driven button/link used across the marketing site so styling
+// stays consistent. Renders an <a> (it's always a navigation/CTA here).
+//   variant: 'primary' (brass fill) | 'secondary' (outline) | 'ghost-ink'
+//            (outline on dark sections)
+interface Props {
+  href: string;
+  variant?: 'primary' | 'secondary' | 'ghost-ink';
+  class?: string;
+}
+const { href, variant = 'primary', class: className = '' } = Astro.props;
+---
+<a href={href} class:list={['btn', `btn--${variant}`, className]}>
+  <slot />
+</a>
+
+<style>
+  .btn {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1;
+    padding: 14px 28px;
+    border-radius: var(--radius);
+    text-decoration: none;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background-color 0.18s ease, color 0.18s ease,
+      border-color 0.18s ease;
+    white-space: nowrap;
+  }
+
+  /* primary: brass fill, ink text (≈5.6:1 — AA) */
+  .btn--primary {
+    background: var(--accent);
+    color: var(--ink);
+    border-color: var(--accent);
+  }
+  .btn--primary:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+    color: var(--on-ink);
+  }
+
+  /* secondary: outline on light surfaces */
+  .btn--secondary {
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--ink);
+  }
+  .btn--secondary:hover {
+    background: var(--ink);
+    color: var(--on-ink);
+  }
+
+  /* ghost-ink: outline used on dark/ink sections */
+  .btn--ghost-ink {
+    background: transparent;
+    color: var(--on-ink);
+    border-color: rgba(243, 239, 232, 0.45);
+  }
+  .btn--ghost-ink:hover {
+    background: var(--on-ink);
+    color: var(--ink);
+    border-color: var(--on-ink);
+  }
+</style>

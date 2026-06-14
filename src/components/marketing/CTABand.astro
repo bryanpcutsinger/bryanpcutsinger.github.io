@@ -1,0 +1,44 @@
+---
+// Reusable closing booking band on the ink base. The confident final ask.
+import Button from './Button.astro';
+
+interface Props {
+  heading: string;
+  subtext?: string;
+  cta: { label: string; href: string };
+}
+const { heading, subtext, cta } = Astro.props;
+---
+<section class="cta-band">
+  <div class="cta-band__inner">
+    <h2 class="cta-band__heading">{heading}</h2>
+    {subtext && <p class="cta-band__subtext">{subtext}</p>}
+    <Button href={cta.href} variant="primary">{cta.label}</Button>
+  </div>
+</section>
+
+<style>
+  .cta-band {
+    background: var(--ink);
+    color: var(--on-ink);
+    padding-block: var(--section-y-ink);
+  }
+  .cta-band__inner {
+    max-width: 720px;
+    margin-inline: auto;
+    padding-inline: var(--sp-6);
+    text-align: center;
+  }
+  .cta-band__heading {
+    font-size: var(--fs-h2);
+    color: var(--on-ink);
+    margin: 0 auto;
+    max-width: 22ch;
+  }
+  .cta-band__subtext {
+    font-size: var(--fs-lead);
+    color: var(--on-ink-muted);
+    margin: var(--sp-4) auto var(--sp-8);
+    max-width: 48ch;
+  }
+</style>

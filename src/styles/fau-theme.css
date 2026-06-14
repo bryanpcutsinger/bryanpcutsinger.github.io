@@ -1,32 +1,35 @@
 /* =====================================================================
-   FAU style-guide theme for Starlight
-   Adopts the FAU web style guide's visual language (colors, flat/square
-   components, navy chrome, breadcrumbs) over Starlight's defaults, while
-   keeping the site's own identity and the current type stack:
-   Georgia headings + system-sans body, recolored to the FAU palette.
-   Exact values sourced from https://www.fau.edu/css/style.css (2026-06-13).
+   Brand theme for Starlight (the /ai/ guides)
+   Carries the marketing site's full editorial language onto Starlight so the
+   guides match the rest of the site: the ink + warm-brass palette on a bone
+   surface, Fraunces (display) + Inter (body) type, and softened 4px corners.
+   The Starlight DOCS LAYOUT (sidebar + right-rail TOC) is intentionally kept.
+   Fonts are loaded site-wide from src/components/overrides/SiteTitle.astro.
+   Marketing brand tokens live in src/styles/brand.css; this file mirrors their
+   color VALUES through the historical --fau-* variable names to minimize churn
+   (the names now hold brand colors, not FAU's).
    ===================================================================== */
 
 :root {
-  /* --- FAU brand palette --- */
-  --fau-blue: #003366;          /* primary: chrome bars, headings, nav text, borders */
-  --fau-red: #cc0000;           /* accent: active nav item, eyebrows, emphasis */
-  --fau-red-hover: #a30000;
-  --fau-dark-gray: #4d4c55;     /* preferred body-copy color */
-  --fau-gray: #cccccc;          /* borders / rules */
-  --fau-light-gray: #f0f2f3;    /* surface tint */
-  --fau-electric-blue: #126bd9; /* brand links/buttons */
-  --fau-link: #0065d3;          /* preferred body link color */
-  --fau-link-hover: #0056a7;
-  --fau-skyblue: #d9ecff;       /* callout bg, table odd-row stripe */
-  --fau-stone: #7a97ab;
+  /* --- brand palette (mapped onto the historical --fau-* names) --- */
+  --fau-blue: #1a1c1e;          /* ink: chrome bars, headings, nav text, borders */
+  --fau-red: #b07a2c;           /* brass accent: active nav item, eyebrows, emphasis */
+  --fau-red-hover: #8f6120;
+  --fau-dark-gray: #16181a;     /* body-copy color */
+  --fau-gray: #e3ddd3;          /* hairline borders / rules */
+  --fau-light-gray: #f0ece4;    /* warm surface tint */
+  --fau-electric-blue: #b07a2c; /* brand links/buttons -> brass */
+  --fau-link: #b07a2c;          /* body link color -> brass */
+  --fau-link-hover: #8f6120;
+  --fau-skyblue: #efe4d2;       /* accent-tint: callout bg, table odd-row stripe */
+  --fau-stone: #6b7a82;         /* slate: secondary accents */
   --fau-sand: #d4b98b;
-  --surface-nav: #efefef;       /* FAU left-nav panel bg */
-  --stripe-even: #f1f2f2;       /* table even-row stripe */
+  --surface-nav: #efeae1;       /* warm left-nav / table-header panel bg */
+  --stripe-even: #faf8f4;       /* table even-row stripe */
 
-  /* Keep the prior system-sans body stack (Decision: type unchanged, recolor only) */
-  --sl-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
-    Arial, sans-serif;
+  /* Body type -> Inter (matches the marketing site); system-sans fallback */
+  --sl-font: 'Inter Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Roboto, Helvetica, Arial, sans-serif;
 }
 
 /* Force a single light appearance so FAU navy reads consistently, and hide the
@@ -37,30 +40,30 @@
 :root[data-theme='dark'] {
   color-scheme: light;
 
-  /* Accent ramp -> FAU blues */
-  --sl-color-accent-low: #d9ecff;
-  --sl-color-accent: #126bd9;
-  --sl-color-accent-high: #003366;
+  /* Accent ramp -> brass */
+  --sl-color-accent-low: #efe4d2;
+  --sl-color-accent: #b07a2c;
+  --sl-color-accent-high: #1a1c1e;
 
-  /* Text / surface ramp tuned to FAU neutrals (light) */
-  --sl-color-white: #003366;      /* Starlight uses this for headings/strong */
-  --sl-color-gray-1: #4d4c55;
-  --sl-color-gray-2: #4d4c55;
-  --sl-color-gray-3: #5c5c63;
-  --sl-color-gray-4: #7a7a82;
-  --sl-color-gray-5: #cccccc;
-  --sl-color-gray-6: #f0f2f3;
-  --sl-color-gray-7: #f7f7f7;
-  --sl-color-black: #ffffff;      /* page background in light */
+  /* Text / surface ramp tuned to warm brand neutrals (light) */
+  --sl-color-white: #1a1c1e;      /* Starlight uses this for headings/strong */
+  --sl-color-gray-1: #16181a;
+  --sl-color-gray-2: #16181a;
+  --sl-color-gray-3: #5c6066;
+  --sl-color-gray-4: #8a857d;
+  --sl-color-gray-5: #e3ddd3;
+  --sl-color-gray-6: #f0ece4;
+  --sl-color-gray-7: #faf8f4;
+  --sl-color-black: #ffffff;      /* inverse anchor */
 
-  --sl-color-text: #4d4c55;
-  --sl-color-text-accent: #0065d3;
-  --sl-color-bg: #ffffff;
-  --sl-color-bg-nav: #003366;     /* top header bar -> FAU navy */
+  --sl-color-text: #16181a;
+  --sl-color-text-accent: #b07a2c;
+  --sl-color-bg: #f7f4ef;         /* page background -> warm bone */
+  --sl-color-bg-nav: #1a1c1e;     /* top header bar -> ink */
   --sl-color-bg-sidebar: #ffffff;
-  --sl-color-hairline: #e6e6e3;
-  --sl-color-hairline-light: #efefef;
-  --sl-color-hairline-shade: #e6e6e3;
+  --sl-color-hairline: #e3ddd3;
+  --sl-color-hairline-light: #efebe3;
+  --sl-color-hairline-shade: #e3ddd3;
 }
 
 /* Hide the theme switcher (single appearance) */
@@ -69,14 +72,15 @@ starlight-theme-select {
 }
 
 /* --------------------------------------------------------------------
-   Typography: Georgia headings in FAU navy; system-sans body in dark gray
+   Typography: Fraunces (display) headings in ink; Inter body
    -------------------------------------------------------------------- */
 .sl-markdown-content :is(h1, h2, h3, h4, h5, h6),
 h1.content-title,
 .hero h1 {
-  font-family: Georgia, 'Times New Roman', serif !important;
+  font-family: 'Fraunces Variable', Georgia, 'Times New Roman', serif !important;
   color: var(--fau-blue);
-  line-height: 1.2;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
 }
 
 .sl-markdown-content {
@@ -123,7 +127,7 @@ starlight-menu-button button {
    -------------------------------------------------------------------- */
 .sidebar-content a {
   color: var(--fau-blue);
-  border-radius: 0;
+  border-radius: 4px;
 }
 .sidebar-content a:hover {
   background-color: var(--surface-nav);
@@ -158,26 +162,28 @@ starlight-menu-button button {
    Asides / callouts: FAU .alert pattern — 4px left border + pale fill
    -------------------------------------------------------------------- */
 .starlight-aside {
-  border-radius: 0;
+  border-radius: 4px;
   border-inline-start-width: 4px;
   border-inline-start-style: solid;
   padding: 0.75rem 1rem;
 }
+/* Note uses the brand accent; tip/caution/danger keep their SEMANTIC colors
+   (green/amber/red) so warnings still read as warnings — not brass. */
 .starlight-aside--note {
-  background-color: #f0f7fb;
-  border-inline-start-color: #ff6700; /* FAU default alert accent */
+  background-color: #f3ece0;
+  border-inline-start-color: var(--fau-red); /* brass */
 }
 .starlight-aside--tip {
-  background-color: #e1ffe9;
-  border-inline-start-color: #27cc2e;
+  background-color: #e6f4ea;
+  border-inline-start-color: #2f9e44;
 }
 .starlight-aside--caution {
-  background-color: #f7d7d7;
-  border-inline-start-color: var(--fau-red);
+  background-color: #f8eccf;
+  border-inline-start-color: #c08a1e;
 }
 .starlight-aside--danger {
-  background-color: #f7d7d7;
-  border-inline-start-color: var(--fau-red);
+  background-color: #f7dedb;
+  border-inline-start-color: #c0392b;
 }
 .starlight-aside__title {
   color: var(--fau-blue);
@@ -217,7 +223,7 @@ starlight-menu-button button {
    -------------------------------------------------------------------- */
 .card,
 .sl-link-card {
-  border-radius: 0 !important;
+  border-radius: 4px !important;
   border: 1px solid var(--fau-gray);
   box-shadow: none;
 }
@@ -228,8 +234,8 @@ starlight-menu-button button {
   transition: background 0.15s ease, color 0.15s ease;
 }
 .sl-link-card:hover {
-  background: linear-gradient(135deg, #214076, #2f5a99);
-  border-color: #214076;
+  background: linear-gradient(135deg, #26292c, #1a1c1e);
+  border-color: #1a1c1e;
 }
 .sl-link-card:hover .title,
 .sl-link-card:hover .description,
@@ -238,8 +244,7 @@ starlight-menu-button button {
 }
 
 /* --------------------------------------------------------------------
-   Flat / square everywhere (FAU house style). The only round thing FAU
-   keeps is the accordion +/- badge, which Starlight doesn't use here.
+   Softened 4px corners everywhere (matches the marketing brand's --radius).
    -------------------------------------------------------------------- */
 .sl-markdown-content :is(pre, code, img, blockquote),
 .sl-link-button,
@@ -247,21 +252,19 @@ input,
 button,
 .tab,
 details {
-  border-radius: 0;
+  border-radius: 4px;
 }
 
-/* Blockquote -> FAU navy left rule */
+/* Blockquote -> brass left rule */
 .sl-markdown-content blockquote {
-  border-inline-start: 3px solid var(--fau-blue);
+  border-inline-start: 3px solid var(--fau-red);
   color: var(--fau-dark-gray);
 }
 
-/* Hero (splash homepage) call-to-action buttons -> FAU square/uppercase */
+/* Hero (splash) call-to-action buttons -> brand 4px, not uppercase */
 .hero .sl-link-button {
-  border-radius: 0;
-  text-transform: uppercase;
+  border-radius: 4px;
   font-weight: 600;
-  letter-spacing: 0.03em;
 }
 .hero .sl-link-button.primary {
   background-color: var(--fau-link);

@@ -1,0 +1,38 @@
+---
+// Row of testimonials. GRACEFUL-EMPTY: renders nothing when the array is empty
+// so the section can be omitted entirely rather than showing "coming soon".
+import TestimonialCard from './TestimonialCard.astro';
+
+interface Item {
+  quote: string;
+  name: string;
+  role?: string;
+  org?: string;
+}
+interface Props {
+  items: Item[];
+}
+const { items } = Astro.props;
+---
+{
+  items.length > 0 && (
+    <div class="testimonial-row">
+      {items.map((t) => (
+        <TestimonialCard {...t} />
+      ))}
+    </div>
+  )
+}
+
+<style>
+  .testimonial-row {
+    display: grid;
+    gap: var(--sp-6);
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 720px) {
+    .testimonial-row {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

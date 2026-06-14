@@ -1,0 +1,29 @@
+{
+  "_note": "PLACEHOLDER talk topics — Bryan to replace titles/descriptions/audiences with real signature talks. Structure: title, description (2-3 sentences), audience ('best for'), format. Keep 3-6. These draw on his real fields (monetary theory & history, public choice / political economy) but the framing is illustrative until Bryan confirms.",
+  "topics": [
+    {
+      "title": "The Hidden Politics of Money",
+      "description": "Why central banks are never as independent as they claim — and what the history of inflation tells us about who really controls the dollar. A tour of monetary policy that connects the headlines to the institutions behind them.",
+      "audience": "General audiences, policy forums, donor events",
+      "format": "Keynote"
+    },
+    {
+      "title": "Sound Money and the Case for Rules",
+      "description": "What economic history reveals about the costs of discretionary monetary policy, and why predictable rules tend to outperform good intentions. Accessible to non-economists, grounded in the research.",
+      "audience": "University audiences, professional groups",
+      "format": "Lecture"
+    },
+    {
+      "title": "Public Choice: Economics Without Romance",
+      "description": "Politicians and bureaucrats respond to incentives like everyone else. A practical introduction to how public-choice economics explains policy outcomes most people find baffling.",
+      "audience": "Students, civic organizations",
+      "format": "Lecture"
+    },
+    {
+      "title": "Reading the Economy Behind the Headlines",
+      "description": "A working economist's guide to making sense of inflation, interest rates, and the news cycle — separating signal from noise without the jargon.",
+      "audience": "Corporate and professional audiences",
+      "format": "Keynote"
+    }
+  ]
+}

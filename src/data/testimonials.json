@@ -1,0 +1,4 @@
+{
+  "_note": "INTEGRITY: leave `items` EMPTY until Bryan supplies REAL, named testimonials with permission to publish. The TestimonialRow component renders nothing when empty, so the section is omitted entirely (no fabricated quotes, no 'coming soon'). When adding, each item = { quote, name, role, org }.",
+  "items": []
+}

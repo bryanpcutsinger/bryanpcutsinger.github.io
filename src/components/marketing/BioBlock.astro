@@ -1,0 +1,58 @@
+---
+// "At a glance" rule-separated credential list (label / value rows). Value can
+// contain HTML (e.g. a link) — pass it via the `value` field as a string and it
+// renders with set:html.
+interface Row {
+  label: string;
+  value: string; // may contain inline HTML
+}
+interface Props {
+  rows: Row[];
+}
+const { rows } = Astro.props;
+---
+<dl class="bio-block">
+  {
+    rows.map((r) => (
+      <div class="bio-block__row">
+        <dt class="bio-block__label">{r.label}</dt>
+        <dd class="bio-block__value" set:html={r.value} />
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  .bio-block {
+    margin: 0;
+    border-top: 1px solid var(--hairline);
+  }
+  .bio-block__row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: var(--sp-6);
+    padding: var(--sp-4) 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .bio-block__label {
+    font-size: var(--fs-eyebrow);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding-top: 3px;
+  }
+  .bio-block__value {
+    margin: 0;
+    color: var(--text);
+  }
+  .bio-block__value :global(a) {
+    color: var(--accent);
+  }
+  @media (max-width: 560px) {
+    .bio-block__row {
+      grid-template-columns: 1fr;
+      gap: var(--sp-1);
+    }
+  }
+</style>

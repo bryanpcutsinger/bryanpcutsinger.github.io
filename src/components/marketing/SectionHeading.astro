@@ -1,0 +1,54 @@
+---
+// Section header block: eyebrow + H2 + optional lede paragraph. `align`
+// controls centering. Use on light or ink sections (color inherits).
+import Eyebrow from './Eyebrow.astro';
+
+interface Props {
+  eyebrow?: string;
+  heading: string;
+  lede?: string;
+  align?: 'left' | 'center';
+  class?: string;
+}
+const {
+  eyebrow,
+  heading,
+  lede,
+  align = 'left',
+  class: className = '',
+} = Astro.props;
+---
+<div class:list={['section-heading', `is-${align}`, className]}>
+  {eyebrow && <Eyebrow text={eyebrow} />}
+  <h2>{heading}</h2>
+  {lede && <p class="section-heading__lede">{lede}</p>}
+</div>
+
+<style>
+  .section-heading {
+    margin-bottom: var(--sp-12);
+  }
+  .section-heading h2 {
+    font-size: var(--fs-h2);
+    margin: 0;
+    max-width: 24ch;
+  }
+  .section-heading__lede {
+    font-size: var(--fs-lead);
+    line-height: 1.55;
+    color: var(--text-muted);
+    margin: var(--sp-4) 0 0;
+    max-width: 60ch;
+  }
+  .is-center {
+    text-align: center;
+  }
+  .is-center h2,
+  .is-center .section-heading__lede {
+    margin-inline: auto;
+  }
+  /* on ink sections the lede should use the muted-on-ink token */
+  :global(.section--ink) .section-heading__lede {
+    color: var(--on-ink-muted);
+  }
+</style>

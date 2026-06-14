@@ -1,0 +1,163 @@
+---
+import MarketingLayout from '../layouts/MarketingLayout.astro';
+import Hero from '../components/marketing/Hero.astro';
+import Section from '../components/marketing/Section.astro';
+import SectionHeading from '../components/marketing/SectionHeading.astro';
+import AsSeenIn from '../components/marketing/AsSeenIn.astro';
+import TopicGrid from '../components/marketing/TopicGrid.astro';
+import TestimonialRow from '../components/marketing/TestimonialRow.astro';
+import SpeakerReel from '../components/marketing/SpeakerReel.astro';
+import PortraitFigure from '../components/marketing/PortraitFigure.astro';
+import CTABand from '../components/marketing/CTABand.astro';
+import Button from '../components/marketing/Button.astro';
+
+import headshot from '../assets/bryan-cutsinger.png';
+import onStagePodium from '../assets/on-stage-podium.jpg';
+import topicsData from '../data/topics.json';
+import testimonialsData from '../data/testimonials.json';
+import logosData from '../data/logos.json';
+
+// Homepage shows the first 4 topics as teasers, each linking to /speaking.
+const featuredTopics = topicsData.topics.slice(0, 4).map((t) => ({
+  ...t,
+  href: '/speaking/',
+}));
+const testimonials = testimonialsData.items;
+---
+<MarketingLayout
+  title="Bryan Cutsinger — Economist"
+  description="Bryan Cutsinger is an economics professor at Florida Atlantic University working in monetary theory and economic history. He speaks to audiences who want to understand the economic forces that shape money, markets, and public policy."
+>
+  <Hero
+    eyebrow="Economist"
+    headline="The economics behind the headlines — made clear, and made to matter."
+    subhead="I'm Bryan Cutsinger, an economics professor at Florida Atlantic University working in monetary theory and economic history. I've written for National Review and The Hill, and I speak to audiences who want to understand the economic forces that shape money, markets, and public policy."
+    primaryCta={{ label: 'Invite me to speak', href: '/speaking/' }}
+    secondaryCta={{ label: 'About Bryan', href: '/about/' }}
+  >
+    <PortraitFigure
+      slot="media"
+      src={headshot}
+      alt="Bryan Cutsinger"
+      ratio="portrait"
+    />
+  </Hero>
+
+  <!-- Credibility band -->
+  <Section variant="surface">
+    <AsSeenIn label="Featured in" logos={logosData.logos} />
+    <p class="cred-strip">
+      Interim Director, AIER Sound Money Project &nbsp;·&nbsp; Associate Editor,
+      <em>Public Choice</em> &nbsp;·&nbsp; Florida Atlantic University
+    </p>
+  </Section>
+
+  <!-- Signature topics -->
+  <Section variant="raised">
+    <SectionHeading
+      eyebrow="What I speak about"
+      heading="Talks that connect economic ideas to the moment."
+      lede="From the politics of money to the incentives behind public policy — rigorous research, translated for audiences who want to understand the world, not sit through a seminar."
+    />
+    <TopicGrid topics={featuredTopics} columns={2} />
+    <div class="topics-more">
+      <Button href="/speaking/" variant="secondary">See all speaking topics</Button>
+    </div>
+  </Section>
+
+  <!-- About teaser -->
+  <Section variant="surface">
+    <div class="about-teaser">
+      <div class="about-teaser__media">
+        <PortraitFigure
+          src={headshot}
+          ratio="portrait"
+          alt="Bryan Cutsinger"
+        />
+      </div>
+      <div class="about-teaser__copy">
+        <SectionHeading
+          eyebrow="About"
+          heading="Economist, writer, and speaker."
+        />
+        <p>
+          Bryan Cutsinger studies the economic forces that shape money, markets,
+          and public policy — and why they matter far outside the seminar room.
+          His research on monetary theory and economic history appears in leading
+          economics journals, and his commentary in outlets including
+          <em>National Review</em>, <em>The Hill</em>, and
+          <em>The Washington Examiner</em>.
+        </p>
+        <Button href="/about/" variant="secondary">Read full bio</Button>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Testimonials: section only renders when real ones exist -->
+  {
+    testimonials.length > 0 && (
+      <Section variant="raised">
+        <SectionHeading
+          eyebrow="What people say"
+          heading="From the people who've hosted him."
+          align="center"
+        />
+        <TestimonialRow items={testimonials} />
+      </Section>
+    )
+  }
+
+  <!-- Speaker reel: graceful on-stage-photo state until a reel exists -->
+  <SpeakerReel
+    eyebrow="On the stage"
+    heading="Bryan in the room."
+    caption="A speaker reel is on the way. In the meantime, get in touch and let's talk about your event."
+    cta={{ label: 'Invite me to speak', href: '/speaking/' }}
+  >
+    <PortraitFigure
+      slot="fallback"
+      src={onStagePodium}
+      ratio="landscape"
+      alt="Bryan Cutsinger speaking at the Fed Policy Under Pressure conference"
+    />
+  </SpeakerReel>
+
+  <!-- Closing ask -->
+  <CTABand
+    heading="Have an audience that needs to understand the economy? Let's talk."
+    subtext="Keynotes, lectures, and panels for universities, conferences, and professional audiences."
+    cta={{ label: 'Invite me to speak', href: '/speaking/' }}
+  />
+</MarketingLayout>
+
+<style>
+  .cred-strip {
+    text-align: center;
+    margin: var(--sp-8) auto 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    max-width: none;
+  }
+  .topics-more {
+    margin-top: var(--sp-12);
+    text-align: center;
+  }
+  .about-teaser {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: var(--sp-16);
+    align-items: center;
+  }
+  .about-teaser__media {
+    max-width: 360px;
+  }
+  @media (max-width: 820px) {
+    .about-teaser {
+      grid-template-columns: 1fr;
+      gap: var(--sp-8);
+    }
+    .about-teaser__media {
+      max-width: 280px;
+    }
+  }
+</style>

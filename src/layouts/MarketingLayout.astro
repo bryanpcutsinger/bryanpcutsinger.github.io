@@ -1,0 +1,87 @@
+---
+// Layout for the bespoke marketing pages (Home / About / Speaking / Contact).
+// Owns <head>, fonts, brand CSS, and the marketing header/footer. Completely
+// separate from Starlight chrome (which owns /ai/).
+//
+// noindex: these pages do NOT inherit Starlight's global noindex (that's
+// injected only inside Starlight). While the site is shared privately, this
+// layout emits its own robots meta via the `noindex` prop (default true).
+// AT PUBLIC LAUNCH: flip the default below to false AND delete the matching
+// `head` noindex block in astro.config.mjs — lift them together.
+import '@fontsource-variable/fraunces';
+import '@fontsource-variable/inter';
+import '../styles/brand.css';
+import SiteHeader from '../components/marketing/SiteHeader.astro';
+import SiteFooter from '../components/marketing/SiteFooter.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  noindex?: boolean;
+  ogImage?: string;
+}
+const {
+  title,
+  description,
+  noindex = true, // LAUNCH: set to false (see note above)
+  ogImage,
+} = Astro.props;
+
+const siteName = 'Bryan Cutsinger';
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImageUrl = ogImage ? new URL(ogImage, Astro.site).href : undefined;
+const currentPath = Astro.url.pathname;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+    <meta
+      name="twitter:card"
+      content={ogImageUrl ? 'summary_large_image' : 'summary'}
+    />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {ogImageUrl && <meta name="twitter:image" content={ogImageUrl} />}
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <SiteHeader currentPath={currentPath} />
+    <main id="main">
+      <slot />
+    </main>
+    <SiteFooter />
+
+    <style>
+      .skip-link {
+        position: absolute;
+        left: var(--sp-4);
+        top: -3rem;
+        z-index: 200;
+        background: var(--accent);
+        color: var(--ink);
+        padding: var(--sp-2) var(--sp-4);
+        border-radius: var(--radius);
+        text-decoration: none;
+        transition: top 0.18s ease;
+      }
+      .skip-link:focus {
+        top: var(--sp-4);
+      }
+    </style>
+  </body>
+</html>

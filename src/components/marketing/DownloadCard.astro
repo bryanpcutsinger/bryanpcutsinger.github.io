@@ -1,0 +1,61 @@
+---
+// Speaker one-sheet download. GRACEFUL: if `fileUrl` is absent, it degrades to
+// an "available on request" link to the booking/contact path instead of a dead
+// download button.
+import Button from './Button.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  fileUrl?: string;
+  requestHref?: string;
+}
+const {
+  title,
+  description,
+  fileUrl,
+  requestHref = '/contact/',
+} = Astro.props;
+---
+<div class="download-card">
+  <div class="download-card__text">
+    <h3 class="download-card__title">{title}</h3>
+    {description && <p class="download-card__desc">{description}</p>}
+  </div>
+  {
+    fileUrl ? (
+      <Button href={fileUrl} variant="secondary" class="download-card__btn">
+        Download the one-sheet (PDF)
+      </Button>
+    ) : (
+      <Button href={requestHref} variant="secondary" class="download-card__btn">
+        Request the one-sheet
+      </Button>
+    )
+  }
+</div>
+
+<style>
+  .download-card {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-6);
+    background: var(--surface-raised);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius);
+    padding: var(--sp-8);
+  }
+  .download-card__title {
+    font-size: var(--fs-h3);
+    margin: 0 0 var(--sp-2);
+  }
+  .download-card__desc {
+    margin: 0;
+    color: var(--text-muted);
+  }
+  .download-card__btn {
+    flex-shrink: 0;
+  }
+</style>

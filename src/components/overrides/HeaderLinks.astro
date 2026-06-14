@@ -1,0 +1,39 @@
+---
+// Overrides Starlight's `SocialIcons` slot (empty — no socials configured) to
+// add minimal nav links from the /ai/ guides BACK to the marketing site, so the
+// two systems stay navigable in both directions. Styled white-on-navy to match
+// the FAU header bar (the wordmark/SiteTitle already links to `/`).
+const links = [
+  { label: 'About', href: '/about/' },
+  { label: 'Speaking', href: '/speaking/' },
+  { label: 'Contact', href: '/contact/' },
+];
+---
+<nav class="header-links" aria-label="Site">
+  {links.map((l) => <a href={l.href}>{l.label}</a>)}
+</nav>
+
+<style>
+  .header-links {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .header-links a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .header-links a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  /* hide on narrow screens; Starlight's mobile menu covers navigation there */
+  @media (max-width: 50rem) {
+    .header-links {
+      display: none;
+    }
+  }
+</style>

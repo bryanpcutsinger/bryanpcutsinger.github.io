@@ -1,0 +1,101 @@
+---
+// Brand footer on the ink base. Wordmark + one-line positioning, repeat nav,
+// booking email, copyright. Mirrors the year logic of the Starlight Footer
+// override but is a standalone marketing component (no Starlight import).
+interface Props {
+  email?: string;
+}
+// PLACEHOLDER — Bryan: confirm the booking email (recommend a dedicated
+// speaking inbox over the FAU address).
+const { email = 'bcutsinger@fau.edu' } = Astro.props;
+const year = new Date().getFullYear();
+
+const nav = [
+  { label: 'About', href: '/about/' },
+  { label: 'Speaking', href: '/speaking/' },
+  { label: 'Contact', href: '/contact/' },
+  { label: 'Guides', href: '/ai/desktop/' },
+];
+---
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div class="site-footer__brand">
+      <a href="/" class="footer-wordmark">Bryan&nbsp;Cutsinger</a>
+      <p class="footer-tagline">Economist · Florida Atlantic University</p>
+    </div>
+
+    <nav class="site-footer__nav" aria-label="Footer">
+      {nav.map((l) => <a href={l.href}>{l.label}</a>)}
+    </nav>
+
+    <div class="site-footer__contact">
+      <a href={`mailto:${email}`}>{email}</a>
+    </div>
+  </div>
+
+  <div class="site-footer__credit">
+    <p>© {year} Bryan Cutsinger</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--ink);
+    color: var(--on-ink);
+  }
+  .site-footer__inner {
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: var(--sp-16) var(--sp-6) var(--sp-12);
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: var(--sp-8);
+  }
+  .footer-wordmark {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: var(--on-ink);
+    text-decoration: none;
+  }
+  .footer-tagline {
+    margin: var(--sp-2) 0 0;
+    color: var(--on-ink-muted);
+    font-size: var(--fs-small);
+    max-width: none;
+  }
+  .site-footer__nav,
+  .site-footer__contact {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+  }
+  .site-footer__nav a,
+  .site-footer__contact a {
+    color: var(--on-ink);
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+  .site-footer__nav a:hover,
+  .site-footer__contact a:hover {
+    color: var(--accent);
+  }
+  .site-footer__credit {
+    border-top: 1px solid rgba(243, 239, 232, 0.12);
+  }
+  .site-footer__credit p {
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: var(--sp-6);
+    font-size: var(--fs-small);
+    color: var(--on-ink-muted);
+  }
+
+  @media (max-width: 700px) {
+    .site-footer__inner {
+      grid-template-columns: 1fr;
+      gap: var(--sp-8);
+      padding-top: var(--sp-12);
+    }
+  }
+</style>

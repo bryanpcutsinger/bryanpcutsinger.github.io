@@ -1,0 +1,22 @@
+---
+// Small uppercase accent label set above section headings.
+interface Props {
+  text: string;
+  class?: string;
+}
+const { text, class: className = '' } = Astro.props;
+---
+<p class:list={['eyebrow', className]}>{text}</p>
+
+<style>
+  .eyebrow {
+    font-family: var(--font-body);
+    font-size: var(--fs-eyebrow);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 var(--sp-3);
+    max-width: none;
+  }
+</style>

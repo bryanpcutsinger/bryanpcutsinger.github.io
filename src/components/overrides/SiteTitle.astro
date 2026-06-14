@@ -1,12 +1,16 @@
 ---
-// Brand in the FAU-navy top bar — Bryan's own identity (no FAU logo/wordmark).
+// Brand wordmark in the ink top bar — Bryan's own identity (no FAU logo/wordmark).
 // Replaces Starlight's default SiteTitle. Links to the site root.
+// This override also LOADS the brand fonts for every Starlight page (it renders
+// in the chrome site-wide), so the guides match the marketing site's type.
+import '@fontsource-variable/fraunces';
+import '@fontsource-variable/inter';
 ---
 <a href="/" class="fau-site-title">Bryan&nbsp;Cutsinger</a>
 
 <style>
   .fau-site-title {
-    font-family: Georgia, 'Times New Roman', serif;
+    font-family: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
     font-weight: 600;
     font-size: 1.15rem;
     color: #ffffff;

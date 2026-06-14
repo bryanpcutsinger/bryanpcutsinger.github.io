@@ -1,0 +1,217 @@
+---
+// Sticky top nav for the marketing site. Wordmark left (mirrors the serif
+// identity treatment of the Starlight SiteTitle override), nav links + a single
+// accent CTA right, hamburger -> full-screen ink overlay on mobile. Plain Astro
+// + a tiny inline script for the mobile toggle (no framework).
+import Button from './Button.astro';
+
+interface Props {
+  currentPath?: string;
+}
+const { currentPath = '' } = Astro.props;
+
+const links = [
+  { label: 'About', href: '/about/' },
+  { label: 'Speaking', href: '/speaking/' },
+  { label: 'Guides', href: '/ai/desktop/' },
+  { label: 'Contact', href: '/contact/' },
+];
+
+// normalize for active-state matching (trailing slash tolerant)
+const norm = (p: string) => '/' + p.replace(/^\/|\/$/g, '');
+const here = norm(currentPath);
+const isActive = (href: string) =>
+  here === norm(href) || (href !== '/' && here.startsWith(norm(href)));
+---
+<header class="site-header" data-site-header>
+  <div class="site-header__inner">
+    <a href="/" class="wordmark">Bryan&nbsp;Cutsinger</a>
+
+    <nav class="nav-desktop" aria-label="Primary">
+      {
+        links.map((l) => (
+          <a
+            href={l.href}
+            class:list={['nav-link', { 'is-active': isActive(l.href) }]}
+            aria-current={isActive(l.href) ? 'page' : undefined}
+          >
+            {l.label}
+          </a>
+        ))
+      }
+      <Button href="/speaking/" variant="primary" class="nav-cta"
+        >Invite me to speak</Button
+      >
+    </nav>
+
+    <button
+      class="nav-toggle"
+      type="button"
+      aria-label="Open menu"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      data-nav-toggle
+    >
+      <span class="nav-toggle__bar"></span>
+      <span class="nav-toggle__bar"></span>
+      <span class="nav-toggle__bar"></span>
+    </button>
+  </div>
+
+  <div class="mobile-menu" id="mobile-menu" data-mobile-menu hidden>
+    <nav class="mobile-menu__nav" aria-label="Mobile">
+      {links.map((l) => <a href={l.href}>{l.label}</a>)}
+      <Button href="/speaking/" variant="primary">Invite me to speak</Button>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const header = document.querySelector('[data-site-header]');
+  const toggle = document.querySelector('[data-nav-toggle]');
+  const menu = document.querySelector('[data-mobile-menu]');
+
+  // mobile menu open/close
+  toggle?.addEventListener('click', () => {
+    const open = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!open));
+    toggle.setAttribute('aria-label', open ? 'Open menu' : 'Close menu');
+    header?.classList.toggle('is-menu-open', !open);
+    if (menu) (menu as HTMLElement).hidden = open;
+    document.body.style.overflow = open ? '' : 'hidden';
+  });
+
+  // solidify the bar once scrolled past the hero top
+  const onScroll = () => {
+    header?.classList.toggle('is-scrolled', window.scrollY > 24);
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: transparent;
+    transition: background-color 0.25s ease, box-shadow 0.25s ease;
+  }
+  /* solid once scrolled (and always when the mobile menu is open) */
+  .site-header.is-scrolled,
+  .site-header.is-menu-open {
+    background: var(--ink);
+    box-shadow: 0 1px 0 rgba(243, 239, 232, 0.08);
+  }
+
+  .site-header__inner {
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: var(--sp-4) var(--sp-6);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-6);
+  }
+
+  .wordmark {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: var(--on-ink);
+    text-decoration: none;
+    white-space: nowrap;
+    letter-spacing: -0.01em;
+  }
+  .wordmark:hover {
+    opacity: 0.85;
+  }
+
+  .nav-desktop {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-6);
+  }
+  .nav-link {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--on-ink);
+    text-decoration: none;
+    padding-bottom: 2px;
+    border-bottom: 2px solid transparent;
+  }
+  .nav-link:hover {
+    color: #fff;
+    border-bottom-color: rgba(243, 239, 232, 0.4);
+  }
+  .nav-link.is-active {
+    border-bottom-color: var(--accent);
+  }
+
+  /* hamburger */
+  .nav-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+  }
+  .nav-toggle__bar {
+    display: block;
+    width: 24px;
+    height: 2px;
+    margin: 0 auto;
+    background: var(--on-ink);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+  .is-menu-open .nav-toggle__bar:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .is-menu-open .nav-toggle__bar:nth-child(2) {
+    opacity: 0;
+  }
+  .is-menu-open .nav-toggle__bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* mobile overlay menu */
+  .mobile-menu {
+    display: none;
+  }
+  .mobile-menu__nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-6);
+    padding: var(--sp-8) var(--sp-6) var(--sp-12);
+  }
+  .mobile-menu__nav a {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    color: var(--on-ink);
+    text-decoration: none;
+  }
+  .mobile-menu__nav a:hover {
+    color: var(--accent);
+  }
+
+  @media (max-width: 820px) {
+    .nav-desktop {
+      display: none;
+    }
+    .nav-toggle {
+      display: flex;
+    }
+    .mobile-menu {
+      display: block;
+      background: var(--ink);
+    }
+    .mobile-menu[hidden] {
+      display: none;
+    }
+  }
+</style>

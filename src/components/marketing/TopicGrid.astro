@@ -1,0 +1,38 @@
+---
+// Responsive grid of TopicCards. 1 col mobile -> 2 tablet -> `columns` desktop.
+import TopicCard from './TopicCard.astro';
+
+interface Topic {
+  title: string;
+  description: string;
+  audience?: string;
+  format?: string;
+  href?: string;
+}
+interface Props {
+  topics: Topic[];
+  columns?: 2 | 3;
+}
+const { topics, columns = 3 } = Astro.props;
+---
+<div class:list={['topic-grid', `cols-${columns}`]}>
+  {topics.map((t) => <TopicCard {...t} />)}
+</div>
+
+<style>
+  .topic-grid {
+    display: grid;
+    gap: var(--sp-6);
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 600px) {
+    .topic-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 940px) {
+    .topic-grid.cols-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

@@ -1,0 +1,194 @@
+---
+import MarketingLayout from '../layouts/MarketingLayout.astro';
+import Section from '../components/marketing/Section.astro';
+import SectionHeading from '../components/marketing/SectionHeading.astro';
+import Eyebrow from '../components/marketing/Eyebrow.astro';
+import BioBlock from '../components/marketing/BioBlock.astro';
+import PortraitFigure from '../components/marketing/PortraitFigure.astro';
+import CTABand from '../components/marketing/CTABand.astro';
+import Button from '../components/marketing/Button.astro';
+
+import headshot from '../assets/bryan-cutsinger.png';
+import onStageGesturing from '../assets/on-stage-gesturing.jpg';
+
+// "At a glance" — VERIFIED facts only. Items marked PLACEHOLDER need Bryan's
+// confirmation (exact title/department, education, links) before publish.
+const glance = [
+  { label: 'Position', value: 'Economics professor, Florida Atlantic University <em>(PLACEHOLDER — confirm exact rank &amp; department)</em>' },
+  { label: 'Editorial', value: 'Associate Editor, <em>Public Choice</em>' },
+  { label: 'Affiliation', value: 'Interim Director, Sound Money Project — American Institute for Economic Research (AIER)' },
+  { label: 'Fields', value: 'Monetary theory · Economic history · Public choice' },
+  { label: 'Writing', value: 'National Review · The Hill · The Washington Examiner · RealClearEducation <em>(PLACEHOLDER — link representative pieces)</em>' },
+  { label: 'Education', value: 'PLACEHOLDER — degrees &amp; institutions' },
+];
+
+const speakChips = [
+  'The politics of money',
+  'Sound money & monetary rules',
+  'Public choice',
+  'The economy behind the headlines',
+];
+---
+<MarketingLayout
+  title="About — Bryan Cutsinger"
+  description="Bryan Cutsinger is an economics professor at Florida Atlantic University, interim director of the Sound Money Project at the American Institute for Economic Research, and Associate Editor of Public Choice. He works in monetary theory and economic history, has written for National Review, The Hill, and The Washington Examiner, and speaks to audiences who want the economics behind the headlines."
+>
+  <!-- Intro -->
+  <Section variant="ink">
+    <div class="about-intro">
+      <div class="about-intro__media">
+        <PortraitFigure
+          src={headshot}
+          ratio="portrait"
+          alt="Bryan Cutsinger"
+        />
+      </div>
+      <div class="about-intro__copy">
+        <Eyebrow text="About" />
+        <h1 class="about-intro__name">Bryan Cutsinger</h1>
+        <p class="about-intro__lede">
+          An economics professor working in monetary theory and economic
+          history — and a speaker who makes it matter to audiences well outside
+          the seminar room.
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Short bio (host-readable) -->
+  <Section variant="surface" width="reading">
+    <SectionHeading eyebrow="The short version" heading="Bio for hosts." />
+    <p>
+      Bryan Cutsinger is an economics professor at Florida Atlantic University
+      whose research focuses on monetary theory and economic history. He is
+      interim director of the Sound Money Project at the American Institute for
+      Economic Research and serves as Associate Editor of <em>Public Choice</em>.
+      His commentary has appeared in <em>National Review</em>, <em>The Hill</em>,
+      and <em>The Washington Examiner</em>. He speaks to audiences who want to
+      understand the economics behind the headlines — clearly, rigorously, and
+      without the jargon.
+    </p>
+    <p class="about-copyhint">
+      <strong>Hosts:</strong> this paragraph is yours to use — copy it straight
+      into your program or introduction.
+    </p>
+  </Section>
+
+  <!-- Long bio -->
+  <Section variant="raised" width="reading">
+    <SectionHeading eyebrow="The longer story" heading="About Bryan." />
+    <p>
+      <em>PLACEHOLDER — Bryan to draft 3–5 paragraphs.</em> The through-line:
+      what drew you to monetary economics and economic history, the questions
+      your research asks, why those questions matter beyond the academy, and how that
+      led to writing and speaking for general audiences. Keep it narrative, not a
+      CV. Do not include appointments, awards, degrees, or dates that haven't
+      been verified.
+    </p>
+    <p>
+      <em>PLACEHOLDER — paragraph 2.</em>
+    </p>
+    <p>
+      <em>PLACEHOLDER — paragraph 3.</em>
+    </p>
+  </Section>
+
+  <!-- At a glance -->
+  <Section variant="surface" width="reading">
+    <SectionHeading eyebrow="At a glance" heading="The essentials." />
+    <BioBlock rows={glance} />
+  </Section>
+
+  <!-- What I speak about + secondary photo -->
+  <Section variant="raised">
+    <div class="about-speak">
+      <div class="about-speak__copy">
+        <SectionHeading
+          eyebrow="On the stage"
+          heading="What I speak about."
+        />
+        <ul class="chips">
+          {speakChips.map((c) => <li>{c}</li>)}
+        </ul>
+        <Button href="/speaking/" variant="secondary">See speaking topics</Button>
+      </div>
+      <div class="about-speak__media">
+        <PortraitFigure
+          src={onStageGesturing}
+          ratio="landscape"
+          alt="Bryan Cutsinger speaking to an executive-education audience"
+        />
+      </div>
+    </div>
+  </Section>
+
+  <CTABand
+    heading="Bring Bryan to your next event."
+    cta={{ label: 'Invite me to speak', href: '/speaking/' }}
+  />
+</MarketingLayout>
+
+<style>
+  .about-intro {
+    display: grid;
+    grid-template-columns: 0.7fr 1.3fr;
+    gap: var(--sp-16);
+    align-items: center;
+  }
+  .about-intro__media {
+    max-width: 340px;
+  }
+  .about-intro__name {
+    font-size: var(--fs-display-lg);
+    color: var(--on-ink);
+    margin: 0;
+  }
+  .about-intro__lede {
+    font-size: var(--fs-lead);
+    line-height: 1.55;
+    color: var(--on-ink-muted);
+    margin: var(--sp-6) 0 0;
+    max-width: 48ch;
+  }
+  .about-copyhint {
+    margin-top: var(--sp-6);
+    padding: var(--sp-4) var(--sp-6);
+    background: var(--accent-tint);
+    border-radius: var(--radius);
+    font-size: var(--fs-small);
+    color: var(--ink);
+    max-width: none;
+  }
+  .about-speak {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-16);
+    align-items: center;
+  }
+  .chips {
+    list-style: none;
+    margin: 0 0 var(--sp-8);
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-3);
+  }
+  .chips li {
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    padding: var(--sp-2) var(--sp-4);
+    font-size: var(--fs-small);
+    font-weight: 500;
+  }
+  @media (max-width: 820px) {
+    .about-intro,
+    .about-speak {
+      grid-template-columns: 1fr;
+      gap: var(--sp-8);
+    }
+    .about-intro__media {
+      max-width: 260px;
+    }
+  }
+</style>

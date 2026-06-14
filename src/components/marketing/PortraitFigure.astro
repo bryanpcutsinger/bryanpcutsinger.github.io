@@ -1,0 +1,81 @@
+---
+// Responsive figure for the headshot / on-stage photos. GRACEFUL: when no
+// `src` is provided yet, it renders a labeled placeholder box at the right
+// aspect ratio so the layout reads correctly before Bryan supplies images.
+// Once an image exists, import it in the page and pass it as `src` (an
+// astro:assets ImageMetadata) — it'll be optimized to AVIF/WebP automatically.
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  src?: ImageMetadata;
+  alt?: string;
+  caption?: string;
+  ratio?: 'portrait' | 'square' | 'landscape';
+  placeholderLabel?: string;
+}
+const {
+  src,
+  alt = '',
+  caption,
+  ratio = 'portrait',
+  placeholderLabel = 'Photo to add',
+} = Astro.props;
+
+const ratioMap = {
+  portrait: '4 / 5',
+  square: '1 / 1',
+  landscape: '16 / 9',
+};
+const aspect = ratioMap[ratio];
+const widths = ratio === 'landscape' ? [640, 1024, 1600, 2400] : [400, 800, 1200];
+---
+<figure class="portrait" style={`--aspect: ${aspect};`}>
+  {
+    src ? (
+      <Image
+        src={src}
+        alt={alt}
+        widths={widths}
+        sizes="(max-width: 820px) 100vw, 600px"
+        formats={['avif', 'webp']}
+      />
+    ) : (
+      <div class="portrait__placeholder" role="img" aria-label={alt || placeholderLabel}>
+        <span>{placeholderLabel}</span>
+      </div>
+    )
+  }
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .portrait {
+    margin: 0;
+  }
+  .portrait :global(img),
+  .portrait__placeholder {
+    width: 100%;
+    aspect-ratio: var(--aspect);
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+  }
+  .portrait__placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ink-soft);
+    border: 1px dashed rgba(243, 239, 232, 0.25);
+  }
+  .portrait__placeholder span {
+    font-size: var(--fs-small);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--on-ink-muted);
+  }
+  .portrait figcaption {
+    margin-top: var(--sp-3);
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+  }
+</style>

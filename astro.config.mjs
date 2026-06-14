@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import sitemap from '@astrojs/sitemap';
 
 // GitHub *user site* (bryanpcutsinger.github.io) served from root — no `base`.
 // The site is a Starlight docs site themed to the FAU style guide (see
@@ -8,6 +9,9 @@ import starlight from '@astrojs/starlight';
 export default defineConfig({
   site: 'https://bryanpcutsinger.github.io',
   integrations: [
+    // Explicit sitemap so the custom marketing pages (src/pages/*) are included
+    // — Starlight's transitive sitemap only enumerates its own docs routes.
+    sitemap(),
     starlight({
       title: 'Bryan Cutsinger',
       // TEMP: keep the site out of search results while it's shared privately with a
@@ -25,6 +29,9 @@ export default defineConfig({
       components: {
         SiteTitle: './src/components/overrides/SiteTitle.astro',
         Footer: './src/components/overrides/Footer.astro',
+        // Repurpose the (empty) social-icons header slot for nav links back to
+        // the marketing site, keeping both systems navigable.
+        SocialIcons: './src/components/overrides/HeaderLinks.astro',
       },
       // Curriculum order lives here (not in pubDate). Labels are curated;
       // URLs stay flat at /ai/<slug>/. The guide is framed as a LEAN pre-read:

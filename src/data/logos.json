@@ -1,0 +1,9 @@
+{
+  "_note": "VERIFIED outlets only, confirmed by Bryan. These appear in the homepage 'Featured in' row as serif wordmarks (logo files optional). WSJ is intentionally excluded — his only WSJ appearance was a letter to the editor, which doesn't belong in a 'Featured in' row. Add/remove outlets here; `href` is optional (link to a representative piece).",
+  "logos": [
+    { "name": "National Review" },
+    { "name": "The Hill" },
+    { "name": "The Washington Examiner" },
+    { "name": "RealClearEducation" }
+  ]
+}
