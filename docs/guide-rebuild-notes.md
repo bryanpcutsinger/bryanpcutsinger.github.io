@@ -71,7 +71,7 @@ keep it in the Required tier even if the dedicated "verifying" routine gets fold
 
 | # | slug | title (working) | tier | status |
 |---|------|-----------------|------|--------|
-| 1 | what-is-claude-code | What Claude Code is (and isn't) | required | DRAFTED 2026-06-15, awaiting Bryan's review |
+| 1 | what-is-claude-code | What Claude Code is (and isn't) | required | PUBLISHED 2026-06-15 (`draft:false`, committed `33c9c38`) |
 
 (Decide each next post only after the prior is finalized; keep this table current so
 cross-links and sequence stay coherent.)
@@ -86,20 +86,24 @@ Cowork/`desktop/` branch was **deleted** (2026-06-15); `/ai/` is Claude-Code-onl
 `docs/getting-started-plan.md` marked superseded; `npm run build` green. Still in the
 **per-post loop** — next is proposing post 2 (the setup arc).
 
-**Start by drafting post 1 — `what-is-claude-code.md` — on this approved approach:**
-- Purpose: let an economist decide in ~3 min if Claude Code is worth their time; set the
-  one governing expectation (you stay the reviewer; it can be confidently wrong).
-- **Lean shape, ~500–600 words** (down from the old ~1,100; the "What it's NOT" bloat
-  compresses to ONE `:::caution` callout that forward-links to the integrity post):
-  1. One-paragraph definition — AI that works on the actual files on your computer, driven
-     from a text prompt, asks permission before acting.
-  2. How it differs from browser Claude (acts on your folder vs. copy-paste).
-  3. 2–3 grounded academic vignettes — one teaching, one research (e.g. untangle a messy
-     replication folder; turn lecture notes into a problem set).
-  4. One honest-limits `:::caution` — confidently wrong → verify everything (link integrity).
-  5. Tight "what you'll need" line → hands off to setup.
-- Frontmatter: `title`, `description`, `draft: true`. No pubDate/tags. De-numbered/topical
-  open, no "Step N". Self-contained prose; screenshots optional, not load-bearing.
+**Start by proposing post 2 — the setup arc.** Post 1 is done and published. Per the
+must-cover checklist, the next required ground is **setup**: install VS Code (home base) →
+just-enough terminal → install Claude Code + first launch. Decide whether that's **one
+consolidated "Set up" post** or **two** (VS Code/terminal, then install/auth) — bias to one
+lean post if it fits the 6–8 page budget. Re-verify version-sensitive facts at draft time
+(plan names, the `curl … claude.ai/install.sh` install command, macOS 13+, browser/Keychain
+auth) via the `claude-code-guide` agent — nothing version-sensitive from memory.
 
-**Then:** Bryan reviews post 1 → finalize → propose post 2 (likely the setup arc). Hold to
-the **6–8 page budget** and the must-cover checklist above. Don't re-sprawl.
+**Conventions to hold (already set by post 1 + the overview):**
+- Lean (~500–600 words/post), de-numbered/topical open (no "Step N"), self-contained prose.
+  Voice: practical, low-hype, second person; teaching/research examples balanced.
+- **Publishing model has shifted:** new posts can ship **`draft:false`** as they're
+  finalized (post 1 + overview are already live). When a post ships: add its slug to the
+  **minimal live sidebar group** in `astro.config.mjs` ("Getting Started with Claude Code"),
+  add a working link from `src/content/docs/ai/index.mdx` (the overview's "Start here" list),
+  and keep every internal link resolving (no links to not-yet-written pages).
+- Screenshots optional, not load-bearing. Keep `npm run build` green.
+
+**Process:** propose post 2's shape → Bryan approves → draft → finalize/publish → update the
+table above. Hold the **6–8 page budget** and the must-cover checklist. Don't re-sprawl
+toward 17.
