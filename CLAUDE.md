@@ -5,8 +5,9 @@
 An umbrella website built with **Astro + Starlight** and deployed to **GitHub
 Pages** as a user site (`bryanpcutsinger.github.io`, served at the root). One repo:
 
-- `/` — the professional landing page (a Starlight **splash** page; minimal stub,
-  full build-out later)
+- `/`, `/about/`, `/speaking/`, `/contact/` — the **professional marketing site**
+  (custom Astro pages in `src/pages/`, NOT Starlight). Built out 2026-06-14 — see the
+  **Marketing site** section below. This is now the primary front end.
 - `/ai/` — **Getting Started with Claude Code**: a beginner's guide to getting started with
   Claude Code, written for **academic economists** on a Mac who are new to the
   command line and AI tools. **Framed as a LEAN pre-read** (see the Goal below): a
@@ -26,6 +27,43 @@ Pages** as a user site (`bryanpcutsinger.github.io`, served at the root). One re
 
 Future sub-sites get added as new Starlight content groups in the same repo.
 
+## Marketing site (the primary front end — built 2026-06-14)
+
+The root is now a **bespoke, conversion-grade marketing site** positioning Bryan as an
+economist + **paid speaker**, built as **custom Astro pages in `src/pages/`**
+(`index`, `about`, `speaking`, `contact`), completely separate from Starlight (which
+still owns `/ai/`). Full build history: `~/.claude/plans/i-want-to-rebuilt-ancient-zephyr.md`
+(Revisions 1–5).
+
+- **Brand (independent/editorial — NOT FAU navy/red):** deep ink `#1a1c1e` + warm brass
+  `#b07a2c` on bone `#f7f4ef`; **Fraunces** display + **Inter** body, self-hosted via
+  `@fontsource-variable/*`. Tokens: `src/styles/brand.css`. The two CSS systems never
+  touch — `brand.css` loads only on `src/pages/`; `fau-theme.css` only inside Starlight.
+- **Layout/kit:** `src/layouts/MarketingLayout.astro` (own `<head>`, sticky nav, footer,
+  **`noindex` prop default `true`**) + `src/components/marketing/*` (Hero, Section,
+  TopicGrid, TestimonialRow [null-on-empty], AsSeenIn, CTABand, SpeakerReel [3-state
+  graceful], BookingForm, PortraitFigure, …). Editable copy: `src/data/{topics,testimonials,logos}.json`.
+- **Photos** in `src/assets/`: `bryan-cutsinger.png` (headshot → hero/about), plus
+  `on-stage-podium.jpg` (home "Bryan in the room" reel), `on-stage-gesturing.jpg` (about),
+  `speaking-hero.jpg` (speaking hero). Optimized via `astro:assets`.
+- **Cross-nav:** `src/components/overrides/HeaderLinks.astro` (registered as Starlight's
+  `SocialIcons`) links guides → About/Speaking/Contact; marketing nav has a "Guides" link.
+  Sitemap: explicit `@astrojs/sitemap` in `astro.config.mjs` covers the `src/pages/` routes.
+- **`/ai/` guides restyled to match** (Rev 5): `fau-theme.css` now carries the brand
+  palette + Fraunces/Inter + 4px (fonts loaded site-wide via `SiteTitle.astro` frontmatter).
+  Docs layout (sidebar/TOC) intentionally kept.
+- **LIVE** (commit `6b6d36f`, 2026-06-14); still **`noindex`ed**.
+
+**Placeholders Bryan still owes (marked `[PLACEHOLDER]` in code):** Web3Forms access key
++ booking email (booking form is inert until then — `BookingForm.astro`); real **talk
+topics** (`data/topics.json`); **testimonials** (`testimonials.json` empty → section
+auto-hidden; named quotes only); **long bio** + exact **rank/department** (`about.astro`);
+speaker **one-sheet PDF** → `public/downloads/`; optional video **reel** (photo fallback
+shows now). Verified facts only: "Featured in" = National Review, The Hill, The Washington
+Examiner, RealClearEducation; credentials = interim director of the **AIER Sound Money
+Project**, Associate Editor of *Public Choice*, FAU economics professor (WSJ was a letter
+to the editor — deliberately not featured).
+
 ## Stack & conventions
 
 - **Astro 5 + Starlight** (`@astrojs/starlight@^0.36`). Static output, user site,
@@ -33,13 +71,12 @@ Future sub-sites get added as new Starlight content groups in the same repo.
   pager, and search.
   - Starlight is **pinned to the 0.36 line on purpose**: 0.38+ requires Astro 6 and
     we're staying on Astro 5 for now (see TODO). Don't bump it without bumping Astro.
-- **Theming = FAU style guide.** `src/styles/fau-theme.css` (registered via
-  Starlight `customCss`) maps the FAU palette and flat/square component language
-  onto Starlight. Type is deliberately the **current stack recolored**: Georgia
-  headings in FAU navy + system-sans body in FAU dark gray (no Avenir license).
-  Key FAU colors: navy `#003366`, red `#cc0000` (active/accent), body `#4d4c55`,
-  links `#0065d3`, sky-blue `#d9ecff`. Full design rationale: the approved plan at
-  `~/.claude/plans/jaunty-spinning-tiger.md`.
+- **Theming = the brand (was FAU; changed 2026-06-14).** `src/styles/fau-theme.css`
+  (registered via Starlight `customCss`) now carries the **marketing brand** onto
+  Starlight: ink `#1a1c1e` + brass `#b07a2c` on bone `#f7f4ef`, Fraunces headings +
+  Inter body, 4px corners. The filename and its `--fau-*` variable names are
+  **historical** — they hold brand colors now, not FAU navy/red. Marketing tokens:
+  `src/styles/brand.css`. (Original FAU rationale: `~/.claude/plans/jaunty-spinning-tiger.md`.)
 - **Content lives in `src/content/docs/`** (Starlight's `docs` collection, defined
   in `src/content.config.ts` via `docsLoader()` + `docsSchema()`):
   - `docs/index.mdx` → `/` (splash landing)
@@ -68,10 +105,11 @@ Future sub-sites get added as new Starlight content groups in the same repo.
   `:::note` "Reference — for when you're up and running…" aside so it reads as
   optional. Add the same banner to any future Reference post.
 - **Chrome overrides** in `src/components/overrides/`: `SiteTitle.astro` ("Bryan
-  Cutsinger" on the navy bar — own identity, NO FAU logo/wordmark) and
-  `Footer.astro` (**wraps** Starlight's default Footer so the prev/next pager is
-  preserved, then adds a navy copyright bar). Don't replace Footer outright or you
-  lose the pager.
+  Cutsinger" wordmark on the ink bar — own identity, NO FAU logo; **also loads the
+  Fraunces/Inter fonts site-wide** via its frontmatter imports), `Footer.astro`
+  (**wraps** Starlight's default Footer to preserve the pager, then adds an ink
+  copyright bar — don't replace it outright), and `HeaderLinks.astro` (registered as
+  `SocialIcons`; adds About/Speaking/Contact links back to the marketing site).
 - Safety/screenshot callouts use Starlight **asides** (`:::note` / `:::caution` /
   `:::danger`). Screenshot placeholders are `:::note[Screenshot to add]` blocks —
   Bryan still needs to capture and insert real images.
@@ -82,22 +120,28 @@ Future sub-sites get added as new Starlight content groups in the same repo.
 - `npm run build` — production build into `dist/`
 - `npm run preview` — serve the built site
 
-> **IMPORTANT build caveat (current phase):** while all 17 guide posts are
-> `draft: true`, **`npm run build` FAILS** — Starlight excludes drafts from the
-> production build, so the sidebar slugs (all drafts) don't resolve. This is
-> expected and not a bug. **Preview with `npm run dev`** (Starlight includes drafts
-> in dev). The build goes green the moment posts flip to `draft: false` at publish.
+> **Build status: `npm run build` is GREEN.** The marketing pages (`src/pages/`) and
+> the `/ai/desktop/` branch (`draft:false`) build fine. The original Mac `/ai/` guide
+> (17 posts) is still `draft:true` with its sidebar group **commented out** in
+> `astro.config.mjs` — leave it commented until those flip to `draft:false`, or
+> Starlight fails the build on unresolved draft slugs.
 
 ## Deploy
 
 Push to `main` → `.github/workflows/deploy.yml` builds and publishes to Pages.
-No manual deploy step. **LIVE as of 2026-06-13** at
-https://bryanpcutsinger.github.io (repo: GitHub user site
-`bryanpcutsinger/bryanpcutsinger.github.io`, public; Pages source = GitHub Actions).
-The site is **`noindex`ed** for now (a `head` meta in `astro.config.mjs`) while it's
-shared privately — delete that `head` block to allow search indexing at full launch.
-Build action emits a non-blocking warning that its Node 20 sub-actions are deprecated
-(GitHub forces Node 24 ~June 2026) — bump `withastro/action`/checkout versions later.
+No manual deploy step. **LIVE** at https://bryanpcutsinger.github.io (repo: GitHub
+user site `bryanpcutsinger/bryanpcutsinger.github.io`, public).
+- **Pages source = "GitHub Actions" (`build_type: workflow`).** Set 2026-06-14 via
+  `gh api -X PUT .../pages -f build_type=workflow`. It was previously **`legacy`**
+  ("deploy from branch"), which made GitHub auto-run its **Jekyll** `pages-build-deployment`
+  builder on every push — it choked on the `.astro` frontmatter and **failed every time**
+  (harmless: the Astro workflow is what actually served, but it spammed failure emails).
+  **Do NOT switch Pages back to branch mode** or the failing Jekyll builds return.
+- The site is **`noindex`ed** while shared privately: a `head` meta in `astro.config.mjs`
+  (covers `/ai/`) AND `MarketingLayout.astro`'s `noindex` prop default `true` (covers
+  `src/pages/`). **To allow indexing at full launch, lift BOTH** (comment-linked).
+- Non-blocking CI warning: Node 20 sub-actions deprecated (GitHub forces Node 24 ~June
+  2026) — bump `withastro/action`/checkout versions later.
 
 ## Adding content
 
@@ -202,6 +246,12 @@ Build action emits a non-blocking warning that its Node 20 sub-actions are depre
 
 ## Notes / TODO
 
+- **Marketing site — open items (see the Marketing site section for the full list).**
+  Highest-value next steps: Web3Forms key + booking email (booking form inert until
+  then); real talk topics; named testimonials; long bio + exact rank/department; speaker
+  one-sheet PDF; optional video reel. All are `[PLACEHOLDER]` in code. Optional: pre-shrink
+  the 14 MB `src/assets/on-stage-podium.jpg` source (build already optimizes the output).
+  The TODO bullets below this one are about the older Mac `/ai/` guide, not the marketing site.
 - **Screenshots — HARD pre-publish blockers on the required path.** Several posts have
   `:::note[Screenshot to add]` placeholders for Bryan to fill. On the lean pre-read,
   these gate solo followability (a beginner with nobody to help hits a wall at a blank
