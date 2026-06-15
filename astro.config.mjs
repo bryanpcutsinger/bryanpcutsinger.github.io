@@ -50,6 +50,8 @@ export default defineConfig({
           items: [
             { label: 'Start here', slug: 'ai' },
             { slug: 'ai/what-is-claude-code' },
+            { slug: 'ai/setting-up-claude-code' },
+            { slug: 'ai/your-first-session' },
           ],
         },
 

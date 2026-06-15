@@ -55,6 +55,6 @@ A Mac (macOS 13 or later), a **paid Claude plan** (Pro is the usual starting poi
 Max also works — the free plan does *not* include Claude Code), and about thirty
 minutes for a one-time setup.
 
-The next chapter — the setup walkthrough (installing VS Code, just-enough terminal,
-and Claude Code itself) — is coming soon. For now, see the [guide overview](/ai/) for
-what's available.
+Ready? The next chapter walks you through the one-time setup: [set up Claude
+Code](/ai/setting-up-claude-code/) — install the tool, sign in, and get VS Code running
+as your home base.

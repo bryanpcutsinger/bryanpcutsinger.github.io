@@ -72,27 +72,31 @@ keep it in the Required tier even if the dedicated "verifying" routine gets fold
 | # | slug | title (working) | tier | status |
 |---|------|-----------------|------|--------|
 | 1 | what-is-claude-code | What Claude Code is (and isn't) | required | PUBLISHED 2026-06-15 (`draft:false`, committed `33c9c38`) |
+| 2 | setting-up-claude-code | Set up Claude Code | required | PUBLISHED 2026-06-15 (`draft:false`) — consolidates install VS Code + just-enough terminal + install Claude Code/auth; terminal primer woven in |
+| 3 | your-first-session | Your first session | required | PUBLISHED 2026-06-15 (`draft:false`) — Sandbox folder, read-only first Q, permission prompt, "success looks like this", context mgmt (/context //compact //clear), handoff (--continue //resume) |
 
 (Decide each next post only after the prior is finalized; keep this table current so
 cross-links and sequence stay coherent.)
 
 ## >>> RESUME HERE (next session) <<<
 
-**Where we are:** Step 0 done — checkpoint commit `846e42c` preserves the 17 old
-posts; all 17 deleted from `src/content/docs/ai/`. **Post 1 (`what-is-claude-code`) is
-drafted and now published** (`draft:false`), and the **overview (`index.mdx`) is published
-too** (trimmed to only-existing links) — both live in a minimal sidebar group. The old
-Cowork/`desktop/` branch was **deleted** (2026-06-15); `/ai/` is Claude-Code-only.
-`docs/getting-started-plan.md` marked superseded; `npm run build` green. Still in the
-**per-post loop** — next is proposing post 2 (the setup arc).
+**Where we are:** Posts 1–3 are drafted and **published** (`draft:false`) — post 1
+(`what-is-claude-code`), post 2 (`setting-up-claude-code`, the setup arc, consolidated +
+terminal primer woven in), and post 3 (`your-first-session`). The **overview
+(`index.mdx`)** lists all three; all four slugs are in the minimal live sidebar group in
+`astro.config.mjs`. Install facts were re-verified via the `claude-code-guide` agent
+against `code.claude.com/docs` (June 2026). The old Cowork/`desktop/` branch stays
+deleted; `/ai/` is Claude-Code-only. **Guide is now at 3 of the 6–8 budget.**
 
-**Start by proposing post 2 — the setup arc.** Post 1 is done and published. Per the
-must-cover checklist, the next required ground is **setup**: install VS Code (home base) →
-just-enough terminal → install Claude Code + first launch. Decide whether that's **one
-consolidated "Set up" post** or **two** (VS Code/terminal, then install/auth) — bias to one
-lean post if it fits the 6–8 page budget. Re-verify version-sensitive facts at draft time
-(plan names, the `curl … claude.ai/install.sh` install command, macOS 13+, browser/Keychain
-auth) via the `claude-code-guide` agent — nothing version-sensitive from memory.
+**Start by proposing post 4 — operating modes.** Per the must-cover checklist, the next
+required ground (post 3 deliberately kept the permission prompt light, deferring this):
+**operating modes** — default / plan / auto-accept / bypass, the control-vs-speed dial,
+**Shift+Tab** to cycle, which to use when. Then **point Claude at a real project**
+(working directory, read the diff, backup mindset, raw-data-read-only → write to
+derived/output) and **trust/safety/integrity** (reviewer of record; never invent
+citations/DOIs/quotes/numbers; data + confidentiality; a short checklist). Re-verify any
+version-sensitive facts (the Shift+Tab cycle, mode names) via the `claude-code-guide`
+agent at draft time — nothing version-sensitive from memory.
 
 **Conventions to hold (already set by post 1 + the overview):**
 - Lean (~500–600 words/post), de-numbered/topical open (no "Step N"), self-contained prose.

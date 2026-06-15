@@ -133,10 +133,11 @@ to the editor — deliberately not featured).
 
 > **Build status: `npm run build` is GREEN.** The marketing pages (`src/pages/`) build
 > fine. The `/ai/` Claude Code guide is being rebuilt post-by-post: the **overview
-> (`ai/index.mdx`) and `what-is-claude-code` are `draft:false`** and served via a
-> **minimal live sidebar group** in `astro.config.mjs`. The fuller guide structure stays
-> **commented out** below that group until each post is rebuilt and flipped to
-> `draft:false` — leave it commented, or Starlight fails the build on draft/missing slugs.
+> (`ai/index.mdx`), `what-is-claude-code`, `setting-up-claude-code`, and
+> `your-first-session` are `draft:false`** and served via a **minimal live sidebar group**
+> in `astro.config.mjs`. The fuller guide structure stays **commented out** below that
+> group until each post is rebuilt and flipped to `draft:false` — leave it commented, or
+> Starlight fails the build on draft/missing slugs.
 
 ## Deploy
 
@@ -230,11 +231,12 @@ user site `bryanpcutsinger/bryanpcutsinger.github.io`, public).
   (`ai/index.mdx`) + `what-is-claude-code`** are live (`draft:false`). Everything stays
   **`noindex`ed** while shared privately.
 - **Mac/terminal Claude Code guide — mid-rebuild.** The old 17 posts were deleted in the
-  blank-slate rebuild; only the **overview + `what-is-claude-code`** exist so far (both
-  `draft:false`, in a minimal live sidebar group). Resume drafting the remaining posts per
-  `docs/guide-rebuild-notes.md`; as each ships, add its slug to the live sidebar group and
-  link it from the overview. The fuller sidebar structure stays commented in
-  `astro.config.mjs` until the full set is rebuilt.
+  blank-slate rebuild; the **overview + posts 1–3** (`what-is-claude-code`,
+  `setting-up-claude-code`, `your-first-session`) are published (`draft:false`, in a
+  minimal live sidebar group) — **guide is at 3 of the 6–8 budget.** Resume at **post 4
+  (operating modes)** per `docs/guide-rebuild-notes.md` ("RESUME HERE"); as each ships, add
+  its slug to the live sidebar group and link it from the overview. The fuller sidebar
+  structure stays commented in `astro.config.mjs` until the full set is rebuilt.
 
 ## Notes / TODO
 
