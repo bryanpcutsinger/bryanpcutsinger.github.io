@@ -39,50 +39,27 @@ export default defineConfig({
       // beginner self-sufficient, with everything else demoted to a collapsed
       // "Reference (for after)" group so it reads as optional, not the path.
       sidebar: [
-        // ── The "Claude on the Desktop (Cowork & Code)" branch ──────────────
-        // A standalone, Windows + desktop-app-centric branch written for a
-        // non-technical colleague (econ professor / department chair) whose app
-        // is already installed. Cowork-first; Code as a taste. Two sections: a
-        // pre-read to skim, and a 2-hour facilitator run-of-show that doubles as
-        // a later reference. All posts ship draft:false (see TEMP note below).
+        // ── Getting Started with Claude Code (live, minimal) ────────────────
+        // The Claude Code guide is being rebuilt post-by-post. Only the overview
+        // and the orientation post are draft:false so far, so this live group
+        // lists just those two. Add slugs here as each post is re-drafted and
+        // flipped to draft:false. The fuller structure to restore lives in the
+        // commented block below.
         {
-          label: 'Claude on the Desktop (Cowork & Code)',
+          label: 'Getting Started with Claude Code',
           items: [
-            { label: 'Start here', slug: 'ai/desktop' },
-            {
-              label: 'Before we meet (pre-read)',
-              items: [
-                { slug: 'ai/desktop/the-desktop-app' },
-                { slug: 'ai/desktop/meet-cowork' },
-                { slug: 'ai/desktop/cowork-safely' },
-                { slug: 'ai/desktop/cowork-for-economists' },
-                { slug: 'ai/desktop/a-taste-of-code' },
-                { slug: 'ai/desktop/before-we-meet' },
-              ],
-            },
-            {
-              label: 'The 2-hour session',
-              items: [
-                { slug: 'ai/desktop/session-run-of-show' },
-                { slug: 'ai/desktop/session-1-orientation' },
-                { slug: 'ai/desktop/session-2-first-cowork-task' },
-                { slug: 'ai/desktop/session-3-research-or-teaching' },
-                { slug: 'ai/desktop/session-4-taste-of-code' },
-                { slug: 'ai/desktop/session-5-safety-and-wrap-up' },
-              ],
-            },
+            { label: 'Start here', slug: 'ai' },
+            { slug: 'ai/what-is-claude-code' },
           ],
         },
 
-        // ── TEMP (2026-06-13): the "Getting Started with Claude Code" group is
-        // commented out ON PURPOSE. All 17 of its posts are still draft:true,
-        // and Starlight FAILS the production build whenever the sidebar
-        // references draft slugs. Keeping it out lets `npm run build` go green so
-        // the desktop branch above (draft:false) is publish-ready. Nothing in
-        // these files changed — they're untouched drafts. RESTORE this whole
-        // block (and delete this note) once the main guide's screenshot blockers
-        // are filled and its posts flip to draft:false. The two groups coexist
-        // fine then.
+        // ── TEMP (2026-06-13, updated 2026-06-15): the FULL "Getting Started
+        // with Claude Code" group is commented out ON PURPOSE. Its posts are
+        // still draft:true (or not yet rebuilt), and Starlight FAILS the
+        // production build whenever the sidebar references draft/missing slugs.
+        // The minimal live group above keeps `npm run build` green while the
+        // guide is rebuilt. RESTORE this whole block (and remove the minimal
+        // group + this note) once every post below exists and is draft:false.
         // {
         //   label: 'Getting Started with Claude Code',
         //   items: [

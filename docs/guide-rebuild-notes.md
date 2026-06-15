@@ -71,7 +71,35 @@ keep it in the Required tier even if the dedicated "verifying" routine gets fold
 
 | # | slug | title (working) | tier | status |
 |---|------|-----------------|------|--------|
-| 1 | _tbd_ | _tbd_ | — | not started |
+| 1 | what-is-claude-code | What Claude Code is (and isn't) | required | DRAFTED 2026-06-15, awaiting Bryan's review |
 
 (Decide each next post only after the prior is finalized; keep this table current so
 cross-links and sequence stay coherent.)
+
+## >>> RESUME HERE (next session) <<<
+
+**Where we are:** Step 0 done — checkpoint commit `846e42c` preserves the 17 old
+posts; all 17 deleted from `src/content/docs/ai/`. **Post 1 (`what-is-claude-code`) is
+drafted and now published** (`draft:false`), and the **overview (`index.mdx`) is published
+too** (trimmed to only-existing links) — both live in a minimal sidebar group. The old
+Cowork/`desktop/` branch was **deleted** (2026-06-15); `/ai/` is Claude-Code-only.
+`docs/getting-started-plan.md` marked superseded; `npm run build` green. Still in the
+**per-post loop** — next is proposing post 2 (the setup arc).
+
+**Start by drafting post 1 — `what-is-claude-code.md` — on this approved approach:**
+- Purpose: let an economist decide in ~3 min if Claude Code is worth their time; set the
+  one governing expectation (you stay the reviewer; it can be confidently wrong).
+- **Lean shape, ~500–600 words** (down from the old ~1,100; the "What it's NOT" bloat
+  compresses to ONE `:::caution` callout that forward-links to the integrity post):
+  1. One-paragraph definition — AI that works on the actual files on your computer, driven
+     from a text prompt, asks permission before acting.
+  2. How it differs from browser Claude (acts on your folder vs. copy-paste).
+  3. 2–3 grounded academic vignettes — one teaching, one research (e.g. untangle a messy
+     replication folder; turn lecture notes into a problem set).
+  4. One honest-limits `:::caution` — confidently wrong → verify everything (link integrity).
+  5. Tight "what you'll need" line → hands off to setup.
+- Frontmatter: `title`, `description`, `draft: true`. No pubDate/tags. De-numbered/topical
+  open, no "Step N". Self-contained prose; screenshots optional, not load-bearing.
+
+**Then:** Bryan reviews post 1 → finalize → propose post 2 (likely the setup arc). Hold to
+the **6–8 page budget** and the must-cover checklist above. Don't re-sprawl.

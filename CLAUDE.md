@@ -49,9 +49,14 @@ still owns `/ai/`). Full build history: `~/.claude/plans/i-want-to-rebuilt-ancie
 - **Cross-nav:** `src/components/overrides/HeaderLinks.astro` (registered as Starlight's
   `SocialIcons`) links guides → About/Speaking/Contact; marketing nav has a "Guides" link.
   Sitemap: explicit `@astrojs/sitemap` in `astro.config.mjs` covers the `src/pages/` routes.
-- **`/ai/` guides restyled to match** (Rev 5): `fau-theme.css` now carries the brand
-  palette + Fraunces/Inter + 4px (fonts loaded site-wide via `SiteTitle.astro` frontmatter).
-  Docs layout (sidebar/TOC) intentionally kept.
+- **`/ai/` guides share the marketing site's FULL visual language** (Rev 5, then fully
+  unified 2026-06-15): `fau-theme.css` carries the brand palette + Fraunces/Inter + 4px
+  (fonts loaded site-wide via `SiteTitle.astro` frontmatter) **and** the brand's
+  patterns — sentence-case headings/nav/tables (no institutional all-caps), minimal
+  hairline tables (no zebra striping), cards that lift on hover (no navy-gradient
+  takeover), and a softened ink header. There is **no separate "FAU pattern."** The
+  **only** intentionally-distinct thing is the Starlight docs layout (sidebar/TOC), kept
+  because the guides are reference docs that need navigation.
 - **LIVE** (commit `6b6d36f`, 2026-06-14); still **`noindex`ed**.
 
 **Placeholders Bryan still owes (marked `[PLACEHOLDER]` in code):** Web3Forms access key
@@ -71,12 +76,18 @@ to the editor — deliberately not featured).
   pager, and search.
   - Starlight is **pinned to the 0.36 line on purpose**: 0.38+ requires Astro 6 and
     we're staying on Astro 5 for now (see TODO). Don't bump it without bumping Astro.
-- **Theming = the brand (was FAU; changed 2026-06-14).** `src/styles/fau-theme.css`
-  (registered via Starlight `customCss`) now carries the **marketing brand** onto
-  Starlight: ink `#1a1c1e` + brass `#b07a2c` on bone `#f7f4ef`, Fraunces headings +
-  Inter body, 4px corners. The filename and its `--fau-*` variable names are
-  **historical** — they hold brand colors now, not FAU navy/red. Marketing tokens:
-  `src/styles/brand.css`. (Original FAU rationale: `~/.claude/plans/jaunty-spinning-tiger.md`.)
+- **Theming = the brand (was FAU; changed 2026-06-14, fully unified 2026-06-15).**
+  `src/styles/fau-theme.css` (registered via Starlight `customCss`) carries the
+  **full marketing brand** onto Starlight — not just the palette/type/corners (ink
+  `#1a1c1e` + brass `#b07a2c` on bone `#f7f4ef`, Fraunces headings + Inter body, 4px)
+  but the brand's *patterns* too: sentence case throughout, minimal hairline tables,
+  lift-on-hover cards, underlined brass links. **Don't reintroduce FAU structural
+  patterns** (uppercase nav/table headers, navy-gradient card hover, zebra striping,
+  hard brass header underline) — they were deliberately removed. The filename and its
+  `--fau-*` variable names are **historical** — they hold brand colors now, not FAU
+  navy/red. Marketing tokens: `src/styles/brand.css`. (Unification plan:
+  `~/.claude/plans/the-style-for-the-effervescent-shannon.md`; original FAU rationale,
+  now superseded: `~/.claude/plans/jaunty-spinning-tiger.md`.)
 - **Content lives in `src/content/docs/`** (Starlight's `docs` collection, defined
   in `src/content.config.ts` via `docsLoader()` + `docsSchema()`):
   - `docs/index.mdx` → `/` (splash landing)
@@ -120,11 +131,12 @@ to the editor — deliberately not featured).
 - `npm run build` — production build into `dist/`
 - `npm run preview` — serve the built site
 
-> **Build status: `npm run build` is GREEN.** The marketing pages (`src/pages/`) and
-> the `/ai/desktop/` branch (`draft:false`) build fine. The original Mac `/ai/` guide
-> (17 posts) is still `draft:true` with its sidebar group **commented out** in
-> `astro.config.mjs` — leave it commented until those flip to `draft:false`, or
-> Starlight fails the build on unresolved draft slugs.
+> **Build status: `npm run build` is GREEN.** The marketing pages (`src/pages/`) build
+> fine. The `/ai/` Claude Code guide is being rebuilt post-by-post: the **overview
+> (`ai/index.mdx`) and `what-is-claude-code` are `draft:false`** and served via a
+> **minimal live sidebar group** in `astro.config.mjs`. The fuller guide structure stays
+> **commented out** below that group until each post is rebuilt and flipped to
+> `draft:false` — leave it commented, or Starlight fails the build on draft/missing slugs.
 
 ## Deploy
 
@@ -154,30 +166,18 @@ user site `bryanpcutsinger/bryanpcutsinger.github.io`, public).
   not developer-facing. Voice: practical, low-hype, second person.
 - **A new sub-site:** add content under `src/content/docs/<name>/`, give it its own
   `sidebar` group in `astro.config.mjs` (and/or a splash index). It inherits the
-  FAU theme automatically.
+  brand theme automatically.
 
 ## Current status (as of 2026-06-13)
 
-- **NEW BRANCH: "Claude on the Desktop (Cowork & Code)"** (2026-06-13; plan:
-  `~/.claude/plans/sparkling-strolling-pearl.md`). A standalone sidebar group under
-  `/ai/` for a **non-technical Windows colleague** (econ professor / dept chair) whose
-  desktop app is already installed — built to prep them for a **2-hour working session**.
-  Desktop-app-centric, **Cowork-first, Code as a taste** (the key research finding: the
-  desktop app's **Code tab runs Claude Code with no terminal/Node/CLI** — so the Mac
-  terminal path is skippable). 13 pages in `src/content/docs/ai/desktop/`: a **pre-read**
-  (`index.mdx`, `the-desktop-app`, `meet-cowork`, `cowork-safely`,
-  `cowork-for-economists`, `a-taste-of-code`, `before-we-meet`) + a **2-hour facilitator
-  run-of-show** (`session-run-of-show.mdx`, `session-1-orientation` …
-  `session-5-safety-and-wrap-up`) whose segment pages carry `:::tip[For the facilitator]`
-  cues alongside colleague-facing reference steps. Authored via a 12-agent Workflow; all
-  external links re-verified live against an Anthropic-docs allowlist. **These ship
-  `draft: false`** (unlike the Mac guide), so to keep `npm run build` GREEN the existing
-  "Getting Started with Claude Code" sidebar group is **temporarily commented out** in
-  `astro.config.mjs` (files untouched/still draft; restore the block when the Mac guide's
-  screenshots land). Build verified green; all 16 pages render (asides/cards/tables/
-  screenshot placeholders OK). Windows desktop-app screenshots are Bryan's to add later
-  (non-blocking — prose stands alone). Note: home splash + `/ai/` overview still point at
-  the now-unbuilt Mac guide, so **share the direct `/ai/desktop/` URL** with the colleague.
+- **The Cowork/Desktop branch was DELETED (2026-06-15).** A standalone "Claude on the
+  Desktop (Cowork & Code)" branch (13 pages under `src/content/docs/ai/desktop/`, for a
+  non-technical Windows colleague) was removed entirely — the site's focus is now
+  **entirely on Claude Code**. Its sidebar group, the `sparkling-strolling-pearl*` plan
+  files, and all `/ai/desktop/` references are gone. The marketing header/footer "Guides"
+  link was repointed `/ai/desktop/` → `/ai/`, and the **`/ai/` Claude Code guide overview
+  + `what-is-claude-code` were published (`draft:false`)** so that link lands on real
+  content (see Build status above). The rest of the guide is still being rebuilt.
 - **Refocused as a lean "arrive-ready" pre-read** (plan:
   `~/.claude/plans/crystalline-rolling-jellyfish.md`). A read-only multi-agent audit
   (one agent per post + synthesis) found the guide had become a 17-post standalone
@@ -226,23 +226,15 @@ user site `bryanpcutsinger/bryanpcutsinger.github.io`, public).
   model & cost, Git as undo, Codex comparison). See the plan. Not started.
 - **PUBLISHED to GitHub Pages (2026-06-13).** Live at https://bryanpcutsinger.github.io
   (public repo `bryanpcutsinger/bryanpcutsinger.github.io`; Pages via GitHub Actions).
-  Only the **Claude on the Desktop (Cowork & Code)** branch + the home splash are live.
-  For a clean, dead-link-free launch with the Mac guide still unfinished, three
-  temporary changes were made (all reversible at full launch):
-  1. **Home splash** (`src/content/docs/index.mdx`) hero button + card now point to
-     `/ai/desktop/` (were `/ai/`).
-  2. **`src/content/docs/ai/index.mdx`** (the Mac-guide overview) set `draft: true` so
-     it isn't built (it linked to draft pages → would 404). Restore to `draft: false`
-     and re-point the home splash when the Mac guide ships.
-  3. The desktop branch's cross-links to the unbuilt Mac-guide pages
-     (`/ai/what-is-claude-code/`, `/ai/trust-safety-integrity/`) were repointed —
-     integrity refs → the branch's own `/ai/desktop/cowork-safely/`; command-line refs
-     → Anthropic's official quickstart. Revisit if you want them to point back at the
-     Mac guide once it's live.
-- **Mac/terminal guide:** all 17 posts remain `draft: true` and its sidebar group
-  stays commented out in `astro.config.mjs`. Publishing it = fill screenshot blockers,
-  flip drafts to `draft: false`, uncomment the sidebar group, restore the home splash +
-  `/ai/` overview, and (optionally) repoint the desktop cross-links back.
+  The marketing site is the front end; under `/ai/`, the **Claude Code guide overview
+  (`ai/index.mdx`) + `what-is-claude-code`** are live (`draft:false`). Everything stays
+  **`noindex`ed** while shared privately.
+- **Mac/terminal Claude Code guide — mid-rebuild.** The old 17 posts were deleted in the
+  blank-slate rebuild; only the **overview + `what-is-claude-code`** exist so far (both
+  `draft:false`, in a minimal live sidebar group). Resume drafting the remaining posts per
+  `docs/guide-rebuild-notes.md`; as each ships, add its slug to the live sidebar group and
+  link it from the overview. The fuller sidebar structure stays commented in
+  `astro.config.mjs` until the full set is rebuilt.
 
 ## Notes / TODO
 

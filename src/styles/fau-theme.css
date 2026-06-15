@@ -1,9 +1,12 @@
 /* =====================================================================
    Brand theme for Starlight (the /ai/ guides)
-   Carries the marketing site's full editorial language onto Starlight so the
-   guides match the rest of the site: the ink + warm-brass palette on a bone
-   surface, Fraunces (display) + Inter (body) type, and softened 4px corners.
-   The Starlight DOCS LAYOUT (sidebar + right-rail TOC) is intentionally kept.
+   The guides share the marketing site's FULL visual language so they read as
+   one brand: the ink + warm-brass palette on a bone surface, Fraunces (display)
+   + Inter (body) type, sentence-case headings, minimal hairline tables, cards
+   that lift on hover, and 4px corners. The ONLY thing that stays distinct is the
+   Starlight DOCS LAYOUT (sidebar + right-rail TOC) — the guides are reference
+   docs that need navigation. There is no separate "FAU pattern"; uppercase is
+   reserved for the marketing brand's small eyebrow labels, not nav or tables.
    Fonts are loaded site-wide from src/components/overrides/SiteTitle.astro.
    Marketing brand tokens live in src/styles/brand.css; this file mirrors their
    color VALUES through the historical --fau-* variable names to minimize churn
@@ -25,16 +28,15 @@
   --fau-stone: #6b7a82;         /* slate: secondary accents */
   --fau-sand: #d4b98b;
   --surface-nav: #efeae1;       /* warm left-nav / table-header panel bg */
-  --stripe-even: #faf8f4;       /* table even-row stripe */
 
   /* Body type -> Inter (matches the marketing site); system-sans fallback */
   --sl-font: 'Inter Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI',
     Roboto, Helvetica, Arial, sans-serif;
 }
 
-/* Force a single light appearance so FAU navy reads consistently, and hide the
-   light/dark toggle. We map the FAU palette onto BOTH theme attribute scopes so
-   no matter what Starlight resolves at load, the look is identical. */
+/* Force a single light appearance so the brand neutrals read consistently, and
+   hide the light/dark toggle. We map the brand palette onto BOTH theme attribute
+   scopes so no matter what Starlight resolves at load, the look is identical. */
 :root,
 :root[data-theme='light'],
 :root[data-theme='dark'] {
@@ -87,30 +89,32 @@ h1.content-title,
   color: var(--fau-dark-gray);
 }
 
-/* Body links -> FAU link blue */
+/* Body links -> brass, underlined by default (matches the marketing pages) */
 .sl-markdown-content a {
   color: var(--fau-link);
-  text-decoration: none;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
 }
 .sl-markdown-content a:hover {
   color: var(--fau-link-hover);
-  text-decoration: underline;
 }
 
 /* --------------------------------------------------------------------
-   Top header bar: FAU navy with white contents
+   Top header bar: ink with light contents, matching the marketing nav's
+   scrolled state — a clean hairline, not a hard brass underline.
    -------------------------------------------------------------------- */
 .header {
   background-color: var(--fau-blue) !important;
-  border-bottom: 3px solid var(--fau-red);
+  border-bottom: 1px solid rgba(243, 239, 232, 0.1);
 }
-/* Search button, social, icons -> readable on navy */
+/* Search button, social, icons -> readable on the ink bar */
 .header a,
 .header button,
 .header .sl-link-button {
   color: #ffffff;
 }
-/* Search field on the navy bar */
+/* Search field on the ink bar */
 .header site-search button {
   background-color: rgba(255, 255, 255, 0.12);
   border-color: rgba(255, 255, 255, 0.35);
@@ -123,7 +127,7 @@ starlight-menu-button button {
 }
 
 /* --------------------------------------------------------------------
-   Left sidebar nav: FAU pattern — navy links, red current page, 1px rules
+   Left sidebar nav: ink links, brass current page, soft warm hover
    -------------------------------------------------------------------- */
 .sidebar-content a {
   color: var(--fau-blue);
@@ -133,19 +137,18 @@ starlight-menu-button button {
   background-color: var(--surface-nav);
   color: var(--fau-blue);
 }
-/* Current page -> FAU red */
+/* Current page -> brass on a warm tint */
 .sidebar-content a[aria-current='page'],
 .sidebar-content a[aria-current='page']:hover {
   color: var(--fau-red);
   background-color: var(--fau-skyblue);
   font-weight: 600;
 }
-/* Group headings -> uppercase navy, like FAU side-menu headings */
+/* Group headings -> quiet sentence-case ink labels (no institutional all-caps) */
 .sidebar-content summary .group-label span,
 .sidebar-content h2 {
-  text-transform: uppercase;
   color: var(--fau-blue);
-  letter-spacing: 0.04em;
+  font-weight: 600;
   font-size: 0.85rem;
 }
 
@@ -159,7 +162,7 @@ starlight-menu-button button {
 }
 
 /* --------------------------------------------------------------------
-   Asides / callouts: FAU .alert pattern — 4px left border + pale fill
+   Asides / callouts: 4px left border + warm pale fill (brand editorial)
    -------------------------------------------------------------------- */
 .starlight-aside {
   border-radius: 4px;
@@ -190,7 +193,8 @@ starlight-menu-button button {
 }
 
 /* --------------------------------------------------------------------
-   Tables: uppercase header + striped rows (FAU #d9ecff / #f1f2f2)
+   Tables: minimal hairline rules, sentence-case header (marketing bio-block
+   feel) — no all-caps, no zebra striping.
    -------------------------------------------------------------------- */
 .sl-markdown-content table {
   border-collapse: collapse;
@@ -199,27 +203,20 @@ starlight-menu-button button {
 .sl-markdown-content th {
   background-color: var(--surface-nav);
   color: var(--fau-blue);
-  text-transform: uppercase;
-  font-size: 0.85rem;
-  letter-spacing: 0.02em;
-  border: 1px solid #ffffff;
+  font-size: 0.9rem;
+  border: 1px solid var(--fau-gray);
   padding: 0.6rem 0.9rem;
   text-align: left;
 }
 .sl-markdown-content td {
-  border: 1px solid #ffffff;
+  border: 1px solid var(--fau-gray);
   padding: 0.6rem 0.9rem;
-}
-.sl-markdown-content tbody tr:nth-child(odd) {
-  background-color: var(--fau-skyblue);
-}
-.sl-markdown-content tbody tr:nth-child(even) {
-  background-color: var(--stripe-even);
 }
 
 /* --------------------------------------------------------------------
-   Cards / LinkCards: flat, square, 1px #ccc border; LinkCard hover = navy
-   gradient with white text (FAU .link-card pattern)
+   Cards / LinkCards: white, 1px hairline, 4px corners; hover = lift with a
+   brass border + soft warm shadow (the marketing card pattern). Text colors
+   stay put on hover — no navy takeover.
    -------------------------------------------------------------------- */
 .card,
 .sl-link-card {
@@ -231,16 +228,13 @@ starlight-menu-button button {
   color: var(--fau-blue);
 }
 .sl-link-card {
-  transition: background 0.15s ease, color 0.15s ease;
+  transition: transform 0.18s ease, border-color 0.18s ease,
+    box-shadow 0.18s ease;
 }
 .sl-link-card:hover {
-  background: linear-gradient(135deg, #26292c, #1a1c1e);
-  border-color: #1a1c1e;
-}
-.sl-link-card:hover .title,
-.sl-link-card:hover .description,
-.sl-link-card:hover .icon {
-  color: #ffffff;
+  transform: translateY(-2px);
+  border-color: var(--fau-red);
+  box-shadow: 0 8px 30px rgba(26, 28, 30, 0.08);
 }
 
 /* --------------------------------------------------------------------

@@ -1,3 +1,8 @@
+> **SUPERSEDED (2026-06-14).** This is the original pre-Starlight plan (it references
+> `src/content/ai/`, `pubDate`/`tags`, and a `welcome.md` that no longer exist). The
+> guide was rebuilt from a blank slate — see `~/.claude/plans/i-want-to-revist-jazzy-crane.md`
+> and `docs/guide-rebuild-notes.md`. Kept for history only; do not follow it.
+
 # Plan: "Getting Started with Claude Code" learning path (AI sub-site)
 
 ## Context
