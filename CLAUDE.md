@@ -252,7 +252,26 @@ trees API but slugs assume a flat layout). Why import-then-commit rather than an
 remote loader: keeps CI hermetic (no build-time private-repo auth) and every change is
 visible in `git diff`.
 
-## Current status (as of 2026-06-13)
+## Current status (as of 2026-06-17)
+
+**Latest (2026-06-17) — merged to `main` and deployed (still `noindex`ed):**
+- **Teaching section + course pipeline shipped.** `/teaching/` landing +
+  `/teaching/microeconomics/` course home + the topic-posts pipeline
+  (`scripts/import-topic.sh`, `courses` collection, `[topic].astro`). Live topic index
+  is **empty** until a micro topic is flipped to `status: approved` upstream (none is
+  yet). See "Teaching section + course-content publishing" above.
+- **AI guide split into its own repo.** `/ai/` is now **imported** from
+  `bryanpcutsinger/claude-code-guide` (local `~/Projects/claude-code-guide`); the
+  website holds a generated, committed copy + a manifest-driven sidebar. Output is
+  byte-identical to before the split. See "Claude Code guide — imported from its own
+  repo" above.
+- **Held out of git on purpose (untracked, regenerable):** `src/content/courses/` (the
+  imported T1 micro post) and `public/teaching/` (its figure) — kept out until T1 is
+  re-approved; recreate with `npm run import:topic`.
+- **Branches:** today's work landed on `teaching-topics` → `ai-guide-split`, both merged
+  into `main` and pushed (2026-06-17). The deploy workflow publishes `main` to Pages.
+- The history log below predates today and is kept for context; where it says the guide
+  is "mid-rebuild in-repo," that's superseded by the split above.
 
 - **The Cowork/Desktop branch was DELETED (2026-06-15).** A standalone "Claude on the
   Desktop (Cowork & Code)" branch (13 pages under `src/content/docs/ai/desktop/`, for a
