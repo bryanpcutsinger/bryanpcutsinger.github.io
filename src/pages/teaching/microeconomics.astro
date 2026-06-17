@@ -1,0 +1,132 @@
+---
+import MarketingLayout from '../../layouts/MarketingLayout.astro';
+import Hero from '../../components/marketing/Hero.astro';
+import Section from '../../components/marketing/Section.astro';
+import SectionHeading from '../../components/marketing/SectionHeading.astro';
+import DownloadCard from '../../components/marketing/DownloadCard.astro';
+import Button from '../../components/marketing/Button.astro';
+import CTABand from '../../components/marketing/CTABand.astro';
+
+// PLACEHOLDER — Bryan to fill in real course materials. DownloadCards render a
+// "Request" fallback (to /contact/) until a `fileUrl` is supplied. Real files
+// go in public/downloads/.
+const materials = [
+  {
+    title: 'Syllabus',
+    description: 'Course outline, policies, and the schedule of topics.',
+    downloadLabel: 'Download the syllabus (PDF)',
+    requestLabel: 'Request the syllabus',
+    // fileUrl: '/downloads/microeconomics-syllabus.pdf',
+  },
+  {
+    title: 'Lecture slides',
+    description: 'Slide decks for each unit of the course.',
+    downloadLabel: 'Download the slides (PDF)',
+    requestLabel: 'Request the slides',
+    // fileUrl: '/downloads/microeconomics-slides.pdf',
+  },
+  {
+    title: 'Problem sets',
+    description: 'Practice problems with the concepts from each section.',
+    downloadLabel: 'Download the problem sets (PDF)',
+    requestLabel: 'Request the problem sets',
+    // fileUrl: '/downloads/microeconomics-problem-sets.pdf',
+  },
+];
+
+// PLACEHOLDER — Bryan to supply real URLs (LMS, video playlist, repository) or
+// remove this section.
+const externalLinks: { label: string; href: string }[] = [
+  // { label: 'Course site', href: '[PLACEHOLDER]' },
+  // { label: 'Lecture videos', href: '[PLACEHOLDER]' },
+];
+---
+<MarketingLayout
+  title="Principles of Microeconomics — Bryan Cutsinger"
+  description="Overview and course materials for Bryan Cutsinger's Principles of Microeconomics — syllabus, lecture slides, and problem sets."
+>
+  <!-- PLACEHOLDER copy — Bryan to confirm overview line. -->
+  <Hero
+    eyebrow="Course"
+    headline="Principles of Microeconomics"
+    subhead="How markets, prices, and incentives shape the choices households and firms make — and what that tells us about the world beyond the classroom."
+  />
+
+  <!-- Written overview -->
+  <Section variant="surface" width="reading">
+    <SectionHeading eyebrow="Overview" heading="About the course." />
+    <div class="prose">
+      <!-- PLACEHOLDER — Bryan to replace with the real course overview. -->
+      <p>
+        This is an introduction to microeconomics: the study of how individuals,
+        households, and firms make decisions under scarcity, and how those
+        decisions interact in markets. We build the core toolkit — supply and
+        demand, elasticity, costs, competition, and market failure — and use it
+        to make sense of real economic questions.
+      </p>
+      <p>
+        <strong>Topics covered.</strong> [PLACEHOLDER — list the main units, e.g.
+        scarcity and choice; supply and demand; elasticity; consumer and producer
+        theory; market structures; externalities and public goods.]
+      </p>
+      <p>
+        <strong>Who it's for.</strong> [PLACEHOLDER — e.g. undergraduates taking
+        their first economics course; no prior background assumed.]
+      </p>
+    </div>
+  </Section>
+
+  <!-- Materials (downloads) -->
+  <Section variant="raised">
+    <SectionHeading
+      eyebrow="Materials"
+      heading="Course materials."
+      lede="You're welcome to use or adapt these. Files marked “request” aren't posted yet — reach out and I'll send them."
+    />
+    <div class="materials">
+      {materials.map((m) => <DownloadCard {...m} />)}
+    </div>
+  </Section>
+
+  {
+    externalLinks.length > 0 && (
+      <Section variant="surface">
+        <SectionHeading eyebrow="Elsewhere" heading="Related links." />
+        <div class="links">
+          {externalLinks.map((l) => (
+            <Button href={l.href} variant="secondary">
+              {l.label}
+            </Button>
+          ))}
+        </div>
+      </Section>
+    )
+  }
+
+  <CTABand
+    heading="Questions about the course or its materials?"
+    cta={{ label: 'Get in touch', href: '/contact/' }}
+  />
+</MarketingLayout>
+
+<style>
+  .prose p {
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: var(--text);
+    margin: 0 0 var(--sp-6);
+  }
+  .prose p:last-child {
+    margin-bottom: 0;
+  }
+  .materials {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-6);
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-4);
+  }
+</style>

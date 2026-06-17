@@ -9,12 +9,16 @@ interface Props {
   description?: string;
   fileUrl?: string;
   requestHref?: string;
+  downloadLabel?: string;
+  requestLabel?: string;
 }
 const {
   title,
   description,
   fileUrl,
   requestHref = '/contact/',
+  downloadLabel = 'Download the one-sheet (PDF)',
+  requestLabel = 'Request the one-sheet',
 } = Astro.props;
 ---
 <div class="download-card">
@@ -25,11 +29,11 @@ const {
   {
     fileUrl ? (
       <Button href={fileUrl} variant="secondary" class="download-card__btn">
-        Download the one-sheet (PDF)
+        {downloadLabel}
       </Button>
     ) : (
       <Button href={requestHref} variant="secondary" class="download-card__btn">
-        Request the one-sheet
+        {requestLabel}
       </Button>
     )
   }
