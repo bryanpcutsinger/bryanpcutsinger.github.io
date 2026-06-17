@@ -3,11 +3,46 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import sitemap from '@astrojs/sitemap';
 
+// Defense-in-depth: strip HTML comments (incl. the `<!-- INSTRUCTOR NOTES -->`
+// block) from imported course posts at render time. The PRIMARY strip is
+// scripts/import-topic.sh (so notes never enter this public repo's source); this
+// is a backstop, plus the `postbuild` grep gate in package.json. Scoped to
+// /content/courses/ by file path so Starlight's /ai/ docs are untouched. Never
+// throws — a failure here must not break the build (the import script already
+// guaranteed clean source).
+function stripCourseComments() {
+  const COMMENT = /<!--[\s\S]*?-->/g;
+  return (/** @type {any} */ tree, /** @type {any} */ file) => {
+    const path = file?.path || file?.history?.[0] || '';
+    if (!String(path).includes('/content/courses/')) return;
+    const walk = (/** @type {any} */ node) => {
+      if (!node || !Array.isArray(node.children)) return;
+      node.children = node.children.filter((/** @type {any} */ child) => {
+        if (child.type === 'html' && typeof child.value === 'string') {
+          child.value = child.value.replace(COMMENT, '');
+          if (child.value.trim() === '') return false; // drop emptied node
+        }
+        walk(child);
+        return true;
+      });
+    };
+    try {
+      walk(tree);
+    } catch {
+      /* never throw — import-topic.sh is the primary control */
+    }
+  };
+}
+
 // GitHub *user site* (bryanpcutsinger.github.io) served from root — no `base`.
 // The site is a Starlight docs site themed to the FAU style guide (see
 // src/styles/fau-theme.css). When a custom domain is attached, only `site` changes.
 export default defineConfig({
   site: 'https://bryanpcutsinger.github.io',
+  // Backstop strip for imported course posts (see stripCourseComments above).
+  // The path guard makes it a no-op for every non-course file, so the /ai/
+  // Starlight build output is byte-for-byte unchanged.
+  markdown: { remarkPlugins: [stripCourseComments] },
   integrations: [
     // Explicit sitemap so the custom marketing pages (src/pages/*) are included
     // — Starlight's transitive sitemap only enumerates its own docs routes.

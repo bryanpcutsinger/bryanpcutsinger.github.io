@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "postbuild": "if grep -rl 'INSTRUCTOR NOTES' dist >/dev/null 2>&1; then echo 'SECURITY: INSTRUCTOR NOTES found in build output — failing build' && exit 1; fi",
+    "preview": "astro preview",
+    "import:topic": "bash scripts/import-topic.sh"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",

@@ -169,6 +169,53 @@ user site `bryanpcutsinger/bryanpcutsinger.github.io`, public).
   `sidebar` group in `astro.config.mjs` (and/or a splash index). It inherits the
   brand theme automatically.
 
+## Teaching section + course-content publishing (built 2026-06-17)
+
+`/teaching/` is a **marketing-styled** sub-site (custom `src/pages/`, NOT Starlight),
+separate from the `/ai/` Starlight docs. Two layers:
+
+- **Static scaffold** (committed 2026-06-17, `158f056`): `/teaching/` landing
+  (`src/pages/teaching.astro` + `src/data/teaching.json`) and the per-course home
+  `src/pages/teaching/microeconomics.astro`. Nav links to `/teaching/` were added to
+  `SiteHeader`, `SiteFooter`, and the Starlight `HeaderLinks` override.
+- **Topic-posts pipeline** (the publishing machine): per-topic readers are **imported**
+  from the **private** repo `bryanpcutsinger/micro-principles` — this public repo holds a
+  *generated, never-hand-edited copy*. Edit the source post → re-import → site updates.
+
+**How to publish/refresh a topic:**
+```
+npm run import:topic -- <topic-slug> [course]     # e.g. t01-economic-way-of-thinking microeconomics
+```
+`scripts/import-topic.sh` (via `gh`, no local clone of the source needed): copies `post.md`
+with the `<!-- INSTRUCTOR NOTES … -->` block **stripped**, rewrites relative figure refs
+`](figures/x.svg)` → absolute `](/teaching/<course>/<slug>/figures/x.svg)`, and copies
+`figures/*.svg` into `public/teaching/<course>/<slug>/figures/`. Cleaned posts land in
+`src/content/courses/<course>/<slug>/post.md` (the `courses` content collection in
+`src/content.config.ts` — lenient Zod schema; Starlight's `docs` is untouched).
+
+**🔴 Security — instructor notes are stripped at THREE layers (the public repo must never
+carry them):** (1) PRIMARY — the import script removes the block at copy time, so notes
+never enter source/git history; (2) defense-in-depth — a path-scoped remark plugin
+(`stripCourseComments` in `astro.config.mjs`, no-op outside `/content/courses/`, so `/ai/`
+output is byte-unchanged) strips HTML comments at render; (3) a `postbuild` gate
+(`package.json`) fails the build if `INSTRUCTOR NOTES` appears anywhere in `dist`.
+
+**Publish gate:** topic pages render/route **only when frontmatter `status: approved`** in
+the PRODUCTION build. `astro dev` also previews drafts (mirrors Starlight's `draft:`
+behavior) with a "Draft preview" badge, so Bryan can read in-progress topics locally
+without publishing them. As of 2026-06-17 **no source topic is `approved`** (T1 was
+re-set to `draft` after a 2026-06-06 rebuild — "re-approval pending"), so the live topic
+index renders **empty** until Bryan flips a topic to `approved` and re-imports. T1 is
+imported into the working tree for verification.
+
+**Rendering:** `src/pages/teaching/microeconomics/[topic].astro` (`getStaticPaths` +
+`render()`) — eyebrow band (course · T#), in-page TOC from `##` claim headers, scoped
+`.prose` CSS (incl. GFM tables + figure/caption styling), prev/next pager, back-link,
+CTABand. The course home lists published topics as an ordered index. Slides are LaTeX and
+on hold upstream → `DownloadCard`s show "Request" until PDFs land in `public/downloads/`.
+**Note:** in `[topic].astro`, `getStaticPaths()` runs in an isolated scope — keep the
+consts it needs (`COURSE`, helpers) *inside* it; the template re-declares `COURSE`.
+
 ## Current status (as of 2026-06-13)
 
 - **The Cowork/Desktop branch was DELETED (2026-06-15).** A standalone "Claude on the
