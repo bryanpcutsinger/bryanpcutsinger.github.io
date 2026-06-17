@@ -1,0 +1,9 @@
+{
+  "label": "Getting Started with Claude Code",
+  "items": [
+    { "label": "Start here", "slug": "ai" },
+    { "slug": "ai/what-is-claude-code" },
+    { "slug": "ai/setting-up-claude-code" },
+    { "slug": "ai/your-first-session" }
+  ]
+}

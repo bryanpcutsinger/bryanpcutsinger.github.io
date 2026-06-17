@@ -98,15 +98,15 @@ to the editor — deliberately not featured).
 - **Frontmatter is Starlight's** (`title`, `description`, `draft`, optionally
   `template`/`hero`/`sidebar`). **No `pubDate`/`tags`** — curriculum ORDER lives in
   the sidebar config, not dates.
-- **Sidebar / curriculum order is in `astro.config.mjs`** — the "Getting Started
-  with Claude Code" group, now in **4 sections** reflecting the lean pre-read:
-  *Start here* (overview + `what-is-claude-code`) → **Set up (do this first)**
-  (`installing-vs-code`, `terminal-basics`, `installing-claude-code`) → **Get
-  oriented** (`your-first-session`, `operating-modes`, `pointing-claude-at-your-work`,
-  `trust-safety-integrity`) → **Reference (for after)** (`collapsed: true`; the other
-  9 posts). To add/reorder a post, edit that sidebar config — and decide deliberately
-  whether it belongs in the required path or Reference (default to Reference unless it
-  serves "arrive ready").
+- **Sidebar / curriculum order lives in the GUIDE repo** (`guide.manifest.json` in
+  `bryanpcutsinger/claude-code-guide`), NOT in `astro.config.mjs` anymore (changed
+  2026-06-17 — see the "Claude Code guide" section below). The config just does
+  `import claudeGuideSidebar from './src/data/guide-sidebar.json'` (a generated copy)
+  and `sidebar: [claudeGuideSidebar]`. To add/reorder a post or restore the nested
+  *Start here → Set up → Get oriented → Reference (for after)* groups, edit the
+  **manifest in the guide repo** and re-import — never hand-edit the config or the
+  generated JSON. Draft-safety rule still applies: the manifest lists only
+  `draft:false` posts (Starlight fails the build on draft/missing slugs).
 - **The path is DE-NUMBERED.** The original 10 posts used to hard-code "Step N" in
   prose; that was removed in the 2026-06-13 reframe (it broke once pages were
   resequenced/demoted). All posts now **open topically and reference prerequisites by
@@ -132,12 +132,13 @@ to the editor — deliberately not featured).
 - `npm run preview` — serve the built site
 
 > **Build status: `npm run build` is GREEN.** The marketing pages (`src/pages/`) build
-> fine. The `/ai/` Claude Code guide is being rebuilt post-by-post: the **overview
-> (`ai/index.mdx`), `what-is-claude-code`, `setting-up-claude-code`, and
-> `your-first-session` are `draft:false`** and served via a **minimal live sidebar group**
-> in `astro.config.mjs`. The fuller guide structure stays **commented out** below that
-> group until each post is rebuilt and flipped to `draft:false` — leave it commented, or
-> Starlight fails the build on draft/missing slugs.
+> fine. The `/ai/` Claude Code guide is now **imported** from `bryanpcutsinger/claude-code-guide`
+> (see the "Claude Code guide" section below): the overview (`ai/index.mdx`),
+> `what-is-claude-code`, `setting-up-claude-code`, and `your-first-session` are
+> `draft:false` and the sidebar is built from the imported manifest
+> (`src/data/guide-sidebar.json`). The fuller structure is reintroduced by editing the
+> manifest **in the guide repo** as posts are rebuilt and flipped to `draft:false` (only
+> `draft:false` posts go in the manifest, or Starlight fails the build).
 
 ## Deploy
 
@@ -158,13 +159,15 @@ user site `bryanpcutsinger/bryanpcutsinger.github.io`, public).
 
 ## Adding content
 
-- **A guide post:** add `src/content/docs/ai/<slug>.md` with Starlight frontmatter
-  (`title`, `description`, `draft: true`), then add `{ slug: 'ai/<slug>' }` to the
-  right stage in the `sidebar` config in `astro.config.mjs`. Frame it for an
-  **academic economist** new to these tools — draw examples from teaching and
-  research, balanced roughly evenly (e.g. syllabi, problem sets, lecture notes;
-  data cleaning, replication, working papers, citations). Stay beginner-friendly,
-  not developer-facing. Voice: practical, low-hype, second person.
+- **A guide post:** author it in the **guide repo** (`~/Projects/claude-code-guide`),
+  NOT here — add `posts/<slug>.md` with Starlight frontmatter (`title`, `description`,
+  `draft: true`), add `{ "slug": "ai/<slug>" }` to `guide.manifest.json` when ready
+  (`draft:false`), push, then on the website run `npm run import:guide` + `npm run
+  build` and commit the regenerated files. Frame it for an **academic economist** new
+  to these tools — examples from teaching and research, balanced (syllabi, problem
+  sets, lecture notes; data cleaning, replication, working papers, citations).
+  Beginner-friendly, not developer-facing. Voice: practical, low-hype, second person.
+  **Never hand-edit `src/content/docs/ai/` here — it's a generated copy.**
 - **A new sub-site:** add content under `src/content/docs/<name>/`, give it its own
   `sidebar` group in `astro.config.mjs` (and/or a splash index). It inherits the
   brand theme automatically.
@@ -215,6 +218,39 @@ CTABand. The course home lists published topics as an ordered index. Slides are 
 on hold upstream → `DownloadCard`s show "Request" until PDFs land in `public/downloads/`.
 **Note:** in `[topic].astro`, `getStaticPaths()` runs in an isolated scope — keep the
 consts it needs (`COURSE`, helpers) *inside* it; the template re-declares `COURSE`.
+
+## Claude Code guide — imported from its own repo (split out 2026-06-17)
+
+The `/ai/` "Getting Started with Claude Code" guide is **no longer hand-authored in
+this repo**. Its source of truth is `bryanpcutsinger/claude-code-guide` (private; local
+folder `~/Projects/claude-code-guide`, a top-level sibling of `Website`). This repo
+holds a **generated, committed copy** — same source-of-truth model as the micro course,
+but for Starlight content. Plan: `~/.claude/plans/would-it-make-sense-humble-cupcake.md`.
+
+**Refresh the guide:**
+```
+npm run import:guide        # scripts/import-guide.sh, via gh
+```
+It pulls from the guide repo (default branch) over `gh` — no local cross-folder
+dependency — and writes:
+- `posts/**` → `src/content/docs/ai/**` (**clear-and-rewrite**: this dir is 100%
+  generated, so a renamed/deleted source post can't leave an orphan live page),
+- `guide.manifest.json` → `src/data/guide-sidebar.json` (drives the Starlight sidebar
+  via the `import` in `astro.config.mjs`),
+- the guide's `public/**` → this repo's `public/**` (**additive** — never deletes
+  site-owned files like `favicon.svg` or `teaching/**`; this is how
+  `public/templates/CLAUDE-md-economist-template.md` arrives).
+
+No notes-strip / no path-rewrite needed (no instructor notes in the guide). The global
+`postbuild` `INSTRUCTOR NOTES` gate still runs but is a harmless no-op here.
+
+**Rules:** never hand-edit `src/content/docs/ai/` or `src/data/guide-sidebar.json` —
+edit the source repo + re-import (the next import clobbers local edits). The generated
+files **must stay committed** (CI builds from local files only; it never runs the
+import). `posts/` in the guide repo is **flat** (the importer's listing is via the git
+trees API but slugs assume a flat layout). Why import-then-commit rather than an Astro 5
+remote loader: keeps CI hermetic (no build-time private-repo auth) and every change is
+visible in `git diff`.
 
 ## Current status (as of 2026-06-13)
 
