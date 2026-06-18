@@ -15,7 +15,8 @@
 #   3. Rewrites relative figure refs  ](figures/x.svg)  ->  absolute public paths
 #      ](/teaching/<course>/<slug>/figures/x.svg)  so the SVGs resolve when the
 #      Markdown is rendered through a custom src/pages route (avoids astro#13512).
-#   4. Copies the topic's figures/*.svg (NOT the .tex sources) into public/.
+#   4. Copies the topic's figures/*.svg AND figures/*.html (interactive widgets;
+#      NOT the .tex sources) into public/, gating .html for INSTRUCTOR NOTES.
 #   5. Writes the cleaned post to src/content/courses/<course>/<slug>/post.md.
 #   6. Hard-fails if the INSTRUCTOR NOTES marker survives the strip.
 #
@@ -65,21 +66,28 @@ if grep -q "INSTRUCTOR NOTES" "$CONTENT_DIR/post.md"; then
   exit 1
 fi
 
-# --- 4. figures: copy *.svg only (skip .tex sources) --------------------------
+# --- 4. figures: copy *.svg + *.html (interactive widgets); skip .tex sources -
 # Portable read loop (macOS ships bash 3.2, which has no `mapfile`).
 FIGS=()
 while IFS= read -r f; do
   [ -n "$f" ] && FIGS+=("$f")
 done < <(
   gh api "repos/$SRC_REPO/contents/$SRC_TOPIC/figures" \
-    --jq '.[] | select(.name | endswith(".svg")) | .name' 2>/dev/null || true
+    --jq '.[] | select(.name | endswith(".svg") or endswith(".html")) | .name' 2>/dev/null || true
 )
 if [ "${#FIGS[@]}" -eq 0 ]; then
-  echo "  (no .svg figures in source — nothing to copy)"
+  echo "  (no .svg/.html figures in source — nothing to copy)"
 else
   for f in "${FIGS[@]}"; do
     gh api "repos/$SRC_REPO/contents/$SRC_TOPIC/figures/$f" \
       -H "Accept: application/vnd.github.raw" > "$PUBLIC_FIG_DIR/$f"
+    # Defense-in-depth: an interactive .html widget must not carry the notes
+    # marker into the public repo (the postbuild grep over dist/ backstops this).
+    if grep -q "INSTRUCTOR NOTES" "$PUBLIC_FIG_DIR/$f"; then
+      echo "✗ ABORT: 'INSTRUCTOR NOTES' found in figure $f" >&2
+      rm -f "$PUBLIC_FIG_DIR/$f"
+      exit 1
+    fi
     echo "  figure: $f"
   done
 fi
