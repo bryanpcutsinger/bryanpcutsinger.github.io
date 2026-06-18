@@ -181,6 +181,19 @@ separate from the `/ai/` Starlight docs. Two layers:
   (`src/pages/teaching.astro` + `src/data/teaching.json`) and the per-course home
   `src/pages/teaching/microeconomics.astro`. Nav links to `/teaching/` were added to
   `SiteHeader`, `SiteFooter`, and the Starlight `HeaderLinks` override.
+  - **Courses are scaffold, NOT imported.** The course list/cards live HERE in
+    `src/data/teaching.json` (each card: `title`/`description`/`audience`/`format`/`href`)
+    and each course home is a hand-authored `src/pages/teaching/<slug>.astro` (copy
+    `microeconomics.astro`). Only the *topics inside* a course flow through the import
+    pipeline. **Adding a course = one card in `teaching.json` + one page in
+    `src/pages/teaching/`.** The course `<slug>` in the card's `href` MUST match the
+    `course` arg passed to `import:topic` (the `src/content/courses/<course>/` folder),
+    or topics won't show under it.
+  - As of 2026-06-18 (`c1cc97b`): two course cards — **Micro-Economic Principles**
+    (renamed from "Principles of Microeconomics"; URL slug stays `microeconomics`; real
+    description) and a **Price Theory** placeholder (`/teaching/price-theory/`, slug
+    `price-theory`, page is a PLACEHOLDER overview/subhead). No `price-theory` source
+    repo exists yet — needs one (or a `SRC_REPO` override) before its topics can import.
 - **Topic-posts pipeline** (the publishing machine): per-topic readers are **imported**
   from the **private** repo `bryanpcutsinger/micro-principles` — this public repo holds a
   *generated, never-hand-edited copy*. Edit the source post → re-import → site updates.
@@ -252,9 +265,16 @@ trees API but slugs assume a flat layout). Why import-then-commit rather than an
 remote loader: keeps CI hermetic (no build-time private-repo auth) and every change is
 visible in `git diff`.
 
-## Current status (as of 2026-06-17)
+## Current status (as of 2026-06-18)
 
-**Latest (2026-06-17) — merged to `main` and deployed (still `noindex`ed):**
+**Latest (2026-06-18) — committed to `main` and deployed (`c1cc97b`, still `noindex`ed):**
+- **Teaching course cards updated.** Renamed the micro course to **Micro-Economic
+  Principles** (card + course-page title/headline; URL slug unchanged) with a real
+  one-line description, and added a **Price Theory** placeholder course (card +
+  `src/pages/teaching/price-theory.astro`). See the "Courses are scaffold, NOT imported"
+  note in the Teaching section. Committed directly to `main` and pushed.
+
+**Prior (2026-06-17) — merged to `main` and deployed (still `noindex`ed):**
 - **Teaching section + course pipeline shipped.** `/teaching/` landing +
   `/teaching/microeconomics/` course home + the topic-posts pipeline
   (`scripts/import-topic.sh`, `courses` collection, `[topic].astro`). Live topic index
