@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive production possibilities frontier</title>
+<!--
+  Interactive PPF for the T1 blog post (website-styled, not FAU).
+  Self-contained: no libraries, no network. The static FAU figure
+  (figures/t01-ppf.{tex,svg}) is the SLIDE version and is untouched.
+
+  Same geometry as the static figure: concave Food/Housing frontier,
+  quarter-ellipse with food-max (5,0) and housing-max (0,5). A point
+  is draggable ALONG the frontier; droplines + a readout (Food,
+  Housing, and the trade-off "+1 housing costs N food") update live.
+
+  No-JS / print: the base figure (curve, axes, point at E, droplines,
+  default readout) is real SVG markup; the script only ATTACHES
+  interactivity, so it degrades gracefully.
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;   /* warm bone background        */
+    --ink:     #1a1c1e;    /* frontier + headings         */
+    --text:    #16181a;    /* body text                   */
+    --muted:   #5c6066;    /* captions / secondary labels */
+    --hairline:#e3ddd3;    /* axes muting / droplines     */
+    --accent:  #b07a2c;    /* brass — the draggable point */
+    --accent-tint: #efe4d2;/* feasible-region wash        */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .ppf { width: 100%; max-width: 480px; }
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+
+  /* structural strokes */
+  .axis      { stroke: var(--muted); stroke-width: 1.4; }
+  .frontier  { stroke: var(--ink); stroke-width: 2.6; fill: none;
+               stroke-linecap: round; }
+  .feasible  { fill: var(--accent-tint); opacity: 0.5; stroke: none; }
+  .drop      { stroke: var(--hairline); stroke-width: 1.6;
+               stroke-dasharray: 5 4; }
+
+  /* draggable point + generous transparent hit targets */
+  .pt        { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5; }
+  .hit       { fill: transparent; stroke: transparent; touch-action: none;
+               cursor: grab; }
+  .hit-curve { fill: none; stroke: transparent; stroke-width: 26;
+               touch-action: none; cursor: grab; }
+  .pt-focus:focus-visible { outline: none; }
+  .pt-focus:focus-visible + .pt,
+  .grabbing .pt { stroke: var(--accent); stroke-width: 3.5; }
+
+  /* text */
+  .axlabel { fill: var(--muted); font-size: 15px; font-weight: 600; }
+  .maxlabel{ fill: var(--muted); font-size: 11.5px; }
+  .ptlabel { fill: var(--ink); font-size: 13px; font-weight: 700; }
+  .sep     { stroke: var(--hairline); stroke-width: 1; }
+  .r-hint  { fill: var(--muted); font-size: 12.5px; }
+  .r-vals  { fill: var(--ink); font-size: 15px; font-weight: 700; }
+  .r-trade { fill: var(--accent); font-size: 14px; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="ppf">
+  <!-- viewBox 400 x 500 (4:5). Plot occupies the top; readout band below.
+       Pixel frame: x0=58 x1=370 (Food 0..5), y0=350 y1=36 (Housing 0..5). -->
+  <svg id="ppf" viewBox="0 0 400 500" role="group"
+       aria-label="Production possibilities frontier for food and housing. Drag the point along the curve to see the trade-off.">
+    <defs>
+      <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+    </defs>
+
+    <!-- feasible set (interior) -->
+    <path class="feasible" d="M58,350 L58,36 A312,314 0 0 1 370,350 Z" />
+
+    <!-- axes (drawn before frontier so the curve sits on top) -->
+    <line class="axis" x1="58" y1="350" x2="382" y2="350" marker-end="url(#arrow)" />
+    <line class="axis" x1="58" y1="350" x2="58"  y2="24"  marker-end="url(#arrow)" />
+
+    <!-- the concave frontier: food-max (5,0)=(370,350) to housing-max (0,5)=(58,36) -->
+    <path class="frontier" d="M58,36 A312,314 0 0 1 370,350" />
+
+    <!-- axis + corner labels -->
+    <text class="axlabel" x="214" y="378" text-anchor="middle">Food</text>
+    <text class="axlabel" x="20" y="193" text-anchor="middle"
+          transform="rotate(-90 20 193)">Housing</text>
+    <text class="maxlabel" x="64" y="30" text-anchor="start">Maximum housing</text>
+    <text class="maxlabel" x="370" y="368" text-anchor="end">Maximum food</text>
+
+    <!-- droplines (initial: point E = Food 4, Housing 3 -> px 307.6,161.6) -->
+    <line id="dropV" class="drop" x1="307.6" y1="350" x2="307.6" y2="161.6" />
+    <line id="dropH" class="drop" x1="58" y1="161.6" x2="307.6" y2="161.6" />
+
+    <!-- the draggable point + hit targets -->
+    <path id="hitCurve" class="hit-curve" d="M58,36 A312,314 0 0 1 370,350" />
+    <circle id="hit" class="hit" cx="307.6" cy="161.6" r="22" />
+    <circle id="pt"  class="pt"  cx="307.6" cy="161.6" r="7" />
+    <!-- focusable proxy for keyboard control -->
+    <circle id="ptFocus" class="pt-focus hit" cx="307.6" cy="161.6" r="22"
+            tabindex="0" role="slider" aria-label="Point on the frontier"
+            aria-valuemin="0" aria-valuemax="5" aria-valuenow="3"
+            aria-valuetext="Food 4.0, Housing 3.0" />
+
+    <!-- readout band -->
+    <line class="sep" x1="40" y1="404" x2="360" y2="404" />
+    <text id="rHint"  class="r-hint"  x="200" y="428" text-anchor="middle">Drag the point along the curve.</text>
+    <text id="rVals"  class="r-vals"  x="200" y="456" text-anchor="middle">Food 4.0&#160;&#160;·&#160;&#160;Housing 3.0</text>
+    <text id="rTrade" class="r-trade" x="200" y="482" text-anchor="middle">Toward more housing: +1 housing costs ≈ 0.75 food</text>
+  </svg>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var svg = document.getElementById('ppf');
+  var pt = document.getElementById('pt');
+  var hit = document.getElementById('hit');
+  var ptFocus = document.getElementById('ptFocus');
+  var hitCurve = document.getElementById('hitCurve');
+  var dropV = document.getElementById('dropV');
+  var dropH = document.getElementById('dropH');
+  var rVals = document.getElementById('rVals');
+  var rTrade = document.getElementById('rTrade');
+
+  // pixel frame + scale (mirrors the SVG markup above)
+  var R = 5;
+  var X0 = 58, X1 = 370, Y0 = 350, Y1 = 36;
+  var fx = function (f) { return X0 + (f / R) * (X1 - X0); };       // food  -> px x
+  var hy = function (h) { return Y0 - (h / R) * (Y0 - Y1); };       // housing -> px y
+  var toFood = function (px) { return ((px - X0) / (X1 - X0)) * R; };
+  var toHousing = function (py) { return ((Y0 - py) / (Y0 - Y1)) * R; };
+
+  // keep the point a hair off the singular corners so the trade-off stays finite
+  var TH_MIN = 4 * Math.PI / 180;
+  var TH_MAX = 86 * Math.PI / 180;
+
+  var theta = Math.atan2(3, 4); // initial E = (Food 4, Housing 3)
+
+  // convert a client event to SVG user coords (handles responsive scaling)
+  var spt = svg.createSVGPoint();
+  function toSvg(evt) {
+    spt.x = evt.clientX; spt.y = evt.clientY;
+    return spt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+
+  function render() {
+    var food = R * Math.cos(theta);
+    var housing = R * Math.sin(theta);
+    var px = fx(food), py = hy(housing);
+
+    pt.setAttribute('cx', px);  pt.setAttribute('cy', py);
+    hit.setAttribute('cx', px); hit.setAttribute('cy', py);
+    ptFocus.setAttribute('cx', px); ptFocus.setAttribute('cy', py);
+
+    dropV.setAttribute('x1', px); dropV.setAttribute('x2', px);
+    dropV.setAttribute('y1', Y0); dropV.setAttribute('y2', py);
+    dropH.setAttribute('y1', py); dropH.setAttribute('y2', py);
+    dropH.setAttribute('x1', X0); dropH.setAttribute('x2', px);
+
+    // food given up per +1 unit of housing = |dFood/dHousing| = Housing/Food
+    var tradeoff = housing / food;
+    var tradeText;
+    if (tradeoff >= 10) tradeText = 'very large (almost all housing)';
+    else if (tradeoff <= 0.1) tradeText = 'almost nothing';
+    else tradeText = '≈ ' + tradeoff.toFixed(2) + ' food';
+
+    rVals.textContent = 'Food ' + food.toFixed(1) + '  ·  Housing ' + housing.toFixed(1);
+    rTrade.textContent = 'Toward more housing: +1 housing costs ' + tradeText;
+
+    ptFocus.setAttribute('aria-valuenow', housing.toFixed(1));
+    ptFocus.setAttribute('aria-valuetext',
+      'Food ' + food.toFixed(1) + ', Housing ' + housing.toFixed(1) +
+      '. One more housing costs ' + tradeText);
+  }
+
+  function setFromPointer(evt) {
+    var p = toSvg(evt);
+    var fu = toFood(p.x), hu = toHousing(p.y);
+    var t = Math.atan2(hu, fu);
+    if (isNaN(t)) return;
+    theta = Math.max(TH_MIN, Math.min(TH_MAX, t));
+    render();
+  }
+
+  // --- drag (pointer events; move/up on window so a fast drag can't get stuck) ---
+  var dragging = false;
+  function onMove(evt) { if (dragging) { evt.preventDefault(); setFromPointer(evt); } }
+  function onUp() {
+    dragging = false;
+    svg.classList.remove('grabbing');
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+  }
+  function onDown(evt) {
+    evt.preventDefault();
+    dragging = true;
+    svg.classList.add('grabbing');
+    setFromPointer(evt);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }
+  hit.addEventListener('pointerdown', onDown);
+  hitCurve.addEventListener('pointerdown', onDown);
+
+  // --- keyboard (arrows nudge along the curve) ---
+  ptFocus.addEventListener('keydown', function (evt) {
+    var step = 2 * Math.PI / 180;
+    if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') { theta -= step; }
+    else if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') { theta += step; }
+    else return;
+    evt.preventDefault();
+    theta = Math.max(TH_MIN, Math.min(TH_MAX, theta));
+    render();
+  });
+
+  render(); // sync the JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

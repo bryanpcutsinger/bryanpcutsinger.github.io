@@ -297,12 +297,31 @@ visible in `git diff`.
 
 ## Current status (as of 2026-06-18)
 
-**Latest (2026-06-18) — committed to `main` and deployed (`c1cc97b`, still `noindex`ed):**
+**Latest (2026-06-18) — committed to `main` and deployed (`de49b94`, still `noindex`ed):**
+- **Price Theory problem bank integrated + LIVE.** The placeholder Price Theory course is
+  now a real, browsable **problem bank** sourced from the public repo
+  `bryanpcutsinger/price-theory` (68 verbatim Chicago/Columbia exam problems across a
+  13-topic taxonomy). It uses its **own** `import:problems` pipeline (NOT `import:topic`)
+  — see "Price Theory — problem-bank pipeline" in the Teaching section. New/changed:
+  `scripts/import-problems.sh`, generated+committed `src/data/price-theory/{problems,taxonomy}.json`,
+  rewritten `src/pages/teaching/price-theory.astro` (overview + topic grid), new
+  `src/pages/teaching/price-theory/[topic].astro` (per-topic problem cards w/ provenance +
+  source back-links), real `teaching.json` card copy. Build green; 12 topic pages live
+  (`exchange-and-trade` has 0 problems → no page yet). **Refresh loop:** edit the source
+  repo → `build.py` there → `npm run import:problems` → `npm run build` → commit.
+  **Known follow-ups (deferred):** inline LaTeX renders raw (visible on `general-equilibrium`;
+  KaTeX not yet wired) and cross-bank filtering/search.
+- **⚠️ Uncommitted, NOT mine:** a working-tree edit to `scripts/import-topic.sh` (adds
+  `.html` interactive-widget copying + INSTRUCTOR NOTES gating to the *micro* importer)
+  was present before the Price Theory work and was deliberately **left out** of `de49b94`.
+  It's unrelated in-progress work — commit or discard it separately.
+
+**Prior same day (2026-06-18) — committed to `main` and deployed (`c1cc97b`, still `noindex`ed):**
 - **Teaching course cards updated.** Renamed the micro course to **Micro-Economic
   Principles** (card + course-page title/headline; URL slug unchanged) with a real
-  one-line description, and added a **Price Theory** placeholder course (card +
-  `src/pages/teaching/price-theory.astro`). See the "Courses are scaffold, NOT imported"
-  note in the Teaching section. Committed directly to `main` and pushed.
+  one-line description, and added the **Price Theory** course card (now backed by the
+  problem bank above; was a placeholder at `c1cc97b`). See the "Courses are scaffold, NOT
+  imported" note in the Teaching section. Committed directly to `main` and pushed.
 
 **Prior (2026-06-17) — merged to `main` and deployed (still `noindex`ed):**
 - **Teaching section + course pipeline shipped.** `/teaching/` landing +

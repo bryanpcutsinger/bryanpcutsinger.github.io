@@ -75,9 +75,14 @@ One last idea belongs here, and it is where our work on demand will begin: the m
 
 People throw the word "efficient" around as if it meant "produce as much as possible." It does not. Picture everything an economy could produce, every combination of two goods its resources allow, as a single boundary line. Any point on that boundary is efficient: the only way to get more of one good is to give up some of the other. Any point inside is wasteful, because from there you could have more of both at once. So efficiency means no waste, being on the line. It does not mean having the most of any single thing.
 
-![Production possibilities frontier for food and housing: the curve's two ends mark the maximum possible housing and the maximum possible food, an efficient point E on the curve has dashed lines dropping to both axes, a red arrow traces a tradeoff move up and to the left along the frontier to more housing and less food, and a wasteful point W sits inside the curve.](/teaching/microeconomics/t01-economic-way-of-thinking/figures/t01-ppf.svg)
+<iframe
+  src="/teaching/microeconomics/t01-economic-way-of-thinking/figures/t01-ppf-interactive.html"
+  title="Interactive production possibilities frontier for food and housing — drag the point along the curve to see the trade-off"
+  loading="lazy"
+  style="width:100%; max-width:480px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:1.5rem auto;">
+</iframe>
 
-*A production possibilities frontier for two goods, food and housing. Every point on the curve is efficient: the two ends are the maximum possible housing (and no food) or the maximum possible food (and no housing), and point E is an efficient combination in between — the dashed lines show how much food and how much housing E yields. The red arrow traces a tradeoff along the frontier: moving up and to the left buys more housing only by giving up food. Point W lies inside the curve and is wasteful — from there you could have more of both goods. So efficiency means being on the curve, not having the most of any single thing.*
+*A production possibilities frontier for two goods, food and housing. **Drag the point along the curve.** Every point on the curve is efficient: the two ends are the maximum possible housing (and no food) or the maximum possible food (and no housing), and any point in between is an efficient combination — the dashed lines show how much food and how much housing it yields. As you slide toward more housing, the readout shows the trade-off: each extra unit of housing costs some food, and that cost rises the more housing you already have. The shaded interior is feasible but wasteful — from inside you could have more of both goods at once. So efficiency means being on the curve, not having the most of any single thing.*
 
 "Maximize one good" is an incoherent goal. Build nothing but housing and you get handsome neighborhoods and empty pantries, with no land left to grow food. Pour everything into clean air and let the factories fall silent, and you would breathe beautifully with nothing to eat. We do not want the most of any one thing; we want some workable combination, and efficiency is what forces us to face the trade-off.
 
