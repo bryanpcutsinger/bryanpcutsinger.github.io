@@ -4,7 +4,6 @@ import MarketingLayout from '../../layouts/MarketingLayout.astro';
 import Hero from '../../components/marketing/Hero.astro';
 import Section from '../../components/marketing/Section.astro';
 import SectionHeading from '../../components/marketing/SectionHeading.astro';
-import DownloadCard from '../../components/marketing/DownloadCard.astro';
 import CTABand from '../../components/marketing/CTABand.astro';
 
 const COURSE = 'microeconomics';
@@ -90,26 +89,8 @@ const topics = (await getCollection('courses'))
     }
   </Section>
 
-  <!-- Materials (downloads) -->
-  <Section variant="surface">
-    <SectionHeading
-      eyebrow="Materials"
-      heading="Course materials."
-      lede="You're welcome to use or adapt these. Files marked “request” aren't posted yet — reach out and I'll send them."
-    />
-    <div class="materials">
-      <!-- PLACEHOLDER — drop a real PDF in public/downloads/ and set fileUrl. -->
-      <DownloadCard
-        title="Syllabus"
-        description="Course outline, policies, and the schedule of topics."
-        downloadLabel="Download the syllabus (PDF)"
-        requestLabel="Request the syllabus"
-      />
-    </div>
-  </Section>
-
   <CTABand
-    heading="Questions about the course or its materials?"
+    heading="Questions about the course?"
     cta={{ label: 'Get in touch', href: '/contact/' }}
   />
 </MarketingLayout>
@@ -180,11 +161,5 @@ const topics = (await getCollection('courses'))
   .topics__empty {
     font-size: 1.05rem;
     color: var(--text-muted);
-  }
-
-  .materials {
-    display: flex;
-    flex-direction: column;
-    gap: var(--sp-6);
   }
 </style>
