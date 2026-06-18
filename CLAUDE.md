@@ -311,10 +311,13 @@ visible in `git diff`.
   repo → `build.py` there → `npm run import:problems` → `npm run build` → commit.
   **Known follow-ups (deferred):** inline LaTeX renders raw (visible on `general-equilibrium`;
   KaTeX not yet wired) and cross-bank filtering/search.
-- **⚠️ Uncommitted, NOT mine:** a working-tree edit to `scripts/import-topic.sh` (adds
-  `.html` interactive-widget copying + INSTRUCTOR NOTES gating to the *micro* importer)
-  was present before the Price Theory work and was deliberately **left out** of `de49b94`.
-  It's unrelated in-progress work — commit or discard it separately.
+- **Parallel micro work (`b7950ad`):** between the two Price Theory commits, a separate
+  change landed on `main` — `import-topic.sh` now also copies `figures/*.html` interactive
+  widgets (INSTRUCTOR-NOTES-gated) alongside `*.svg`, plus the regenerated **T1 micro
+  content is now TRACKED** (`src/content/courses/microeconomics/t01-.../post.md` + a new
+  `t01-ppf-interactive.html` figure) — superseding the older "held out of git" note below.
+  Heads-up: the CLAUDE.md docs commit `2eea0bb` incidentally swept the T1 `post.md`/`html`
+  in with it (harmless, already pushed; build green).
 
 **Prior same day (2026-06-18) — committed to `main` and deployed (`c1cc97b`, still `noindex`ed):**
 - **Teaching course cards updated.** Renamed the micro course to **Micro-Economic
