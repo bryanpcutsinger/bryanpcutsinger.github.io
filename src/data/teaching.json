@@ -10,9 +10,9 @@
     },
     {
       "title": "Price Theory",
-      "description": "PLACEHOLDER — Bryan to confirm a one-line course description.",
-      "audience": "Undergraduate",
-      "format": "Course",
+      "description": "A browsable archive of classic Chicago- and Columbia-style price theory exam and problem-set questions, organized by topic with full source attribution.",
+      "audience": "Graduate · Advanced undergraduate",
+      "format": "Problem bank",
       "href": "/teaching/price-theory/"
     }
   ]

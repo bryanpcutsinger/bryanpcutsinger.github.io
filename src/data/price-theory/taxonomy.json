@@ -1,0 +1,57 @@
+{
+  "_comment": "Controlled vocabulary for Price Theory problems. A problem may carry more than one topic. build.py flags any topic/subtopic not listed here. Extend as real problems reveal gaps.",
+  "topics": {
+    "consumer-theory": {
+      "label": "Consumer theory",
+      "subtopics": ["utility", "preferences", "indifference-curves", "demand", "consumer-surplus", "index-numbers", "income-substitution-effects", "revealed-preference", "elasticity"]
+    },
+    "producer-theory": {
+      "label": "Producer theory",
+      "subtopics": ["production-functions", "cost-curves", "firm-supply", "returns-to-scale", "profit-maximization", "factor-demand", "short-run-long-run"]
+    },
+    "market-structure": {
+      "label": "Market structure",
+      "subtopics": ["perfect-competition", "monopoly", "monopolistic-competition", "oligopoly", "entry-exit", "industrial-organization", "antitrust"]
+    },
+    "price-discrimination": {
+      "label": "Price discrimination",
+      "subtopics": ["first-degree", "second-degree", "third-degree", "tying", "bundling"]
+    },
+    "exchange-and-trade": {
+      "label": "Exchange and trade",
+      "subtopics": ["gains-from-trade", "edgeworth-box", "comparative-advantage", "barter"]
+    },
+    "factor-markets-distribution": {
+      "label": "Factor markets and distribution",
+      "subtopics": ["labor", "wages", "rent", "marginal-productivity", "derived-demand", "minimum-wage", "unions", "human-capital"]
+    },
+    "capital-and-interest": {
+      "label": "Capital and interest",
+      "subtopics": ["intertemporal-choice", "investment", "discounting", "time-preference", "interest-rates", "present-value"]
+    },
+    "uncertainty-and-information": {
+      "label": "Uncertainty and information",
+      "subtopics": ["risk", "insurance", "search", "asymmetric-information", "expected-utility", "moral-hazard", "adverse-selection"]
+    },
+    "welfare-and-efficiency": {
+      "label": "Welfare and efficiency",
+      "subtopics": ["pareto-efficiency", "deadweight-loss", "surplus-analysis", "social-welfare"]
+    },
+    "externalities-property-rights": {
+      "label": "Externalities and property rights",
+      "subtopics": ["coase", "public-goods", "common-property", "transaction-costs", "pollution", "law-and-economics"]
+    },
+    "government-intervention": {
+      "label": "Government intervention",
+      "subtopics": ["taxes", "subsidies", "price-controls", "quotas", "tax-incidence", "tariffs", "regulation"]
+    },
+    "general-equilibrium": {
+      "label": "General equilibrium",
+      "subtopics": ["multi-market", "existence", "comparative-statics", "stability"]
+    },
+    "applied-and-misc": {
+      "label": "Applied and miscellaneous",
+      "subtopics": ["puzzle", "methodology", "history-of-thought", "monetary", "macro-adjacent", "uncategorized"]
+    }
+  }
+}

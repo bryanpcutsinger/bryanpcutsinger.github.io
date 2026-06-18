@@ -191,9 +191,9 @@ separate from the `/ai/` Starlight docs. Two layers:
     or topics won't show under it.
   - As of 2026-06-18 (`c1cc97b`): two course cards — **Micro-Economic Principles**
     (renamed from "Principles of Microeconomics"; URL slug stays `microeconomics`; real
-    description) and a **Price Theory** placeholder (`/teaching/price-theory/`, slug
-    `price-theory`, page is a PLACEHOLDER overview/subhead). No `price-theory` source
-    repo exists yet — needs one (or a `SRC_REPO` override) before its topics can import.
+    description) and **Price Theory** (`/teaching/price-theory/`, slug `price-theory`).
+    **Price Theory does NOT use the topic-posts pipeline** — it's a problem bank with its
+    own `import:problems` pipeline (see "Price Theory — problem-bank pipeline" below).
 - **Topic-posts pipeline** (the publishing machine): per-topic readers are **imported**
   from the **private** repo `bryanpcutsinger/micro-principles` — this public repo holds a
   *generated, never-hand-edited copy*. Edit the source post → re-import → site updates.
@@ -231,6 +231,36 @@ CTABand. The course home lists published topics as an ordered index. Slides are 
 on hold upstream → `DownloadCard`s show "Request" until PDFs land in `public/downloads/`.
 **Note:** in `[topic].astro`, `getStaticPaths()` runs in an isolated scope — keep the
 consts it needs (`COURSE`, helpers) *inside* it; the template re-declares `COURSE`.
+
+### Price Theory — problem-bank pipeline (built 2026-06-18)
+
+Price Theory is **not** topic readers — its source repo
+`bryanpcutsinger/price-theory` (public) is a **problem bank**, so it uses a *separate,
+simpler* pipeline from `import:topic`. The repo's own build (`fetch_raw.py` →
+`collect_problems.js` → `build.py`) regenerates `derived/problems.json` (flattened
+problems, each with inline provenance + `topics[]`/`subtopics[]`/`exam_context`/`solution`)
+and `taxonomy.json` (13 topics, each with a `label` + allowed subtopics).
+
+**Refresh the bank:** `npm run import:problems` (`scripts/import-problems.sh`, via `gh`)
+pulls those two files into a **generated, never-hand-edited committed copy** at
+`src/data/price-theory/{problems,taxonomy}.json`. No notes-strip / no figure copy (the
+source is public + text-only); the script fails if the bank is empty/malformed.
+
+**Rendering** (custom Astro pages reading the JSON, NOT the `courses` collection or the
+Markdown pipeline):
+- `src/pages/teaching/price-theory.astro` — course home = the bank's front door: overview
+  + a `TopicGrid` of the taxonomy topics that have ≥1 problem (sorted by count), each
+  card → `/teaching/price-theory/<topic-key>/`.
+- `src/pages/teaching/price-theory/[topic].astro` — `getStaticPaths` over taxonomy topics
+  (one route per non-empty topic); renders each matching problem as a card (verbatim
+  question, provenance line + "source" back-link to Irwin Collier, subtopic chips,
+  `<details>` solution when present). Imports the JSON at module scope (fine in
+  `getStaticPaths` — imports are allowed there, unlike module consts).
+- **Known limitation:** these pages render JSON, so inline LaTeX (`$…$`) shows **raw**
+  (e.g. on `general-equilibrium`). Most problems are `has_math:false`; a KaTeX pass is a
+  deferred follow-up. Also deferred: cross-bank filtering/search.
+- No publish-gate / no `status:approved` here — the bank is public by construction
+  (decision 2026-06-18: publish with source attribution). Site-wide `noindex` still applies.
 
 ## Claude Code guide — imported from its own repo (split out 2026-06-17)
 

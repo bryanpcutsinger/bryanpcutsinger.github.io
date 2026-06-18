@@ -1,107 +1,88 @@
 ---
-import { getCollection } from 'astro:content';
+// Price Theory course home — a browsable PROBLEM BANK (not topic readers).
+// Built from the generated copy of bryanpcutsinger/price-theory's clean artifact
+// (src/data/price-theory/{problems,taxonomy}.json — refresh with
+// `npm run import:problems`). The course home is the bank's front door: an
+// overview + a grid of taxonomy topics (with problem counts) linking to per-topic
+// problem pages. Readers/slides can be added alongside this later.
+import problemsDoc from '../../data/price-theory/problems.json';
+import taxonomy from '../../data/price-theory/taxonomy.json';
 import MarketingLayout from '../../layouts/MarketingLayout.astro';
 import Hero from '../../components/marketing/Hero.astro';
 import Section from '../../components/marketing/Section.astro';
 import SectionHeading from '../../components/marketing/SectionHeading.astro';
-import DownloadCard from '../../components/marketing/DownloadCard.astro';
+import TopicGrid from '../../components/marketing/TopicGrid.astro';
 import CTABand from '../../components/marketing/CTABand.astro';
 
 const COURSE = 'price-theory';
+const problems = problemsDoc.problems;
 
-// Published topic index. Production build lists only `status: approved` topics;
-// `astro dev` also previews drafts (see [topic].astro for the rationale).
-const previewDrafts = import.meta.env.DEV;
-const topics = (await getCollection('courses'))
-  .filter((e) => e.id.split('/')[0] === COURSE)
-  .filter(
-    (e) => previewDrafts || (e.data.status ?? '').toLowerCase() === 'approved',
-  )
-  .map((e) => {
-    const code = (e.data.topic ?? '').match(/T\d+/)?.[0] ?? '';
-    const num = parseInt(code.replace(/\D/g, '') || '999', 10);
-    return {
-      slug: e.id.split('/')[1],
-      title: e.data.title,
-      code,
-      order: e.data.order ?? num,
-      isDraft: (e.data.status ?? '').toLowerCase() !== 'approved',
-    };
-  })
-  .sort((a, b) => a.order - b.order);
+// Problems per taxonomy topic (a problem can carry several topics — count
+// membership). Drop zero-count topics from the grid.
+const counts: Record<string, number> = {};
+for (const p of problems)
+  for (const t of p.topics ?? []) counts[t] = (counts[t] ?? 0) + 1;
+
+const humanize = (s: string) =>
+  s.replace(/-/g, ' ').replace(/^./, (c) => c.toUpperCase());
+
+const topicCards = Object.entries(taxonomy.topics)
+  .map(([key, t]: [string, any]) => ({ key, ...t, count: counts[key] ?? 0 }))
+  .filter((t) => t.count > 0)
+  .sort((a, b) => b.count - a.count)
+  .map((t) => ({
+    title: t.label,
+    format: `${t.count} problem${t.count === 1 ? '' : 's'}`,
+    description: t.subtopics.map((s: string) => s.replace(/-/g, ' ')).join(', '),
+    href: `/teaching/${COURSE}/${t.key}/`,
+  }));
+
+const totalProblems = problems.length;
+const sourceCount = new Set(problems.map((p) => p.source.slug)).size;
 ---
 <MarketingLayout
   title="Price Theory — Bryan Cutsinger"
-  description="Overview and course materials for Bryan Cutsinger's Price Theory course — a topic-by-topic reader, syllabus, and slides."
+  description="A browsable archive of classic Chicago- and Columbia-style price theory exam and problem-set questions, organized by topic with full source attribution."
 >
-  <!-- PLACEHOLDER copy — Bryan to confirm overview line. -->
   <Hero
     eyebrow="Course"
     headline="Price Theory"
-    subhead="PLACEHOLDER — a one-line description of the course goes here."
+    subhead="A working archive of classic price-theory exam and problem-set questions — the kind of problems that taught generations of economists to think with the tools of the trade."
   />
 
   <!-- Written overview -->
   <Section variant="surface" width="reading">
-    <SectionHeading eyebrow="Overview" heading="About the course." />
+    <SectionHeading eyebrow="About" heading="What this is." />
     <div class="prose">
-      <!-- PLACEHOLDER — Bryan to replace with the real course overview. -->
       <p>
-        Course overview coming soon. Check back, or
-        <a href="/contact/">get in touch</a> for materials in the meantime.
+        This is a growing, attribution-preserving collection of price theory
+        problems — {totalProblems} so far, drawn from {sourceCount} archival
+        sources: Chicago- and Columbia-style preliminary exams and problem sets
+        from the Friedman, Becker, and Stigler era.
+      </p>
+      <p>
+        Each problem is reproduced verbatim and linked back to its source —
+        primarily Irwin Collier's
+        <a href="https://www.irwincollier.com/" rel="noopener">Economics in the
+        Rear-view Mirror</a>, which transcribes archival material such as the
+        Milton Friedman and George Stigler Papers. Browse by topic below; more
+        sources are added over time.
       </p>
     </div>
   </Section>
 
-  <!-- Topic index -->
+  <!-- Topic grid -->
   <Section variant="raised">
     <SectionHeading
       eyebrow="Topics"
-      heading="The course, topic by topic."
-      lede="Read in order or jump to a topic. More are added as they're finalized."
+      heading="Browse by topic."
+      lede="Each topic collects the problems tagged to it. A problem touching several topics appears under each."
     />
-    {
-      topics.length > 0 ? (
-        <ol class="topics">
-          {topics.map((t) => (
-            <li class="topics__item">
-              <a class="topics__link" href={`/teaching/${COURSE}/${t.slug}/`}>
-                {t.code && <span class="topics__badge">{t.code}</span>}
-                <span class="topics__title">{t.title}</span>
-                {t.isDraft && <span class="topics__draft">Draft</span>}
-              </a>
-            </li>
-          ))}
-        </ol>
-      ) : (
-        <p class="topics__empty">
-          Topics are being finalized and will appear here as they're published.
-          In the meantime, <a href="/contact/">get in touch</a> for materials.
-        </p>
-      )
-    }
-  </Section>
-
-  <!-- Materials (downloads) -->
-  <Section variant="surface">
-    <SectionHeading
-      eyebrow="Materials"
-      heading="Course materials."
-      lede="You're welcome to use or adapt these. Files marked “request” aren't posted yet — reach out and I'll send them."
-    />
-    <div class="materials">
-      <!-- PLACEHOLDER — drop a real PDF in public/downloads/ and set fileUrl. -->
-      <DownloadCard
-        title="Syllabus"
-        description="Course outline, policies, and the schedule of topics."
-        downloadLabel="Download the syllabus (PDF)"
-        requestLabel="Request the syllabus"
-      />
-    </div>
+    <TopicGrid topics={topicCards} columns={3} />
   </Section>
 
   <CTABand
-    heading="Questions about the course or its materials?"
+    heading="Want these as a problem set, or have one to add?"
     cta={{ label: 'Get in touch', href: '/contact/' }}
   />
 </MarketingLayout>
@@ -116,67 +97,9 @@ const topics = (await getCollection('courses'))
   .prose p:last-child {
     margin-bottom: 0;
   }
-
-  /* Ordered topic index — quiet rows that lift slightly on hover. */
-  .topics {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    border-top: 1px solid var(--hairline);
-  }
-  .topics__item {
-    border-bottom: 1px solid var(--hairline);
-  }
-  .topics__link {
-    display: flex;
-    align-items: baseline;
-    gap: var(--sp-4);
-    padding: var(--sp-4) var(--sp-2);
-    text-decoration: none;
-    color: var(--ink);
-    transition: background-color 0.15s ease, padding-left 0.15s ease;
-  }
-  .topics__link:hover {
-    background: var(--surface);
-    padding-left: var(--sp-4);
-  }
-  .topics__badge {
-    flex: none;
-    min-width: 2.5rem;
-    font-family: var(--font-body);
-    font-size: var(--fs-small);
-    font-weight: 600;
+  .prose a {
     color: var(--accent);
-    letter-spacing: 0.02em;
-  }
-  .topics__title {
-    font-family: var(--font-display);
-    font-size: 1.2rem;
-    line-height: 1.3;
-  }
-  .topics__link:hover .topics__title {
-    color: var(--accent-hover);
-  }
-  .topics__draft {
-    flex: none;
-    margin-left: auto;
-    align-self: center;
-    font-size: var(--fs-eyebrow);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--text-muted);
-    border: 1px solid var(--hairline);
-    border-radius: var(--radius);
-    padding: 0.1em 0.5em;
-  }
-  .topics__empty {
-    font-size: 1.05rem;
-    color: var(--text-muted);
-  }
-
-  .materials {
-    display: flex;
-    flex-direction: column;
-    gap: var(--sp-6);
+    text-decoration: underline;
+    text-underline-offset: 2px;
   }
 </style>

@@ -1,0 +1,234 @@
+---
+// Per-topic problem listing for the Price Theory bank. One route per taxonomy
+// topic that has ≥1 problem; renders each matching problem as a card with its
+// question text, source provenance + back-link, subtopics, and (rarely) a
+// solution. Data comes from the generated copy of bryanpcutsinger/price-theory
+// (src/data/price-theory/*.json — refresh with `npm run import:problems`).
+//
+// NOTE: these are Astro pages rendering JSON, not the Markdown pipeline, so any
+// inline LaTeX ($…$) in a question renders raw. Most current problems are
+// has_math:false; a KaTeX pass is a follow-up if math-heavy problems land.
+import problemsDoc from '../../../data/price-theory/problems.json';
+import taxonomy from '../../../data/price-theory/taxonomy.json';
+import MarketingLayout from '../../../layouts/MarketingLayout.astro';
+import Eyebrow from '../../../components/marketing/Eyebrow.astro';
+import CTABand from '../../../components/marketing/CTABand.astro';
+
+export async function getStaticPaths() {
+  const topics: Record<string, any> = taxonomy.topics;
+  const problems = problemsDoc.problems;
+  return Object.entries(topics)
+    .map(([key, t]) => ({
+      key,
+      label: t.label,
+      items: problems.filter((p) => (p.topics ?? []).includes(key)),
+    }))
+    .filter((x) => x.items.length > 0)
+    .map((x) => ({
+      params: { topic: x.key },
+      props: { label: x.label, items: x.items },
+    }));
+}
+
+const { label, items } = Astro.props;
+const COURSE = 'price-theory';
+
+const isStated = (v?: string | null) =>
+  !!v && v.trim() !== '' && v.trim().toLowerCase() !== 'n.d.';
+const humanize = (s: string) => s.replace(/-/g, ' ');
+const paragraphs = (text: string) =>
+  (text ?? '').split(/\n\s*\n/).map((s) => s.trim()).filter(Boolean);
+
+// Build a provenance line from a problem's source: "University · Course ·
+// Instructor, Year · exam context". Empty/"n.d." fields are dropped.
+function provenance(src: any): string {
+  const who = [src.instructor, src.year].filter(isStated).join(', ');
+  return [src.university, src.course, who].filter((p) => p && p.length).join(' · ');
+}
+const examContext = (c?: string) =>
+  c && c !== 'unknown' ? c.charAt(0).toUpperCase() + c.slice(1) : '';
+---
+<MarketingLayout
+  title={`${label} — Price Theory — Bryan Cutsinger`}
+  description={`${items.length} classic price theory problem${items.length === 1 ? '' : 's'} on ${label.toLowerCase()}, with source attribution.`}
+>
+  <article class="bank">
+    <header class="bank__head">
+      <Eyebrow text={`Price Theory · ${label}`} />
+      <p class="bank__count">
+        {items.length} problem{items.length === 1 ? '' : 's'}
+      </p>
+    </header>
+
+    <ol class="problems">
+      {
+        items.map((p: any) => (
+          <li class="problem" id={p.id}>
+            <div class="problem__q">
+              {paragraphs(p.question_text).map((para) => (
+                <p>{para}</p>
+              ))}
+            </div>
+
+            <p class="problem__meta">
+              <span class="problem__source">{provenance(p.source)}</span>
+              {examContext(p.exam_context) && (
+                <span class="problem__tag">{examContext(p.exam_context)}</span>
+              )}
+              {p.source?.web_source?.url && (
+                <a
+                  class="problem__src-link"
+                  href={p.source.web_source.url}
+                  rel="noopener"
+                >
+                  source
+                </a>
+              )}
+            </p>
+
+            {p.subtopics?.length > 0 && (
+              <p class="problem__subtopics">
+                {p.subtopics.map((s: string) => (
+                  <span class="chip">{humanize(s)}</span>
+                ))}
+              </p>
+            )}
+
+            {isStated(p.solution) && (
+              <details class="problem__solution">
+                <summary>Show solution</summary>
+                {paragraphs(p.solution).map((para) => (
+                  <p>{para}</p>
+                ))}
+              </details>
+            )}
+          </li>
+        ))
+      }
+    </ol>
+
+    <p class="bank__back">
+      <a href={`/teaching/${COURSE}/`}>← Back to Price Theory</a>
+    </p>
+  </article>
+
+  <CTABand
+    heading="Want these as a problem set, or have one to add?"
+    cta={{ label: 'Get in touch', href: '/contact/' }}
+  />
+</MarketingLayout>
+
+<style>
+  .bank {
+    max-width: var(--reading);
+    margin-inline: auto;
+    padding: var(--sp-16) var(--sp-6) var(--sp-24);
+  }
+  .bank__head {
+    margin-bottom: var(--sp-12);
+  }
+  .bank__count {
+    margin: var(--sp-2) 0 0;
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+  }
+
+  .problems {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-8);
+  }
+  .problem {
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius);
+    background: var(--surface-raised);
+    padding: var(--sp-8);
+    scroll-margin-top: var(--sp-16);
+  }
+
+  /* Question text — verbatim, with blank-line-separated parts as paragraphs. */
+  .problem__q p {
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: var(--text);
+    margin: 0 0 var(--sp-4);
+    white-space: pre-line;
+  }
+  .problem__q p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Provenance line: source · context · back-link. */
+  .problem__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--sp-2) var(--sp-3);
+    margin: var(--sp-6) 0 0;
+    padding-top: var(--sp-4);
+    border-top: 1px solid var(--hairline);
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+  }
+  .problem__source {
+    font-style: italic;
+  }
+  .problem__tag {
+    font-size: var(--fs-eyebrow);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius);
+    padding: 0.1em 0.5em;
+  }
+  .problem__src-link {
+    margin-left: auto;
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .problem__subtopics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    margin: var(--sp-4) 0 0;
+  }
+  .chip {
+    font-size: var(--fs-eyebrow);
+    letter-spacing: 0.02em;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius);
+    padding: 0.15em 0.6em;
+  }
+
+  .problem__solution {
+    margin-top: var(--sp-6);
+  }
+  .problem__solution summary {
+    cursor: pointer;
+    font-size: var(--fs-small);
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .problem__solution p {
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--text);
+    margin: var(--sp-4) 0 0;
+    white-space: pre-line;
+  }
+
+  .bank__back {
+    margin-top: var(--sp-16);
+    padding-top: var(--sp-8);
+    border-top: 1px solid var(--hairline);
+    font-size: var(--fs-small);
+  }
+</style>
