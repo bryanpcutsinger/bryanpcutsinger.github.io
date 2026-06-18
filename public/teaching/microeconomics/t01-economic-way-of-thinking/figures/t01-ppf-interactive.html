@@ -11,12 +11,13 @@
 
   Same geometry as the static figure: concave Food/Housing frontier,
   quarter-ellipse with food-max (5,0) and housing-max (0,5). A point
-  is draggable ALONG the frontier; droplines + a readout (Food,
-  Housing, and the trade-off "+1 housing costs N food") update live.
+  is draggable ALONG the frontier; droplines + LIVE QUANTITIES read off
+  the x and y axes; the opportunity-cost trade-off updates below.
 
-  No-JS / print: the base figure (curve, axes, point at E, droplines,
-  default readout) is real SVG markup; the script only ATTACHES
-  interactivity, so it degrades gracefully.
+  The axes extend past the intercepts so the frontier no longer crowds
+  the arrowheads. No-JS / print: the base figure (curve, axes, point at
+  E, droplines, axis quantities, trade-off) is real SVG markup; the
+  script only ATTACHES interactivity, so it degrades gracefully.
 -->
 <style>
   :root {
@@ -42,7 +43,7 @@
     padding: 8px;
     -webkit-font-smoothing: antialiased;
   }
-  .ppf { width: 100%; max-width: 480px; }
+  .ppf { width: 100%; max-width: 560px; }
   svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
 
   /* structural strokes */
@@ -66,18 +67,19 @@
   /* text */
   .axlabel { fill: var(--muted); font-size: 15px; font-weight: 600; }
   .maxlabel{ fill: var(--muted); font-size: 11.5px; }
-  .ptlabel { fill: var(--ink); font-size: 13px; font-weight: 700; }
+  .qlabel  { fill: var(--ink); font-size: 13px; font-weight: 700; }
   .sep     { stroke: var(--hairline); stroke-width: 1; }
   .r-hint  { fill: var(--muted); font-size: 12.5px; }
-  .r-vals  { fill: var(--ink); font-size: 15px; font-weight: 700; }
   .r-trade { fill: var(--accent); font-size: 14px; font-weight: 600; }
 </style>
 </head>
 <body>
 <div class="ppf">
-  <!-- viewBox 400 x 500 (4:5). Plot occupies the top; readout band below.
-       Pixel frame: x0=58 x1=370 (Food 0..5), y0=350 y1=36 (Housing 0..5). -->
-  <svg id="ppf" viewBox="0 0 400 500" role="group"
+  <!-- viewBox 440 x 540. Plot occupies the top; readout band below.
+       Pixel frame: origin (64,360). Frontier intercepts: Food 5 -> x=380,
+       Housing 5 -> y=56. Axes extend PAST the intercepts (x to 415, y to 28)
+       so the curve no longer crowds the arrowheads. -->
+  <svg id="ppf" viewBox="0 0 440 540" role="group"
        aria-label="Production possibilities frontier for food and housing. Drag the point along the curve to see the trade-off.">
     <defs>
       <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
@@ -87,41 +89,45 @@
     </defs>
 
     <!-- feasible set (interior) -->
-    <path class="feasible" d="M58,350 L58,36 A312,314 0 0 1 370,350 Z" />
+    <path class="feasible" d="M64,360 L64,56 A316,304 0 0 1 380,360 Z" />
 
-    <!-- axes (drawn before frontier so the curve sits on top) -->
-    <line class="axis" x1="58" y1="350" x2="382" y2="350" marker-end="url(#arrow)" />
-    <line class="axis" x1="58" y1="350" x2="58"  y2="24"  marker-end="url(#arrow)" />
+    <!-- axes (drawn before frontier so the curve sits on top); extend past intercepts -->
+    <line class="axis" x1="64" y1="360" x2="415" y2="360" marker-end="url(#arrow)" />
+    <line class="axis" x1="64" y1="360" x2="64"  y2="28"  marker-end="url(#arrow)" />
 
-    <!-- the concave frontier: food-max (5,0)=(370,350) to housing-max (0,5)=(58,36) -->
-    <path class="frontier" d="M58,36 A312,314 0 0 1 370,350" />
+    <!-- the concave frontier: housing-max (0,5)=(64,56) to food-max (5,0)=(380,360) -->
+    <path class="frontier" d="M64,56 A316,304 0 0 1 380,360" />
 
     <!-- axis + corner labels -->
-    <text class="axlabel" x="214" y="378" text-anchor="middle">Food</text>
-    <text class="axlabel" x="20" y="193" text-anchor="middle"
-          transform="rotate(-90 20 193)">Housing</text>
-    <text class="maxlabel" x="64" y="30" text-anchor="start">Maximum housing</text>
-    <text class="maxlabel" x="370" y="368" text-anchor="end">Maximum food</text>
+    <text class="axlabel" x="222" y="392" text-anchor="middle">Food</text>
+    <text class="axlabel" x="24" y="208" text-anchor="middle"
+          transform="rotate(-90 24 208)">Housing</text>
+    <text class="maxlabel" x="70" y="50" text-anchor="start">Maximum housing</text>
+    <text class="maxlabel" x="380" y="380" text-anchor="end">Maximum food</text>
 
-    <!-- droplines (initial: point E = Food 4, Housing 3 -> px 307.6,161.6) -->
-    <line id="dropV" class="drop" x1="307.6" y1="350" x2="307.6" y2="161.6" />
-    <line id="dropH" class="drop" x1="58" y1="161.6" x2="307.6" y2="161.6" />
+    <!-- droplines (initial: point E = Food 4, Housing 3 -> px 316.8,177.6) -->
+    <line id="dropV" class="drop" x1="316.8" y1="360" x2="316.8" y2="177.6" />
+    <line id="dropH" class="drop" x1="64" y1="177.6" x2="316.8" y2="177.6" />
+
+    <!-- live quantities read off the axes (ride the dropline feet) -->
+    <text id="qx" class="qlabel" x="316.8" y="376" text-anchor="middle">4.0</text>
+    <text id="qy" class="qlabel" x="54" y="177.6" text-anchor="end"
+          dominant-baseline="middle">3.0</text>
 
     <!-- the draggable point + hit targets -->
-    <path id="hitCurve" class="hit-curve" d="M58,36 A312,314 0 0 1 370,350" />
-    <circle id="hit" class="hit" cx="307.6" cy="161.6" r="22" />
-    <circle id="pt"  class="pt"  cx="307.6" cy="161.6" r="7" />
+    <path id="hitCurve" class="hit-curve" d="M64,56 A316,304 0 0 1 380,360" />
+    <circle id="hit" class="hit" cx="316.8" cy="177.6" r="22" />
+    <circle id="pt"  class="pt"  cx="316.8" cy="177.6" r="7" />
     <!-- focusable proxy for keyboard control -->
-    <circle id="ptFocus" class="pt-focus hit" cx="307.6" cy="161.6" r="22"
+    <circle id="ptFocus" class="pt-focus hit" cx="316.8" cy="177.6" r="22"
             tabindex="0" role="slider" aria-label="Point on the frontier"
             aria-valuemin="0" aria-valuemax="5" aria-valuenow="3"
             aria-valuetext="Food 4.0, Housing 3.0" />
 
     <!-- readout band -->
-    <line class="sep" x1="40" y1="404" x2="360" y2="404" />
-    <text id="rHint"  class="r-hint"  x="200" y="428" text-anchor="middle">Drag the point along the curve.</text>
-    <text id="rVals"  class="r-vals"  x="200" y="456" text-anchor="middle">Food 4.0&#160;&#160;·&#160;&#160;Housing 3.0</text>
-    <text id="rTrade" class="r-trade" x="200" y="482" text-anchor="middle">Toward more housing: +1 housing costs ≈ 0.75 food</text>
+    <line class="sep" x1="44" y1="430" x2="396" y2="430" />
+    <text id="rHint"  class="r-hint"  x="220" y="458" text-anchor="middle">Drag the point along the curve.</text>
+    <text id="rTrade" class="r-trade" x="220" y="486" text-anchor="middle">Toward more housing: +1 housing costs ≈ 0.75 food</text>
   </svg>
 </div>
 
@@ -135,12 +141,15 @@
   var hitCurve = document.getElementById('hitCurve');
   var dropV = document.getElementById('dropV');
   var dropH = document.getElementById('dropH');
-  var rVals = document.getElementById('rVals');
+  var qx = document.getElementById('qx');
+  var qy = document.getElementById('qy');
   var rTrade = document.getElementById('rTrade');
 
-  // pixel frame + scale (mirrors the SVG markup above)
+  // pixel frame + scale (mirrors the SVG markup above).
+  // X1/Y1 are the FRONTIER INTERCEPT pixels (food=5 / housing=5);
+  // the drawn axis lines run past them, but the scale maps 0..5 to X0..X1.
   var R = 5;
-  var X0 = 58, X1 = 370, Y0 = 350, Y1 = 36;
+  var X0 = 64, X1 = 380, Y0 = 360, Y1 = 56;
   var fx = function (f) { return X0 + (f / R) * (X1 - X0); };       // food  -> px x
   var hy = function (h) { return Y0 - (h / R) * (Y0 - Y1); };       // housing -> px y
   var toFood = function (px) { return ((px - X0) / (X1 - X0)) * R; };
@@ -173,6 +182,10 @@
     dropH.setAttribute('y1', py); dropH.setAttribute('y2', py);
     dropH.setAttribute('x1', X0); dropH.setAttribute('x2', px);
 
+    // live quantities on the axes (ride the dropline feet)
+    qx.setAttribute('x', px); qx.textContent = food.toFixed(1);
+    qy.setAttribute('y', py); qy.textContent = housing.toFixed(1);
+
     // food given up per +1 unit of housing = |dFood/dHousing| = Housing/Food
     var tradeoff = housing / food;
     var tradeText;
@@ -180,7 +193,6 @@
     else if (tradeoff <= 0.1) tradeText = 'almost nothing';
     else tradeText = '≈ ' + tradeoff.toFixed(2) + ' food';
 
-    rVals.textContent = 'Food ' + food.toFixed(1) + '  ·  Housing ' + housing.toFixed(1);
     rTrade.textContent = 'Toward more housing: +1 housing costs ' + tradeText;
 
     ptFocus.setAttribute('aria-valuenow', housing.toFixed(1));
@@ -198,12 +210,17 @@
     render();
   }
 
-  // --- drag (pointer events; move/up on window so a fast drag can't get stuck) ---
+  // --- drag (pointer events with pointer capture so a fast drag can't get stuck) ---
   var dragging = false;
+  var capturedEl = null, capturedId = null;
   function onMove(evt) { if (dragging) { evt.preventDefault(); setFromPointer(evt); } }
   function onUp() {
     dragging = false;
     svg.classList.remove('grabbing');
+    if (capturedEl && capturedId !== null) {
+      try { capturedEl.releasePointerCapture(capturedId); } catch (e) {}
+    }
+    capturedEl = null; capturedId = null;
     window.removeEventListener('pointermove', onMove);
     window.removeEventListener('pointerup', onUp);
   }
@@ -211,12 +228,17 @@
     evt.preventDefault();
     dragging = true;
     svg.classList.add('grabbing');
+    // route subsequent moves to the pressed element even if the pointer
+    // leaves it, so pressing squarely on the dot drags reliably
+    capturedEl = evt.currentTarget; capturedId = evt.pointerId;
+    try { capturedEl.setPointerCapture(capturedId); } catch (e) {}
     setFromPointer(evt);
     window.addEventListener('pointermove', onMove);
     window.addEventListener('pointerup', onUp);
   }
   hit.addEventListener('pointerdown', onDown);
   hitCurve.addEventListener('pointerdown', onDown);
+  ptFocus.addEventListener('pointerdown', onDown); // the dot itself is draggable
 
   // --- keyboard (arrows nudge along the curve) ---
   ptFocus.addEventListener('keydown', function (evt) {
