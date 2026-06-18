@@ -7,7 +7,7 @@ import SectionHeading from '../../components/marketing/SectionHeading.astro';
 import DownloadCard from '../../components/marketing/DownloadCard.astro';
 import CTABand from '../../components/marketing/CTABand.astro';
 
-const COURSE = 'microeconomics';
+const COURSE = 'price-theory';
 
 // Published topic index. Production build lists only `status: approved` topics;
 // `astro dev` also previews drafts (see [topic].astro for the rationale).
@@ -31,14 +31,14 @@ const topics = (await getCollection('courses'))
   .sort((a, b) => a.order - b.order);
 ---
 <MarketingLayout
-  title="Micro-Economic Principles — Bryan Cutsinger"
-  description="Overview and course materials for Bryan Cutsinger's Micro-Economic Principles — a topic-by-topic reader, syllabus, and slides."
+  title="Price Theory — Bryan Cutsinger"
+  description="Overview and course materials for Bryan Cutsinger's Price Theory course — a topic-by-topic reader, syllabus, and slides."
 >
   <!-- PLACEHOLDER copy — Bryan to confirm overview line. -->
   <Hero
     eyebrow="Course"
-    headline="Micro-Economic Principles"
-    subhead="How markets, prices, and incentives shape the choices households and firms make — and what that tells us about the world beyond the classroom."
+    headline="Price Theory"
+    subhead="PLACEHOLDER — a one-line description of the course goes here."
   />
 
   <!-- Written overview -->
@@ -47,16 +47,8 @@ const topics = (await getCollection('courses'))
     <div class="prose">
       <!-- PLACEHOLDER — Bryan to replace with the real course overview. -->
       <p>
-        This is an introduction to microeconomics: the study of how individuals,
-        households, and firms make decisions under scarcity, and how those
-        decisions interact in markets. We build the core toolkit — supply and
-        demand, elasticity, costs, competition, and market failure — and use it
-        to make sense of real economic questions.
-      </p>
-      <p>
-        The course is organized as a series of short, self-contained readers —
-        one per topic, in sequence below. Each is written to stand on its own,
-        with the figures and tables built in.
+        Course overview coming soon. Check back, or
+        <a href="/contact/">get in touch</a> for materials in the meantime.
       </p>
     </div>
   </Section>

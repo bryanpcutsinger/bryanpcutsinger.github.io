@@ -2,11 +2,18 @@
   "_note": "PLACEHOLDER course list — each course renders as a card on /teaching/ and links to its own page at /teaching/<slug>/. Mirrors topics.json shape (title, description, audience, format, href). Add a course = one entry here + one page in src/pages/teaching/.",
   "courses": [
     {
-      "title": "Principles of Microeconomics",
-      "description": "PLACEHOLDER — Bryan to confirm a one-line course description (how markets, prices, and incentives shape the choices of households and firms).",
+      "title": "Micro-Economic Principles",
+      "description": "How markets, prices, and incentives shape the choices households and firms make — and what that toolkit reveals about the world beyond the classroom.",
       "audience": "Undergraduate",
       "format": "Course",
       "href": "/teaching/microeconomics/"
+    },
+    {
+      "title": "Price Theory",
+      "description": "PLACEHOLDER — Bryan to confirm a one-line course description.",
+      "audience": "Undergraduate",
+      "format": "Course",
+      "href": "/teaching/price-theory/"
     }
   ]
 }
