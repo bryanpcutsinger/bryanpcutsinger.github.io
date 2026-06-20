@@ -252,8 +252,11 @@ Markdown pipeline):
   + a `TopicGrid` of the taxonomy topics that have ≥1 problem (sorted by count), each
   card → `/teaching/price-theory/<topic-key>/`, **plus a client-side cross-bank search**:
   free-text box + facet filters (topic, source, instructor, year, exam context) over a
-  results list with a live, `aria-live` count. Filtering is pure DOM (`data-*` attributes
-  on each result row); no JS framework, no network.
+  results list with a live, `aria-live` count. **The results list is on-demand** (redesign
+  2026-06-20): it (and the count) stay `hidden` until the search/any filter is "active";
+  the inactive default shows a one-line hint and lets the topic grid be the primary browse
+  path — no 68-item wall on load. `applyFilters()` runs once on load to set that state.
+  Filtering is pure DOM (`data-*` attributes on each result row); no JS framework, no network.
 - `src/pages/teaching/price-theory/[topic].astro` — `getStaticPaths` over taxonomy topics
   (one route per non-empty topic); renders each matching problem as a card (verbatim
   question, provenance line + "source" back-link to Irwin Collier, subtopic chips,

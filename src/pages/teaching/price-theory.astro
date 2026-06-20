@@ -89,18 +89,14 @@ const examContextOptions = [
     <SectionHeading eyebrow="About" heading="What this is." />
     <div class="prose">
       <p>
-        This is a growing, attribution-preserving collection of price theory
-        problems — {totalProblems} so far, drawn from {sourceCount} archival
-        sources: Chicago- and Columbia-style preliminary exams and problem sets
-        from the Friedman, Becker, and Stigler era.
-      </p>
-      <p>
-        Each problem is reproduced verbatim and linked back to its source —
-        primarily Irwin Collier's
+        A growing, attribution-preserving collection of price theory problems —
+        {totalProblems} so far, drawn from {sourceCount} archival sources:
+        Chicago- and Columbia-style preliminary exams and problem sets from the
+        Friedman, Becker, and Stigler era. Each is reproduced verbatim and linked
+        back to its source — primarily Irwin Collier's
         <a href="https://www.irwincollier.com/" rel="noopener">Economics in the
-        Rear-view Mirror</a>, which transcribes archival material such as the
-        Milton Friedman and George Stigler Papers. Browse by topic below; more
-        sources are added over time.
+        Rear-view Mirror</a>. Search for a specific problem below, or browse by
+        topic.
       </p>
       <p class="archive-note">
         Historical wording is preserved as archival text. Exam-only scaffolding
@@ -115,7 +111,7 @@ const examContextOptions = [
     <SectionHeading
       eyebrow="Search"
       heading="Find a problem."
-      lede="Search across the full bank, then narrow by topic, source, instructor, year, or exam context."
+      lede="Search across the full bank, then narrow by topic, source, instructor, year, or exam context. Results appear as you type."
     />
     <section class="bank-search" aria-label="Search price theory problems">
       <form class="bank-search__filters" data-problem-filters>
@@ -192,11 +188,16 @@ const examContextOptions = [
         <button class="bank-search__reset" type="reset">Reset</button>
       </form>
 
-      <p class="bank-search__count" aria-live="polite" data-problem-count>
+      <p class="bank-search__hint" data-problem-hint>
+        Start typing or pick a filter to search the {totalProblems} problems —
+        or browse by topic below.
+      </p>
+
+      <p class="bank-search__count" aria-live="polite" data-problem-count hidden>
         Showing {totalProblems} problems
       </p>
 
-      <ol class="search-results" data-problem-results>
+      <ol class="search-results" data-problem-results hidden>
         {problems.map((p: any) => {
           const primaryTopic = p.topics?.[0] ?? topicOptions[0]?.key;
           const excerpt = paragraphs(p.question_text)[0] ?? '';
@@ -280,6 +281,7 @@ const examContextOptions = [
     color: var(--text-muted);
   }
 
+
   .bank-search {
     max-width: var(--container);
     margin-inline: auto;
@@ -330,9 +332,13 @@ const examContextOptions = [
     color: var(--on-ink);
   }
   .bank-search__count,
-  .bank-search__empty {
+  .bank-search__empty,
+  .bank-search__hint {
     color: var(--text-muted);
     font-size: var(--fs-small);
+  }
+  .bank-search__hint {
+    margin: 0;
   }
   .search-results {
     list-style: none;
@@ -340,6 +346,10 @@ const examContextOptions = [
     padding: 0;
     display: grid;
     gap: var(--sp-4);
+  }
+  /* `display: grid` would override the `hidden` attribute — restore it. */
+  .search-results[hidden] {
+    display: none;
   }
   .search-result {
     border: 1px solid var(--hairline);
@@ -384,9 +394,11 @@ const examContextOptions = [
 
 <script>
   const form = document.querySelector('[data-problem-filters]');
+  const resultsList = document.querySelector('[data-problem-results]');
   const results = [...document.querySelectorAll('[data-problem]')];
   const count = document.querySelector('[data-problem-count]');
   const empty = document.querySelector('[data-problem-empty]');
+  const hint = document.querySelector('[data-problem-hint]');
 
   function tokens(value) {
     return String(value || '').split(/\s+/).filter(Boolean);
@@ -402,8 +414,19 @@ const examContextOptions = [
     const instructor = String(data.get('instructor') || '');
     const year = String(data.get('year') || '');
     const context = String(data.get('context') || '');
-    let visible = 0;
 
+    // The bank stays quiet until the reader actually searches or filters —
+    // no 68-item wall on load. Active = any field has a value.
+    const active = !!(query || topic || subtopic || source || instructor || year || context);
+    if (hint) hint.hidden = active;
+    if (resultsList) resultsList.hidden = !active;
+    if (count) count.hidden = !active;
+    if (!active) {
+      if (empty) empty.hidden = true;
+      return;
+    }
+
+    let visible = 0;
     for (const item of results) {
       const el = item;
       const ok =
@@ -427,4 +450,7 @@ const examContextOptions = [
   form?.addEventListener('reset', () => {
     window.setTimeout(applyFilters, 0);
   });
+
+  // Set the initial (inactive) state: hint shown, results/count hidden.
+  applyFilters();
 </script>
