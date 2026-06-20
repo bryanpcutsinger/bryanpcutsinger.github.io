@@ -5,14 +5,23 @@
 // solution. Data comes from the generated copy of bryanpcutsinger/price-theory
 // (src/data/price-theory/*.json — refresh with `npm run import:problems`).
 //
-// NOTE: these are Astro pages rendering JSON, not the Markdown pipeline, so any
-// inline LaTeX ($…$) in a question renders raw. Most current problems are
-// has_math:false; a KaTeX pass is a follow-up if math-heavy problems land.
 import problemsDoc from '../../../data/price-theory/problems.json';
 import taxonomy from '../../../data/price-theory/taxonomy.json';
 import MarketingLayout from '../../../layouts/MarketingLayout.astro';
 import Eyebrow from '../../../components/marketing/Eyebrow.astro';
 import CTABand from '../../../components/marketing/CTABand.astro';
+import 'katex/dist/katex.min.css';
+import {
+  COURSE,
+  examContext,
+  groupBySourceYear,
+  humanize,
+  isStated,
+  optionLabel,
+  paragraphs,
+  provenance,
+  renderInlineMath,
+} from '../../../lib/priceTheory';
 
 export async function getStaticPaths() {
   const topics: Record<string, any> = taxonomy.topics;
@@ -26,27 +35,17 @@ export async function getStaticPaths() {
     .filter((x) => x.items.length > 0)
     .map((x) => ({
       params: { topic: x.key },
-      props: { label: x.label, items: x.items },
+      props: { topicKey: x.key, label: x.label, items: x.items },
     }));
 }
 
-const { label, items } = Astro.props;
-const COURSE = 'price-theory';
-
-const isStated = (v?: string | null) =>
-  !!v && v.trim() !== '' && v.trim().toLowerCase() !== 'n.d.';
-const humanize = (s: string) => s.replace(/-/g, ' ');
-const paragraphs = (text: string) =>
-  (text ?? '').split(/\n\s*\n/).map((s) => s.trim()).filter(Boolean);
-
-// Build a provenance line from a problem's source: "University · Course ·
-// Instructor, Year · exam context". Empty/"n.d." fields are dropped.
-function provenance(src: any): string {
-  const who = [src.instructor, src.year].filter(isStated).join(', ');
-  return [src.university, src.course, who].filter((p) => p && p.length).join(' · ');
-}
-const examContext = (c?: string) =>
-  c && c !== 'unknown' ? c.charAt(0).toUpperCase() + c.slice(1) : '';
+const { topicKey, label, items } = Astro.props;
+const groups = groupBySourceYear(items);
+const topicSubtopics = taxonomy.topics[topicKey]?.subtopics ?? [];
+const presentSubtopics = new Set(items.flatMap((p: any) => p.subtopics ?? []));
+const subtopics = topicSubtopics
+  .filter((subtopic: string) => presentSubtopics.has(subtopic))
+  .sort((a, b) => humanize(a).localeCompare(humanize(b)));
 ---
 <MarketingLayout
   title={`${label} — Price Theory — Bryan Cutsinger`}
@@ -55,57 +54,120 @@ const examContext = (c?: string) =>
   <article class="bank">
     <header class="bank__head">
       <Eyebrow text={`Price Theory · ${label}`} />
+      <h1>{label}</h1>
       <p class="bank__count">
         {items.length} problem{items.length === 1 ? '' : 's'}
       </p>
+      <p class="bank__intro">
+        Historical wording is preserved as archival text. Exam-only point
+        values, time limits, and outer question numbers are omitted for use as a
+        question bank.
+      </p>
     </header>
 
-    <ol class="problems">
+    <nav class="bank-tools" aria-label={`${label} filters and source groups`}>
+      {subtopics.length > 0 && (
+        <div class="bank-tools__block">
+          <h2>Filter by subtopic</h2>
+          <div class="chip-row" data-topic-chips>
+            <button class="chip chip--button is-active" type="button" data-chip-value="">
+              All
+            </button>
+            {subtopics.map((subtopic) => (
+              <button
+                class="chip chip--button"
+                type="button"
+                data-chip-value={subtopic}
+              >
+                {optionLabel(subtopic)}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div class="bank-tools__block">
+        <h2>Jump to source</h2>
+        <div class="source-jumps">
+          {groups.map((group) => (
+            <a href={`#${group.id}`}>{group.label}</a>
+          ))}
+        </div>
+      </div>
+    </nav>
+
+    <p class="bank__count bank__count--live" aria-live="polite" data-topic-count>
+      Showing {items.length} problem{items.length === 1 ? '' : 's'}
+    </p>
+
+    <div class="source-groups">
       {
-        items.map((p: any) => (
-          <li class="problem" id={p.id}>
-            <div class="problem__q">
-              {paragraphs(p.question_text).map((para) => (
-                <p>{para}</p>
-              ))}
-            </div>
-
-            <p class="problem__meta">
-              <span class="problem__source">{provenance(p.source)}</span>
-              {examContext(p.exam_context) && (
-                <span class="problem__tag">{examContext(p.exam_context)}</span>
-              )}
-              {p.source?.web_source?.url && (
-                <a
-                  class="problem__src-link"
-                  href={p.source.web_source.url}
-                  rel="noopener"
+        groups.map((group) => (
+          <section class="source-group" id={group.id} data-source-group>
+            <h2>{group.label}</h2>
+            <ol class="problems">
+              {group.items.map((p: any) => (
+                <li
+                  class="problem"
+                  id={p.id}
+                  data-problem
+                  data-subtopics={(p.subtopics ?? []).join(' ')}
                 >
-                  source
-                </a>
-              )}
-            </p>
+                  <div class="problem__q">
+                    {paragraphs(p.question_text).map((para) => (
+                      <p set:html={renderInlineMath(para)} />
+                    ))}
+                  </div>
 
-            {p.subtopics?.length > 0 && (
-              <p class="problem__subtopics">
-                {p.subtopics.map((s: string) => (
-                  <span class="chip">{humanize(s)}</span>
-                ))}
-              </p>
-            )}
+                  <p class="problem__meta">
+                    <span class="problem__source">{provenance(p.source)}</span>
+                    {examContext(p.exam_context) && (
+                      <span class="problem__tag">{examContext(p.exam_context)}</span>
+                    )}
+                    {p.source?.web_source?.url && (
+                      <a
+                        class="problem__src-link"
+                        href={p.source.web_source.url}
+                        rel="noopener"
+                      >
+                        source
+                      </a>
+                    )}
+                  </p>
 
-            {isStated(p.solution) && (
-              <details class="problem__solution">
-                <summary>Show solution</summary>
-                {paragraphs(p.solution).map((para) => (
-                  <p>{para}</p>
-                ))}
-              </details>
-            )}
-          </li>
+                  {p.subtopics?.length > 0 && (
+                    <p class="problem__subtopics">
+                      {p.subtopics.map((s: string) => (
+                        <button
+                          class="chip chip--button"
+                          type="button"
+                          data-chip-value={s}
+                        >
+                          {optionLabel(s)}
+                        </button>
+                      ))}
+                    </p>
+                  )}
+
+                  {isStated(p.solution) && (
+                    <details class="problem__solution">
+                      <summary>Show solution</summary>
+                      {paragraphs(p.solution).map((para) => (
+                        <p set:html={renderInlineMath(para)} />
+                      ))}
+                    </details>
+                  )}
+                </li>
+              ))}
+            </ol>
+          </section>
         ))
       }
-    </ol>
+    </div>
+
+    <p class="bank__empty" hidden data-topic-empty>
+      No problems in {label.toLowerCase()} match that subtopic.
+    </p>
 
     <p class="bank__back">
       <a href={`/teaching/${COURSE}/`}>← Back to Price Theory</a>
@@ -127,10 +189,58 @@ const examContext = (c?: string) =>
   .bank__head {
     margin-bottom: var(--sp-12);
   }
+  .bank__head h1 {
+    font-size: var(--fs-display-lg);
+    max-width: 18ch;
+  }
   .bank__count {
     margin: var(--sp-2) 0 0;
     font-size: var(--fs-small);
     color: var(--text-muted);
+  }
+  .bank__count--live {
+    margin: 0 0 var(--sp-6);
+  }
+  .bank__intro {
+    color: var(--text-muted);
+    margin-top: var(--sp-6);
+  }
+
+  .bank-tools {
+    border-block: 1px solid var(--hairline);
+    padding-block: var(--sp-6);
+    margin-bottom: var(--sp-8);
+    display: grid;
+    gap: var(--sp-6);
+  }
+  .bank-tools__block h2,
+  .source-group h2 {
+    font-family: var(--font-body);
+    font-size: var(--fs-small);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 0 0 var(--sp-3);
+  }
+  .chip-row,
+  .source-jumps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+  }
+  .source-jumps a {
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius);
+    background: var(--surface-raised);
+    color: var(--text);
+    font-size: var(--fs-small);
+    padding: 0.25rem 0.65rem;
+    text-decoration: none;
+  }
+  .source-jumps a:hover {
+    border-color: var(--accent);
+    color: var(--accent-hover);
   }
 
   .problems {
@@ -140,6 +250,17 @@ const examContext = (c?: string) =>
     display: flex;
     flex-direction: column;
     gap: var(--sp-8);
+  }
+  .source-groups {
+    display: grid;
+    gap: var(--sp-12);
+  }
+  .source-group {
+    scroll-margin-top: var(--sp-16);
+  }
+  .source-group[hidden],
+  .problem[hidden] {
+    display: none;
   }
   .problem {
     border: 1px solid var(--hairline);
@@ -207,6 +328,15 @@ const examContext = (c?: string) =>
     border-radius: var(--radius);
     padding: 0.15em 0.6em;
   }
+  .chip--button {
+    cursor: pointer;
+    font-family: var(--font-body);
+  }
+  .chip--button:hover,
+  .chip--button.is-active {
+    border-color: var(--accent);
+    color: var(--accent-hover);
+  }
 
   .problem__solution {
     margin-top: var(--sp-6);
@@ -231,4 +361,46 @@ const examContext = (c?: string) =>
     border-top: 1px solid var(--hairline);
     font-size: var(--fs-small);
   }
+  .bank__empty {
+    color: var(--text-muted);
+  }
 </style>
+
+<script>
+  const buttons = [...document.querySelectorAll('[data-chip-value]')];
+  const problems = [...document.querySelectorAll('[data-problem]')];
+  const groups = [...document.querySelectorAll('[data-source-group]')];
+  const count = document.querySelector('[data-topic-count]');
+  const empty = document.querySelector('[data-topic-empty]');
+  let active = '';
+
+  function tokens(value) {
+    return String(value || '').split(/\s+/).filter(Boolean);
+  }
+
+  function setActive(value) {
+    active = value;
+    let visible = 0;
+
+    for (const problem of problems) {
+      const ok = !active || tokens(problem.dataset.subtopics).includes(active);
+      problem.hidden = !ok;
+      if (ok) visible += 1;
+    }
+
+    for (const group of groups) {
+      group.hidden = !group.querySelector('[data-problem]:not([hidden])');
+    }
+
+    for (const button of buttons) {
+      button.classList.toggle('is-active', button.dataset.chipValue === active);
+    }
+
+    if (count) count.textContent = `Showing ${visible} problem${visible === 1 ? '' : 's'}`;
+    if (empty) empty.hidden = visible !== 0;
+  }
+
+  for (const button of buttons) {
+    button.addEventListener('click', () => setActive(button.dataset.chipValue || ''));
+  }
+</script>

@@ -13,9 +13,21 @@ import Section from '../../components/marketing/Section.astro';
 import SectionHeading from '../../components/marketing/SectionHeading.astro';
 import TopicGrid from '../../components/marketing/TopicGrid.astro';
 import CTABand from '../../components/marketing/CTABand.astro';
+import 'katex/dist/katex.min.css';
+import {
+  COURSE,
+  examContext,
+  humanize,
+  isStated,
+  optionLabel,
+  paragraphs,
+  provenance,
+  renderInlineMath,
+  sourceLabel,
+} from '../../lib/priceTheory';
 
-const COURSE = 'price-theory';
 const problems = problemsDoc.problems;
+const topics = taxonomy.topics;
 
 // Problems per taxonomy topic (a problem can carry several topics — count
 // membership). Drop zero-count topics from the grid.
@@ -23,10 +35,7 @@ const counts: Record<string, number> = {};
 for (const p of problems)
   for (const t of p.topics ?? []) counts[t] = (counts[t] ?? 0) + 1;
 
-const humanize = (s: string) =>
-  s.replace(/-/g, ' ').replace(/^./, (c) => c.toUpperCase());
-
-const topicCards = Object.entries(taxonomy.topics)
+const topicCards = Object.entries(topics)
   .map(([key, t]: [string, any]) => ({ key, ...t, count: counts[key] ?? 0 }))
   .filter((t) => t.count > 0)
   .sort((a, b) => b.count - a.count)
@@ -39,6 +48,31 @@ const topicCards = Object.entries(taxonomy.topics)
 
 const totalProblems = problems.length;
 const sourceCount = new Set(problems.map((p) => p.source.slug)).size;
+
+const topicOptions = Object.entries(topics)
+  .map(([key, t]: [string, any]) => ({ key, label: t.label, count: counts[key] ?? 0 }))
+  .filter((t) => t.count > 0)
+  .sort((a, b) => a.label.localeCompare(b.label));
+const subtopicOptions = [
+  ...new Set(problems.flatMap((p) => p.subtopics ?? [])),
+].sort((a, b) => humanize(a).localeCompare(humanize(b)));
+const sourceOptions = [
+  ...new Map(
+    problems.map((p) => [
+      p.source.slug,
+      { slug: p.source.slug, label: sourceLabel(p.source) },
+    ])
+  ).values(),
+].sort((a, b) => a.label.localeCompare(b.label));
+const instructorOptions = [
+  ...new Set(problems.map((p) => p.source.instructor).filter(isStated)),
+].sort((a, b) => a.localeCompare(b));
+const yearOptions = [
+  ...new Set(problems.map((p) => p.source.year).filter(isStated)),
+].sort((a, b) => String(a).localeCompare(String(b)));
+const examContextOptions = [
+  ...new Set(problems.map((p) => p.exam_context).filter((c) => c && c !== 'unknown')),
+].sort((a, b) => examContext(a).localeCompare(examContext(b)));
 ---
 <MarketingLayout
   title="Price Theory — Bryan Cutsinger"
@@ -68,7 +102,145 @@ const sourceCount = new Set(problems.map((p) => p.source.slug)).size;
         Milton Friedman and George Stigler Papers. Browse by topic below; more
         sources are added over time.
       </p>
+      <p class="archive-note">
+        Historical wording is preserved as archival text. Exam-only scaffolding
+        such as point values, time limits, and outer question numbers is omitted
+        here so the material works as a reusable question bank.
+      </p>
     </div>
+  </Section>
+
+  <!-- Search / filters -->
+  <Section variant="surface">
+    <SectionHeading
+      eyebrow="Search"
+      heading="Find a problem."
+      lede="Search across the full bank, then narrow by topic, source, instructor, year, or exam context."
+    />
+    <section class="bank-search" aria-label="Search price theory problems">
+      <form class="bank-search__filters" data-problem-filters>
+        <label class="filter-field filter-field--wide">
+          <span>Search text</span>
+          <input
+            type="search"
+            name="q"
+            placeholder="Try monopoly, tax incidence, Becker, steel..."
+            autocomplete="off"
+          />
+        </label>
+
+        <label class="filter-field">
+          <span>Topic</span>
+          <select name="topic">
+            <option value="">All topics</option>
+            {topicOptions.map((topic) => (
+              <option value={topic.key}>{topic.label}</option>
+            ))}
+          </select>
+        </label>
+
+        <label class="filter-field">
+          <span>Subtopic</span>
+          <select name="subtopic">
+            <option value="">All subtopics</option>
+            {subtopicOptions.map((subtopic) => (
+              <option value={subtopic}>{optionLabel(subtopic)}</option>
+            ))}
+          </select>
+        </label>
+
+        <label class="filter-field">
+          <span>Source</span>
+          <select name="source">
+            <option value="">All sources</option>
+            {sourceOptions.map((source) => (
+              <option value={source.slug}>{source.label}</option>
+            ))}
+          </select>
+        </label>
+
+        <label class="filter-field">
+          <span>Instructor</span>
+          <select name="instructor">
+            <option value="">All instructors</option>
+            {instructorOptions.map((instructor) => (
+              <option value={instructor}>{instructor}</option>
+            ))}
+          </select>
+        </label>
+
+        <label class="filter-field">
+          <span>Year</span>
+          <select name="year">
+            <option value="">All years</option>
+            {yearOptions.map((year) => (
+              <option value={year}>{year}</option>
+            ))}
+          </select>
+        </label>
+
+        <label class="filter-field">
+          <span>Context</span>
+          <select name="context">
+            <option value="">All contexts</option>
+            {examContextOptions.map((context) => (
+              <option value={context}>{examContext(context)}</option>
+            ))}
+          </select>
+        </label>
+
+        <button class="bank-search__reset" type="reset">Reset</button>
+      </form>
+
+      <p class="bank-search__count" aria-live="polite" data-problem-count>
+        Showing {totalProblems} problems
+      </p>
+
+      <ol class="search-results" data-problem-results>
+        {problems.map((p: any) => {
+          const primaryTopic = p.topics?.[0] ?? topicOptions[0]?.key;
+          const excerpt = paragraphs(p.question_text)[0] ?? '';
+          const searchText = [
+            p.question_text,
+            p.source.university,
+            p.source.course,
+            p.source.instructor,
+            p.source.year,
+            p.exam_context,
+            ...(p.topics ?? []),
+            ...(p.subtopics ?? []),
+          ].join(' ').toLowerCase();
+          return (
+            <li
+              class="search-result"
+              data-problem
+              data-search={searchText}
+              data-topics={(p.topics ?? []).join(' ')}
+              data-subtopics={(p.subtopics ?? []).join(' ')}
+              data-source={p.source.slug}
+              data-instructor={p.source.instructor}
+              data-year={p.source.year}
+              data-context={p.exam_context}
+            >
+              <a class="search-result__title" href={`/teaching/${COURSE}/${primaryTopic}/#${p.id}`}>
+                {provenance(p.source)}
+              </a>
+              <p class="search-result__text" set:html={renderInlineMath(excerpt)} />
+              <p class="search-result__meta">
+                {(p.topics ?? []).map((topic: string) => (
+                  <span>{topics[topic]?.label ?? optionLabel(topic)}</span>
+                ))}
+                {examContext(p.exam_context) && <span>{examContext(p.exam_context)}</span>}
+              </p>
+            </li>
+          );
+        })}
+      </ol>
+
+      <p class="bank-search__empty" hidden data-problem-empty>
+        No problems match those filters.
+      </p>
+    </section>
   </Section>
 
   <!-- Topic grid -->
@@ -102,4 +274,157 @@ const sourceCount = new Set(problems.map((p) => p.source.slug)).size;
     text-decoration: underline;
     text-underline-offset: 2px;
   }
+  .archive-note {
+    border-left: 3px solid var(--accent);
+    padding-left: var(--sp-4);
+    color: var(--text-muted);
+  }
+
+  .bank-search {
+    max-width: var(--container);
+    margin-inline: auto;
+  }
+  .bank-search__filters {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--sp-4);
+    align-items: end;
+    margin-bottom: var(--sp-6);
+  }
+  .filter-field {
+    display: grid;
+    gap: var(--sp-2);
+  }
+  .filter-field--wide {
+    grid-column: 1 / -1;
+  }
+  .filter-field span {
+    font-size: var(--fs-eyebrow);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .filter-field input,
+  .filter-field select {
+    width: 100%;
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius);
+    background: var(--surface-raised);
+    color: var(--text);
+    font: inherit;
+    padding: 0.75rem 0.85rem;
+  }
+  .bank-search__reset {
+    border: 1px solid var(--ink);
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    font: inherit;
+    font-weight: 600;
+    padding: 0.75rem 1rem;
+  }
+  .bank-search__reset:hover {
+    background: var(--ink);
+    color: var(--on-ink);
+  }
+  .bank-search__count,
+  .bank-search__empty {
+    color: var(--text-muted);
+    font-size: var(--fs-small);
+  }
+  .search-results {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--sp-4);
+  }
+  .search-result {
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius);
+    background: var(--surface-raised);
+    padding: var(--sp-6);
+  }
+  .search-result[hidden] {
+    display: none;
+  }
+  .search-result__title {
+    display: inline-block;
+    font-weight: 700;
+    color: var(--text);
+    text-decoration-color: var(--accent);
+  }
+  .search-result__text {
+    margin: var(--sp-3) 0 0;
+    color: var(--text);
+  }
+  .search-result__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    margin: var(--sp-4) 0 0;
+    font-size: var(--fs-eyebrow);
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .search-result__meta span {
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius);
+    padding: 0.1em 0.5em;
+  }
+  @media (max-width: 820px) {
+    .bank-search__filters {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>
+
+<script>
+  const form = document.querySelector('[data-problem-filters]');
+  const results = [...document.querySelectorAll('[data-problem]')];
+  const count = document.querySelector('[data-problem-count]');
+  const empty = document.querySelector('[data-problem-empty]');
+
+  function tokens(value) {
+    return String(value || '').split(/\s+/).filter(Boolean);
+  }
+
+  function applyFilters() {
+    if (!(form instanceof HTMLFormElement)) return;
+    const data = new FormData(form);
+    const query = String(data.get('q') || '').trim().toLowerCase();
+    const topic = String(data.get('topic') || '');
+    const subtopic = String(data.get('subtopic') || '');
+    const source = String(data.get('source') || '');
+    const instructor = String(data.get('instructor') || '');
+    const year = String(data.get('year') || '');
+    const context = String(data.get('context') || '');
+    let visible = 0;
+
+    for (const item of results) {
+      const el = item;
+      const ok =
+        (!query || String(el.dataset.search || '').includes(query)) &&
+        (!topic || tokens(el.dataset.topics).includes(topic)) &&
+        (!subtopic || tokens(el.dataset.subtopics).includes(subtopic)) &&
+        (!source || el.dataset.source === source) &&
+        (!instructor || el.dataset.instructor === instructor) &&
+        (!year || el.dataset.year === year) &&
+        (!context || el.dataset.context === context);
+
+      el.hidden = !ok;
+      if (ok) visible += 1;
+    }
+
+    if (count) count.textContent = `Showing ${visible} problem${visible === 1 ? '' : 's'}`;
+    if (empty) empty.hidden = visible !== 0;
+  }
+
+  form?.addEventListener('input', applyFilters);
+  form?.addEventListener('reset', () => {
+    window.setTimeout(applyFilters, 0);
+  });
+</script>

@@ -3,7 +3,7 @@
   "problems": [
     {
       "id": "chicago-economic-theory-prelim-exam-for-phd-and-am-1960-001",
-      "question_text": "[22 points, 2 each] Define briefly the following terms and indicate their use in economic theory:\n\nBackward bending supply curve\n\nGiffen effect\n\nComposite demand\n\nElasticity of substitution\n\nExhaustion of product\n\nMarginal value product\n\nSunk costs\n\nRent\n\nFirm\n\nPresent value\n\nRate of time preference",
+      "question_text": "Define briefly the following terms and indicate their use in economic theory:\n\nBackward bending supply curve\n\nGiffen effect\n\nComposite demand\n\nElasticity of substitution\n\nExhaustion of product\n\nMarginal value product\n\nSunk costs\n\nRent\n\nFirm\n\nPresent value\n\nRate of time preference",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -26,7 +26,7 @@
       ],
       "exam_context": "qualifying exam",
       "difficulty": null,
-      "notes": "Eleven terms listed; header states [22 points, 2 each] (= 22 points), consistent with eleven items.",
+      "notes": "Eleven terms listed.",
       "source": {
         "slug": "chicago-economic-theory-prelim-exam-for-phd-and-am-1960",
         "university": "University of Chicago",
@@ -50,7 +50,7 @@
     },
     {
       "id": "chicago-economic-theory-prelim-exam-for-phd-and-am-1960-002",
-      "question_text": "[10 points] Describe the cost curves for an individual firm, explaining the relation between short-run and long-run curves, average and marginal cost curve. Explain the equilibrium of the firm for various market conditions of competition.\n\nb. [5 points] Describe the demand curves on the part of the individual firm for factors of production under various market conditions of competition.\n\nc. [5 points] Demonstrate that (a) and (b) are fundamentally translations of one another.",
+      "question_text": "Describe the cost curves for an individual firm, explaining the relation between short-run and long-run curves, average and marginal cost curve. Explain the equilibrium of the firm for various market conditions of competition.\n\nb. Describe the demand curves on the part of the individual firm for factors of production under various market conditions of competition.\n\nc. Demonstrate that (a) and (b) are fundamentally translations of one another.",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -94,7 +94,7 @@
     },
     {
       "id": "chicago-economic-theory-prelim-exam-for-phd-and-am-1960-003",
-      "question_text": "[15 points] The U.S. Steel Corporation produces about one-third of the total ingot steel production in the United States (and a similar proportion of mill shapes and other forms of steel sold to steel-using industries). If the price elasticity of demand for steel is -0.5, what is the minimum absolute value of the elasticity of demand facing the U.S. Steel Corporation? What is the maximum absolute value? What can you conclude, without further information, about the monopoly power of the U.S. Steel Corporation? What further information, if any, would be relevant, and why?",
+      "question_text": "The U.S. Steel Corporation produces about one-third of the total ingot steel production in the United States (and a similar proportion of mill shapes and other forms of steel sold to steel-using industries). If the price elasticity of demand for steel is -0.5, what is the minimum absolute value of the elasticity of demand facing the U.S. Steel Corporation? What is the maximum absolute value? What can you conclude, without further information, about the monopoly power of the U.S. Steel Corporation? What further information, if any, would be relevant, and why?",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -133,7 +133,7 @@
     },
     {
       "id": "chicago-economic-theory-prelim-exam-for-phd-and-am-1960-004",
-      "question_text": "It is sometimes alleged that unionized firms are not injured by competition with non-union firms in the same industry because the presence of the union wage scale and working conditions enables the firm to obtain better quality labor, to have better labor morale and labor relations, etc.\n\n[10 points] Analytically, are these arguments well-founded? Discuss.\n\n[10 points] What data would you need on union and non-union firms to confirm or reject these arguments as an empirical proposition? In particular, would you use comparative output per man-hour, unit labor costs, or what? Why one and not another?",
+      "question_text": "It is sometimes alleged that unionized firms are not injured by competition with non-union firms in the same industry because the presence of the union wage scale and working conditions enables the firm to obtain better quality labor, to have better labor morale and labor relations, etc.\n\nAnalytically, are these arguments well-founded? Discuss.\n\nWhat data would you need on union and non-union firms to confirm or reject these arguments as an empirical proposition? In particular, would you use comparative output per man-hour, unit labor costs, or what? Why one and not another?",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -148,7 +148,7 @@
       ],
       "exam_context": "qualifying exam",
       "difficulty": null,
-      "notes": "Multi-part question kept together: a common preamble followed by two parts ([10 points] and [10 points]); parts are unlabeled in the capture.",
+      "notes": "Multi-part question kept together: a common preamble followed by two unlabeled parts.",
       "source": {
         "slug": "chicago-economic-theory-prelim-exam-for-phd-and-am-1960",
         "university": "University of Chicago",
@@ -172,7 +172,7 @@
     },
     {
       "id": "chicago-economic-theory-prelim-exam-for-phd-and-am-1960-005",
-      "question_text": "A consumer buys in perfectly competitive markets, spending all of his income. Over a period of time his income changes and prices change, but it is our hypothesis that his tastes do not change.\n\n[10 points] Assuming no price-income situation was every exactly repeated, what possible behavior on his part, if any, could contradict our hypothesis? Why?\n\n[10 points] If the hypothesis is not contradicted, and if we then assume it to be correct, can we also assume that his indifference curves are everywhere convex to the origin? What possible behavior on his part, if any, could contradict the assumption of convexity to the origin? Why?",
+      "question_text": "A consumer buys in perfectly competitive markets, spending all of his income. Over a period of time his income changes and prices change, but it is our hypothesis that his tastes do not change.\n\nAssuming no price-income situation was every exactly repeated, what possible behavior on his part, if any, could contradict our hypothesis? Why?\n\nIf the hypothesis is not contradicted, and if we then assume it to be correct, can we also assume that his indifference curves are everywhere convex to the origin? What possible behavior on his part, if any, could contradict the assumption of convexity to the origin? Why?",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -185,7 +185,7 @@
       ],
       "exam_context": "qualifying exam",
       "difficulty": null,
-      "notes": "Multi-part question kept together: common preamble followed by two [10 points] parts. “every” (for “ever”) preserved verbatim as it appears in the capture.",
+      "notes": "Multi-part question kept together: common preamble followed by two unlabeled parts. “every” (for “ever”) preserved verbatim as it appears in the capture.",
       "source": {
         "slug": "chicago-economic-theory-prelim-exam-for-phd-and-am-1960",
         "university": "University of Chicago",
@@ -209,7 +209,7 @@
     },
     {
       "id": "chicago-economic-theory-prelim-exam-for-phd-and-am-1960-006",
-      "question_text": "[15 points] What are Marshall’s four propositions on derived demand? What subsequent contributions have been made concerning these propositions? In the light of these contributions, how would the propositions now be correctly and fully stated?",
+      "question_text": "What are Marshall’s four propositions on derived demand? What subsequent contributions have been made concerning these propositions? In the light of these contributions, how would the propositions now be correctly and fully stated?",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -245,7 +245,7 @@
     },
     {
       "id": "chicago-economic-theory-prelim-exam-for-phd-and-am-1960-007",
-      "question_text": "[20 points] Write a brief essay on TWO of the following men and their contributions to economics:\n\nHume\n\nDupuit\n\nVon Thünen\n\nMenger\n\nJevons\n\nEdgeworth\n\nTaussig\n\nMitchell",
+      "question_text": "Write a brief essay on TWO of the following men and their contributions to economics:\n\nHume\n\nDupuit\n\nVon Thünen\n\nMenger\n\nJevons\n\nEdgeworth\n\nTaussig\n\nMitchell",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -280,7 +280,7 @@
     },
     {
       "id": "chicago-graduate-prelim-exam-questions-for-price-theory-1969-001",
-      "question_text": "I.\n\nA recent survey found that supermarkets in low income areas charge higher average prices than supermarkets in high income areas for many identical items. This is consistent with\n\n_____(a) price discrimination in the sale of groceries\n\n_____(b) no price discrimination\n\n_____(c) lack of competition in the retail grocery market\n\n_____(d) competition in the retail grocery market.\n\nCheck those that apply.",
+      "question_text": "A recent survey found that supermarkets in low income areas charge higher average prices than supermarkets in high income areas for many identical items. This is consistent with\n\n(a) price discrimination in the sale of groceries\n\n(b) no price discrimination\n\n(c) lack of competition in the retail grocery market\n\n(d) competition in the retail grocery market.\n\nCheck those that apply.",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -294,7 +294,7 @@
       ],
       "exam_context": "qualifying exam",
       "difficulty": null,
-      "notes": "Section I, multiple-choice 'check those that apply' item. Exam header states: Answer all questions. Time: 3 hours.",
+      "notes": "multiple-choice 'check those that apply' item. Exam header states: Answer all questions. Time: 3 hours.",
       "source": {
         "slug": "chicago-graduate-prelim-exam-questions-for-price-theory-1969",
         "university": "University of Chicago",
@@ -318,7 +318,7 @@
     },
     {
       "id": "chicago-graduate-prelim-exam-questions-for-price-theory-1969-002",
-      "question_text": "On the following questions, indicate whether True (T), False (F), or Uncertain (U), with brief explanation.\n\nA firm produces output $x$ using inputs $a_1$ and $a_2$, which it purchases competitively at prices $p_1$ and $p_2$. Its total cost is given by\n\nwhere $A$, $?$, $a_1$, $a_2$ are constants.\n\n_____(a) The demand for the first factor is given by\n\n_____(b) The production process of the firm exhibits constant returns to scale.\n\n_____(c) The above cost function corresponds to a Cobb-Douglas production function.",
+      "question_text": "On the following questions, indicate whether True (T), False (F), or Uncertain (U), with brief explanation.\n\nA firm produces output $x$ using inputs $a_1$ and $a_2$, which it purchases competitively at prices $p_1$ and $p_2$. Its total cost is given by\n\nwhere $A$, $?$, $a_1$, $a_2$ are constants.\n\n(a) The demand for the first factor is given by\n\n(b) The production process of the firm exhibits constant returns to scale.\n\n(c) The above cost function corresponds to a Cobb-Douglas production function.",
       "solution": null,
       "has_math": true,
       "topics": [
@@ -332,7 +332,7 @@
       ],
       "exam_context": "qualifying exam",
       "difficulty": null,
-      "notes": "Section I True/False/Uncertain item. The displayed total cost equation, the displayed factor-demand equation in (a), and one constant in the 'where' clause did not transcribe (the raw capture shows blank lines where displayed math should appear; the constant appears as '?'). LaTeX: reconstructed inline math from mangled run-together text 'xusing' -> output $x$ using; subscripts a1->$a_1$, a2->$a_2$, p1->$p_1$, p2->$p_2$. Missing equations flagged; not reconstructed because text was absent from the capture.",
+      "notes": "True/False/Uncertain item. The displayed total cost equation, the displayed factor-demand equation in (a), and one constant in the 'where' clause did not transcribe (the raw capture shows blank lines where displayed math should appear; the constant appears as '?'). LaTeX: reconstructed inline math from mangled run-together text 'xusing' -> output $x$ using; subscripts a1->$a_1$, a2->$a_2$, p1->$p_1$, p2->$p_2$. Missing equations flagged; not reconstructed because text was absent from the capture.",
       "source": {
         "slug": "chicago-graduate-prelim-exam-questions-for-price-theory-1969",
         "university": "University of Chicago",
@@ -356,7 +356,7 @@
     },
     {
       "id": "chicago-graduate-prelim-exam-questions-for-price-theory-1969-003",
-      "question_text": "Consider a price system involving four commodities, $q_1$, $q_2$, $q_3$, and $q_4$. If the goods are gross substitutes, it can be shown that the equilibrium will\n\n_____(a) Satisfy the Hicks conditions of perfect stability, and\n\n_____(b) Be dynamically stable.\n\nAssume demand shifts from the first commodity to the second commodity. Again, assuming that the commodities are gross substitutes, it can then be demonstrated that:\n\n_____(c) $P_1/P_2$ falls and $P_3/P_4$ remains unchanged;\n\n_____(d) $P_2/P_3$ rises and $P_1/P_4$ falls;\n\n_____(e) $P_3/P_1$ rises by a smaller proportion than $P_2/P_1$.",
+      "question_text": "Consider a price system involving four commodities, $q_1$, $q_2$, $q_3$, and $q_4$. If the goods are gross substitutes, it can be shown that the equilibrium will\n\n(a) Satisfy the Hicks conditions of perfect stability, and\n\n(b) Be dynamically stable.\n\nAssume demand shifts from the first commodity to the second commodity. Again, assuming that the commodities are gross substitutes, it can then be demonstrated that:\n\n(c) $P_1/P_2$ falls and $P_3/P_4$ remains unchanged;\n\n(d) $P_2/P_3$ rises and $P_1/P_4$ falls;\n\n(e) $P_3/P_1$ rises by a smaller proportion than $P_2/P_1$.",
       "solution": null,
       "has_math": true,
       "topics": [
@@ -369,7 +369,7 @@
       ],
       "exam_context": "qualifying exam",
       "difficulty": null,
-      "notes": "Section I True/False/Uncertain item. LaTeX: reconstructed mangled subscripts/ratios run together in the capture: q1->$q_1$ ... q4->$q_4$; 'P1/P2falls' -> $P_1/P_2$ falls; 'P3/P4remains' -> $P_3/P_4$ remains; 'P2/P3rises' -> $P_2/P_3$; 'P1/P4' -> $P_1/P_4$; 'P3/P1rises' -> $P_3/P_1$; 'P2/P1' -> $P_2/P_1$.",
+      "notes": "True/False/Uncertain item. LaTeX: reconstructed mangled subscripts/ratios run together in the capture: q1->$q_1$... q4->$q_4$; 'P1/P2falls' -> $P_1/P_2$ falls; 'P3/P4remains' -> $P_3/P_4$ remains; 'P2/P3rises' -> $P_2/P_3$; 'P1/P4' -> $P_1/P_4$; 'P3/P1rises' -> $P_3/P_1$; 'P2/P1' -> $P_2/P_1$.",
       "source": {
         "slug": "chicago-graduate-prelim-exam-questions-for-price-theory-1969",
         "university": "University of Chicago",
@@ -393,7 +393,7 @@
     },
     {
       "id": "chicago-graduate-prelim-exam-questions-for-price-theory-1969-004",
-      "question_text": "_____ 4. If the consumer’s utility function is separable, then his marginal utility must be declining for all goods.",
+      "question_text": "If the consumer’s utility function is separable, then his marginal utility must be declining for all goods.",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -405,7 +405,7 @@
       ],
       "exam_context": "qualifying exam",
       "difficulty": null,
-      "notes": "Section I True/False/Uncertain item, numbered 4 in the source.",
+      "notes": "True/False/Uncertain item.",
       "source": {
         "slug": "chicago-graduate-prelim-exam-questions-for-price-theory-1969",
         "university": "University of Chicago",
@@ -429,7 +429,7 @@
     },
     {
       "id": "chicago-graduate-prelim-exam-questions-for-price-theory-1969-005",
-      "question_text": "_____ 5. In a two good world, consumer indifference curves must be everywhere convex to the origin. Otherwise there is no solution to the consumer’s problem of maximizing his satisfaction subject to his budget constraint.",
+      "question_text": "In a two good world, consumer indifference curves must be everywhere convex to the origin. Otherwise there is no solution to the consumer’s problem of maximizing his satisfaction subject to his budget constraint.",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -442,7 +442,7 @@
       ],
       "exam_context": "qualifying exam",
       "difficulty": null,
-      "notes": "Section I True/False/Uncertain item, numbered 5 in the source.",
+      "notes": "True/False/Uncertain item.",
       "source": {
         "slug": "chicago-graduate-prelim-exam-questions-for-price-theory-1969",
         "university": "University of Chicago",
@@ -466,7 +466,7 @@
     },
     {
       "id": "chicago-graduate-prelim-exam-questions-for-price-theory-1969-006",
-      "question_text": "_____ 6. Three top executives leave company A and join company B. The price of company A’s stock falls and the price of company B’s stock rises. This proves that the executives are being exploited.",
+      "question_text": "Three top executives leave company A and join company B. The price of company A’s stock falls and the price of company B’s stock rises. This proves that the executives are being exploited.",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -480,7 +480,7 @@
       ],
       "exam_context": "qualifying exam",
       "difficulty": null,
-      "notes": "Section I True/False/Uncertain item, numbered 6 in the source.",
+      "notes": "True/False/Uncertain item.",
       "source": {
         "slug": "chicago-graduate-prelim-exam-questions-for-price-theory-1969",
         "university": "University of Chicago",
@@ -504,7 +504,7 @@
     },
     {
       "id": "chicago-graduate-prelim-exam-questions-for-price-theory-1969-007",
-      "question_text": "II.\n\nIn Ronald Coase’s celebrated article on the nature of social cost the first example concerns the externality imposed by a cattle ranch that is next to a corn farm. The cattle can wander into the corn farm and eat some of the corn. This increases cost to the corn farmer and imposes an externality on him. Construct a formal analysis of the following situation:\n\n(i) Let there be two firms such that the output of each firm is an “input” in the production function of the other. Let the other inputs be of the same kind, say, labor and capital. Let the output prices be given and let the input prices be given. Derive the profit maximizing solution for the two firms.\n\n(ii) Give a precise measure of the externality and show that the solution in (i) does not depend on who pays whom.\n\n(iii) Under what conditions will the dollar amount of the externality be proportional to the output of the other firm?",
+      "question_text": "In Ronald Coase’s celebrated article on the nature of social cost the first example concerns the externality imposed by a cattle ranch that is next to a corn farm. The cattle can wander into the corn farm and eat some of the corn. This increases cost to the corn farmer and imposes an externality on him. Construct a formal analysis of the following situation:\n\n(i) Let there be two firms such that the output of each firm is an “input” in the production function of the other. Let the other inputs be of the same kind, say, labor and capital. Let the output prices be given and let the input prices be given. Derive the profit maximizing solution for the two firms.\n\n(ii) Give a precise measure of the externality and show that the solution in (i) does not depend on who pays whom.\n\n(iii) Under what conditions will the dollar amount of the externality be proportional to the output of the other firm?",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -519,7 +519,7 @@
       ],
       "exam_context": "qualifying exam",
       "difficulty": null,
-      "notes": "Section II, multi-part (i)-(iii) kept together.",
+      "notes": "multi-part (i)-(iii) kept together.",
       "source": {
         "slug": "chicago-graduate-prelim-exam-questions-for-price-theory-1969",
         "university": "University of Chicago",
@@ -543,7 +543,7 @@
     },
     {
       "id": "chicago-graduate-prelim-exam-questions-for-price-theory-1969-008",
-      "question_text": "III.\n\nConsider an economy with two, L and K, factors of production producing goods, X and Y, under conditions of constant returns to scale. Assume that X is relatively L-intensive at all factor prices.\n\n(a) Analyze the effect of an increase in L on the production of X and Y on the assumption that the relative price of X and Y is constant. How would the increase in L affect the share of L in the economy’s income?\n\n(b) Analyze the effect of an increase in the relative price of X on relative and absolute factor rewards, and on the share of L in the economy’s income. Would your answer be altered if both production functions were of Cobb-Douglas type?\n\n(c) Analyze the effect of an increase in K on the relative price of X on the assumption that neither X nor Y is inferior in the community’s consumption.",
+      "question_text": "Consider an economy with two, L and K, factors of production producing goods, X and Y, under conditions of constant returns to scale. Assume that X is relatively L-intensive at all factor prices.\n\n(a) Analyze the effect of an increase in L on the production of X and Y on the assumption that the relative price of X and Y is constant. How would the increase in L affect the share of L in the economy’s income?\n\n(b) Analyze the effect of an increase in the relative price of X on relative and absolute factor rewards, and on the share of L in the economy’s income. Would your answer be altered if both production functions were of Cobb-Douglas type?\n\n(c) Analyze the effect of an increase in K on the relative price of X on the assumption that neither X nor Y is inferior in the community’s consumption.",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -561,7 +561,7 @@
       ],
       "exam_context": "qualifying exam",
       "difficulty": null,
-      "notes": "Section III, multi-part (a)-(c) kept together.",
+      "notes": "multi-part (a)-(c) kept together.",
       "source": {
         "slug": "chicago-graduate-prelim-exam-questions-for-price-theory-1969",
         "university": "University of Chicago",
@@ -585,7 +585,7 @@
     },
     {
       "id": "chicago-graduate-prelim-exam-questions-for-price-theory-1969-009",
-      "question_text": "IV.\n\nWhat effect would you expect the British devaluation of the pound from $2.80 to $2.40 to have had on the dollar price of Rolls Royce cars? Justify your conclusion, preferably by diagrams describing the position of the company, indicating explicitly any assumptions you regard as relevant. Assume that wage rates in Britain in pounds are not affected by the devaluation.",
+      "question_text": "What effect would you expect the British devaluation of the pound from $2.80 to $2.40 to have had on the dollar price of Rolls Royce cars? Justify your conclusion, preferably by diagrams describing the position of the company, indicating explicitly any assumptions you regard as relevant. Assume that wage rates in Britain in pounds are not affected by the devaluation.",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -599,7 +599,7 @@
       ],
       "exam_context": "qualifying exam",
       "difficulty": null,
-      "notes": "Section IV.",
+      "notes": "",
       "source": {
         "slug": "chicago-graduate-prelim-exam-questions-for-price-theory-1969",
         "university": "University of Chicago",
@@ -623,7 +623,7 @@
     },
     {
       "id": "chicago-graduate-prelim-exam-questions-for-price-theory-1969-010",
-      "question_text": "V.\n\nThe difference between the price of foreign crude oil and the price of domestic crude oil (landed at the same U.S. port) times the quantity of oil consumed in the U.S. is roughly $5 billion. This has been cited as an estimate of the cost to the U.S., in terms of wasted resources, of the whole set of governmental measures special to oil (oil import quotas, percentage depletion allowances, prorationing of oil, etc.). Indicate as specifically as you can the defects, if any, in this measure, and the information needed to set a dollar value on each defect.",
+      "question_text": "The difference between the price of foreign crude oil and the price of domestic crude oil (landed at the same U.S. port) times the quantity of oil consumed in the U.S. is roughly $5 billion. This has been cited as an estimate of the cost to the U.S., in terms of wasted resources, of the whole set of governmental measures special to oil (oil import quotas, percentage depletion allowances, prorationing of oil, etc.). Indicate as specifically as you can the defects, if any, in this measure, and the information needed to set a dollar value on each defect.",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -638,7 +638,7 @@
       ],
       "exam_context": "qualifying exam",
       "difficulty": null,
-      "notes": "Section V.",
+      "notes": "",
       "source": {
         "slug": "chicago-graduate-prelim-exam-questions-for-price-theory-1969",
         "university": "University of Chicago",
@@ -662,7 +662,7 @@
     },
     {
       "id": "chicago-graduate-price-theory-preliminary-examination-1964-001",
-      "question_text": "[45 points] Indicate whether each of the following statements is true or false and explain briefly why.\n\n1. An “inferior” good is one for which the marginal utility is negative.\n\n2. The short-run marginal cost curves cross the long-run marginal cost curve from below (proceeding from left to right) at the quantities corresponding to the points of tangency of their respective average curves.\n\n3. For a homogeneous production function of degree one, and, for given relative factor prices but varying output, both of the following are true:\n\na. The ratios of the quantities of the various inputs are constant at all levels of outputs.\n\nb. The average productivities for each factor are constant at all levels of output.\n\n4. Suppose you have the following budget data for two periods for a consistent consumer (i.e., a consumer who, in those situations where the same two commodity bundles are within his budget and he chooses one of them, will never choose the other one): prices of all goods in only the first period $p_{i1}$ for $i = 1, 2, \\ldots, n$) and quantities purchased of all goods ($q_{i1}$ and $q_{i2}$ for $i = 1, 2, \\ldots, n$).\n\nThen it is true that implies that the consumer is “better off” in the first period than in the second.\n\n5. Consider an individual’s demand functions for two goods, $x_k$ and $x_j$. Then the cross elasticity of demand for $x_k$ with respect to $p_{ik}$ is equal to the cross elasticity of demand for $x_j$ with respect to $p_k$ when only the substitution terms are considered.\n\n6. “The more the merrier” is a denial of the law of diminishing marginal utility.\n\n7. “The increment of product resulting from adding one more worker to a firm should not be attributed exclusively to labor because it results partly from the more intensive working of the other productive factors.”\n\n8. A tax of 20 per cent on all wages and salaries will decrease the supply of labor by more than a tax of 20 per cent on overtime pay alone.\n\n9. Carpenters would not receive a wage equal to the value of their marginal product if they were a “specific factor of production” in the industry using their services.\n\n10. The demand function for labor on the part of a competitive industry can in some cases be more elastic in the neighborhood of a given point if the quantities of other factors are taken as given than if the prices of other factors are taken as given.",
+      "question_text": "Indicate whether each of the following statements is true or false and explain briefly why.\n\n1. An “inferior” good is one for which the marginal utility is negative.\n\n2. The short-run marginal cost curves cross the long-run marginal cost curve from below (proceeding from left to right) at the quantities corresponding to the points of tangency of their respective average curves.\n\n3. For a homogeneous production function of degree one, and, for given relative factor prices but varying output, both of the following are true:\n\na. The ratios of the quantities of the various inputs are constant at all levels of outputs.\n\nb. The average productivities for each factor are constant at all levels of output.\n\n4. Suppose you have the following budget data for two periods for a consistent consumer (i.e., a consumer who, in those situations where the same two commodity bundles are within his budget and he chooses one of them, will never choose the other one): prices of all goods in only the first period $p_{i1}$ for $i = 1, 2, \\ldots, n$) and quantities purchased of all goods ($q_{i1}$ and $q_{i2}$ for $i = 1, 2, \\ldots, n$).\n\nThen it is true that implies that the consumer is “better off” in the first period than in the second.\n\n5. Consider an individual’s demand functions for two goods, $x_k$ and $x_j$. Then the cross elasticity of demand for $x_k$ with respect to $p_{ik}$ is equal to the cross elasticity of demand for $x_j$ with respect to $p_k$ when only the substitution terms are considered.\n\n6. “The more the merrier” is a denial of the law of diminishing marginal utility.\n\n7. “The increment of product resulting from adding one more worker to a firm should not be attributed exclusively to labor because it results partly from the more intensive working of the other productive factors.”\n\n8. A tax of 20 per cent on all wages and salaries will decrease the supply of labor by more than a tax of 20 per cent on overtime pay alone.\n\n9. Carpenters would not receive a wage equal to the value of their marginal product if they were a “specific factor of production” in the industry using their services.\n\n10. The demand function for labor on the part of a competitive industry can in some cases be more elastic in the neighborhood of a given point if the quantities of other factors are taken as given than if the prices of other factors are taken as given.",
       "solution": null,
       "has_math": true,
       "topics": [
@@ -690,7 +690,7 @@
       ],
       "exam_context": "qualifying exam",
       "difficulty": null,
-      "notes": "True/false-with-explanation question worth 45 points, comprising 10 statements. LaTeX: reconstructed mangled subscripts/notation from the capture: p_{i1}, q_{i1}, q_{i2} (\"pi1\", \"qi1\", \"qi2\"); x_k, x_j (\"xk\", \"xj\"); p_{ik} (\"pik\"); p_k (\"pk\"). The capture's wording is reproduced verbatim, including statement 4's incomplete clause \"Then it is true that implies that\" (text appears to be missing between \"that\" and \"implies\" in the source). Subparts a/b of statement 3 kept inline as written.",
+      "notes": "True/false-with-explanation prompt comprising 10 statements. LaTeX: reconstructed mangled subscripts/notation from the capture: p_{i1}, q_{i1}, q_{i2} (\"pi1\", \"qi1\", \"qi2\"); x_k, x_j (\"xk\", \"xj\"); p_{ik} (\"pik\"); p_k (\"pk\"). The capture's wording is reproduced verbatim, including statement 4's incomplete clause \"Then it is true that implies that\" (text appears to be missing between \"that\" and \"implies\" in the source). Subparts a/b of statement 3 kept inline as written.",
       "source": {
         "slug": "chicago-graduate-price-theory-preliminary-examination-1964",
         "university": "University of Chicago",
@@ -714,7 +714,7 @@
     },
     {
       "id": "chicago-graduate-price-theory-preliminary-examination-1964-002",
-      "question_text": "[15 points] A substitute for a product is invented. What, if anything, can you say about the effect of this invention on (a) the position; (b) the elasticity of the demand curve for the initial product? (To fix ideas, one example is the effect of the invention of electric shavers on the demand for safety razors; another, and perhaps more widely quoted example, is the effect of the introduction of financial intermediaries on the demand for money.)",
+      "question_text": "A substitute for a product is invented. What, if anything, can you say about the effect of this invention on (a) the position; (b) the elasticity of the demand curve for the initial product? (To fix ideas, one example is the effect of the invention of electric shavers on the demand for safety razors; another, and perhaps more widely quoted example, is the effect of the introduction of financial intermediaries on the demand for money.)",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -726,7 +726,7 @@
       ],
       "exam_context": "qualifying exam",
       "difficulty": null,
-      "notes": "Question worth 15 points. The editorial note preceding this question states: \"[Note: Question II neatly ripped off from this copy, presumably deleted from the examination]\" — so a question (apparently numbered II) is missing from the original document between the true/false section and this one.",
+      "notes": "A source note indicates that one problem is missing from the original document between the true/false section and this one.",
       "source": {
         "slug": "chicago-graduate-price-theory-preliminary-examination-1964",
         "university": "University of Chicago",
@@ -750,7 +750,7 @@
     },
     {
       "id": "chicago-graduate-price-theory-preliminary-examination-1964-003",
-      "question_text": "[15 points] We frequently hear it said that labor is cheap and capital dear in a country like the U.S. Such statements seem reasonable, yet it is not clear how one can compare the price of labor (rupees or dollars per hour) with the price of capital (percent per year). Can you suggest a way to interpret the statements so that they make sense?",
+      "question_text": "We frequently hear it said that labor is cheap and capital dear in a country like the U.S. Such statements seem reasonable, yet it is not clear how one can compare the price of labor (rupees or dollars per hour) with the price of capital (percent per year). Can you suggest a way to interpret the statements so that they make sense?",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -764,7 +764,7 @@
       ],
       "exam_context": "qualifying exam",
       "difficulty": null,
-      "notes": "Question worth 15 points.",
+      "notes": "",
       "source": {
         "slug": "chicago-graduate-price-theory-preliminary-examination-1964",
         "university": "University of Chicago",
@@ -788,7 +788,7 @@
     },
     {
       "id": "chicago-graduate-price-theory-preliminary-examination-1964-004",
-      "question_text": "[30 points] In the 1880’s there were a class of independent railroad ticket brokers called “scalpers,” who purchased tickets in quantity at reduced prices from the railroads and resold them to the public, typically at prices below the prices posted by the railroads and charged to people who bought tickets at the railroad windows.\n\nIn discussing the practice in its 1890 report, the Interstate Commerce Commission argues that (a) it raised the cost of transportation because it made it necessary, “to support the auxiliary force of scalpers,” and (b) also reflected “the avidity of nearly every railroad to do a greater amount of passenger business than any competitor.”\n\nIs (a) correct? Is it consistent with (b)?",
+      "question_text": "In the 1880’s there were a class of independent railroad ticket brokers called “scalpers,” who purchased tickets in quantity at reduced prices from the railroads and resold them to the public, typically at prices below the prices posted by the railroads and charged to people who bought tickets at the railroad windows.\n\nIn discussing the practice in its 1890 report, the Interstate Commerce Commission argues that (a) it raised the cost of transportation because it made it necessary, “to support the auxiliary force of scalpers,” and (b) also reflected “the avidity of nearly every railroad to do a greater amount of passenger business than any competitor.”\n\nIs (a) correct? Is it consistent with (b)?",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -803,7 +803,7 @@
       ],
       "exam_context": "qualifying exam",
       "difficulty": null,
-      "notes": "Question worth 30 points.",
+      "notes": "",
       "source": {
         "slug": "chicago-graduate-price-theory-preliminary-examination-1964",
         "university": "University of Chicago",
@@ -827,7 +827,7 @@
     },
     {
       "id": "chicago-graduate-price-theory-preliminary-examination-1964-005",
-      "question_text": "[30 points] President Johnson has recently sent to Congress a bill that would require certain industries to pay double the standard wage-rate for overtime. Assuming competitive conditions, what can you say about the effect on (a) prices of products (b) output (c) number of man hours, (d) number of persons employed in (1) the industries affected and (2) other industries?",
+      "question_text": "President Johnson has recently sent to Congress a bill that would require certain industries to pay double the standard wage-rate for overtime. Assuming competitive conditions, what can you say about the effect on (a) prices of products (b) output (c) number of man hours, (d) number of persons employed in (1) the industries affected and (2) other industries?",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -844,7 +844,7 @@
       ],
       "exam_context": "qualifying exam",
       "difficulty": null,
-      "notes": "Question worth 30 points.",
+      "notes": "",
       "source": {
         "slug": "chicago-graduate-price-theory-preliminary-examination-1964",
         "university": "University of Chicago",
@@ -868,7 +868,7 @@
     },
     {
       "id": "chicago-graduate-price-theory-preliminary-examination-1964-006",
-      "question_text": "[30 points] Currently, the number of taxicabs permitted to operate in the city of Chicago is limited by licensure, no new licenses are being issued, and existing licenses which can be transferred sell for substantial sums. In addition, the price which taxicabs charge is fixed by the city. (A) Suppose restrictions on licensure were lifted but prices continued to be fixed at present levels. What would be the effect on (a) number of cabs, (b) incomes of non-driving owners of cabs, (c) wages of non-owning (i.e., hired) cab drivers?\n\n(B) Suppose the price restrictions were lifted, so cabs could charge whatever they wanted. What would you expect to happen to prices for taxicab rides, both with respect to level and structure?",
+      "question_text": "Currently, the number of taxicabs permitted to operate in the city of Chicago is limited by licensure, no new licenses are being issued, and existing licenses which can be transferred sell for substantial sums. In addition, the price which taxicabs charge is fixed by the city. (A) Suppose restrictions on licensure were lifted but prices continued to be fixed at present levels. What would be the effect on (a) number of cabs, (b) incomes of non-driving owners of cabs, (c) wages of non-owning (i.e., hired) cab drivers?\n\n(B) Suppose the price restrictions were lifted, so cabs could charge whatever they wanted. What would you expect to happen to prices for taxicab rides, both with respect to level and structure?",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -887,7 +887,7 @@
       ],
       "exam_context": "qualifying exam",
       "difficulty": null,
-      "notes": "Question worth 30 points. Multi-part (A)/(B) kept together in one entry.",
+      "notes": "Multi-part (A)/(B) kept together in one entry.",
       "source": {
         "slug": "chicago-graduate-price-theory-preliminary-examination-1964",
         "university": "University of Chicago",
@@ -924,7 +924,7 @@
       ],
       "exam_context": "qualifying exam",
       "difficulty": null,
-      "notes": "Question 1 of the Industrial Organization Prelim. Instruction preceding the questions: \"Answer all questions:\"",
+      "notes": "Instruction preceding the source questions: \"Answer all questions:\"",
       "source": {
         "slug": "chicago-industrial-organization-prelim-1977",
         "university": "University of Chicago",
@@ -963,7 +963,7 @@
       ],
       "exam_context": "qualifying exam",
       "difficulty": null,
-      "notes": "Question 2 of the Industrial Organization Prelim.",
+      "notes": "",
       "source": {
         "slug": "chicago-industrial-organization-prelim-1977",
         "university": "University of Chicago",
@@ -1001,7 +1001,7 @@
       ],
       "exam_context": "qualifying exam",
       "difficulty": null,
-      "notes": "Question 3 of the Industrial Organization Prelim. The six listed factors appear as separate paragraphs in the source; preserved as a list.",
+      "notes": "The six listed factors appear as separate paragraphs in the source; preserved as a list.",
       "source": {
         "slug": "chicago-industrial-organization-prelim-1977",
         "university": "University of Chicago",
@@ -1038,7 +1038,7 @@
       ],
       "exam_context": "qualifying exam",
       "difficulty": null,
-      "notes": "Question 4 of the Industrial Organization Prelim. The seven conditions appear as separate paragraphs in the source; preserved as a list. The lowercase 'n' in 'n fictional books' is verbatim from the source (a variable for a count of books) but no further mathematical notation is involved, so has_math left false.",
+      "notes": "The seven conditions appear as separate paragraphs in the source; preserved as a list. The lowercase 'n' in 'n fictional books' is verbatim from the source (a variable for a count of books) but no further mathematical notation is involved, so has_math left false.",
       "source": {
         "slug": "chicago-industrial-organization-prelim-1977",
         "university": "University of Chicago",
@@ -1077,7 +1077,7 @@
       ],
       "exam_context": "qualifying exam",
       "difficulty": null,
-      "notes": "Question 5 of the Industrial Organization Prelim. LaTeX: reconstructed mangled subscripts from the OCR/transcription where subscripts ran into surrounding words — 'Nit' -> N_{it}, 'Cit' -> C_{it}, 'Qit' -> Q_{it}, 'Rit' -> R_{it}; also separated run-together strings 'Nitconstant' -> 'N_{it} constant', 'Ritis' -> 'R_{it} is', 'Citconstant' -> 'C_{it} constant', 'Nitare' -> 'N_{it} are', 'Citand' -> 'C_{it} and', 'Qitand' -> 'Q_{it} and'. Verbatim typo preserved: 'holing' (for 'holding') in the first listed finding. Note: the last two listed findings appear to contradict each other (0.55 vs. zero correlation between the change in C_{it} and change in log N_{it}) — reproduced exactly as in the source.",
+      "notes": "LaTeX: reconstructed mangled subscripts from the OCR/transcription where subscripts ran into surrounding words — 'Nit' -> N_{it}, 'Cit' -> C_{it}, 'Qit' -> Q_{it}, 'Rit' -> R_{it}; also separated run-together strings 'Nitconstant' -> 'N_{it} constant', 'Ritis' -> 'R_{it} is', 'Citconstant' -> 'C_{it} constant', 'Nitare' -> 'N_{it} are', 'Citand' -> 'C_{it} and', 'Qitand' -> 'Q_{it} and'. Verbatim typo preserved: 'holing' (for 'holding') in the first listed finding. Note: the last two listed findings appear to contradict each other (0.55 vs. zero correlation between the change in C_{it} and change in log N_{it}) — reproduced exactly as in the source.",
       "source": {
         "slug": "chicago-industrial-organization-prelim-1977",
         "university": "University of Chicago",
@@ -1119,7 +1119,7 @@
       ],
       "exam_context": "qualifying exam",
       "difficulty": null,
-      "notes": "Question 6 of the Industrial Organization Prelim.",
+      "notes": "",
       "source": {
         "slug": "chicago-industrial-organization-prelim-1977",
         "university": "University of Chicago",
@@ -1451,7 +1451,7 @@
     },
     {
       "id": "chicago-price-theory-ph-d-core-examination-summer-1975-001",
-      "question_text": "(60 minutes, 5 per item) Indicate whether each of the following statements is TRUE, FALSE, or UNCERTAIN. In each case write a few sentences explaining your answer. Your grade will be determined by your explanation.\n\nIt is immediately obvious that if the firm has any significant degree of monopoly power, sales maximization would be better for the rest of the economy than profit maximization.\n\nWhen a firm increases its price because its raw material costs have risen, the buyers accept the price increase more readily.\n\nIf A and B are produced in fixed proportions and consumed in fixed proportions, one of the two will be free.\n\nMarshall asserts that the rents of different qualities of agricultural land will approach equality as the economy grows in population and wealth.\n\nAn industry whose output is increasing cannot be making negative profits.\n\nThe prohibition on environmental pollution by (say) a factory cannot increase national income.\n\nA competitive industry is more likely to cartelize when the probability of expropriation increases.\n\nRegulation of a competitive industry by the government will decrease the probability of cartelization.\n\nIn the social security systems of most countries, the age of retirement after which old age pensions are “payable” is lower for women than for men (usually 60 as compared with 65 years of age), even though on the average women live significantly longer than men. This is a clear case of discrimination against men, which should be protested by the Men’s Liberation Movement.\n\nThe U.S. personal income tax system allows married couples to “split” their aggregate income equally and pay tax on the results at the same rates as single people would. This is a clear case of discrimination in favor of heterosexuality that should be vigorously protested by the Gay Liberation front.\n\nIf the elasticity of supply is less than unity, and the elasticity of substitution in production greater than unity, a fall in the price of a factor must increase the demand for it.\n\nLabor can be “Exploited” only if there is monopoly in the product market.",
+      "question_text": "Indicate whether each of the following statements is TRUE, FALSE, or UNCERTAIN. In each case write a few sentences explaining your answer. Your grade will be determined by your explanation.\n\nIt is immediately obvious that if the firm has any significant degree of monopoly power, sales maximization would be better for the rest of the economy than profit maximization.\n\nWhen a firm increases its price because its raw material costs have risen, the buyers accept the price increase more readily.\n\nIf A and B are produced in fixed proportions and consumed in fixed proportions, one of the two will be free.\n\nMarshall asserts that the rents of different qualities of agricultural land will approach equality as the economy grows in population and wealth.\n\nAn industry whose output is increasing cannot be making negative profits.\n\nThe prohibition on environmental pollution by (say) a factory cannot increase national income.\n\nA competitive industry is more likely to cartelize when the probability of expropriation increases.\n\nRegulation of a competitive industry by the government will decrease the probability of cartelization.\n\nIn the social security systems of most countries, the age of retirement after which old age pensions are “payable” is lower for women than for men (usually 60 as compared with 65 years of age), even though on the average women live significantly longer than men. This is a clear case of discrimination against men, which should be protested by the Men’s Liberation Movement.\n\nThe U.S. personal income tax system allows married couples to “split” their aggregate income equally and pay tax on the results at the same rates as single people would. This is a clear case of discrimination in favor of heterosexuality that should be vigorously protested by the Gay Liberation front.\n\nIf the elasticity of supply is less than unity, and the elasticity of substitution in production greater than unity, a fall in the price of a factor must increase the demand for it.\n\nLabor can be “Exploited” only if there is monopoly in the product market.",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -1474,7 +1474,7 @@
       ],
       "exam_context": "qualifying exam",
       "difficulty": null,
-      "notes": "True/False/Uncertain section worth 60 minutes, 5 points per item (12 statements). Transcribed verbatim. No mathematical notation. “200,200” not applicable.",
+      "notes": "True/False/Uncertain section with 12 statements. Transcribed verbatim. No mathematical notation. “200,200” not applicable.",
       "source": {
         "slug": "chicago-price-theory-ph-d-core-examination-summer-1975",
         "university": "University of Chicago",
@@ -1498,7 +1498,7 @@
     },
     {
       "id": "chicago-price-theory-ph-d-core-examination-summer-1975-002",
-      "question_text": "(25 minutes)\n\nIn most states it is illegal for drug stores to advertise the prices of prescription drugs. A customer can find out the price of a prescription drug only by asking the pharmacist in person. In addition only pharmacists licensed by the state are allowed to dispense drugs and every drug store must employ at least one licensed pharmacist. One can become a licensed pharmacist by passing an examination administered by the state and written by a board of pharmacists. Finally, a pharmacist must fill a prescription exactly as it is written by the physician and may not substitute a generically equivalent drug.\n\nWhat would happen if pharmacists were allowed to advertise the prices of prescription drugs?\n\nWhat would happen to the price of drugs if pharmacists were allowed to substitute any drug from a specified list in place of the prescribed drug?",
+      "question_text": "In most states it is illegal for drug stores to advertise the prices of prescription drugs. A customer can find out the price of a prescription drug only by asking the pharmacist in person. In addition only pharmacists licensed by the state are allowed to dispense drugs and every drug store must employ at least one licensed pharmacist. One can become a licensed pharmacist by passing an examination administered by the state and written by a board of pharmacists. Finally, a pharmacist must fill a prescription exactly as it is written by the physician and may not substitute a generically equivalent drug.\n\nWhat would happen if pharmacists were allowed to advertise the prices of prescription drugs?\n\nWhat would happen to the price of drugs if pharmacists were allowed to substitute any drug from a specified list in place of the prescribed drug?",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -1514,7 +1514,7 @@
       ],
       "exam_context": "qualifying exam",
       "difficulty": null,
-      "notes": "25-minute essay question with two sub-parts. Verbatim transcription; no math.",
+      "notes": "Essay prompt with two sub-parts. Verbatim transcription; no math.",
       "source": {
         "slug": "chicago-price-theory-ph-d-core-examination-summer-1975",
         "university": "University of Chicago",
@@ -1538,7 +1538,7 @@
     },
     {
       "id": "chicago-price-theory-ph-d-core-examination-summer-1975-003",
-      "question_text": "(25 minutes)\n\nWe are presently importing considerable oil at the $10 barrel price, and producing domestically at a free price from new wells and a $5 price from “old” wells (on amounts they produced before the oil price rises).\n\nWhat would be the effect on domestic price of a higher tariff on imports? On what would the magnitude of the price rise depend?\n\nWhat would be the effect on domestic price of a removal of the price ceiling on “old” oil? On what would the magnitude of this price effect depend?",
+      "question_text": "We are presently importing considerable oil at the $10 barrel price, and producing domestically at a free price from new wells and a $5 price from “old” wells (on amounts they produced before the oil price rises).\n\nWhat would be the effect on domestic price of a higher tariff on imports? On what would the magnitude of the price rise depend?\n\nWhat would be the effect on domestic price of a removal of the price ceiling on “old” oil? On what would the magnitude of this price effect depend?",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -1552,7 +1552,7 @@
       ],
       "exam_context": "qualifying exam",
       "difficulty": null,
-      "notes": "25-minute question with two sub-parts. Verbatim; dollar prices are stated values from the text, not reconstructed math.",
+      "notes": "Prompt with two sub-parts. Verbatim; dollar prices are stated values from the text, not reconstructed math.",
       "source": {
         "slug": "chicago-price-theory-ph-d-core-examination-summer-1975",
         "university": "University of Chicago",
@@ -1576,7 +1576,7 @@
     },
     {
       "id": "chicago-price-theory-ph-d-core-examination-summer-1975-004",
-      "question_text": "(25 minutes)\n\nTranslate into the apparatus of indifference curves and budget lines the following phenomena:\n\nThe individual likes good music more, the more he hears.\n\nThe individual has monopsonistic power with respect to one commodity.\n\n(a) The consumption of the two commodities (however spaced) is poisonous.\n\n(b) The consumption of either commodity alone is poisonous.\n\nThe individual cannot afford one of the commodities.\n\n(a) One of the commodities yields increasing marginal utility.\n\n(b) Both do.",
+      "question_text": "Translate into the apparatus of indifference curves and budget lines the following phenomena:\n\nThe individual likes good music more, the more he hears.\n\nThe individual has monopsonistic power with respect to one commodity.\n\n(a) The consumption of the two commodities (however spaced) is poisonous.\n\n(b) The consumption of either commodity alone is poisonous.\n\nThe individual cannot afford one of the commodities.\n\n(a) One of the commodities yields increasing marginal utility.\n\n(b) Both do.",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -1591,7 +1591,7 @@
       ],
       "exam_context": "qualifying exam",
       "difficulty": null,
-      "notes": "25-minute question listing several phenomena to translate into indifference-curve/budget-line apparatus; two of the phenomena have (a)/(b) sub-parts. Verbatim. References indifference curves/budget lines conceptually but no explicit notation in the text, so has_math=false.",
+      "notes": "Prompt listing several phenomena to translate into indifference-curve/budget-line apparatus; two of the phenomena have (a)/(b) sub-parts. Verbatim. References indifference curves/budget lines conceptually but no explicit notation in the text, so has_math=false.",
       "source": {
         "slug": "chicago-price-theory-ph-d-core-examination-summer-1975",
         "university": "University of Chicago",
@@ -1615,7 +1615,7 @@
     },
     {
       "id": "chicago-price-theory-ph-d-core-examination-summer-1975-005",
-      "question_text": "(20 minutes)\n\nAssume there is an exhaustible resource that can be extracted at a constant marginal cost c. Assume there is a competitive industry that extracts this resource. Derive the behavior of the equilibrium price over time if the demand schedule for the product remains constant over time.\n\nUnder the same demand and cost conditions, derive the equilibrium price if the resource is controlled by a single firm.",
+      "question_text": "Assume there is an exhaustible resource that can be extracted at a constant marginal cost c. Assume there is a competitive industry that extracts this resource. Derive the behavior of the equilibrium price over time if the demand schedule for the product remains constant over time.\n\nUnder the same demand and cost conditions, derive the equilibrium price if the resource is controlled by a single firm.",
       "solution": null,
       "has_math": true,
       "topics": [
@@ -1632,7 +1632,7 @@
       ],
       "exam_context": "qualifying exam",
       "difficulty": null,
-      "notes": "20-minute analytical question (exhaustible resource / Hotelling-type problem). Contains the variable 'c' (constant marginal cost) and asks to derive equilibrium price over time. has_math=true due to the symbolic marginal cost c and derivation of price dynamics. No mangled subscripts to reconstruct; 'c' left verbatim.",
+      "notes": "Analytical prompt (exhaustible resource / Hotelling-type problem). Contains the variable 'c' (constant marginal cost) and asks to derive equilibrium price over time. has_math=true due to the symbolic marginal cost c and derivation of price dynamics. No mangled subscripts to reconstruct; 'c' left verbatim.",
       "source": {
         "slug": "chicago-price-theory-ph-d-core-examination-summer-1975",
         "university": "University of Chicago",
@@ -1656,7 +1656,7 @@
     },
     {
       "id": "chicago-price-theory-ph-d-core-examination-summer-1975-006",
-      "question_text": "(25 minutes)\n\nOntario imposes a tax of 30 percent on the sale or bequest of any land to non-Canadians. What are the effects of such a tax on:\n\nLandowners, Canadian and non-Canadian;\n\nNon-landowners, Canadian and non-Canadian.\n\nWhat will the effect be if leases are not regulated?",
+      "question_text": "Ontario imposes a tax of 30 percent on the sale or bequest of any land to non-Canadians. What are the effects of such a tax on:\n\nLandowners, Canadian and non-Canadian;\n\nNon-landowners, Canadian and non-Canadian.\n\nWhat will the effect be if leases are not regulated?",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -1672,7 +1672,7 @@
       ],
       "exam_context": "qualifying exam",
       "difficulty": null,
-      "notes": "25-minute tax-incidence question with sub-parts. Verbatim; no notation.",
+      "notes": "Tax-incidence prompt with sub-parts. Verbatim; no notation.",
       "source": {
         "slug": "chicago-price-theory-ph-d-core-examination-summer-1975",
         "university": "University of Chicago",
@@ -1775,7 +1775,7 @@
     },
     {
       "id": "chicago-price-theory-reading-assignments-problem-exam-friedman-1951-52-003",
-      "question_text": "(15 points)\n\n(a) Appraise: “Recent studies of domestic consumption in low-cost municipalities demonstrate that the demand for electric current is highly elastic, expanding rapidly as the cost declines. The national average consumption of the United States was 604 kilowatt-hours in 1933. The average charge to consumers on October 1, 1934, for the whole country is reported as 5.4 cents per kilowatt-hour. In Seattle where the average cost is 2.58 cents, the average consumption is 1,098 kilowatt-hours. In Tacoma, the charge is 1.726 cents and the consumption 1,550. In 26 cities of Ontario, the average charge is 1.45 cents and the consumption 1,780. Finally, in Winnipeg, where the average net charge is only 8 mills per kilowatt-hour the average per capita consumption exceeds 4,000 kilowatt-hours.” (Report of the National Resources Board, December 1, 1934, Government Printing Office, 1934, p. 39.)\n\n(b) Will a specific tax (a tax of a specified number of dollars per physical unit) on a commodity raise its price more or less than an equivalent ad valoremtax (a tax of a specified percentage of the price)? Assume that the commodity is produced and sold under competitive conditions.",
+      "question_text": "(a) Appraise: “Recent studies of domestic consumption in low-cost municipalities demonstrate that the demand for electric current is highly elastic, expanding rapidly as the cost declines. The national average consumption of the United States was 604 kilowatt-hours in 1933. The average charge to consumers on October 1, 1934, for the whole country is reported as 5.4 cents per kilowatt-hour. In Seattle where the average cost is 2.58 cents, the average consumption is 1,098 kilowatt-hours. In Tacoma, the charge is 1.726 cents and the consumption 1,550. In 26 cities of Ontario, the average charge is 1.45 cents and the consumption 1,780. Finally, in Winnipeg, where the average net charge is only 8 mills per kilowatt-hour the average per capita consumption exceeds 4,000 kilowatt-hours.” (Report of the National Resources Board, December 1, 1934, Government Printing Office, 1934, p. 39.)\n\n(b) Will a specific tax (a tax of a specified number of dollars per physical unit) on a commodity raise its price more or less than an equivalent ad valoremtax (a tax of a specified percentage of the price)? Assume that the commodity is produced and sold under competitive conditions.",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -1789,8 +1789,8 @@
         "tax-incidence"
       ],
       "exam_context": "final",
-      "difficulty": "15 points",
-      "notes": "Economics 300A, Final Examination, December 17, 1951 (Box 76, Folder 76.9). Question 1. 'ad valoremtax' appears run together in the capture (missing space before 'tax'); preserved verbatim.",
+      "difficulty": null,
+      "notes": "Economics 300A, Final Examination, December 17, 1951 (Box 76, Folder 76.9). 'ad valoremtax' appears run together in the capture (missing space before 'tax'); preserved verbatim.",
       "source": {
         "slug": "chicago-price-theory-reading-assignments-problem-exam-friedman-1951-52",
         "university": "University of Chicago",
@@ -1814,7 +1814,7 @@
     },
     {
       "id": "chicago-price-theory-reading-assignments-problem-exam-friedman-1951-52-004",
-      "question_text": "(15 points) (a) Figure 1 gives the locus of points of tangency between indifference curves and budget lines parallel to ab (and cd). ABCDEFGH is therefore and “expansion path” or curve showing the quantity of X and Y and individual would buy at different incomes and constant relative prices. Fill in the following table with as precise statements as are deducible from Fig. 1 by observation without measurement:\n\nSegment | Income elasticity of (X, Y) | Good is Superior (S), Inferior (I), or Uncertain (U) (X, Y)\nAB\nBC\nCD\nDE\nEF\nFG\nGH\n\n(b) ABCDEF in Figure 2 is the locus of points of tangency between indifference curves and budget lines representing different money prices for X but the same money price of Y and money income (i.e. budget lines like ab and ac rotating about a). Fill in the following table with as precise statements as are deducible from Fig. 2 by observation without measurement.\n\nSegment | Income elasticity of (X, Y) | Good is Superior (S), Inferior (I), or Uncertain (U) (X, Y)\nAB\nBC\nCD\nDE\nEF",
+      "question_text": "(a) Figure 1 gives the locus of points of tangency between indifference curves and budget lines parallel to ab (and cd). ABCDEFGH is therefore and “expansion path” or curve showing the quantity of X and Y and individual would buy at different incomes and constant relative prices. Fill in the following table with as precise statements as are deducible from Fig. 1 by observation without measurement:\n\nSegment | Income elasticity of (X, Y) | Good is Superior (S), Inferior (I), or Uncertain (U) (X, Y)\nAB\nBC\nCD\nDE\nEF\nFG\nGH\n\n(b) ABCDEF in Figure 2 is the locus of points of tangency between indifference curves and budget lines representing different money prices for X but the same money price of Y and money income (i.e. budget lines like ab and ac rotating about a). Fill in the following table with as precise statements as are deducible from Fig. 2 by observation without measurement.\n\nSegment | Income elasticity of (X, Y) | Good is Superior (S), Inferior (I), or Uncertain (U) (X, Y)\nAB\nBC\nCD\nDE\nEF",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -1827,8 +1827,8 @@
         "income-substitution-effects"
       ],
       "exam_context": "final",
-      "difficulty": "15 points",
-      "notes": "Economics 300A, Final Examination, December 17, 1951 (Box 76, Folder 76.9). Question 2. The original contains two tables (with columns Segment / Income elasticity of X,Y / Good is Superior, Inferior, or Uncertain for X,Y) and row labels for the path segments; the capture flattened the table layout. Tables reconstructed inline with segment row labels preserved. References to 'Figure 1' / 'Figure 2' (diagrams not reproduced in the capture). Typos present in source ('therefore and', 'Y and individual') preserved verbatim. | verify: The Figure 1/Figure 2 tables are mangled in the raw (column headers 'Segment', 'Income elasticity of', 'Good is Superior (S), Inferior (I), or Uncertain (U)', and sub-columns 'X','Y' are split across many separate lines). The extractor reconstructed them into a single inline header row 'Segment | Income elasticity of (X, Y) | Good is Superior (S), Inferior (I), or Uncertain (U) (X, Y)'. This is a reasonable, meaning-preserving reconstruction rather than verbatim, but it is a formatting reinterpretation worth noting; no content was lost or distorted.",
+      "difficulty": null,
+      "notes": "Economics 300A, Final Examination, December 17, 1951 (Box 76, Folder 76.9). The original contains two tables (with columns Segment / Income elasticity of X,Y / Good is Superior, Inferior, or Uncertain for X,Y) and row labels for the path segments; the capture flattened the table layout. Tables reconstructed inline with segment row labels preserved. References to 'Figure 1' / 'Figure 2' (diagrams not reproduced in the capture). Typos present in source ('therefore and', 'Y and individual') preserved verbatim. | verify: The Figure 1/Figure 2 tables are mangled in the raw (column headers 'Segment', 'Income elasticity of', 'Good is Superior (S), Inferior (I), or Uncertain (U)', and sub-columns 'X','Y' are split across many separate lines). The extractor reconstructed them into a single inline header row 'Segment | Income elasticity of (X, Y) | Good is Superior (S), Inferior (I), or Uncertain (U) (X, Y)'. This is a reasonable, meaning-preserving reconstruction rather than verbatim, but it is a formatting reinterpretation worth noting; no content was lost or distorted.",
       "source": {
         "slug": "chicago-price-theory-reading-assignments-problem-exam-friedman-1951-52",
         "university": "University of Chicago",
@@ -1852,7 +1852,7 @@
     },
     {
       "id": "chicago-price-theory-reading-assignments-problem-exam-friedman-1951-52-005",
-      "question_text": "(20 points) “Monopolistic competition robs the old concept of industry (and also the Chamberlinian group) of any theoretical significance…The value of these groupings is only a concrete, empirical one…Which firms shall be included in any one group will have to be decided, not on an a prioribasis, but after an empirical survey of market realities…In the general pure theory of value, the group and the industry are useless concepts…When the study of competition is freed from the narrowing assumptions of pure competition, only two terms remain essential for the analysis: the individual firms, on the one hand; the whole collectivity of competitors on the other.” (Triffin)\n\n(a) Explain why “monopolistic competition robs the old concept of industry…of any theoretical significance.”\n\n(b) Explain the general position summarized in this quotation and discuss it critically.",
+      "question_text": "“Monopolistic competition robs the old concept of industry (and also the Chamberlinian group) of any theoretical significance…The value of these groupings is only a concrete, empirical one…Which firms shall be included in any one group will have to be decided, not on an a prioribasis, but after an empirical survey of market realities…In the general pure theory of value, the group and the industry are useless concepts…When the study of competition is freed from the narrowing assumptions of pure competition, only two terms remain essential for the analysis: the individual firms, on the one hand; the whole collectivity of competitors on the other.” (Triffin)\n\n(a) Explain why “monopolistic competition robs the old concept of industry…of any theoretical significance.”\n\n(b) Explain the general position summarized in this quotation and discuss it critically.",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -1866,8 +1866,8 @@
         "methodology"
       ],
       "exam_context": "final",
-      "difficulty": "20 points",
-      "notes": "Economics 300A, Final Examination, December 17, 1951 (Box 76, Folder 76.9). Question 3. 'a prioribasis' run together in capture; preserved verbatim.",
+      "difficulty": null,
+      "notes": "Economics 300A, Final Examination, December 17, 1951 (Box 76, Folder 76.9). 'a prioribasis' run together in capture; preserved verbatim.",
       "source": {
         "slug": "chicago-price-theory-reading-assignments-problem-exam-friedman-1951-52",
         "university": "University of Chicago",
@@ -1891,7 +1891,7 @@
     },
     {
       "id": "chicago-price-theory-reading-assignments-problem-exam-friedman-1951-52-006",
-      "question_text": "(20 points) Find the mistakes (there are at least six) in the accompanying diagram showing long and short run marginal and average cost curves, and explain the general principle corresponding to each particular mistake.",
+      "question_text": "Find the mistakes (there are at least six) in the accompanying diagram showing long and short run marginal and average cost curves, and explain the general principle corresponding to each particular mistake.",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -1902,8 +1902,8 @@
         "short-run-long-run"
       ],
       "exam_context": "final",
-      "difficulty": "20 points",
-      "notes": "Economics 300A, Final Examination, December 17, 1951 (Box 76, Folder 76.9). Question 4. Refers to an 'accompanying diagram' not reproduced in the capture.",
+      "difficulty": null,
+      "notes": "Economics 300A, Final Examination, December 17, 1951 (Box 76, Folder 76.9). Refers to an 'accompanying diagram' not reproduced in the capture.",
       "source": {
         "slug": "chicago-price-theory-reading-assignments-problem-exam-friedman-1951-52",
         "university": "University of Chicago",
@@ -1947,7 +1947,7 @@
       ],
       "exam_context": "final",
       "difficulty": null,
-      "notes": "Economics 300A, Final Examination, December 17, 1951 (Box 76, Folder 76.9). Question 5 (no point value stated in capture). LaTeX/notation: point and segment labels were captured without subscripts (e.g. 'O Q2Q5', 'P1', 'LP5', 'OSP2', 'P2Q2', 'P5'); these refer to diagram points $Q_2$, $Q_5$, $P_1$, $P_2$, $P_5$, and equation $P_2 Q_2 = OL$. Preserved as written in the source rather than silently re-subscripting; flagging the convention here. Refers to an 'accompanying diagram' not reproduced in the capture.",
+      "notes": "Economics 300A, Final Examination, December 17, 1951 (Box 76, Folder 76.9). LaTeX/notation: point and segment labels were captured without subscripts (e.g. 'O Q2Q5', 'P1', 'LP5', 'OSP2', 'P2Q2', 'P5'); these refer to diagram points $Q_2$, $Q_5$, $P_1$, $P_2$, $P_5$, and equation $P_2 Q_2 = OL$. Preserved as written in the source rather than silently re-subscripting; flagging the convention here. Refers to an 'accompanying diagram' not reproduced in the capture.",
       "source": {
         "slug": "chicago-price-theory-reading-assignments-problem-exam-friedman-1951-52",
         "university": "University of Chicago",
@@ -2007,7 +2007,7 @@
     },
     {
       "id": "chicago-price-theory-reading-assignments-problem-exam-friedman-1951-52-009",
-      "question_text": "(35 points) Indicate whether each of the following statements is true (T), false (F), or uncertain (U), and state briefly the reason for your answer. It is to be understood that in each question the appropriate “other things” are to be held constant.\n\n1. The imposition of a minimum wage for labor of type X higher than the preceding wage leads to an increase in the number of laborers of type X employed. It follows that labor of type X is hired under monopsonistic conditions.\n\n2. Under both competition and monopoly in the product market, marginal value product of a factor to a firm is equal to marginal physical product of the firm times marginal revenue to the firm from the sale of the product.\n\n3. Marginal productivity analysis shows that, in the absence of monopsony, a laborer gets as a wage his marginal value product. If this analysis is correct, it follows that unions can raise wages in the absence of monopsony only if they either make each worker more efficient, or increase demand for the product, or make the demand for the product more elastic.\n\n4. The law of variable proportions (or diminishing returns) is contradicted by the fact that agricultural output of this country has increased tremendously despite a decrease in the proportion of the working population on farms.\n\n5. The rate of interest is equal to the rate of time preference of consumers.\n\n6. At present levels of operation, three quarters of the total cost of the XYZ railroad is overhead cost that does not vary with traffic, only one quarter is variable cost. It follows that marginal cost is much less than average cost.\n\n7. The demand curve of an individual firm for a factor of production is identical with its marginal value productivity curve for the same factor of production.\n\n8. The demand curve of a firm for a factor of production is a meaningless concept if the firm is a monopsonistic purchaser of that factor.\n\n9. A declining long run supply curve is impossible in a competitive industry.\n\n10. Marginal factor cost is equal to the price per unit of a factor whenever the product market is competitive.\n\n11. According to the theory of joint demand, the absolute value of the elasticity of derived demand for a factor of production will be smaller the more inelastic the supply of that factor.\n\n12. The fact that individuals do not choose occupations solely on the basis of their pecuniary attractiveness helps explain why the supply curve of labor for a particular occupation has an elasticity greater than zero.\n\n13. If all types of services were used only in fixed proportions, a marginal-productivity theory would be neither necessary nor possible.\n\n14. Our society is often described as a “profit” economy or “profit-maximizing” economy. The word “profit” is here used in the same sense as in the uncertainty theory of “profit.”\n\n15. “Profit” as defined in the uncertainty theory of profit is the expected return to any factor assuming uncertainty over and above the guaranteed expected income it can obtain if it assumes no uncertainty.\n\n16. If one income is higher than another before income tax it will also be higher after a progressive income tax, provided only that the marginal tax never exceeds 100%. It follows that if one accepts the theory that individuals act as if they sought to maximize their income, he must also accept the conclusion that such taxes do not alter individual's actions and hence are not shifted.\n\n17 and 18. A minimum wage law is repealed. The wage rate of a class of workers hired under competitive conditions was equal to the minimum before repeal and falls after repeal. It follows that:\n\n17. The total wage bill for this class of labor will rise, remain constant, or fall, according as the elasticity of demand for labor of this class is greater than, equal to, or less than unity in absolute value.\n\n18. The quantity of labor of this class employed will fall, remain constant, or rise according as the elasticity of supply of labor of this class is positive, zero, or negative.\n\n19. The great technological improvements in the past few decades in the production of synthetic fibers (rayon, nylon, etc.) and associated decline in their relative price has, among other effects, tended to raise the price of meat in general, especially of lamb and mutton.\n\n20. At the same time, stringent rationing of meat consumption in Great Britain, by tending to offset this effect, has improved the competitive position of the synthetic fiber industry, and so enabled it to expand more than otherwise.",
+      "question_text": "Indicate whether each of the following statements is true (T), false (F), or uncertain (U), and state briefly the reason for your answer. It is to be understood that in each question the appropriate “other things” are to be held constant.\n\n1. The imposition of a minimum wage for labor of type X higher than the preceding wage leads to an increase in the number of laborers of type X employed. It follows that labor of type X is hired under monopsonistic conditions.\n\n2. Under both competition and monopoly in the product market, marginal value product of a factor to a firm is equal to marginal physical product of the firm times marginal revenue to the firm from the sale of the product.\n\n3. Marginal productivity analysis shows that, in the absence of monopsony, a laborer gets as a wage his marginal value product. If this analysis is correct, it follows that unions can raise wages in the absence of monopsony only if they either make each worker more efficient, or increase demand for the product, or make the demand for the product more elastic.\n\n4. The law of variable proportions (or diminishing returns) is contradicted by the fact that agricultural output of this country has increased tremendously despite a decrease in the proportion of the working population on farms.\n\n5. The rate of interest is equal to the rate of time preference of consumers.\n\n6. At present levels of operation, three quarters of the total cost of the XYZ railroad is overhead cost that does not vary with traffic, only one quarter is variable cost. It follows that marginal cost is much less than average cost.\n\n7. The demand curve of an individual firm for a factor of production is identical with its marginal value productivity curve for the same factor of production.\n\n8. The demand curve of a firm for a factor of production is a meaningless concept if the firm is a monopsonistic purchaser of that factor.\n\n9. A declining long run supply curve is impossible in a competitive industry.\n\n10. Marginal factor cost is equal to the price per unit of a factor whenever the product market is competitive.\n\n11. According to the theory of joint demand, the absolute value of the elasticity of derived demand for a factor of production will be smaller the more inelastic the supply of that factor.\n\n12. The fact that individuals do not choose occupations solely on the basis of their pecuniary attractiveness helps explain why the supply curve of labor for a particular occupation has an elasticity greater than zero.\n\n13. If all types of services were used only in fixed proportions, a marginal-productivity theory would be neither necessary nor possible.\n\n14. Our society is often described as a “profit” economy or “profit-maximizing” economy. The word “profit” is here used in the same sense as in the uncertainty theory of “profit.”\n\n15. “Profit” as defined in the uncertainty theory of profit is the expected return to any factor assuming uncertainty over and above the guaranteed expected income it can obtain if it assumes no uncertainty.\n\n16. If one income is higher than another before income tax it will also be higher after a progressive income tax, provided only that the marginal tax never exceeds 100%. It follows that if one accepts the theory that individuals act as if they sought to maximize their income, he must also accept the conclusion that such taxes do not alter individual's actions and hence are not shifted.\n\n17 and 18. A minimum wage law is repealed. The wage rate of a class of workers hired under competitive conditions was equal to the minimum before repeal and falls after repeal. It follows that:\n\n17. The total wage bill for this class of labor will rise, remain constant, or fall, according as the elasticity of demand for labor of this class is greater than, equal to, or less than unity in absolute value.\n\n18. The quantity of labor of this class employed will fall, remain constant, or rise according as the elasticity of supply of labor of this class is positive, zero, or negative.\n\n19. The great technological improvements in the past few decades in the production of synthetic fibers (rayon, nylon, etc.) and associated decline in their relative price has, among other effects, tended to raise the price of meat in general, especially of lamb and mutton.\n\n20. At the same time, stringent rationing of meat consumption in Great Britain, by tending to offset this effect, has improved the competitive position of the synthetic fiber industry, and so enabled it to expand more than otherwise.",
       "solution": "Partial answer key supplied by Friedman (True/False/Uncertain), keyed by statement number: 1. [True]; 2. [True]; 3. [False]; 4. [False]; 5. [True]; 6. [False]; 7. [False]; 8. [True]; 9. [False]; 10. [False]; 11. [False]; 12. [True]; 13. [False]; 14. [False]; 15. [False]; 16. [False]; 17. [True]; 18. [False]; 19. [True]; 20. [True].",
       "has_math": false,
       "topics": [
@@ -2038,8 +2038,8 @@
         "elasticity"
       ],
       "exam_context": "final",
-      "difficulty": "35 points",
-      "notes": "Economics 300B, Final Examination, March 12, 1952 (Box 76, Folder 76.10). Question 1 (the True/False/Uncertain block). The source page presents these statements as an unnumbered run of paragraphs; I added sequential numbers (1-20) to preserve the correspondence with the bracketed answer-key tags, matching the editorial note that this is 'Friedman's partial answer key for the True/False/Uncertain questions.' The bracketed [True]/[False] tags after each statement in the capture are Friedman's answer key and are transferred to the solution field. Items 17 and 18 share a common stem, transcribed verbatim. Question instruction requires students to also state the reason; the key gives only the T/F/U verdict. | verify: The raw 35-point T/F/U section does NOT number statements 1 through 16 (they appear as unnumbered consecutive paragraphs); only the marker '17 and 18.' is explicit in the raw. The extractor ADDED enumeration '1.' through '20.' to every statement. This is added text not present verbatim in the source. Content of each statement is otherwise faithful, and dropping the bracketed answer-key tags ([True]/[False]/etc.) is appropriate since those are Friedman's answers, not part of the question.",
+      "difficulty": null,
+      "notes": "Economics 300B, Final Examination, March 12, 1952 (Box 76, Folder 76.10). True/False/Uncertain block. The source page presents these statements as an unnumbered run of paragraphs; I added sequential numbers (1-20) to preserve the correspondence with the bracketed answer-key tags, matching the editorial note that this is 'Friedman's partial answer key for the True/False/Uncertain questions.' The bracketed [True]/[False] tags after each statement in the capture are Friedman's answer key and are transferred to the solution field. Items 17 and 18 share a common stem, transcribed verbatim. The prompt requires students to also state the reason; the key gives only the T/F/U verdict. | verify: The raw 35-point T/F/U section does NOT number statements 1 through 16 (they appear as unnumbered consecutive paragraphs); only the marker '17 and 18.' is explicit in the raw. The extractor ADDED enumeration '1.' through '20.' to every statement. This is added text not present verbatim in the source. Content of each statement is otherwise faithful, and dropping the bracketed answer-key tags ([True]/[False]/etc.) is appropriate since those are Friedman's answers, not part of the question.",
       "source": {
         "slug": "chicago-price-theory-reading-assignments-problem-exam-friedman-1951-52",
         "university": "University of Chicago",
@@ -2063,7 +2063,7 @@
     },
     {
       "id": "chicago-price-theory-reading-assignments-problem-exam-friedman-1951-52-010",
-      "question_text": "(15 points) “The wages of every class of labour tends to be equal to the net product due to the additional labour of the marginal labourer of that class.\n\n“This doctrine is not a theory of wages: but is a useful part of a theory.” (Marshall)\n\n(a) What does Marshall mean by “net product”? [4] By “Marginal labourer”? [4]\n\n(b) Explain and evaluate the second sentence in the quotation. [7]",
+      "question_text": "“The wages of every class of labour tends to be equal to the net product due to the additional labour of the marginal labourer of that class.\n\n“This doctrine is not a theory of wages: but is a useful part of a theory.” (Marshall)\n\n(a) What does Marshall mean by “net product”? By “Marginal labourer”?\n\n(b) Explain and evaluate the second sentence in the quotation.",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -2075,8 +2075,8 @@
         "labor"
       ],
       "exam_context": "final",
-      "difficulty": "15 points",
-      "notes": "Economics 300B, Final Examination, March 12, 1952 (Box 76, Folder 76.10). Question 2. Bracketed numbers [4], [4], [7] are per-part point allocations. In the capture, '(Marshall)(a)' ran together; split for readability but text preserved.",
+      "difficulty": null,
+      "notes": "Economics 300B, Final Examination, March 12, 1952 (Box 76, Folder 76.10). In the capture, '(Marshall)(a)' ran together; split for readability but text preserved.",
       "source": {
         "slug": "chicago-price-theory-reading-assignments-problem-exam-friedman-1951-52",
         "university": "University of Chicago",
@@ -2100,7 +2100,7 @@
     },
     {
       "id": "chicago-price-theory-reading-assignments-problem-exam-friedman-1951-52-011",
-      "question_text": "(15 points) It is frequently argued that a tax on a product imposed at the manufacturing level involves a greater burden on consumers than a tax yielding the same revenue imposed at the retail level because the tax is “pyramided,” i.e., the “margins” of wholesalers and retailers are viewed as given percentages of purchase price and so, it is argued, price will tend to rise not only by the tax but also by the “margins” on the tax.\n\nEvaluate this argument.",
+      "question_text": "It is frequently argued that a tax on a product imposed at the manufacturing level involves a greater burden on consumers than a tax yielding the same revenue imposed at the retail level because the tax is “pyramided,” i.e., the “margins” of wholesalers and retailers are viewed as given percentages of purchase price and so, it is argued, price will tend to rise not only by the tax but also by the “margins” on the tax.\n\nEvaluate this argument.",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -2111,8 +2111,8 @@
         "tax-incidence"
       ],
       "exam_context": "final",
-      "difficulty": "15 points",
-      "notes": "Economics 300B, Final Examination, March 12, 1952 (Box 76, Folder 76.10). Question 3.",
+      "difficulty": null,
+      "notes": "Economics 300B, Final Examination, March 12, 1952 (Box 76, Folder 76.10).",
       "source": {
         "slug": "chicago-price-theory-reading-assignments-problem-exam-friedman-1951-52",
         "university": "University of Chicago",
@@ -2136,7 +2136,7 @@
     },
     {
       "id": "chicago-price-theory-reading-assignments-problem-exam-friedman-1951-52-012",
-      "question_text": "(10 points) The price of nylon thread for use in making women's hosiery was recently lowered drastically when DuPont decided to make much larger quantities available. The resulting decline in the price of hosiery was viewed by at least some manufacturers and retailers as a misfortune and as portending smaller profits for themselves. Were they right? In the short run? In the long run? Justify your answers.",
+      "question_text": "The price of nylon thread for use in making women's hosiery was recently lowered drastically when DuPont decided to make much larger quantities available. The resulting decline in the price of hosiery was viewed by at least some manufacturers and retailers as a misfortune and as portending smaller profits for themselves. Were they right? In the short run? In the long run? Justify your answers.",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -2151,8 +2151,8 @@
         "entry-exit"
       ],
       "exam_context": "final",
-      "difficulty": "10 points",
-      "notes": "Economics 300B, Final Examination, March 12, 1952 (Box 76, Folder 76.10). Question 4.",
+      "difficulty": null,
+      "notes": "Economics 300B, Final Examination, March 12, 1952 (Box 76, Folder 76.10).",
       "source": {
         "slug": "chicago-price-theory-reading-assignments-problem-exam-friedman-1951-52",
         "university": "University of Chicago",
@@ -2176,7 +2176,7 @@
     },
     {
       "id": "chicago-price-theory-reading-assignments-problem-exam-friedman-1951-52-013",
-      "question_text": "(10 points) A subsidy of $X is paid per acre of land devoted to growing soy beans. Will this lead to a rise or to a decline in the yield per acre on land devoted to growing soy beans prior to the introduction of the subsidy? Justify your answer.",
+      "question_text": "A subsidy of $X is paid per acre of land devoted to growing soy beans. Will this lead to a rise or to a decline in the yield per acre on land devoted to growing soy beans prior to the introduction of the subsidy? Justify your answer.",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -2188,8 +2188,8 @@
         "factor-demand"
       ],
       "exam_context": "final",
-      "difficulty": "10 points",
-      "notes": "Economics 300B, Final Examination, March 12, 1952 (Box 76, Folder 76.10). Question 5.",
+      "difficulty": null,
+      "notes": "Economics 300B, Final Examination, March 12, 1952 (Box 76, Folder 76.10).",
       "source": {
         "slug": "chicago-price-theory-reading-assignments-problem-exam-friedman-1951-52",
         "university": "University of Chicago",
@@ -2213,7 +2213,7 @@
     },
     {
       "id": "chicago-price-theory-reading-assignments-problem-exam-friedman-1951-52-014",
-      "question_text": "(15 points)\n\n(a) What is the Pigou effect? [4] What relevance does it have to the theory of the rate of interest? [4]\n\n(b) List some economic decisions that would be affected by a change in the rate of interest. Indicate why they would be affected and if possible the direction of the effect. [7]",
+      "question_text": "(a) What is the Pigou effect? What relevance does it have to the theory of the rate of interest?\n\n(b) List some economic decisions that would be affected by a change in the rate of interest. Indicate why they would be affected and if possible the direction of the effect.",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -2227,8 +2227,8 @@
         "macro-adjacent"
       ],
       "exam_context": "final",
-      "difficulty": "15 points",
-      "notes": "Economics 300B, Final Examination, March 12, 1952 (Box 76, Folder 76.10). Question 6 (final question). Bracketed numbers [4], [4], [7] are per-part point allocations.",
+      "difficulty": null,
+      "notes": "Economics 300B, Final Examination, March 12, 1952 (Box 76, Folder 76.10).",
       "source": {
         "slug": "chicago-price-theory-reading-assignments-problem-exam-friedman-1951-52",
         "university": "University of Chicago",
@@ -2252,7 +2252,7 @@
     },
     {
       "id": "chicago-problems-and-exams-income-employment-theory-friedman-1966-67-001",
-      "question_text": "Problems for Reading Period\n(Due at Final Exam, Monday, March 14, 1966, 1:30 P.M.)\n\nIn an economy using fiduciary money, it costs nothing to create additional cash balances. Hence, it is desirable to encourage wealth-holders to hold additional cash balances so long as they get any additional non-pecuniary return from them. One way to do so is through a deliberate policy of announced deflation.\n\nFor individuals, additions to cash balances are a substitute for real saving in the form of direct investment or loans to finance direct investment; hence, the larger the additions to cash balances, the lower will tend to be the volume of real capital formation. Since economic growth depends on the volume of real capital formation, it is desirable to discourage the hoarding of cash. One way to do so is through a deliberate policy of announced inflation.\n\nBoth statements offer plausible, yet they lead to precisely opposite policy conclusions. Can you reconcile them? If not, which, in your opinion, is in error? What is the source of the mistake?",
+      "question_text": "In an economy using fiduciary money, it costs nothing to create additional cash balances. Hence, it is desirable to encourage wealth-holders to hold additional cash balances so long as they get any additional non-pecuniary return from them. One way to do so is through a deliberate policy of announced deflation.\n\nFor individuals, additions to cash balances are a substitute for real saving in the form of direct investment or loans to finance direct investment; hence, the larger the additions to cash balances, the lower will tend to be the volume of real capital formation. Since economic growth depends on the volume of real capital formation, it is desirable to discourage the hoarding of cash. One way to do so is through a deliberate policy of announced inflation.\n\nBoth statements offer plausible, yet they lead to precisely opposite policy conclusions. Can you reconcile them? If not, which, in your opinion, is in error? What is the source of the mistake?",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -2267,7 +2267,7 @@
       ],
       "exam_context": "problem set",
       "difficulty": null,
-      "notes": "ECONOMICS 332, Winter 1966. Take-home “Problems for Reading Period,” due at the final exam. The raw text reads “Both statements offer plausible” — transcribed verbatim (likely a typo for “seem” in the original, but copied as written).",
+      "notes": "ECONOMICS 332, Winter 1966. Reading-period prompt. The raw text reads “Both statements offer plausible” — transcribed verbatim (likely a typo for “seem” in the original, but copied as written).",
       "source": {
         "slug": "chicago-problems-and-exams-income-employment-theory-friedman-1966-67",
         "university": "University of Chicago",
@@ -2291,7 +2291,7 @@
     },
     {
       "id": "chicago-problems-and-exams-income-employment-theory-friedman-1966-67-002",
-      "question_text": "[25 Points]\n\nIndicate in each box whether the change in the indicated variable would, under the specified conditions, tend to be an increase (+), decrease (-), no change (0), or is uncertain (?). In each case, of course, assume other relevant variables unchanged.\n\nMake usual assumptions about behavior functions.\n\nThe table columns are organized under two conditions — Underemployment / Rigid Wages, and Full Employment / Flexible Wages — with the following variables for each: Employment, Interest rate, Real stock of money, Consumption (Underemployment, Rigid Wages); and Price level, Interest rate, Real stock of money, Consumption (Full Employment, Flexible Wages).\n\nAssumed change:\n\n(1) Rise in tariff\n\n(2) Increase in government taxes, no change in government expenditures\n\n(3) Reduction in legal reserve requirements of member banks\n\n(4) Discovery of vast oilfields\n\n(5) Substitution of tax on land values for tax on wages, no change in revenue\n\n(6) Emergence of widespread fear of civil disturbances",
+      "question_text": "Indicate in each box whether the change in the indicated variable would, under the specified conditions, tend to be an increase (+), decrease (-), no change (0), or is uncertain (?). In each case, of course, assume other relevant variables unchanged.\n\nMake usual assumptions about behavior functions.\n\nThe table columns are organized under two conditions — Underemployment / Rigid Wages, and Full Employment / Flexible Wages — with the following variables for each: Employment, Interest rate, Real stock of money, Consumption (Underemployment, Rigid Wages); and Price level, Interest rate, Real stock of money, Consumption (Full Employment, Flexible Wages).\n\nAssumed change:\n\n(1) Rise in tariff\n\n(2) Increase in government taxes, no change in government expenditures\n\n(3) Reduction in legal reserve requirements of member banks\n\n(4) Discovery of vast oilfields\n\n(5) Substitution of tax on land values for tax on wages, no change in revenue\n\n(6) Emergence of widespread fear of civil disturbances",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -2306,7 +2306,7 @@
       ],
       "exam_context": "final",
       "difficulty": null,
-      "notes": "Final Examination, Winter 1966, March 14, 1966. Question worth 25 points. The original is a matrix/table; the raw capture fragmented the column headers across many lines (“Employ-/ment”, “Con-sump-tion”, “Consump-tion”). I have reassembled the table structure in prose to preserve the two condition groupings (Underemployment/Rigid Wages and Full Employment/Flexible Wages) and the per-condition variable lists, without inventing content. | verify: The table is not reproduced verbatim. The extractor replaced the OCR-fragmented column headers (raw lines 39-65: 'Underemployment / Rigid Wages / Full Employment / Flexible Wages' as section headers, with the variable headers 'Employ-ment / Interest rate / Real stock of money / Con-sump-tion / Price level / Interest rate / Real stock of money / Consump-tion' split across separate lines) with a paraphrased prose sentence ('The table columns are organized under two conditions...'). The column structure and meaning are preserved accurately, but the text is reconstructed/paraphrased rather than verbatim. The extractor also added a colon to 'Assumed change' -> 'Assumed change:'. Defensible given the shattered OCR, but it is a deviation from the strict verbatim standard. | verify: Not verbatim. The raw text (lines 37-65) presents a table with fragmented column-header lines (Assumed change / Underemployment / Rigid Wages / Full Employment / Flexible Wages / Employment / Interest rate / Real stock of money / Consumption ...). The extractor replaced this with a paraphrased prose sentence ('The table columns are organized under two conditions...') that re-labels and regroups the headers interpretively rather than reproducing them. Also added a colon: raw line 37 is 'Assumed change' but extractor wrote 'Assumed change:'. Item rows (1)-(6) are verbatim. Defensible handling of an untranscribable table, but flagged as non-verbatim per the strict fidelity criterion.",
+      "notes": "Final Examination, Winter 1966, March 14, 1966. The original is a matrix/table; the raw capture fragmented the column headers across many lines (“Employ-/ment”, “Con-sump-tion”, “Consump-tion”). I have reassembled the table structure in prose to preserve the two condition groupings (Underemployment/Rigid Wages and Full Employment/Flexible Wages) and the per-condition variable lists, without inventing content. | verify: The table is not reproduced verbatim. The extractor replaced the OCR-fragmented column headers (raw lines 39-65: 'Underemployment / Rigid Wages / Full Employment / Flexible Wages' as section headers, with the variable headers 'Employ-ment / Interest rate / Real stock of money / Con-sump-tion / Price level / Interest rate / Real stock of money / Consump-tion' split across separate lines) with a paraphrased prose sentence ('The table columns are organized under two conditions...'). The column structure and meaning are preserved accurately, but the text is reconstructed/paraphrased rather than verbatim. The extractor also added a colon to 'Assumed change' -> 'Assumed change:'. Defensible given the shattered OCR, but it is a deviation from the strict verbatim standard. | verify: Not verbatim. The raw text (lines 37-65) presents a table with fragmented column-header lines (Assumed change / Underemployment / Rigid Wages / Full Employment / Flexible Wages / Employment / Interest rate / Real stock of money / Consumption...). The extractor replaced this with a paraphrased prose sentence ('The table columns are organized under two conditions...') that re-labels and regroups the headers interpretively rather than reproducing them. Also added a colon: raw line 37 is 'Assumed change' but extractor wrote 'Assumed change:'. Item rows (1)-(6) are verbatim. Defensible handling of an untranscribable table, but flagged as non-verbatim per the strict fidelity criterion.",
       "source": {
         "slug": "chicago-problems-and-exams-income-employment-theory-friedman-1966-67",
         "university": "University of Chicago",
@@ -2330,7 +2330,7 @@
     },
     {
       "id": "chicago-problems-and-exams-income-employment-theory-friedman-1966-67-003",
-      "question_text": "[30 Points]\n\nAn earthquake destroys half the physical capital in a country but miraculously there is negligible loss of life. The earthquake was most unusual, was unexpected and no one expects a repetition.\n\nShow graphically the effect on (1) the stock demand and supply for capital; (2) the flow demand and supply curves.\n\nAssuming flexible prices and full employment throughout, what, if anything, can you say about the initial effects on (1) rental rate on capital goods; (2) sales price of capital goods; (3) interest rate [i.e., ratio of (1) to (2)]; (4) real wage rate; (5) fraction of income consumed; (6) absolute level of investment.\n\nWhat about ultimate effects on these variables?\n\nAssuming initially rigid wages and underemployment, what, if anything, can you say about initial effects on items listed in (b)?",
+      "question_text": "An earthquake destroys half the physical capital in a country but miraculously there is negligible loss of life. The earthquake was most unusual, was unexpected and no one expects a repetition.\n\nShow graphically the effect on (1) the stock demand and supply for capital; (2) the flow demand and supply curves.\n\nAssuming flexible prices and full employment throughout, what, if anything, can you say about the initial effects on (1) rental rate on capital goods; (2) sales price of capital goods; (3) interest rate [i.e., ratio of (1) to (2)]; (4) real wage rate; (5) fraction of income consumed; (6) absolute level of investment.\n\nWhat about ultimate effects on these variables?\n\nAssuming initially rigid wages and underemployment, what, if anything, can you say about initial effects on items listed in (b)?",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -2346,7 +2346,7 @@
       ],
       "exam_context": "final",
       "difficulty": null,
-      "notes": "Final Examination, Winter 1966. Question worth 30 points. The final part refers to “items listed in (b)”; the part labels (a)/(b) are not printed in the raw capture but the reference is preserved verbatim.",
+      "notes": "Final Examination, Winter 1966. The final part refers to “items listed in (b)”; the part labels (a)/(b) are not printed in the raw capture but the reference is preserved verbatim.",
       "source": {
         "slug": "chicago-problems-and-exams-income-employment-theory-friedman-1966-67",
         "university": "University of Chicago",
@@ -2370,7 +2370,7 @@
     },
     {
       "id": "chicago-problems-and-exams-income-employment-theory-friedman-1966-67-004",
-      "question_text": "[15 Points]\n\n“The relation between the volume of economic activity and the price level is not simple. As a first approximation, the classical law of supply and demand leads one to expect that the change in the price level will depend mainly on the size of the gap between capacity and actual output” 1966 Annual Report, Council of Economic Advisers, pp. 63-64.\n\n“Money prices, as opposed to relative prices, can never be governed by the conditions of the commodity market itself (or of the production of goods)” K. Wicksell, Interest and Prices (1898), p. 24.\n\nIn your opinion, does this shift in economic theory over the past 68 years reflect progress or retrogression? Justify your answer.",
+      "question_text": "“The relation between the volume of economic activity and the price level is not simple. As a first approximation, the classical law of supply and demand leads one to expect that the change in the price level will depend mainly on the size of the gap between capacity and actual output” 1966 Annual Report, Council of Economic Advisers, pp. 63-64.\n\n“Money prices, as opposed to relative prices, can never be governed by the conditions of the commodity market itself (or of the production of goods)” K. Wicksell, Interest and Prices (1898), p. 24.\n\nIn your opinion, does this shift in economic theory over the past 68 years reflect progress or retrogression? Justify your answer.",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -2384,7 +2384,7 @@
       ],
       "exam_context": "final",
       "difficulty": null,
-      "notes": "Final Examination, Winter 1966. Question worth 15 points. Quotations from the 1966 CEA Annual Report and Wicksell are part of the exam prompt, not a reading list, so retained verbatim within the question.",
+      "notes": "Final Examination, Winter 1966. Quotations from the 1966 CEA Annual Report and Wicksell are part of the exam prompt, not a reading list, so retained verbatim within the question.",
       "source": {
         "slug": "chicago-problems-and-exams-income-employment-theory-friedman-1966-67",
         "university": "University of Chicago",
@@ -2408,7 +2408,7 @@
     },
     {
       "id": "chicago-problems-and-exams-income-employment-theory-friedman-1966-67-005",
-      "question_text": "[15 Points]\n\nConsider a hypothetical economy in which initially, government expenditures (G) are 100, private investment (I) is 50, and private consumption (C) is 350, so that national product (Y) is 100 + 50 + 350 = 500, and tax receipts (T) are 90. Assume that G and T are both reduced by 10 to 90 and 80 respectively, and that wage rates are rigid.\n\nIf you neglect any effects on the rate of interest, what would be the resulting values of C, I, and Y? Prove your answer in general by a simple algebraic analysis.\n\nWould you expect any effects on the interest rate if nominal quantity of money is constant? If so, what effect? How would this in turn affect I, C, and Y? Give hypothetical numbers that might correspond to final outcome.\n\nAgain, prove your answer.\n\nWhat additional complications, if any, are relevant in generalizing these effects of a balanced budget change to actual circumstances?",
+      "question_text": "Consider a hypothetical economy in which initially, government expenditures (G) are 100, private investment (I) is 50, and private consumption (C) is 350, so that national product (Y) is 100 + 50 + 350 = 500, and tax receipts (T) are 90. Assume that G and T are both reduced by 10 to 90 and 80 respectively, and that wage rates are rigid.\n\nIf you neglect any effects on the rate of interest, what would be the resulting values of C, I, and Y? Prove your answer in general by a simple algebraic analysis.\n\nWould you expect any effects on the interest rate if nominal quantity of money is constant? If so, what effect? How would this in turn affect I, C, and Y? Give hypothetical numbers that might correspond to final outcome.\n\nAgain, prove your answer.\n\nWhat additional complications, if any, are relevant in generalizing these effects of a balanced budget change to actual circumstances?",
       "solution": null,
       "has_math": true,
       "topics": [
@@ -2423,7 +2423,7 @@
       ],
       "exam_context": "final",
       "difficulty": null,
-      "notes": "Final Examination, Winter 1966. Question worth 15 points. Contains arithmetic/algebraic content (G, I, C, Y, T; Y = 100 + 50 + 350 = 500). Variable names are single letters as printed; no mangled subscripts to reconstruct.",
+      "notes": "Final Examination, Winter 1966. Contains arithmetic/algebraic content (G, I, C, Y, T; Y = 100 + 50 + 350 = 500). Variable names are single letters as printed; no mangled subscripts to reconstruct.",
       "source": {
         "slug": "chicago-problems-and-exams-income-employment-theory-friedman-1966-67",
         "university": "University of Chicago",
@@ -2447,7 +2447,7 @@
     },
     {
       "id": "chicago-problems-and-exams-income-employment-theory-friedman-1966-67-006",
-      "question_text": "[15 Points]\n\nDiscuss the “real balance effect,” indicating what you think to be its meaning, and what role it has played in discussions of the possibility of under-employment equilibrium. In the course of your answer indicate what economists have been the main contributors to the discussion and what their specific contributions have been.",
+      "question_text": "Discuss the “real balance effect,” indicating what you think to be its meaning, and what role it has played in discussions of the possibility of under-employment equilibrium. In the course of your answer indicate what economists have been the main contributors to the discussion and what their specific contributions have been.",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -2460,7 +2460,7 @@
       ],
       "exam_context": "final",
       "difficulty": null,
-      "notes": "Final Examination, Winter 1966. Question worth 15 points.",
+      "notes": "Final Examination, Winter 1966.",
       "source": {
         "slug": "chicago-problems-and-exams-income-employment-theory-friedman-1966-67",
         "university": "University of Chicago",
@@ -2484,7 +2484,7 @@
     },
     {
       "id": "chicago-problems-and-exams-income-employment-theory-friedman-1966-67-007",
-      "question_text": "Problem for Reading Period\nDue at Final Exam, Wed., June 7, 1967\n(Maximum length = 1,000 words)\n\nMONETARY vs. FISCAL POLICY\n\nDefine fiscal policy as deliberate changes in the government tax structure or expenditure structure for a given behavior of the quantity of money; monetary policy as a change in the rate of change of the quantity of money for a given tax and expenditure structure.\n\nUsing the standard income-expenditure model, and assuming prices are rigid, analyze the effect on real income and interest rates of an increase in taxes which would raise the full-employment surplus (or lower the full-employment deficit) by X billion dollars. Specify the parameters on which the result depends and indicate limiting cases.\n\nUsing the same model, indicate how to determine the change in monetary policy that would have the same effect on real income. How would other effects of the two policies differ?\n\nThe standard model is in terms of comparative statics, so (1) and (2) would be analyzed in terms of a comparison of two alternative positions at a single date. In addition, the only stock variable in the standard model is the quantity of money. Modify the analysis in (1) in both respects. That is, indicate the time path of adjustment you might expect and why, taking into account any effects on such stock variables as total holdings of government and private securities.\n\nSimilarly, analyze the time path of the effect of a decline in the rate of monetary growth by, say, X percentage points, again allowing for effect on stocks.",
+      "question_text": "MONETARY vs. FISCAL POLICY\n\nDefine fiscal policy as deliberate changes in the government tax structure or expenditure structure for a given behavior of the quantity of money; monetary policy as a change in the rate of change of the quantity of money for a given tax and expenditure structure.\n\nUsing the standard income-expenditure model, and assuming prices are rigid, analyze the effect on real income and interest rates of an increase in taxes which would raise the full-employment surplus (or lower the full-employment deficit) by X billion dollars. Specify the parameters on which the result depends and indicate limiting cases.\n\nUsing the same model, indicate how to determine the change in monetary policy that would have the same effect on real income. How would other effects of the two policies differ?\n\nThe standard model is in terms of comparative statics, so (1) and (2) would be analyzed in terms of a comparison of two alternative positions at a single date. In addition, the only stock variable in the standard model is the quantity of money. Modify the analysis in (1) in both respects. That is, indicate the time path of adjustment you might expect and why, taking into account any effects on such stock variables as total holdings of government and private securities.\n\nSimilarly, analyze the time path of the effect of a decline in the rate of monetary growth by, say, X percentage points, again allowing for effect on stocks.",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -2500,7 +2500,7 @@
       ],
       "exam_context": "problem set",
       "difficulty": null,
-      "notes": "ECONOMICS 332, Spring Quarter 1967. Take-home “Problem for Reading Period,” due at the final exam, maximum 1,000 words. References to “(1)” and “(2)” preserved as printed though the numbered parts are not separately labeled in the raw capture. “X billion dollars” / “X percentage points” are literal placeholders as written, not mangled math.",
+      "notes": "ECONOMICS 332, Spring Quarter 1967. Reading-period prompt. References to “(1)” and “(2)” preserved as printed though the numbered parts are not separately labeled in the raw capture. “X billion dollars” / “X percentage points” are literal placeholders as written, not mangled math.",
       "source": {
         "slug": "chicago-problems-and-exams-income-employment-theory-friedman-1966-67",
         "university": "University of Chicago",
@@ -2524,7 +2524,7 @@
     },
     {
       "id": "columbia-microeconomic-theory-exam-becker-1965-001",
-      "question_text": "(40 points) Answer each of the following as true, false or uncertain and justify your answer in the space provided.\n\nOver time in the U.S. since 1929 output of the service industries rose at about the same rate as that of goods. Since the price of services rose at least as rapidly as that of goods, the income elasticity of demand for services would be greater than that for goods.\n\nA weighted average of all price elasticities must add up to one.\n\nSuppose the excise tax on bus travel was reduced and not on plane, train or other travel. This would reduce the use of buses if such travel was a sufficiently strong inferior good relative to other kinds of travel.\n\nThe ability of firms of very different sizes to survive in an industry means that the long run marginal cost curve is horizontal over the range of firm sizes that survive.\n\nIf an increase in the output of any firm lowered the marginal cost curves of other firms in the same industry (external economies) a competitive industry as a whole might show increasing returns; i.e., have a negatively inclined supply curve.\n\nShort run marginal costs can never be below long run marginal costs.\n\nSuppose that a competitive firm maximizes not income but its sales subject to the constraint that it does not make any losses. Then reduction in the demand for its product might not lead it to reduce output.\n\nGoods X and Y are either substitutes, complements, or independent if an increase in the amount of X either reduces, raises or leaves unchanged the marginal utility of Y.\n\nIf the price of a good competitively produced was free to vary and yet did not change much between a seasonal low and a seasonal high in demand, this means that the industry’s long run marginal cost curve was very elastic.\n\nAn ad valorem tax, with a tax rate proportional to producer’s price, on a competitive industry that yielded the same revenue at the initial output as a specific tax, fixed amount per unit, would reduce output less than the specific tax.",
+      "question_text": "Answer each of the following as true, false or uncertain and justify your answer in the space provided.\n\nOver time in the U.S. since 1929 output of the service industries rose at about the same rate as that of goods. Since the price of services rose at least as rapidly as that of goods, the income elasticity of demand for services would be greater than that for goods.\n\nA weighted average of all price elasticities must add up to one.\n\nSuppose the excise tax on bus travel was reduced and not on plane, train or other travel. This would reduce the use of buses if such travel was a sufficiently strong inferior good relative to other kinds of travel.\n\nThe ability of firms of very different sizes to survive in an industry means that the long run marginal cost curve is horizontal over the range of firm sizes that survive.\n\nIf an increase in the output of any firm lowered the marginal cost curves of other firms in the same industry (external economies) a competitive industry as a whole might show increasing returns; i.e., have a negatively inclined supply curve.\n\nShort run marginal costs can never be below long run marginal costs.\n\nSuppose that a competitive firm maximizes not income but its sales subject to the constraint that it does not make any losses. Then reduction in the demand for its product might not lead it to reduce output.\n\nGoods X and Y are either substitutes, complements, or independent if an increase in the amount of X either reduces, raises or leaves unchanged the marginal utility of Y.\n\nIf the price of a good competitively produced was free to vary and yet did not change much between a seasonal low and a seasonal high in demand, this means that the industry’s long run marginal cost curve was very elastic.\n\nAn ad valorem tax, with a tax rate proportional to producer’s price, on a competitive industry that yielded the same revenue at the initial output as a specific tax, fixed amount per unit, would reduce output less than the specific tax.",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -2549,7 +2549,7 @@
       ],
       "exam_context": "final",
       "difficulty": null,
-      "notes": "First question of the Final Examination (G6213x, Prof. G. S. Becker, January 1965). True/false/uncertain section worth 40 points; contains ten distinct statements to evaluate, kept together as the single point-weighted question. No math notation in the original.",
+      "notes": "First question of the Final Examination (G6213x, Prof. G. S. Becker, January 1965). True/false/uncertain section contains ten distinct statements to evaluate, kept together as a single prompt. No math notation in the original.",
       "source": {
         "slug": "columbia-microeconomic-theory-exam-becker-1965",
         "university": "Columbia University",
@@ -2573,7 +2573,7 @@
     },
     {
       "id": "columbia-microeconomic-theory-exam-becker-1965-002",
-      "question_text": "(20 points) Treat charitable contributions as a commodity entering the utility functions or indifference curves systems of the contributor. Assume, as is largely true, that contributions can be deducted from income in arriving at taxable income. Assume a proportional tax rate equal to t.\n\nWhat would be the effect of an increase in the tax rate for any one person alone on his contributions? How does your analysis compare with the traditional analysis for commodities?\n\nIs he more likely to increase or decrease his contributions?\n\nSuppose now the tax rate increased for everyone. Would your answers to a. and b. be significantly different?",
+      "question_text": "Treat charitable contributions as a commodity entering the utility functions or indifference curves systems of the contributor. Assume, as is largely true, that contributions can be deducted from income in arriving at taxable income. Assume a proportional tax rate equal to t.\n\nWhat would be the effect of an increase in the tax rate for any one person alone on his contributions? How does your analysis compare with the traditional analysis for commodities?\n\nIs he more likely to increase or decrease his contributions?\n\nSuppose now the tax rate increased for everyone. Would your answers to a. and b. be significantly different?",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -2589,7 +2589,7 @@
       ],
       "exam_context": "final",
       "difficulty": null,
-      "notes": "Second question, 20 points. The parts in the original are presented as unlabeled paragraphs but referenced later as 'a.' and 'b.'; kept together as one entry with parts intact. 't' is the proportional tax rate as stated in plain text; not rendered as LaTeX since it appears as ordinary prose.",
+      "notes": "The parts in the original are presented as unlabeled paragraphs but referenced later as 'a.' and 'b.'; kept together as one entry with parts intact. 't' is the proportional tax rate as stated in plain text; not rendered as LaTeX since it appears as ordinary prose.",
       "source": {
         "slug": "columbia-microeconomic-theory-exam-becker-1965",
         "university": "Columbia University",
@@ -2613,7 +2613,7 @@
     },
     {
       "id": "columbia-microeconomic-theory-exam-becker-1965-003",
-      "question_text": "(20 points) Suppose the traffic department would like to enforce parking regulations in an efficient way. Assume that each person has the choice of parking illegally or legally; the latter costs X dollars per “day” and the former, if one is caught, causes a fine equal to F dollars per time caught.\n\nAssume first that the sole aim of the traffic department is to discourage illegal parking at minimum cost. Assume also that all drivers simply try to maximize expected money income. How frequently should the traffic department inspect parking in order to achieve its aim?\n\nIf all drivers maximized expected utility and had diminishing marginal utility of income, (but there is no utility or disutility from disobeying the law), how would this affect your answer? If they had increasing marginal utility of income?\n\nSuppose the traffic department received all the fines and desired just to maximize its expected income. How would your answer to 1. be affected?\n\nHow does your answer to a. and c. depend on F, the size of the fine, and X, the cost of legal parking?",
+      "question_text": "Suppose the traffic department would like to enforce parking regulations in an efficient way. Assume that each person has the choice of parking illegally or legally; the latter costs X dollars per “day” and the former, if one is caught, causes a fine equal to F dollars per time caught.\n\nAssume first that the sole aim of the traffic department is to discourage illegal parking at minimum cost. Assume also that all drivers simply try to maximize expected money income. How frequently should the traffic department inspect parking in order to achieve its aim?\n\nIf all drivers maximized expected utility and had diminishing marginal utility of income, (but there is no utility or disutility from disobeying the law), how would this affect your answer? If they had increasing marginal utility of income?\n\nSuppose the traffic department received all the fines and desired just to maximize its expected income. How would your answer to 1. be affected?\n\nHow does your answer to a. and c. depend on F, the size of the fine, and X, the cost of legal parking?",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -2629,7 +2629,7 @@
       ],
       "exam_context": "final",
       "difficulty": null,
-      "notes": "Third question, 20 points (a precursor to Becker's crime-and-punishment economics). Parts referenced as 'a.', 'c.', and '1.' in the original prose though not all are explicitly labeled; kept together. X and F are scalar parameters stated in plain text (dollars per day / dollars per time caught); no LaTeX reconstruction needed.",
+      "notes": "(a precursor to Becker's crime-and-punishment economics). Parts referenced as 'a.', 'c.', and '1.' in the original prose though not all are explicitly labeled; kept together. X and F are scalar parameters stated in plain text (dollars per day / dollars per time caught); no LaTeX reconstruction needed.",
       "source": {
         "slug": "columbia-microeconomic-theory-exam-becker-1965",
         "university": "Columbia University",
@@ -2653,7 +2653,7 @@
     },
     {
       "id": "columbia-microeconomic-theory-exam-becker-1965-004",
-      "question_text": "(20 points) Suppose the earnings of military personnel were set below the price that would make the number of volunteers equal to the demand by the military, and that draft calls were sent out strictly at random to males aged 18-26 to bring the number entering up to demand\n\na.\n\n1. How would the composition of drafted personnel compare with those that would enter if military earnings were raised sufficiently to make the number of volunteers equal to demand?\n\n2. How would the total tax burden and its distribution among the population compare?\n\nb. Assume now that drafted personnel could buy a substitute or substitute for someone else (as during the Civil War) instead of entering as a draftee. Assuming the capital market for substitutes works well, in equilibrium\n\n1. How would the composition of men entering and the tax burden compare with that under a drafted and a fully voluntary system?\n\n2. What determines the price that substitutes can get?",
+      "question_text": "Suppose the earnings of military personnel were set below the price that would make the number of volunteers equal to the demand by the military, and that draft calls were sent out strictly at random to males aged 18-26 to bring the number entering up to demand\n\na.\n\n1. How would the composition of drafted personnel compare with those that would enter if military earnings were raised sufficiently to make the number of volunteers equal to demand?\n\n2. How would the total tax burden and its distribution among the population compare?\n\nb. Assume now that drafted personnel could buy a substitute or substitute for someone else (as during the Civil War) instead of entering as a draftee. Assuming the capital market for substitutes works well, in equilibrium\n\n1. How would the composition of men entering and the tax burden compare with that under a drafted and a fully voluntary system?\n\n2. What determines the price that substitutes can get?",
       "solution": null,
       "has_math": false,
       "topics": [
@@ -2672,7 +2672,7 @@
       ],
       "exam_context": "final",
       "difficulty": null,
-      "notes": "Fourth question, 20 points (economics of conscription/the draft). Part labels 'a.' and 'b.' with sub-parts '1.' and '2.' preserved verbatim, including the standalone 'a.' line. The stem sentence ends without terminal punctuation in the original ('...up to demand') — preserved as written. No math notation.",
+      "notes": "(economics of conscription/the draft). Part labels 'a.' and 'b.' with sub-parts '1.' and '2.' preserved verbatim, including the standalone 'a.' line. The stem sentence ends without terminal punctuation in the original ('...up to demand') — preserved as written. No math notation.",
       "source": {
         "slug": "columbia-microeconomic-theory-exam-becker-1965",
         "university": "Columbia University",
