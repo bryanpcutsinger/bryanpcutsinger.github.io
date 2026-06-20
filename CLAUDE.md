@@ -309,7 +309,22 @@ visible in `git diff`.
 
 ## Current status (as of 2026-06-20)
 
-**Latest (2026-06-20) — committed + pushed to `main` (`eba9b95`, deployed, still `noindex`ed):**
+**Latest (2026-06-20) — committed + pushed to `main` (`594aa0e`, deployed, still `noindex`ed):**
+- **Content refresh: revised T1 micro topic + much larger Price Theory bank.** Re-imported
+  the revised `t01-economic-way-of-thinking` (`npm run import:topic`) and refreshed the
+  Price Theory problem bank (`npm run import:problems`) — the bank grew **68 → 311 problems
+  across 38 sources**. Pure content re-import (no code changes): `T1 post.md` + its
+  interactive figure, and `src/data/price-theory/problems.json`. Build green (26 pages,
+  postbuild gate passed).
+  - **⚠️ Micro course publish gap (deliberate, still open):** upstream `micro-principles`
+    now has **19 approved topics** (T1, T2, T3, T3b, T4a, T4b, T5, T6a, T6b, T7a, T7b, T8,
+    T9, T10a, T10b, T11a, T11b, T12, T13 — check `status: approved` via `gh api`), but only
+    **T1 is imported here**, so the live course shows just T1. Bryan scoped this update to
+    T1 only on purpose. To publish the rest later: `npm run import:topic -- <slug>
+    microeconomics` for each, then build + commit. (An interrupted bulk-import loop left
+    stray t02–t05 folders this session; they were removed.)
+
+**Prior (2026-06-20) — committed + pushed to `main` (`eba9b95`, deployed, still `noindex`ed):**
 - **Price Theory landing redesigned: search results are on-demand; topic grid leads.**
   The course home used to dump all 68 problems as one `<ol>` on load (search just hid
   rows) — an overwhelming "wall of every exam." Now the results list + count stay `hidden`
