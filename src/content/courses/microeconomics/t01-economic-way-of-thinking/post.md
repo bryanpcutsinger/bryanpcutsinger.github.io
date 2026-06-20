@@ -21,6 +21,8 @@ Underneath it all sits one stubborn fact: there is never enough. Not enough time
 
 The classic definition, which we owe to the economist Lionel Robbins, is that economics studies how people use scarce resources that have alternative uses. Both halves carry weight. *Scarce* means there is not enough to go around. *Alternative uses* means each resource could serve more than one purpose. An hour of your time could go to studying, sleeping, or a paying shift; a barrel of oil could become fuel, plastic, or fertilizer. Because resources are both limited and usable in many ways, every time we commit them to one purpose we give up the others.
 
+> **Key terms:** **Scarcity** means there is not enough to satisfy every want. **Alternative uses** means the same resource could be used in more than one way.
+
 Notice that money appears nowhere in that definition. For a society as a whole, money is just a tool for moving real things around. If printing it made a nation rich, no country would ever be poor. The real economy is the goods, services, time, and effort that money stands for, not the paper itself. A decision can even be economic with no money at all. A medical team that reaches a disaster with more wounded than it can treat must decide who gets care first: scarcity, alternative uses, and a hard trade-off, with not a cent changing hands. Economics is not a guide to personal finance. It is the study of how scarce things get put to use.
 
 ## Economics Traces Cause and Effect, and Judges Policies by Results
@@ -41,6 +43,10 @@ Two terms sharpen the idea. An *economic good* is scarce enough that getting mor
 
 One point here pays off again and again later: a price tag of zero does not make something free. The money price of "free" parking, "free" beaches, and "free" tuition is zero, but the resources they use are every bit as scarce and costly to provide as anything you pay for. Worse, handing a scarce thing out at no charge usually makes its scarcity bite harder, because nothing restrains how much people take. Somebody still pays, in waiting, in lines, in showing up before dawn. Always ask who pays, and in what form.
 
+> **Key terms:** An **economic good** is scarce enough that getting more requires giving something up. A **free good** is so abundant that nobody wants more even when the money price is zero. A **zero price** means no money changes hands; it does not mean nobody pays.
+
+> **Pause and check:** A "free" campus parking pass has a zero money price. What is one non-money price students might still pay?
+
 It also is not enough to have resources. What matters is how well you turn them into things people want, and that capacity is what we mean by productivity. It accounts for much of the gap between a rich country and a poor one. During the Cold War, Soviet industry often used more electricity than American industry while producing less. The reverse is just as telling: Japan and Switzerland have very little in the way of natural resources, yet enjoy high standards of living, while some countries blessed with resources stay poor. A nation's wealth has less to do with what it starts with than with how well it puts it to use.
 
 ## Scarcity Forces Competition, So Every Society Needs a Rule for Who Gets What
@@ -57,6 +63,8 @@ The rule in force often depends, too, on who owns the thing being handed out. A 
 
 This course mostly studies one of these rules: exchange, which is easy to sneer at but deserves a defense. Trading is competitive and cooperative at once. Rivals bid against each other for your business, yet a deal closes only when it leaves both sides better off. You compete for a deal by serving the person on the other side.
 
+> **Pause and check:** In the parking example, what changes when the campus rations spaces by first-come-first-served instead of by price? Who pays, and in what form?
+
 ## Every Choice Has a Cost
 
 Now turn from society back to you. Every choice closes off the things you did not pick, and the most valuable of those is the real cost of what you chose. Economists call it the *opportunity cost*. Money may not enter into it at all.
@@ -67,9 +75,24 @@ This idea has a few features that regularly trip people up. **Cost is personal:*
 
 Two of those money-and-more pieces have names worth knowing. An *explicit cost* is one you pay out in money: the rent, the wages, the price on the tag. An *implicit cost* is a value you give up without any payment changing hands, and it is the one people overlook. Suppose Joe runs his repair shop out of a building he already owns, so he writes no rent check. He still bears a real cost, because he could have leased that building to someone else; the rent he gives up by using it himself is an implicit cost. Add the explicit and the implicit together and you have the *full cost* of a choice, which is just the opportunity cost counted in full. The hour you spend studying carries a full cost too: not only any money it takes, but the value of whatever else you would have done with the time.
 
+> **Key terms:** **Opportunity cost** is the most valuable alternative you give up. A **sunk cost** is already gone and should not decide what you do next. **Explicit costs** are money payments; **implicit costs** are forgone values without a payment; **full cost** means counting both.
+
 One more confusion is worth heading off, because students fall into it constantly. The unpleasant byproducts of a choice are not its cost. People say the cost of playing tennis is a sore arm, or that the cost of studying is eyestrain. The sore arm and the eyestrain are consequences of the activity, not its cost. The cost of an hour spent studying is the best thing you gave up to spend it that way, perhaps an hour of a game you would have enjoyed. Bad side effects can weigh on whether you do something, but they are not the cost.
 
 One last idea belongs here, and it is where our work on demand will begin: the more of something you already have, the less you will give up to get one more unit of it. To someone dying of thirst, the first glass of water is worth almost anything. By the fifth glass, it is worth very little.
+
+> **Pause and check:** You bought a concert ticket last month, but tonight you would rather study and sleep. Which part of the situation is sunk, and what is the real cost of going?
+
+> **Toolkit So Far**
+>
+> - **Scarcity:** wants outrun the resources available to satisfy them.
+> - **Alternative uses:** the same resource can serve more than one purpose.
+> - **Opportunity cost:** the best alternative given up.
+> - **Sunk cost:** a past cost that should not guide today's choice.
+> - **Explicit cost:** money paid out.
+> - **Implicit cost:** value given up without a payment.
+> - **Full cost:** explicit cost plus implicit cost.
+> - **Zero price is not free:** someone still pays in time, effort, waiting, taxes, or forgone alternatives.
 
 ## Efficiency Means No Waste, Not the Most of Any One Thing
 
@@ -80,9 +103,16 @@ People throw the word "efficient" around as if it meant "produce as much as poss
   title="Interactive production possibilities frontier for food and housing — drag the point along the curve to see the trade-off"
   loading="lazy"
   style="width:100%; max-width:480px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:1.5rem auto;">
+  <p><a href="/teaching/microeconomics/t01-economic-way-of-thinking/figures/t01-ppf-interactive.html">Open the interactive PPF directly</a> or <a href="/teaching/microeconomics/t01-economic-way-of-thinking/figures/t01-ppf.svg">view the static PPF</a>.</p>
 </iframe>
 
-*A production possibilities frontier for two goods, food and housing. **Drag the point along the curve.** Every point on the curve is efficient: the two ends are the maximum possible housing (and no food) or the maximum possible food (and no housing), and any point in between is an efficient combination — the dashed lines show how much food and how much housing it yields. As you slide toward more housing, the readout shows the trade-off: each extra unit of housing costs some food, and that cost rises the more housing you already have. The shaded interior is feasible but wasteful — from inside you could have more of both goods at once. So efficiency means being on the curve, not having the most of any single thing.*
+**Interactive PPF:** Food and housing combinations are efficient on the curve and wasteful inside it.
+
+- Drag the point along the curve.
+- On the curve = efficient.
+- Inside the curve = wasteful.
+- Moving toward more housing costs food, and that cost rises.
+- If the frame is blocked, [open the interactive PPF directly](/teaching/microeconomics/t01-economic-way-of-thinking/figures/t01-ppf-interactive.html) or [view the static PPF](/teaching/microeconomics/t01-economic-way-of-thinking/figures/t01-ppf.svg).
 
 "Maximize one good" is an incoherent goal. Build nothing but housing and you get handsome neighborhoods and empty pantries, with no land left to grow food. Pour everything into clean air and let the factories fall silent, and you would breathe beautifully with nothing to eat. We do not want the most of any one thing; we want some workable combination, and efficiency is what forces us to face the trade-off.
 
@@ -95,6 +125,8 @@ Start by clearing up a caricature: that economists assume everyone is selfish. N
 What makes a trade work is that it is voluntary: both sides expect to come out ahead, or one would walk away. That has a striking implication. In an ordinary trade both parties gain, and nobody wins at the other's expense. (Economists call this positive-sum.) It also knits together strangers who never meet. No one even knows how to make a pencil from scratch, yet by pursuing their own ends, scattered strangers end up serving you. As Adam Smith put it in 1776, "It is not from the benevolence of the butcher, the brewer, or the baker, that we expect our dinner, but from their regard to their own interest."
 
 None of this works without *property rights*. Owning something means holding three powers at once: the right to use it, the right to sell or transfer it, and the right to keep what it earns and absorb what it loses. Strip away any one of those and you do not really own the thing. A "right," in this sense, is not your own personal muscle. It is a claim your community recognizes and enforces. Your car is yours because the people around you will back you up if someone tries to take it.
+
+> **Key term:** **Property rights** are socially enforced claims over scarce resources: the power to use, transfer, and bear the gains or losses from what you own.
 
 A few confusions are worth heading off. The first is about whole systems. The gap between a "capitalist" and a "socialist" society is not whether property rights exist at all; even in the Soviet Union, people owned their clothes and furniture. The difference is how far private rights extend, especially over the productive resources used to make things for others. What changes across that border is the rules, not human nature. The second confusion is about what a right protects. Your rights protect the physical thing you own, not its market value. If I open a better taco stand across the street and your sales fall, I have taken nothing that was yours; that is just competition. "Free speech" works the same way: it lets you address willing listeners using your own resources, but never lets you commandeer someone else's megaphone.
 
@@ -112,6 +144,10 @@ Two warnings about evidence are worth keeping. Be skeptical of breathless first 
 
 This is the line between *positive* and *normative* claims. Economics is a positive, if-this-then-that tool: it can tell you the likely consequences of a tax or a rent-control law, but not whether those consequences are good. The "should" is yours to supply, once you have seen the "is." Be wary of words that smuggle a "should" inside what sounds like fact, like "fair," "equal," and "socially preferred." "Fair" does not have to mean "equal," and "what society prefers" quietly assumes a group can prefer things, when only individuals do the preferring. Pin down what such a word means before you argue about it. Economics can sharpen the question; it cannot settle it for you.
 
+> **Key terms:** A **positive claim** says what is, or what is likely to follow if something happens. A **normative claim** says what should happen or what would be good.
+
+> **Pause and check:** Is "a rent ceiling will reduce the number of apartments available" positive or normative? What extra value judgment would turn it into a normative claim?
+
 This is also where you should be most on guard against economists themselves, mine included. What economics says and what an economist says are not the same thing. An economist can deduce the likely consequences of a policy more reliably than most people, and that is the real expertise. But the moment one tells you to "cut tariffs" or "buy this stock," that advice has crossed from analysis into preference, and a preference dressed in a credential is no more authoritative than your own. The training buys sharper "is," not a better "should." So take the consequences an economist traces out seriously, and treat the recommendation tacked onto the end as just one more opinion to weigh against yours.
 
 ## Only Individuals Really Choose
@@ -124,9 +160,18 @@ I want to close where students least expect economics to say anything useful: ab
 
 And the weighing cannot be dodged, because scarcity never takes a day off. There are no costless fixes, only trade-offs, which is the honest meaning of "no free lunch." Refusing to weigh a trade-off does not make it vanish; the choice still gets made by default, on whatever terms circumstances impose. Insisting that some cherished goal must never be weighed against anything is itself a choice with a price. Money spent to preserve a scenic lake or a historic building is money that might instead have vaccinated thousands of children somewhere else. We can wish to do it all at once, but the wish does not lift the constraint.
 
-The hardest version involves human lives. "If it saves even one life, it is worth any cost" can sound unanswerable. But the resources a costly rule swallows have other life-saving uses. If a regulation spends five times as much to save one life as some other measure would, it has effectively cost five other lives, ones we never see but lives all the same. And nobody acts as if a life were of infinite value. No one would spend half a nation's yearly output to keep one person alive an extra thirty seconds, yet that is what infinite value would demand. You can see it every day: people take dangerous jobs when the pay is high enough, and gamble their lives skydiving for fun. Wealth itself saves lives, which is why the same earthquake kills a handful of people in a rich country and thousands in a poor one. So a policy that holds an economy back can cost lives too, even when we never see the bill.
+This does not tell us which life-saving policy to choose; it only shows why the trade-off cannot be avoided. The hardest version involves human lives. "If it saves even one life, it is worth any cost" can sound unanswerable. But the resources a costly rule swallows have other life-saving uses. If a regulation spends five times as much to save one life as some other measure would, it has effectively cost five other lives, ones we never see but lives all the same. And nobody acts as if a life were of infinite value. No one would spend half a nation's yearly output to keep one person alive an extra thirty seconds, yet that is what infinite value would demand. You can see it every day: people take dangerous jobs when the pay is high enough, and gamble their lives skydiving for fun. Wealth itself saves lives, which is why the same earthquake kills a handful of people in a rich country and thousands in a poor one. So a policy that holds an economy back can cost lives too, even when we never see the bill.
 
 That is why I think of economics as the real art of the possible. Politics often invites us to vote for several things that cannot all happen at once. Economics is the discipline that keeps pointing at the trade-off and asking "compared to what?" That is not cynicism, but what taking your own values seriously requires.
+
+**You should now be able to...**
+
+- Define scarcity and explain why it forces choice.
+- Identify opportunity cost, including explicit, implicit, and sunk costs.
+- Explain why a zero money price does not mean free.
+- Distinguish positive analysis from normative judgment.
+- Explain why property rights and voluntary exchange matter.
+- Explain why only individuals choose.
 
 ## What's Next
 

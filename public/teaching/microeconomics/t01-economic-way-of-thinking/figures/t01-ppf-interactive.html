@@ -71,6 +71,14 @@
   .sep     { stroke: var(--hairline); stroke-width: 1; }
   .r-hint  { fill: var(--muted); font-size: 12.5px; }
   .r-trade { fill: var(--accent); font-size: 14px; font-weight: 600; }
+  .fallback {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.35;
+    text-align: center;
+  }
+  .fallback a { color: var(--ink); }
 </style>
 </head>
 <body>
@@ -129,6 +137,9 @@
     <text id="rHint"  class="r-hint"  x="220" y="458" text-anchor="middle">Drag the point along the curve.</text>
     <text id="rTrade" class="r-trade" x="220" y="486" text-anchor="middle">Toward more housing: +1 housing costs ≈ 0.75 food</text>
   </svg>
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame shows the static frontier. You can also <a href="t01-ppf.svg">open the static PPF image</a>.</p>
+  </noscript>
 </div>
 
 <script>
