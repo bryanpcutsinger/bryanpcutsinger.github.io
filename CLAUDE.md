@@ -309,7 +309,19 @@ visible in `git diff`.
 
 ## Current status (as of 2026-06-20)
 
-**Latest (2026-06-20) — committed + pushed to `main` (`f9304fc`, still `noindex`ed):**
+**Latest (2026-06-20) — committed + pushed to `main` (`eba9b95`, deployed, still `noindex`ed):**
+- **Price Theory landing redesigned: search results are on-demand; topic grid leads.**
+  The course home used to dump all 68 problems as one `<ol>` on load (search just hid
+  rows) — an overwhelming "wall of every exam." Now the results list + count stay `hidden`
+  until the search/any filter is "active"; the inactive default shows a one-line hint and
+  the `TopicGrid` is the primary browse path. `applyFilters()` runs once on load to set the
+  inactive state. Also tightened the About copy (3 → 2 paragraphs; scale still stated in the
+  first sentence). Single file: `src/pages/teaching/price-theory.astro` (+ a
+  `.search-results[hidden]` rule so `display:grid` doesn't defeat the `hidden` attr). Build
+  green (25 pages, postbuild gate passed). See the on-demand note in the Price Theory page
+  description above. No follow-ups outstanding.
+
+**Prior (2026-06-20) — committed + pushed to `main` (`f9304fc`, still `noindex`ed):**
 - **Price Theory: inline math renders via KaTeX + cross-bank search/filtering shipped.**
   Closes both deferred follow-ups. Added `katex` dep + a shared `src/lib/priceTheory.ts`
   (provenance/label/grouping helpers + a currency-aware `renderInlineMath`), and wired both
