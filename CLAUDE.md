@@ -250,15 +250,24 @@ source is public + text-only); the script fails if the bank is empty/malformed.
 Markdown pipeline):
 - `src/pages/teaching/price-theory.astro` — course home = the bank's front door: overview
   + a `TopicGrid` of the taxonomy topics that have ≥1 problem (sorted by count), each
-  card → `/teaching/price-theory/<topic-key>/`.
+  card → `/teaching/price-theory/<topic-key>/`, **plus a client-side cross-bank search**:
+  free-text box + facet filters (topic, source, instructor, year, exam context) over a
+  results list with a live, `aria-live` count. Filtering is pure DOM (`data-*` attributes
+  on each result row); no JS framework, no network.
 - `src/pages/teaching/price-theory/[topic].astro` — `getStaticPaths` over taxonomy topics
   (one route per non-empty topic); renders each matching problem as a card (verbatim
   question, provenance line + "source" back-link to Irwin Collier, subtopic chips,
-  `<details>` solution when present). Imports the JSON at module scope (fine in
-  `getStaticPaths` — imports are allowed there, unlike module consts).
-- **Known limitation:** these pages render JSON, so inline LaTeX (`$…$`) shows **raw**
-  (e.g. on `general-equilibrium`). Most problems are `has_math:false`; a KaTeX pass is a
-  deferred follow-up. Also deferred: cross-bank filtering/search.
+  `<details>` solution when present). Adds a visible `<h1>`, **clickable subtopic chips
+  that filter the page** (`data-chip-value`), a source-jump nav, and **problems grouped by
+  source/year** (`groupBySourceYear`, anchored `<section data-source-group>` blocks).
+  Imports the JSON at module scope (fine in `getStaticPaths` — imports are allowed there,
+  unlike module consts).
+- **Inline math:** inline LaTeX (`$…$`) is rendered with **KaTeX** (added 2026-06-20,
+  `f9304fc`) via `renderInlineMath` in `src/lib/priceTheory.ts` — a shared helper module
+  that also holds the provenance/label/grouping helpers used by both Price Theory pages.
+  `renderInlineMath` is **currency-aware**: a `$…$` pair whose contents start with a digit
+  is treated as a prose dollar amount (e.g. `$2.80`), not a math delimiter, so ordinary
+  prices don't get mangled. (Was previously a deferred follow-up — rendered raw.)
 - No publish-gate / no `status:approved` here — the bank is public by construction
   (decision 2026-06-18: publish with source attribution). Site-wide `noindex` still applies.
 
@@ -295,9 +304,20 @@ trees API but slugs assume a flat layout). Why import-then-commit rather than an
 remote loader: keeps CI hermetic (no build-time private-repo auth) and every change is
 visible in `git diff`.
 
-## Current status (as of 2026-06-18)
+## Current status (as of 2026-06-20)
 
-**Latest (2026-06-18) — committed to `main` and deployed (`de49b94`, still `noindex`ed):**
+**Latest (2026-06-20) — committed + pushed to `main` (`f9304fc`, still `noindex`ed):**
+- **Price Theory: inline math renders via KaTeX + cross-bank search/filtering shipped.**
+  Closes both deferred follow-ups. Added `katex` dep + a shared `src/lib/priceTheory.ts`
+  (provenance/label/grouping helpers + a currency-aware `renderInlineMath`), and wired both
+  pages to it. Home page gained a client-side cross-bank search (free-text + topic/source/
+  instructor/year/exam-context facets, live count); topic pages gained a visible `<h1>`,
+  filterable subtopic chips, a source-jump nav, and source/year grouping. Also re-imported
+  `problems.json` (upstream stripped the `[N points]` annotations). Build green (25 pages,
+  postbuild gate passed). See "Inline math" + the page descriptions in the Price Theory
+  problem-bank pipeline section. No follow-ups outstanding.
+
+**Prior (2026-06-18) — committed to `main` and deployed (`de49b94`, still `noindex`ed):**
 - **Price Theory problem bank integrated + LIVE.** The placeholder Price Theory course is
   now a real, browsable **problem bank** sourced from the public repo
   `bryanpcutsinger/price-theory` (68 verbatim Chicago/Columbia exam problems across a
@@ -309,8 +329,8 @@ visible in `git diff`.
   source back-links), real `teaching.json` card copy. Build green; 12 topic pages live
   (`exchange-and-trade` has 0 problems → no page yet). **Refresh loop:** edit the source
   repo → `build.py` there → `npm run import:problems` → `npm run build` → commit.
-  **Known follow-ups (deferred):** inline LaTeX renders raw (visible on `general-equilibrium`;
-  KaTeX not yet wired) and cross-bank filtering/search.
+  **Known follow-ups:** both resolved 2026-06-20 (`f9304fc`) — inline LaTeX now renders via
+  KaTeX and cross-bank search/filtering shipped; see the Latest entry above.
 - **Parallel micro work (`b7950ad`):** between the two Price Theory commits, a separate
   change landed on `main` — `import-topic.sh` now also copies `figures/*.html` interactive
   widgets (INSTRUCTOR-NOTES-gated) alongside `*.svg`, plus the regenerated **T1 micro
