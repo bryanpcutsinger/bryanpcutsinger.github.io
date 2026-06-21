@@ -145,6 +145,16 @@ to the editor — deliberately not featured).
 Push to `main` → `.github/workflows/deploy.yml` builds and publishes to Pages.
 No manual deploy step. **LIVE** at https://bryanpcutsinger.github.io (repo: GitHub
 user site `bryanpcutsinger/bryanpcutsinger.github.io`, public).
+- **This repo is the ONLY publisher to the live site (single-publisher invariant).**
+  Source repos feed in via the `import:*` scripts (read over `gh api`); the live deploy
+  then happens **here**: `npm run import:*` → `npm run build` → commit/push `main`. The
+  source repos **never deploy to live** — `micro-principles` and `price-theory` each
+  carry a refusal **guardrail** in their own `CLAUDE.md` (added 2026-06-20; committed +
+  pushed: micro `b9d714f`, price `7cea48d`) telling the agent to decline any
+  push/deploy-to-live request and redirect it here. Pushing *source* to those repos' own
+  GitHub remotes is fine and expected — that's the importer's input; only live-deploy is
+  blocked there. (`claude-code-guide` is also import-fed but does not yet carry this
+  guardrail.)
 - **Pages source = "GitHub Actions" (`build_type: workflow`).** Set 2026-06-14 via
   `gh api -X PUT .../pages -f build_type=workflow`. It was previously **`legacy`**
   ("deploy from branch"), which made GitHub auto-run its **Jekyll** `pages-build-deployment`
@@ -307,9 +317,16 @@ trees API but slugs assume a flat layout). Why import-then-commit rather than an
 remote loader: keeps CI hermetic (no build-time private-repo auth) and every change is
 visible in `git diff`.
 
-## Current status (as of 2026-06-20)
+## Current status (as of 2026-06-21)
 
-**Latest (2026-06-20) — committed + pushed to `main` (`594aa0e`, deployed, still `noindex`ed):**
+**Latest (2026-06-21) — docs-only (this repo):**
+- **Recorded the single-publisher guardrail in the Deploy section.** Noted that this repo
+  is the sole publisher to the live site and that the `micro-principles` (`b9d714f`) and
+  `price-theory` (`7cea48d`) source repos now carry refusal guardrails in their own
+  `CLAUDE.md` (both committed + pushed) declining any live-deploy request and redirecting
+  it here. See the new bullet under `## Deploy`. No code/build change.
+
+**Prior (2026-06-20) — committed + pushed to `main` (`594aa0e`, deployed, still `noindex`ed):**
 - **Content refresh: revised T1 micro topic + much larger Price Theory bank.** Re-imported
   the revised `t01-economic-way-of-thinking` (`npm run import:topic`) and refreshed the
   Price Theory problem bank (`npm run import:problems`) — the bank grew **68 → 311 problems
