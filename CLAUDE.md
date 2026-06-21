@@ -319,7 +319,17 @@ visible in `git diff`.
 
 ## Current status (as of 2026-06-21)
 
-**Latest (2026-06-21) — docs-only (this repo):**
+**Latest (2026-06-21) — committed + pushed to `main` (`a62547c`, deployed, still `noindex`ed):**
+- **Price Theory bank refreshed: 311 → 477 problems across 40 sources.** Bryan added new
+  questions upstream in `bryanpcutsinger/price-theory`; published them via the standard
+  loop: `npm run import:problems` → `npm run build` (green, 26 pages, postbuild
+  `INSTRUCTOR NOTES` gate passed) → commit + push `main` (deploy run `27904329890` went
+  green). Only `src/data/price-theory/problems.json` changed; `taxonomy.json` was
+  unchanged, so the 13 topic routes are the same set — and all 13 are now non-empty
+  (`exchange-and-trade` rose from 0 → 14, so it now has a page). Pure content re-import,
+  no code changes.
+
+**Prior (2026-06-21) — docs-only (this repo):**
 - **Recorded the single-publisher guardrail in the Deploy section.** Noted that this repo
   is the sole publisher to the live site and that the `micro-principles` (`b9d714f`) and
   `price-theory` (`7cea48d`) source repos now carry refusal guardrails in their own
