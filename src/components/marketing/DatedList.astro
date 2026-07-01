@@ -1,0 +1,143 @@
+---
+// DatedList — the site's backbone record. A ruled list where the year/date sits
+// in the left column as accent tabular figures and the entry (title + meta) reads
+// to its right. Rows link only when a real `href` is given. Single small-screen
+// behavior: below 640px the row stacks (date above the entry) — no second layout.
+//
+// items: { date, title, meta?, href?, note?, external?, placeholder? }[]
+//   date  — short display string (a year "2024", or "Jun 2026"); shown in accent
+//   meta  — venue / outlet / format, set in the label voice
+//   note  — a short trailing status ("Working paper", "R&R")
+//   external — render an ↗ and rel=noopener for off-site links
+interface Item {
+  date?: string;
+  title: string;
+  meta?: string;
+  href?: string;
+  note?: string;
+  external?: boolean;
+  placeholder?: boolean;
+}
+interface Props {
+  items: Item[];
+  class?: string;
+}
+const { items, class: className = '' } = Astro.props;
+---
+<ul class:list={['drec', className]}>
+  {
+    items.map((it) => {
+      const Tag = it.href ? 'a' : 'div';
+      const rel = it.external ? 'noopener noreferrer' : undefined;
+      const target = it.external ? '_blank' : undefined;
+      return (
+        <li class:list={['drec__item', { 'is-placeholder': it.placeholder }]}>
+          <Tag
+            class:list={['drec__row', { 'is-link': !!it.href }]}
+            href={it.href}
+            rel={rel}
+            target={target}
+          >
+            <span class="drec__date tnum">{it.date}</span>
+            <span class="drec__body">
+              <span class="drec__title">
+                {it.title}
+                {it.external && it.href && (
+                  <span class="drec__ext" aria-hidden="true"> ↗</span>
+                )}
+              </span>
+              {it.meta && <span class="drec__meta label">{it.meta}</span>}
+            </span>
+            {it.note && <span class="drec__note">{it.note}</span>}
+            {it.placeholder && <span class="drec__flag">Placeholder</span>}
+          </Tag>
+        </li>
+      );
+    })
+  }
+</ul>
+
+<style>
+  .drec {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--hairline);
+  }
+  .drec__item {
+    border-bottom: 1px solid var(--hairline);
+  }
+  .drec__row {
+    display: grid;
+    grid-template-columns: 5.5rem 1fr auto;
+    align-items: baseline;
+    gap: var(--sp-2) var(--sp-6);
+    padding: var(--sp-4) 0;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .drec__date {
+    font-family: var(--font-label);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.02em;
+  }
+  .drec__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-1);
+    min-width: 0;
+  }
+  .drec__title {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 480;
+    line-height: 1.25;
+    color: var(--ink);
+  }
+  .drec__meta {
+    margin-top: 2px;
+  }
+  .drec__note {
+    font-family: var(--font-label);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .drec__ext { color: var(--accent); font-size: 0.85em; }
+
+  /* linked rows: quiet accent wash + title picks up accent */
+  .drec__row.is-link:hover {
+    background: color-mix(in srgb, var(--accent) 4%, transparent);
+  }
+  .drec__row.is-link:hover .drec__title { color: var(--accent); }
+  .drec__row.is-link:focus-visible { outline-offset: -2px; }
+
+  /* honest scaffold state */
+  .drec__item.is-placeholder { opacity: 0.62; }
+  .drec__flag {
+    font-family: var(--font-label);
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    padding: 0.15rem 0.5rem;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 640px) {
+    .drec__row {
+      grid-template-columns: 1fr auto;
+      gap: var(--sp-1) var(--sp-4);
+    }
+    .drec__date { grid-column: 1 / -1; order: -1; font-size: 0.8rem; }
+    .drec__note { grid-column: 2; }
+  }
+</style>

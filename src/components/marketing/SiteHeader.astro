@@ -11,10 +11,12 @@ interface Props {
 const { currentPath = '' } = Astro.props;
 
 const links = [
-  { label: 'About', href: '/about/' },
   { label: 'Speaking', href: '/speaking/' },
+  { label: 'Writing', href: '/writing/' },
+  { label: 'Research', href: '/research/' },
   { label: 'Teaching', href: '/teaching/' },
   { label: 'Guides', href: '/ai/' },
+  { label: 'About', href: '/about/' },
   { label: 'Contact', href: '/contact/' },
 ];
 
@@ -95,13 +97,13 @@ const isActive = (href: string) =>
     position: sticky;
     top: 0;
     z-index: 100;
-    background: transparent;
-    transition: background-color 0.25s ease, box-shadow 0.25s ease;
+    background: var(--ink);
+    box-shadow: 0 1px 0 rgba(243, 239, 232, 0.08);
+    transition: box-shadow 0.25s ease;
   }
-  /* solid once scrolled (and always when the mobile menu is open) */
+  /* keep a firm edge once scrolled and while the mobile menu is open */
   .site-header.is-scrolled,
   .site-header.is-menu-open {
-    background: var(--ink);
     box-shadow: 0 1px 0 rgba(243, 239, 232, 0.08);
   }
 
@@ -146,7 +148,7 @@ const isActive = (href: string) =>
     border-bottom-color: rgba(243, 239, 232, 0.4);
   }
   .nav-link.is-active {
-    border-bottom-color: var(--accent);
+    border-bottom-color: var(--accent-on-ink);
   }
 
   /* hamburger */

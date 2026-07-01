@@ -1,20 +1,18 @@
 ---
-// "Invite me to speak" inquiry form. Posts to Web3Forms (free, static-host
-// friendly, no backend). Progressive enhancement: a tiny inline script submits
-// via fetch and shows an inline success/error state; without JS it still POSTs
-// normally. Honeypot ("botcheck") for spam.
-//
-// PLACEHOLDER — Bryan must do two things before this works:
-//   1. Create a free Web3Forms access key (web3forms.com) tied to your booking
-//      email and paste it into ACCESS_KEY below.
-//   2. Confirm the fallback booking email in `email` (a dedicated speaking
-//      inbox is recommended over the FAU address).
-const ACCESS_KEY = 'YOUR_WEB3FORMS_ACCESS_KEY'; // PLACEHOLDER — Bryan to fill
+// "Invite me to speak" inquiry form. If a Web3Forms key is configured, the form
+// submits directly. Without a key, it drafts a complete email from the entered
+// fields so the page remains useful on a static host.
+const ACCESS_KEY = '';
 
 interface Props {
   email?: string;
 }
 const { email = 'bcutsinger@fau.edu' } = Astro.props;
+const hasWeb3Forms = ACCESS_KEY.length > 0;
+const formAction = hasWeb3Forms
+  ? 'https://api.web3forms.com/submit'
+  : `mailto:${email}?subject=Speaking%20inquiry`;
+const submitLabel = hasWeb3Forms ? 'Send inquiry' : 'Draft email';
 
 const audienceOptions = [
   'University / academic',
@@ -42,12 +40,14 @@ const budgetOptions = [
 ---
 <form
   class="booking-form"
-  action="https://api.web3forms.com/submit"
+  action={formAction}
   method="POST"
+  data-form-mode={hasWeb3Forms ? 'web3forms' : 'mailto'}
+  data-email={email}
   data-booking-form
 >
-  <input type="hidden" name="access_key" value={ACCESS_KEY} />
-  <input type="hidden" name="subject" value="Speaking inquiry — bryancutsinger.com" />
+  {hasWeb3Forms && <input type="hidden" name="access_key" value={ACCESS_KEY} />}
+  <input type="hidden" name="subject" value="Speaking inquiry - bryancutsinger.com" />
   <input type="hidden" name="from_name" value="Speaking inquiry" />
   <!-- honeypot: bots fill this; humans never see it -->
   <input type="checkbox" name="botcheck" class="visually-hidden" tabindex="-1" autocomplete="off" />
@@ -113,7 +113,7 @@ const budgetOptions = [
   </div>
 
   <div class="booking-form__actions">
-    <button type="submit" class="booking-form__submit">Send inquiry</button>
+    <button type="submit" class="booking-form__submit">{submitLabel}</button>
     <p class="booking-form__alt">
       Prefer email? <a href={`mailto:${email}?subject=Speaking%20inquiry`}>{email}</a>
     </p>
@@ -127,10 +127,44 @@ const budgetOptions = [
   const status = document.querySelector('[data-form-status]') as HTMLElement | null;
 
   form?.addEventListener('submit', async (e) => {
-    // If the access key is still the placeholder, let the normal POST happen so
-    // it's obvious in testing; otherwise enhance with fetch.
+    const mode = form.dataset.formMode;
+
+    if (mode === 'mailto') {
+      e.preventDefault();
+      const data = new FormData(form);
+      const labels = [
+        ['name', 'Name'],
+        ['email', 'Email'],
+        ['organization', 'Organization / institution'],
+        ['role', 'Role / title'],
+        ['event_name', 'Event name'],
+        ['event_dates', 'Event date(s)'],
+        ['location', 'Location'],
+        ['audience_type', 'Audience type'],
+        ['audience_size', 'Estimated audience size'],
+        ['format', 'Format'],
+        ['budget', 'Budget range'],
+        ['message', 'Message'],
+      ];
+      const body = labels
+        .map(([key, label]) => {
+          const value = String(data.get(key) || '').trim();
+          return value ? `${label}: ${value}` : '';
+        })
+        .filter(Boolean)
+        .join('\n\n');
+      const to = form.dataset.email || '';
+      window.location.href = `mailto:${encodeURIComponent(to)}?subject=Speaking%20inquiry&body=${encodeURIComponent(body)}`;
+      if (status) {
+        status.hidden = false;
+        status.textContent = 'Your email app should open with the inquiry details.';
+        status.className = 'booking-form__status is-success';
+      }
+      return;
+    }
+
     const key = (form.querySelector('[name="access_key"]') as HTMLInputElement)?.value;
-    if (!key || key === 'YOUR_WEB3FORMS_ACCESS_KEY') return;
+    if (!key) return;
 
     e.preventDefault();
     if (status) {
@@ -171,6 +205,7 @@ const budgetOptions = [
     border: 1px solid var(--hairline);
     border-radius: var(--radius);
     padding: var(--sp-8);
+    width: 100%;
   }
   .booking-form__grid {
     display: grid;
@@ -199,6 +234,8 @@ const budgetOptions = [
   .field textarea {
     font-family: var(--font-body);
     font-size: 1rem;
+    width: 100%;
+    min-width: 0;
     color: var(--text);
     background: var(--surface);
     border: 1px solid var(--hairline);
@@ -230,7 +267,7 @@ const budgetOptions = [
     padding: 14px 28px;
     border-radius: var(--radius);
     background: var(--accent);
-    color: var(--ink);
+    color: var(--on-ink);
     border: 1px solid var(--accent);
     cursor: pointer;
     transition: background-color 0.18s ease;
@@ -260,6 +297,9 @@ const budgetOptions = [
   }
 
   @media (max-width: 560px) {
+    .booking-form {
+      padding: var(--sp-6);
+    }
     .booking-form__grid {
       grid-template-columns: 1fr;
     }

@@ -1,70 +1,57 @@
 ---
 import MarketingLayout from '../layouts/MarketingLayout.astro';
+import PageHead from '../components/marketing/PageHead.astro';
 import Section from '../components/marketing/Section.astro';
-import SectionHeading from '../components/marketing/SectionHeading.astro';
 import BookingForm from '../components/marketing/BookingForm.astro';
 
-// PLACEHOLDER — Bryan: confirm which email(s). A dedicated speaking inbox is
-// recommended over the FAU address for booking; the FAU address is fine for
-// academic/media. Update both the BookingForm `email` and the values below.
-const speakingEmail = 'bcutsinger@fau.edu';
-const generalEmail = 'bcutsinger@fau.edu';
+const email = 'bcutsinger@fau.edu';
 ---
 <MarketingLayout
   title="Contact — Bryan Cutsinger"
   description="Get in touch with Bryan Cutsinger about speaking engagements, media, or academic inquiries."
 >
-  <Section variant="ink">
-    <SectionHeading
-      eyebrow="Contact"
-      heading="Get in touch."
-      lede="Speaking inquiries get a personal reply. For media and academic matters, email is best."
-    />
-  </Section>
+  <PageHead
+    kicker="Contact"
+    edition="Response within a few days"
+    headline="Get in touch."
+    lede="Speaking inquiries get a personal reply. For media and academic matters, email is best."
+  />
 
   <!-- Speaking inquiries (primary) -->
   <Section variant="surface" id="book">
-    <SectionHeading
-      eyebrow="Speaking inquiries"
-      heading="Invite Bryan to speak."
-      lede="Tell me about your event below — the more detail, the faster I can respond."
-    />
-    <BookingForm email={speakingEmail} />
+    <div class="head">
+      <p class="kicker">Speaking inquiries</p>
+      <h2>Invite Bryan to speak.</h2>
+      <p class="lede">
+        Tell me about your event below — the more detail, the faster I can respond.
+      </p>
+    </div>
+    <BookingForm email={email} />
   </Section>
 
   <!-- General / media -->
-  <Section variant="raised">
-    <div class="contact-general">
-      <SectionHeading
-        eyebrow="Media & academic"
-        heading="Everything else."
-      />
-      <p>
-        For interviews, commentary requests, academic correspondence, or
-        anything that isn't a speaking inquiry, email me directly:
-      </p>
-      <p class="contact-email">
-        <a href={`mailto:${generalEmail}`}>{generalEmail}</a>
-      </p>
-      <p class="contact-note">
-        <em>PLACEHOLDER — Bryan: add a response-time line (e.g. "I reply to
-        speaking inquiries within two business days") and any social / LinkedIn
-        links you want here.</em>
-      </p>
+  <Section variant="raised" width="reading">
+    <div class="head">
+      <p class="kicker">Media & academic</p>
+      <h2>Everything else.</h2>
     </div>
+    <p>
+      For interviews, commentary requests, academic correspondence, or anything
+      that isn't a speaking inquiry, email me directly:
+    </p>
+    <p class="contact-email">
+      <a href={`mailto:${email}`}>{email}</a>
+    </p>
+    <p class="contact-note">
+      For time-sensitive media requests, include your deadline and topic in the
+      subject line.
+    </p>
   </Section>
 </MarketingLayout>
 
 <style>
-  .contact-general {
-    max-width: var(--reading);
-  }
-  .contact-email {
-    font-family: var(--font-display);
-    font-size: var(--fs-h3);
-  }
-  .contact-note {
-    color: var(--text-muted);
-    font-size: var(--fs-small);
-  }
+  .head { margin-bottom: var(--sp-8); }
+  .head .lede { margin-top: var(--sp-3); }
+  .contact-email { font-family: var(--font-display); font-size: var(--fs-h3); }
+  .contact-note { color: var(--muted); font-size: var(--fs-small); }
 </style>

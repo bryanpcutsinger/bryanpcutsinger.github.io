@@ -1,0 +1,50 @@
+---
+// CloseBand — the in-system ink closing call-to-action for interior pages
+// (Writing, Research, About…). Replaces the claret-era Colophon. A kicker, a
+// Fraunces heading, a line of subtext, and one light button on ink.
+import Button from './Button.astro';
+interface Props {
+  kicker: string;
+  heading: string;
+  subtext?: string;
+  cta: { label: string; href: string };
+}
+const { kicker, heading, subtext, cta } = Astro.props;
+---
+<section class="close">
+  <div class="close__inner">
+    <p class="kicker">{kicker}</p>
+    <h2 class="close__heading">{heading}</h2>
+    {subtext && <p class="close__sub">{subtext}</p>}
+    <div class="close__cta">
+      <Button href={cta.href} variant="on-ink">{cta.label}</Button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .close {
+    background: var(--ink);
+    color: var(--on-ink);
+    padding-block: var(--section-y-ink);
+  }
+  .close__inner {
+    max-width: var(--reading);
+    margin-inline: auto;
+    padding-inline: var(--sp-6);
+  }
+  .close__heading {
+    color: var(--on-ink);
+    font-size: var(--fs-h2);
+    max-width: 20ch;
+    margin: 0 0 var(--sp-4);
+  }
+  .close__sub {
+    color: var(--on-ink-muted);
+    font-size: var(--fs-lead);
+    line-height: 1.5;
+    max-width: 52ch;
+    margin: 0 0 var(--sp-8);
+  }
+  .close__sub :global(a) { color: var(--accent-on-ink); }
+</style>

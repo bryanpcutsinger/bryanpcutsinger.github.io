@@ -1,0 +1,52 @@
+{
+  "_note": "Bryan's research. Two lists: `articles` (peer-reviewed / forthcoming) and `workingPapers`. Each item: year, title, authors, venue, status, url (DOI/publisher), note. Set placeholder:true on any row not yet real — it renders dimmed with a chip and MUST NOT be shown as a real citation. Replace with VERIFIED references only (title, venue, year, DOI). NEVER fabricate a citation, DOI, or coauthor. To populate quickly, paste from a CV or a Google Scholar / ORCID profile.",
+  "articles": [
+    {
+      "year": "20XX",
+      "title": "[PLACEHOLDER] Article title — peer-reviewed publication",
+      "authors": "B. Cutsinger [+ coauthors]",
+      "venue": "Journal name",
+      "status": "Published",
+      "url": "",
+      "placeholder": true
+    },
+    {
+      "year": "20XX",
+      "title": "[PLACEHOLDER] Second article title",
+      "authors": "B. Cutsinger",
+      "venue": "Journal name",
+      "status": "Published",
+      "url": "",
+      "placeholder": true
+    },
+    {
+      "year": "20XX",
+      "title": "[PLACEHOLDER] Third article title",
+      "authors": "B. Cutsinger [+ coauthors]",
+      "venue": "Journal name",
+      "status": "Forthcoming",
+      "url": "",
+      "placeholder": true
+    }
+  ],
+  "workingPapers": [
+    {
+      "year": "20XX",
+      "title": "[PLACEHOLDER] Working paper title",
+      "authors": "B. Cutsinger [+ coauthors]",
+      "venue": "",
+      "status": "Under review",
+      "url": "",
+      "placeholder": true
+    },
+    {
+      "year": "20XX",
+      "title": "[PLACEHOLDER] Second working paper title",
+      "authors": "B. Cutsinger",
+      "venue": "",
+      "status": "Revise & resubmit",
+      "url": "",
+      "placeholder": true
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+---
+import MarketingLayout from '../layouts/MarketingLayout.astro';
+import PageHead from '../components/marketing/PageHead.astro';
+import Section from '../components/marketing/Section.astro';
+import DatedList from '../components/marketing/DatedList.astro';
+import CloseBand from '../components/marketing/CloseBand.astro';
+import writingData from '../data/writing.json';
+
+// Map the forgiving JSON into DatedList items. A row links only when it has a real
+// url AND is not a placeholder — so scaffold rows never render a dead/invented link.
+const toItems = (rows: any[]) =>
+  rows.map((r) => ({
+    date: r.date,
+    title: r.title,
+    meta: r.outlet ? `${r.outlet}${r.kind ? ` · ${r.kind}` : ''}` : r.kind,
+    href: !r.placeholder && r.url ? r.url : undefined,
+    external: !r.placeholder && !!r.url,
+    placeholder: r.placeholder,
+  }));
+
+const essays = toItems(writingData.essays ?? []);
+const press = toItems(writingData.press ?? []);
+---
+<MarketingLayout
+  title="Writing — Bryan Cutsinger"
+  description="Public writing by Bryan Cutsinger — essays and commentary on money, inflation, and public policy in National Review, The Hill, The Washington Examiner, and RealClearEducation, plus interviews and appearances."
+>
+  <PageHead
+    kicker="Writing"
+    edition="Essays & press"
+    headline="Economics, argued in public."
+    lede="I write for general audiences about money, inflation, and the incentives behind public policy — translating research into the debates people are actually having."
+  />
+
+  <!-- Commentary / essays -->
+  <Section variant="surface">
+    <div class="head">
+      <p class="kicker">Commentary</p>
+      <h2>Essays & op-eds.</h2>
+      <p class="lede">Selected pieces for national outlets.</p>
+    </div>
+    <DatedList items={essays} />
+  </Section>
+
+  <!-- Press & appearances -->
+  <Section variant="raised">
+    <div class="head">
+      <p class="kicker">Press & appearances</p>
+      <h2>Interviews & media.</h2>
+      <p class="lede">Interviews, podcasts, and mentions.</p>
+    </div>
+    <DatedList items={press} />
+  </Section>
+
+  <CloseBand
+    kicker="For editors & producers"
+    heading="Writing on deadline, or need a source?"
+    subtext="I'm glad to write, comment, or point you to the research on money, inflation, and monetary policy. The fastest way to reach me is email."
+    cta={{ label: 'Get in touch', href: '/contact/' }}
+  />
+</MarketingLayout>
+
+<style>
+  .head { margin-bottom: var(--sp-8); }
+  .head h2 { max-width: 22ch; }
+  .head .lede { margin-top: var(--sp-3); }
+</style>

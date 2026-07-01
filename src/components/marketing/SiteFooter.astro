@@ -5,15 +5,15 @@
 interface Props {
   email?: string;
 }
-// PLACEHOLDER — Bryan: confirm the booking email (recommend a dedicated
-// speaking inbox over the FAU address).
 const { email = 'bcutsinger@fau.edu' } = Astro.props;
 const year = new Date().getFullYear();
 
 const nav = [
-  { label: 'About', href: '/about/' },
   { label: 'Speaking', href: '/speaking/' },
+  { label: 'Writing', href: '/writing/' },
+  { label: 'Research', href: '/research/' },
   { label: 'Teaching', href: '/teaching/' },
+  { label: 'About', href: '/about/' },
   { label: 'Contact', href: '/contact/' },
   { label: 'Guides', href: '/ai/' },
 ];
@@ -79,7 +79,7 @@ const nav = [
   }
   .site-footer__nav a:hover,
   .site-footer__contact a:hover {
-    color: var(--accent);
+    color: var(--accent-on-ink);
   }
   .site-footer__credit {
     border-top: 1px solid rgba(243, 239, 232, 0.12);

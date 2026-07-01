@@ -1,11 +1,18 @@
 ---
 // Single variant-driven button/link used across the marketing site so styling
 // stays consistent. Renders an <a> (it's always a navigation/CTA here).
-//   variant: 'primary' (brass fill) | 'secondary' (outline) | 'ghost-ink'
-//            (outline on dark sections)
+//   variant: 'primary' (claret fill) | 'secondary' (ink outline) | 'ghost-ink'
+//            (outline on dark sections) | 'on-claret' (cream fill, claret text —
+//            for the full-bleed claret opener) | 'ghost-claret' (cream outline)
 interface Props {
   href: string;
-  variant?: 'primary' | 'secondary' | 'ghost-ink';
+  variant?:
+    | 'primary'
+    | 'secondary'
+    | 'ghost-ink'
+    | 'on-ink'
+    | 'on-claret'
+    | 'ghost-claret';
   class?: string;
 }
 const { href, variant = 'primary', class: className = '' } = Astro.props;
@@ -18,32 +25,33 @@ const { href, variant = 'primary', class: className = '' } = Astro.props;
   .btn {
     display: inline-block;
     font-family: var(--font-body);
-    font-weight: 600;
-    font-size: 1rem;
+    font-weight: 550;
+    font-size: 0.9375rem;
+    letter-spacing: 0.005em;
     line-height: 1;
-    padding: 14px 28px;
+    padding: 15px 28px;
     border-radius: var(--radius);
     text-decoration: none;
     border: 1px solid transparent;
     cursor: pointer;
     transition: background-color 0.18s ease, color 0.18s ease,
-      border-color 0.18s ease;
+      border-color 0.18s ease, box-shadow 0.18s ease;
     white-space: nowrap;
   }
 
-  /* primary: brass fill, ink text (≈5.6:1 — AA) */
+  /* primary: claret fill, light paper text */
   .btn--primary {
     background: var(--accent);
-    color: var(--ink);
+    color: var(--on-ink);
     border-color: var(--accent);
   }
   .btn--primary:hover {
     background: var(--accent-hover);
     border-color: var(--accent-hover);
-    color: var(--on-ink);
+    color: #fff;
   }
 
-  /* secondary: outline on light surfaces */
+  /* secondary: ink outline on light surfaces, fills on hover */
   .btn--secondary {
     background: transparent;
     color: var(--ink);
@@ -58,11 +66,47 @@ const { href, variant = 'primary', class: className = '' } = Astro.props;
   .btn--ghost-ink {
     background: transparent;
     color: var(--on-ink);
-    border-color: rgba(243, 239, 232, 0.45);
+    border-color: rgba(242, 239, 231, 0.4);
   }
   .btn--ghost-ink:hover {
     background: var(--on-ink);
     color: var(--ink);
     border-color: var(--on-ink);
+  }
+
+  /* on-ink: paper fill, ink text — primary CTA on dark/ink sections */
+  .btn--on-ink {
+    background: var(--on-ink);
+    color: var(--ink);
+    border-color: var(--on-ink);
+  }
+  .btn--on-ink:hover {
+    background: #fff;
+    border-color: #fff;
+    color: var(--accent);
+  }
+
+  /* on-claret: cream fill, claret text — primary CTA on the claret field */
+  .btn--on-claret {
+    background: var(--on-claret);
+    color: var(--accent);
+    border-color: var(--on-claret);
+  }
+  .btn--on-claret:hover {
+    background: #fff;
+    border-color: #fff;
+    color: var(--accent-hover);
+  }
+
+  /* ghost-claret: cream outline on the claret field */
+  .btn--ghost-claret {
+    background: transparent;
+    color: var(--on-claret);
+    border-color: var(--claret-hairline);
+  }
+  .btn--ghost-claret:hover {
+    background: var(--on-claret);
+    color: var(--accent);
+    border-color: var(--on-claret);
   }
 </style>

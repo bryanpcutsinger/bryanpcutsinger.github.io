@@ -1,37 +1,41 @@
 /* =====================================================================
    Brand theme for Starlight (the /ai/ guides)
    The guides share the marketing site's FULL visual language so they read as
-   one brand: the ink + warm-brass palette on a bone surface, Fraunces (display)
-   + Inter (body) type, sentence-case headings, minimal hairline tables, cards
-   that lift on hover, and 4px corners. The ONLY thing that stays distinct is the
-   Starlight DOCS LAYOUT (sidebar + right-rail TOC) — the guides are reference
-   docs that need navigation. There is no separate "FAU pattern"; uppercase is
-   reserved for the marketing brand's small eyebrow labels, not nav or tables.
-   Fonts are loaded site-wide from src/components/overrides/SiteTitle.astro.
-   Marketing brand tokens live in src/styles/brand.css; this file mirrors their
-   color VALUES through the historical --fau-* variable names to minimize churn
-   (the names now hold brand colors, not FAU's).
+   one brand: the "public economist" system — bright archival paper, deep ink, one
+   ledger-green accent; Fraunces (display) + Newsreader (reading prose) + Inter
+   (UI/nav) + IBM Plex Mono (code); sentence-case headings, minimal hairline
+   tables, and cards that lift on hover. The ONLY thing that stays distinct is the
+   Starlight DOCS LAYOUT (sidebar + right-rail TOC) — the guides are reference docs
+   that need navigation. Fonts load site-wide from
+   src/components/overrides/SiteTitle.astro. Marketing tokens live in
+   src/styles/site.css; this file mirrors their color VALUES through the historical
+   --fau-* variable names (the names now hold the new brand colors, not FAU's).
    ===================================================================== */
 
 :root {
-  /* --- brand palette (mapped onto the historical --fau-* names) --- */
-  --fau-blue: #1a1c1e;          /* ink: chrome bars, headings, nav text, borders */
-  --fau-red: #b07a2c;           /* brass accent: active nav item, eyebrows, emphasis */
-  --fau-red-hover: #8f6120;
-  --fau-dark-gray: #16181a;     /* body-copy color */
-  --fau-gray: #e3ddd3;          /* hairline borders / rules */
-  --fau-light-gray: #f0ece4;    /* warm surface tint */
-  --fau-electric-blue: #b07a2c; /* brand links/buttons -> brass */
-  --fau-link: #b07a2c;          /* body link color -> brass */
-  --fau-link-hover: #8f6120;
-  --fau-skyblue: #efe4d2;       /* accent-tint: callout bg, table odd-row stripe */
-  --fau-stone: #6b7a82;         /* slate: secondary accents */
-  --fau-sand: #d4b98b;
-  --surface-nav: #efeae1;       /* warm left-nav / table-header panel bg */
+  /* --- brand palette (mapped onto the historical --fau-* names) ---
+     The "public economist" system: bright archival paper, deep ink, one
+     ledger-green accent. Retuned 2026-07-01 to match src/styles/site.css. */
+  --fau-blue: #1a1917;          /* ink: chrome bars, headings, nav text, borders */
+  --fau-red: #22453b;           /* ledger-green accent: active nav item, emphasis */
+  --fau-red-hover: #163029;
+  --fau-dark-gray: #1a1917;     /* body-copy color */
+  --fau-gray: #e4e1da;          /* hairline borders / rules */
+  --fau-light-gray: #f3f1ea;    /* cool surface tint */
+  --fau-electric-blue: #22453b; /* brand links/buttons -> ledger-green */
+  --fau-link: #22453b;          /* body link color -> ledger-green */
+  --fau-link-hover: #163029;
+  --fau-skyblue: #e7ede9;       /* accent-tint: callout bg (green tint) */
+  --fau-stone: #6b6862;         /* muted: secondary accents */
+  --fau-sand: #cfcabd;
+  --surface-nav: #f3f1ea;       /* cool left-nav / table-header panel bg */
 
-  /* Body type -> Inter (matches the marketing site); system-sans fallback */
-  --sl-font: 'Inter Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, Helvetica, Arial, sans-serif;
+  /* Type -> the two-face pairing. UI/nav in Inter; markdown prose in Newsreader
+     (set below); headings in Fraunces; code in IBM Plex Mono. Loaded via SiteTitle. */
+  --sl-font: 'Inter Variable', -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --sl-font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas,
+    monospace;
 }
 
 /* Force a single light appearance so the brand neutrals read consistently, and
@@ -42,30 +46,30 @@
 :root[data-theme='dark'] {
   color-scheme: light;
 
-  /* Accent ramp -> brass */
-  --sl-color-accent-low: #efe4d2;
-  --sl-color-accent: #b07a2c;
-  --sl-color-accent-high: #1a1c1e;
+  /* Accent ramp -> ledger-green */
+  --sl-color-accent-low: #e7ede9;
+  --sl-color-accent: #22453b;
+  --sl-color-accent-high: #1a1917;
 
-  /* Text / surface ramp tuned to warm brand neutrals (light) */
-  --sl-color-white: #1a1c1e;      /* Starlight uses this for headings/strong */
-  --sl-color-gray-1: #16181a;
-  --sl-color-gray-2: #16181a;
-  --sl-color-gray-3: #5c6066;
-  --sl-color-gray-4: #8a857d;
-  --sl-color-gray-5: #e3ddd3;
-  --sl-color-gray-6: #f0ece4;
-  --sl-color-gray-7: #faf8f4;
+  /* Text / surface ramp tuned to bright paper neutrals (light) */
+  --sl-color-white: #1a1917;      /* Starlight uses this for headings/strong */
+  --sl-color-gray-1: #1c1e20;
+  --sl-color-gray-2: #1c1e20;
+  --sl-color-gray-3: #5a5e63;
+  --sl-color-gray-4: #86827a;
+  --sl-color-gray-5: #e4e1da;
+  --sl-color-gray-6: #f3f1ea;
+  --sl-color-gray-7: #f7f6f2;
   --sl-color-black: #ffffff;      /* inverse anchor */
 
-  --sl-color-text: #16181a;
-  --sl-color-text-accent: #b07a2c;
-  --sl-color-bg: #f7f4ef;         /* page background -> warm bone */
-  --sl-color-bg-nav: #1a1c1e;     /* top header bar -> ink */
+  --sl-color-text: #1c1e20;
+  --sl-color-text-accent: #22453b;
+  --sl-color-bg: #fbfaf7;         /* page background -> bright archival paper */
+  --sl-color-bg-nav: #1a1917;     /* top header bar -> ink */
   --sl-color-bg-sidebar: #ffffff;
-  --sl-color-hairline: #e3ddd3;
-  --sl-color-hairline-light: #efebe3;
-  --sl-color-hairline-shade: #e3ddd3;
+  --sl-color-hairline: #e4e1da;
+  --sl-color-hairline-light: #eae7e0;
+  --sl-color-hairline-shade: #e4e1da;
 }
 
 /* Hide the theme switcher (single appearance) */
@@ -74,19 +78,28 @@ starlight-theme-select {
 }
 
 /* --------------------------------------------------------------------
-   Typography: Fraunces (display) headings in ink; Inter body
+   Typography: Fraunces (display) headings in ink; Newsreader reading prose;
+   Inter UI/nav (via --sl-font); IBM Plex Mono code.
    -------------------------------------------------------------------- */
 .sl-markdown-content :is(h1, h2, h3, h4, h5, h6),
 h1.content-title,
 .hero h1 {
   font-family: 'Fraunces Variable', Georgia, 'Times New Roman', serif !important;
+  font-weight: 460;
   color: var(--fau-blue);
-  line-height: 1.15;
-  letter-spacing: -0.01em;
+  line-height: 1.12;
+  letter-spacing: -0.014em;
 }
 
+/* Reading prose -> Newsreader (matches the marketing pages). Code/UI stay put. */
 .sl-markdown-content {
   color: var(--fau-dark-gray);
+  font-family: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
+  font-size: 1.05rem;
+  line-height: 1.62;
+}
+.sl-markdown-content :is(code, pre, kbd, samp) {
+  font-family: var(--sl-font-mono);
 }
 
 /* Body links -> brass, underlined by default (matches the marketing pages) */
@@ -173,8 +186,8 @@ starlight-menu-button button {
 /* Note uses the brand accent; tip/caution/danger keep their SEMANTIC colors
    (green/amber/red) so warnings still read as warnings — not brass. */
 .starlight-aside--note {
-  background-color: #f3ece0;
-  border-inline-start-color: var(--fau-red); /* brass */
+  background-color: #e7ede9;
+  border-inline-start-color: var(--fau-red); /* ledger-green */
 }
 .starlight-aside--tip {
   background-color: #e6f4ea;

@@ -1,5 +1,5 @@
 {
-  "_note": "PLACEHOLDER course list — each course renders as a card on /teaching/ and links to its own page at /teaching/<slug>/. Mirrors topics.json shape (title, description, audience, format, href). Add a course = one entry here + one page in src/pages/teaching/.",
+  "_note": "Course list shown on /teaching/. Each course renders as a card and links to its course page.",
   "courses": [
     {
       "title": "Micro-Economic Principles",

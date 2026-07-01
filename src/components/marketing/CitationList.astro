@@ -1,0 +1,234 @@
+---
+// CitationList — the signature academic pattern. A bibliography rendered as
+// editorial back-matter: the publication YEAR hangs in the left margin as a folio
+// (mirroring EditorialIndex's numeral grammar, but the number is real data, not a
+// sequence), with the entry set as a proper citation line — authors, a Newsreader
+// title (linked when a real href exists), an italic venue, an optional detail
+// (volume/pages or a status note), and mono resource links (DOI / PDF / SSRN).
+//
+// Entries flagged `placeholder: true` render dimmed with a [PLACEHOLDER] chip so a
+// scaffolded list never reads as a fabricated citation. `authorHighlight` (default
+// "Cutsinger") is bolded wherever it appears in an entry's `authors` string.
+interface Link {
+  label: string;
+  href: string;
+}
+interface Entry {
+  year?: string;
+  authors?: string;
+  title: string;
+  href?: string; // primary link on the title (DOI / publisher page)
+  venue?: string; // journal / press — rendered italic
+  detail?: string; // vol/issue/pages, or a status note ("Revise & resubmit")
+  links?: Link[]; // secondary resources
+  placeholder?: boolean;
+}
+interface Props {
+  entries: Entry[];
+  authorHighlight?: string;
+  class?: string;
+}
+const {
+  entries,
+  authorHighlight = 'Cutsinger',
+  class: className = '',
+} = Astro.props;
+
+// Split an authors string around the highlighted surname so we can bold just it,
+// without dangerously injecting HTML.
+function authorParts(authors?: string) {
+  if (!authors) return null;
+  const i = authors.indexOf(authorHighlight);
+  if (i === -1) return [{ text: authors, strong: false }];
+  return [
+    { text: authors.slice(0, i), strong: false },
+    { text: authorHighlight, strong: true },
+    { text: authors.slice(i + authorHighlight.length), strong: false },
+  ];
+}
+---
+<ol class:list={['cites', className]}>
+  {
+    entries.map((e) => {
+      const TitleTag = e.href ? 'a' : 'span';
+      const parts = authorParts(e.authors);
+      return (
+        <li class:list={['cite', { 'is-placeholder': e.placeholder }]}>
+          <span class="cite__year" aria-hidden={!e.year}>
+            {e.year ?? '—'}
+          </span>
+          <div class="cite__body">
+            {parts && (
+              <p class="cite__authors">
+                {parts.map((p) =>
+                  p.strong ? <strong>{p.text}</strong> : p.text,
+                )}
+              </p>
+            )}
+            <p class="cite__title-line">
+              <TitleTag
+                class:list={['cite__title', { 'is-link': !!e.href }]}
+                href={e.href}
+              >
+                {e.title}
+              </TitleTag>
+              {e.venue && (
+                <>
+                  {' '}
+                  <cite class="cite__venue">{e.venue}</cite>
+                </>
+              )}
+              {e.detail && <span class="cite__detail">{e.detail}</span>}
+            </p>
+            {e.links && e.links.length > 0 && (
+              <p class="cite__links">
+                {e.links.map((l) => (
+                  <a class="cite__link" href={l.href}>
+                    {l.label}
+                  </a>
+                ))}
+              </p>
+            )}
+          </div>
+          {e.placeholder && <span class="cite__flag">Placeholder</span>}
+        </li>
+      );
+    })
+  }
+</ol>
+
+<style>
+  .cites {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--rule);
+  }
+  .cite {
+    display: grid;
+    grid-template-columns: minmax(3.5rem, 4.5rem) 1fr auto;
+    align-items: baseline;
+    gap: var(--sp-2) clamp(var(--sp-4), 2vw, var(--sp-8));
+    padding: var(--sp-6) 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  /* the marginal folio: publication year, hanging left in Newsreader claret */
+  .cite__year {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--accent);
+    font-variant-numeric: lining-nums tabular-nums;
+    letter-spacing: -0.01em;
+  }
+
+  .cite__body {
+    min-width: 0;
+  }
+  .cite__authors {
+    margin: 0 0 var(--sp-1);
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    max-width: none;
+  }
+  .cite__authors strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .cite__title-line {
+    margin: 0;
+    max-width: 62ch;
+    line-height: 1.4;
+  }
+  .cite__title {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .cite__title.is-link {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--accent) 35%, transparent);
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+    transition: color 0.15s ease, text-decoration-color 0.15s ease;
+  }
+  .cite__title.is-link:hover {
+    color: var(--accent);
+    text-decoration-color: currentColor;
+  }
+  .cite__venue {
+    font-style: italic;
+    color: var(--text);
+  }
+  .cite__detail {
+    color: var(--text-muted);
+  }
+  .cite__title-line .cite__detail::before {
+    content: ' · ';
+    color: var(--rule);
+  }
+
+  /* resource links: mono, small, claret — the "furniture" voice */
+  .cite__links {
+    margin: var(--sp-3) 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-1) var(--sp-4);
+  }
+  .cite__link {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+    padding-bottom: 1px;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  }
+  .cite__link:hover {
+    color: var(--accent-hover);
+    border-bottom-color: currentColor;
+  }
+
+  /* scaffold state: dimmed row + a mono chip so it never reads as a real cite */
+  .cite.is-placeholder {
+    opacity: 0.62;
+  }
+  .cite__flag {
+    align-self: center;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    padding: 0.15rem 0.55rem;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 640px) {
+    .cite {
+      grid-template-columns: 1fr auto;
+      gap: var(--sp-1) var(--sp-4);
+    }
+    /* year rides above the body on its own line */
+    .cite__year {
+      grid-column: 1 / -1;
+      font-size: 1.25rem;
+    }
+    .cite__flag {
+      grid-column: 2;
+      grid-row: 1;
+      justify-self: end;
+    }
+  }
+</style>

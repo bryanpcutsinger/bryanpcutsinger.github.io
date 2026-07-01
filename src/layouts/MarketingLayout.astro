@@ -9,8 +9,15 @@
 // AT PUBLIC LAUNCH: flip the default below to false AND delete the matching
 // `head` noindex block in astro.config.mjs — lift them together.
 import '@fontsource-variable/fraunces';
+import '@fontsource-variable/newsreader';
+import '@fontsource-variable/newsreader/opsz-italic.css';
 import '@fontsource-variable/inter';
+// brand.css (the superseded claret system) is loaded FIRST during migration so
+// not-yet-converted pages keep their claret-only vars; site.css overrides the
+// shared tokens with the new "public economist" system. Remove brand.css once
+// About/Teaching/Contact are migrated (task 6).
 import '../styles/brand.css';
+import '../styles/site.css';
 import SiteHeader from '../components/marketing/SiteHeader.astro';
 import SiteFooter from '../components/marketing/SiteFooter.astro';
 
@@ -31,6 +38,24 @@ const siteName = 'Bryan Cutsinger';
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImageUrl = ogImage ? new URL(ogImage, Astro.site).href : undefined;
 const currentPath = Astro.url.pathname;
+
+// Sitewide Person structured data. Only verifiable facts — `sameAs` (Google
+// Scholar / ORCID / SSRN / social) is intentionally omitted until Bryan supplies
+// the real profile URLs; do NOT invent them.
+const personLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Bryan Cutsinger',
+  jobTitle: 'Economics Professor',
+  url: Astro.site?.href,
+  worksFor: { '@type': 'CollegeOrUniversity', name: 'Florida Atlantic University' },
+  knowsAbout: [
+    'Monetary theory',
+    'Monetary history',
+    'Public choice',
+    'Political economy',
+  ],
+};
 ---
 <!doctype html>
 <html lang="en">
@@ -57,6 +82,12 @@ const currentPath = Astro.url.pathname;
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     {ogImageUrl && <meta name="twitter:image" content={ogImageUrl} />}
+
+    <!-- Structured data: Person -->
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(personLd)}
+    />
   </head>
   <body>
     <a href="#main" class="skip-link">Skip to content</a>

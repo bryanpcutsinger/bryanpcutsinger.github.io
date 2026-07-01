@@ -4,32 +4,48 @@
    separate from src/styles/fau-theme.css (which loads only inside Starlight and
    themes the /ai/ guides). The two never share selectors or tokens.
 
-   Brand: independent / editorial — deep ink + a warm brass accent, Fraunces
-   serif display, Inter body, generous whitespace. NOT the FAU navy/red look.
+   Brand: "the public essay" — the look of a serious thinking-person's review.
+   An economist who argues in public. Cool oat "document" paper (NOT warm cream),
+   a deep ink, and ONE considered accent: a claret drawn from bound volumes and
+   editorial mastheads. Newsreader (editorial serif) sets the writing; IBM Plex
+   Sans the body; IBM Plex Mono is the "editorial furniture" voice — kickers,
+   deks, credits, and running labels — replacing generic all-caps eyebrows.
+   Redesigned 2026-07-01. NOT the warm-bone + Fraunces + brass default.
    ========================================================================== */
 
 :root {
-  /* --- palette (warm editorial) --- */
-  --ink: #1a1c1e;           /* dark sections: hero, CTA bands, footer */
-  --ink-soft: #26292c;      /* cards / panels on dark */
-  --text: #16181a;          /* body copy on light */
-  --text-muted: #5c6066;    /* captions, labels, metadata */
-  --surface: #f7f4ef;       /* page background — warm bone, not pure white */
-  --surface-raised: #ffffff;/* cards, form fields */
-  --hairline: #e3ddd3;      /* 1px rules / borders */
-  --accent: #b07a2c;        /* brass/ochre — primary CTA, links, eyebrows */
-  --accent-hover: #8f6120;  /* hover / pressed */
-  --accent-tint: #efe4d2;   /* quote marks, hover washes */
-  --slate: #6b7a82;         /* "as seen in" logos, secondary borders */
-  --on-ink: #f3efe8;        /* text on ink */
-  --on-ink-muted: #a7a39b;  /* muted text on ink */
+  /* --- palette (cool editorial document) --- */
+  --ink: #191b1d;           /* dark sections: hero, CTA bands, footer */
+  --ink-soft: #24272a;      /* cards / panels on dark */
+  --text: #1c1e20;          /* body copy on light */
+  --text-muted: #5a5e63;    /* captions, labels, metadata */
+  --surface: #f0ede4;       /* page background — cool oat paper, not warm cream */
+  --surface-raised: #fbfaf5;/* cards, form fields — warm document white */
+  --hairline: #dcd7cb;      /* 1px rules / borders */
+  --rule: #c9c3b4;          /* engraved / editorial hairlines (a touch darker) */
+  --accent: #8a2f38;        /* claret — primary CTA, links, kickers */
+  --accent-hover: #6d232b;  /* hover / pressed */
+  --accent-tint: #f0e2e2;   /* quote marks, hover washes */
+  --slate: #6a6459;         /* masthead wordmarks, secondary text */
+  --on-ink: #f2efe7;        /* text on ink */
+  --on-ink-muted: #a8a39a;  /* muted text on ink */
+
+  /* claret field (the full-bleed opener) — cream type on --accent */
+  --on-claret: #f7efe6;         /* headline / body on claret */
+  --on-claret-muted: #e6c9c6;   /* running line, subhead, meta on claret */
+  --claret-hairline: rgba(247, 239, 230, 0.28); /* rules on claret */
+  --claret-deep: #74232c;       /* deeper claret for the field base / gradient */
 
   /* --- type --- */
-  --font-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
-  --font-body: 'Inter Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, Helvetica, Arial, sans-serif;
+  --font-display: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
+  --font-body: 'IBM Plex Sans Variable', -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas,
+    monospace;
 
   /* fluid type scale (mobile -> desktop via clamp) */
+  --fs-nameplate: clamp(2.9rem, 1.3rem + 7vw, 6rem);  /* claret-opener headline */
+  --fs-folio: clamp(2.25rem, 1.4rem + 3.6vw, 4.25rem);/* giant index numerals */
   --fs-display-xl: clamp(2.5rem, 1.6rem + 4.5vw, 4.5rem);
   --fs-display-lg: clamp(2rem, 1.4rem + 3vw, 3.25rem);
   --fs-h2: clamp(1.6rem, 1.2rem + 2vw, 2.25rem);
@@ -54,6 +70,7 @@
   /* --- layout --- */
   --container: 1120px;
   --reading: 680px;
+  --header-h: 78px;         /* SiteHeader height; openers pad-top by this */
   --radius: 4px;
   --radius-lg: 8px;
   --shadow-hover: 0 8px 30px rgba(26, 28, 30, 0.08);
@@ -100,11 +117,12 @@ h1,
 h2,
 h3 {
   font-family: var(--font-display);
-  font-weight: 500;
-  line-height: 1.12;
-  letter-spacing: -0.01em;
+  font-weight: 480;
+  line-height: 1.13;
+  letter-spacing: -0.012em;
   color: var(--ink);
   margin: 0 0 var(--sp-4);
+  font-optical-sizing: auto;
 }
 
 p {
@@ -115,11 +133,63 @@ p {
 a {
   color: var(--accent);
   text-decoration: underline;
-  text-underline-offset: 2px;
+  text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  text-underline-offset: 3px;
   text-decoration-thickness: 1px;
+  transition: text-decoration-color 0.15s ease, color 0.15s ease;
 }
 a:hover {
   color: var(--accent-hover);
+  text-decoration-color: currentColor;
+}
+
+/* --- editorial kicker (the "furniture" voice) ---------------------------
+   A monospaced label with a short claret rule, used above section headings
+   and in card metadata. Replaces the generic all-caps letterspaced eyebrow. */
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 var(--sp-4);
+  max-width: none;
+}
+.kicker::before {
+  content: '';
+  inline-size: 1.75rem;
+  block-size: 1px;
+  background: currentColor;
+  flex: none;
+  opacity: 0.85;
+}
+/* centered variant drops the leading rule so it stays symmetrical */
+.is-center .kicker,
+.kicker.is-center {
+  justify-content: center;
+}
+/* on dark sections the claret is too low-contrast — use a soft claret rose */
+.hero .kicker,
+.cta-band .kicker,
+.speaker-reel .kicker,
+.section--ink .kicker {
+  color: #d18d94;
+}
+
+/* editorial drop cap — CSS ::first-letter (stays in the reading flow for SR) */
+.dropcap::first-letter {
+  float: left;
+  font-family: var(--font-display);
+  font-weight: 420;
+  font-size: 3.4em;
+  line-height: 0.82;
+  padding-right: 0.09em;
+  margin-top: 0.04em;
+  color: var(--accent);
 }
 
 ul,

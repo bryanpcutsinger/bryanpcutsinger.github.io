@@ -1,0 +1,121 @@
+---
+import MarketingLayout from '../layouts/MarketingLayout.astro';
+import PageHead from '../components/marketing/PageHead.astro';
+import Section from '../components/marketing/Section.astro';
+import CitationList from '../components/marketing/CitationList.astro';
+import DownloadCard from '../components/marketing/DownloadCard.astro';
+import CloseBand from '../components/marketing/CloseBand.astro';
+import pubs from '../data/publications.json';
+
+// Research fields — Bryan's actual areas (stated facts, not fabricated).
+const fields = [
+  {
+    label: 'Field 01',
+    heading: 'Monetary theory & history',
+    body: 'How monetary institutions and policy regimes shape prices, output, and the value of money — read through the historical record.',
+  },
+  {
+    label: 'Field 02',
+    heading: 'Public choice & political economy',
+    body: 'The incentives facing policymakers and institutions, and how those incentives explain the rules we actually get.',
+  },
+];
+
+// Map the forgiving JSON to CitationList entries. A link renders only for real
+// (non-placeholder) rows with a URL — scaffolds never show an invented DOI.
+const toEntries = (rows: any[]) =>
+  rows.map((r) => ({
+    year: r.year,
+    authors: r.authors,
+    title: r.title,
+    venue: r.venue,
+    detail: r.status,
+    href: !r.placeholder && r.url ? r.url : undefined,
+    links: !r.placeholder && r.url ? [{ label: 'DOI', href: r.url }] : undefined,
+    placeholder: r.placeholder,
+  }));
+
+const articles = toEntries(pubs.articles ?? []);
+const workingPapers = toEntries(pubs.workingPapers ?? []);
+---
+<MarketingLayout
+  title="Research — Bryan Cutsinger"
+  description="Research by Bryan Cutsinger in monetary theory, economic history, and public choice — peer-reviewed articles, working papers, and current projects."
+>
+  <PageHead
+    kicker="Research"
+    edition="Selected work"
+    headline="Money, institutions, and the incentives behind policy."
+    lede="My research asks how monetary institutions shape economies, and why the rules governing money look the way they do — spanning monetary theory and economic history, read through the lens of public choice."
+  >
+    <Fragment slot="headline">
+      Money, institutions, and the <em>incentives</em> behind policy.
+    </Fragment>
+  </PageHead>
+
+  <!-- Fields -->
+  <Section variant="surface">
+    <div class="head"><p class="kicker">Fields</p><h2>What I work on.</h2></div>
+    <div class="fields">
+      {
+        fields.map((f) => (
+          <div class="field">
+            <span class="label label--accent">{f.label}</span>
+            <h3 class="field__heading">{f.heading}</h3>
+            <p class="field__body">{f.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </Section>
+
+  <!-- Peer-reviewed articles -->
+  <Section variant="raised">
+    <div class="head">
+      <p class="kicker">Publications</p>
+      <h2>Peer-reviewed articles.</h2>
+      <p class="lede">Published and forthcoming work in economics journals.</p>
+    </div>
+    <CitationList entries={articles} />
+  </Section>
+
+  <!-- Working papers -->
+  <Section variant="surface">
+    <div class="head">
+      <p class="kicker">In progress</p>
+      <h2>Working papers.</h2>
+      <p class="lede">Current projects — drafts available on request while under review.</p>
+    </div>
+    <CitationList entries={workingPapers} />
+  </Section>
+
+  <!-- CV + profiles -->
+  <Section variant="raised">
+    <DownloadCard
+      title="Curriculum vitae"
+      description="The full record — publications, teaching, service, and appointments — on a single PDF. Google Scholar and ORCID links land here too."
+      requestHref="/contact/"
+      requestLabel="Request my CV"
+    />
+  </Section>
+
+  <CloseBand
+    kicker="Collaboration"
+    heading="Working on a related question?"
+    subtext="I'm glad to hear from students, coauthors, and journalists about monetary policy, economic history, and the political economy of money."
+    cta={{ label: 'Get in touch', href: '/contact/' }}
+  />
+</MarketingLayout>
+
+<style>
+  .head { margin-bottom: var(--sp-8); }
+  .head h2 { max-width: 22ch; }
+  .head .lede { margin-top: var(--sp-3); }
+  .fields {
+    display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-12);
+    border-top: 1px solid var(--hairline); padding-top: var(--sp-8);
+  }
+  .field__heading { font-size: var(--fs-h3); margin: var(--sp-3) 0; }
+  .field__body { margin: 0; color: var(--muted); }
+  @media (max-width: 720px) { .fields { grid-template-columns: 1fr; gap: var(--sp-8); } }
+</style>

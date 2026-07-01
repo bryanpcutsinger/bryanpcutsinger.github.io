@@ -1,0 +1,47 @@
+{
+  "_note": "Bryan's public writing. Two lists: `essays` (op-eds/commentary) and `press` (interviews, podcasts, mentions). Each item: date (display string), title, outlet, url, kind. Set placeholder:true on any row that is not yet real — it renders dimmed with a chip and MUST NOT be presented as a real, verified link. Replace with real, verified URLs before removing placeholder. NEVER invent a title or URL.",
+  "essays": [
+    {
+      "date": "20XX",
+      "title": "[PLACEHOLDER] Essay or op-ed title",
+      "outlet": "National Review",
+      "url": "",
+      "kind": "Commentary",
+      "placeholder": true
+    },
+    {
+      "date": "20XX",
+      "title": "[PLACEHOLDER] Second essay title",
+      "outlet": "The Hill",
+      "url": "",
+      "kind": "Commentary",
+      "placeholder": true
+    },
+    {
+      "date": "20XX",
+      "title": "[PLACEHOLDER] Third essay title",
+      "outlet": "The Washington Examiner",
+      "url": "",
+      "kind": "Commentary",
+      "placeholder": true
+    }
+  ],
+  "press": [
+    {
+      "date": "20XX",
+      "title": "[PLACEHOLDER] Interview or podcast appearance",
+      "outlet": "Outlet / program name",
+      "url": "",
+      "kind": "Interview",
+      "placeholder": true
+    },
+    {
+      "date": "20XX",
+      "title": "[PLACEHOLDER] Media mention or quote",
+      "outlet": "Outlet name",
+      "url": "",
+      "kind": "Mention",
+      "placeholder": true
+    }
+  ]
+}

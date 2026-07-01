@@ -1,177 +1,229 @@
 ---
 import MarketingLayout from '../layouts/MarketingLayout.astro';
-import Hero from '../components/marketing/Hero.astro';
+import PageHead from '../components/marketing/PageHead.astro';
 import Section from '../components/marketing/Section.astro';
-import SectionHeading from '../components/marketing/SectionHeading.astro';
-import TopicGrid from '../components/marketing/TopicGrid.astro';
-import AsSeenIn from '../components/marketing/AsSeenIn.astro';
-import TestimonialRow from '../components/marketing/TestimonialRow.astro';
+import Button from '../components/marketing/Button.astro';
 import DownloadCard from '../components/marketing/DownloadCard.astro';
 import BookingForm from '../components/marketing/BookingForm.astro';
-import CTABand from '../components/marketing/CTABand.astro';
-import PortraitFigure from '../components/marketing/PortraitFigure.astro';
 
-import speakingHero from '../assets/speaking-hero.jpg';
 import topicsData from '../data/topics.json';
 import testimonialsData from '../data/testimonials.json';
-import logosData from '../data/logos.json';
 
-const topics = topicsData.topics; // full list, no outbound links here
-const testimonials = testimonialsData.items;
+const talks = topicsData.topics;
+const testimonials = testimonialsData.items ?? [];
 
-// PLACEHOLDER — Bryan: confirm which audience types are accurate.
+const formats = [
+  { name: 'Keynotes', note: 'A signature talk shaped to your theme and audience.' },
+  { name: 'Lectures & campus visits', note: 'For universities, honors programs, and student groups.' },
+  { name: 'Panels & moderated conversations', note: 'On monetary policy, inflation, and political economy.' },
+  { name: 'Workshops & seminars', note: 'Smaller, participatory sessions for professional groups.' },
+  { name: 'Virtual talks & webinars', note: 'Remote keynotes and Q&A for distributed audiences.' },
+];
+
 const audiences = [
   'Universities & academic events',
   'Conferences & summits',
+  'Associations & professional groups',
   'Policy organizations & think tanks',
-  'Professional & corporate audiences',
-  'Student organizations',
+  'Corporate & executive audiences',
 ];
+
+const mailto =
+  'mailto:bcutsinger@fau.edu?subject=' +
+  encodeURIComponent('Speaking inquiry');
 ---
 <MarketingLayout
   title="Speaking — Bryan Cutsinger"
-  description="Invite Bryan Cutsinger to speak. Keynotes and lectures on monetary policy, economic history, and public choice — the economics behind the headlines, made clear for any audience."
+  description="Invite Bryan Cutsinger to speak on money, inflation, sound monetary rules, and public choice — serious economics in plain language for universities, conferences, associations, and corporate audiences."
 >
-  <Hero
-    eyebrow="Speaking"
-    headline="Bring the economics behind the headlines to your audience."
-    subhead="An economist who can make monetary policy, economic history, and the incentives behind public policy genuinely clear — and genuinely interesting — to people who don't live in the seminar room."
-    primaryCta={{ label: 'Check availability', href: '#book' }}
-    secondaryCta={{ label: 'See topics', href: '#topics' }}
+  <PageHead
+    kicker="Speaking"
+    edition="Booking open"
+    headline="Economic ideas your audience can use."
+    lede="I connect monetary policy, economic history, and public choice to the questions facing students, professionals, and civic audiences — serious economics in plain language, shaped to your event."
   >
-    <PortraitFigure
-      slot="media"
-      src={speakingHero}
-      ratio="portrait"
-      alt="Bryan Cutsinger presenting at Florida Atlantic University"
-    />
-  </Hero>
+    <Fragment slot="headline">
+      Economic ideas your audience can <em>use</em>.
+    </Fragment>
+  </PageHead>
 
-  <!-- Signature topics -->
+  <!-- Primary booking affordance up top -->
+  <Section variant="surface">
+    <div class="book-lead">
+      <div class="book-lead__cta">
+        <Button href="#book" variant="primary">Check availability</Button>
+        <a class="book-lead__mail" href={mailto}>or email me directly ↗</a>
+      </div>
+      <p class="book-lead__fee">
+        <span class="label label--accent">Fees</span>
+        Fee range and availability on request. Honorarium and workshop rates vary
+        by format, audience, and travel — <a href="#book">tell me about your
+        event</a> and I'll send details.
+      </p>
+    </div>
+  </Section>
+
+  <!-- Signature topics as outcomes -->
   <Section variant="surface" id="topics">
-    <SectionHeading
-      eyebrow="Signature talks"
-      heading="What I speak about."
-      lede="Each talk is tailored to the audience and the occasion. These are starting points — tell me who's in the room and we'll shape it together."
-    />
-    <TopicGrid topics={topics} columns={2} />
+    <div class="head">
+      <p class="kicker">What I speak about</p>
+      <h2>Signature talks.</h2>
+      <p class="lede">
+        Starting points, not scripts — each talk is adjusted to the host,
+        audience, and occasion.
+      </p>
+    </div>
+    <ol class="topics">
+      {
+        talks.map((t) => (
+          <li class="topic">
+            <p class="topic__meta label label--accent">{t.format} · {t.audience}</p>
+            <h3 class="topic__title">{t.title}</h3>
+            <p class="topic__dek">{t.description}</p>
+          </li>
+        ))
+      }
+    </ol>
     <p class="topics-note">
-      Looking for something specific? I regularly build custom talks around a
-      host's theme. <a href="#book">Tell me what you have in mind.</a>
+      Need a different angle? Share the theme and audience, and I'll shape a talk
+      around it. <a href="#book">Tell me what you have in mind.</a>
     </p>
   </Section>
 
-  <!-- Who I speak to -->
+  <!-- Video reel slot (graceful until a clip exists) -->
   <Section variant="raised">
-    <SectionHeading eyebrow="Who I speak to" heading="Audiences." />
-    <ul class="audience-list">
-      {audiences.map((a) => <li>{a}</li>)}
-    </ul>
+    <div class="head"><p class="kicker">On the stage</p><h2>See a talk.</h2></div>
+    <div class="reel">
+      <p class="reel__note">
+        A short speaking reel is on the way. In the meantime, I'm glad to share
+        video, references, and past-talk details on request.
+      </p>
+      <Button href="#book" variant="secondary">Request video & references</Button>
+    </div>
   </Section>
 
-  <!-- Social proof -->
+  <!-- Formats + audiences -->
   <Section variant="surface">
-    <AsSeenIn label="Featured in" logos={logosData.logos} />
-    {
-      testimonials.length > 0 && (
-        <div class="speaking-testimonials">
-          <TestimonialRow items={testimonials} />
-        </div>
-      )
-    }
-  </Section>
-
-  <!-- Formats, logistics, one-sheet -->
-  <Section variant="raised">
-    <div class="logistics">
-      <div class="logistics__col">
-        <SectionHeading eyebrow="Formats" heading="How we can work together." />
-        <ul class="logistics__list">
-          <li>Keynotes</li>
-          <li>Lectures &amp; campus visits</li>
-          <li>Panels &amp; moderated conversations</li>
-          <li>Workshops &amp; seminars</li>
-          <li>Virtual talks &amp; webinars</li>
+    <div class="two-col">
+      <div>
+        <div class="head"><p class="kicker">Formats</p><h2>How we can work together.</h2></div>
+        <ul class="ledger">
+          {formats.map((f) => (
+            <li>
+              <span class="ledger__name">{f.name}</span>
+              <span class="ledger__note">{f.note}</span>
+            </li>
+          ))}
         </ul>
-        <p class="logistics__fee">
-          Fees depend on format, audience, and travel. <a href="#book">Get in
-          touch</a> and I'll send details.
-        </p>
       </div>
-      <div class="logistics__col">
-        <DownloadCard
-          title="Speaker one-sheet"
-          description="Bio, signature topics, and booking details on a single page — handy for sharing with your committee."
-          requestHref="#book"
-        />
+      <div>
+        <div class="head"><p class="kicker">Audiences</p><h2>Who I speak to.</h2></div>
+        <ul class="chips">
+          {audiences.map((a) => <li>{a}</li>)}
+        </ul>
       </div>
     </div>
   </Section>
 
-  <!-- Booking -->
-  <Section variant="surface" id="book" width="wide">
-    <SectionHeading
-      eyebrow="Get in touch"
-      heading="Invite Bryan to speak."
-      lede="Tell me about your event and I'll get back to you personally. The more detail you can share, the faster I can say yes."
+  {
+    testimonials.length > 0 && (
+      <Section variant="raised">
+        <div class="head"><p class="kicker">What hosts say</p><h2>From the room.</h2></div>
+        <ul class="quotes">
+          {testimonials.map((q: any) => (
+            <li class="quote">
+              <blockquote>{q.quote}</blockquote>
+              <p class="quote__by label">{q.name}{q.title ? ` · ${q.title}` : ''}</p>
+            </li>
+          ))}
+        </ul>
+      </Section>
+    )
+  }
+
+  <!-- One-sheet -->
+  <Section variant="surface">
+    <DownloadCard
+      title="Speaker one-sheet"
+      description="Bio, signature topics, formats, and booking details on a single page — handy for sharing with your committee."
+      requestHref="#book"
+      requestLabel="Request the one-sheet"
     />
-    <BookingForm />
   </Section>
 
-  <CTABand
-    heading="Let's give your audience the economics they actually want."
-    cta={{ label: 'Start a conversation', href: '#book' }}
-  />
+  <!-- Booking -->
+  <Section variant="ink" id="book">
+    <div class="head"><p class="kicker">Get in touch</p><h2>Invite Bryan to speak.</h2>
+      <p class="lede book-lede">
+        Tell me about your event and I'll get back to you personally. The more
+        detail you can share, the faster I can say yes. Prefer email? Reach me at
+        <a href={mailto}>bcutsinger@fau.edu</a>.
+      </p>
+    </div>
+    <BookingForm />
+  </Section>
 </MarketingLayout>
 
 <style>
-  .topics-note {
-    margin: var(--sp-12) auto 0;
-    text-align: center;
-    color: var(--text-muted);
-    max-width: 60ch;
-  }
-  .audience-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  .head { margin-bottom: var(--sp-8); }
+  .head h2 { max-width: 22ch; }
+  .head .lede { margin-top: var(--sp-3); }
+  :global(.section--ink) .book-lede a { color: var(--accent-on-ink); }
+
+  /* booking lead */
+  .book-lead {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: var(--sp-4);
+    grid-template-columns: auto 1fr;
+    gap: var(--sp-8) var(--sp-16);
+    align-items: center;
   }
-  .audience-list li {
-    background: var(--surface);
-    border: 1px solid var(--hairline);
-    border-radius: var(--radius);
-    padding: var(--sp-4) var(--sp-6);
-    font-weight: 500;
+  .book-lead__cta { display: flex; align-items: center; gap: var(--sp-4); flex-wrap: wrap; }
+  .book-lead__mail { font-family: var(--font-label); font-size: 0.9rem; }
+  .book-lead__fee { margin: 0; color: var(--muted); max-width: 60ch; }
+  .book-lead__fee .label { display: block; margin-bottom: var(--sp-2); }
+
+  /* topics */
+  .topics {
+    list-style: none; margin: 0; padding: var(--sp-8) 0 0;
+    display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-12) var(--sp-16);
+    border-top: 1px solid var(--hairline);
   }
-  .speaking-testimonials {
-    margin-top: var(--sp-16);
+  .topic__meta { display: block; margin-bottom: var(--sp-3); }
+  .topic__title { font-size: var(--fs-h3); margin: 0 0 var(--sp-3); }
+  .topic__dek { margin: 0; color: var(--muted); }
+  .topics-note { margin: var(--sp-12) auto 0; text-align: center; color: var(--muted); max-width: 56ch; }
+
+  /* reel */
+  .reel {
+    border: 1px dashed var(--rule-strong);
+    border-radius: var(--radius-lg);
+    padding: clamp(var(--sp-8), 4vw, var(--sp-16));
+    display: flex; flex-direction: column; gap: var(--sp-6);
+    align-items: flex-start;
+    background: var(--paper);
   }
-  .logistics {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--sp-16);
-    align-items: start;
+  .reel__note { margin: 0; color: var(--muted); max-width: 54ch; }
+
+  /* two-col formats/audiences */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-16); align-items: start; }
+  .ledger { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--hairline); }
+  .ledger li { display: flex; flex-direction: column; gap: 2px; padding: var(--sp-4) 0; border-bottom: 1px solid var(--hairline); }
+  .ledger__name { font-family: var(--font-display); font-size: 1.15rem; color: var(--ink); }
+  .ledger__note { color: var(--muted); font-size: 0.95rem; }
+  .chips { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--sp-2); }
+  .chips li {
+    font-family: var(--font-display); font-size: 1.2rem; color: var(--ink);
+    padding: var(--sp-3) 0; border-bottom: 1px solid var(--hairline);
   }
-  .logistics__list {
-    list-style: none;
-    margin: 0 0 var(--sp-6);
-    padding: 0;
-  }
-  .logistics__list li {
-    padding: var(--sp-3) 0;
-    border-bottom: 1px solid var(--hairline);
-    font-size: 1.05rem;
-  }
-  .logistics__fee {
-    color: var(--text-muted);
-  }
+
+  /* quotes */
+  .quotes { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-8); }
+  .quote blockquote { font-family: var(--font-display); font-size: 1.35rem; line-height: 1.35; margin: 0 0 var(--sp-3); color: var(--ink); }
+  .quote__by { color: var(--muted); }
+
   @media (max-width: 820px) {
-    .logistics {
-      grid-template-columns: 1fr;
-      gap: var(--sp-8);
-    }
+    .book-lead { grid-template-columns: 1fr; gap: var(--sp-6); }
+    .topics { grid-template-columns: 1fr; gap: var(--sp-8); }
+    .two-col { grid-template-columns: 1fr; gap: var(--sp-12); }
   }
 </style>

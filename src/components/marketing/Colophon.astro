@@ -1,0 +1,50 @@
+---
+// Colophon — the page-specific closing ask on a claret field (bookends the
+// ClaretOpener). Left-aligned with a mono kicker + oversized serif ask — a
+// deliberate departure from the old centered CTABand. Copy varies per page.
+import Button from './Button.astro';
+
+interface Props {
+  kicker?: string;
+  heading: string;
+  subtext?: string;
+  cta: { label: string; href: string };
+}
+const { kicker = 'Booking', heading, subtext, cta } = Astro.props;
+---
+<section class="colophon">
+  <div class="colophon__inner">
+    <p class="kicker">{kicker}</p>
+    <h2 class="colophon__ask">{heading}</h2>
+    {subtext && <p class="colophon__sub">{subtext}</p>}
+    <Button href={cta.href} variant="on-claret">{cta.label}</Button>
+  </div>
+</section>
+
+<style>
+  .colophon {
+    background: linear-gradient(157deg, var(--accent), var(--claret-deep) 82%);
+    color: var(--on-claret);
+    padding-block: var(--section-y-ink);
+  }
+  .colophon__inner {
+    max-width: var(--container);
+    margin-inline: auto;
+    padding-inline: var(--sp-6);
+  }
+  .colophon .kicker {
+    color: var(--on-claret-muted);
+  }
+  .colophon__ask {
+    font-size: clamp(2rem, 1.4rem + 2.6vw, 3rem);
+    color: var(--on-claret);
+    max-width: 20ch;
+    margin: 0 0 var(--sp-4);
+  }
+  .colophon__sub {
+    font-size: var(--fs-lead);
+    color: var(--on-claret-muted);
+    max-width: 46ch;
+    margin: 0 0 var(--sp-8);
+  }
+</style>

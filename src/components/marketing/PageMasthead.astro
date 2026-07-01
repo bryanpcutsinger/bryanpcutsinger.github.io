@@ -1,0 +1,99 @@
+---
+// PageMasthead — the lighter interior-page header for academic/department pages
+// (Research, Writing). The full-bleed ClaretOpener stays reserved for the three
+// "front" pages (Home / Speaking / About); interior departments open with this
+// quieter masthead instead: a mono runline (kicker left, edition right) framed by
+// engraved rules, an oversized Newsreader H1, and an optional dek. Reads like the
+// masthead of a section in a review. Sits on the oat surface under the sticky ink
+// header and pads its own top by --header-h so it clears the bar.
+//
+// Rich H1 markup can be passed via the `headline` slot; otherwise `headline` prints.
+interface Props {
+  runline: string; // mono kicker, e.g. "Research"
+  edition?: string; // right-aligned label, e.g. "Selected work"
+  headline: string;
+  dek?: string;
+}
+const { runline, edition, headline, dek } = Astro.props;
+const hasHeadlineSlot = Astro.slots.has('headline');
+---
+<header class="masthead">
+  <div class="masthead__inner">
+    <div class="masthead__runline">
+      <span class="masthead__kicker">{runline}</span>
+      {edition && <span class="masthead__edition">{edition}</span>}
+    </div>
+    <h1 class="masthead__headline">
+      {hasHeadlineSlot ? <slot name="headline" /> : headline}
+    </h1>
+    {dek && <p class="masthead__dek">{dek}</p>}
+    <slot />
+  </div>
+</header>
+
+<style>
+  .masthead {
+    background: var(--surface);
+    padding-top: calc(var(--header-h) + var(--sp-16));
+    padding-bottom: var(--sp-12);
+  }
+  .masthead__inner {
+    max-width: var(--container);
+    margin-inline: auto;
+    padding-inline: var(--sp-6);
+  }
+
+  /* runline: mono kicker + edition, bracketed by a top hairline */
+  .masthead__runline {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--sp-4);
+    padding-top: var(--sp-3);
+    border-top: 1px solid var(--ink);
+    margin-bottom: var(--sp-8);
+  }
+  .masthead__kicker,
+  .masthead__edition {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .masthead__kicker {
+    color: var(--accent);
+  }
+  .masthead__edition {
+    color: var(--text-muted);
+    text-align: right;
+  }
+
+  .masthead__headline {
+    font-size: var(--fs-display-lg);
+    line-height: 1.05;
+    margin: 0;
+    max-width: 18ch;
+  }
+  .masthead__headline :global(em) {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .masthead__dek {
+    font-size: var(--fs-lead);
+    line-height: 1.55;
+    color: var(--text-muted);
+    margin: var(--sp-6) 0 0;
+    max-width: 58ch;
+  }
+
+  @media (max-width: 640px) {
+    .masthead {
+      padding-top: calc(var(--header-h) + var(--sp-8));
+    }
+    .masthead__edition {
+      display: none;
+    }
+  }
+</style>
