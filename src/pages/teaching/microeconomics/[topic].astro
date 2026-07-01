@@ -89,21 +89,10 @@ const isDraft = (data.status ?? '').toLowerCase() !== 'approved';
 ---
 <MarketingLayout title={`${data.title} — Bryan Cutsinger`} description={metaDescription()}>
   <article class="topic">
-    <header class="topic__head">
-      <Eyebrow text={topicCode ? `${courseLabel} · ${topicCode}` : courseLabel} />
-      {
-        isDraft && (
-          <p class="topic__draft">
-            Draft preview — not published. Visible only in local <code>dev</code>.
-          </p>
-        )
-      }
-    </header>
-
-    <div class="topic__body">
+    <div class="topic__layout">
       {
         toc.length > 1 && (
-          <nav class="toc" aria-label="On this page">
+          <nav class="toc-sidebar" aria-label="On this page">
             <p class="toc__label">On this page</p>
             <ol class="toc__list">
               {toc.map((h) => (
@@ -116,55 +105,68 @@ const isDraft = (data.status ?? '').toLowerCase() !== 'approved';
         )
       }
 
-      <div class="prose">
-        <Content />
+      <div class="topic__main">
+        <header class="topic__head">
+          <Eyebrow text={topicCode ? `${courseLabel} · ${topicCode}` : courseLabel} />
+          {
+            isDraft && (
+              <p class="topic__draft">
+                Draft preview — not published. Visible only in local <code>dev</code>.
+              </p>
+            )
+          }
+        </header>
+
+        <div class="prose">
+          <Content />
+        </div>
+
+        {
+          data.slides.length > 0 && (
+            <section class="topic__slides">
+              <h2 class="topic__slides-h">Slides</h2>
+              <div class="topic__slides-grid">
+                {data.slides.map((s: { label: string; file: string }) => (
+                  <DownloadCard
+                    title={s.label}
+                    fileUrl={`/downloads/${s.file}`}
+                    downloadLabel="Download the slides (PDF)"
+                    requestLabel="Request the slides"
+                  />
+                ))}
+              </div>
+            </section>
+          )
+        }
+
+        <nav class="pager" aria-label="Topics">
+          <div class="pager__cell">
+            {
+              prev && (
+                <a href={`/teaching/${COURSE}/${prev.slug}/`} class="pager__link">
+                  <span class="pager__dir">← Previous</span>
+                  <span class="pager__title">{prev.title}</span>
+                </a>
+              )
+            }
+          </div>
+          <div class="pager__cell pager__cell--right">
+            {
+              next && (
+                <a href={`/teaching/${COURSE}/${next.slug}/`} class="pager__link">
+                  <span class="pager__dir">Next →</span>
+                  <span class="pager__title">{next.title}</span>
+                </a>
+              )
+            }
+          </div>
+        </nav>
+
+        <p class="topic__back">
+          <a href={`/teaching/${COURSE}/`}>← Back to the course</a>
+        </p>
       </div>
     </div>
-
-    {
-      data.slides.length > 0 && (
-        <section class="topic__slides">
-          <h2 class="topic__slides-h">Slides</h2>
-          <div class="topic__slides-grid">
-            {data.slides.map((s: { label: string; file: string }) => (
-              <DownloadCard
-                title={s.label}
-                fileUrl={`/downloads/${s.file}`}
-                downloadLabel="Download the slides (PDF)"
-                requestLabel="Request the slides"
-              />
-            ))}
-          </div>
-        </section>
-      )
-    }
-
-    <nav class="pager" aria-label="Topics">
-      <div class="pager__cell">
-        {
-          prev && (
-            <a href={`/teaching/${COURSE}/${prev.slug}/`} class="pager__link">
-              <span class="pager__dir">← Previous</span>
-              <span class="pager__title">{prev.title}</span>
-            </a>
-          )
-        }
-      </div>
-      <div class="pager__cell pager__cell--right">
-        {
-          next && (
-            <a href={`/teaching/${COURSE}/${next.slug}/`} class="pager__link">
-              <span class="pager__dir">Next →</span>
-              <span class="pager__title">{next.title}</span>
-            </a>
-          )
-        }
-      </div>
-    </nav>
-
-    <p class="topic__back">
-      <a href={`/teaching/${COURSE}/`}>← Back to the course</a>
-    </p>
   </article>
 
   <CTABand
@@ -175,9 +177,28 @@ const isDraft = (data.status ?? '').toLowerCase() !== 'approved';
 
 <style>
   .topic {
-    max-width: var(--reading);
+    max-width: 64rem;
     margin-inline: auto;
     padding: var(--sp-16) var(--sp-6) var(--sp-24);
+  }
+
+  /* Two-column reading layout: sticky "On this page" sidebar (left) + the
+     reading column. Collapses to a single centered reading column below 60rem
+     and whenever a post is too short to warrant a TOC. */
+  .topic__layout {
+    display: grid;
+    grid-template-columns: minmax(0, var(--reading));
+    justify-content: center;
+    gap: var(--sp-12);
+    align-items: start;
+  }
+  .topic__main {
+    min-width: 0;
+  }
+  @media (min-width: 60rem) {
+    .topic__layout:has(> .toc-sidebar) {
+      grid-template-columns: 13rem minmax(0, var(--reading));
+    }
   }
   .topic__head {
     margin-bottom: var(--sp-8);
@@ -192,13 +213,18 @@ const isDraft = (data.status ?? '').toLowerCase() !== 'approved';
     border-radius: 0 var(--radius) var(--radius) 0;
   }
 
-  /* In-page TOC — quiet, bordered block above the prose. */
-  .toc {
-    margin-bottom: var(--sp-12);
-    padding: var(--sp-4) var(--sp-6);
-    border: 1px solid var(--hairline);
-    border-radius: var(--radius);
-    background: var(--surface-raised);
+  /* On-page TOC — sticky left sidebar on wide viewports; hidden on narrow
+     screens, where the reading column takes the full width. */
+  .toc-sidebar {
+    display: none;
+  }
+  @media (min-width: 60rem) {
+    .toc-sidebar {
+      display: block;
+      position: sticky;
+      top: var(--sp-16);
+      align-self: start;
+    }
   }
   .toc__label {
     margin: 0 0 var(--sp-2);
@@ -313,6 +339,198 @@ const isDraft = (data.status ?? '').toLowerCase() !== 'approved';
     margin: var(--sp-12) 0;
   }
 
+  /* ---- teaching callouts (econ- design system) ---------------------------
+     Four visually distinct devices so a definition, a retrieval prompt, a
+     source quote, and the end summary never look alike. Referenced from posts
+     via raw-HTML <aside class="econ-callout ..."> / <blockquote class="econ-quote">.
+     Additive: leaves the base prose rules above untouched. */
+
+  /* Lead paragraph (dek) — opt-in via <p class="econ-dek"> on the opener. */
+  .prose :global(.econ-dek) {
+    font-family: var(--font-display);
+    font-size: var(--fs-lead);
+    line-height: 1.5;
+    color: var(--ink);
+    margin: 0 0 var(--sp-6);
+  }
+
+  .prose :global(.econ-callout) {
+    margin: var(--sp-8) 0;
+    padding: var(--sp-4) var(--sp-6);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  .prose :global(.econ-callout__label) {
+    margin: 0 0 var(--sp-3);
+    font-family: var(--font-body);
+    font-size: var(--fs-eyebrow);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .prose :global(.econ-callout p) {
+    margin: 0 0 var(--sp-2);
+  }
+  .prose :global(.econ-callout p:last-child) {
+    margin-bottom: 0;
+  }
+
+  /* Key-term definitions — white card, brass top-rule, Fraunces terms. */
+  .prose :global(.econ-termset) {
+    background: var(--surface-raised);
+    border: 1px solid var(--hairline);
+    border-top: 3px solid var(--accent);
+  }
+  .prose :global(.econ-term-list) {
+    display: grid;
+    gap: var(--sp-3);
+    margin: 0;
+  }
+  .prose :global(.econ-term-list > div) {
+    display: grid;
+    grid-template-columns: 10rem 1fr;
+    gap: var(--sp-1) var(--sp-4);
+    padding-top: var(--sp-3);
+    border-top: 1px solid var(--hairline);
+  }
+  .prose :global(.econ-term-list > div:first-child) {
+    padding-top: 0;
+    border-top: 0;
+  }
+  .prose :global(.econ-term-list dt) {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .prose :global(.econ-term-list dd) {
+    margin: 0;
+    color: var(--text-muted);
+  }
+
+  /* Definition — an emphasized single-term card. Brass top-rule and label like
+     the termset, but the definition text itself is set a touch larger and
+     medium-weight so it stands apart from the surrounding body prose. */
+  .prose :global(.econ-def) {
+    background: var(--surface-raised);
+    border: 1px solid var(--hairline);
+    border-top: 3px solid var(--accent);
+  }
+  .prose :global(.econ-def p:not(.econ-callout__label)) {
+    font-size: 1.15rem;
+    font-weight: 500;
+    line-height: 1.55;
+    color: var(--ink);
+  }
+
+  /* Learning objectives — a top-of-post card. The lead <p> reads as intro text;
+     the <ul>/<li> get comfortable padding and item spacing. Same card + label
+     styling as the other callouts. */
+  .prose :global(.econ-objectives) {
+    background: var(--surface-raised);
+    border: 1px solid var(--hairline);
+    border-top: 3px solid var(--accent);
+  }
+  .prose :global(.econ-objectives ul) {
+    margin: var(--sp-3) 0 0;
+    padding-left: 1.4rem;
+    display: grid;
+    gap: var(--sp-2);
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  .prose :global(.econ-objectives li) {
+    margin: 0;
+  }
+
+  /* Pause and check — tinted retrieval prompt with a brass "?" chip. */
+  .prose :global(.econ-check) {
+    display: grid;
+    grid-template-columns: 2rem 1fr;
+    column-gap: var(--sp-4);
+    background: var(--accent-tint);
+    border: 1px dashed var(--accent);
+    border-left: 3px solid var(--accent);
+  }
+  .prose :global(.econ-check::before) {
+    content: "?";
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    align-self: start;
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--font-display);
+    font-weight: 700;
+  }
+  .prose :global(.econ-check > *) {
+    grid-column: 2;
+  }
+
+  /* Source quote — reserved for real quotations (not instructional boxes). */
+  .prose :global(blockquote.econ-quote) {
+    margin: var(--sp-8) 0;
+    padding: var(--sp-1) 0 var(--sp-1) var(--sp-6);
+    border-left: 4px double var(--accent);
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    line-height: 1.5;
+    font-style: normal;
+  }
+  .prose :global(blockquote.econ-quote p) {
+    margin: 0;
+    color: var(--ink);
+    font-style: normal;
+  }
+  .prose :global(blockquote.econ-quote footer) {
+    margin-top: var(--sp-3);
+    font-family: var(--font-body);
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+  }
+
+  /* End-of-post review — the single consolidated summary. */
+  .prose :global(.econ-review) {
+    margin: var(--sp-12) 0 var(--sp-8);
+    padding: var(--sp-6);
+    background: var(--surface-raised);
+    border: 1px solid var(--hairline);
+    border-top: 5px solid var(--ink);
+    border-radius: var(--radius);
+  }
+  .prose :global(.econ-review > h2) {
+    margin-top: 0;
+  }
+  .prose :global(.econ-review__section + .econ-review__section) {
+    margin-top: var(--sp-6);
+    padding-top: var(--sp-6);
+    border-top: 1px solid var(--hairline);
+  }
+  .prose :global(.econ-review__section > h3) {
+    margin-top: 0;
+  }
+
+  /* Figure wrapper — hairline-framed embed with a real <figcaption>. */
+  .prose :global(.econ-figure) {
+    margin: var(--sp-8) 0 var(--sp-2);
+  }
+  .prose :global(.econ-figure figcaption) {
+    margin-top: var(--sp-3);
+    font-size: var(--fs-small);
+    line-height: 1.5;
+    color: var(--text-muted);
+  }
+  .prose :global(.econ-figure figcaption strong) {
+    color: var(--ink);
+  }
+
   /* Figures (SVGs served from /public): centered, hairline-framed, with the
      immediately-following italic paragraph styled as a caption (best-effort). */
   .prose :global(img) {
@@ -323,7 +541,13 @@ const isDraft = (data.status ?? '').toLowerCase() !== 'approved';
     background: var(--surface-raised);
     padding: var(--sp-4);
   }
-  .prose :global(p > em:only-child) {
+  /* Caption heuristic: an all-italic paragraph *immediately after an image*
+     renders as a centered caption. Scoped to `p:has(> img) + p` so it never
+     catches an inline first-use term whose paragraph happens to contain a
+     single <em> (`:only-child` ignores text nodes, so the bare selector
+     over-matched and center-blocked ordinary italic terms). Figure embeds now
+     use <figure class="econ-figure"><figcaption>, which this leaves untouched. */
+  .prose :global(p:has(> img) + p > em:only-child) {
     display: block;
     text-align: center;
     font-size: var(--fs-small);

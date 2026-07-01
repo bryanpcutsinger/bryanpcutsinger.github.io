@@ -3,21 +3,29 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Interactive production possibilities frontier</title>
+<title>Interactive production possibilities frontier: food vs. clean air</title>
 <!--
   Interactive PPF for the T1 blog post (website-styled, not FAU).
   Self-contained: no libraries, no network. The static FAU figure
   (figures/t01-ppf.{tex,svg}) is the SLIDE version and is untouched.
 
-  Same geometry as the static figure: concave Food/Housing frontier,
-  quarter-ellipse with food-max (5,0) and housing-max (0,5). A point
-  is draggable ALONG the frontier; droplines + LIVE QUANTITIES read off
-  the x and y axes; the opportunity-cost trade-off updates below.
+  Same geometry as the static figure: concave Food/Clean-air frontier,
+  quarter-ellipse with food-max (5,0) and clean-air-max (0,5). In DATA
+  units (both goods run 0..5) the frontier is a circle of radius 5:
+  food^2 + clean_air^2 = 25.
 
-  The axes extend past the intercepts so the frontier no longer crowds
-  the arrowheads. No-JS / print: the base figure (curve, axes, point at
-  E, droplines, axis quantities, trade-off) is real SVG markup; the
-  script only ATTACHES interactivity, so it degrades gracefully.
+  The point can be dragged ANYWHERE in the feasible set:
+    - ON the frontier (efficient) -> more of one good REQUIRES giving up
+      the other; the opportunity-cost trade-off updates below.
+    - INSIDE the frontier (wasteful) -> you can get more of one good
+      WITHOUT giving up the other by moving out to the frontier.
+  It travels the full frontier, corner to corner, reaching both axes.
+
+  Droplines + LIVE QUANTITIES read off the x (Food) and y (Clean air) axes.
+  The axes extend past the intercepts so the frontier no longer crowds the
+  arrowheads. No-JS / print: the base figure (curve, axes, point at E,
+  droplines, axis quantities, readout) is real SVG markup; the script only
+  ATTACHES interactivity, so it degrades gracefully.
 -->
 <style>
   :root {
@@ -50,7 +58,9 @@
   .axis      { stroke: var(--muted); stroke-width: 1.4; }
   .frontier  { stroke: var(--ink); stroke-width: 2.6; fill: none;
                stroke-linecap: round; }
-  .feasible  { fill: var(--accent-tint); opacity: 0.5; stroke: none; }
+  /* feasible set is also a drag target (press inside to pick a wasteful mix) */
+  .feasible  { fill: var(--accent-tint); opacity: 0.5; stroke: none;
+               touch-action: none; cursor: grab; }
   .drop      { stroke: var(--hairline); stroke-width: 1.6;
                stroke-dasharray: 5 4; }
 
@@ -85,10 +95,10 @@
 <div class="ppf">
   <!-- viewBox 440 x 540. Plot occupies the top; readout band below.
        Pixel frame: origin (64,360). Frontier intercepts: Food 5 -> x=380,
-       Housing 5 -> y=56. Axes extend PAST the intercepts (x to 415, y to 28)
+       Clean air 5 -> y=56. Axes extend PAST the intercepts (x to 415, y to 28)
        so the curve no longer crowds the arrowheads. -->
   <svg id="ppf" viewBox="0 0 440 540" role="group"
-       aria-label="Production possibilities frontier for food and housing. Drag the point along the curve to see the trade-off.">
+       aria-label="Production possibilities frontier for food and clean air. Drag the point to explore efficient (on the frontier) and wasteful (inside the frontier) production.">
     <defs>
       <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
               orient="auto" markerUnits="userSpaceOnUse">
@@ -96,24 +106,25 @@
       </marker>
     </defs>
 
-    <!-- feasible set (interior) -->
-    <path class="feasible" d="M64,360 L64,56 A316,304 0 0 1 380,360 Z" />
+    <!-- feasible set (interior) — also a drag target -->
+    <path id="feasible" class="feasible" d="M64,360 L64,56 A316,304 0 0 1 380,360 Z" />
 
     <!-- axes (drawn before frontier so the curve sits on top); extend past intercepts -->
     <line class="axis" x1="64" y1="360" x2="415" y2="360" marker-end="url(#arrow)" />
     <line class="axis" x1="64" y1="360" x2="64"  y2="28"  marker-end="url(#arrow)" />
 
-    <!-- the concave frontier: housing-max (0,5)=(64,56) to food-max (5,0)=(380,360) -->
+    <!-- the concave frontier: clean-air-max (0,5)=(64,56) to food-max (5,0)=(380,360) -->
     <path class="frontier" d="M64,56 A316,304 0 0 1 380,360" />
 
-    <!-- axis + corner labels -->
+    <!-- axis + corner labels (max-labels held clear of the axis ends so they
+         never collide with the live point / quantity readouts) -->
     <text class="axlabel" x="222" y="392" text-anchor="middle">Food</text>
     <text class="axlabel" x="24" y="208" text-anchor="middle"
-          transform="rotate(-90 24 208)">Housing</text>
-    <text class="maxlabel" x="70" y="50" text-anchor="start">Maximum housing</text>
-    <text class="maxlabel" x="380" y="380" text-anchor="end">Maximum food</text>
+          transform="rotate(-90 24 208)">Clean air</text>
+    <text class="maxlabel" x="80" y="42" text-anchor="start">Maximum clean air</text>
+    <text class="maxlabel" x="379" y="400" text-anchor="middle">Maximum food</text>
 
-    <!-- droplines (initial: point E = Food 4, Housing 3 -> px 316.8,177.6) -->
+    <!-- droplines (initial: point E = Food 4, Clean air 3 -> px 316.8,177.6) -->
     <line id="dropV" class="drop" x1="316.8" y1="360" x2="316.8" y2="177.6" />
     <line id="dropH" class="drop" x1="64" y1="177.6" x2="316.8" y2="177.6" />
 
@@ -128,14 +139,14 @@
     <circle id="pt"  class="pt"  cx="316.8" cy="177.6" r="7" />
     <!-- focusable proxy for keyboard control -->
     <circle id="ptFocus" class="pt-focus hit" cx="316.8" cy="177.6" r="22"
-            tabindex="0" role="slider" aria-label="Point on the frontier"
-            aria-valuemin="0" aria-valuemax="5" aria-valuenow="3"
-            aria-valuetext="Food 4.0, Housing 3.0" />
+            tabindex="0" role="slider" aria-label="Point in the production set"
+            aria-valuemin="0" aria-valuemax="5" aria-valuenow="4"
+            aria-valuetext="Food 4.0, clean air 3.0. Producing efficiently: one more food costs about 1.33 clean air." />
 
     <!-- readout band -->
     <line class="sep" x1="44" y1="430" x2="396" y2="430" />
-    <text id="rHint"  class="r-hint"  x="220" y="458" text-anchor="middle">Drag the point along the curve.</text>
-    <text id="rTrade" class="r-trade" x="220" y="486" text-anchor="middle">Toward more housing: +1 housing costs ≈ 0.75 food</text>
+    <text id="rHint"  class="r-hint"  x="220" y="458" text-anchor="middle">On the frontier: producing efficiently.</text>
+    <text id="rTrade" class="r-trade" x="220" y="486" text-anchor="middle">+1 food costs ≈ 1.33 clean air</text>
   </svg>
   <noscript>
     <p class="fallback">JavaScript is off, so this frame shows the static frontier. You can also <a href="t01-ppf.svg">open the static PPF image</a>.</p>
@@ -150,27 +161,36 @@
   var hit = document.getElementById('hit');
   var ptFocus = document.getElementById('ptFocus');
   var hitCurve = document.getElementById('hitCurve');
+  var feasible = document.getElementById('feasible');
   var dropV = document.getElementById('dropV');
   var dropH = document.getElementById('dropH');
   var qx = document.getElementById('qx');
   var qy = document.getElementById('qy');
+  var rHint = document.getElementById('rHint');
   var rTrade = document.getElementById('rTrade');
 
   // pixel frame + scale (mirrors the SVG markup above).
-  // X1/Y1 are the FRONTIER INTERCEPT pixels (food=5 / housing=5);
+  // X1/Y1 are the FRONTIER INTERCEPT pixels (food=5 / clean-air=5);
   // the drawn axis lines run past them, but the scale maps 0..5 to X0..X1.
   var R = 5;
   var X0 = 64, X1 = 380, Y0 = 360, Y1 = 56;
-  var fx = function (f) { return X0 + (f / R) * (X1 - X0); };       // food  -> px x
-  var hy = function (h) { return Y0 - (h / R) * (Y0 - Y1); };       // housing -> px y
+  var fx = function (f) { return X0 + (f / R) * (X1 - X0); };       // food      -> px x
+  var ay = function (a) { return Y0 - (a / R) * (Y0 - Y1); };       // clean air -> px y
   var toFood = function (px) { return ((px - X0) / (X1 - X0)) * R; };
-  var toHousing = function (py) { return ((Y0 - py) / (Y0 - Y1)) * R; };
+  var toAir  = function (py) { return ((Y0 - py) / (Y0 - Y1)) * R; };
 
-  // keep the point a hair off the singular corners so the trade-off stays finite
-  var TH_MIN = 4 * Math.PI / 180;
-  var TH_MAX = 86 * Math.PI / 180;
+  // Regime tolerance (DATA units, radius 5). Within TOL of the frontier
+  // radius counts as ON the frontier (efficient); ~1.6% of the radius, so a
+  // hair inside still reads as efficient, but a clear interior mix reads as
+  // wasteful. Snapped points sit at exactly r = R.
+  var TOL = 0.08;
+  // Endpoint epsilon: below this a good is treated as exactly zero, so the
+  // corners say "All food, no clean air" instead of dividing by ~0.
+  var EP = 0.06;
 
-  var theta = Math.atan2(3, 4); // initial E = (Food 4, Housing 3)
+  // State: the point's coordinates in DATA units (0..5), NOT an angle, so an
+  // interior (wasteful) point can be represented as well as a frontier point.
+  var food = 4, air = 3; // initial efficient point E = (Food 4, Clean air 3)
 
   // convert a client event to SVG user coords (handles responsive scaling)
   var spt = svg.createSVGPoint();
@@ -179,10 +199,15 @@
     return spt.matrixTransform(svg.getScreenCTM().inverse());
   }
 
+  // clean air given up per +1 food, phrased for the readout
+  function costPhrase(cost) {
+    if (cost >= 10)  return 'a large amount of clean air';
+    if (cost <= 0.1) return 'very little clean air';
+    return '≈ ' + cost.toFixed(2) + ' clean air';
+  }
+
   function render() {
-    var food = R * Math.cos(theta);
-    var housing = R * Math.sin(theta);
-    var px = fx(food), py = hy(housing);
+    var px = fx(food), py = ay(air);
 
     pt.setAttribute('cx', px);  pt.setAttribute('cy', py);
     hit.setAttribute('cx', px); hit.setAttribute('cy', py);
@@ -195,29 +220,63 @@
 
     // live quantities on the axes (ride the dropline feet)
     qx.setAttribute('x', px); qx.textContent = food.toFixed(1);
-    qy.setAttribute('y', py); qy.textContent = housing.toFixed(1);
+    qy.setAttribute('y', py); qy.textContent = air.toFixed(1);
 
-    // food given up per +1 unit of housing = |dFood/dHousing| = Housing/Food
-    var tradeoff = housing / food;
-    var tradeText;
-    if (tradeoff >= 10) tradeText = 'very large (almost all housing)';
-    else if (tradeoff <= 0.1) tradeText = 'almost nothing';
-    else tradeText = '≈ ' + tradeoff.toFixed(2) + ' food';
+    // regime: is the point on the frontier (efficient) or inside it (wasteful)?
+    var r = Math.sqrt(food * food + air * air);
+    var onFrontier = r >= R - TOL;
 
-    rTrade.textContent = 'Toward more housing: +1 housing costs ' + tradeText;
+    var hint, trade, aria;
+    if (!onFrontier) {
+      // INSIDE the frontier — wasteful. No opportunity-cost trade-off applies:
+      // you can get more of one good WITHOUT giving up the other.
+      hint  = 'Inside the frontier: a wasteful mix.';
+      trade = 'Get more of one good without giving up the other.';
+      aria  = 'Food ' + food.toFixed(1) + ', clean air ' + air.toFixed(1) +
+              '. Inside the frontier, so this mix is wasteful: you can get more ' +
+              'of one good without giving up the other.';
+    } else if (air < EP) {
+      // all-food corner
+      hint  = 'On the frontier: producing efficiently.';
+      trade = 'All food, no clean air.';
+      aria  = 'Food ' + food.toFixed(1) + ', no clean air. Producing efficiently ' +
+              'at the all-food corner.';
+    } else if (food < EP) {
+      // all-clean-air corner
+      hint  = 'On the frontier: producing efficiently.';
+      trade = 'All clean air, no food.';
+      aria  = 'No food, clean air ' + air.toFixed(1) + '. Producing efficiently ' +
+              'at the all-clean-air corner.';
+    } else {
+      // ON the frontier — efficient. Getting +1 food REQUIRES giving up clean
+      // air. Slope of food^2 + air^2 = 25 is d(air)/d(food) = -food/air, so the
+      // opportunity cost of one more food is food/air units of clean air.
+      var phrase = costPhrase(food / air);
+      hint  = 'On the frontier: more food costs clean air.';
+      trade = '+1 food costs ' + phrase;
+      aria  = 'Food ' + food.toFixed(1) + ', clean air ' + air.toFixed(1) +
+              '. Producing efficiently: one more food costs ' + phrase + '.';
+    }
 
-    ptFocus.setAttribute('aria-valuenow', housing.toFixed(1));
-    ptFocus.setAttribute('aria-valuetext',
-      'Food ' + food.toFixed(1) + ', Housing ' + housing.toFixed(1) +
-      '. One more housing costs ' + tradeText);
+    rHint.textContent = hint;
+    rTrade.textContent = trade;
+    ptFocus.setAttribute('aria-valuenow', food.toFixed(1));
+    ptFocus.setAttribute('aria-valuetext', aria);
   }
 
   function setFromPointer(evt) {
     var p = toSvg(evt);
-    var fu = toFood(p.x), hu = toHousing(p.y);
-    var t = Math.atan2(hu, fu);
-    if (isNaN(t)) return;
-    theta = Math.max(TH_MIN, Math.min(TH_MAX, t));
+    var f = toFood(p.x), a = toAir(p.y);
+    if (isNaN(f) || isNaN(a)) return;
+    // clamp into the axis box first (food>=0, clean-air>=0, neither past 5)
+    if (f < 0) f = 0; else if (f > R) f = R;
+    if (a < 0) a = 0; else if (a > R) a = R;
+    // if the pointer is OUTSIDE the frontier, snap to the nearest frontier
+    // point (scale onto the radius-5 circle); otherwise keep it where it is
+    // (an interior, wasteful mix)
+    var r = Math.sqrt(f * f + a * a);
+    if (r > R) { f = f * R / r; a = a * R / r; }
+    food = f; air = a;
     render();
   }
 
@@ -249,16 +308,21 @@
   }
   hit.addEventListener('pointerdown', onDown);
   hitCurve.addEventListener('pointerdown', onDown);
-  ptFocus.addEventListener('pointerdown', onDown); // the dot itself is draggable
+  feasible.addEventListener('pointerdown', onDown); // press inside for a wasteful mix
+  ptFocus.addEventListener('pointerdown', onDown);  // the dot itself is draggable
 
-  // --- keyboard (arrows nudge along the curve) ---
+  // --- keyboard (arrows nudge the point ALONG the frontier) ---
   ptFocus.addEventListener('keydown', function (evt) {
     var step = 2 * Math.PI / 180;
+    var theta = Math.atan2(air, food); // project current point onto a frontier angle
     if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') { theta -= step; }
     else if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') { theta += step; }
     else return;
     evt.preventDefault();
-    theta = Math.max(TH_MIN, Math.min(TH_MAX, theta));
+    // clamp to the quarter arc so the point reaches, but does not pass, each axis
+    theta = Math.max(0, Math.min(Math.PI / 2, theta));
+    food = R * Math.cos(theta);
+    air = R * Math.sin(theta);
     render();
   });
 

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Static PPF-growth figure for the T1 blog post (website-styled, NOT FAU).
+  Sibling of figures/t01-ppf-interactive.html: same warm-editorial palette,
+  same concave quarter-ellipse frontier geometry, same Food (x) / Clean Air (y)
+  goods, same muted-arrow axis style, same 440-wide scale.
+
+  Self-contained: no JS, no network, no external fonts (system sans stack).
+
+  Teaches ECONOMIC GROWTH as an OUTWARD SHIFT of the frontier: better
+  productivity / innovation / institutions expand the achievable combinations
+  of BOTH goods. Scarcity does NOT vanish - a frontier still exists and still
+  bounds choice; it just sits farther out.
+
+  Geometry (pixel frame, origin O = (64,360)):
+    Inner "original" frontier : food-max (5,0) -> x=340 ; clean-air-max (0,5) -> y=96
+                                rx=276, ry=264 ; arc M64,96  A276,264 0 0 1 340,360
+    Outer "after growth"      : food-max (5,0) -> x=404 ; clean-air-max (0,5) -> y=36
+                                rx=340, ry=324 ; arc M64,36  A340,324 0 0 1 404,360
+    Both intercepts move OUT (more food AND more clean air are now possible).
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 400" role="img"
+     aria-label="A production-possibilities frontier for Clean Air (vertical) and Food (horizontal). Economic growth shifts the whole concave frontier outward: both the maximum food and the maximum clean air increase, so more of both goods becomes possible. A scarcity-bounding frontier still exists, just farther out.">
+  <style>
+    .surface  { fill: #f7f4ef; }
+    .axis     { stroke: #5c6066; stroke-width: 1.4; fill: none; }
+    .front-in { stroke: #1a1c1e; stroke-width: 2.6; fill: none; stroke-linecap: round; }
+    .front-out{ stroke: #b07a2c; stroke-width: 2.6; fill: none; stroke-linecap: round; }
+    .feas-in  { fill: #efe4d2; opacity: 0.5; stroke: none; }
+    .feas-gain{ fill: #b07a2c; opacity: 0.12; stroke: none; }
+    .growth   { stroke: #b07a2c; stroke-width: 3; fill: none; stroke-linecap: round; }
+    .expand   { stroke: #b07a2c; stroke-width: 1.8; fill: none; stroke-linecap: round; }
+    .axlabel  { fill: #5c6066; font-size: 15px; font-weight: 600;
+                font-family: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                             'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+    .name-out { fill: #b07a2c; font-size: 13px; font-weight: 700;
+                font-family: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                             'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+    .name-in  { fill: #1a1c1e; font-size: 13px; font-weight: 700;
+                font-family: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                             'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+    .sub      { fill: #5c6066; font-size: 10.5px; font-weight: 400;
+                font-family: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                             'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+  </style>
+
+  <defs>
+    <marker id="arrowMuted" markerWidth="9" markerHeight="9" refX="6" refY="4"
+            orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+    </marker>
+    <marker id="arrowAccent" markerWidth="11" markerHeight="11" refX="7" refY="5"
+            orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#b07a2c" />
+    </marker>
+    <marker id="arrowAccentSm" markerWidth="8" markerHeight="8" refX="5.5" refY="3.5"
+            orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L7,3.5 L0,7 Z" fill="#b07a2c" />
+    </marker>
+  </defs>
+
+  <!-- warm bone background (matches the interactive widget) -->
+  <rect class="surface" x="0" y="0" width="440" height="400" />
+
+  <!-- feasible sets (drawn first, under everything) -->
+  <!-- original feasible region: under the inner frontier -->
+  <path class="feas-in" d="M64,360 L64,96 A276,264 0 0 1 340,360 Z" />
+  <!-- newly feasible region gained from growth: crescent between the two frontiers -->
+  <path class="feas-gain" d="M340,360 L404,360 A340,324 0 0 0 64,36 L64,96 A276,264 0 0 1 340,360 Z" />
+
+  <!-- axes (extend past the outer intercepts so the frontier never crowds the arrowheads) -->
+  <line class="axis" x1="64" y1="360" x2="424" y2="360" marker-end="url(#arrowMuted)" />
+  <line class="axis" x1="64" y1="360" x2="64"  y2="20"  marker-end="url(#arrowMuted)" />
+
+  <!-- intercept-expansion arrows: show BOTH maxima move out (scarcity persists, just farther) -->
+  <line class="expand" x1="340" y1="374" x2="404" y2="374" marker-end="url(#arrowAccentSm)" />
+  <line class="expand" x1="50"  y1="96"  x2="50"  y2="36"  marker-end="url(#arrowAccentSm)" />
+
+  <!-- the two concave frontiers -->
+  <path class="front-in"  d="M64,96 A276,264 0 0 1 340,360" />
+  <path class="front-out" d="M64,36 A340,324 0 0 1 404,360" />
+
+  <!-- growth shift arrow: outward from inner frontier to outer frontier -->
+  <line class="growth" x1="253.8" y1="158.5" x2="286.4" y2="124.6" marker-end="url(#arrowAccent)" />
+
+  <!-- axis labels -->
+  <text class="axlabel" x="234" y="392" text-anchor="middle">Food</text>
+  <text class="axlabel" x="22" y="204" text-anchor="middle"
+        transform="rotate(-90 22 204)">Clean Air</text>
+
+  <!-- curve labels (placed in clear space: no text over any curve, axis, or arrow) -->
+  <text class="name-out" x="360" y="66"  text-anchor="middle">After growth</text>
+  <text class="sub"      x="360" y="84"  text-anchor="middle">productivity, innovation,</text>
+  <text class="sub"      x="360" y="99"  text-anchor="middle">and institutions</text>
+  <text class="name-in"  x="243" y="300" text-anchor="middle">Original frontier</text>
+</svg>
