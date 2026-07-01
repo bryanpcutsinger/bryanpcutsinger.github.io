@@ -81,8 +81,9 @@ long, wandering session eventually fills it. Three commands keep it healthy:
 
 - `/context` — see how full the window is right now.
 - `/compact` — summarize the conversation so far to free up room while staying in the
-  same session. (Claude also does this automatically when things get tight.)
-- `/clear` — wipe the slate and start a fresh conversation.
+  same session.
+- `/clear` — wipe the slate and start a fresh conversation. (The old one isn't lost —
+  it's saved, and you can return to it later with `/resume`.)
 
 The habit worth forming: **one focused task per session, then `/clear` before the next
 one.** Cleaning the same dataset, then drafting an unrelated problem set, then debugging a
@@ -110,5 +111,4 @@ sessions instead, run `claude` and then `/resume`.)
 ---
 
 That's a full session, start to finish — the same loop you'll use on real work. From
-here, the [guide overview](/ai/) points to what's next as the rest of the chapters come
-online.
+here, the [guide overview](/ai/) points to what's next.

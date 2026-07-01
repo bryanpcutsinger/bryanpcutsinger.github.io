@@ -7,7 +7,7 @@ draft: false
 Before you spend half an hour setting anything up, here's enough to decide whether
 Claude Code is worth your time.
 
-**Claude Code is an AI assistant that works on the actual files on your computer.**
+**Claude Code is an AI agent — an assistant that works on the actual files on your computer.**
 You drive it by typing a request in plain English, and it reads, writes, and edits
 files in a folder you point it at — a paper, a dataset, a folder of scripts. It
 asks your permission before it changes anything, so you stay in control the whole
@@ -51,9 +51,10 @@ work until you've checked it. We come back to this rule throughout the guide.
 
 ## What you'll need
 
-A Mac (macOS 13 or later), a **paid Claude plan** (Pro is the usual starting point;
-Max also works — the free plan does *not* include Claude Code), and about thirty
-minutes for a one-time setup.
+A Mac running a recent version of macOS, a **paid Claude plan** — as of mid-2026,
+Pro is the usual starting point and Max also works, while the free plan does *not*
+include Claude Code (plans change, so check Anthropic's current requirements when
+you set up) — and about thirty minutes for a one-time setup.
 
 Ready? The next chapter walks you through the one-time setup: [set up Claude
 Code](/ai/setting-up-claude-code/) — install the tool, sign in, and get VS Code running

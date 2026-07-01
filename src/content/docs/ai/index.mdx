@@ -23,12 +23,19 @@ zero and build up. It's free, self-paced, and updated as the tools change: no
 sign-up, no paywall, no consultation gate. (For Anthropic's own reference, see the
 [official quickstart](https://code.claude.com/docs/en/quickstart).)
 
-:::note[This guide is being built]
-I'm publishing it chapter by chapter. The first three chapters — orientation, setup, and
-your first session — are below. More are coming; check back as it fills in.
+:::note[How to read this guide]
+The guide has a short **required path** and a longer shelf of chapters you pull in as you
+need them. The required path is just the first two groups — **Set up** (decide and
+install) and **Get oriented** (the core working loop and how to steer it). Finish those
+and you're self-sufficient. The rest — **Work on real projects** and the **Reference**
+section — is next-stage reading for when you point Claude at a real paper, dataset, or
+course, or want a specific capability. None of it is a checklist to finish before you
+start.
 :::
 
-## Start here
+## Set up
+
+The short on-ramp: decide whether Claude Code is for you, then do the one-time setup.
 
 <CardGrid>
   <LinkCard
@@ -41,10 +48,109 @@ your first session — are below. More are coming; check back as it fills in.
     description="A one-time, beginner-friendly walkthrough: install the tool from the Terminal, sign in, fix the common snags, then add VS Code and the Claude Code extension as your home base."
     href="/ai/setting-up-claude-code/"
   />
+</CardGrid>
+
+## Get oriented
+
+The core loop and how to steer it — no new tools needed. A reader who stops at the end
+of this group is productive.
+
+<CardGrid>
   <LinkCard
     title="Your first session"
     description="Run Claude Code end to end on a safe practice folder — ask it a question, approve your first change, and learn to manage and hand off a conversation."
     href="/ai/your-first-session/"
+  />
+  <LinkCard
+    title="Customizing Claude with a CLAUDE.md file"
+    description="The single highest-leverage habit: a file that tells Claude who you are, how you work, and your house style — so you stop re-explaining yourself every session."
+    href="/ai/claude-md-file/"
+  />
+  <LinkCard
+    title="Controlling Claude"
+    description="How to steer a session on real work: the explore, plan, implement, commit loop, plan mode, the permission modes, and the habit of staying the reviewer."
+    href="/ai/controlling-claude/"
+  />
+  <LinkCard
+    title="Models, cost, and usage limits"
+    description="Choosing a model and managing what it costs: the model tiers, effort and fast mode, the two billing models, session and weekly limits, and habits that keep usage down."
+    href="/ai/models-cost-and-limits/"
+  />
+  <LinkCard
+    title="Getting material into Claude"
+    description="Three ways to feed Claude well: dictating long prompts, converting documents to Markdown so Claude reads them cleanly, and pasting figures, screenshots, and PDFs."
+    href="/ai/getting-material-into-claude/"
+  />
+</CardGrid>
+
+## Work on real projects
+
+Next-stage reading for when you point Claude at a real paper, dataset, or course — the
+two "before you touch real data" chapters first.
+
+<CardGrid>
+  <LinkCard
+    title="Working safely on real projects"
+    description="How folder scope limits what Claude sees, what to keep out, working on a copy, and using rewind to undo a change you didn't want."
+    href="/ai/working-safely/"
+  />
+  <LinkCard
+    title="Keeping your data private"
+    description="What happens to data you give Claude, why your plan choice matters, and how to work on confidential or IRB-governed data without exposing it."
+    href="/ai/keeping-your-data-private/"
+  />
+  <LinkCard
+    title="Working in VS Code"
+    description="Settle into VS Code for real work: juggle multiple integrated terminals, and add the few extensions an economist needs."
+    href="/ai/working-in-vs-code/"
+  />
+  <LinkCard
+    title="Version control: Git & GitHub"
+    description="What Git and GitHub are in plain terms — an undo history for a whole project, plus a cloud home for it — and the handful of moves you'll actually use."
+    href="/ai/git-and-github/"
+  />
+  <LinkCard
+    title="Writing papers & slides"
+    description="Claude Code inside a real academic writing workflow: a LaTeX paper kept in sync between Overleaf and GitHub, Beamer slides, and a verify-every-citation discipline."
+    href="/ai/writing-papers-and-slides/"
+  />
+</CardGrid>
+
+## Reference (for after)
+
+Come-back-later material, ordered by rising power. API keys come first because the
+chapters after them lean on credentials.
+
+<CardGrid>
+  <LinkCard
+    title="API keys and secrets"
+    description="What an API key is, when you actually need one, and how to handle keys safely — never in a file, a commit, or printed output."
+    href="/ai/api-keys-and-secrets/"
+  />
+  <LinkCard
+    title="Connecting Claude to your apps"
+    description="App connectors and the browser extension on the Claude side, and MCP servers that plug data sources like Zotero or a database into Claude Code."
+    href="/ai/connectors-and-mcp/"
+  />
+  <LinkCard
+    title="The Claude app and the cloud"
+    description="The Claude desktop and web apps and cloud sessions — what they add over the terminal, and when your data should and shouldn't leave your Mac."
+    href="/ai/claude-app-and-cloud/"
+  />
+  <LinkCard
+    title="Sub-agents"
+    description="Separate Claude workers you hand a focused job — and how to use them to keep your main session clean."
+    href="/ai/sub-agents/"
+  />
+  <LinkCard
+    title="Rules, hooks, and skills"
+    description="The customization layer beyond CLAUDE.md: hooks that run on their own to enforce your guardrails, and skills that package a repeatable job into a single command."
+    href="/ai/rules-hooks-and-skills/"
+  />
+  <LinkCard
+    title="Orchestration: agent teams and dynamic workflows"
+    description="The deep end: running many Claude agents in parallel for big, fan-out tasks — and what the speed buys and costs."
+    href="/ai/orchestration-and-workflows/"
   />
 </CardGrid>
 

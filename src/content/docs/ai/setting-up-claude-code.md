@@ -71,7 +71,7 @@ Code needs a paid plan (Pro or Max) — see [what you'll need](/ai/what-is-claud
 
 ## If something went wrong
 
-Two snags account for almost every failed install.
+Two snags account for almost every failed setup.
 
 **`command not found: claude`.** The tool installed fine, but your Terminal doesn't yet
 know where to find it. Tell it once, then reload:
@@ -84,9 +84,9 @@ source ~/.zshrc
 Now try `claude --version` again. (Quitting and reopening the Terminal does the same thing
 as that second line.)
 
-**"Claude Code can't be opened because the developer cannot be verified."** That's macOS
-Gatekeeper being cautious. Open **System Settings → Privacy & Security**, scroll down,
-and click **Allow Anyway**, then run `claude` again.
+**Sign-in failed or keeps looping.** The clean fix is to start over: type `/logout`
+inside Claude Code, quit it, run `claude` again, and sign in fresh. (If the browser
+never opens, press `c` to copy the sign-in link — same trick as above.)
 
 :::caution
 If you see `dyld: cannot load` or `Abort trap: 6`, your macOS is too old. Claude Code
@@ -139,6 +139,28 @@ which matters more than it sounds, and we lean on it in the next chapter.
 
 :::note[Screenshot to add]
 The VS Code window with the Explorer, editor, and integrated Terminal labeled.
+:::
+
+## One thing to settle before you use real data
+
+The practice folder in the next chapter is safe by design, but it's worth knowing the ground
+rule now, because the relevant choice is made here at setup.
+
+:::caution[Your plan and your data]
+Anything Claude reads is **sent over the network** to do its work — it doesn't all stay on
+your Mac. Two habits keep you out of trouble:
+
+- **Check your data-sharing setting.** As of mid-2026, on the consumer plans (Pro, Max),
+  Anthropic can use your conversations to improve its models when data-sharing is turned
+  **on**. Open your account's privacy settings and turn it **off** if you'd rather it
+  didn't — and since these policies change, check the current settings page rather than
+  taking this paragraph's word for it.
+- **Keep confidential data out for now.** Until you've worked through the data-privacy
+  chapter, don't point Claude at IRB-governed data, unpublished manuscripts, student records,
+  or raw datasets. Practice on things you could post publicly.
+
+A later chapter covers de-identification and the plan, training, and retention details in
+full — this is just the part you can't skip on day one.
 :::
 
 That's the whole setup. Next, you'll [run your first session](/ai/your-first-session/) —
