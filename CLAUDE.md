@@ -29,45 +29,73 @@ Future sub-sites get added as new Starlight content groups in the same repo.
 
 ## Marketing site (the primary front end — built 2026-06-14)
 
-The root is now a **bespoke, conversion-grade marketing site** positioning Bryan as an
+The root is a **bespoke, conversion-grade marketing site** positioning Bryan as an
 economist + **paid speaker**, built as **custom Astro pages in `src/pages/`**
-(`index`, `about`, `speaking`, `contact`), completely separate from Starlight (which
-still owns `/ai/`). Full build history: `~/.claude/plans/i-want-to-rebuilt-ancient-zephyr.md`
-(Revisions 1–5).
+(`index`, `about`, `speaking`, `contact`, **`writing`, `research`**, plus `teaching/*`),
+completely separate from Starlight (which still owns `/ai/`).
 
-- **Brand (independent/editorial — NOT FAU navy/red):** deep ink `#1a1c1e` + warm brass
-  `#b07a2c` on bone `#f7f4ef`; **Fraunces** display + **Inter** body, self-hosted via
-  `@fontsource-variable/*`. Tokens: `src/styles/brand.css`. The two CSS systems never
-  touch — `brand.css` loads only on `src/pages/`; `fau-theme.css` only inside Starlight.
+> **⚠️ REDESIGNED 2026-07-01 → the "public economist" system (LIVE, commit `369cf5f`).**
+> The brass/bone and Fraunces+Inter descriptions in this section — and a since-superseded
+> interim *claret* "public essay" system — are **HISTORY**. The live look is now
+> **outward-first**: bright paper + deep ink + **one ledger-green accent**, a two-face
+> pairing (**Fraunces** display + **Newsreader** reading + **Inter** labels). See the
+> **"Public economist redesign"** bullet below and the top **Current status** entry.
+> Earlier history: `~/.claude/plans/i-want-to-rebuilt-ancient-zephyr.md` (Rev 1–5) and
+> `~/.claude/plans/let-s-try-another-approach-async-knuth.md` (the 2026-07-01 rebuild).
+
+- **Brand — "the public economist" (2026-07-01, current):** bright archival **paper
+  `#FBFAF7`** + warm **ink `#1A1917`** + one **ledger-green accent `#22453B`** (on-ink
+  variant `#B8D0C6`; hard rule — never green on the ink header/footer, 1.66:1). Type is a
+  **two-face pairing**: **Fraunces** (display voice) + **Newsreader** (reading prose) +
+  **Inter** (labels/nav/data), all reusing fonts already in `package.json` (no new font
+  deps). Tokens: **`src/styles/site.css`** (loaded by `MarketingLayout` *after* the
+  legacy `brand.css`, whose shared tokens it overrides via aliases; `brand.css` = the
+  superseded claret system, kept loaded only until Teaching is migrated). The two CSS
+  systems never touch — `site.css`/`brand.css` load only on `src/pages/`; `fau-theme.css`
+  only inside Starlight. Accent hue is a token knob (green default; ink-blue/graphite noted).
 - **Layout/kit:** `src/layouts/MarketingLayout.astro` (own `<head>`, sticky nav, footer,
-  **`noindex` prop default `true`**) + `src/components/marketing/*` (Hero, Section,
-  TopicGrid, TestimonialRow [null-on-empty], AsSeenIn, CTABand, SpeakerReel [3-state
-  graceful], BookingForm, PortraitFigure, …). Editable copy: `src/data/{topics,testimonials,logos}.json`.
+  **`noindex` prop default `true`**, sitewide `Person` JSON-LD) + `src/components/marketing/*`.
+  New primitives: **`DatedList`** (dated record; year in accent tabular figures; stacks
+  <640px), **`EmailCapture`** (graceful mailto fallback), **`PageHead`** (interior-page
+  masthead), **`CloseBand`** (in-system ink CTA, replaces the claret `Colophon`),
+  **`CitationList`** (bibliography; year folio). `Button` gained an **`on-ink`** variant.
+  Reused: `Section`, `BookingForm`, `DownloadCard`. Editable copy: `src/data/{topics,
+  testimonials,logos,writing,publications}.json`. **Home is outward-first** — masthead +
+  positioning line, proof strip, signature talks as outcomes, an **ink invite band with a
+  fee signal**, the **Claude Code guide as a hook**, a Recent list, email capture, and a
+  departments router. **Claret-era components** (`ClaretOpener`, `Colophon`,
+  `EditorialIndex`, `PageMasthead`) are now **unused dead files** pending cleanup.
 - **Photos** in `src/assets/`: `bryan-cutsinger.png` (headshot → hero/about), plus
   `on-stage-podium.jpg` (home "Bryan in the room" reel), `on-stage-gesturing.jpg` (about),
   `speaking-hero.jpg` (speaking hero). Optimized via `astro:assets`.
-- **Cross-nav:** `src/components/overrides/HeaderLinks.astro` (registered as Starlight's
-  `SocialIcons`) links guides → About/Speaking/Contact; marketing nav has a "Guides" link.
-  Sitemap: explicit `@astrojs/sitemap` in `astro.config.mjs` covers the `src/pages/` routes.
-- **`/ai/` guides share the marketing site's FULL visual language** (Rev 5, then fully
-  unified 2026-06-15): `fau-theme.css` carries the brand palette + Fraunces/Inter + 4px
-  (fonts loaded site-wide via `SiteTitle.astro` frontmatter) **and** the brand's
-  patterns — sentence-case headings/nav/tables (no institutional all-caps), minimal
-  hairline tables (no zebra striping), cards that lift on hover (no navy-gradient
-  takeover), and a softened ink header. There is **no separate "FAU pattern."** The
-  **only** intentionally-distinct thing is the Starlight docs layout (sidebar/TOC), kept
-  because the guides are reference docs that need navigation.
-- **LIVE** (commit `6b6d36f`, 2026-06-14); still **`noindex`ed**.
+- **Nav order (2026-07-01):** `Speaking · Writing · Research · Teaching · Guides · About ·
+  Contact` (Speaking promoted to slot 1) across `SiteHeader`, `SiteFooter`, and the
+  `HeaderLinks` override. On-ink surfaces use the `--accent-on-ink` variant for
+  hover/active (never green on ink). Sitemap: explicit `@astrojs/sitemap` in
+  `astro.config.mjs` covers the `src/pages/` routes.
+- **`/ai/` guides share the marketing site's FULL visual language** — retuned 2026-07-01
+  to the "public economist" system: `fau-theme.css` maps paper/ink/**ledger-green** onto
+  Starlight's ramp; **Fraunces** headings, **Newsreader** prose, **Inter** UI, IBM Plex
+  Mono code (loaded via `SiteTitle.astro`, whose wordmark is now Fraunces). Sentence-case
+  headings, minimal hairline tables, lift-on-hover cards, green note-callouts. The **only**
+  intentionally-distinct thing is the Starlight docs layout (sidebar/TOC).
+- **LIVE** (redesign deployed 2026-07-01, commit `369cf5f`); still **`noindex`ed**.
 
-**Placeholders Bryan still owes (marked `[PLACEHOLDER]` in code):** Web3Forms access key
-+ booking email (booking form is inert until then — `BookingForm.astro`); real **talk
-topics** (`data/topics.json`); **testimonials** (`testimonials.json` empty → section
-auto-hidden; named quotes only); **long bio** + exact **rank/department** (`about.astro`);
-speaker **one-sheet PDF** → `public/downloads/`; optional video **reel** (photo fallback
-shows now). Verified facts only: "Featured in" = National Review, The Hill, The Washington
-Examiner, RealClearEducation; credentials = interim director of the **AIER Sound Money
-Project**, Associate Editor of *Public Choice*, FAU economics professor (WSJ was a letter
-to the editor — deliberately not featured).
+**Placeholders Bryan still owes (marked `[PLACEHOLDER]` in code; all `noindex`, but
+publicly viewable by link on the live site):** real **publications** (`data/publications.json`
+— Research page; paste from a CV / Google Scholar / ORCID, verified only); real **essay/press
+URLs** (`data/writing.json` — Writing page); the home **Recent** list (literals in
+`index.astro`); Web3Forms access key + booking email (booking form inert until then —
+`BookingForm.astro`) and a list provider for `EmailCapture` (mailto fallback until then);
+**CV PDF** → `public/downloads/`; speaker **one-sheet PDF** + a **video reel** (Speaking's
+paid-speaking launch gate: at least one on-stage photo + short clip before lifting `noindex`);
+**testimonials** (`testimonials.json` empty → section auto-hidden; named quotes only);
+`sameAs` profile URLs for the `Person` JSON-LD (Scholar/ORCID/SSRN). **Already real:** talk
+topics (`data/topics.json`), short + long bio + credentials (`about.astro`). Verified facts
+only: "Featured in" = National Review, The Hill, The Washington Examiner, RealClearEducation;
+credentials = interim director of the **AIER Sound Money Project**, Associate Editor of
+*Public Choice*, FAU economics professor (WSJ was a letter to the editor — not featured).
+**Integrity: never fabricate a citation, DOI, essay URL, testimonial, or `sameAs`.**
 
 ## Stack & conventions
 
@@ -76,18 +104,17 @@ to the editor — deliberately not featured).
   pager, and search.
   - Starlight is **pinned to the 0.36 line on purpose**: 0.38+ requires Astro 6 and
     we're staying on Astro 5 for now (see TODO). Don't bump it without bumping Astro.
-- **Theming = the brand (was FAU; changed 2026-06-14, fully unified 2026-06-15).**
-  `src/styles/fau-theme.css` (registered via Starlight `customCss`) carries the
-  **full marketing brand** onto Starlight — not just the palette/type/corners (ink
-  `#1a1c1e` + brass `#b07a2c` on bone `#f7f4ef`, Fraunces headings + Inter body, 4px)
-  but the brand's *patterns* too: sentence case throughout, minimal hairline tables,
-  lift-on-hover cards, underlined brass links. **Don't reintroduce FAU structural
-  patterns** (uppercase nav/table headers, navy-gradient card hover, zebra striping,
-  hard brass header underline) — they were deliberately removed. The filename and its
-  `--fau-*` variable names are **historical** — they hold brand colors now, not FAU
-  navy/red. Marketing tokens: `src/styles/brand.css`. (Unification plan:
-  `~/.claude/plans/the-style-for-the-effervescent-shannon.md`; original FAU rationale,
-  now superseded: `~/.claude/plans/jaunty-spinning-tiger.md`.)
+- **Theming = the "public economist" brand (retuned 2026-07-01; was FAU→brass→claret).**
+  `src/styles/fau-theme.css` (registered via Starlight `customCss`) carries the **full
+  marketing brand** onto Starlight — palette/type (paper `#FBFAF7` + ink `#1A1917` + one
+  **ledger-green `#22453B`** accent; **Fraunces** headings, **Newsreader** prose, **Inter**
+  UI, IBM Plex Mono code) **and** its patterns: sentence case throughout, minimal hairline
+  tables, lift-on-hover cards, green underlined links, green note-callouts. The filename
+  and its `--fau-*` variable names are **historical** — they hold the current brand colors,
+  not FAU's (and not the interim brass/claret). **Marketing tokens: `src/styles/site.css`**
+  (the current system); `src/styles/brand.css` is the superseded claret system, still
+  loaded first so not-yet-migrated pages keep working — retire it once Teaching is migrated.
+  Redesign plan: `~/.claude/plans/let-s-try-another-approach-async-knuth.md`.
 - **Content lives in `src/content/docs/`** (Starlight's `docs` collection, defined
   in `src/content.config.ts` via `docsLoader()` + `docsSchema()`):
   - `docs/index.mdx` → `/` (splash landing)
@@ -317,9 +344,31 @@ trees API but slugs assume a flat layout). Why import-then-commit rather than an
 remote loader: keeps CI hermetic (no build-time private-repo auth) and every change is
 visible in `git diff`.
 
-## Current status (as of 2026-06-21)
+## Current status (as of 2026-07-01)
 
-**Latest (2026-06-21) — committed + pushed to `main` (`a62547c`, deployed, still `noindex`ed):**
+**Latest (2026-07-01) — full front-end REDESIGN committed + pushed + deployed (`369cf5f`,
+still `noindex`ed):** The marketing site was rebuilt from scratch as the **outward-first
+"public economist" system** (paper/ink/**ledger-green**; Fraunces + Newsreader + Inter). See
+the rewritten **Marketing site** and **Stack → Theming** sections above for the full spec, and
+`~/.claude/plans/let-s-try-another-approach-async-knuth.md` for the plan (which went through a
+Codex review + a 5-adversary red-team; client chose outward-first / design-first / fresh system).
+- **New/changed:** `src/styles/site.css` (new token+type system, loaded after `brand.css` and
+  overriding its shared tokens via aliases); new primitives `DatedList`, `EmailCapture`,
+  `PageHead`, `CloseBand`; `Button` gained `on-ink`; **outward Home** (`index.astro`),
+  promoted **Speaking**, new **Writing** + **Research** pages (fed from forgiving
+  `data/{writing,publications}.json`, honest labeled placeholders), migrated **About** +
+  **Contact**; nav reordered to `Speaking·Writing·Research·Teaching·Guides·About·Contact`
+  (header/footer/`HeaderLinks`); **/ai/ Starlight guides retuned** (`fau-theme.css`,
+  `SiteTitle` fonts); sitewide `Person` JSON-LD. Build green (43 pages, postbuild gate passed).
+- **Deliberately DEFERRED (open follow-ups):** (1) **Teaching pages** still use the reused/
+  claret-era components under aliased tokens — they render fine + build green, but a full
+  restyle is pending; (2) **`brand.css` + claret-era components** (`ClaretOpener`, `Colophon`,
+  `EditorialIndex`, `PageMasthead`) stay until Teaching is migrated, then retire; (3) **RSS**
+  for Writing not yet added (would be empty until real essays) — add `@astrojs/rss` when
+  `writing.json` has real entries; (4) all `[PLACEHOLDER]` content above (real publications,
+  essay URLs, Recent, CV, forms, reel) still owed by Bryan.
+
+**Prior (2026-06-21) — committed + pushed to `main` (`a62547c`, deployed, still `noindex`ed):**
 - **Price Theory bank refreshed: 311 → 477 problems across 40 sources.** Bryan added new
   questions upstream in `bryanpcutsinger/price-theory`; published them via the standard
   loop: `npm run import:problems` → `npm run build` (green, 26 pages, postbuild
