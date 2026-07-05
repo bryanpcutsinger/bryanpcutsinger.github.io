@@ -18,12 +18,16 @@ Most people assume economics is about money, the stock market, or how to get ric
 <p class="econ-callout__label">Learning objectives</p>
 <p>By the end of this post you should be able to:</p>
 <ul>
-<li>Define scarcity and explain why it forces choice.</li>
-<li>Identify opportunity cost, including explicit, implicit, and sunk costs.</li>
+<li>Define scarcity and explain why it forces every society to choose who gets what.</li>
+<li>Explain why incentives, not intentions, determine what a policy does.</li>
 <li>Explain why a $0 money price does not mean free.</li>
+<li>Identify the full cost of a choice, explicit and implicit, and explain why sunk costs are irrelevant.</li>
+<li>Use the production possibilities frontier to explain efficiency and growth.</li>
+<li>Explain why voluntary exchange is positive-sum and why markets depend on property rights.</li>
+<li>Judge a theory by whether its predictions survive testing, not by the realism of its assumptions.</li>
 <li>Distinguish positive analysis from normative judgment.</li>
-<li>Explain why property rights and voluntary exchange matter.</li>
-<li>Explain why only individuals choose.</li>
+<li>Explain the actions of governments, firms, and markets through the incentives facing the individuals inside them.</li>
+<li>Explain why economics clarifies trade-offs but does not supply your values.</li>
 </ul>
 </aside>
 
@@ -260,6 +264,7 @@ That is why I think of economics as the real art of the possible. Politics often
 <li><strong>A $0 money price is not free.</strong> Someone still pays, in waiting, effort, lines, or taxes.</li>
 <li><strong>Efficiency means no waste,</strong> being on the frontier, not producing the most of any one thing; growth shifts the whole frontier outward.</li>
 <li><strong>Markets rest on property rights and voluntary exchange,</strong> which is positive-sum: both sides expect to gain, or the trade does not happen.</li>
+<li><strong>Judge theories by their predictions.</strong> A useful theory makes refutable claims that survive testing, even when its assumptions are unrealistic.</li>
 <li><strong>Economics is positive, not normative.</strong> Economics tells you what is or what will follow; the "should" is a separate value judgment you supply.</li>
 <li><strong>Only individuals choose,</strong> so explain what a government, a firm, or a market does by the incentives facing the people inside it.</li>
 <li><strong>Economics clarifies your trade-offs;</strong> it helps you see what pursuing one thing you care about costs in terms of the others, but it does not supply the values themselves.</li>
