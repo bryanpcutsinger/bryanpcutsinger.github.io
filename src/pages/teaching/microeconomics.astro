@@ -17,11 +17,10 @@ const topics = (await getCollection('courses'))
     (e) => previewDrafts || (e.data.status ?? '').toLowerCase() === 'approved',
   )
   .map((e) => {
-    // Order and the "T#" badge come from the directory slug (t01, t03a, t03b…),
-    // which is authoritative and always well-formed — NOT the `topic:` prose,
-    // whose upstream label is inconsistent (T6/T10 still carry the old lowercase
-    // bundled name, which the case-sensitive /T\d+/ missed → they sorted to the
-    // end with no badge). The slug also encodes the a/b/c lecture split.
+    // Order comes from the directory slug (t01, t03a, t03b…), which is
+    // authoritative and always well-formed — NOT the `topic:` prose, whose
+    // upstream label is inconsistent (T6/T10 carried the old lowercase bundled
+    // name). The slug also encodes the a/b/c lecture split: t04a < t04b < t04c.
     const slug = e.id.split('/')[1];
     const m = slug.match(/^t(\d+)([a-z]?)/i);
     const num = m ? parseInt(m[1], 10) : 999;
@@ -29,12 +28,14 @@ const topics = (await getCollection('courses'))
     return {
       slug,
       title: e.data.title,
-      code: num < 999 ? `T${num}` : '',
       order: e.data.order ?? num * 100 + part,
       isDraft: (e.data.status ?? '').toLowerCase() !== 'approved',
     };
   })
   .sort((a, b) => a.order - b.order);
+// Sequential lecture numbers (1..N) by published order. We number lectures, not
+// upstream "T#" — several T-numbers span multiple lectures via a/b/c splits, so
+// the shared "T3"/"T6" badge repeated and read as duplicate titles.
 ---
 <MarketingLayout
   title="Micro-Economic Principles — Bryan Cutsinger"
@@ -88,10 +89,10 @@ const topics = (await getCollection('courses'))
     {
       topics.length > 0 ? (
         <ol class="topics">
-          {topics.map((t) => (
+          {topics.map((t, i) => (
             <li class="topics__item">
               <a class="topics__link" href={`/teaching/${COURSE}/${t.slug}/`}>
-                {t.code && <span class="topics__badge">{t.code}</span>}
+                <span class="topics__lecture">Lecture {i + 1}:</span>
                 <span class="topics__title">{t.title}</span>
                 {t.isDraft && <span class="topics__draft">Draft</span>}
               </a>
@@ -136,8 +137,8 @@ const topics = (await getCollection('courses'))
   }
   .topics__link {
     display: flex;
-    align-items: baseline;
-    gap: var(--sp-4);
+    flex-direction: column;
+    gap: var(--sp-1);
     padding: var(--sp-4) var(--sp-2);
     text-decoration: none;
     color: var(--ink);
@@ -147,9 +148,8 @@ const topics = (await getCollection('courses'))
     background: var(--surface);
     padding-left: var(--sp-4);
   }
-  .topics__badge {
-    flex: none;
-    min-width: 2.5rem;
+  /* "Lecture N:" — small accent label on its own line above the title. */
+  .topics__lecture {
     font-family: var(--font-body);
     font-size: var(--fs-small);
     font-weight: 600;
@@ -165,9 +165,8 @@ const topics = (await getCollection('courses'))
     color: var(--accent-hover);
   }
   .topics__draft {
-    flex: none;
-    margin-left: auto;
-    align-self: center;
+    align-self: flex-start;
+    margin-top: var(--sp-1);
     font-size: var(--fs-eyebrow);
     text-transform: uppercase;
     letter-spacing: 0.06em;

@@ -48,6 +48,7 @@ export async function getStaticPaths() {
     params: { topic: cur.slug },
     props: {
       entry: cur.entry,
+      lectureNum: i + 1, // sequential position in the published sequence
       prev: i > 0 ? link(ordered[i - 1]) : null,
       next: i < ordered.length - 1 ? link(ordered[i + 1]) : null,
     },
@@ -55,21 +56,19 @@ export async function getStaticPaths() {
 }
 
 const COURSE = 'microeconomics'; // for the template hrefs (getStaticPaths has its own)
-const { entry, prev, next } = Astro.props;
+const { entry, prev, next, lectureNum } = Astro.props;
 const data = entry.data;
 const { Content, headings } = await render(entry);
 
-// Eyebrow band: course name (drop the institutional "(FAU)") + topic code.
+// Eyebrow band: course name (drop the institutional "(FAU)") + sequential
+// lecture number. We number lectures 1..N by published order rather than the
+// upstream "T#" — several T-numbers span multiple lectures via a/b/c splits, so
+// the shared "T3"/"T6" badge repeated and read as duplicate titles.
 const courseLabel = (data.course ?? 'Principles of Microeconomics').replace(
   /\s*\(.*\)\s*$/,
   '',
 );
-// Badge derives from the slug (see topicOrder above) so every topic — incl. the
-// T6/T10 posts whose `topic:` prose lacks an uppercase "T#" — shows its number.
-const topicCode = (() => {
-  const m = entry.id.split('/')[1].match(/^t(\d+)/i);
-  return m ? `T${parseInt(m[1], 10)}` : '';
-})();
+const lectureLabel = lectureNum ? `Lecture ${lectureNum}` : '';
 
 // In-page TOC from the post's ## claim headers. Collapses (hidden) on short
 // posts. Astro auto-assigns slug ids to headings, so #slug anchors resolve.
@@ -119,7 +118,7 @@ const isDraft = (data.status ?? '').toLowerCase() !== 'approved';
 
       <div class="topic__main">
         <header class="topic__head">
-          <Eyebrow text={topicCode ? `${courseLabel} · ${topicCode}` : courseLabel} />
+          <Eyebrow text={lectureLabel ? `${courseLabel} · ${lectureLabel}` : courseLabel} />
           {
             isDraft && (
               <p class="topic__draft">
