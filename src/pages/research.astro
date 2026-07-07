@@ -35,7 +35,9 @@ const toEntries = (rows: any[]) =>
     placeholder: r.placeholder,
   }));
 
+const worksInPress = toEntries(pubs.worksInPress ?? []);
 const articles = toEntries(pubs.articles ?? []);
+const bookChapters = toEntries(pubs.bookChapters ?? []);
 const workingPapers = toEntries(pubs.workingPapers ?? []);
 ---
 <MarketingLayout
@@ -69,22 +71,50 @@ const workingPapers = toEntries(pubs.workingPapers ?? []);
     </div>
   </Section>
 
+  <!-- Book in press -->
+  {
+    worksInPress.length > 0 && (
+      <Section variant="raised">
+        <div class="head">
+          <p class="kicker">Book</p>
+          <h2>In press.</h2>
+          <p class="lede">A book-length project under contract.</p>
+        </div>
+        <CitationList entries={worksInPress} />
+      </Section>
+    )
+  }
+
   <!-- Peer-reviewed articles -->
-  <Section variant="raised">
+  <Section variant="surface">
     <div class="head">
       <p class="kicker">Publications</p>
       <h2>Peer-reviewed articles.</h2>
-      <p class="lede">Published and forthcoming work in economics journals.</p>
+      <p class="lede">Published work in economics and economic-history journals.</p>
     </div>
     <CitationList entries={articles} />
   </Section>
+
+  <!-- Book chapters -->
+  {
+    bookChapters.length > 0 && (
+      <Section variant="raised">
+        <div class="head">
+          <p class="kicker">Publications</p>
+          <h2>Book chapters.</h2>
+          <p class="lede">Invited contributions to edited volumes.</p>
+        </div>
+        <CitationList entries={bookChapters} />
+      </Section>
+    )
+  }
 
   <!-- Working papers -->
   <Section variant="surface">
     <div class="head">
       <p class="kicker">In progress</p>
       <h2>Working papers.</h2>
-      <p class="lede">Current projects — drafts available on request while under review.</p>
+      <p class="lede">Current projects under review — drafts available on request.</p>
     </div>
     <CitationList entries={workingPapers} />
   </Section>

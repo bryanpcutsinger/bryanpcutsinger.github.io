@@ -1,52 +1,171 @@
 {
-  "_note": "Bryan's research. Two lists: `articles` (peer-reviewed / forthcoming) and `workingPapers`. Each item: year, title, authors, venue, status, url (DOI/publisher), note. Set placeholder:true on any row not yet real — it renders dimmed with a chip and MUST NOT be shown as a real citation. Replace with VERIFIED references only (title, venue, year, DOI). NEVER fabricate a citation, DOI, or coauthor. To populate quickly, paste from a CV or a Google Scholar / ORCID profile.",
+  "_note": "Bryan's research record, transcribed from his CV (T&P copy, 2026-06-04). Lists: `worksInPress` (book under contract), `articles` (refereed journal articles), `bookChapters`, `workingPapers` (under review / R&R). Each item: year, title, authors, venue (journal/book/press — rendered italic), status (→ the `detail` line: vol/pages for articles, editor/press for chapters, review status for papers), url (DOI/publisher — EMPTY here; none were on the CV). INTEGRITY: every row is verified from Bryan's own CV. NEVER fabricate a citation, DOI, coauthor, or venue. Add a `url` only when you have a verified DOI/publisher link. Set placeholder:true on any row not yet real (renders dimmed, never a real citation).",
+  "worksInPress": [
+    {
+      "year": "2027",
+      "title": "Based Money: A Citizen's Guide to Money Mischief and Fiscal Folly",
+      "authors": "Bryan P. Cutsinger and Alexander William Salter",
+      "venue": "Independent Institute",
+      "status": "Book — under contract, anticipated 2027",
+      "url": ""
+    }
+  ],
   "articles": [
     {
-      "year": "20XX",
-      "title": "[PLACEHOLDER] Article title — peer-reviewed publication",
-      "authors": "B. Cutsinger [+ coauthors]",
-      "venue": "Journal name",
-      "status": "Published",
-      "url": "",
-      "placeholder": true
+      "year": "2026",
+      "title": "Putting Economics Back in Humanomics",
+      "authors": "Bryan P. Cutsinger and Alexander William Salter",
+      "venue": "Public Choice",
+      "status": "206: 309–326",
+      "url": ""
     },
     {
-      "year": "20XX",
-      "title": "[PLACEHOLDER] Second article title",
-      "authors": "B. Cutsinger",
-      "venue": "Journal name",
-      "status": "Published",
-      "url": "",
-      "placeholder": true
+      "year": "2025",
+      "title": "Symposium Introduction: Reviewing the Federal Reserve's Framework",
+      "authors": "Bryan P. Cutsinger and William J. Luther",
+      "venue": "Southern Economic Journal",
+      "status": "91, no. 4: 1213–1228",
+      "url": ""
     },
     {
-      "year": "20XX",
-      "title": "[PLACEHOLDER] Third article title",
-      "authors": "B. Cutsinger [+ coauthors]",
-      "venue": "Journal name",
-      "status": "Forthcoming",
-      "url": "",
-      "placeholder": true
+      "year": "2024",
+      "title": "The Need for a Price Theory Revival",
+      "authors": "Bryan P. Cutsinger and Alexander William Salter",
+      "venue": "Journal of Private Enterprise",
+      "status": "39, no. 1: 11–44",
+      "url": ""
+    },
+    {
+      "year": "2023",
+      "title": "Assignats or Death: The Politics and Dynamics of Hyperinflation in Revolutionary France",
+      "authors": "Bryan P. Cutsinger, Louis Rouanet, and Joshua S. Ingber",
+      "venue": "European Economic Review",
+      "status": "157: 104510",
+      "url": ""
+    },
+    {
+      "year": "2022",
+      "title": "Seigniorage Payments and the Federal Reserve's New Operating Regime",
+      "authors": "Bryan P. Cutsinger and William J. Luther",
+      "venue": "Economics Letters",
+      "status": "220: 110880",
+      "url": ""
+    },
+    {
+      "year": "2022",
+      "title": "Insuring Legislative Wealth Transfers: Theory and Evidence",
+      "authors": "Bryan P. Cutsinger, Alexander Marsella, and Yang Zhou",
+      "venue": "Public Choice",
+      "status": "192: 127–144",
+      "url": ""
+    },
+    {
+      "year": "2022",
+      "title": "The Wild Card: Colonial Paper Money in French North America, 1685 to 1719",
+      "authors": "Bryan P. Cutsinger, Mathieu Bédard, and Vincent Geloso",
+      "venue": "European Review of Economic History",
+      "status": "26, no. 2: 185–207",
+      "url": ""
+    },
+    {
+      "year": "2021",
+      "title": "The Federal Reserve's Response to the COVID-19 Contraction: An Initial Appraisal",
+      "authors": "Nicolás Cachanosky, Bryan P. Cutsinger, Thomas L. Hogan, William J. Luther, and Alexander William Salter",
+      "venue": "Southern Economic Journal",
+      "status": "87, no. 4: 1152–1174",
+      "url": ""
+    },
+    {
+      "year": "2021",
+      "title": "Forced Savings and Political Malinvestment: An Application of Steven Horwitz's Microfoundations and Macroeconomics",
+      "authors": "Bryan P. Cutsinger",
+      "venue": "The Review of Austrian Economics",
+      "status": "34, no. 2: 311–322",
+      "url": ""
+    },
+    {
+      "year": "2020",
+      "title": "On the Feasibility of Returning to the Gold Standard",
+      "authors": "Bryan P. Cutsinger",
+      "venue": "The Quarterly Review of Economics and Finance",
+      "status": "78: 88–97",
+      "url": ""
+    },
+    {
+      "year": "2019",
+      "title": "Seigniorage in the Civil War South",
+      "authors": "Bryan P. Cutsinger and Joshua S. Ingber",
+      "venue": "Explorations in Economic History",
+      "status": "72: 74–92",
+      "url": ""
+    },
+    {
+      "year": "2019",
+      "title": "The Durability of Legislative Benefits and the Role of the Executive Branch's Settlement Authority",
+      "authors": "Bryan P. Cutsinger",
+      "venue": "Journal of Private Enterprise",
+      "status": "34, no. 1: 1–14",
+      "url": ""
+    }
+  ],
+  "bookChapters": [
+    {
+      "year": "2024",
+      "title": "There's No Such Thing as a Wage-Price Spiral",
+      "authors": "Bryan P. Cutsinger",
+      "venue": "The War on Prices",
+      "status": "Ed. Ryan Bourne · Cato Institute · 29–39",
+      "url": ""
+    },
+    {
+      "year": "2023",
+      "title": "Interest on Reserves: Implications for Austrian Monetary and Business Cycle Theory",
+      "authors": "Bryan P. Cutsinger",
+      "venue": "A Research Agenda for Austrian Economics",
+      "status": "Eds. Steven Horwitz & Louis Rouanet · Edward Elgar · 21–44",
+      "url": ""
+    },
+    {
+      "year": "2021",
+      "title": "Is the Gold Standard Feasible?",
+      "authors": "Bryan P. Cutsinger",
+      "venue": "The Gold Standard: Retrospect and Prospect",
+      "status": "Eds. Peter C. Earle & William J. Luther · AIER · 165–182",
+      "url": ""
     }
   ],
   "workingPapers": [
     {
-      "year": "20XX",
-      "title": "[PLACEHOLDER] Working paper title",
-      "authors": "B. Cutsinger [+ coauthors]",
-      "venue": "",
-      "status": "Under review",
-      "url": "",
-      "placeholder": true
+      "year": "",
+      "title": "As Good as Gold? A Framework for Analyzing Redeemable Paper Money",
+      "authors": "Bryan P. Cutsinger and Joshua R. Hendrickson",
+      "venue": "Explorations in Economic History",
+      "status": "Revise & resubmit",
+      "url": ""
     },
     {
-      "year": "20XX",
-      "title": "[PLACEHOLDER] Second working paper title",
-      "authors": "B. Cutsinger",
-      "venue": "",
+      "year": "",
+      "title": "Reviewing the Federal Reserve's 2025 Monetary Policy Framework Review",
+      "authors": "Bryan P. Cutsinger, Peter N. Ireland, and William J. Luther",
+      "venue": "Quarterly Journal of Political Science",
+      "status": "Under review",
+      "url": ""
+    },
+    {
+      "year": "",
+      "title": "Rethinking Deflation and Its Effects: A Cross-Country Analysis of Supply-Driven Deflation",
+      "authors": "Bryan P. Cutsinger and Casey Pender",
+      "venue": "Journal of Economic Behavior & Organization",
       "status": "Revise & resubmit",
-      "url": "",
-      "placeholder": true
+      "url": ""
+    },
+    {
+      "year": "",
+      "title": "Captured Gatekeepers: Structural Conflicts of Interest in U.S. Higher Education",
+      "authors": "Bryan P. Cutsinger and Siri Terjesen",
+      "venue": "European Economic Review",
+      "status": "Under review",
+      "url": ""
     }
   ]
 }
