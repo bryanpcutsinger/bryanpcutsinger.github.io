@@ -16,7 +16,23 @@ note: "Self-contained — assumes no access to the textbooks. Part A of t07-comp
 
 In T6 we built the cost side of the firm. You know how a producer's costs behave as it runs faster or slower: marginal cost rises as output climbs, and average cost traces a U. What we never did was put a price next to those costs. A cost curve by itself cannot tell a firm how much to make, whether to make anything at all, or whether it will survive. For that we need the other blade of the scissors, the market price. Today we add it.
 
-We will study the simplest and in many ways the most important case: a seller so small relative to its market that it has no power over price. It must take the going price as a given and decide only how much to produce. Economists call such a seller a *price-taker*, and the markets full of them are what we usually mean by "competition." This is the first of two installments on competitive markets. Today, in Part A, we stay inside a single firm and the industry it belongs to: how a price-taking firm picks its output, how thousands of them together generate a market supply curve, why competition produces the industry's output as cheaply as possible, and why profits in such a market get driven toward an ordinary return. Next time, in Part B, we put this machinery to work on taxes, timing, and the constant churn of firms rising and falling. By the end of today you should be able to predict how a single price-taking firm behaves, build a market supply curve from many of them, and explain why the profits competition generates do not last.
+We will study the simplest and in many ways the most important case: a seller so small relative to its market that it has no power over price. It must take the going price as a given and decide only how much to produce. Economists call such a seller a *price-taker*, and the markets full of them are what we usually mean by "competition." This is the first of two installments on competitive markets. Today, in Part A, we stay inside a single firm and the industry it belongs to: how a price-taking firm picks its output, how thousands of them together generate a market supply curve, why competition produces the industry's output as cheaply as possible, and why profits in such a market get driven toward an ordinary return. Next time, in Part B, we put this machinery to work on taxes, timing, and the constant churn of firms rising and falling.
+
+<aside class="econ-callout econ-objectives">
+<p class="econ-callout__label">Learning objectives</p>
+<p>By the end of this post you should be able to:</p>
+<ul>
+<li>Explain why a price-taker faces a horizontal demand curve at the market price, and why homogeneity and easy entry, not the number of rivals, make a seller a price-taker.</li>
+<li>Explain why a price-taker's marginal revenue equals the market price, while a price-searcher's marginal revenue falls below its price.</li>
+<li>Use the rule to produce until marginal cost rises to the price to find a price-taker's profit-maximizing output, and explain why its rising marginal cost is its supply curve.</li>
+<li>Decide whether a firm should keep producing by comparing price with the right average cost, using minimum average variable cost as the short-run shutdown price and minimum average total cost as the long-run break-even price.</li>
+<li>Build the market supply curve by summing firms' supply horizontally, and explain why entry makes it slope upward.</li>
+<li>Explain why competition drives every firm's marginal cost toward the same number, and why that produces the industry's output at the lowest possible total cost.</li>
+<li>Explain why competition selects for the firms that behave as if they maximize profit, even when no manager actually computes marginal cost.</li>
+<li>Explain how competition turns profits into costs by capitalizing an asset's earnings into its price, why current value rather than historical cost governs, and how a genuine profit differs from a transfer engineered by blocking competition.</li>
+<li>Explain the verbal case for why competitive output, where price equals marginal cost, is efficient, and identify the value judgment about willingness to pay that the argument assumes.</li>
+</ul>
+</aside>
 
 ## A Price-Taker Faces a Horizontal Demand Curve at the Market Price
 
@@ -24,15 +40,35 @@ Start with a wheat farmer. Suppose wheat sells for $2 a bushel and the whole mar
 
 So the farmer can sell as much or as little as he likes, but only at the one price the market hands him. Draw the demand curve facing him alone and it is not the familiar downward slope; it is a flat horizontal line at $2. That flat line is the signature of a price-taker: he takes the market price as fixed and chooses only a quantity along it.
 
-![Two-panel diagram: the market price is set where market demand meets market supply (left panel), and the individual price-taking firm faces that price as a horizontal demand line (right panel).](/teaching/microeconomics/t07a-competitive-firm/figures/t07a-market-firm.svg)
+<aside class="econ-callout econ-def">
+<p class="econ-callout__label">Definition</p>
+<p>A price-taker is a seller so small relative to its market that it must accept the going market price and can choose only how much to produce.</p>
+</aside>
+
+<figure class="econ-figure" style="margin:1.5em 0;">
+<iframe src="/teaching/microeconomics/t07a-competitive-firm/figures/t07a-market-firm-interactive.html" title="Drag the market demand curve up or down to watch the clearing price change and the price-taking firm's flat demand line move to meet it." loading="lazy" style="width:100%; max-width:640px; aspect-ratio:16/10; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t07a-competitive-firm/figures/t07a-market-firm-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t07a-competitive-firm/figures/t07a-market-firm.svg">view the static figure</a>.</p></iframe>
+<figcaption><strong>The market sets the price; the firm just takes it.</strong> In the left panel, market demand meets market supply at the clearing price. In the right panel, that same price is the flat, horizontal demand line facing one price-taking firm; it can sell any quantity it likes at that price, so it chooses a quantity, not a price. Drag (or tap and arrow-key) the market demand curve up or down and watch the clearing price rise or fall; the firm's flat line moves to meet it. If the frame does not load, <a href="/teaching/microeconomics/t07a-competitive-firm/figures/t07a-market-firm-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t07a-competitive-firm/figures/t07a-market-firm.svg">view the static figure</a>.</figcaption>
+</figure>
 
 What makes a seller a price-taker is not the raw number of competitors at any moment. It is two conditions working together. First, the product is *homogeneous*: buyers treat one seller's units as interchangeable with another's, so no one can command a premium. Second, entry is quick and cheap, so if a price ever rose far above cost, newcomers would pour in and compete it back down. A market can have only a handful of sellers today and still discipline each like a price-taker, as long as outsiders can jump in fast. Homogeneity plus easy entry, not a head count, is what strips a seller of power over price.
+
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>Our wheat farmer holds back his thousand bushels to push the price up, then tries charging $2.01. Why does neither move work? What two conditions, not the number of rivals, make him a price-taker?</p>
+</aside>
 
 Set aside, for now, a different kind of seller: one that faces a downward-sloping demand for its own product, so that to sell more it must cut its price. Such a seller does not take a price; it searches for one. We study those *price-searchers* in a later topic.
 
 ## For a Price-Taker, Marginal Revenue Is Just the Market Price
 
 Because our farmer can sell any quantity at the same $2, the revenue from one more bushel is easy to find. Sell one more and revenue rises by exactly $2, with no hidden cost in the form of a lower price on everything else, because selling more does not move the price. The extra revenue from one more unit is what we call *marginal revenue*. For a price-taker, marginal revenue equals the price.
+
+<aside class="econ-callout econ-termset">
+<p class="econ-callout__label">Key term</p>
+<dl class="econ-term-list">
+<div><dt>Marginal Revenue</dt><dd>The extra revenue a firm gets from selling one more unit.</dd></div>
+</dl>
+</aside>
 
 That is precisely what fails for a price-searcher, who must cut its price to move extra units and so earns less than the price on each new sale, since the cut bites into the units it was already selling. For that seller marginal revenue falls below price. Competition behaves so cleanly because, for a price-taker, marginal revenue and price are the same number.
 
@@ -60,9 +96,17 @@ Let me put numbers on it with a single producer's cost schedule. These are the s
 
 Suppose the market price is $25. Where does marginal cost meet it? At seven units. The seventh unit costs $22 to make and sells for $25, so it is worth producing. The eighth would cost $30 and still fetch only $25, so making it would shrink profit by $5. Seven units is the profit-maximizing rate, and notice we found it without ever consulting average cost. The marginal comparison alone pins down the rate.
 
-![The firm's rising marginal cost curve crosses the U-shaped average variable cost and average total cost curves; a horizontal price line at $25 meets MC at the profit-maximizing output of seven units, with the AVC minimum ($7) and ATC minimum ($9) marked as the short-run and long-run shutdown floors.](/teaching/microeconomics/t07a-competitive-firm/figures/t07a-firm-cost.svg)
+<figure class="econ-figure" style="margin:1.5em 0;">
+<iframe src="/teaching/microeconomics/t07a-competitive-firm/figures/t07a-firm-cost-interactive.html" title="Drag the output handle to watch profit peak where marginal cost meets the $25 price, or drag the price line down to find the loss floor at $9 and the shut-down floor at $7." loading="lazy" style="width:100%; max-width:520px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t07a-competitive-firm/figures/t07a-firm-cost-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t07a-competitive-firm/figures/t07a-firm-cost.svg">view the static figure</a>.</p></iframe>
+<figcaption><strong>Produce where marginal cost meets the price.</strong> A price-taking firm faces a flat price line ($25 = marginal revenue) and maximizes profit at the output where rising marginal cost meets that price: here, 7 units, with the shaded rectangle from average total cost up to the price as the profit. Drag the output handle (or use the arrow keys) to see profit peak at 7 units, then drag the price line down to watch the firm keep producing at a loss above the $7 shut-down floor and stop below it. If the frame does not load, <a href="/teaching/microeconomics/t07a-competitive-firm/figures/t07a-firm-cost-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t07a-competitive-firm/figures/t07a-firm-cost.svg">view the static figure</a>.</figcaption>
+</figure>
 
 Read the table the other way and you see the firm's supply curve fall right out of it. At a price of $25 the firm offers seven units; at a higher price it would push to eight, nine, ten, climbing its marginal-cost schedule. The amount the firm is willing to supply at each price is read straight off its rising marginal cost. That is the deep result: above a certain floor, the firm's marginal-cost curve is its supply curve. We will pin down that floor in a moment.
+
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>The market price is $25 and the firm makes seven units. Why is making the eighth a mistake? If the price instead rose to $40, would the firm want to produce more or fewer units?</p>
+</aside>
 
 ## Shut Down or Keep Going Depends on Whether Price Covers the Right Cost
 
@@ -72,7 +116,20 @@ In the short run, the firm has already sunk money into its building and machiner
 
 The long run is a different decision program, not the same one stretched out. When the equipment finally wears out and the firm must decide whether to replace it, the old investment is no longer sunk; buying new machinery is a fresh, avoidable cost. Now the relevant figure is *average total cost*, which includes the cost of capacity. It bottoms out at $9 in our table, so the firm reinvests and stays in the business only if the expected price covers at least $9. Below $9 it runs the equipment it has until it dies, then exits.
 
+<aside class="econ-callout econ-termset">
+<p class="econ-callout__label">Key terms</p>
+<dl class="econ-term-list">
+<div><dt>Average Variable Cost</dt><dd>The cost that changes with output, averaged over each unit produced.</dd></div>
+<div><dt>Average Total Cost</dt><dd>All cost, including the cost of capacity, averaged over each unit produced.</dd></div>
+</dl>
+</aside>
+
 There is the floor we promised. The firm's marginal-cost curve serves as its supply curve only above the lowest average variable cost, $7, since below that it produces nothing. And the lowest average total cost, $9, is the price below which it will not stay in the industry permanently. Same firm, two break-even prices, because the short run and the long run are two different production plans, each carrying its own cost.
+
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>Suppose the market price settles at $8. In the short run, does the firm keep producing or shut down? When its equipment finally wears out, will it buy new machinery and stay in the business? Point to the cost each answer depends on.</p>
+</aside>
 
 ## Add Up Every Firm's Supply and You Get the Market Supply Curve
 
@@ -80,7 +137,10 @@ One firm's supply curve is its marginal cost above the shutdown point. A market 
 
 It slopes upward for two reasons. Each firm's marginal cost rises with output, and a higher price also draws in firms that were sitting on the sidelines. Picture a price climbing from low to high: at first only the lowest-cost producers find it worth operating; as the price rises, each expands along its marginal-cost curve while new firms with higher costs clear their own break-even and switch on, adding fresh marginal-cost curves to the sum. Entry is the market's own margin. The individual firm adjusts its rate; the industry adjusts the number of firms. Both push the same way, so the market offers more as the price rises.
 
-![Three individual firm marginal-cost curves summed horizontally into an upward-sloping market supply curve; a demand shift raises the clearing price and draws additional firms into the market.](/teaching/microeconomics/t07a-competitive-firm/figures/t07a-market-supply.svg)
+<figure class="econ-figure" style="margin:1.5em 0;">
+<iframe src="/teaching/microeconomics/t07a-competitive-firm/figures/t07a-market-supply-interactive.html" title="Toggle between the lower and higher demand curve to watch the market-clearing price rise, firm C enter, and the equalized-marginal-cost construction shift from $20 to $30." loading="lazy" style="width:100%; max-width:520px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t07a-competitive-firm/figures/t07a-market-supply-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t07a-competitive-firm/figures/t07a-market-supply.svg">view the static figure</a>.</p></iframe>
+<figcaption><strong>Market supply is the horizontal sum of every firm's marginal cost.</strong> Three firms' marginal-cost curves add up, quantity by quantity, into the bold market-supply curve: B's curve enters the sum once the price reaches its $18 cost floor, C's once the price reaches $28. Toggle Lower demand ($20, where only A and B produce) to Higher demand ($30, where all three produce) and watch each firm's output ride up its own MC curve to the new equalized price, with C entering along the way. If the frame does not load, <a href="/teaching/microeconomics/t07a-competitive-firm/figures/t07a-market-supply-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t07a-competitive-firm/figures/t07a-market-supply.svg">view the static figure</a>.</figcaption>
+</figure>
 
 ## Competition Pushes Every Firm's Marginal Cost Toward the Same Number
 
@@ -113,9 +173,21 @@ The table tracks the machine as the product price moves.
 
 Two lessons live in that table. First, the cost of using the machine is not the $2 per unit you would compute from its $10,000 purchase price; it is whatever the machine is currently worth, spread over its output. When the product sells for $4, the true cost of using the machine is $3 a unit, because that is what you sacrifice by using it rather than selling it. The historical price you paid is irrelevant; only current value counts. That kills a stubborn fallacy: that new firms can undercut old ones because the old are "burdened" with obsolete, expensive equipment. They are not burdened at all. Old equipment is continuously revalued to whatever level lets it keep competing; if it can no longer earn its old keep, its value is rewritten downward, and at that lower value it competes on equal current footing with anything new. What a firm once paid for its capital is dead history.
 
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>A rival claims it can undercut an old firm because that firm is stuck with expensive, outdated equipment. Using the machine example, explain why the old equipment is not really a burden, and why what the firm originally paid for it no longer matters.</p>
+</aside>
+
 Be precise about what these profits are. A genuine profit of this kind is an increase in wealth: someone created value worth more than the resources it consumed and for a while captured the difference. That is entirely different from the gain a firm collects by getting the government to block its rivals. Money squeezed out of consumers by restricting competition is not a profit in our sense; it is a transfer engineered by force, and competition does not erode it because competition has been forbidden. When we say competition drives profits to normal, we mean the wealth-creating kind, the kind that draws in imitators precisely because it is real.
 
 One thread runs forward from here. When rivals bid up the price of a profit-earning asset, what they pay for is its stream of future earnings squeezed into a single price today. Collapsing a future flow into a present price is *capitalization*, and we will make its arithmetic explicit when we reach present value and capital later. For now the verbal version is enough: tomorrow's profit gets baked into today's asset price, leaving the new owner only a normal return.
+
+<aside class="econ-callout econ-termset">
+<p class="econ-callout__label">Key term</p>
+<dl class="econ-term-list">
+<div><dt>Capitalization</dt><dd>Collapsing an asset's stream of future earnings into a single present price.</dd></div>
+</dl>
+</aside>
 
 ## Is Producing Where Price Equals Marginal Cost Socially Desirable?
 
@@ -125,8 +197,19 @@ At the competitive output, the last unit produced is worth at least its price to
 
 Be honest about what the argument assumes. It treats willingness to pay as the measure of a unit's "worth," and willingness to pay depends on a person's wealth, so the efficiency claim accepts the existing distribution of wealth as its yardstick. That is not a hidden flaw, but it is a value judgment riding inside an apparently technical result, and you should see it. One footnote worth knowing: this argument was first worked out in detail by economists sympathetic to socialism, who hoped a planner could mimic it. It became one of the strongest cases for letting competitive markets and private property do the work instead.
 
-## What's Next
-
-Pull Part A together. A price-taker takes the market price as given and produces where its marginal cost rises to meet that price; above its shutdown floor, that marginal-cost curve is its supply curve. Sum those curves across all firms, let entry and exit work, and you get an upward-sloping market supply that produces the industry's output at the lowest possible total cost. Profits in such a market do not last, because rivals bid up the price of whatever earns them, capitalizing the profit into a cost and leaving an ordinary return. And the whole arrangement is efficient in a specific, value-laden sense: the last unit made is worth its price to the buyer and worth its marginal cost in resources given up.
-
-Everything so far has stayed inside the firm and its industry under settled conditions. Part B sets that machinery in motion. We add time, and watch demand and supply grow more elastic the longer we wait. Then we drop a tax onto a competitive market and discover the surprising result that it does not matter who writes the check to the government: the burden splits between buyers and sellers by who can more easily walk away, lands first on immobile resources and later on consumers, and falls entirely on a lone price-taker who cannot pass it along. That tax-incidence result is our main Exam 2 target. We will also name the quasi-rent a sunk resource earns, see why cutting price below a rival's cost can be efficient rather than predatory, and close with the relentless rise and fall of firms that competition drives. Bring today's tools; in Part B you will use every one of them.
+<div class="econ-review">
+<section class="econ-review__section">
+<h3>Key takeaways</h3>
+<ul>
+<li><strong>A price-taker faces a flat demand curve.</strong> Because its output is a rounding error and its product is identical to its rivals', it must accept the market price; homogeneity and easy entry, not a head count, are what strip it of power over price.</li>
+<li><strong>Marginal revenue equals price for a price-taker.</strong> Selling one more unit adds exactly the market price, since the extra sale does not move the price, whereas a price-searcher earns less than price on each new unit.</li>
+<li><strong>The firm's supply curve is its rising marginal cost.</strong> It produces until marginal cost climbs to meet the price, so its marginal-cost curve above the shutdown floor traces how much it will supply at each price.</li>
+<li><strong>Marginal cost sets how much, average cost decides whether.</strong> Above minimum average variable cost the firm keeps running in the short run; only above minimum average total cost will it reinvest and stay in the business for the long run.</li>
+<li><strong>Sum firm supplies to get market supply.</strong> Adding every firm's quantity at each price, and letting higher prices draw new firms in, produces an upward-sloping market supply curve.</li>
+<li><strong>Competition equalizes marginal cost.</strong> Every firm expands until its marginal cost meets the one market price, so marginal costs converge and the industry's output is produced as cheaply as possible, with no planner directing it.</li>
+<li><strong>Survival, not calculation, is what competition rewards.</strong> Firms need not compute the optimum; the market winnows those that stray far from it and keeps those that land near it, so the survivors behave as if they had solved the problem.</li>
+<li><strong>Competition turns profits into costs.</strong> Rivals bid up the price of whatever earns a profit until it is capitalized into a cost, leaving an ordinary return; current value, not historical cost, is what matters, and a genuine profit is created wealth, not a transfer won by blocking competition.</li>
+<li><strong>Competitive output is efficient in a value-laden sense.</strong> Where price equals marginal cost, the last unit is worth its price to the buyer and its marginal cost in resources given up, but that worth is measured by willingness to pay, which depends on the existing distribution of wealth.</li>
+</ul>
+</section>
+</div>

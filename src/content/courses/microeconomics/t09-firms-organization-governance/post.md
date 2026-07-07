@@ -17,6 +17,23 @@ So far this course has treated the economy as a web of trades between separate p
 
 That is the puzzle for today, and we answer it in pieces: why teams produce more than scattered individuals, why that tempts slacking, who owns a firm and why that person has the strongest reason to police it, how people protect investments that leave them exposed to a partner, and how the corporation lets strangers pool wealth. Threaded through it all is a political-economy question: what happens to behavior when the link between authority and responsibility is cut?
 
+<aside class="econ-callout econ-objectives">
+<p class="econ-callout__label">Learning objectives</p>
+<p>By the end of this post you should be able to:</p>
+<ul>
+<li>Explain why team output exceeds separate efforts and cannot be divided among members.</li>
+<li>Explain why unmetered team output tempts shirking, making monitoring a real job.</li>
+<li>Identify the residual claimant and why he has the strongest reason to monitor.</li>
+<li>Explain how tips, premium wages, and deferred pay curb shirking cheaply.</li>
+<li>Explain how a specific investment creates dependence and invites hold-up.</li>
+<li>Describe how integration, hostages, contracts, and reputation shield a dependent party.</li>
+<li>Explain how limited liability and transferable shares let a corporation pool wealth.</li>
+<li>Explain how salable shares make control contestable and discipline managers.</li>
+<li>Distinguish a shareholder's contractual claim from a stakeholder's unilateral dependence.</li>
+<li>Explain why stockholders and bondholders clash over risk, a general conflict.</li>
+</ul>
+</aside>
+
 ## Firms Exist Because Team Output Cannot Be Divided Up
 
 Start with the gain that makes firms worth forming. People can produce more of some things together than apart. Suppose Jack working alone produces output worth $5 and Jill alone produces $7. Apart, they make $12 between them. Put them on the same team and they produce $15. Working together created $3 of value neither could have made solo.
@@ -35,6 +52,11 @@ That extra value is the whole point of a team. But it brings a problem that does
 
 The table makes the trap visible. The two contributions sum to more than the joint output because the output is genuinely *joint*. It is non-separable: there is no honest way to slice the $15 and say "this part is Jack's doing, that part is Jill's." The gain from teamwork belongs to neither one alone.
 
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>The two marginal products sum to $18, but the team produced only $15. Why can't a firm pay each teammate the value he adds to the total?</p>
+</aside>
+
 This is why "you are paid the value of what you produce" is, inside a team, a futile claim. The B-17 bomber crews of the Second World War make the point. A crew of ten specialists flew each mission together; ask which one mattered most and the question dissolves, because the plane either completed its run or it did not, and the result was the crew's.
 
 So if pay cannot track each person's slice of an unsliceable total, what sets it? Competition. Each team member earns roughly what he could get on his best alternative team elsewhere; that outside option is the real cost of keeping him, and pay must at least match it. If the whole team produces less than the sum of what its members could earn elsewhere, it will not form or will not last. (How much a worker is worth to an employer, and why chasing "what you add to the total" leads nowhere, connects to the demand for labor, our next topic.)
@@ -43,6 +65,13 @@ So if pay cannot track each person's slice of an unsliceable total, what sets it
 
 The non-separability that makes teams valuable also makes them vulnerable. If no one can measure exactly what you contributed, you can ease off and let the others carry you, collecting your share while supplying less than your effort. Economists call this *shirking*, and the general problem it belongs to is *moral hazard*: when someone can capture the gains from cutting corners while others bear the cost, and the cutting is hard to detect, expect more of it.
 
+<aside class="econ-callout econ-termset">
+<p class="econ-callout__label">Key term</p>
+<dl class="econ-term-list">
+<div><dt>Moral Hazard</dt><dd>The temptation to take less care when others bear the cost and the conduct is hard to detect.</dd></div>
+</dl>
+</aside>
+
 Moral hazard is everywhere, not just on the shop floor. An employee paid by the hour, a manager spending other people's money, a depositor whose account is guaranteed by the government, all face some version of the temptation to take less care than if they bore the full consequences. The B-17 crew is the rare team where shirking barely arises: at 20,000 feet under fire, no one is tempted to loaf, because everyone's survival rides on everyone's effort.
 
 Because shirking is the cost of team production, somebody must watch for it, and *monitoring is itself a job that creates value*. This answers a puzzle about sports: the coach never plays, the conductor never makes a sound, so what do they contribute? They monitor. A player executing his own assignment at full tilt cannot also evaluate his teammates and bench the ones who slack; the coach can. The conductor adds nothing to the noise and everything to the music by judging each musician's performance.
@@ -50,6 +79,13 @@ Because shirking is the cost of team production, somebody must watch for it, and
 ## The Owner Is the Residual Claimant, and That Is Why He Monitors
 
 If monitoring is so important, who does it, and why? You cannot literally "own a firm"; a firm is a bundle of people and contracts. What you own is the firm-specific resources whose value rises and falls most with how well the firm does. The person holding those resources is the *owner*, and he has a special claim: after everyone else has been paid their agreed wages, rents, and interest, whatever is left, profit or loss, is his. We call him the *residual claimant*.
+
+<aside class="econ-callout econ-termset">
+<p class="econ-callout__label">Key term</p>
+<dl class="econ-term-list">
+<div><dt>Residual Claimant</dt><dd>The owner who keeps whatever is left after all fixed claims are paid, and bears any loss.</dd></div>
+</dl>
+</aside>
 
 This is no accident; it solves the monitoring problem. The residual claimant keeps every dollar saved by stopping a shirker and eats every dollar lost to one, so no one has a sharper incentive to watch the team. He gets the authority to direct, hire, and fire, and bears the residual in return: authority and responsibility are bolted together.
 
@@ -84,6 +120,11 @@ Because hold-up is a predictable danger, people have invented several ways to de
 It is no accident that performers and athletes are the standard examples of trying to tear up a signed deal once they make it big, far more than doctors, lawyers, or engineers. The difference is the shape of the career. A star's high earnings arrive in a short burst of a few years, so the value of the whole career is bunched into that brief window, and the pressure to cash in while still hot is enormous. A doctor or engineer earns a good living spread evenly across decades, so the temptation to blow up a contract for a one-time gain is far weaker. The longer the earning horizon, the less reason to grab.
 
 That short-window logic explains the studio contract too. A studio signs an unknown to a five-year deal. She becomes a star and feels cheated, locked into yesterday's pay while drawing tomorrow's crowds. But the studio signed many unknowns, and most never became stars. The contract must pay enough early, when failure is likely, to make the whole gamble worth taking, which means the rare winner is "overpaid" at first and "underpaid" later. The late underpayment is not exploitation; it is the offset that funded all the bets that flopped. Without the bundle, no one would back unknowns at all.
+
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>A studio's one breakout star feels cheated by her five-year deal. Why is her later "underpayment" not exploitation, given the many unknowns the studio also signed?</p>
+</aside>
 
 The most powerful protection is written in no contract. It is *reputation*: other people's belief about how you will behave in the future, valuable because it lets them rely on you without inspecting everything you do. A *brand name* is reputation made portable. Far from being empty advertising propaganda, a brand lets a shopper predict quality and judge whether a price is fair without costly investigation, which is why a traveler in a strange city chooses the familiar chain over the unknown diner next door. What makes a brand trustworthy is that the seller has put up a hostage of his own: building a brand is expensive, and that investment evaporates the instant he is caught cheating. A brand is thus a self-enforcing promise; the seller behaves well not out of virtue but because misbehaving would forfeit the future earnings the brand exists to capture. Advertising is a sibling mechanism, equally maligned without cause: by telling buyers who sells what, an advertisement lowers the customer's cost of finding a seller, so it serves the shopper as much as the seller. A tire ad is worthless on the many days you need no tires and valuable on the rare day you do. *Franchising* scales this up. The franchiser supplies and polices a predictable brand, "no surprises" from one town to the next, while the franchisee pays a fee and posts a sign that act as a hostage the franchiser can seize if the franchisee free-rides on the shared name by skimping on quality. The relationship is mutual dependence, not tribute paid to a useless headquarters.
 
@@ -146,11 +187,23 @@ That is moral hazard between classes of investors rather than between owner and 
 
 After all the talk of shareholders, managers, and raiders, the firm's ultimate controller is none of them; it is the consumer. The market for corporate control disciplines managers from above, but consumer demand disciplines the whole firm from below: a firm whose product no one will buy dies, unless it can secure a government subsidy or a law banning people from buying from competitors. The buy-or-walk-away decision is the one discipline no boardroom maneuver can repeal.
 
-## What's Next
-
-Pull the threads together. Firms exist because teamwork produces more than scattered effort, but joint output cannot be carved into individual shares, which both creates value and tempts people to shirk. The residual claimant has the strongest reason to monitor, which is why ownership carries authority. Specific investments leave their owners exposed to hold-up, so people protect themselves with integration, hostages, long-term contracts, and above all reputation. The corporation, with limited liability and tradable shares, lets multitudes pool wealth and makes control contestable. And running underneath it all: cut the link between authority and responsibility, and behavior deteriorates in predictable ways.
-
-Next time we turn from how firms are organized to how they decide what to buy. A firm hires workers, rents machines, and buys materials, and a question that kept surfacing today, "how much is one more team member worth?", finally gets a clean answer. We will see how the value a worker adds at the margin sets the wage, and how the income from production gets divided among the people and resources that made it. Bring the residual-claimant frame with you; it does most of the work in the background.+ table rows ^|), WITHIN the 6,000 hard
+<div class="econ-review">
+<section class="econ-review__section">
+<h3>Key takeaways</h3>
+<ul>
+<li><strong>Teams create non-separable value.</strong> Joint output exceeds separate effort but belongs to no member alone.</li>
+<li><strong>Non-separability tempts shirking.</strong> Unmetered effort invites slacking, so watching for it is a paid job.</li>
+<li><strong>The residual claimant monitors.</strong> Keeping what is left after fixed claims gives the sharpest reason to monitor.</li>
+<li><strong>Devices economize on watching.</strong> Tips, premium wages, and deferred pay curb shirking when supervision is costly.</li>
+<li><strong>Specific investments invite hold-up.</strong> A sunk, relationship-specific asset leaves its owner exposed to a partner's squeeze.</li>
+<li><strong>Several devices defuse hold-up.</strong> Integration, hostages, long-term contracts, and reputation protect the dependent party.</li>
+<li><strong>The corporation pools wealth.</strong> Limited liability and transferable shares let strangers share huge ventures.</li>
+<li><strong>Control is contestable.</strong> A sagging share price invites a takeover that disciplines managers.</li>
+<li><strong>Contracts bind, dependence does not.</strong> A shareholder's claim rests on a prior promise; a firm owes only its actual commitments.</li>
+<li><strong>Investor conflicts are general.</strong> Stockholders want more risk than bondholders wherever one gains while another bears the cost.</li>
+</ul>
+</section>
+</div>+ table rows ^|), WITHIN the 6,000 hard
 cap (12 words headroom). §6 voice on the body: em-dashes 0 (budget <=~12); "quiet*" 1
 ("quietly moved $4.50"; budget <=2) — both within budget; the three adds introduced no em-dashes
 (the one "quietly valuable" draft phrasing was reworded out to hold the count at 1). The §10

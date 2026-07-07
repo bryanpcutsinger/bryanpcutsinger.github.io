@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive figure: possible demand-curve shapes</title>
+<!--
+  Interactive shape gallery for the T3a blog post (website-styled, warm
+  palette). Recreates UE Fig 5.2 "Possible Demand Curves" (p.65) — a DEFERRED
+  figure with no existing static .tex/.svg; built from scratch per
+  topics/t03a-demand-and-marginal-tools/figures/interactive-specs.md
+  (t03a-ue5-2 block). Self-contained: no libraries, no network.
+
+  FAMILY F5 (schedule/step-through link — the interaction floor: a segmented
+  toggle steps among five shape representations; there is no curve-drag
+  economics here, only "which shapes still count as a demand curve").
+  Geometry class: single-panel, viewBox 440x540, aspect-ratio 4/5, max-width
+  480px.
+
+  GEOMETRY / coordinate frame:
+    Toggle row (5 tabs: Straight / Curved / Stepped / Vertical / Upward) sits
+    at the top, y 6-36, x 16-424.
+    Axes: origin (Quantity=0, Price=0) at pixel (64,360); x-axis line runs to
+    (415,360); y-axis line runs up to (64,46). No numeric ticks — this is a
+    shape gallery, not a schedule (per the spec's "no numeric ticks needed").
+    Four overlaid demand-curve shapes occupy the plot, all running
+    upper-left -> lower-right (never upward):
+      shapeStraight  M80,70  L358,320               (idx 0)
+      shapeCurvedA   M84,58  C150,75 175,150 232,182 C290,214 328,258 356,300
+                     (smooth wavy/S-shaped; idx 1, grouped with curvedB)
+      shapeCurvedB   M100,86 Q300,120 348,308        (dash-dot stroke; idx 1)
+      shapeStepped   M84,72  H140 V132 H196 V192 H252 V252 H308 V312 H356
+                     (staircase; idx 2)
+      shapeUpward    M228,286 L300,206               (rising -- INVALID; idx 4;
+                     hidden until selected, then drawn with a reject cross)
+    Inset callout box (the source's lower-left box), x70-198 y254-348,
+    entirely clear of all four curves above (checked: every curve stays
+    outside this rectangle). Inside it: a mini curve with an explicit
+    VERTICAL sub-segment M86,266 L110,290 L110,310 L140,332 (the middle leg,
+    x=110 constant, is the "vertical stretch" -- idx 3), plus a prohibited-
+    up-arrow icon (idx 4) and the static caption "No upward slope".
+    The selected shape (or inset element) draws in --accent; the rest sit as
+    muted --hairline ghosts. Readout band: hairline separator y=414, muted
+    state line y=436, accent takeaway line y=458 (wraps to a second line at
+    476 if needed, mirroring the family-reference wrap helper).
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;   /* warm bone background        */
+    --ink:     #1a1c1e;    /* headings                    */
+    --text:    #16181a;    /* body text                   */
+    --muted:   #5c6066;    /* axes / captions / ghosts    */
+    --hairline:#e3ddd3;    /* ghost strokes / droplines   */
+    --accent:  #b07a2c;    /* brass — the selected shape  */
+    --accent-tint: #efe4d2;/* inset box fill              */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .fig { width: 100%; max-width: 480px; min-width: 0; }
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+
+  /* structural strokes */
+  .axis    { stroke: var(--muted); stroke-width: 1.4; }
+  .axtitle { fill: var(--muted); font-size: 13px; font-weight: 600; }
+
+  /* the four gallery shapes: ghost by default, accent when selected */
+  .shape        { fill: none; stroke-linecap: round; }
+  .shape.ghost  { stroke: var(--hairline); stroke-width: 1.8; }
+  .shape.active { stroke: var(--accent);   stroke-width: 3.2; }
+  .dashdot      { stroke-dasharray: 8 3 2 3; }
+
+  /* the invalid "try upward" segment: hidden until its toggle position */
+  .upward-group { opacity: 0; transition: opacity .12s ease; }
+  .upward-group.shown { opacity: 1; }
+  .reject-x { stroke: var(--muted); stroke-width: 2.2; stroke-linecap: round; }
+  .upward-group.shown .reject-x { stroke: var(--accent); }
+
+  /* inset callout box */
+  .insetBox   { fill: var(--accent-tint); fill-opacity: 0.55;
+                stroke: var(--hairline); stroke-width: 1.4; }
+  .insetBox.hi { stroke: var(--accent); stroke-width: 2; }
+  .insetCurve { fill: none; stroke: var(--muted); stroke-width: 1.8;
+                stroke-linecap: round; }
+  .insetVert  { fill: none; stroke: var(--muted); stroke-width: 2.4;
+                stroke-linecap: round; }
+  .insetVert.active { stroke: var(--accent); stroke-width: 3.2; }
+  .insetLabel { fill: var(--muted); font-size: 11px; font-weight: 600;
+                text-anchor: middle; }
+  .prohibit   { fill: none; stroke: var(--muted); stroke-width: 1.8; }
+  .prohibit.active { stroke: var(--accent); }
+  .arrowUp    { stroke: var(--muted); stroke-width: 2; }
+  .arrowUp.active { stroke: var(--accent); }
+
+  /* segmented toggle row */
+  .tab      { fill: var(--surface); stroke: var(--hairline); stroke-width: 1.4;
+              cursor: pointer; }
+  .tab.active { fill: var(--accent); stroke: var(--accent); }
+  .tabTxt   { fill: var(--muted); font-size: 10.5px; font-weight: 600;
+              text-anchor: middle; pointer-events: none; }
+  .tabTxt.active { fill: var(--surface); }
+  .toggle-focus { fill: transparent; stroke: transparent; pointer-events: none; }
+  .toggle-focus:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* readout */
+  .sep     { stroke: var(--hairline); stroke-width: 1; }
+  .r-hint  { fill: var(--muted); font-size: 12.5px; text-anchor: middle; }
+  .r-trade { fill: var(--accent); font-size: 13px; font-weight: 600; text-anchor: middle; }
+  .fallback {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.35;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<!-- Everything from here to </div> is REAL base SVG: a no-JS reader sees the
+     full figure — the toggle row, four overlaid demand-curve shapes (straight,
+     smooth-curved, dash-dot-curved, stepped), the inset "no upward slope" box,
+     and (hidden by default) the invalid rising segment. The script only
+     ATTACHES the toggle behavior / readout updates; it never builds the DOM. -->
+<div class="fig">
+  <svg id="fig" viewBox="0 0 440 540" role="group"
+       aria-label="Possible demand-curve shapes. Price is on the vertical axis and quantity on the horizontal axis. Several shapes are overlaid — straight, smoothly curved, stepped, and one with a flat vertical stretch — plus an inset box showing that a demand curve may run flat over a price range but must never slope upward. Use the toggle to step through the shapes and see that every one obeys the same rule: it never slopes upward.">
+    <title>Possible demand curves: a shape gallery obeying one rule — never slope upward</title>
+
+    <!-- segmented toggle: Straight / Curved / Stepped / Vertical / Upward -->
+    <g id="toggleRow">
+      <rect id="tab0" class="tab active" data-idx="0" x="16"  y="6" width="74" height="30" rx="4" />
+      <rect id="tab1" class="tab"        data-idx="1" x="99"  y="6" width="74" height="30" rx="4" />
+      <rect id="tab2" class="tab"        data-idx="2" x="182" y="6" width="74" height="30" rx="4" />
+      <rect id="tab3" class="tab"        data-idx="3" x="265" y="6" width="74" height="30" rx="4" />
+      <rect id="tab4" class="tab"        data-idx="4" x="348" y="6" width="74" height="30" rx="4" />
+      <text id="tabTxt0" class="tabTxt active" x="53"  y="25">Straight</text>
+      <text id="tabTxt1" class="tabTxt"        x="136" y="25">Curved</text>
+      <text id="tabTxt2" class="tabTxt"        x="219" y="25">Stepped</text>
+      <text id="tabTxt3" class="tabTxt"        x="302" y="25">Vertical</text>
+      <text id="tabTxt4" class="tabTxt"        x="385" y="25">Upward?</text>
+      <rect id="toggleFocus" class="toggle-focus" x="12" y="2" width="416" height="38"
+            tabindex="0" role="slider" aria-label="Demand-curve shape selector"
+            aria-valuemin="0" aria-valuemax="4" aria-valuenow="0"
+            aria-valuetext="Straight. This demand curve is drawn as a straight line. The simplest shape to use — and it still slopes down throughout." />
+    </g>
+
+    <!-- axes (drawn before the curves so the curves sit on top); no numeric
+         ticks — this figure is a shape gallery, not a priced schedule -->
+    <line class="axis" x1="64" y1="360" x2="415" y2="360" marker-end="url(#arrow)" />
+    <line class="axis" x1="64" y1="360" x2="64"  y2="46"  marker-end="url(#arrow)" />
+    <defs>
+      <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+    </defs>
+    <text class="axtitle" x="240" y="386" text-anchor="middle">Quantity</text>
+    <text class="axtitle" x="24" y="204" text-anchor="middle"
+          transform="rotate(-90 24 204)">Price</text>
+
+    <!-- four overlaid demand-curve shapes, each upper-left -> lower-right -->
+    <path id="shapeStraight" class="shape active" d="M80,70 L358,320" />
+    <path id="shapeCurvedA"  class="shape ghost"
+          d="M84,58 C150,75 175,150 232,182 C290,214 328,258 356,300" />
+    <path id="shapeCurvedB"  class="shape ghost dashdot" d="M100,86 Q300,120 348,308" />
+    <path id="shapeStepped"  class="shape ghost"
+          d="M84,72 H140 V132 H196 V192 H252 V252 H308 V312 H356" />
+
+    <!-- the invalid "try upward" segment — hidden until its toggle position -->
+    <g id="gUpward" class="upward-group">
+      <path id="shapeUpward" class="shape active" d="M228,286 L300,206" />
+      <line class="reject-x" x1="240" y1="272" x2="288" y2="220" />
+      <line class="reject-x" x1="288" y1="272" x2="240" y2="220" />
+    </g>
+
+    <!-- inset callout (the source's lower-left box): a mini curve with a
+         vertical stretch + a prohibited up-arrow, labeled "No upward slope" -->
+    <rect id="insetBox" class="insetBox" x="70" y="254" width="128" height="94" rx="4" />
+    <path class="insetCurve" d="M86,266 L110,290" />
+    <path id="insetVert" class="insetVert" d="M110,290 L110,310" />
+    <path class="insetCurve" d="M110,310 L140,332" />
+    <g id="insetUpwardIcon">
+      <circle id="prohibitCircle" class="prohibit" cx="165" cy="287" r="15" />
+      <line id="prohibitSlash" class="prohibit" x1="154" y1="298" x2="176" y2="276" />
+      <line id="arrowShaft" class="arrowUp" x1="165" y1="306" x2="165" y2="272" />
+      <path id="arrowHead" class="arrowUp" d="M158,280 L165,270 L172,280" fill="none" />
+    </g>
+    <text class="insetLabel" x="134" y="342">No upward slope</text>
+
+    <!-- readout band: hairline separator, muted STATE line, accent TAKEAWAY line -->
+    <line class="sep" x1="44" y1="414" x2="396" y2="414" />
+    <text id="rHint"  class="r-hint"  x="220" y="436">This demand curve is drawn as a straight line.</text>
+    <text id="rTrade" class="r-trade" text-anchor="middle"><tspan id="rTradeLine1" x="220" y="458">The simplest shape to use — and it still</tspan><tspan id="rTradeLine2" x="220" y="476">slopes down throughout.</tspan></text>
+  </svg>
+  <noscript>
+    <p class="fallback">JavaScript is off, so the figure above is a complete
+    still image: four demand-curve shapes — straight, smoothly curved, dash-dot
+    curved, and stepped — are drawn overlaid, all running from a high price /
+    low quantity corner to a low price / high quantity corner. The inset box
+    shows that a curve may run flat (vertical) over a price range but must
+    never slope upward. The straight-line shape is shown selected by default.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var tabs   = [
+    document.getElementById('tab0'),
+    document.getElementById('tab1'),
+    document.getElementById('tab2'),
+    document.getElementById('tab3'),
+    document.getElementById('tab4')
+  ];
+  var tabTxts = [
+    document.getElementById('tabTxt0'),
+    document.getElementById('tabTxt1'),
+    document.getElementById('tabTxt2'),
+    document.getElementById('tabTxt3'),
+    document.getElementById('tabTxt4')
+  ];
+  var toggleFocus = document.getElementById('toggleFocus');
+  var shapeStraight = document.getElementById('shapeStraight');
+  var shapeCurvedA  = document.getElementById('shapeCurvedA');
+  var shapeCurvedB  = document.getElementById('shapeCurvedB');
+  var shapeStepped  = document.getElementById('shapeStepped');
+  var gUpward       = document.getElementById('gUpward');
+  var insetBox      = document.getElementById('insetBox');
+  var insetVert     = document.getElementById('insetVert');
+  var prohibitCircle = document.getElementById('prohibitCircle');
+  var prohibitSlash  = document.getElementById('prohibitSlash');
+  var arrowShaft      = document.getElementById('arrowShaft');
+  var arrowHead       = document.getElementById('arrowHead');
+  var rHint  = document.getElementById('rHint');
+  var rTradeLine1 = document.getElementById('rTradeLine1');
+  var rTradeLine2 = document.getElementById('rTradeLine2');
+
+  // labels + two-line readout text per toggle position (idx 0..4)
+  var LABELS = ['Straight', 'Curved', 'Stepped', 'Vertical', 'Upward?'];
+  var STATES = [
+    { hint: 'This demand curve is drawn as a straight line.',
+      trade1: 'The simplest shape to use — and it still',
+      trade2: 'slopes down throughout.' },
+    { hint: 'This demand curve is drawn as a smooth curve.',
+      trade1: 'Still a valid demand curve — it never',
+      trade2: 'slopes upward.' },
+    { hint: 'This one is stepped, not smooth.',
+      trade1: "Shape doesn't matter; the downward tilt",
+      trade2: 'is what counts.' },
+    { hint: 'Over this price range, quantity demanded doesn’t change.',
+      trade1: 'A flat, vertical stretch is fine — it still',
+      trade2: 'never turns upward.' },
+    { hint: 'This segment slopes UP.',
+      trade1: 'Not allowed — a demand curve has no',
+      trade2: 'upward-sloping portion.' }
+  ];
+
+  var idx = 0; // initial state matches the static markup: Straight selected
+
+  function setActive(el, on) {
+    el.classList.toggle('active', on);
+    el.classList.toggle('ghost', !on);
+  }
+
+  function render() {
+    // idx 0: Straight
+    setActive(shapeStraight, idx === 0);
+    // idx 1: Curved (both curved shapes highlight together)
+    setActive(shapeCurvedA, idx === 1);
+    setActive(shapeCurvedB, idx === 1);
+    // idx 2: Stepped
+    setActive(shapeStepped, idx === 2);
+    // idx 3: Vertical stretch -> the inset's vertical segment + box border
+    insetVert.classList.toggle('active', idx === 3);
+    insetBox.classList.toggle('hi', idx === 3 || idx === 4);
+    // idx 4: Upward -> reveal the invalid rising segment + the inset's
+    // prohibited-arrow icon
+    gUpward.classList.toggle('shown', idx === 4);
+    prohibitCircle.classList.toggle('active', idx === 4);
+    prohibitSlash.classList.toggle('active', idx === 4);
+    arrowShaft.classList.toggle('active', idx === 4);
+    arrowHead.classList.toggle('active', idx === 4);
+
+    // toggle-row visuals
+    for (var i = 0; i < 5; i++) {
+      tabs[i].classList.toggle('active', i === idx);
+      tabTxts[i].classList.toggle('active', i === idx);
+    }
+
+    // readout
+    var s = STATES[idx];
+    rHint.textContent = s.hint;
+    rTradeLine1.textContent = s.trade1;
+    rTradeLine2.textContent = s.trade2;
+
+    toggleFocus.setAttribute('aria-valuenow', String(idx));
+    toggleFocus.setAttribute('aria-valuetext',
+      LABELS[idx] + '. ' + s.hint + ' ' + s.trade1 + ' ' + s.trade2);
+  }
+
+  function setIdx(newIdx) {
+    var i = Math.round(newIdx);
+    if (isNaN(i)) return;
+    if (i < 0) i = 0;
+    if (i > 4) i = 4;
+    if (i === idx) return;
+    idx = i;
+    render();
+  }
+
+  // --- tap/click a tab to jump straight to its position ---
+  function onTabActivate(i) {
+    return function (evt) { evt.preventDefault(); setIdx(i); };
+  }
+  for (var t = 0; t < 5; t++) {
+    tabs[t].addEventListener('pointerdown', onTabActivate(t));
+    tabs[t].addEventListener('click', onTabActivate(t));
+  }
+
+  // --- keyboard (arrows step one position) ---
+  toggleFocus.addEventListener('keydown', function (evt) {
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') { setIdx(idx + 1); }
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') { setIdx(idx - 1); }
+    else return;
+    evt.preventDefault();
+  });
+
+  // Debug hook: lets a reviewer screenshot non-initial states via scripting.
+  window.__fig = {
+    set: function (v) { setIdx(+v); },
+    get: function () { return { idx: idx, label: LABELS[idx] }; }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

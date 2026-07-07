@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive figure: the market sets a price, the price-taking firm faces it as a flat line</title>
+<!--
+  Interactive recreation of UE Fig 16.1 (p.235) for the T7a blog post
+  (website-styled warm palette, not FAU). Self-contained: no libraries, no
+  network. The static FAU figure (figures/t07a-market-firm.{tex,svg}) is the
+  SLIDE version and is untouched; it is also this widget's <noscript> fallback.
+
+  ARCHITECTURE: the base figure is REAL SVG markup. A no-JS reader sees the
+  FULL two-panel still — both panels complete with every curve, point, axis,
+  price line and label. The script only ATTACHES behavior (drag the market
+  demand curve up/down; the clearing price and the firm's flat demand line
+  respond; live readouts); it never builds figure DOM.
+
+  FAMILY F7 (market <-> firm two-panel). GEOMETRY: viewBox 720 x 460,
+  aspect-ratio 16/10, max-width 640px.
+    Panel A (the market): origin (70,350). Data Q 0..40 -> x = 70 + Q*6.5
+    (Q=40 -> x=330); Data P 0..40 -> y = 350 - P*7 (P=40 -> y=70). Axes drawn
+    PAST the data max so curves don't crowd the arrowheads.
+      Market Supply : P = 6 + 0.35*Q + 0.01*Q^2  (rising, gently convex, fixed)
+      Market Demand : P = D0 - 0.7*Q              (straight, downward; DRAGGABLE)
+    Panel B (one price-taking firm): origin (410,350), SAME vertical P scale as
+    A so the clearing price P* lines up across both panels. A single horizontal
+    line at height P* = the demand facing the firm (= P = MR).
+    Clearing point solves 0.01*Q^2 + 1.05*Q + (6 - D0) = 0 for Q*, then
+    P* = D0 - 0.7*Q*. Base D0 = 45.63 -> Q* ~ 29.5, P* = $25.
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;   /* warm bone background        */
+    --ink:     #1a1c1e;    /* primary curves + headings   */
+    --text:    #16181a;    /* body text                   */
+    --muted:   #5c6066;    /* captions / secondary labels */
+    --hairline:#e3ddd3;    /* axes muting / droplines     */
+    --accent:  #b07a2c;    /* brass — active point/curve  */
+    --accent-tint: #efe4d2;/* active wash                 */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .fig { width: 100%; max-width: 640px; min-width: 0; }
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+
+  /* structural strokes */
+  .axis      { stroke: var(--muted); stroke-width: 1.4; }
+  .supply    { stroke: var(--ink); stroke-width: 2.6; fill: none;
+               stroke-linecap: round; }
+  .demand    { stroke: var(--accent); stroke-width: 2.6; fill: none;
+               stroke-linecap: round; }
+  .firmline  { stroke: var(--accent); stroke-width: 2.6; stroke-linecap: round; }
+  .drop      { stroke: var(--hairline); stroke-width: 1.6;
+               stroke-dasharray: 5 4; }
+
+  /* points + hit targets */
+  .pt        { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5; }
+  .qfoot     { fill: var(--muted); }
+  .hit       { fill: transparent; stroke: transparent; touch-action: none;
+               cursor: grab; }
+  .hit-curve { fill: none; stroke: transparent; stroke-width: 28;
+               touch-action: none; cursor: grab; }
+  .pt-focus:focus-visible { outline: none; }
+  .pt-focus:focus-visible + .pt,
+  .grabbing .pt { stroke: var(--accent); stroke-width: 3.5; }
+
+  /* text */
+  .panelhead { fill: var(--ink); font-size: 13px; font-weight: 700; }
+  .axlabel   { fill: var(--muted); font-size: 12px; font-weight: 600; }
+  .curvelabel{ fill: var(--muted); font-size: 11px; font-style: italic; }
+  .firmlabel { fill: var(--ink); font-size: 11.5px; font-weight: 700; }
+  .notelabel { fill: var(--muted); font-size: 10.5px; }
+  .plabel    { fill: var(--ink); font-size: 12px; font-weight: 700;
+               paint-order: stroke; stroke: var(--surface); stroke-width: 3px;
+               stroke-linejoin: round; }
+  .qlabel    { fill: var(--ink); font-size: 12px; font-weight: 700;
+               paint-order: stroke; stroke: var(--surface); stroke-width: 3px;
+               stroke-linejoin: round; }
+  .sep       { stroke: var(--hairline); stroke-width: 1; }
+  .r-hint    { fill: var(--muted); font-size: 12.5px; }
+  .r-trade   { fill: var(--accent); font-size: 14px; font-weight: 600; }
+  .fallback  { margin: 8px 0 0; color: var(--muted); font-size: 13px;
+               line-height: 1.35; text-align: center; }
+  .fallback a { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="fig">
+  <svg id="fig" viewBox="0 0 720 460" role="group"
+       aria-label="Two panels. Left: the market, where a downward-sloping demand curve meets an upward-sloping supply curve at the clearing price. Right: one price-taking firm, which faces that same price as a flat horizontal demand line. Drag the market demand curve up or down; the clearing price and the firm's flat line move with it.">
+    <title>The market sets the price; the price-taking firm faces it as a flat demand line</title>
+    <defs>
+      <marker id="arw" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+    </defs>
+
+    <!-- ================= PANEL A : the market ================= -->
+    <g id="panelA">
+      <text class="panelhead" x="200" y="40" text-anchor="middle">The Market</text>
+
+      <!-- axes (drawn before the curves); extended past the data max -->
+      <line class="axis" x1="70" y1="350" x2="340" y2="350" marker-end="url(#arw)" />
+      <line class="axis" x1="70" y1="350" x2="70"  y2="55"  marker-end="url(#arw)" />
+      <text class="axlabel" x="205" y="374" text-anchor="middle">Quantity per week</text>
+      <text class="axlabel" x="40" y="205" text-anchor="middle"
+            transform="rotate(-90 40 205)">Price per unit</text>
+
+      <!-- fixed market supply (rising, gently convex) -->
+      <path class="supply" d="M70,308 L102.5,294 L135,276.5 L167.5,255.5 L200,231 L232.5,203 L265,171.5 L297.5,136.5 L330,98" />
+      <text class="curvelabel" x="304" y="108" text-anchor="end">Market Supply</text>
+
+      <!-- market demand (straight, downward) — the DRAGGABLE curve -->
+      <line id="demLine" class="demand" x1="131.6" y1="77" x2="330" y2="226.6" />
+      <text id="demLabel" class="curvelabel" x="330" y="242" text-anchor="end">Market Demand</text>
+
+      <!-- droplines from the clearing point to both axes -->
+      <line id="dropV" class="drop" x1="261.6" y1="350" x2="261.6" y2="175" />
+      <line id="dropH" class="drop" x1="70" y1="175" x2="261.6" y2="175" />
+      <circle id="qfoot" class="qfoot" cx="261.6" cy="350" r="3.2" />
+      <text id="pStar" class="plabel" x="62" y="175" text-anchor="end"
+            dominant-baseline="middle">$25</text>
+      <text id="qStar" class="qlabel" x="261.6" y="366" text-anchor="middle">Q*</text>
+
+      <!-- draggable clearing point + generous hit targets -->
+      <line id="demHit" class="hit-curve" x1="131.6" y1="77" x2="330" y2="226.6" />
+      <circle id="hit" class="hit" cx="261.6" cy="175" r="22" />
+      <circle id="clrPt" class="pt" cx="261.6" cy="175" r="7" />
+      <circle id="ptFocus" class="pt-focus hit" cx="261.6" cy="175" r="22"
+              tabindex="0" role="slider" aria-label="Position of the market demand curve"
+              aria-valuemin="18" aria-valuemax="32" aria-valuenow="25"
+              aria-valuetext="Market demand meets supply at a clearing price of $25. The firm can sell any quantity it likes at $25; its own demand curve is a flat line at that price." />
+    </g>
+
+    <!-- ================= PANEL B : one price-taking firm ================= -->
+    <g id="panelB">
+      <text class="panelhead" x="545" y="40" text-anchor="middle">One Price-Taking Firm</text>
+
+      <line class="axis" x1="410" y1="350" x2="680" y2="350" marker-end="url(#arw)" />
+      <line class="axis" x1="410" y1="350" x2="410" y2="55"  marker-end="url(#arw)" />
+      <text class="axlabel" x="545" y="374" text-anchor="middle">Quantity per week (this firm)</text>
+      <text class="axlabel" x="380" y="205" text-anchor="middle"
+            transform="rotate(-90 380 205)">Price per unit</text>
+
+      <!-- the horizontal demand line facing the firm, at the market price P* -->
+      <line id="firmLine" class="firmline" x1="440" y1="175" x2="660" y2="175" />
+      <text id="firmP" class="plabel" x="402" y="175" text-anchor="end"
+            dominant-baseline="middle">$25</text>
+      <text id="firmLabel" class="firmlabel" x="655" y="165" text-anchor="end">Demand facing the firm (= P = MR)</text>
+      <text id="firmNote" class="notelabel" x="545" y="193" text-anchor="middle">Market-clearing price = MR</text>
+    </g>
+
+    <!-- ================= readout band ================= -->
+    <line class="sep" x1="60" y1="402" x2="660" y2="402" />
+    <text id="rHint"  class="r-hint"  x="360" y="424" text-anchor="middle">Market price P* = $25. The firm can sell any quantity it likes at $25.</text>
+    <text id="rTrade" class="r-trade" x="360" y="448" text-anchor="middle">The firm is a price-taker: its own demand curve is flat at the market price.</text>
+  </svg>
+
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame is a still image: on the
+      left the market demand curve meets market supply at the clearing price; on
+      the right one price-taking firm faces that same price as a flat horizontal
+      demand line. You can also <a href="t07a-market-firm.svg">open the static
+      figure</a>.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var svg = document.getElementById('fig');
+  var byId = function (id) { return document.getElementById(id); };
+
+  var demLine = byId('demLine'), demHit = byId('demHit'), demLabel = byId('demLabel');
+  var dropV = byId('dropV'), dropH = byId('dropH'), qfoot = byId('qfoot');
+  var pStar = byId('pStar'), qStar = byId('qStar');
+  var hit = byId('hit'), clrPt = byId('clrPt'), ptFocus = byId('ptFocus');
+  var firmLine = byId('firmLine'), firmP = byId('firmP'), firmLabel = byId('firmLabel'), firmNote = byId('firmNote');
+  var rHint = byId('rHint'), rTrade = byId('rTrade');
+
+  // ---- pixel frame (mirrors the markup) ----
+  // Panel A: x = 70 + Q*6.5 ; y = 350 - P*7. Data Q 0..40, P 0..40.
+  var AX0 = 70, PER_X = 6.5, Y0 = 350, PER_Y = 7;
+  var axA = function (q) { return AX0 + q * PER_X; };
+  var pyv = function (p) { return Y0 - p * PER_Y; };
+  var toQ = function (px) { return (px - AX0) / PER_X; };
+  var toP = function (py) { return (Y0 - py) / PER_Y; };
+
+  // ---- economic model ----
+  // Supply P = 6 + 0.35Q + 0.01Q^2 ; Demand P = D0 - 0.7Q.
+  var D0_LO = 33, D0_HI = 58;
+  var D0 = 45.63;             // base -> P* = $25
+  function clearing() {
+    // 0.01 Q^2 + 1.05 Q + (6 - D0) = 0  ->  quadratic formula
+    var disc = 0.8625 + 0.04 * D0;
+    var q = (-1.05 + Math.sqrt(disc)) / 0.02;
+    var p = D0 - 0.7 * q;
+    return { q: q, p: p };
+  }
+
+  // demand endpoints clipped to the visible plot band (P in [3,39])
+  function demandEnds() {
+    var p1 = D0, q1 = 0;               // top-left end (Q=0)
+    if (p1 > 39) { p1 = 39; q1 = (D0 - 39) / 0.7; }
+    var p2 = D0 - 0.7 * 40, q2 = 40;   // bottom-right end (Q=40)
+    if (p2 < 3) { p2 = 3; q2 = (D0 - 3) / 0.7; }
+    return { x1: axA(q1), y1: pyv(p1), x2: axA(q2), y2: pyv(p2) };
+  }
+
+  // convert a client event to SVG user coords (handles responsive scaling)
+  var spt = svg.createSVGPoint();
+  function toSvg(evt) {
+    spt.x = evt.clientX; spt.y = evt.clientY;
+    return spt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+
+  function readoutFor(pR) {
+    if (Math.abs(pR - 25) < 1) {
+      return {
+        hint: 'Market price P* = $' + pR + '. The firm can sell any quantity it likes at $' + pR + '.',
+        take: 'The firm is a price-taker: its own demand curve is flat at the market price.',
+        aria: 'Market demand meets supply at a clearing price of $' + pR + '. The firm can sell any quantity it likes at $' + pR + '; its own demand curve is a flat line at that price.'
+      };
+    }
+    if (pR > 25) {
+      return {
+        hint: 'Higher demand lifts the market price to $' + pR + '.',
+        take: 'The firm still faces a flat line — now at $' + pR + ' — and still just picks a quantity, not a price.',
+        aria: 'Higher demand lifts the market price to $' + pR + '. The firm still faces a flat demand line, now at $' + pR + ', and still just picks a quantity, not a price.'
+      };
+    }
+    return {
+      hint: 'Lower demand pushes the market price to $' + pR + '.',
+      take: 'Raise your own price a penny above $' + pR + ' and every buyer switches to a rival.',
+      aria: 'Lower demand pushes the market price to $' + pR + '. Raise your own price a penny above $' + pR + ' and every buyer switches to a rival.'
+    };
+  }
+
+  function render() {
+    var c = clearing();
+    var cx = axA(c.q), cy = pyv(c.p);
+    var pR = Math.round(c.p);
+
+    // draggable market demand line + its fat hit line
+    var e = demandEnds();
+    demLine.setAttribute('x1', e.x1); demLine.setAttribute('y1', e.y1);
+    demLine.setAttribute('x2', e.x2); demLine.setAttribute('y2', e.y2);
+    demHit.setAttribute('x1', e.x1); demHit.setAttribute('y1', e.y1);
+    demHit.setAttribute('x2', e.x2); demHit.setAttribute('y2', e.y2);
+    // demand label follows the lower-right end, sitting below the line
+    demLabel.setAttribute('x', e.x2); demLabel.setAttribute('y', Math.min(e.y2 + 16, 344));
+
+    // clearing point + hit targets
+    clrPt.setAttribute('cx', cx); clrPt.setAttribute('cy', cy);
+    hit.setAttribute('cx', cx); hit.setAttribute('cy', cy);
+    ptFocus.setAttribute('cx', cx); ptFocus.setAttribute('cy', cy);
+
+    // droplines to both axes
+    dropV.setAttribute('x1', cx); dropV.setAttribute('x2', cx);
+    dropV.setAttribute('y2', cy);
+    dropH.setAttribute('y1', cy); dropH.setAttribute('y2', cy);
+    dropH.setAttribute('x2', cx);
+    qfoot.setAttribute('cx', cx);
+    qStar.setAttribute('x', cx);
+
+    // live axis readouts (P* rides the y-foot; Q* stays qualitative)
+    pStar.setAttribute('y', cy); pStar.textContent = '$' + pR;
+
+    // firm panel: the flat demand line rises/falls to the new P*
+    firmLine.setAttribute('y1', cy); firmLine.setAttribute('y2', cy);
+    firmP.setAttribute('y', cy); firmP.textContent = '$' + pR;
+    firmLabel.setAttribute('y', cy - 10);
+    firmNote.setAttribute('y', cy + 18);
+
+    // two-line readout + spoken equivalent
+    var r = readoutFor(pR);
+    rHint.textContent = r.hint;
+    rTrade.textContent = r.take;
+    ptFocus.setAttribute('aria-valuenow', pR);
+    ptFocus.setAttribute('aria-valuetext', r.aria);
+  }
+
+  // ---- drag: dragging the demand curve (or the point) sets D0 so the curve
+  //      follows the pointer at the pointer's own quantity ----
+  function setFromPointer(evt) {
+    var pnt = toSvg(evt);
+    var q = toQ(pnt.x), p = toP(pnt.y);
+    if (isNaN(q) || isNaN(p)) return;
+    var d = p + 0.7 * q;              // demand curve through the pointer
+    if (d < D0_LO) d = D0_LO;
+    if (d > D0_HI) d = D0_HI;
+    D0 = d;
+    render();
+  }
+
+  var dragging = false, capturedEl = null, capturedId = null;
+  function onMove(evt) { if (dragging) { evt.preventDefault(); setFromPointer(evt); } }
+  function onUp() {
+    dragging = false;
+    svg.classList.remove('grabbing');
+    if (capturedEl && capturedId !== null) {
+      try { capturedEl.releasePointerCapture(capturedId); } catch (e) {}
+    }
+    capturedEl = null; capturedId = null;
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+  }
+  function onDown(evt) {
+    evt.preventDefault();
+    dragging = true;
+    svg.classList.add('grabbing');
+    capturedEl = evt.currentTarget; capturedId = evt.pointerId;
+    try { capturedEl.setPointerCapture(capturedId); } catch (e) {}
+    setFromPointer(evt);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }
+  hit.addEventListener('pointerdown', onDown);
+  demHit.addEventListener('pointerdown', onDown);
+  ptFocus.addEventListener('pointerdown', onDown);
+
+  // ---- keyboard: arrows step the clearing price up/down ----
+  ptFocus.addEventListener('keydown', function (evt) {
+    var step = 2;                    // in D0 units (~ $1 of P*)
+    if (evt.key === 'ArrowUp' || evt.key === 'ArrowRight') { D0 += step; }
+    else if (evt.key === 'ArrowDown' || evt.key === 'ArrowLeft') { D0 -= step; }
+    else return;
+    evt.preventDefault();
+    if (D0 < D0_LO) D0 = D0_LO;
+    if (D0 > D0_HI) D0 = D0_HI;
+    render();
+  });
+
+  // ---- debug hook (inert for students) ----
+  window.__fig = {
+    set: function (v) {
+      v = v || {};
+      if (typeof v.D0 === 'number') D0 = Math.max(D0_LO, Math.min(D0_HI, v.D0));
+      if (typeof v.pStar === 'number') {
+        // invert: choose D0 so the clearing price ~ requested pStar (bisection)
+        var lo = D0_LO, hi = D0_HI;
+        for (var i = 0; i < 40; i++) {
+          var mid = (lo + hi) / 2;
+          D0 = mid;
+          if (clearing().p < v.pStar) lo = mid; else hi = mid;
+        }
+        D0 = (lo + hi) / 2;
+      }
+      render();
+    },
+    get: function () {
+      var c = clearing();
+      return { D0: D0, pStar: c.p, qStar: c.q };
+    }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

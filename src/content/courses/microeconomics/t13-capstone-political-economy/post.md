@@ -18,6 +18,24 @@ This is the last topic of the course, so I am not going to teach you anything br
 
 One thread runs through the whole hour. Scarcity makes competition unavoidable; we established that on the first day. The payoff we did not fully draw out then is this: suppress competition in one form and it does not disappear, it reappears in another, usually worse. That single idea unlocks both the market myths and the political ones. Keep one distinction handy throughout: a *positive* claim is about what is, the kind economics can test, while a *normative* one is about what ought to be and rests on values economics cannot supply. Most of today's confusions come from smuggling the second past you dressed as the first.
 
+<aside class="econ-callout econ-objectives">
+<p class="econ-callout__label">Learning objectives</p>
+<p>By the end of this post you should be able to:</p>
+<ul>
+<li>Explain why a market is not an impersonal force but people trading, so blocking a deal replaces the traders' own judgment with a third party's.</li>
+<li>Explain why physically identical goods at different prices are rarely the same thing, and why prices are not costs but what pay for costs.</li>
+<li>Explain how a brand economizes on scarce knowledge and forces producers to compete on quality.</li>
+<li>Explain why a non-profit's insulation from profit-and-loss feedback weakens its pressure to serve, and apply the market test to it.</li>
+<li>Model politics as a marketplace, so that suppressing price competition relocates competition into votes, connections, and favors.</li>
+<li>Explain why durable cartels require government enforcement, and identify who gains and who pays when entry is barred.</li>
+<li>Diagnose farm programs and licensing by separating their stated objective from their realized outcome and the constituency served.</li>
+<li>Explain why many apparent market failures are missing or unassigned property rights, so the remedy is to price the right rather than prohibit the activity.</li>
+<li>Explain why economic reasoning is value-neutral and applies to any system, so economists part company over facts and values, not over how the economy works.</li>
+<li>Explain why economics supplies none of your values but forces you to weigh trade-offs, and spot rhetoric that hides who pays.</li>
+<li>Apply the course's diagnostic questions to any policy: compared to what, who gains and who pays, and what a policy does versus what it is called.</li>
+</ul>
+</aside>
+
 ## A Market Is Not a Thing, It Is People Trading
 
 Start with the myth buried in the word itself. We say "the market" as if it were a machine humming in the basement, an impersonal force that crushes people and must be reined in. But a market is not a thing at all. It is just people, you and me and millions of strangers, agreeing to trade on terms we each find acceptable, which makes it exactly as personal as the people in it.
@@ -31,6 +49,11 @@ Here is a complaint you have surely heard: the very same product sells for wildl
 Two cans of soup with identical labels are physically identical, yes. But the conditions wrapped around them differ, and you are buying those conditions too. One store sits on expensive downtown land; the other where land is cheap, and that cost difference has to be recovered somewhere. One keeps most of its inventory in stock so you finish your list in one trip and gets you through checkout fast; the other keeps less and leaves you in line. Sowell reports a consumer magazine study in northern California that priced an identical basket of brand-name groceries across several stores: as he tells it, the bill ran from about eighty dollars at the cheapest to roughly a hundred and twenty-five at the most expensive. The cheap store carried far less of the list and was slow at checkout; the pricey one sat on some of the costliest real estate in the country.
 
 So the shoppers were not paying different prices for the same thing. They were paying different prices for different things: a fast trip versus a slow one, a complete list versus a partial one, convenient location versus cheap rent. The "same product, different price" complaint ignores everything but the label.
+
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>Two hardware stores sell the identical box of nails, one on costly downtown land and one out by the highway, at different prices. Name one condition wrapped around the nails that the shopper is also buying. Is the pricier store necessarily gouging?</p>
+</aside>
 
 A close cousin is the demand for "reasonable" or "affordable" prices. To insist that a price be reasonable is to insist that reality bend to our budget, but the resources it takes to build an apartment, train a doctor, or grow food do not shrink because we would prefer to pay less. Here is the line I most want you to carry out of this room: *prices are not costs; prices are what pay for costs.* When a law forbids charging enough to cover the costs, the costs do not vanish. The supply does. Quantity falls, or quality falls, or both, which is exactly the shortage logic we worked out under price controls. Capping what a hospital may charge does not make it cheaper to build a hospital; it just means longer waits and older equipment.
 
@@ -54,6 +77,11 @@ The slack shows up in concrete ways. Non-profits often drift from what their fou
 
 Now run the market test. If profit really were just an unnecessary markup, non-profits should be able to undercut for-profit firms and slowly replace them, yet the opposite keeps happening. Colleges, which are non-profit, have steadily handed their bookstores and dining halls to outside companies, because those companies run them better and still pay the college more than it earned doing the job itself. Sowell's example is a campus bookstore from which a university rarely cleared a hundred thousand dollars a year; a national chain paid the school half a million a year to run the very same store, and still profited on top. The profit motive was not waste; it was what surfaced the waste the non-profit had been living with.
 
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>A college hands its dining hall to an outside company that runs it and still pays the college more than it used to earn there. If profit were just a needless markup, what should have happened instead? What does the actual outcome tell you?</p>
+</aside>
+
 ## Politics Is a Marketplace
 
 Here the course turns toward its political-economy payoff. Government is essential, and I am not waving it away. But "the government" never decides anything; particular officials do, and those officials do not stand above the economy refereeing it. They are players in it, controlling scarce, valuable resources, the use of land, the permission you need to open certain businesses, the contracts and subsidies and licenses people want, and they compete with one another for the support of whoever can keep them in office. An elected politician is, in this sense, an intermediary, working for his backers against other politicians working for theirs. The political arena is a marketplace as surely as the stock exchange; the absence of a posted money price does not suspend the principles of competition for scarce things, and incentives operate in politics no less than in business.
@@ -70,9 +98,28 @@ What makes a restriction stick is government. The cartels that endure are backed
 
 Once you see the pattern, ask the question we will use on every policy from here on: who benefits, and who pays? Government-erected barriers to entry transfer wealth from the many to the few. A handful of incumbent producers, concentrated and politically organized, capture what economists carefully call monopoly *rents*, the gains that come purely from restricting supply rather than from producing more or better, while the cost is spread thinly across a vast number of consumers who each pay a little more and never notice. Concentrated benefits, dispersed costs: that asymmetry is why such policies persist even when they make the country poorer, because the few who gain a lot fight hard and the many who each lose a little do not bother.
 
+<aside class="econ-callout econ-termset">
+<p class="econ-callout__label">Key term</p>
+<dl class="econ-term-list">
+<div><dt>Monopoly Rents</dt><dd>Gains that come purely from restricting supply rather than from producing more or better.</dd></div>
+</dl>
+</aside>
+
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>A sugar import quota costs each household only a few dollars a year while handing a handful of producers large gains. Who fights hard to keep it, and who barely notices it exists? Why does that asymmetry keep the policy alive even when it makes the country poorer?</p>
+</aside>
+
 ## Farm Programs and Licensing Are Politics in Action
 
 Farmers have been politically powerful almost everywhere, and farm policy shows what that power buys. Japan has long kept out imported rice to prop up its rice farmers, so Japanese consumers pay dearly for it, and Europe's Common Agricultural Policy is notorious for pushing food prices well above what open competition would deliver. The United States restricts imports of sugar, peanuts, and other products to hold up the prices its domestic producers receive, so Americans face less supply and higher prices. The dairy program is the cleanest illustration of a tool we already studied: the government sets a price floor above the market level and forbids selling below it. A price floor produces a surplus, so the government ends up either capping how many cows farmers may keep or buying up the unsold milk and cheese, which then gets stored, given away, or left to spoil. That is our price-floor mechanism playing out as national policy.
+
+<aside class="econ-callout econ-termset">
+<p class="econ-callout__label">Key term</p>
+<dl class="econ-term-list">
+<div><dt>Price Floor</dt><dd>A legal minimum price set above the market level, which pushes quantity supplied past quantity demanded and creates a surplus.</dd></div>
+</dl>
+</aside>
 
 Diagnose these programs the way the course has trained you: strip off the stated objective, food security or helping farmers, and look at the realized outcome and who is served. After decades of subsidies the honest justification has largely worn away, and what keeps the programs alive is closer to the campaign contributions the beneficiaries make to the officials who vote for them, the same concentrated-benefits, dispersed-costs logic.
 
@@ -85,6 +132,11 @@ Labor unions fit the same frame, and I will keep this brief because the wage ana
 One myth deserves its own diagnosis: the idea that there is a war between "the economy" and "the environment," with markets as the villain that fouls the air and water. Ralph Nader once noted the apparent injustice that a man can be fined for relieving himself in a river while large industries pollute it freely. The contrast feels damning, but it misses the economics. Pollution is not a free-standing evil that producers commit out of malice; it is a by-product of producing things we value, electricity, steel, the goods of modern life, and it imposes a real cost on others. The problem is not that production happens; it is that no one owns the river, so its use as a dumping ground carries no price and nobody bears the cost of fouling it. The economic answer is not zero-tolerance prohibition, which would also wipe out the valuable output, but making the polluter bear the cost, in effect attaching a price to the right to pollute so the activity continues only where it is worth more than the harm it does.
 
 That is the deeper lesson from our property-rights unit: a great many apparent "market failures" turn out to be missing or unassigned property rights, cases of there being no owner and no price for the scarce thing, not cases of markets producing bad results. "Economics versus the environment" is a false opposition. The question is how to price the scarce thing so its use reflects its true cost, not whether to have an economy at all.
+
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>A factory dumps waste into a river no one owns. Is the deeper problem that production happens at all, or that using the river as a dump carries no price? What would attaching a price to that use change?</p>
+</aside>
 
 ## Economic Reasoning Is a Tool, Not an Ideology
 
@@ -109,3 +161,22 @@ That is the course. We started with scarcity and the discovery that competition 
 There is one more habit worth carrying out the door, because it keeps the whole toolkit honest. An economy is a single connected system, not a row of separate problems to be fixed one at a time, so whenever someone proposes a law aimed at one problem the right reflex is to ask what else moves. Cap a price to help renters and you have not just lowered a number; you have shrunk the supply of housing, redirected building elsewhere, raised costs for everything that depends on it, and rewarded whoever already holds a lease. The repercussions do not stop at the problem the policy named; they ripple through the rest of the system, often undoing the very thing the policy was meant to do. A fix that looks clean in isolation rarely stays clean once the connected parts respond, which is why "compared to what, and what else moves?" is the core of thinking about any policy.
 
 The point was never to make you cheer for markets or against government. It was to make you ask the questions a careful person asks: Compared to what? Who gains and who pays? What does this policy actually do, as opposed to what it is called? Bring those questions to whatever you read after this class is over, and you will find they cut against comfortable opinions on every side. The toolkit is yours now.
+
+<div class="econ-review">
+<section class="econ-review__section">
+<h3>Key takeaways</h3>
+<ul>
+<li><strong>A market is people, not a machine.</strong> Blocking a deal does not free the two traders; it replaces their own judgment with a third party's.</li>
+<li><strong>The "same" thing at different prices is rarely the same.</strong> Different conditions come bundled into the price, and prices are not costs but what pay for costs.</li>
+<li><strong>Brands sell knowledge.</strong> A brand stakes a reputation you could sue and collect from, which forces producers to compete on quality.</li>
+<li><strong>Non-profit does not mean better.</strong> Insulation from profit-and-loss feedback weakens the pressure to serve, and the market test keeps confirming it.</li>
+<li><strong>Politics is a marketplace.</strong> Suppress price competition and it does not end; it relocates into votes, connections, lobbying, and favors.</li>
+<li><strong>Lasting cartels are government-enforced.</strong> Only law can bar entrants and hold members in line, transferring monopoly rents from the many to the few.</li>
+<li><strong>Farm programs and licensing are politics in action.</strong> Diagnose them by stated objective versus realized outcome and who is served, not by their label.</li>
+<li><strong>Market failure is often a missing property right.</strong> When no one owns the river, price the right to use it rather than prohibit the valued output.</li>
+<li><strong>Economics is a tool, not an ideology.</strong> The same validated principles apply to any system; economists divide over facts and values, not over how the economy works.</li>
+<li><strong>Economics clarifies values, it does not supply them.</strong> It forces you to weigh trade-offs and to ask which humans a "more humane" appeal keeps off the page.</li>
+<li><strong>Carry the diagnostic questions.</strong> Compared to what? Who gains and who pays? What does a policy do, as opposed to what it is called?</li>
+</ul>
+</section>
+</div>

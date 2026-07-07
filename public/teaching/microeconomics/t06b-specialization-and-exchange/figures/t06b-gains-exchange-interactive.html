@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive figure: gains from trade between Baker and Adam</title>
+<!--
+  Interactive recreation of UE Fig 15.4 (p.218) for the T6b blog post
+  (website-styled warm palette, not FAU). Self-contained: no libraries, no
+  network. The static FAU figure (figures/t06b-gains-exchange.{tex,svg}) is
+  the SLIDE version and is untouched; it is also this widget's <noscript>
+  fallback.
+
+  ARCHITECTURE (family F8 — allocation / two-agent margins): the base figure
+  is REAL SVG markup. A no-JS reader sees the full single-panel still — both
+  marginal lines, the gain wedge, the price line, the q=3 illustrative dots,
+  the Baker self-sufficiency dot, and every label. The script only ATTACHES
+  behavior (drag a quantity handle along the x-axis; two tracking dots ride
+  Baker's MC and Adam's MW; a third rides the fixed price line; droplines +
+  live axis tags update; readout updates); it never builds figure DOM.
+
+  APPROVED SINGLE-PANEL REDESIGN (brief-sanctioned; see interactive-specs.md):
+  the UE source is two panels (Baker's own MC vs MW; Adam's own MC vs MW). This
+  widget keeps the approved single-panel simplification — Baker's MC vs Adam's
+  MW, i.e. the trade itself — and the readout verbalizes why each declines to
+  self-produce past his own stopping point, so the source's full lesson survives
+  without re-expanding to two panels.
+
+  GEOMETRY (single-panel): viewBox 440x540, aspect-ratio 4/5, max-width 480-560px.
+    Pixel frame: X0=64 (q=0), PER_X=50 px/cake; Y0=360 (value=0), PER_Y=200 px/Y.
+    x(q) = 64 + 50*q ; y(v) = 360 - 200*v.
+    Baker's Marginal Cost:   MC(q) = 0.20 + 0.20*q   (rising; drawn q=0.7..6.0)
+    Adam's Marginal Worth:   MW(q) = 1.25 - 0.10*q   (falling; drawn q=0.7..6.0)
+    Crossing (mutual-trade boundary): MC=MW at q=3.5, v=0.90.
+    Gain wedge: triangle (q=1,v=1.15)-(q=3.5,v=0.90)-(q=1,v=0.40) — the region
+    between Adam's MW (upper) and Baker's MC (lower) from q=1 to the crossover.
+    Trade price = 0.90Y (dashed horizontal, fixed — the source's given price,
+    not derived from q). Baker's own self-sufficiency stop: (q=2, MC=0.60Y).
+    Handle: draggable quantity control riding the x-axis, integer q in [1,6],
+    default q=3 (the traded unit). Two tracking dots ride MC(q) and MW(q); a
+    third (muted) rides the fixed price line at (q, 0.90). Droplines + live
+    axis tags at both feet. q=3 gets a visual "opt" (traded-unit) highlight;
+    q>=4 (past the crossover, no gain left) gets a muted "no-gain" recolor.
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;   /* warm bone background        */
+    --ink:     #1a1c1e;    /* Baker MC / Adam MW lines     */
+    --text:    #16181a;    /* body text                   */
+    --muted:   #5c6066;    /* axes / secondary labels     */
+    --hairline:#e3ddd3;    /* droplines / muting          */
+    --accent:  #b07a2c;    /* brass — dots / handle       */
+    --accent-tint: #efe4d2;/* gain-wedge wash             */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .fig { width: 100%; max-width: 520px; min-width: 0; }
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+
+  /* structural strokes */
+  .axis    { stroke: var(--muted); stroke-width: 1.4; }
+  .tickmark{ stroke: var(--muted); stroke-width: 1; }
+  .curve   { stroke: var(--ink); stroke-width: 2.4; fill: none;
+             stroke-linecap: round; }
+  .gain    { fill: var(--accent-tint); opacity: 0.7; stroke: none; }
+  .priceline { stroke: var(--muted); stroke-width: 1.6; stroke-dasharray: 7 5; }
+  .guide   { stroke: var(--hairline); stroke-width: 1.6; stroke-dasharray: 5 4; }
+  .drop    { stroke: var(--hairline); stroke-width: 1.6; stroke-dasharray: 5 4; }
+  .drop.noGain { stroke: var(--muted); }
+
+  /* points + generous transparent hit targets */
+  .pt        { fill: var(--accent); stroke: var(--surface); stroke-width: 2.2; }
+  .pt.opt    { stroke: var(--accent); stroke-width: 3; }
+  .pt.noGain { fill: var(--muted); }
+  .ptRef     { fill: var(--muted); stroke: var(--surface); stroke-width: 2; }
+  .ptPrice   { fill: var(--surface); stroke: var(--muted); stroke-width: 2; }
+  .handleDot { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5; }
+  .handleDot.opt    { stroke: var(--accent); stroke-width: 3.5; }
+  .handleDot.noGain { fill: var(--muted); }
+  .hit       { fill: transparent; stroke: transparent; touch-action: none;
+               cursor: grab; }
+  .hit-axis  { fill: none; stroke: transparent; stroke-width: 30;
+               touch-action: none; cursor: grab; }
+  .pt-focus:focus-visible { outline: none; }
+  .pt-focus:focus-visible + .handleDot,
+  .grabbing .handleDot { stroke: var(--accent); stroke-width: 3.5; }
+
+  /* text */
+  .axlabel   { fill: var(--muted); font-size: 13px; font-weight: 600; }
+  .ticklabel { fill: var(--muted); font-size: 11px; }
+  .curvelabel{ fill: var(--ink); font-size: 11.5px; font-weight: 600; }
+  .notelabel { fill: var(--muted); font-size: 10.5px; font-style: italic; }
+  .pricelabel{ fill: var(--muted); font-size: 10.5px; font-weight: 600; }
+  .title     { fill: var(--muted); font-size: 13px; font-weight: 700; }
+  .taglabel  { fill: var(--ink); font-size: 11px; font-weight: 700;
+               paint-order: stroke; stroke: var(--surface); stroke-width: 3px;
+               stroke-linejoin: round; }
+  .axtag     { fill: var(--accent); font-size: 11.5px; font-weight: 700; }
+  .axtagbg   { fill: var(--surface); }
+  .sep       { stroke: var(--hairline); stroke-width: 1; }
+  .r-hint    { fill: var(--muted); font-size: 12.5px; }
+  .r-trade   { fill: var(--accent); font-size: 13.5px; font-weight: 600; }
+  .fallback  { margin: 8px 0 0; color: var(--muted); font-size: 13px;
+               line-height: 1.35; text-align: center; }
+  .fallback a { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="fig">
+  <svg id="fig" viewBox="0 0 440 540" role="group"
+       aria-label="Baker's rising marginal cost of baking cakes and Adam's falling marginal worth of buying cakes, on one chart. A gain wedge marks the cakes worth more to Adam than they cost Baker, up to where the two meet at 3.5 cakes. A dashed price line sits at 0.90Y. Drag the quantity handle along the x-axis to see Baker's cost and Adam's worth at that cake, and whether a gain from trade remains. At the third cake, Baker's cost is 0.80Y, Adam's worth is 0.95Y, and both gain at the 0.90Y trade price.">
+    <defs>
+      <marker id="ax-arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+    </defs>
+
+    <!-- title -->
+    <text class="title" x="239" y="20" text-anchor="middle">Baker sells; Adam buys</text>
+
+    <!-- gain wedge (static teaching region: q=1 to the 3.5-cake crossover) -->
+    <path class="gain" d="M114,130 L239,180 L114,280 Z" />
+
+    <!-- ===================== axes ===================== -->
+    <line class="axis" x1="64" y1="360" x2="414" y2="360" marker-end="url(#ax-arrow)" />
+    <line class="axis" x1="64" y1="360" x2="64"  y2="32"  marker-end="url(#ax-arrow)" />
+
+    <!-- x ticks (0..6) -->
+    <g class="tickmark">
+      <line x1="64"  y1="360" x2="64"  y2="364" />
+      <line x1="114" y1="360" x2="114" y2="364" />
+      <line x1="164" y1="360" x2="164" y2="364" />
+      <line x1="214" y1="360" x2="214" y2="364" />
+      <line x1="264" y1="360" x2="264" y2="364" />
+      <line x1="314" y1="360" x2="314" y2="364" />
+      <line x1="364" y1="360" x2="364" y2="364" />
+    </g>
+    <g class="ticklabel">
+      <text x="64"  y="378" text-anchor="middle">0</text>
+      <text x="114" y="378" text-anchor="middle">1</text>
+      <text x="164" y="378" text-anchor="middle">2</text>
+      <text x="214" y="378" text-anchor="middle">3</text>
+      <text x="264" y="378" text-anchor="middle">4</text>
+      <text x="314" y="378" text-anchor="middle">5</text>
+      <text x="364" y="378" text-anchor="middle">6</text>
+    </g>
+    <text class="axlabel" x="239" y="398" text-anchor="middle">Cakes per day</text>
+
+    <!-- y ticks (0.60, 0.80, 0.95) -->
+    <g class="tickmark">
+      <line x1="60" y1="240" x2="64" y2="240" />
+      <line x1="60" y1="200" x2="64" y2="200" />
+      <line x1="60" y1="170" x2="64" y2="170" />
+    </g>
+    <g class="ticklabel">
+      <text x="54" y="240" text-anchor="end" dominant-baseline="middle">0.60</text>
+      <text x="54" y="200" text-anchor="end" dominant-baseline="middle">0.80</text>
+      <text x="54" y="170" text-anchor="end" dominant-baseline="middle">0.95</text>
+    </g>
+    <text class="axlabel" x="16" y="196" text-anchor="middle"
+          transform="rotate(-90 16 196)">Cost / Worth (in Y)</text>
+
+    <!-- ===================== marginal lines ===================== -->
+    <path class="curve" d="M99,292 L364,80" />
+    <text class="curvelabel" x="250" y="48" text-anchor="start">Baker&#8217;s Marginal Cost</text>
+    <path class="curve" d="M99,124 L364,230" />
+    <text class="curvelabel" x="100" y="48" text-anchor="start">Adam&#8217;s Marginal Worth</text>
+
+    <!-- trade price (fixed at 0.90Y, independent of q) -->
+    <line class="priceline" x1="64" y1="180" x2="354" y2="180" />
+    <text class="pricelabel" x="360" y="184" text-anchor="start">Price = 0.90Y</text>
+
+    <!-- Baker self-sufficient reference (fixed at Q=2, MC=0.60Y) -->
+    <circle class="ptRef" cx="164" cy="240" r="4.5" />
+    <text class="notelabel" x="164" y="258" text-anchor="middle">Baker self-sufficient</text>
+    <text class="notelabel" x="164" y="270" text-anchor="middle">(Q = 2)</text>
+
+    <!-- gain-region verbal label (static, inside the wedge) -->
+    <text class="notelabel" x="164" y="212" text-anchor="middle">gain</text>
+    <text class="notelabel" x="164" y="224" text-anchor="middle">region</text>
+
+    <!-- ===================== dynamic droplines + guides (q=3 default) ===================== -->
+    <line id="dropV"   class="drop"  x1="214" y1="360" x2="214" y2="170" />
+    <line id="guideMC" class="guide" x1="64"  y1="200" x2="214" y2="200" />
+    <line id="guideMW" class="guide" x1="64"  y1="170" x2="214" y2="170" />
+
+    <!-- ===================== tracking dots (q=3 default) ===================== -->
+    <circle id="dotMC" class="pt opt" cx="214" cy="200" r="5" />
+    <circle id="dotMW" class="pt opt" cx="214" cy="170" r="5" />
+    <circle id="dotPrice" class="ptPrice" cx="214" cy="180" r="4" />
+
+    <!-- near-dot value labels (q=3 default) -->
+    <text id="tagMCnear" class="taglabel" x="224" y="200" dominant-baseline="middle">MC = 0.80Y</text>
+    <text id="tagMWnear" class="taglabel" x="224" y="170" dominant-baseline="middle">MW = 0.95Y</text>
+
+    <!-- live axis tags (ride the dropline feet; q=3 default) -->
+    <rect id="tagQbg" class="axtagbg" x="200" y="370" width="28" height="15" rx="2" />
+    <text id="tagQ" class="axtag" x="214" y="382" text-anchor="middle">3</text>
+    <rect id="tagMCbg" class="axtagbg" x="18" y="192.5" width="42" height="15" rx="2" />
+    <text id="tagMC" class="axtag" x="39" y="204.5" text-anchor="middle">0.80</text>
+    <rect id="tagMWbg" class="axtagbg" x="18" y="162.5" width="42" height="15" rx="2" />
+    <text id="tagMW" class="axtag" x="39" y="174.5" text-anchor="middle">0.95</text>
+
+    <!-- ===================== draggable quantity handle (q=3 default) ===================== -->
+    <line id="hitAxis" class="hit-axis" x1="89" y1="360" x2="389" y2="360" />
+    <circle id="hitHandle" class="hit" cx="214" cy="360" r="24" />
+    <circle id="handle" class="handleDot opt" cx="214" cy="360" r="6" />
+    <circle id="ptFocus" class="pt-focus hit" cx="214" cy="360" r="24"
+            tabindex="0" role="slider" aria-label="Quantity of cakes traded"
+            aria-valuemin="1" aria-valuemax="6" aria-valuenow="3"
+            aria-valuetext="3rd cake: Baker's cost 0.80Y, Adam's worth 0.95Y; price 0.90Y. Both gain: Baker earns 0.10Y over cost, Adam pays 0.05Y under worth." />
+
+    <!-- readout band: hairline separator, muted STATE line, accent TAKEAWAY line -->
+    <line class="sep" x1="44" y1="430" x2="396" y2="430" />
+    <text id="rHint"  class="r-hint"  x="220" y="454" text-anchor="middle">3rd cake: Baker's cost 0.80Y, Adam's worth 0.95Y; price 0.90Y.</text>
+    <text id="rTrade" class="r-trade" text-anchor="middle"><tspan x="220" y="476">Both gain — Baker earns 0.10Y over cost, Adam</tspan><tspan x="220" y="494">pays 0.05Y under worth.</tspan></text>
+  </svg>
+
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame is a still image: Baker's
+      rising marginal cost and Adam's falling marginal worth, with the gain wedge
+      between them up to the 3.5-cake crossover, a dashed 0.90Y price line, and
+      the third cake marked as the traded unit (Baker's cost 0.80Y, Adam's worth
+      0.95Y). You can also
+      <a href="t06b-gains-exchange.svg">open the static figure</a>.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var svg = document.getElementById('fig');
+  var byId = function (id) { return document.getElementById(id); };
+
+  var dropV = byId('dropV'), guideMC = byId('guideMC'), guideMW = byId('guideMW');
+  var dotMC = byId('dotMC'), dotMW = byId('dotMW'), dotPrice = byId('dotPrice');
+  var tagMCnear = byId('tagMCnear'), tagMWnear = byId('tagMWnear');
+  var tagQ = byId('tagQ'), tagQbg = byId('tagQbg');
+  var tagMC = byId('tagMC'), tagMCbg = byId('tagMCbg');
+  var tagMW = byId('tagMW'), tagMWbg = byId('tagMWbg');
+  var hitAxis = byId('hitAxis'), hitHandle = byId('hitHandle'), handle = byId('handle');
+  var ptFocus = byId('ptFocus');
+  var rHint = byId('rHint'), rTrade = byId('rTrade');
+  var NS = 'http://www.w3.org/2000/svg';
+
+  // --- pixel frame + scale (mirrors the markup above) ---
+  var X0 = 64, Y0 = 360, PER_X = 50, PER_Y = 200;
+  function xAt(q) { return X0 + q * PER_X; }
+  function yAt(v) { return Y0 - v * PER_Y; }
+
+  // --- the model ---
+  function mc(q) { return 0.20 + 0.20 * q; }   // Baker's marginal cost
+  function mw(q) { return 1.25 - 0.10 * q; }   // Adam's marginal worth
+  var QLO = 1, QHI = 6, Q_TRADE = 3;
+  var PRICE = 0.90;
+
+  var q = 3; // initial state (matches the static markup)
+
+  var spt = svg.createSVGPoint();
+  function toSvg(evt) {
+    spt.x = evt.clientX; spt.y = evt.clientY;
+    return spt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+
+  function money(v) { return v.toFixed(2) + 'Y'; }
+
+  var ORD = ['', '1st', '2nd', '3rd', '4th', '5th', '6th'];
+
+  // readout text — verbatim spec examples at q=1,3,4; formula-derived elsewhere
+  function text(qq) {
+    var c = mc(qq), w = mw(qq), gain = w - c;
+    if (qq === 1) return {
+      m: '1st cake: Baker’s cost 0.40Y, Adam’s worth 1.15Y.',
+      a: 'A wide gap — the earliest units carry the biggest gains from trade.'
+    };
+    if (qq === 3) return {
+      m: '3rd cake: Baker’s cost 0.80Y, Adam’s worth 0.95Y; price 0.90Y.',
+      a: 'Both gain — Baker earns 0.10Y over cost, Adam pays 0.05Y under worth.'
+    };
+    if (qq === 4) return {
+      m: '4th cake: Baker’s cost 1.00Y, Adam’s worth 0.85Y.',
+      a: 'Cost now exceeds Adam’s worth — no gain left to trade.'
+    };
+    var m = ORD[qq] + ' cake: Baker’s cost ' + money(c) + ', Adam’s worth ' + money(w) + '.';
+    var a = (gain > 0)
+      ? 'Still a gain — worth exceeds cost by ' + money(gain) + '.'
+      : 'Cost now exceeds worth by ' + money(-gain) + ' — no gain left to trade.';
+    return { m: m, a: a };
+  }
+
+  // greedy word-wrap into <tspan> lines so the accent line never overflows
+  function layoutTrade(str) {
+    var maxW = 388, x = 220, y0 = 476, lineH = 18;
+    while (rTrade.firstChild) rTrade.removeChild(rTrade.firstChild);
+    var probe = document.createElementNS(NS, 'tspan');
+    rTrade.appendChild(probe);
+    var words = str.split(' '), lines = [], cur = words[0] || '';
+    for (var i = 1; i < words.length; i++) {
+      probe.textContent = cur + ' ' + words[i];
+      if (probe.getComputedTextLength() > maxW) { lines.push(cur); cur = words[i]; }
+      else { cur = cur + ' ' + words[i]; }
+    }
+    lines.push(cur);
+    rTrade.removeChild(probe);
+    var startY = (lines.length === 1) ? y0 + 4 : y0;
+    for (var j = 0; j < lines.length; j++) {
+      var t = document.createElementNS(NS, 'tspan');
+      t.setAttribute('x', x);
+      t.setAttribute('y', startY + j * lineH);
+      t.textContent = lines[j];
+      rTrade.appendChild(t);
+    }
+  }
+
+  function render() {
+    var c = mc(q), w = mw(q);
+    var cx = xAt(q), cyMC = yAt(c), cyMW = yAt(w), cyPrice = yAt(PRICE);
+    var noGain = (c > w);        // past the 3.5-cake crossover: no gain left
+    var isTraded = (q === Q_TRADE);
+
+    // tracking dots
+    dotMC.setAttribute('cx', cx); dotMC.setAttribute('cy', cyMC);
+    dotMW.setAttribute('cx', cx); dotMW.setAttribute('cy', cyMW);
+    dotPrice.setAttribute('cx', cx); dotPrice.setAttribute('cy', cyPrice);
+    dotMC.setAttribute('class', 'pt' + (isTraded ? ' opt' : '') + (noGain ? ' noGain' : ''));
+    dotMW.setAttribute('class', 'pt' + (isTraded ? ' opt' : '') + (noGain ? ' noGain' : ''));
+
+    // droplines + guides
+    var topY = Math.min(cyMC, cyMW);
+    dropV.setAttribute('x1', cx); dropV.setAttribute('x2', cx);
+    dropV.setAttribute('y2', topY);
+    dropV.setAttribute('class', 'drop' + (noGain ? ' noGain' : ''));
+    guideMC.setAttribute('x2', cx); guideMC.setAttribute('y1', cyMC); guideMC.setAttribute('y2', cyMC);
+    guideMW.setAttribute('x2', cx); guideMW.setAttribute('y1', cyMW); guideMW.setAttribute('y2', cyMW);
+
+    // near-dot value labels
+    tagMCnear.setAttribute('x', cx + 10); tagMCnear.setAttribute('y', cyMC);
+    tagMCnear.textContent = 'MC = ' + money(c);
+    tagMWnear.setAttribute('x', cx + 10); tagMWnear.setAttribute('y', cyMW);
+    tagMWnear.textContent = 'MW = ' + money(w);
+
+    // live axis tags (ride the dropline feet)
+    tagQbg.setAttribute('x', cx - 14);
+    tagQ.setAttribute('x', cx); tagQ.textContent = String(q);
+    tagMCbg.setAttribute('y', cyMC - 7.5);
+    tagMC.setAttribute('y', cyMC + 4); tagMC.textContent = c.toFixed(2);
+    tagMWbg.setAttribute('y', cyMW - 7.5);
+    tagMW.setAttribute('y', cyMW + 4); tagMW.textContent = w.toFixed(2);
+
+    // handle (rides the x-axis)
+    handle.setAttribute('cx', cx);
+    handle.setAttribute('class', 'handleDot' + (isTraded ? ' opt' : '') + (noGain ? ' noGain' : ''));
+    hitHandle.setAttribute('cx', cx);
+    ptFocus.setAttribute('cx', cx);
+
+    // readouts
+    var t = text(q);
+    rHint.textContent = t.m;
+    layoutTrade(t.a);
+    ptFocus.setAttribute('aria-valuenow', q);
+    ptFocus.setAttribute('aria-valuetext', t.m + ' ' + t.a);
+  }
+
+  function setQ(newQ) {
+    var qq = Math.round(newQ);
+    if (isNaN(qq)) return;
+    if (qq < QLO) qq = QLO;
+    if (qq > QHI) qq = QHI;
+    if (qq === q) return;
+    q = qq;
+    render();
+  }
+
+  function setFromPointer(evt) {
+    var p = toSvg(evt);
+    if (isNaN(p.x)) return;
+    setQ((p.x - X0) / PER_X);
+  }
+
+  // --- drag (pointer capture so a fast drag can't get stuck) ---
+  var dragging = false, capturedEl = null, capturedId = null;
+  function onMove(evt) { if (dragging) { evt.preventDefault(); setFromPointer(evt); } }
+  function onUp() {
+    dragging = false;
+    svg.classList.remove('grabbing');
+    if (capturedEl && capturedId !== null) {
+      try { capturedEl.releasePointerCapture(capturedId); } catch (e) {}
+    }
+    capturedEl = null; capturedId = null;
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+  }
+  function onDown(evt) {
+    evt.preventDefault();
+    dragging = true;
+    svg.classList.add('grabbing');
+    capturedEl = evt.currentTarget; capturedId = evt.pointerId;
+    try { capturedEl.setPointerCapture(capturedId); } catch (e) {}
+    setFromPointer(evt);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }
+  hitAxis.addEventListener('pointerdown', onDown);
+  hitHandle.addEventListener('pointerdown', onDown);
+  ptFocus.addEventListener('pointerdown', onDown);
+
+  // --- keyboard: step the quantity by one cake ---
+  ptFocus.addEventListener('keydown', function (evt) {
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') { setQ(q + 1); }
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') { setQ(q - 1); }
+    else return;
+    evt.preventDefault();
+  });
+
+  // --- debug hook (inert for students) ---
+  window.__fig = {
+    set: function (v) {
+      var qq = (v && typeof v.q === 'number') ? v.q : v;
+      setQ(+qq);
+    },
+    get: function () {
+      return { q: q, mc: mc(q), mw: mw(q), price: PRICE, gain: mw(q) - mc(q) };
+    }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive figure: elasticity is not slope</title>
+<!--
+  Interactive recreation of UE Fig 8.2 (p.113) for the T3b blog post
+  (website-styled warm palette, not FAU). Self-contained: no libraries, no
+  network. DEFERRED FIGURE — there is no companion static .tex/.svg for this
+  one, so the <noscript> fallback describes the still image directly instead
+  of linking a static file.
+
+  ARCHITECTURE: the base figure is REAL SVG markup. A no-JS reader sees the
+  FULL comparison — three straight demand lines, the shared/parallel
+  intercepts T and T', the horizontal price line at P with all three
+  crossings marked, and the "1 / 2 / 3" curve labels. The script only
+  ATTACHES behavior (the Same-intercept | Same-slope toggle, dimming the
+  inactive curve, live readouts); it never builds figure DOM.
+
+  GEOMETRY (family F2, repurposed as a compare toggle; single-panel):
+  viewBox 440 x 540, aspect-ratio 4/5, max-width 480-560px.
+  Data: Price on y, Quantity on x. Pixel frame: x = 70 + Q*45 (origin 70),
+  y = 360 - P*26 (origin 360). Axes drawn past the data max.
+    T  = (0,7)  -> curve 1 and curve 2's shared price-axis intercept.
+    T' = (0,10) -> curve 3's (higher) price-axis intercept.
+    Curve 1: P = 7  - 1.75 Q   (from T,  x-intercept 4.00)
+    Curve 2: P = 7  - 1.4  Q   (from T,  x-intercept 5.00, flatter than 1)
+    Curve 3: P = 10 - 1.75 Q   (from T', x-intercept 5.71, PARALLEL to 1)
+  A horizontal dashed line at P = 3 crosses all three; the three crossings
+  are fixed reference dots (do not move / fade on toggle) at
+  (2.29,3), (2.86,3), (4.00,3) in data units.
+  Curve 1 stays ink-solid in both toggle states (it is the common member of
+  both comparisons); curve 2 or curve 3 is accent-solid when the active
+  partner and a muted dashed ghost when not.
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;   /* warm bone background        */
+    --ink:     #1a1c1e;    /* primary curve + headings    */
+    --text:    #16181a;    /* body text                   */
+    --muted:   #5c6066;    /* captions / secondary labels */
+    --hairline:#e3ddd3;    /* axes muting / droplines     */
+    --accent:  #b07a2c;    /* brass — active curve/points */
+    --accent-tint: #efe4d2;/* unused wash reserved token  */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .fig { width: 100%; max-width: 480px; min-width: 0; }
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+
+  /* compare toggle (above the plot) */
+  .modebar { display: flex; align-items: center; gap: 8px;
+             margin: 0 0 8px; flex-wrap: wrap; }
+  .modelabel { color: var(--muted); font-size: 13px; font-weight: 600; }
+  .seg { font-family: inherit; font-size: 12.5px; font-weight: 600;
+         color: var(--ink); background: var(--surface);
+         border: 1.5px solid var(--hairline); border-radius: 6px;
+         padding: 5px 12px; cursor: pointer; }
+  .seg + .seg { margin-left: -1px; }
+  .seg.on { background: var(--accent); color: var(--surface);
+            border-color: var(--accent); }
+  .seg:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* structural strokes */
+  .axis        { stroke: var(--muted); stroke-width: 1.4; }
+  .curve       { stroke: var(--ink); stroke-width: 2.6; fill: none;
+                 stroke-linecap: round; }
+  .curve-active{ stroke: var(--accent); stroke-width: 2.8; fill: none;
+                 stroke-linecap: round; }
+  .curve-ghost { stroke: var(--muted); stroke-width: 2; fill: none;
+                 stroke-dasharray: 6 5; opacity: 0.7; }
+  .priceline   { stroke: var(--muted); stroke-width: 1.3;
+                 stroke-dasharray: 3 3; }
+  .drop        { stroke: var(--hairline); stroke-width: 1.6;
+                 stroke-dasharray: 5 4; }
+
+  /* the three fixed reference dots — do not move or fade on toggle */
+  .fixedpt { fill: var(--ink); stroke: var(--surface); stroke-width: 2; }
+
+  /* text */
+  .axlabel   { fill: var(--muted); font-size: 13px; font-weight: 600; }
+  .ticklabel { fill: var(--ink); font-size: 13px; font-weight: 700; }
+  .curvelabel{ font-size: 13px; font-weight: 700; }
+  .sep       { stroke: var(--hairline); stroke-width: 1; }
+  .r-hint    { fill: var(--muted); font-size: 12.5px; }
+  .r-trade   { fill: var(--accent); font-size: 14px; font-weight: 600; }
+  .fallback  { margin: 8px 0 0; color: var(--muted); font-size: 13px;
+               line-height: 1.35; text-align: center; }
+</style>
+</head>
+<body>
+<div class="fig">
+  <div class="modebar" role="group" aria-label="Choose which curves to compare">
+    <span class="modelabel">Compare:</span>
+    <button id="btnIntercept" class="seg on" type="button" aria-pressed="true"
+            tabindex="0">Same intercept (1 &amp; 2)</button>
+    <button id="btnSlope" class="seg" type="button" aria-pressed="false"
+            tabindex="0">Same slope (1 &amp; 3)</button>
+  </div>
+
+  <svg id="fig" viewBox="0 0 440 540" role="group"
+       aria-label="Three straight-line demand curves showing that elasticity is not slope. Curves 1 and 2 share the same price-axis intercept T but have different slopes. Curve 3 is parallel to curve 1 (identical slope) but starts from a higher intercept T-prime. A dashed line at price P marks where all three curves cross. Toggle to compare curves 1 and 2, or curves 1 and 3.">
+    <title>Elasticity is not slope: three demand curves compared (UE Fig 8.2)</title>
+    <defs>
+      <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+    </defs>
+
+    <!-- axes (drawn before the curves); extended past the data max -->
+    <line class="axis" x1="70" y1="360" x2="390" y2="360" marker-end="url(#arrow)" />
+    <line class="axis" x1="70" y1="360" x2="70"  y2="50"  marker-end="url(#arrow)" />
+    <text class="axlabel" x="230" y="392" text-anchor="middle">Quantity</text>
+    <text class="axlabel" x="24" y="205" text-anchor="middle"
+          transform="rotate(-90 24 205)">Price</text>
+    <text class="ticklabel" x="60" y="376" text-anchor="end">O</text>
+
+    <!-- price-axis intercepts -->
+    <text class="ticklabel" x="64" y="181" text-anchor="end">T</text>
+    <text class="ticklabel" x="64" y="103" text-anchor="end">T&#8242;</text>
+
+    <!-- vertical droplines from the three fixed price-crossings to the x-axis -->
+    <line class="drop" x1="172.9" y1="282" x2="172.9" y2="360" />
+    <line class="drop" x1="198.6" y1="282" x2="198.6" y2="360" />
+    <line class="drop" x1="250.0" y1="282" x2="250.0" y2="360" />
+
+    <!-- curve 1 (from T, steepest, x-intercept 4.00) — always ink-solid -->
+    <path id="curve1" class="curve" d="M70,178 L250,360" />
+    <!-- curve 2 (from T, flatter, x-intercept 5.00) -->
+    <path id="curve2" class="curve-active" d="M70,178 L295,360" />
+    <!-- curve 3 (from T', parallel to curve 1, x-intercept 5.71) -->
+    <path id="curve3" class="curve-ghost" d="M70,100 L327.1,360" />
+
+    <!-- curve number labels, sitting past each curve's own x-intercept -->
+    <text id="lab1" class="curvelabel" x="255" y="348" text-anchor="middle" fill="#1a1c1e">1</text>
+    <text id="lab2" class="curvelabel" x="300" y="348" text-anchor="middle" fill="#b07a2c">2</text>
+    <text id="lab3" class="curvelabel" x="332" y="348" text-anchor="middle" fill="#5c6066">3</text>
+
+    <!-- horizontal dashed price line at P = 3, crossing all three curves -->
+    <line class="priceline" x1="70" y1="282" x2="250" y2="282" />
+    <text class="ticklabel" x="64" y="286" text-anchor="end">P</text>
+
+    <!-- the three fixed crossing dots — position and presence never change -->
+    <circle class="fixedpt" cx="172.9" cy="282" r="5" />
+    <circle class="fixedpt" cx="198.6" cy="282" r="5" />
+    <circle class="fixedpt" cx="250.0" cy="282" r="5" />
+
+    <!-- readout band: hairline separator, muted STATE line, accent TAKEAWAY line.
+         Both lines can run long, so each wraps into its own pair of <tspan>s
+         (hand-set here for the no-JS/initial view; render() below re-measures
+         and re-flows both on load and on every toggle, exactly like the
+         house pattern in t03-marginal-worths-interactive.html). -->
+    <line class="sep" x1="44" y1="400" x2="396" y2="400" />
+    <text id="rHint" class="r-hint" text-anchor="middle"><tspan x="220" y="422">Curves 1 and 2 start from the same price-axis point;</tspan><tspan x="220" y="440">curve 2 is flatter.</tspan></text>
+    <text id="rTrade" class="r-trade" text-anchor="middle"><tspan x="220" y="466">Same intercept &#8594; same elasticity at P &#8212;</tspan><tspan x="220" y="484">even though the slopes differ.</tspan></text>
+  </svg>
+
+  <noscript>
+    <p class="fallback">JavaScript is off, so the frame above already shows the
+      complete comparison: curves 1 and 2 both start at T and cross the dashed
+      P line at different points; curve 3 starts higher, at T&#8242;, running
+      parallel to curve 1. All three fixed crossing points and both intercepts
+      are visible in this still image; only the compare toggle above it is
+      inactive.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var curve1 = document.getElementById('curve1');
+  var curve2 = document.getElementById('curve2');
+  var curve3 = document.getElementById('curve3');
+  var lab2 = document.getElementById('lab2');
+  var lab3 = document.getElementById('lab3');
+  var rHint = document.getElementById('rHint');
+  var rTrade = document.getElementById('rTrade');
+  var btnIntercept = document.getElementById('btnIntercept');
+  var btnSlope = document.getElementById('btnSlope');
+
+  var ACCENT = '#b07a2c', MUTED = '#5c6066';
+  var NS = 'http://www.w3.org/2000/svg';
+
+  // state: which pair is being compared. Curve 1 is common to both and
+  // always stays ink-solid; the other curve in the active pair goes
+  // accent-solid, the excluded one becomes a muted dashed ghost.
+  var mode = 'intercept'; // 'intercept' (1 & 2) | 'slope' (1 & 3)
+
+  // Greedily word-wrap `str` into <tspan> lines inside `el` so the readout
+  // never overflows the 440-wide viewBox. Measures with getComputedTextLength.
+  function wrapInto(el, str, x, maxW) {
+    while (el.firstChild) el.removeChild(el.firstChild);
+    var probe = document.createElementNS(NS, 'tspan');
+    el.appendChild(probe);
+    var words = str.split(' '), lines = [], cur = words[0] || '';
+    for (var i = 1; i < words.length; i++) {
+      probe.textContent = cur + ' ' + words[i];
+      if (probe.getComputedTextLength() > maxW) { lines.push(cur); cur = words[i]; }
+      else { cur = cur + ' ' + words[i]; }
+    }
+    lines.push(cur);
+    el.removeChild(probe);
+    return lines;
+  }
+
+  function layoutLines(el, lines, x, y0, lineH) {
+    while (el.firstChild) el.removeChild(el.firstChild);
+    var startY = (lines.length === 1) ? y0 + 9 : y0;
+    for (var j = 0; j < lines.length; j++) {
+      var t = document.createElementNS(NS, 'tspan');
+      t.setAttribute('x', x); t.setAttribute('y', startY + j * lineH);
+      t.textContent = lines[j];
+      el.appendChild(t);
+    }
+    return startY + (lines.length - 1) * lineH;
+  }
+
+  function setReadout(hintStr, tradeStr) {
+    var maxW = 404, x = 220;
+    var hintLines = wrapInto(rHint, hintStr, x, maxW);
+    var hintBottom = layoutLines(rHint, hintLines, x, 422, 18);
+    var tradeLines = wrapInto(rTrade, tradeStr, x, maxW);
+    layoutLines(rTrade, tradeLines, x, hintBottom + 26, 18);
+  }
+
+  function render() {
+    var intercept = (mode === 'intercept');
+
+    curve2.setAttribute('class', intercept ? 'curve-active' : 'curve-ghost');
+    curve3.setAttribute('class', intercept ? 'curve-ghost' : 'curve-active');
+    lab2.setAttribute('fill', intercept ? ACCENT : MUTED);
+    lab3.setAttribute('fill', intercept ? MUTED : ACCENT);
+
+    btnIntercept.classList.toggle('on', intercept);
+    btnSlope.classList.toggle('on', !intercept);
+    btnIntercept.setAttribute('aria-pressed', intercept ? 'true' : 'false');
+    btnSlope.setAttribute('aria-pressed', intercept ? 'false' : 'true');
+
+    if (intercept) {
+      setReadout(
+        'Curves 1 and 2 start from the same price-axis point; curve 2 is flatter.',
+        'Same intercept → same elasticity at P — even though the slopes differ.'
+      );
+    } else {
+      setReadout(
+        'Curves 1 and 3 are parallel — identical slope — from different intercepts.',
+        'Same slope → different elasticity at P. Elasticity is not slope.'
+      );
+    }
+  }
+
+  function setMode(m) {
+    if (m !== 'intercept' && m !== 'slope') return;
+    mode = m;
+    render();
+  }
+
+  btnIntercept.addEventListener('click', function () { setMode('intercept'); });
+  btnSlope.addEventListener('click', function () { setMode('slope'); });
+
+  // arrow keys step between the two comparisons from either button (a small
+  // two-item tablist pattern layered on top of the native button toggle)
+  function onKey(evt) {
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowDown') {
+      evt.preventDefault();
+      setMode('slope');
+      btnSlope.focus();
+    } else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowUp') {
+      evt.preventDefault();
+      setMode('intercept');
+      btnIntercept.focus();
+    }
+  }
+  btnIntercept.addEventListener('keydown', onKey);
+  btnSlope.addEventListener('keydown', onKey);
+
+  // debug hook (inert for students)
+  window.__fig = {
+    set: function (v) {
+      v = v || {};
+      if (v.mode === 'intercept' || v.mode === 'slope') mode = v.mode;
+      render();
+    },
+    get: function () { return { mode: mode }; }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

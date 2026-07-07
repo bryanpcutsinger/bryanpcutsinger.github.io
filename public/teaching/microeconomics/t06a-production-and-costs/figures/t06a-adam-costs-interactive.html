@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive marginal-cost bar chart: the marginal costs sum to total cost</title>
+<!--
+  Interactive figure for the t06a "Production and Costs" blog post.
+  Recreates UE Fig 14.1 (p.202) — Adam's marginal and average daily cost at
+  various daily rates of production. Family F5 (schedule-bar link): the reader
+  steps a cake marker across outputs 1..10; the selected marginal-cost bar
+  brightens, the average-cost dot at that output gets a ring, and a faint band
+  covers the marginal-cost bars 1..q whose heights SUM to the total cost at q
+  (the graphical-arithmetic teaching point). Self-contained: no libraries, no
+  network. The static FAU figure (figures/t06a-adam-costs.svg) is the SLIDE
+  version and is untouched.
+
+  ARCHITECTURE: the base figure is REAL SVG markup — a no-JS reader (or the
+  <noscript> still image) sees the full chart: axes, gridlines, all ten
+  marginal-cost bars, the average-cost line + dots, both annotations, the
+  cumulative band, the current-bar highlight, the average-cost ring, and the
+  two-line readout (all drawn at the initial state q = 6). The script only
+  ATTACHES behavior (tap/scrub, arrow keys, live readouts); it never builds DOM.
+
+  GEOMETRY (single-panel, standard §4): viewBox 440 x 540, aspect-ratio 4/5,
+  max-width 480-560px. Pixel frame: y-axis at x = 70, baseline y = 380. Value
+  scale py(v) = 380 - v*155, so value 2.0 -> y = 70 (axis extends past to y = 52).
+  Ten bars at centers barX(i) = 105 + (i-1)*33 (i = 1..10 -> 105..402), width 22.
+  x-axis runs to x = 420 (arrowhead) past the last bar.
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;   /* warm bone background        */
+    --ink:     #1a1c1e;    /* primary ink (AC line)       */
+    --text:    #16181a;    /* body text / annotations     */
+    --muted:   #5c6066;    /* captions / secondary labels */
+    --hairline:#e3ddd3;    /* axes muting / droplines     */
+    --accent:  #b07a2c;    /* brass — highlight / AC       */
+    --accent-tint: #efe4d2;/* bar fill / shaded band       */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .fig { width: 100%; max-width: 540px; }
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+
+  /* structural strokes */
+  .axis     { stroke: var(--muted); stroke-width: 1.4; }
+  .grid     { stroke: var(--hairline); stroke-width: 1; }
+  .tick     { stroke: var(--muted); stroke-width: 1.2; }
+  .drop     { stroke: var(--hairline); stroke-width: 1.6; stroke-dasharray: 5 4; }
+
+  /* marginal-cost bars */
+  .mcbar    { fill: var(--accent-tint); stroke: var(--muted); stroke-width: 1.1; }
+  .mcbar.current { fill: var(--accent); stroke: var(--accent); }
+  /* faint band over the cumulative bars 1..q (sum = total cost) */
+  .cumband  { fill: var(--accent); opacity: 0.10; stroke: none; }
+
+  /* average-cost line + dots + current ring */
+  .acline   { stroke: var(--ink); stroke-width: 2.2; fill: none; stroke-linecap: round; }
+  .acdot    { fill: var(--ink); stroke: var(--surface); stroke-width: 1; }
+  .acring   { fill: none; stroke: var(--accent); stroke-width: 2.4; }
+
+  /* generous hit / keyboard proxy over the whole plot */
+  .hit      { fill: transparent; stroke: transparent; touch-action: none;
+              cursor: pointer; }
+  .hit:focus-visible { outline: none; stroke: var(--accent); stroke-width: 2;
+              stroke-dasharray: 5 4; }
+
+  /* text */
+  .axlabel  { fill: var(--muted); font-size: 15px; font-weight: 600; }
+  .gridlab  { fill: var(--muted); font-size: 11.5px; }
+  .ticklab  { fill: var(--text); font-size: 12.5px; }
+  .annot    { fill: var(--text); font-size: 13px; font-weight: 600; }
+  .mcval    { fill: var(--accent); font-size: 12px; font-weight: 700; }
+  .sep      { stroke: var(--hairline); stroke-width: 1; }
+  .r-state  { fill: var(--muted); font-size: 12px; }
+  .r-take   { fill: var(--accent); font-size: 12px; font-weight: 700; }
+  .fallback {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.35;
+    text-align: center;
+  }
+  .fallback a { color: var(--ink); }
+</style>
+</head>
+<body>
+<!-- Everything from here to </div> is REAL base SVG drawn at the initial state
+     q = 6, so a no-JS reader sees the complete chart. -->
+<div class="fig">
+  <svg id="fig" viewBox="0 0 440 540" role="group"
+       aria-label="Adam's marginal cost and average cost at each daily output of cakes, from 1 to 10. Ten light bars show the marginal cost of each successive cake, rising from 0.90 to 1.80 units of product Y. A darker line with dots shows the average cost rising from 0.90 to 1.35. Step the cake marker to see that the marginal-cost bars up to any output sum to the total cost at that output.">
+    <title>Adam's marginal and average cost: the marginal-cost bars sum to total cost</title>
+    <defs>
+      <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+    </defs>
+
+    <!-- horizontal gridlines at 0.5, 1.0, 1.5, 2.0 (drawn first, faint) -->
+    <line class="grid" x1="70" y1="302.5" x2="415" y2="302.5" />
+    <line class="grid" x1="70" y1="225"   x2="415" y2="225" />
+    <line class="grid" x1="70" y1="147.5" x2="415" y2="147.5" />
+    <line class="grid" x1="70" y1="70"    x2="415" y2="70" />
+    <text class="gridlab" x="60" y="384" text-anchor="end">0</text>
+    <text class="gridlab" x="60" y="306"   text-anchor="end">0.5</text>
+    <text class="gridlab" x="60" y="228.5" text-anchor="end">1.0</text>
+    <text class="gridlab" x="60" y="151"   text-anchor="end">1.5</text>
+    <text class="gridlab" x="60" y="73.5"  text-anchor="end">2.0</text>
+
+    <!-- cumulative band over bars 1..q (initial q = 6: x 91..284) -->
+    <rect id="cumBand" class="cumband" x="91" y="70" width="193" height="310" />
+
+    <!-- axes (arrowheads); extend past the data so bars/labels don't crowd them -->
+    <line class="axis" x1="70" y1="380" x2="420" y2="380" marker-end="url(#arrow)" />
+    <line class="axis" x1="70" y1="380" x2="70"  y2="52"  marker-end="url(#arrow)" />
+
+    <!-- ten marginal-cost bars (bar6 highlighted as the initial current bar) -->
+    <rect id="bar1"  class="mcbar" x="94"  y="240.5" width="22" height="139.5" />
+    <rect id="bar2"  class="mcbar" x="127" y="225"   width="22" height="155" />
+    <rect id="bar3"  class="mcbar" x="160" y="209.5" width="22" height="170.5" />
+    <rect id="bar4"  class="mcbar" x="193" y="194"   width="22" height="186" />
+    <rect id="bar5"  class="mcbar" x="226" y="178.5" width="22" height="201.5" />
+    <rect id="bar6"  class="mcbar current" x="259" y="163" width="22" height="217" />
+    <rect id="bar7"  class="mcbar" x="292" y="147.5" width="22" height="232.5" />
+    <rect id="bar8"  class="mcbar" x="325" y="132"   width="22" height="248" />
+    <rect id="bar9"  class="mcbar" x="358" y="116.5" width="22" height="263.5" />
+    <rect id="bar10" class="mcbar" x="391" y="101"   width="22" height="279" />
+
+    <!-- average-cost line across the bar tops + dots -->
+    <polyline class="acline"
+      points="105,240.5 138,232.75 171,225 204,217.25 237,209.5 270,201.75 303,194 336,186.25 369,178.5 402,170.75" />
+    <circle class="acdot" cx="105" cy="240.5"  r="3.2" />
+    <circle class="acdot" cx="138" cy="232.75" r="3.2" />
+    <circle class="acdot" cx="171" cy="225"    r="3.2" />
+    <circle class="acdot" cx="204" cy="217.25" r="3.2" />
+    <circle class="acdot" cx="237" cy="209.5"  r="3.2" />
+    <circle class="acdot" cx="270" cy="201.75" r="3.2" />
+    <circle class="acdot" cx="303" cy="194"    r="3.2" />
+    <circle class="acdot" cx="336" cy="186.25" r="3.2" />
+    <circle class="acdot" cx="369" cy="178.5"  r="3.2" />
+    <circle class="acdot" cx="402" cy="170.75" r="3.2" />
+    <!-- ring on the current average-cost dot (initial q = 6) -->
+    <circle id="acRing" class="acring" cx="270" cy="201.75" r="6.8" />
+
+    <!-- horizontal dropline from the current bar top to the y-axis + live value -->
+    <line id="mcDrop" class="drop" x1="70" y1="163" x2="270" y2="163" />
+    <text id="mcVal" class="mcval" x="62" y="167" text-anchor="end">1.40</text>
+
+    <!-- annotations (arrows point at a bar / the AC line, gap-routed to clear the bars) -->
+    <text class="annot" x="150" y="138" text-anchor="middle">Marginal cost</text>
+    <line class="axis" x1="150" y1="150" x2="139" y2="222" marker-end="url(#arrow)" />
+    <text class="annot" x="250" y="116" text-anchor="middle">Average cost</text>
+    <line class="axis" x1="250" y1="128" x2="252" y2="200" marker-end="url(#arrow)" />
+
+    <!-- axis titles -->
+    <text class="axlabel" x="245" y="418" text-anchor="middle">Daily output of cakes</text>
+    <text class="axlabel" x="22" y="225" text-anchor="middle"
+          transform="rotate(-90 22 225)">Cost (units of product Y)</text>
+
+    <!-- x-axis ticks + labels 1..10 -->
+    <line class="tick" x1="105" y1="380" x2="105" y2="385" />
+    <line class="tick" x1="138" y1="380" x2="138" y2="385" />
+    <line class="tick" x1="171" y1="380" x2="171" y2="385" />
+    <line class="tick" x1="204" y1="380" x2="204" y2="385" />
+    <line class="tick" x1="237" y1="380" x2="237" y2="385" />
+    <line class="tick" x1="270" y1="380" x2="270" y2="385" />
+    <line class="tick" x1="303" y1="380" x2="303" y2="385" />
+    <line class="tick" x1="336" y1="380" x2="336" y2="385" />
+    <line class="tick" x1="369" y1="380" x2="369" y2="385" />
+    <line class="tick" x1="402" y1="380" x2="402" y2="385" />
+    <text class="ticklab" x="105" y="398" text-anchor="middle">1</text>
+    <text class="ticklab" x="138" y="398" text-anchor="middle">2</text>
+    <text class="ticklab" x="171" y="398" text-anchor="middle">3</text>
+    <text class="ticklab" x="204" y="398" text-anchor="middle">4</text>
+    <text class="ticklab" x="237" y="398" text-anchor="middle">5</text>
+    <text class="ticklab" x="270" y="398" text-anchor="middle">6</text>
+    <text class="ticklab" x="303" y="398" text-anchor="middle">7</text>
+    <text class="ticklab" x="336" y="398" text-anchor="middle">8</text>
+    <text class="ticklab" x="369" y="398" text-anchor="middle">9</text>
+    <text class="ticklab" x="402" y="398" text-anchor="middle">10</text>
+
+    <!-- keyboard proxy + pointer scrub over the plot -->
+    <rect id="hit" class="hit" x="78" y="52" width="344" height="336"
+          tabindex="0" role="slider" aria-label="Daily output of cakes"
+          aria-valuemin="1" aria-valuemax="10" aria-valuenow="6"
+          aria-valuetext="6th cake: marginal cost 1.40Y · average cost 1.15Y · total cost so far 6.90Y" />
+
+    <!-- readout band: hairline separator, muted STATE line, accent TAKEAWAY line -->
+    <line class="sep" x1="44" y1="432" x2="396" y2="432" />
+    <text id="rState" class="r-state" x="220" y="454" text-anchor="middle">
+      <tspan id="rState1" x="220" dy="0">6th cake: marginal cost 1.40Y · average cost 1.15Y</tspan>
+      <tspan id="rState2" x="220" dy="18">total cost so far 6.90Y</tspan>
+    </text>
+    <text id="rTake" class="r-take" x="220" y="498" text-anchor="middle">
+      <tspan id="rTake1" x="220" dy="0">The six marginal-cost bars stack up to the 6.90Y total —</tspan>
+      <tspan id="rTake2" x="220" dy="18">sum of marginals = total cost.</tspan>
+    </text>
+  </svg>
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame is a still image: Adam's
+    rising marginal-cost bars with the average-cost line across their tops, and a
+    band over the first six bars whose heights sum to the 6.90Y total cost. You can
+    also <a href="t06a-adam-costs.svg">open the static figure</a>.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var svg     = document.getElementById('fig');
+  var hit     = document.getElementById('hit');
+  var cumBand = document.getElementById('cumBand');
+  var acRing  = document.getElementById('acRing');
+  var mcDrop  = document.getElementById('mcDrop');
+  var mcVal   = document.getElementById('mcVal');
+  var rState1 = document.getElementById('rState1');
+  var rState2 = document.getElementById('rState2');
+  var rTake1  = document.getElementById('rTake1');
+  var rTake2  = document.getElementById('rTake2');
+  var bars = [];
+  for (var i = 1; i <= 10; i++) bars[i] = document.getElementById('bar' + i);
+
+  // --- data (index 1..10), read off UE Table 14.2 ---
+  var MC   = [0, 0.90, 1.00, 1.10, 1.20, 1.30, 1.40, 1.50, 1.60, 1.70, 1.80];
+  var AC   = [0, 0.90, 0.95, 1.00, 1.05, 1.10, 1.15, 1.20, 1.25, 1.30, 1.35];
+  var ORD  = ["", "1st","2nd","3rd","4th","5th","6th","7th","8th","9th","10th"];
+  var WORD = ["", "one","two","three","four","five","six","seven","eight","nine","ten"];
+
+  // --- pixel frame (mirrors the SVG markup) ---
+  var X0 = 70, Y0 = 380;                 // origin (y-axis x, baseline y)
+  var STEP = 33, X1 = 105;               // bar1 center; center(i) = X1 + (i-1)*STEP
+  function barX(q) { return X1 + (q - 1) * STEP; }
+  function py(v)   { return Y0 - v * 155; }   // value -> pixel y (value 2.0 -> 70)
+  function totalAt(q) { var s = 0; for (var k = 1; k <= q; k++) s += MC[k]; return s; }
+
+  var QLO = 1, QHI = 10;
+  var q = 6;   // initial state (matches the primary readout example)
+
+  // convert a client event to SVG user coords (handles responsive scaling)
+  var spt = svg.createSVGPoint();
+  function toSvg(evt) {
+    spt.x = evt.clientX; spt.y = evt.clientY;
+    return spt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+  function qFromX(px) {
+    var qq = Math.round((px - X1) / STEP) + 1;
+    if (qq < QLO) qq = QLO;
+    if (qq > QHI) qq = QHI;
+    return qq;
+  }
+
+  // Build the two readout lines + the spoken (single-line) state string.
+  function readout() {
+    var mc = MC[q].toFixed(2), ac = AC[q].toFixed(2), t = totalAt(q).toFixed(2);
+    var seg0 = ORD[q] + " cake: marginal cost " + mc + "Y";
+    var seg1 = "average cost " + ac + "Y";
+    // UE's own captions say "total cost" at q=1/q=3 and "total cost so far" at q=6;
+    // honor the spec's exact example strings.
+    var seg2 = (q === 1 || q === 3) ? "total cost " + t + "Y"
+                                    : "total cost so far " + t + "Y";
+    var take;
+    if (q === 1)      take = "The first bar IS the whole cost — MC, AC, and total all equal 0.90Y.";
+    else if (q === 3) take = "Each new bar is taller, so it drags the average-cost line up behind it.";
+    else              take = "The " + WORD[q] + " marginal-cost bars stack up to the " + t +
+                             "Y total — sum of marginals = total cost.";
+    return {
+      stateLine1: seg0 + " · " + seg1,
+      stateLine2: seg2,
+      spoken: seg0 + " · " + seg1 + " · " + seg2,
+      take: take
+    };
+  }
+
+  function render() {
+    // current-bar highlight
+    for (var k = 1; k <= 10; k++) bars[k].classList.toggle('current', k === q);
+
+    // cumulative band over bars 1..q
+    var right = barX(q) + 14;
+    cumBand.setAttribute('width', right - 91);
+
+    // ring on the current average-cost dot
+    acRing.setAttribute('cx', barX(q));
+    acRing.setAttribute('cy', py(AC[q]));
+
+    // horizontal dropline to the y-axis + live marginal-cost value
+    var yTop = py(MC[q]);
+    mcDrop.setAttribute('y1', yTop); mcDrop.setAttribute('y2', yTop);
+    mcDrop.setAttribute('x2', barX(q));
+    mcVal.setAttribute('y', yTop + 4);
+    mcVal.textContent = MC[q].toFixed(2);
+
+    // readout band
+    var r = readout();
+    rState1.textContent = r.stateLine1;
+    rState2.textContent = r.stateLine2;
+    // takeaway: split at the em dash so it wraps on two lines when present
+    var parts = r.take.split(" — ");
+    if (parts.length === 2) { rTake1.textContent = parts[0] + " —"; rTake2.textContent = parts[1]; }
+    else                    { rTake1.textContent = r.take;         rTake2.textContent = ""; }
+
+    // aria
+    hit.setAttribute('aria-valuenow', q);
+    hit.setAttribute('aria-valuetext', r.spoken);
+  }
+
+  function setFromPointer(evt) {
+    var pnt = toSvg(evt);
+    if (isNaN(pnt.x)) return;
+    var qq = qFromX(pnt.x);
+    if (qq !== q) { q = qq; render(); }
+  }
+
+  // --- pointer: tap / scrub across the bars (capture so a fast drag holds) ---
+  var dragging = false, capturedId = null;
+  function onMove(evt) { if (dragging) { evt.preventDefault(); setFromPointer(evt); } }
+  function onUp() {
+    dragging = false;
+    svg.classList.remove('grabbing');
+    if (capturedId !== null) { try { hit.releasePointerCapture(capturedId); } catch (e) {} }
+    capturedId = null;
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+  }
+  hit.addEventListener('pointerdown', function (evt) {
+    evt.preventDefault();
+    dragging = true;
+    svg.classList.add('grabbing');
+    capturedId = evt.pointerId;
+    try { hit.setPointerCapture(capturedId); } catch (e) {}
+    setFromPointer(evt);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  });
+  // mouse hover (no button) previews the bar the pointer is over
+  hit.addEventListener('pointermove', function (evt) {
+    if (!dragging && evt.pointerType === 'mouse') setFromPointer(evt);
+  });
+
+  // --- keyboard: arrows / Home / End step the cake marker ---
+  hit.addEventListener('keydown', function (evt) {
+    var nq = q;
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') nq = q + 1;
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') nq = q - 1;
+    else if (evt.key === 'Home') nq = QLO;
+    else if (evt.key === 'End') nq = QHI;
+    else return;
+    evt.preventDefault();
+    if (nq < QLO) nq = QLO;
+    if (nq > QHI) nq = QHI;
+    if (nq !== q) { q = nq; render(); }
+  });
+
+  // Debug hook: lets a reviewer screenshot non-initial states via scripting.
+  window.__fig = {
+    set: function (v) { q = Math.max(QLO, Math.min(QHI, Math.round(+v))); render(); },
+    get: function () { return { q: q, mc: MC[q], ac: AC[q], total: totalAt(q) }; }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

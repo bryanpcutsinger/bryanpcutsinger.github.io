@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive: growth of capital value of a tree, optimal cutting time</title>
+<!--
+  Interactive "tree-cutting" tangency figure for the t11b (capital values &
+  profit) blog post. Recreates UE Fig 32.1 (p.524), "Growth of Capital Value
+  of a Tree: Optimal Cutting Time Depends on the Interest Rate and Pattern of
+  Growth of Lumber Value." Website-styled (warm-editorial palette), NOT the
+  FAU slide palette. The static FAU figure (figures/t11b-tree-cutting.svg) is
+  the SLIDE version, untouched.
+
+  ARCHITECTURE: the whole figure is REAL SVG markup. A no-JS reader (or the
+  <noscript> still image) sees the log-scale value curve, BOTH labeled
+  reference interest lines (4% and 3%) with their tangency dots/droplines/
+  annotations, the legend, and the muted takeaway note -- the full UE
+  construction. The script only ATTACHES the F9 interaction: an interest-rate
+  slider (2%-6%, ninth-steps) that sweeps one ACCENT-colored active tangent
+  line + harvest point along the fixed value curve; the two muted reference
+  lines/dots stay drawn throughout (the active line visually coincides with
+  the 4% and 3% reference lines at those two slider positions).
+
+  GEOMETRY (F9, single-panel, viewBox 440x540, aspect 4/5):
+    Y-axis is LOG SCALE. Data: lumber value $150..~$12,000 (log2), tree age
+    0..~82 years (linear). Pixel frame:
+      px(t) = 90 + 3.85*t                      (years -> x pixels)
+      py(V) = 340 - (log2(V/150) - log2(0.8)) * K,  K = 310/(log2(80)-log2(0.8))
+                                                 (dollars -> y pixels, log scale)
+    K ~= 46.6634 px per log2-unit; this maps V=150->py~325 (near axis) up
+    through the 7 doubling ticks to V=9600->py~45 (near the top arrow).
+    Because ln(V(t)) is quadratic in t, py(t) for the value curve is an EXACT
+    quadratic in t -- representable as ONE quadratic Bezier whose single
+    control point is the intersection of the tangent lines at t=0 and t=78
+    (a parabola's Bezier control point is always that intersection). Because
+    the interest lines are constant-%-growth (ln L(t) linear in t), each
+    reference/active line is an EXACT straight line in (px,py) once one point
+    (the tangency) and the rate r are known:
+      py_L(t) = py(V*) - K*log2(e)*r*(t - t*)
+    All curve/line coordinates below were computed from these closed-form
+    relations (verified against the source .tex's annotation placements),
+    not eyeballed.
+
+    Value curve:  V(t) = 150*exp(0.09*t - 0.0005*t^2)
+      growth rate dlnV/dt = 0.09 - 0.001*t (falls with age)
+    4% line: tangent at t*=50, V=$3,869 (growth rate = 4% there)
+    3% line: tangent at t*=60, V=$5,490 (growth rate = 3% there)
+    Lower interest rate -> later wealth-maximizing harvest age.
+
+  INTERACTION (F9): a 9-step interest-rate slider r in {2.0,2.5,...,6.0}%.
+    For each r: t* = 90 - 1000*r (r as a decimal), V* = 150*exp(0.09t*-0.0005t*^2).
+    The active tangent line L(t) = V* * exp(r*(t-t*)) sweeps with the point;
+    r=4%/r=3% land the active line exactly on the corresponding muted
+    reference line (by construction). Right endpoint of the drawn active
+    segment is clipped to keep it inside the plot box (log slopes at r>4%
+    would otherwise run off the top before t=78).
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;   /* warm bone background        */
+    --ink:     #1a1c1e;    /* curve + primary text        */
+    --text:    #16181a;    /* body text                   */
+    --muted:   #5c6066;    /* captions / reference lines  */
+    --hairline:#e3ddd3;    /* axes muting / droplines     */
+    --accent:  #b07a2c;    /* brass -- the active line/point */
+    --accent-tint: #efe4d2;/* live-value badge fill       */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .fig { width: 100%; max-width: 520px; min-width: 0; }
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+
+  .axis      { stroke: var(--muted); stroke-width: 1.4; }
+  .curve     { stroke: var(--ink); stroke-width: 2.4; fill: none;
+               stroke-linecap: round; }
+  .refline   { stroke: var(--muted); stroke-width: 1.6; fill: none;
+               opacity: 0.72; }
+  .refdash   { stroke-dasharray: 6 4; }
+  .refdot    { stroke-dasharray: 1.2 3; stroke-linecap: round; }
+  .refpt     { fill: var(--muted); stroke: var(--surface); stroke-width: 1.4; }
+  .drop-ref  { stroke: var(--hairline); stroke-width: 1.4;
+               stroke-dasharray: 4 3; opacity: 0.9; }
+  .active    { stroke: var(--accent); stroke-width: 2.6; fill: none; }
+  .activePt  { fill: var(--accent); stroke: var(--surface); stroke-width: 2.4; }
+  .drop-act  { stroke: var(--accent); stroke-width: 1.4;
+               stroke-dasharray: 4 3; opacity: 0.85; }
+  .badge-bg  { fill: var(--accent-tint); stroke: var(--accent);
+               stroke-width: 1; opacity: 0.95; }
+  .badge-txt { fill: var(--accent); font-size: 11.5px; font-weight: 700; }
+
+  .hit       { fill: transparent; stroke: transparent; touch-action: none;
+               cursor: grab; }
+  .knob      { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5; }
+  .knob-focus:focus-visible { outline: none; }
+  .knob-focus:focus-visible + .knob,
+  .grabbing .knob { stroke: var(--accent); stroke-width: 3.5; }
+  .track     { stroke: var(--hairline); stroke-width: 4; stroke-linecap: round; }
+  .tick      { stroke: var(--muted); stroke-width: 1.4; opacity: 0.55; }
+
+  .axlabel   { fill: var(--muted); font-size: 12.5px; font-weight: 600; }
+  .yticklab  { fill: var(--muted); font-size: 11px; }
+  .xticklab  { fill: var(--muted); font-size: 11px; text-anchor: middle; }
+  .xticklab-h{ fill: var(--accent); font-size: 11px; font-weight: 700;
+               text-anchor: middle; }
+  .curvelab  { fill: var(--ink); font-size: 12.5px; font-weight: 700; }
+  .reflab    { fill: var(--muted); font-size: 11.5px; font-weight: 600; }
+  .harvlab   { fill: var(--muted); font-size: 11px; }
+  .note      { fill: var(--muted); font-size: 11px; font-style: italic; }
+  .slabel    { fill: var(--muted); font-size: 12px; font-weight: 600; }
+  .stitle    { fill: var(--ink); font-size: 12.5px; font-weight: 700; }
+  .sep       { stroke: var(--hairline); stroke-width: 1; }
+  .r-hint    { fill: var(--muted); font-size: 12px; }
+  .r-trade   { fill: var(--accent); font-size: 13px; font-weight: 600; }
+  .fallback {
+    margin: 8px 0 0; color: var(--muted); font-size: 13px;
+    line-height: 1.35; text-align: center;
+  }
+  .fallback a { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="fig">
+  <svg id="fig" viewBox="0 0 440 540" role="group"
+       aria-label="A tree's lumber value grows over time on a log-scale chart, but its growth rate slows with age. Two straight interest-rate lines lie above the value curve, each tangent to it at the age where the tree's growth rate has fallen to that interest rate -- the wealth-maximizing harvest age. Move the interest-rate slider to sweep an active tangent line and see the harvest age shift.">
+    <title>Growth of capital value of a tree: optimal cutting time depends on the interest rate</title>
+    <defs>
+      <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+      <marker id="arrowInk" markerWidth="8" markerHeight="8" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L7,4 L0,8 Z" fill="#1a1c1e" />
+      </marker>
+    </defs>
+
+    <!-- ══ AXES (drawn first so curves sit on top; extended past the data) ══ -->
+    <line class="axis" x1="90" y1="340" x2="412" y2="340" marker-end="url(#arrow)" />
+    <line class="axis" x1="90" y1="340" x2="90"  y2="18"  marker-end="url(#arrow)" />
+    <text class="axlabel" x="6" y="14">Lumber value</text>
+    <text class="axlabel" x="6" y="28">($, log scale)</text>
+    <text class="axlabel" x="406" y="354" text-anchor="end">Years of life</text>
+
+    <!-- y-axis ticks: every doubling, $150 .. $9,600. Each label carries an id
+         so the script can hide it if the live value badge lands on top of it. -->
+    <line class="tick" x1="84" y1="324.98" x2="90" y2="324.98" />
+    <text id="yt150" class="yticklab" x="80" y="328.4" text-anchor="end">$150</text>
+    <line class="tick" x1="84" y1="278.32" x2="90" y2="278.32" />
+    <text id="yt300" class="yticklab" x="80" y="281.7" text-anchor="end">$300</text>
+    <line class="tick" x1="84" y1="231.66" x2="90" y2="231.66" />
+    <text id="yt600" class="yticklab" x="80" y="235.1" text-anchor="end">$600</text>
+    <line class="tick" x1="84" y1="185.00" x2="90" y2="185.00" />
+    <text id="yt1200" class="yticklab" x="80" y="188.4" text-anchor="end">$1,200</text>
+    <line class="tick" x1="84" y1="138.34" x2="90" y2="138.34" />
+    <text id="yt2400" class="yticklab" x="80" y="141.7" text-anchor="end">$2,400</text>
+    <line class="tick" x1="84" y1="91.68"  x2="90" y2="91.68"  />
+    <text id="yt4800" class="yticklab" x="80" y="95.1"  text-anchor="end">$4,800</text>
+    <line class="tick" x1="84" y1="45.02"  x2="90" y2="45.02"  />
+    <text id="yt9600" class="yticklab" x="80" y="48.4"  text-anchor="end">$9,600</text>
+
+    <!-- x-axis ticks: origin + the two harvest ages (the load-bearing points).
+         The ages themselves are stated in the "Cut at NN yr" annotations below
+         and by the live age badge, so the tick row carries only small marks. -->
+    <line class="tick" x1="90" y1="340" x2="90" y2="346" />
+    <text class="xticklab" x="90" y="356">0</text>
+    <line class="tick" x1="282.5" y1="340" x2="282.5" y2="346" />
+    <line class="tick" x1="321.0" y1="340" x2="321.0" y2="346" />
+
+    <!-- ══ REFERENCE CONSTRUCTION (muted -- always visible, the no-JS base) ══ -->
+    <!-- 4% interest line: tangent at t=50, V=$3,869 -->
+    <line id="ref4" class="refline refdash" x1="90" y1="240.83" x2="390.3" y2="30.81" />
+    <!-- 3% interest line: tangent at t=60, V=$5,490 -->
+    <line id="ref3" class="refline refdot" x1="90" y1="203.81" x2="390.3" y2="46.29" />
+
+    <!-- droplines from each tangency down to the x-axis -->
+    <line class="drop-ref" x1="282.5" y1="106.20" x2="282.5" y2="340" />
+    <line class="drop-ref" x1="321.0" y1="82.64"  x2="321.0" y2="340" />
+
+    <!-- reference tangency dots (muted) -->
+    <circle id="refDot4" class="refpt" cx="282.5" cy="106.20" r="4" />
+    <circle id="refDot3" class="refpt" cx="321.0" cy="82.64"  r="4" />
+
+    <!-- legend swatches for the two reference lines -->
+    <line class="refline refdash" x1="174.7" y1="64.4" x2="197.8" y2="64.4" />
+    <text class="reflab" x="201.7" y="67.8">4% interest rate</text>
+    <line class="refline refdot"  x1="174.7" y1="86.3" x2="197.8" y2="86.3" />
+    <text class="reflab" x="201.7" y="89.7">3% interest rate</text>
+
+    <!-- harvest annotations. Positioned + verified (script-checked) to clear
+         the value curve and both reference lines by >=20px throughout their
+         text span; a background plate also guards against the ACTIVE
+         dropline sweeping behind them at other slider positions. -->
+    <rect class="badge-bg" style="fill:var(--surface); stroke:none; opacity:0.92;"
+          x="184" y="203" width="86" height="30" rx="2" />
+    <text class="harvlab" x="268" y="215" text-anchor="end">
+      <tspan x="268" dy="0">Cut at 50 yr</tspan>
+      <tspan x="268" dy="13">(growth = 4%)</tspan>
+    </text>
+    <path class="refline" d="M275,180 L281.6,113" marker-end="url(#arrow)" fill="none" />
+
+    <rect class="badge-bg" style="fill:var(--surface); stroke:none; opacity:0.92;"
+          x="331" y="116" width="86" height="30" rx="2" />
+    <text class="harvlab" x="332.55" y="128.0" text-anchor="start">
+      <tspan x="332.55" dy="0">Cut at 60 yr</tspan>
+      <tspan x="332.55" dy="13">(growth = 3%)</tspan>
+    </text>
+    <path class="refline" d="M340.25,114.9 L322.93,86.3" marker-end="url(#arrow)" fill="none" />
+
+    <!-- muted takeaway note -->
+    <rect class="badge-bg" style="fill:var(--surface); stroke:none; opacity:0.92;"
+          x="297" y="295" width="99" height="32" rx="2" />
+    <text class="note" x="394.2" y="308" text-anchor="end">
+      <tspan x="394.2" dy="0">Lower rate &#8658; hold longer</tspan>
+      <tspan x="394.2" dy="13">&#8658; cut later.</tspan>
+    </text>
+
+    <!-- ══ VALUE CURVE (ink, on top of the reference lines where it crosses) ══ -->
+    <path id="valueCurve" class="curve"
+          d="M90.00,324.98 Q240.15,88.70 390.30,57.20" />
+    <rect class="badge-bg" style="fill:var(--surface); stroke:none; opacity:0.92;"
+          x="150" y="255" width="90" height="16" rx="2" />
+    <text class="curvelab" x="195" y="266" text-anchor="middle">Value of timber</text>
+    <path class="refline" d="M195,253 L182.4,199" marker-end="url(#arrowInk)"
+          style="stroke:var(--ink); opacity:0.85;" fill="none" />
+
+    <!-- ══ ACTIVE tangent line + harvest point (F9 -- moved by the slider) ══ -->
+    <!-- default state: r = 4%, coincides with the muted 4% reference line -->
+    <line id="activeLine" class="active" x1="90" y1="240.83" x2="405.70" y2="20.04" />
+    <line id="dropX" class="drop-act" x1="282.5" y1="106.20" x2="282.5" y2="340" />
+    <line id="dropY" class="drop-act" x1="90" y1="106.20" x2="282.5" y2="106.20" />
+    <circle id="activePt" class="activePt" cx="282.5" cy="106.20" r="6.5" />
+
+    <!-- live age readout riding the x-axis dropline foot -->
+    <rect id="ageBadgeBg" class="badge-bg" x="266.5" y="326" width="32" height="14" rx="3" />
+    <text id="ageBadge" class="badge-txt" x="282.5" y="336.2" text-anchor="middle">50</text>
+
+    <!-- live value readout riding the y-axis dropline foot -->
+    <rect id="valBadgeBg" class="badge-bg" x="30" y="99.5" width="58" height="14" rx="3" />
+    <text id="valBadge" class="badge-txt" x="59" y="109.2" text-anchor="middle">$3,869</text>
+
+    <!-- ══ RATE SLIDER: Interest rate 2% .. 6% ══ -->
+    <text class="stitle" x="240" y="369" text-anchor="middle">Interest rate on alternative investments</text>
+    <line class="track" x1="130" y1="384" x2="350" y2="384" />
+    <line class="tick" x1="130" y1="379" x2="130" y2="389" />
+    <line class="tick" x1="350" y1="379" x2="350" y2="389" />
+    <text class="slabel" x="114" y="388" text-anchor="end">2%</text>
+    <text class="slabel" x="366" y="388" text-anchor="start">6%</text>
+    <circle id="knob"    class="knob"    cx="240" cy="384" r="8" />
+    <circle id="knobHit" class="knob-focus hit" cx="240" cy="384" r="22"
+            tabindex="0" role="slider"
+            aria-label="Interest rate on alternative investments"
+            aria-valuemin="2" aria-valuemax="6" aria-valuenow="4"
+            aria-valuetext="At a 4% interest rate the tree's growth rate falls to 4% at age 50 (value approximately $3,869). Cut when the tree's growth rate drops to the interest rate." />
+
+    <!-- readout band: hairline separator, muted STATE line, accent TAKEAWAY line -->
+    <line class="sep" x1="44" y1="402" x2="396" y2="402" />
+    <text id="rHint"  class="r-hint"  x="220" y="420" text-anchor="middle">
+      <tspan x="220" dy="0">At a 4% interest rate the tree's growth rate falls</tspan>
+      <tspan x="220" dy="15">to 4% at age 50 (value &#8776; $3,869).</tspan>
+    </text>
+    <text id="rTrade" class="r-trade" x="220" y="458" text-anchor="middle">
+      <tspan x="220" dy="0">Cut when the tree's growth rate drops to the</tspan>
+      <tspan x="220" dy="15">interest rate.</tspan>
+    </text>
+  </svg>
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame is a still image: on a
+      log-scale chart, a tree's lumber value rises but its growth rate slows
+      with age; two interest-rate lines (4% and 3%) lie above the curve,
+      touching it exactly where the tree's growth rate has fallen to that
+      rate -- the wealth-maximizing harvest age (50 years at 4%, 60 years at
+      3%). You can also <a href="t11b-tree-cutting.svg">open the static figure</a>.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var svg = document.getElementById('fig');
+  var knob = document.getElementById('knob');
+  var knobHit = document.getElementById('knobHit');
+  var activeLine = document.getElementById('activeLine');
+  var activePt = document.getElementById('activePt');
+  var dropX = document.getElementById('dropX');
+  var dropY = document.getElementById('dropY');
+  var ageBadge = document.getElementById('ageBadge');
+  var ageBadgeBg = document.getElementById('ageBadgeBg');
+  var valBadgeBg = document.getElementById('valBadgeBg');
+  var valBadge = document.getElementById('valBadge');
+  var rHint = document.getElementById('rHint');
+  var rTrade = document.getElementById('rTrade');
+
+  // static y-axis tick labels the live $ badge can land on top of; hide
+  // whichever one falls within the badge's vertical footprint so the badge's
+  // opaque background never crops a tick label's glyphs.
+  var Y_TICKS = ['yt150', 'yt300', 'yt600', 'yt1200', 'yt2400', 'yt4800', 'yt9600']
+    .map(function (id) { return document.getElementById(id); });
+  var Y_TICK_PY = [324.98, 278.32, 231.66, 185.00, 138.34, 91.68, 45.02];
+
+  // ── geometry (mirrors the base-SVG derivation in the header comment) ──
+  var AXIS_X = 90, SLOPE_X = 3.85;
+  var AXIS_BOTTOM = 340, AXIS_TOP = 20;
+  var K = 310 / (Math.log2(80) - Math.log2(0.8));
+  var RATE_SLOPE = K * Math.LOG2E;
+
+  function px(t) { return AXIS_X + SLOPE_X * t; }
+  function py(V) { return 340 - (Math.log2(V / 150) - Math.log2(0.8)) * K; }
+  function V(t) { return 150 * Math.exp(0.09 * t - 0.0005 * t * t); }
+  function fmtDollar(n) { return '$' + Math.round(n).toLocaleString('en-US'); }
+
+  // slider track geometry: 9 steps, r = 2.0% .. 6.0% in 0.5% increments
+  var TX0 = 130, TX1 = 350, NSTEPS = 8; // 9 positions, 8 intervals
+  function idxToX(i) { return TX0 + (i / NSTEPS) * (TX1 - TX0); }
+  function xToIdx(x) {
+    var i = Math.round(((x - TX0) / (TX1 - TX0)) * NSTEPS);
+    return Math.max(0, Math.min(NSTEPS, i));
+  }
+  function idxToRate(i) { return 0.02 + 0.005 * i; }
+
+  // pre-split readout copy per step (idx 0..8 -> r=2.0%..6.0%). idx 2/4/6
+  // carry the spec's verbatim wording for r=3%/4%/5%.
+  var COPY = [
+    { muted: ["At a 2% interest rate the tree's growth rate falls",
+              "to 2% at age 70 (value ≈ $7,049)."],
+      trade: ["Lower rate → wait even longer: at the lowest rate",
+              "here, the tree earns its keep almost to age 70."] },
+    { muted: ["At a 2.5% interest rate growth falls to 2.5% at",
+              "age 65 (value ≈ $6,299)."],
+      trade: ["Lower rate → wait longer: the wealth-maximizing",
+              "harvest moves out toward age 65."] },
+    { muted: ["At a 3% interest rate growth falls to 3% at age 60",
+              "(value ≈ $5,490)."],
+      trade: ["Lower rate → wait longer: the wealth-maximizing",
+              "harvest moves from 50 to 60 years."] },
+    { muted: ["At a 3.5% interest rate growth falls to 3.5% at",
+              "age 55 (value ≈ $4,666)."],
+      trade: ["A little below 4% → wait a little longer: harvest",
+              "moves from 50 toward 55 years."] },
+    { muted: ["At a 4% interest rate the tree's growth rate falls",
+              "to 4% at age 50 (value ≈ $3,869)."],
+      trade: ["Cut when the tree's growth rate drops to the",
+              "interest rate."] },
+    { muted: ["At a 4.5% interest rate growth falls to 4.5% at",
+              "age 45 (value ≈ $3,128)."],
+      trade: ["Higher rate → cut a little sooner: harvest moves",
+              "from 50 back to 45 years."] },
+    { muted: ["At a 5% interest rate growth falls to 5% by age 40."],
+      trade: ["Higher rate → cut sooner: money reinvested",
+              "elsewhere now grows faster than the aging tree."] },
+    { muted: ["At a 5.5% interest rate growth falls to 5.5% at",
+              "age 35 (value ≈ $1,897)."],
+      trade: ["Higher rate → cut sooner still: harvest moves",
+              "back to age 35."] },
+    { muted: ["At a 6% interest rate growth falls to 6% at age 30",
+              "(value ≈ $1,423)."],
+      trade: ["Highest rate here → cut soonest: at age 30 the",
+              "tree has barely begun to slow its growth."] }
+  ];
+
+  var idx = 4; // default: r = 4%, coincides with the muted 4% reference line
+
+  function setLines(el, lines, y0, dy) {
+    while (el.firstChild) el.removeChild(el.firstChild);
+    for (var k = 0; k < lines.length; k++) {
+      var t = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+      t.setAttribute('x', 220);
+      t.setAttribute('dy', k === 0 ? 0 : dy);
+      t.textContent = lines[k];
+      el.appendChild(t);
+    }
+  }
+
+  function render() {
+    var r = idxToRate(idx);
+    var tstar = 90 - 1000 * r;
+    var Vstar = V(tstar);
+    var pxStar = px(tstar), pyStar = py(Vstar);
+
+    // active tangent line: py_L(t) = pyStar - RATE_SLOPE*r*(t - tstar),
+    // clipped to stay within the plot box [AXIS_TOP, AXIS_BOTTOM] and t in [0,82]
+    function lineAt(t) { return pyStar - RATE_SLOPE * r * (t - tstar); }
+    var tLeft = 0, tRight = 82;
+    // clip right end against the top of the chart
+    var tTop = tstar + (pyStar - AXIS_TOP) / (RATE_SLOPE * r);
+    if (tTop < tRight) tRight = tTop;
+    // clip left end against the bottom axis (guards very low rates)
+    var tBot = tstar + (pyStar - AXIS_BOTTOM) / (RATE_SLOPE * r);
+    if (tBot > tLeft) tLeft = tBot;
+
+    activeLine.setAttribute('x1', px(tLeft));
+    activeLine.setAttribute('y1', lineAt(tLeft));
+    activeLine.setAttribute('x2', px(tRight));
+    activeLine.setAttribute('y2', lineAt(tRight));
+
+    activePt.setAttribute('cx', pxStar);
+    activePt.setAttribute('cy', pyStar);
+
+    dropX.setAttribute('x1', pxStar); dropX.setAttribute('x2', pxStar);
+    dropX.setAttribute('y1', pyStar); dropX.setAttribute('y2', 340);
+    dropY.setAttribute('x1', 90); dropY.setAttribute('x2', pxStar);
+    dropY.setAttribute('y1', pyStar); dropY.setAttribute('y2', pyStar);
+
+    ageBadge.setAttribute('x', pxStar);
+    ageBadge.textContent = Math.round(tstar);
+    ageBadgeBg.setAttribute('x', pxStar - 16);
+
+    var badgeW = 58;
+    valBadgeBg.setAttribute('x', 30);
+    valBadgeBg.setAttribute('y', pyStar - 7);
+    valBadge.setAttribute('x', 30 + badgeW / 2);
+    valBadge.setAttribute('y', pyStar + 2.7);
+    valBadge.textContent = fmtDollar(Vstar);
+
+    // hide any static y-tick label the live badge would otherwise crop
+    for (var yi = 0; yi < Y_TICKS.length; yi++) {
+      Y_TICKS[yi].style.opacity = (Math.abs(Y_TICK_PY[yi] - pyStar) < 16) ? 0 : 1;
+    }
+
+    // slider knob
+    var kx = idxToX(idx);
+    knob.setAttribute('cx', kx);
+    knobHit.setAttribute('cx', kx);
+
+    // readout band
+    var c = COPY[idx];
+    setLines(rHint, c.muted, 420, 15);
+    setLines(rTrade, c.trade, 458, 15);
+
+    // aria
+    var rPct = (r * 100);
+    knobHit.setAttribute('aria-valuenow', rPct);
+    knobHit.setAttribute('aria-valuetext',
+      c.muted.join(' ') + ' ' + c.trade.join(' '));
+  }
+
+  function setIdx(i) {
+    i = Math.max(0, Math.min(NSTEPS, i));
+    if (i !== idx) { idx = i; render(); }
+  }
+
+  // convert a client event to SVG user coords (handles responsive scaling)
+  var spt = svg.createSVGPoint();
+  function toSvg(evt) {
+    spt.x = evt.clientX; spt.y = evt.clientY;
+    return spt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+
+  // --- slider drag (pointer capture so a fast drag can't get stuck) ---
+  var dragging = false, capId = null;
+  function onMove(evt) {
+    if (!dragging) return;
+    evt.preventDefault();
+    setIdx(xToIdx(toSvg(evt).x));
+  }
+  function onUp() {
+    dragging = false;
+    svg.classList.remove('grabbing');
+    if (capId !== null) { try { knobHit.releasePointerCapture(capId); } catch (e) {} }
+    capId = null;
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+  }
+  function onKnobDown(evt) {
+    evt.preventDefault();
+    dragging = true;
+    svg.classList.add('grabbing');
+    capId = evt.pointerId;
+    try { knobHit.setPointerCapture(capId); } catch (e) {}
+    setIdx(xToIdx(toSvg(evt).x));
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }
+  knobHit.addEventListener('pointerdown', onKnobDown);
+
+  // --- keyboard on the slider proxy ---
+  knobHit.addEventListener('keydown', function (evt) {
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') { setIdx(idx + 1); }
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') { setIdx(idx - 1); }
+    else if (evt.key === 'Home') { setIdx(0); }
+    else if (evt.key === 'End') { setIdx(NSTEPS); }
+    else return;
+    evt.preventDefault();
+  });
+
+  // Debug hook: lets a reviewer screenshot non-initial states via scripting.
+  window.__fig = {
+    set: function (v) { setIdx(Math.round(+v)); },
+    get: function () { return { idx: idx, ratePct: idxToRate(idx) * 100 }; }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

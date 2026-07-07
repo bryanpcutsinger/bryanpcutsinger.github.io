@@ -14,11 +14,35 @@ note: "Self-contained — assumes no access to the textbooks. Part B of two on C
 
 # Capital Values, Profit, and the Political Economy of Time
 
-In the first half of this topic we built one tool. *Present value* puts amounts arriving at different times onto a single ruler so they can be compared: a future amount F is worth P = F ÷ (1 + r) today, where r is the *rate of interest*, the rate at which a present amount grows into a future one. A level stream of payments (an *annuity*) is worth the per-dollar annuity factor times the payment; a stream that never ends (a *perpetuity*) is worth A ÷ r. The interest rate itself is a price, the price of current income in terms of future income, set in the loan market where saving meets investment and driven by two forces: the productivity of investment and people's time preference. That is the whole kit. In this half we start using it. The same arithmetic that priced a loan will now price a bond, a house, a machine, an orchard, and your own future earnings; tell us when to harvest a growing asset; explain why we never quite "run out" of a resource; pin down what profit precisely is; and show why politicians mishandle the future while markets do not.
+In the first half of this topic we built one tool. *Present value* puts amounts arriving at different times onto a single ruler so they can be compared: a future amount F is worth P = F ÷ (1 + r) today, where r is the *rate of interest*, the rate at which a present amount grows into a future one. That is the whole kit. In this half we start using it.
+
+<aside class="econ-callout econ-objectives">
+<p class="econ-callout__label">Learning objectives</p>
+<p>By the end of this post you should be able to:</p>
+<ul>
+<li>Value any durable good as the present value of its future services.</li>
+<li>Decide when to harvest a growing asset by comparing its growth to the interest rate.</li>
+<li>Explain why known reserves measure how much it has paid to find, not how much exists.</li>
+<li>Explain why your wealth is the present value of your future earnings, and define standard income.</li>
+<li>Define profit as unexpected wealth growth, captured the moment an asset's value changes.</li>
+<li>Break the observed interest rate into a pure rate plus its add-ons.</li>
+<li>Explain why a change in the interest rate moves the value of long-lived assets most.</li>
+<li>Explain why competition equalizes returns and asset prices follow a random walk.</li>
+<li>Explain why present value forces markets, but not politicians, to face the future now.</li>
+</ul>
+</aside>
 
 ## Every Durable Good Is Worth the Present Value of Its Future Services
 
 We have valued promises to pay money. The same arithmetic values any *durable good*, any asset that yields a stream of services over time, from a bond to a house to a machine to an apple tree. The capital value of any such thing is the present value of the whole stream of future services it will provide. That is the unifying idea behind the whole topic: a bond, a rental building, and a fruit orchard are all just streams of future value discounted to the present.
+
+<aside class="econ-callout econ-termset">
+<p class="econ-callout__label">Key terms</p>
+<dl class="econ-term-list">
+<div><dt>Durable Good</dt><dd>An asset that yields a stream of services over time.</dd></div>
+<div><dt>Capital Value</dt><dd>The present value of the whole stream of future services an asset will provide.</dd></div>
+</dl>
+</aside>
 
 That means a good can yield income in three forms, and they all count equally. There are the *services* it throws off (the rent, the fruit, the coupon payment); there is *physical or quality growth* (the tree gets bigger, the wine improves); and there is *growth in market value*. A stock that pays no dividend but rises in price has still given you income, because income is the increase in your wealth, and your wealth rose. By the same logic, when you hold a painting that appreciates 5 percent a year while money invested elsewhere would have earned 6 percent, owning the painting costs you something even though it is gaining value: you are forgoing the higher return. That forgone return is a real cost of holding any asset.
 
@@ -35,13 +59,26 @@ Because a durable good's value is the present value of its services, and because
 
 Read this table and the central facts about bonds fall out. A bond's price moves inversely to the interest rate: when the market rate sits above the coupon, the bond sells below its $1,000 face value; below the coupon, it sells above face. So if a bond trades below face value, its *yield to maturity*, the return you actually earn, exceeds the coupon rate, because you collect the coupons plus the rise to face value at the end. And longer bonds swing far more than shorter ones, because the longer the stream, the more its present value is whipped around by changes in the rate: a one-year bond barely moves when rates jump from 5 to 10 percent (from $1,000 to $954), but a twenty-year bond plunges (from $1,000 to $573). That extra exposure is why long bonds tend to carry a higher rate to begin with. The same logic answers what changed when a building's or a stock's value falls: you have to ask which part of the package changed, a rise in the rate that discounts every future receipt more heavily, or a fall in the expected receipts themselves, and you read it off bonds.
 
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>In the table, a 5% coupon bond sells for $918 when the market rate is 7%, below its $1,000 face value. Is the return you actually earn on it above or below the 5% coupon, and why?</p>
+</aside>
+
 ## Hold an Asset Only While It Grows Faster Than the Interest Rate
 
 The capital-value idea answers a question that puzzles people: when is the best time to sell a growing asset, a stand of timber, a barrel of aging whiskey, a cellar of wine? Letting it grow adds value, so why ever stop?
 
 The rule is clean. Keep holding the asset as long as its value is growing faster than the interest rate. The moment its growth rate slows to the interest rate, sell, because from that point the money would grow faster invested elsewhere. A tree that adds 8 percent to its lumber value this year is worth holding when the interest rate is 5 percent; once its growth slows to 5 percent, cutting and reinvesting does just as well, and any slower and you lose ground by holding. So the wealth-maximizing harvest age is wherever the tree's own growth rate falls to the market rate, and a lower interest rate means you wait longer (the bar the tree must clear is lower). The same logic governs whiskey: age it while its value climbs faster than the rate, bottle it when the climb slows.
 
-![A tree's lumber value (on a log scale) rising and flattening with age, with two constant-growth interest lines tangent to the value curve — the steeper 4% line touching at year 50 and the flatter 3% line at year 60 — so the wealth-maximizing harvest age is where the tree's own growth rate has fallen to the interest rate, and a lower rate means holding longer and cutting later.](/teaching/microeconomics/t11b-capital-values-and-profit/figures/t11b-tree-cutting.svg)
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>A stand of timber is adding 6% a year to its value while the interest rate is 4%. Should the owner cut it now or keep waiting? At what growth rate should he finally cut?</p>
+</aside>
+
+<figure class="econ-figure" style="margin:1.5em 0;">
+<iframe src="/teaching/microeconomics/t11b-capital-values-and-profit/figures/t11b-tree-cutting-interactive.html" title="Drag the interest-rate slider (or use the arrow keys) to sweep the tangent line and see the wealth-maximizing harvest age shift." loading="lazy" style="width:100%; max-width:480px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t11b-capital-values-and-profit/figures/t11b-tree-cutting-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t11b-capital-values-and-profit/figures/t11b-tree-cutting.svg">view the static figure</a>.</p></iframe>
+<figcaption><strong>Cut when the tree's growth rate falls to the interest rate.</strong> Tangency to the lumber-value curve marks the wealth-maximizing harvest: 50 years at 4%, 60 at 3%.</figcaption>
+</figure>
 
 This optimal-timing rule has a sharp condition attached: it only works when someone owns the asset securely. An owner gains by leaving a tree standing while it still outgrows the interest rate, because the future value is his. But an unowned tree, in a forest open to all, gets cut as soon as its lumber is worth anything at all, because whoever waits loses it to whoever does not. The race to grab an unowned resource destroys the patient, value-maximizing strategy that secure ownership makes possible, our first glimpse of a theme that gets its own topic later.
 
@@ -60,6 +97,19 @@ That is the self-correcting part. As existing reserves get drawn down, the prese
 Now turn the tool on yourself. *Wealth* is the present value of all your future income, from every source. The largest piece of most people's wealth is not a bank balance or a house. It is *human capital*: the present value of your own future earnings. If you imagined a balance sheet listing everything you own, the biggest asset on it would be "Me", the discounted stream of every paycheck you will ever collect. That is why a question like "are you worth more than $500,000?" is not absurd: discount a few decades of salary back to the present and a typical career easily clears that bar. A ninety-year-old who plants fruit trees that mature in twenty years is not being foolish. The land is worth more the day the trees go in, because its present value rises immediately, and he can sell it tomorrow and move to the Bahamas; part of today's wealth is always food not yet grown, to be eaten by people not yet born.
 
 *Income* is best understood as the maintainable flow you can take without shrinking your wealth, what we call *standard income*. If your wealth is W and the interest rate is r, your standard income is r × W: the amount you can consume each year and still leave your wealth intact, exactly like spending only the interest on a perpetuity and never touching the principal. Someone with $100,000 of wealth can maintainably consume nothing extra at a 0 percent rate but $10,000 a year at 10 percent. Run it the other way and a steady $5,000 a year of income, at 10 percent, corresponds to wealth of $50,000 ($5,000 ÷ 0.10), the perpetuity formula again, now read as *capitalizing* an income into the wealth that backs it. If you consume exactly your standard income for two years, your wealth at the end is unchanged; consume more and you are dissaving, eating into the principal.
+
+<aside class="econ-callout econ-termset">
+<p class="econ-callout__label">Key terms</p>
+<dl class="econ-term-list">
+<div><dt>Human Capital</dt><dd>The present value of your own future earnings.</dd></div>
+<div><dt>Standard Income</dt><dd>The maintainable flow you can take each year without shrinking your wealth, equal to r times your wealth.</dd></div>
+</dl>
+</aside>
+
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>Someone has $200,000 of wealth and the interest rate is 5%. How much can he spend each year without shrinking that wealth, and what is that flow called?</p>
+</aside>
 
 This reframes *saving* and *consumption*. No one gears consumption strictly to this year's earnings. People smooth: they borrow when young and earning little, save through their prime years, and spend down in retirement. They can do this because human wealth, the present value of a whole working life, barely moves when a single year's earnings wobble. A bad year is one small dip in a long discounted stream. So consumption tracks expected lifetime wealth, not the current paycheck, which is why a one-time $4,000 gift and a permanent $20-a-month raise can affect spending very differently: the raise, small as it sounds per month, is a stream, and the present value of a lifetime stream can dwarf a single windfall.
 
@@ -110,6 +160,11 @@ This ordering explains why you might rationally accept a lower yield. A Treasury
 
 The second add-on worth a note is for *market risk*, the danger that rates will move while you hold a long bond and shove its price around. We saw that long bonds swing most when rates change, so lenders demand an extra premium to hold them, which is part of why long-term rates usually exceed short-term ones. Running the other way is a *subtraction* for *liquidity*: very short, very safe, easily sold instruments like Treasury bills double as a near-substitute for cash, and that convenience yield lets them pay a bit less. There is also an *inflation premium*, the part of the rate that compensates lenders for the dollar losing value. The stated rate on a loan is the *nominal rate*, the percentage in dollars; the *real rate* is what those dollars actually buy after inflation, roughly the nominal rate minus the rate of inflation. A lender quoting a nominal rate is really demanding some desired real return plus a cushion for the inflation expected over the life of the loan. So if you fear inflation, an inflation-indexed bond, whose payments rise with the price level, is attractive even at a lower stated rate, while someone confident that prices will stay flat would rather hold an ordinary fixed-dollar note at a higher number. The crucial wrinkle is that lenders set the premium for the inflation they expect, and actual inflation can differ. When it runs higher than expected, the *realized real rate*, what the interest truly bought after the fact, can fall to zero or even go negative: the lender is paid back in dollars worth less than the cushion anticipated, an unannounced transfer of wealth from lender to borrower. Realized real rates have dipped below zero this way during wars and supply shocks, when inflation outran what lenders had priced in. Where inflation itself comes from belongs to a later course; here the point is just that "the" rate has a real core and an inflation cover, and only the real core is the true price of waiting.
 
+<figure class="econ-figure" style="margin:1.5em 0;">
+<iframe src="/teaching/microeconomics/t11b-capital-values-and-profit/figures/t11-ue33-1-interactive.html" title="Drag or use the arrow keys to move the marker along the years and read the realized real interest rate at each one." loading="lazy" style="width:100%; max-width:480px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t11b-capital-values-and-profit/figures/t11-ue33-1-interactive.html">Open the interactive figure directly</a>.</p></iframe>
+<figcaption><strong>Realized real returns swing with surprise inflation.</strong> What lenders earned ranged from +15% to −12% since 1920, below zero when inflation outran expectations.</figcaption>
+</figure>
+
 > **Looking ahead to price ceilings on credit (T4).** Where this topic brushes against caps on interest rates, usury laws, payday-loan rate caps, ceilings on veterans' mortgage rates, the same logic applies as for any binding price ceiling, which we study in full in the price-controls topic. Hold the price of credit below where the market would set it and you get a shortage of credit for exactly the borrowers the cap was meant to help: the highest-risk borrowers get shut out (lenders cannot charge enough to cover their risk), lending shifts toward safer borrowers, and the competition that the cap blocks reappears in nonprice forms, fees, tie-in requirements, and the like. When Oregon capped payday-loan rates at 36 percent a year, Sowell reports that about three-quarters of the state's payday lenders shut down, and the borrowers who relied on them did not thereby become better credit risks; they lost access. We will work through the general mechanics of ceilings, shortages, and rationing in the price-controls topic.
 
 That payday example also makes a point about what "interest" even means on a short, small loan. A $15 charge on a $100 loan for two weeks annualizes to a triple-digit percentage, which sounds scandalous, but most of that $15 is not interest at all. It is the fixed cost of processing the loan and the high risk of not being repaid, spread over a tiny principal and a short term. As Sowell puts it, salmon may cost a great deal "per ton," but you are not buying a ton. Annualizing a mostly-fixed cost on a two-week loan badly misrepresents it.
@@ -138,6 +193,11 @@ Pull the threads together and a synthesis appears. The productivity of investmen
 
 That equalization has a striking consequence for asset prices, and it is the part of this topic we will mostly reserve for live discussion rather than the exam. If all known information is already reflected in an asset's price, then today's price is the *unbiased estimator* of tomorrow's: the best single guess of any future price is the current one. Price changes come only from genuine *news*, and news, by definition, is unpredictable; if it were foreseeable it would already be in the price. So successive prices follow a *random walk*, wandering up and down with no exploitable pattern. Flip this around and several puzzles dissolve. After a hundred coin-toss bets, the best prediction of your accumulated winnings is wherever you happen to stand right now, not zero and not the starting point; the past sequence tells you nothing about the next step. If half the brokers say a stock is too high and half say too low, that is exactly what a sensible market price looks like: the price sits right at the dividing line of opinion, and only new information moves it. Knowing that one stock rose 10 percent last month and another fell 10 percent gives you no edge in picking the next winner, because that history is already in both prices.
 
+<figure class="econ-figure" style="margin:1.5em 0;">
+<iframe src="/teaching/microeconomics/t11b-capital-values-and-profit/figures/t11-ue35-1-interactive.html" title="Drag the step scrubber to watch seven random walks fan out from a common start; re-roll for a fresh set." loading="lazy" style="width:100%; max-width:480px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t11b-capital-values-and-profit/figures/t11-ue35-1-interactive.html">Open the interactive figure directly</a>.</p></iframe>
+<figcaption><strong>No path tends back to where it started.</strong> So asset prices already reflect all known information.</figcaption>
+</figure>
+
 Two practical lessons follow. First, you cannot have high returns with no risk; the relative who wants "a high return and no chance of loss" is asking for something the market will not sell, because higher average returns are precisely the payment for bearing more variability. The most reliable advice is to *diversify*, to hold a broad basket so that the ups and downs of individual assets partly cancel, and a broad market-index portfolio is hard for anyone to beat consistently. This mean-versus-variance trade-off is not special to finance; it is the same scarcity-driven trade-off that runs through every choice in this course, you give up some of one good thing (safety) to get more of another (return). Second, proposals to "suspend trading on bad news" mostly backfire: they do not stop the news from being bad, they just trap holders who would like to sell and prevent the price from telling everyone the truth quickly.
 
 > **Looking ahead to risk and uncertainty (T12).** All of this financial-market machinery, the risk premia in the rate package, diversification, the random walk, rests on a distinction we develop next: calculable *risk* (where the odds can be estimated) versus deeper *uncertainty* (where they cannot), and on how markets both transfer risk (through insurance and speculation) and actually reduce it (by pooling many independent chances). The intermediaries who do this work, banks, brokers, mutual funds, insurers, speculators, are the subject of the next topic; here we only flag that they exist and that this is where the story continues.
@@ -156,8 +216,19 @@ Two more cases show the same machinery. When a credit-rating agency downgraded C
 
 This connects back to a point from earlier in the course about permanent losses. When a policy or event causes a lasting fall in an asset's expected future receipts, the loss shows up immediately as a one-time drop in its present value, the harm is "priced in" the instant expectations change, not when the future finally arrives. The arithmetic of capital value is unforgiving: the future is always already here, discounted into today's prices, whether the people making decisions choose to look at it or not.
 
-## What's Next
-
-Step back and the through-line across both halves of this topic is a single tool used over and over. Present value puts amounts arriving at different times onto one ruler, and from it flows everything: what interest is, where it comes from, how it builds into the package any borrower pays, how it values bonds, houses, machines, and your own future earnings, and why a future loss is felt the moment it becomes foreseeable. We saw that profit is the part of wealth growth no one anticipated, and that earning it is bound up with bearing risk.
-
-That is exactly where we go next. We have named risk-bearing as the source of profit, but we have not yet pulled apart what "risk" really means, how it differs from genuine uncertainty, or how markets manage it through insurance, speculation, and the diversification we touched on today. Next time we take up risk, profit, and entrepreneurship head-on: why bearing uncertainty is a productive service, how insurers and speculators both transfer and reduce risk, and what entrepreneurs are actually paid for. Bring the present-value tool with you; you will find it underneath every one of those answers.
+<div class="econ-review">
+<section class="econ-review__section">
+<h3>Key takeaways</h3>
+<ul>
+<li><strong>Every durable good is worth the present value of its future services.</strong> Its price moves opposite the interest rate.</li>
+<li><strong>Hold a growing asset only while it outgrows the interest rate.</strong> A lower rate means waiting longer to sell.</li>
+<li><strong>We never truly run out of a resource.</strong> Known reserves measure how much it has paid to find, not how much exists.</li>
+<li><strong>Your wealth is the present value of everything you will earn.</strong> Standard income is the flow you can take without shrinking it.</li>
+<li><strong>Profit is wealth growth nobody saw coming.</strong> It rewards deferring consumption and bearing risk.</li>
+<li><strong>The observed interest rate is a package.</strong> A pure rate plus add-ons for cost, default risk, and expected inflation.</li>
+<li><strong>The interest rate is the relative price of long- and short-lived things.</strong> A rate cut raises long-lived values most.</li>
+<li><strong>Competition pulls every return into line.</strong> Prices then follow a random walk, so diversifying beats outguessing the market.</li>
+<li><strong>Present value disciplines markets but not politicians.</strong> Owners feel the future now; politicians do not.</li>
+</ul>
+</section>
+</div>

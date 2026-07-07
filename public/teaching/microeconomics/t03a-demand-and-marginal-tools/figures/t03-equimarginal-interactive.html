@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive figure: allocating ten tokens between two machines (the equimarginal rule)</title>
+<!--
+  Interactive recreation of UE Fig 7.3 (p.104) for the T3a blog post
+  (website-styled warm palette, not FAU). Self-contained: no libraries, no
+  network. The static FAU figure (figures/t03-equimarginal.{tex,svg}) is the
+  SLIDE version and is untouched; it is also this widget's <noscript> fallback.
+
+  ARCHITECTURE (family F8 — allocation / two-agent margins): the base figure is
+  REAL SVG markup. A no-JS reader sees the FULL back-to-back still — both
+  marginal-payoff lines, both token axes, both optimum dots, the equalized
+  dashed line, and every label the UE source teaches. The script only ATTACHES
+  behavior (drag the split, both dots + droplines + equalized line move, live
+  readouts, snap-highlight at the optimum); it never builds figure DOM.
+
+  GEOMETRY (two-panel back-to-back mirror): viewBox 720 x 460, aspect-ratio
+  16/10, max-width 640px. Marginal payoff $ on the shared vertical scale,
+  tokens on the two horizontal axes.
+    Dollar scale: y = 350 - $ * (280/21).  $0 -> 350 (baseline), $21 -> 70.
+    Machine A (left): tokens increase RIGHTWARD from its y-axis at x=70.
+      x_A(t) = 70 + 26*t ;  MP_A = 22 - 2t  (steeper; first token $20 at t=1).
+    Machine B (right): tokens increase LEFTWARD from its y-axis at x=650.
+      x_B(s) = 650 - 26*s ; MP_B = 15.5 - 0.5s (flatter; first token $15 at s=1).
+  Allocation: 10 tokens split a to A, b = 10 - a to B (integers 0..10). Total
+  payoff = area under each marginal line up to its count:
+    A(a) = 21a - a^2 ;  B(b) = 15.25b - 0.25b^2.
+  The equimarginal optimum is a = 4, b = 6 (total $150.50): the split that
+  maximizes the aggregate, where the two placed marginals ($14 and $12.50) are
+  as equal as an integer split allows.
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;   /* warm bone background        */
+    --ink:     #1a1c1e;    /* marginal-payoff lines       */
+    --text:    #16181a;    /* body text                   */
+    --muted:   #5c6066;    /* axes / secondary labels     */
+    --hairline:#e3ddd3;    /* droplines / muting          */
+    --accent:  #b07a2c;    /* brass — dots / optimum      */
+    --accent-tint: #efe4d2;/* total-payoff area wash      */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* min-width:0 lets the figure scale DOWN to narrow phones instead of clipping */
+  .fig { width: 100%; max-width: 640px; min-width: 0; }
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+
+  /* structural strokes */
+  .axis   { stroke: var(--muted); stroke-width: 1.4; }
+  .mline  { stroke: var(--ink); stroke-width: 2.6; fill: none;
+            stroke-linecap: round; }
+  .area   { fill: var(--accent-tint); opacity: 0.55; stroke: none; }
+  .drop   { stroke: var(--hairline); stroke-width: 1.6; stroke-dasharray: 5 4; }
+
+  /* the equalized-marginal reference line */
+  .equal-line  { stroke: var(--muted); stroke-width: 1.6; stroke-dasharray: 7 5; }
+  .equal-line.opt { stroke: var(--accent); stroke-width: 2; }
+
+  /* points + generous transparent hit targets */
+  .pt        { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5; }
+  .pt.opt    { stroke: var(--accent); }
+  .hit       { fill: transparent; stroke: transparent; touch-action: none;
+               cursor: grab; }
+  .hit-curve { fill: none; stroke: transparent; stroke-width: 26;
+               touch-action: none; cursor: grab; }
+  .pt-focus:focus-visible { outline: none; }
+  .pt-focus:focus-visible + .pt,
+  .grabbing .pt { stroke: var(--accent); stroke-width: 3.5; }
+
+  /* text */
+  .axlabel   { fill: var(--muted); font-size: 13px; font-weight: 600; }
+  .ticklabel { fill: var(--muted); font-size: 11px; }
+  .dollartop { fill: var(--muted); font-size: 11.5px; font-weight: 700; }
+  .linelabel { fill: var(--muted); font-size: 12px; font-style: italic; }
+  .equal-label { fill: var(--muted); font-size: 11.5px; font-weight: 600; }
+  .equal-label.opt { fill: var(--accent); }
+  .opt-note  { fill: var(--muted); font-size: 11px; font-weight: 600; }
+  .qlabel    { fill: var(--ink); font-size: 12px; font-weight: 700;
+               paint-order: stroke; stroke: var(--surface); stroke-width: 3px;
+               stroke-linejoin: round; }
+  .sep       { stroke: var(--hairline); stroke-width: 1; }
+  .r-hint    { fill: var(--muted); font-size: 12.5px; }
+  .r-trade   { fill: var(--accent); font-size: 14px; font-weight: 600; }
+  .fallback  { margin: 8px 0 0; color: var(--muted); font-size: 13px;
+               line-height: 1.35; text-align: center; }
+  .fallback a { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="fig">
+  <svg id="fig" viewBox="0 0 720 460" role="group"
+       aria-label="Two machines share ten tokens. Machine A's marginal payoff starts higher but falls faster; Machine B's is flatter. Drag the split to change how many tokens go to each machine. The total payoff is largest, and the two placed marginal payoffs are as equal as an integer split allows, when four tokens go to A and six to B.">
+    <defs>
+      <marker id="ax-arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+    </defs>
+
+    <!-- total-payoff area washes (JS rewrites d as the split changes) -->
+    <path id="areaA" class="area" d="M70,350 L70,56.67 L174,163.33 L174,350 Z" />
+    <path id="areaB" class="area" d="M650,350 L650,143.33 L494,183.33 L494,350 Z" />
+
+    <!-- ===================== axes ===================== -->
+    <!-- Machine A: y-axis + x-axis (tokens rightward) -->
+    <line class="axis" x1="70" y1="350" x2="70"  y2="46"  marker-end="url(#ax-arrow)" />
+    <line class="axis" x1="70" y1="350" x2="348" y2="350" marker-end="url(#ax-arrow)" />
+    <!-- Machine B: y-axis + x-axis (tokens leftward) -->
+    <line class="axis" x1="650" y1="350" x2="650" y2="46"  marker-end="url(#ax-arrow)" />
+    <line class="axis" x1="650" y1="350" x2="372" y2="350" marker-end="url(#ax-arrow)" />
+
+    <!-- shared y-axis meaning -->
+    <text class="axlabel" x="28" y="205" text-anchor="middle"
+          transform="rotate(-90 28 205)">Marginal payoff ($)</text>
+
+    <!-- first-token dollar anchors (source labels A's top $20, B's top $15) -->
+    <line class="axis" x1="66" y1="83.33" x2="70" y2="83.33" />
+    <text class="dollartop" x="63" y="83.33" text-anchor="end"
+          dominant-baseline="middle">$20</text>
+    <line class="axis" x1="650" y1="150" x2="654" y2="150" />
+    <text class="dollartop" x="657" y="150" text-anchor="start"
+          dominant-baseline="middle">$15</text>
+
+    <!-- Machine A token ticks (0,2,4,6,8,10) -->
+    <g class="ticklabel">
+      <text x="70"  y="366" text-anchor="middle">0</text>
+      <text x="122" y="366" text-anchor="middle">2</text>
+      <text x="174" y="366" text-anchor="middle">4</text>
+      <text x="226" y="366" text-anchor="middle">6</text>
+      <text x="278" y="366" text-anchor="middle">8</text>
+      <text x="330" y="366" text-anchor="middle">10</text>
+    </g>
+    <!-- Machine B token ticks (0 at right, increasing leftward) -->
+    <g class="ticklabel">
+      <text x="650" y="366" text-anchor="middle">0</text>
+      <text x="598" y="366" text-anchor="middle">2</text>
+      <text x="546" y="366" text-anchor="middle">4</text>
+      <text x="494" y="366" text-anchor="middle">6</text>
+      <text x="442" y="366" text-anchor="middle">8</text>
+      <text x="390" y="366" text-anchor="middle">10</text>
+    </g>
+
+    <!-- x-axis titles -->
+    <text class="axlabel" x="200" y="388" text-anchor="middle">Machine A — tokens &#8594;</text>
+    <text class="axlabel" x="520" y="388" text-anchor="middle">&#8592; tokens — Machine B</text>
+
+    <!-- ===================== marginal lines ===================== -->
+    <!-- A: (t=0,$22)->(t=10,$2), steep; first token reads $20 -->
+    <line class="mline" x1="70" y1="56.67" x2="330" y2="323.33" />
+    <!-- Label sits in the open upper-left triangle ABOVE the A line and ABOVE the
+         equalized band's highest sweep (y=133.33 at a=0), and its x-span (140-245)
+         clears the centered "Equalized marginal" label (x 306-414). This keeps it
+         from being overrun by the moving equalized line/label when the reader drags
+         the split toward A (was at y=150, inside the band -> text-over-line). -->
+    <text class="linelabel" x="140" y="108" text-anchor="start">Marginal Payoff of A</text>
+    <!-- B: (s=0,$15.5)->(s=10,$10.5), shallow -->
+    <line class="mline" x1="650" y1="143.33" x2="390" y2="210" />
+    <text class="linelabel" x="500" y="118" text-anchor="start">Marginal Payoff of B</text>
+
+    <!-- ===================== equalized-marginal reference ===================== -->
+    <line id="equalLine" class="equal-line opt" x1="60" y1="173.33" x2="660" y2="173.33" />
+    <text id="equalLabel" class="equal-label opt" x="360" y="165" text-anchor="middle">Equalized marginal</text>
+
+    <!-- persistent target reminder -->
+    <text class="opt-note" x="360" y="343" text-anchor="middle">Optimum: 4 in A, 6 in B</text>
+
+    <!-- ===================== Machine A dot + droplines ===================== -->
+    <g id="gDotA">
+      <line id="dropAV" class="drop" x1="174" y1="350" x2="174" y2="163.33" />
+      <line id="dropAH" class="drop" x1="70" y1="163.33" x2="174" y2="163.33" />
+      <text id="qA"  class="qlabel" x="174" y="344" text-anchor="middle">4</text>
+      <text id="pyA" class="qlabel" x="64" y="163.33" text-anchor="end"
+            dominant-baseline="middle">$14</text>
+      <circle id="dotA" class="pt opt" cx="174" cy="163.33" r="6.5" />
+    </g>
+
+    <!-- ===================== Machine B dot + droplines ===================== -->
+    <g id="gDotB">
+      <line id="dropBV" class="drop" x1="494" y1="350" x2="494" y2="183.33" />
+      <line id="dropBH" class="drop" x1="650" y1="183.33" x2="494" y2="183.33" />
+      <text id="qB"  class="qlabel" x="494" y="344" text-anchor="middle">6</text>
+      <text id="pyB" class="qlabel" x="654" y="183.33" text-anchor="start"
+            dominant-baseline="middle">$12.50</text>
+      <circle id="dotB" class="pt opt" cx="494" cy="183.33" r="6.5" />
+    </g>
+
+    <!-- ===================== drag hit targets (set the split) ===================== -->
+    <line id="hitA" class="hit-curve" x1="70" y1="56.67" x2="330" y2="323.33" />
+    <line id="hitB" class="hit-curve" x1="650" y1="143.33" x2="390" y2="210" />
+    <circle id="hitDotA" class="hit" cx="174" cy="163.33" r="24" />
+    <circle id="hitDotB" class="hit" cx="494" cy="183.33" r="24" />
+    <!-- focusable keyboard slider proxy (rides Machine A's dot) -->
+    <circle id="ptFocus" class="pt-focus hit" cx="174" cy="163.33" r="24"
+            tabindex="0" role="slider" aria-label="Tokens allocated to Machine A"
+            aria-valuemin="0" aria-valuemax="10" aria-valuenow="4"
+            aria-valuetext="Four tokens in Machine A, six in Machine B. The last token in A is worth $14, the last in B $12.50, total $150.50. The marginals are as equal as an integer split allows — this is the equimarginal optimum." />
+
+    <!-- ===================== readout band ===================== -->
+    <line class="sep" x1="60" y1="404" x2="660" y2="404" />
+    <text id="rHint"  class="r-hint"  x="360" y="426" text-anchor="middle">4 tokens in A (next worth $14), 6 in B (next worth $12.50). Total $150.50.</text>
+    <text id="rTrade" class="r-trade" x="360" y="450" text-anchor="middle">Marginals are as equal as they get — this is the equimarginal optimum.</text>
+  </svg>
+
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame is a still image: two
+      back-to-back marginal-payoff lines for machines A and B, with the ten-token
+      optimum marked at four tokens in A and six in B, where the placed marginals
+      are as equal as an integer split allows. You can also
+      <a href="t03-equimarginal.svg">open the static figure</a>.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var svg = document.getElementById('fig');
+  var byId = function (id) { return document.getElementById(id); };
+
+  var areaA = byId('areaA'), areaB = byId('areaB');
+  var gDotA = byId('gDotA'), gDotB = byId('gDotB');
+  var dotA = byId('dotA'), dotB = byId('dotB');
+  var dropAV = byId('dropAV'), dropAH = byId('dropAH');
+  var dropBV = byId('dropBV'), dropBH = byId('dropBH');
+  var qA = byId('qA'), pyA = byId('pyA'), qB = byId('qB'), pyB = byId('pyB');
+  var hitA = byId('hitA'), hitB = byId('hitB');
+  var hitDotA = byId('hitDotA'), hitDotB = byId('hitDotB'), ptFocus = byId('ptFocus');
+  var equalLine = byId('equalLine'), equalLabel = byId('equalLabel');
+  var rHint = byId('rHint'), rTrade = byId('rTrade');
+
+  // --- pixel frame + scale (mirrors the markup above) ---
+  var PER_T = 26, AX0 = 70, BX0 = 650, Y0 = 350, PER_Y = 280 / 21;
+  var TOTAL = 10, MID_X = 360;   // split boundary between the two panels
+  function yD(d)  { return Y0 - d * PER_Y; }
+  function xA(t)  { return AX0 + t * PER_T; }
+  function xB(s)  { return BX0 - s * PER_T; }
+  function toA(px){ return Math.round((px - AX0) / PER_T); } // px -> tokens in A
+  function toB(px){ return Math.round((BX0 - px) / PER_T); } // px -> tokens in B
+
+  // --- the model ---
+  function mpA(t) { return 22 - 2 * t; }      // worth of the t-th token in A
+  function mpB(s) { return 15.5 - 0.5 * s; }   // worth of the s-th token in B
+  function payA(t){ return 21 * t - t * t; }   // total payoff, first t tokens in A
+  function payB(s){ return 15.25 * s - 0.25 * s * s; }
+  var OPT_A = 4;                               // total-payoff-maximizing split
+
+  // --- state: tokens in A (integer 0..10) ---
+  var a = 4;
+
+  var spt = svg.createSVGPoint();
+  function toSvg(evt) {
+    spt.x = evt.clientX; spt.y = evt.clientY;
+    return spt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+
+  function money(x) { return '$' + (Number.isInteger(x) ? x : x.toFixed(2)); }
+  function ftot(x)  { return Number.isInteger(x) ? String(x) : x.toFixed(2); }
+
+  // readout text — the spec's example states verbatim, generic otherwise
+  function text(av) {
+    var bv = TOTAL - av, va = mpA(av), vb = mpB(bv), tot = payA(av) + payB(bv);
+    if (av === 4)  return { m: '4 tokens in A (next worth $14), 6 in B (next worth $12.50). Total $150.50.',
+                            a: 'Marginals are as equal as they get — this is the equimarginal optimum.' };
+    if (av === 5)  return { m: '5 in A ($12), 5 in B ($13). Total $150.',
+                            a: "B's marginal still beats A's — move one more token to B." };
+    if (av === 10) return { m: '10 in A, 0 in B. Total $110.',
+                            a: "A's last token is worth only $2 while B's first is worth $15 — shift tokens to B." };
+    if (av === 0)  return { m: '0 in A, 10 in B. Total $127.50.',
+                            a: "B's last token is worth $10.50 while A's first is worth $20 — shift tokens to A." };
+    return {
+      m: av + ' in A (last worth ' + money(va) + '), ' + bv + ' in B (last worth ' +
+         money(vb) + '). Total $' + ftot(tot) + '.',
+      a: (av < OPT_A) ? "A's next token beats B's — move a token to A."
+                      : "B's next token beats A's — move a token to B."
+    };
+  }
+
+  function render() {
+    var b = TOTAL - a;
+    var va = mpA(a), vb = mpB(b);
+    var pax = xA(a), pay = yD(va), pbx = xB(b), pby = yD(vb);
+    var opt = (a === OPT_A);
+
+    // Machine A dot + droplines (hidden when A has no tokens)
+    gDotA.style.display = (a === 0) ? 'none' : '';
+    dotA.setAttribute('cx', pax); dotA.setAttribute('cy', pay);
+    dotA.setAttribute('class', opt ? 'pt opt' : 'pt');
+    dropAV.setAttribute('x1', pax); dropAV.setAttribute('x2', pax);
+    dropAV.setAttribute('y2', pay);
+    dropAH.setAttribute('y1', pay); dropAH.setAttribute('y2', pay);
+    dropAH.setAttribute('x2', pax);
+    qA.setAttribute('x', pax); qA.textContent = a;
+    pyA.setAttribute('y', pay); pyA.textContent = money(va);
+
+    // Machine B dot + droplines (hidden when B has no tokens)
+    gDotB.style.display = (b === 0) ? 'none' : '';
+    dotB.setAttribute('cx', pbx); dotB.setAttribute('cy', pby);
+    dotB.setAttribute('class', opt ? 'pt opt' : 'pt');
+    dropBV.setAttribute('x1', pbx); dropBV.setAttribute('x2', pbx);
+    dropBV.setAttribute('y2', pby);
+    dropBH.setAttribute('y1', pby); dropBH.setAttribute('y2', pby);
+    dropBH.setAttribute('x2', pbx);
+    qB.setAttribute('x', pbx); qB.textContent = b;
+    pyB.setAttribute('y', pby); pyB.textContent = money(vb);
+
+    // hit targets ride their dots; focus proxy rides A's dot
+    hitDotA.setAttribute('cx', pax); hitDotA.setAttribute('cy', pay);
+    hitDotB.setAttribute('cx', pbx); hitDotB.setAttribute('cy', pby);
+    ptFocus.setAttribute('cx', pax); ptFocus.setAttribute('cy', pay);
+
+    // total-payoff area washes (under each line to its count)
+    areaA.setAttribute('d', 'M' + AX0 + ',' + Y0 + ' L' + AX0 + ',' + yD(mpA(0)).toFixed(2) +
+      ' L' + pax.toFixed(2) + ',' + pay.toFixed(2) + ' L' + pax.toFixed(2) + ',' + Y0 + ' Z');
+    areaB.setAttribute('d', 'M' + BX0 + ',' + Y0 + ' L' + BX0 + ',' + yD(mpB(0)).toFixed(2) +
+      ' L' + pbx.toFixed(2) + ',' + pby.toFixed(2) + ' L' + pbx.toFixed(2) + ',' + Y0 + ' Z');
+
+    // equalized-marginal reference at the average of the two placed marginals
+    var eqY = yD((va + vb) / 2);
+    equalLine.setAttribute('y1', eqY); equalLine.setAttribute('y2', eqY);
+    equalLine.setAttribute('class', opt ? 'equal-line opt' : 'equal-line');
+    equalLabel.setAttribute('y', eqY - 8);
+    equalLabel.setAttribute('class', opt ? 'equal-label opt' : 'equal-label');
+
+    // readouts + spoken state
+    var t = text(a);
+    rHint.textContent = t.m;
+    rTrade.textContent = t.a;
+    ptFocus.setAttribute('aria-valuenow', a);
+    ptFocus.setAttribute('aria-valuetext', t.m + ' ' + t.a);
+  }
+
+  // pointer -> split: left half sets tokens in A, right half sets tokens in B
+  function setFromPointer(evt) {
+    var p = toSvg(evt);
+    if (isNaN(p.x)) return;
+    var na = (p.x <= MID_X) ? toA(p.x) : (TOTAL - toB(p.x));
+    if (na < 0) na = 0;
+    if (na > TOTAL) na = TOTAL;
+    a = na;
+    render();
+  }
+
+  // --- drag (pointer capture so a fast drag can't get stuck) ---
+  var dragging = false, capturedEl = null, capturedId = null;
+  function onMove(evt) { if (dragging) { evt.preventDefault(); setFromPointer(evt); } }
+  function onUp() {
+    dragging = false;
+    svg.classList.remove('grabbing');
+    if (capturedEl && capturedId !== null) {
+      try { capturedEl.releasePointerCapture(capturedId); } catch (e) {}
+    }
+    capturedEl = null; capturedId = null;
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+  }
+  function onDown(evt) {
+    evt.preventDefault();
+    dragging = true;
+    svg.classList.add('grabbing');
+    capturedEl = evt.currentTarget; capturedId = evt.pointerId;
+    try { capturedEl.setPointerCapture(capturedId); } catch (e) {}
+    setFromPointer(evt);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }
+  hitA.addEventListener('pointerdown', onDown);
+  hitB.addEventListener('pointerdown', onDown);
+  hitDotA.addEventListener('pointerdown', onDown);
+  hitDotB.addEventListener('pointerdown', onDown);
+  ptFocus.addEventListener('pointerdown', onDown);
+
+  // --- keyboard: step the split by one token ---
+  ptFocus.addEventListener('keydown', function (evt) {
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') { a += 1; }
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') { a -= 1; }
+    else return;
+    evt.preventDefault();
+    if (a < 0) a = 0;
+    if (a > TOTAL) a = TOTAL;
+    render();
+  });
+
+  // --- debug hook (inert for students) ---
+  window.__fig = {
+    set: function (v) {
+      var na = (v && typeof v.a === 'number') ? v.a : v;
+      na = Math.round(+na);
+      if (!isNaN(na)) { a = Math.max(0, Math.min(TOTAL, na)); render(); }
+    },
+    get: function () {
+      var b = TOTAL - a;
+      return { a: a, b: b, mpA: mpA(a), mpB: mpB(b), total: payA(a) + payB(b) };
+    }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

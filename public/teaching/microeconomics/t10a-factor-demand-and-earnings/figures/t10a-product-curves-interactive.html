@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive product curves: total, marginal, and average product of labor</title>
+<!--
+  Interactive product-curve figure for the T10a blog post (website-styled, warm
+  palette). Recreates UE Fig 29.1 "Total, Average, and Marginal Product Curves"
+  (p.450). Self-contained: no libraries, no network. The static FAU figure
+  (figures/t10a-product-curves.{tex,svg}) is the SLIDE version and is
+  untouched; it is also the <noscript> fallback.
+
+  FAMILY F1 (trace-the-curve). Geometry class: vertically stacked two-plot
+  single column sharing one input (Labor) axis, viewBox 460x640, aspect-ratio
+  5/7, max-width 480px. (Same geometry class as the T3/T6 diminishing-returns
+  product-curve widget; this file is independently parameterized to the
+  corrected element inventory for UE 29.1 in interactive-specs.md.)
+
+  UNDERLYING FUNCTIONS (clean cubic; every invariant true by construction):
+    TP(L) = -0.3*L^3 + 3.6*L^2   -- inflection at L=4 (TP=38.4); single max at
+                                    L=8 (TP=76.8); declines for L>8.
+    MP(L) = -0.9*L^2 + 7.2*L     -- TP's derivative. Max at L=4 (MP=14.4);
+                                    crosses zero exactly at L=8 (TP's max).
+    AP(L) = -0.3*L^2 + 3.6*L     -- TP/L. Max at L=6 (AP=10.8); MP=AP=10.8 at
+                                    L=6, MP cutting AP from above.
+  Drawn for L in [0, 9.5] (top and bottom plots share the x-scale).
+
+  GEOMETRY / coordinate frame:
+    x scale (both plots): xL(L) = 70 + 34*L  [L=0 -> x=70; L=9.5 -> x=393;
+      axis lines drawn to x=415 so the arrowheads don't crowd the data].
+    Top plot (Total Product): TP=0 -> y=235 (this plot's own Labor baseline);
+      yTP(tp) = 235 - tp*(190/90)  [TP=76.8 -> y=72.87; axis top arrow at y=20].
+    Bottom plot (Marginal & Average Product): the "Labor axis" for this plot
+      is the value=0 line at y=415 (not the plot's bottom edge, since MP goes
+      negative past L=8); yB(v) = 415 - v*7.5  [v=16 -> y=295 (near the top
+      arrow, y=282); v=-14 -> y=520 (bottom edge)].
+    A single draggable point rides the TP curve (top plot); a shared vertical
+    sweep line at the same Labor value drops through BOTH plots, with synced
+    (non-interactive) dots on MP and AP in the bottom plot. Draggable range:
+    L in [0, 9.5]. Snap-highlight at the three teaching inputs L=4 (MP max /
+    inflection), L=6 (AP max, MP=AP, Stage I/II boundary), L=8 (TP max, MP=0,
+    Stage II/III boundary).
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;   /* warm bone background        */
+    --ink:     #1a1c1e;    /* TP curve + AP curve + headings */
+    --text:    #16181a;    /* body text                   */
+    --muted:   #5c6066;    /* axes / captions / static guides */
+    --hairline:#e3ddd3;    /* live droplines               */
+    --accent:  #b07a2c;    /* brass — MP curve + draggable point + emphasis */
+    --accent-tint: #efe4d2;/* (unused fill reserve)        */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* min-width:0 defeats the flexbox min-width:auto default so the figure
+     scales DOWN to viewports narrower than the SVG's intrinsic width instead
+     of clipping (the right side would otherwise be cut off on phones). */
+  .fig { width: 100%; max-width: 480px; min-width: 0; }
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+
+  /* structural strokes */
+  .axis     { stroke: var(--muted); stroke-width: 1.4; }
+  .curveTP  { stroke: var(--ink);    stroke-width: 2.6; fill: none; stroke-linecap: round; }
+  .curveMP  { stroke: var(--accent); stroke-width: 2.4; fill: none; stroke-linecap: round; }
+  .curveAP  { stroke: var(--ink);    stroke-width: 2.4; fill: none; stroke-linecap: round; }
+  .guide    { stroke: var(--muted); stroke-width: 1.3; stroke-dasharray: 4 3;
+              opacity: 0.55; fill: none; }
+  .guide-light { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 3;
+              opacity: 0.32; fill: none; }
+  .drop     { stroke: var(--hairline); stroke-width: 1.6; stroke-dasharray: 5 4; }
+  .drop.snap{ stroke: var(--accent); opacity: 0.9; }
+  .leader   { stroke: var(--muted); stroke-width: 1.1; opacity: 0.7; }
+
+  /* static reference markers (open rings — distinct from the live dot) */
+  .peakring { fill: none; stroke: var(--accent); stroke-width: 2; }
+
+  /* draggable TP point + generous transparent hit targets */
+  .ptTP      { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5; }
+  .ptMP      { fill: var(--accent); stroke: var(--surface); stroke-width: 2; }
+  .ptAP      { fill: var(--ink);    stroke: var(--surface); stroke-width: 2; }
+  .hit       { fill: transparent; stroke: transparent; touch-action: none; cursor: grab; }
+  .hit-curve { fill: none; stroke: transparent; stroke-width: 26; touch-action: none; cursor: grab; }
+  .pt-focus:focus-visible { outline: none; }
+  .pt-focus:focus-visible + .ptTP,
+  .grabbing .ptTP { stroke: var(--accent); stroke-width: 3.5; }
+
+  /* text */
+  .axtitle  { fill: var(--muted); font-size: 12.5px; font-weight: 600; }
+  .tick     { fill: var(--muted); font-size: 10px; }
+  .stagelbl { fill: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: 0.5px; }
+  .curvelbl { fill: var(--ink);   font-size: 12px; font-style: italic; }
+  .curvelbl.mp { fill: var(--accent); }
+  .note     { fill: var(--muted); font-size: 10.8px; }
+  /* live readout tags (accent, with a surface backing so they cleanly cover
+     whatever static mark they ride over) */
+  .tagbg    { fill: var(--surface); }
+  .tagtxt   { fill: var(--accent); font-size: 11.5px; font-weight: 700; }
+  .tagtxt.ap{ fill: var(--ink); }
+  .sep      { stroke: var(--hairline); stroke-width: 1; }
+  .r-hint   { fill: var(--muted);  font-size: 12px; }
+  .r-trade  { fill: var(--accent); font-size: 12.5px; font-weight: 600; }
+  .fallback {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.35;
+    text-align: center;
+  }
+  .fallback a { color: var(--ink); }
+</style>
+</head>
+<body>
+<!-- Everything from here to </div> is REAL base SVG: a no-JS reader sees the
+     full figure (both plots, every curve, every static annotation, and an
+     initial point at L=3 with droplines, live tags, and the readout). The
+     script only ATTACHES drag / keyboard / live updates. -->
+<div class="fig">
+  <svg id="fig" viewBox="0 0 460 640" role="group"
+       aria-label="Total product on top, marginal and average product below, both against the number of workers on the shared horizontal axis. Drag the point along the total-product curve to sweep a labor value through both plots and read off total, marginal, and average product together.">
+    <defs>
+      <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+    </defs>
+    <title>Total, marginal, and average product against the variable input (workers)</title>
+
+    <!-- ============================ TOP PLOT: Total Product ============================ -->
+    <!-- axes (drawn first, so the curve sits on top); extended past the data max -->
+    <line class="axis" x1="70" y1="235" x2="415" y2="235" marker-end="url(#arrow)" />
+    <line class="axis" x1="70" y1="235" x2="70"  y2="20"  marker-end="url(#arrow)" />
+
+    <!-- Stage-boundary dashed verticals at L=6 (Stage I/II, AP max) and L=8
+         (Stage II/III, TP max) -- aligned with the same verticals in the
+         bottom plot -->
+    <line class="guide" x1="274" y1="235" x2="274" y2="40" />
+    <line class="guide" x1="342" y1="235" x2="342" y2="40" />
+    <!-- a third, lighter dropline at L=4 marks the inflection (MP max) -->
+    <line class="guide-light" x1="206" y1="235" x2="206" y2="153.93" />
+
+    <!-- Stage labels I / II / III across the top -->
+    <text class="stagelbl" x="172" y="30" text-anchor="middle">I</text>
+    <text class="stagelbl" x="308" y="30" text-anchor="middle">II</text>
+    <text class="stagelbl" x="367" y="30" text-anchor="middle">III</text>
+
+    <!-- TP(L) = -0.3L^3 + 3.6L^2, L in [0,9.5] -->
+    <path class="curveTP" d="M70.0,235.0 L75.38,234.81 L80.77,234.26 L86.15,233.35 L91.53,232.11 L96.92,230.55 L102.3,228.68 L107.68,226.53 L113.07,224.09 L118.45,221.4 L123.83,218.46 L129.22,215.29 L134.6,211.91 L139.98,208.32 L145.37,204.55 L150.75,200.62 L156.13,196.52 L161.52,192.29 L166.9,187.93 L172.28,183.46 L177.67,178.9 L183.05,174.26 L188.43,169.55 L193.82,164.8 L199.2,160.01 L204.58,155.2 L209.97,150.39 L215.35,145.59 L220.73,140.81 L226.12,136.08 L231.5,131.4 L236.88,126.8 L242.27,122.27 L247.65,117.86 L253.03,113.56 L258.42,109.39 L263.8,105.36 L269.18,101.51 L274.57,97.82 L279.95,94.33 L285.33,91.05 L290.72,87.98 L296.1,85.16 L301.48,82.59 L306.87,80.28 L312.25,78.26 L317.63,76.54 L323.02,75.13 L328.4,74.04 L333.78,73.3 L339.17,72.92 L344.55,72.91 L349.93,73.29 L355.32,74.07 L360.7,75.27 L366.08,76.9 L371.47,78.99 L376.85,81.53 L382.23,84.56 L387.62,88.08 L393.0,92.1" />
+
+    <!-- marked reference dots: inflection (L=4) and TP peak (L=8) -->
+    <circle class="peakring" cx="206" cy="153.93" r="5" />
+    <circle class="peakring" cx="342" cy="72.87" r="5" />
+
+    <!-- "Total Product" label beside the curve's declining right tail, off the line -->
+    <text class="curvelbl" x="360" y="118" text-anchor="start">Total Product</text>
+
+    <!-- axis title (y only -- the shared x-axis title lives under the bottom plot) -->
+    <text class="axtitle" x="16" y="140" text-anchor="middle" transform="rotate(-90 16 140)">Product</text>
+
+    <!-- live droplines: horizontal foot to the y-axis (initial L=3 -> TP=24.3) -->
+    <line id="dropTPh" class="drop" x1="70" y1="183.70" x2="172" y2="183.70" />
+
+    <!-- live TP tag riding the horizontal dropline foot -->
+    <g id="tpTag">
+      <rect id="tpTagBg" class="tagbg" x="16" y="176.20" width="42" height="15" rx="2" />
+      <text id="tpVal" class="tagtxt" x="57" y="183.70" text-anchor="end" dominant-baseline="middle">24.3</text>
+    </g>
+
+    <!-- draggable TP point + hit targets (fat invisible curve-hit + point circle) -->
+    <path id="hitCurve" class="hit-curve" d="M70.0,235.0 L75.38,234.81 L80.77,234.26 L86.15,233.35 L91.53,232.11 L96.92,230.55 L102.3,228.68 L107.68,226.53 L113.07,224.09 L118.45,221.4 L123.83,218.46 L129.22,215.29 L134.6,211.91 L139.98,208.32 L145.37,204.55 L150.75,200.62 L156.13,196.52 L161.52,192.29 L166.9,187.93 L172.28,183.46 L177.67,178.9 L183.05,174.26 L188.43,169.55 L193.82,164.8 L199.2,160.01 L204.58,155.2 L209.97,150.39 L215.35,145.59 L220.73,140.81 L226.12,136.08 L231.5,131.4 L236.88,126.8 L242.27,122.27 L247.65,117.86 L253.03,113.56 L258.42,109.39 L263.8,105.36 L269.18,101.51 L274.57,97.82 L279.95,94.33 L285.33,91.05 L290.72,87.98 L296.1,85.16 L301.48,82.59 L306.87,80.28 L312.25,78.26 L317.63,76.54 L323.02,75.13 L328.4,74.04 L333.78,73.3 L339.17,72.92 L344.55,72.91 L349.93,73.29 L355.32,74.07 L360.7,75.27 L366.08,76.9 L371.47,78.99 L376.85,81.53 L382.23,84.56 L387.62,88.08 L393.0,92.1" />
+    <circle id="hit" class="hit" cx="172" cy="183.70" r="22" />
+    <circle id="ptTP" class="ptTP" cx="172" cy="183.70" r="7" />
+    <!-- focusable proxy for keyboard control -->
+    <circle id="ptFocus" class="pt-focus hit" cx="172" cy="183.70" r="22"
+            tabindex="0" role="slider"
+            aria-label="Number of workers hired, sweeping total, marginal, and average product together"
+            aria-valuemin="0" aria-valuemax="9.5" aria-valuenow="3"
+            aria-valuetext="3 workers: total product 24.3, marginal product 13.5, average product 8.1. Stage I — each new worker adds more than the one before; a profit-seeker never stops here." />
+
+    <!-- ============================ BOTTOM PLOT: Marginal & Average Product ============================ -->
+    <!-- vertical axis (Product per worker, spans negative-to-positive; arrow only at the positive/top end) -->
+    <line class="axis" x1="70" y1="520" x2="70" y2="282" marker-end="url(#arrow)" />
+    <!-- horizontal "zero" line doubles as this plot's Variable Input axis -->
+    <line class="axis" x1="70" y1="415" x2="415" y2="415" marker-end="url(#arrow)" />
+    <text id="zeroTick" class="tick" x="66" y="419" text-anchor="end">0</text>
+
+    <!-- Stage-boundary dashed verticals at L=6 and L=8, aligned with the top
+         plot (shortened before the tick-label row so no text sits over them) -->
+    <line class="guide" x1="274" y1="282" x2="274" y2="500" />
+    <line class="guide" x1="342" y1="282" x2="342" y2="500" />
+
+    <!-- AP(L) = -0.3L^2 + 3.6L, L in [0,9.5] (drawn first so MP sits on top at the crossing) -->
+    <path class="curveAP" d="M70.0,415.0 L75.38,410.78 L80.77,406.67 L86.15,402.68 L91.53,398.8 L96.92,395.03 L102.3,391.38 L107.68,387.84 L113.07,384.41 L118.45,381.09 L123.83,377.89 L129.22,374.8 L134.6,371.82 L139.98,368.96 L145.37,366.21 L150.75,363.57 L156.13,361.04 L161.52,358.63 L166.9,356.33 L172.28,354.14 L177.67,352.06 L183.05,350.1 L188.43,348.25 L193.82,346.51 L199.2,344.89 L204.58,343.38 L209.97,341.98 L215.35,340.7 L220.73,339.52 L226.12,338.46 L231.5,337.52 L236.88,336.68 L242.27,335.96 L247.65,335.35 L253.03,334.86 L258.42,334.47 L263.8,334.2 L269.18,334.05 L274.57,334.0 L279.95,334.07 L285.33,334.25 L290.72,334.54 L296.1,334.95 L301.48,335.47 L306.87,336.1 L312.25,336.85 L317.63,337.71 L323.02,338.68 L328.4,339.76 L333.78,340.96 L339.17,342.27 L344.55,343.69 L349.93,345.22 L355.32,346.87 L360.7,348.63 L366.08,350.5 L371.47,352.49 L376.85,354.59 L382.23,356.8 L387.62,359.13 L393.0,361.56" />
+
+    <!-- MP(L) = -0.9L^2 + 7.2L, L in [0,9.5] (crosses zero exactly at L=8) -->
+    <path class="curveMP" d="M70.0,415.0 L75.38,406.62 L80.77,398.58 L86.15,390.87 L91.53,383.51 L96.92,376.48 L102.3,369.79 L107.68,363.44 L113.07,357.43 L118.45,351.76 L123.83,346.42 L129.22,341.42 L134.6,336.77 L139.98,332.45 L145.37,328.47 L150.75,324.82 L156.13,321.52 L161.52,318.55 L166.9,315.93 L172.28,313.64 L177.67,311.69 L183.05,310.08 L188.43,308.8 L193.82,307.87 L199.2,307.27 L204.58,307.01 L209.97,307.09 L215.35,307.51 L220.73,308.27 L226.12,309.36 L231.5,310.8 L236.88,312.57 L242.27,314.68 L247.65,317.13 L253.03,319.92 L258.42,323.04 L263.8,326.51 L269.18,330.31 L274.57,334.45 L279.95,338.93 L285.33,343.75 L290.72,348.91 L296.1,354.4 L301.48,360.23 L306.87,366.41 L312.25,372.92 L317.63,379.77 L323.02,386.96 L328.4,394.48 L333.78,402.34 L339.17,410.55 L344.55,419.09 L349.93,427.97 L355.32,437.19 L360.7,446.74 L366.08,456.63 L371.47,466.87 L376.85,477.44 L382.23,488.35 L387.62,499.6 L393.0,511.19" />
+
+    <!-- reference dot at the MP = AP crossing (L=6, value 10.8) -->
+    <circle class="peakring" cx="274" cy="334" r="5" />
+    <text class="note" x="280" y="316" text-anchor="start">MP = AP</text>
+
+    <!-- "MP = 0" annotation with a short leader to where MP meets the axis (L=8) -->
+    <text class="note" x="280" y="400" text-anchor="start">MP = 0</text>
+    <line class="leader" x1="332" y1="404" x2="341" y2="414" />
+
+    <!-- x-axis tick labels at the Stage boundaries -->
+    <text class="tick" x="274" y="513" text-anchor="middle">L<tspan dy="3" font-size="7.5">AP</tspan></text>
+    <text class="tick" x="342" y="513" text-anchor="middle">L*</text>
+
+    <!-- curve name labels, off the lines -->
+    <text class="curvelbl mp" x="360" y="472" text-anchor="start">Marginal Product</text>
+    <text class="curvelbl"    x="338" y="330" text-anchor="start">Average Product</text>
+
+    <!-- axis titles -->
+    <text class="axtitle" x="242" y="535" text-anchor="middle">Variable Input (Workers)</text>
+    <text class="axtitle" x="16" y="400" text-anchor="middle" transform="rotate(-90 16 400)">Product</text>
+
+    <!-- shared vertical sweep line: drops the current Labor value through BOTH
+         plots (initial L=3 -> x=172) -->
+    <line id="sweepLine" class="drop" x1="172" y1="20" x2="172" y2="520" />
+
+    <!-- live horizontal droplines from the MP and AP dots to the y-axis -->
+    <line id="dropMPh" class="drop" x1="70" y1="313.75" x2="172" y2="313.75" />
+    <line id="dropAPh" class="drop" x1="70" y1="354.25" x2="172" y2="354.25" />
+
+    <!-- live MP / AP tags riding their dropline feet -->
+    <g id="mpTag">
+      <rect id="mpTagBg" class="tagbg" x="16" y="306.25" width="42" height="15" rx="2" />
+      <text id="mpVal" class="tagtxt" x="57" y="313.75" text-anchor="end" dominant-baseline="middle">13.5</text>
+    </g>
+    <g id="apTag">
+      <rect id="apTagBg" class="tagbg" x="16" y="346.75" width="42" height="15" rx="2" />
+      <text id="apVal" class="tagtxt ap" x="57" y="354.25" text-anchor="end" dominant-baseline="middle">8.1</text>
+    </g>
+
+    <!-- synced (non-interactive) dots on MP and AP at the current Labor value -->
+    <circle id="ptMP" class="ptMP" cx="172" cy="313.75" r="5.5" />
+    <circle id="ptAP" class="ptAP" cx="172" cy="354.25" r="5.5" />
+
+    <!-- live Labor readout, under the zero/Variable-Input axis -->
+    <g id="lTag">
+      <rect id="lTagBg" class="tagbg" x="150" y="432.5" width="44" height="15" rx="2" />
+      <text id="lVal" class="tagtxt" x="172" y="440" text-anchor="middle" dominant-baseline="middle">L = 3</text>
+    </g>
+
+    <!-- readout band: hairline separator, muted STATE line, accent TAKEAWAY line -->
+    <line class="sep" x1="44" y1="560" x2="416" y2="560" />
+    <text id="rHint"  class="r-hint"  x="230" y="582" text-anchor="middle">3 workers: total product 24.3, marginal product 13.5, average product 8.1.</text>
+    <text id="rTrade" class="r-trade" text-anchor="middle"><tspan x="230" y="602">Stage I — each new worker adds more than the one before; a</tspan><tspan x="230" y="620">profit-seeker never stops here.</tspan></text>
+  </svg>
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame is a still image: total product on top, marginal and average product below, both plotted against the number of workers. You can also <a href="t10a-product-curves.svg">open the static figure</a>.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var svg        = document.getElementById('fig');
+  var ptTP       = document.getElementById('ptTP');
+  var hit        = document.getElementById('hit');
+  var ptFocus    = document.getElementById('ptFocus');
+  var hitCurve   = document.getElementById('hitCurve');
+  var ptMP       = document.getElementById('ptMP');
+  var ptAP       = document.getElementById('ptAP');
+  var sweepLine  = document.getElementById('sweepLine');
+  var dropTPh    = document.getElementById('dropTPh');
+  var dropMPh    = document.getElementById('dropMPh');
+  var dropAPh    = document.getElementById('dropAPh');
+  var tpVal      = document.getElementById('tpVal');
+  var tpTagBg    = document.getElementById('tpTagBg');
+  var mpVal      = document.getElementById('mpVal');
+  var mpTagBg    = document.getElementById('mpTagBg');
+  var apVal      = document.getElementById('apVal');
+  var apTagBg    = document.getElementById('apTagBg');
+  var lVal       = document.getElementById('lVal');
+  var lTagBg     = document.getElementById('lTagBg');
+  var rHint      = document.getElementById('rHint');
+  var rTrade     = document.getElementById('rTrade');
+  var zeroTick   = document.getElementById('zeroTick');
+  var NS = 'http://www.w3.org/2000/svg';
+
+  // The static "0" origin tick is a no-JS-fallback label only -- once the
+  // script is running, the live MP tag shows "0.0" at the origin row
+  // whenever the dragged point actually lands there (e.g. L=8), and leaving
+  // the static tick visible would then sit on top of that live tag.
+  if (zeroTick) { zeroTick.style.display = 'none'; }
+
+  // pixel frame + scale (mirrors the static SVG markup above)
+  var X0 = 70, DX = 34;                        // shared Labor scale, both plots
+  var xL = function (L) { return X0 + L * DX; };
+  var toL = function (px) { return (px - X0) / DX; };
+
+  var Y0t = 235, Kt = 190 / 90;                // top plot: TP=0 baseline, px/unit
+  var yTP = function (tp) { return Y0t - tp * Kt; };
+
+  var Y0b = 415, Kb = 7.5;                     // bottom plot: value=0 line, px/unit
+  var yB = function (v) { return Y0b - v * Kb; };
+
+  // the underlying functions (one shared cubic construction, so MP's peak is
+  // TP's inflection, MP crosses zero exactly at TP's max, and MP cuts AP
+  // exactly at AP's max)
+  function TP(L) { return -0.3 * L * L * L + 3.6 * L * L; }
+  function MP(L) { return -0.9 * L * L + 7.2 * L; }
+  function AP(L) { return -0.3 * L * L + 3.6 * L; }
+
+  var LLO = 0, LHI = 9.5;
+  var TEACH = [4, 6, 8];
+  var SNAP = 0.25;
+
+  var L = 3; // initial state (matches the static markup)
+
+  // convert a client event to SVG user coords (handles responsive scaling)
+  var spt = svg.createSVGPoint();
+  function toSvg(evt) {
+    spt.x = evt.clientX; spt.y = evt.clientY;
+    return spt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+
+  function n1(v) { return v.toFixed(1); }
+  function nStr(v) {
+    return (Math.abs(v - Math.round(v)) < 0.01) ? String(Math.round(v)) : v.toFixed(1);
+  }
+
+  // Greedily word-wrap `str` into <tspan> lines inside the accent readout so
+  // it never overflows the 460-wide viewBox. Measures with getComputedTextLength.
+  function layoutTrade(str) {
+    var maxW = 388, x = 230, y0 = 602, lineH = 18;
+    while (rTrade.firstChild) rTrade.removeChild(rTrade.firstChild);
+    var probe = document.createElementNS(NS, 'tspan');
+    rTrade.appendChild(probe);
+    var words = str.split(' '), lines = [], cur = words[0] || '';
+    for (var i = 1; i < words.length; i++) {
+      probe.textContent = cur + ' ' + words[i];
+      if (probe.getComputedTextLength() > maxW) { lines.push(cur); cur = words[i]; }
+      else { cur = cur + ' ' + words[i]; }
+    }
+    lines.push(cur);
+    rTrade.removeChild(probe);
+    var startY = (lines.length === 1) ? y0 + 6 : y0;
+    for (var j = 0; j < lines.length; j++) {
+      var t = document.createElementNS(NS, 'tspan');
+      t.setAttribute('x', x);
+      t.setAttribute('y', startY + j * lineH);
+      t.textContent = lines[j];
+      rTrade.appendChild(t);
+    }
+  }
+
+  // readout grammar: two-line (muted state + accent takeaway), matching the
+  // spec's example texts exactly at L=3, L=6, and L=8, with the same voice
+  // used at L=4 (also a teaching input) and for the general Stage II/III case.
+  function readout(L, tp, mp, ap) {
+    var near = function (v) { return Math.abs(L - v) < 0.01; };
+    var word = (nStr(L) === '1') ? 'worker' : 'workers';
+    if (near(6)) {
+      return {
+        hint: '6 workers: MP = AP = 10.8; average product is at its peak.',
+        trade: 'Marginal product cuts average product from above exactly where average product peaks.'
+      };
+    }
+    if (near(8)) {
+      return {
+        hint: '8 workers: total product peaks at 76.8; marginal product = 0.',
+        trade: 'A 9th worker would shrink total output — marginal product turns negative (Stage III).'
+      };
+    }
+    if (near(4)) {
+      return {
+        hint: '4 workers: total product 38.4, marginal product 14.4 — its peak; average product 9.6.',
+        trade: 'Marginal product is at its highest point here — the inflection where total product bends from increasing to diminishing returns.'
+      };
+    }
+    var hint = nStr(L) + ' ' + word + ': total product ' + n1(tp) + ', marginal product ' +
+               n1(mp) + ', average product ' + n1(ap) + '.';
+    var trade;
+    if (L < 6) {
+      trade = 'Stage I — each new worker adds more than the one before; a profit-seeker never stops here.';
+    } else if (L < 8) {
+      trade = 'Stage II — marginal product is below average product and falling, though still positive; each additional worker adds less than the last.';
+    } else {
+      trade = 'Stage III — marginal product is negative; this worker actually shrinks total output.';
+    }
+    return { hint: hint, trade: trade };
+  }
+
+  function render() {
+    var tp = TP(L), mp = MP(L), ap = AP(L);
+    var cx  = xL(L);
+    var cyT = yTP(tp);
+    var cyM = yB(mp);
+    var cyA = yB(ap);
+
+    // --- top plot: TP point + dropline + tag ---
+    ptTP.setAttribute('cx', cx);      ptTP.setAttribute('cy', cyT);
+    hit.setAttribute('cx', cx);       hit.setAttribute('cy', cyT);
+    ptFocus.setAttribute('cx', cx);   ptFocus.setAttribute('cy', cyT);
+    dropTPh.setAttribute('y1', cyT); dropTPh.setAttribute('y2', cyT);
+    dropTPh.setAttribute('x1', X0);  dropTPh.setAttribute('x2', cx);
+    tpVal.setAttribute('y', cyT); tpVal.textContent = n1(tp);
+    tpTagBg.setAttribute('y', cyT - 7.5);
+
+    // --- bottom plot: MP + AP synced dots + droplines + tags (nudge the tag
+    // rows apart, not the dots, when the two values sit close together --
+    // e.g. right at the L=6 crossing where MP=AP) ---
+    ptMP.setAttribute('cx', cx); ptMP.setAttribute('cy', cyM);
+    ptAP.setAttribute('cx', cx); ptAP.setAttribute('cy', cyA);
+    dropMPh.setAttribute('y1', cyM); dropMPh.setAttribute('y2', cyM);
+    dropMPh.setAttribute('x1', X0);  dropMPh.setAttribute('x2', cx);
+    dropAPh.setAttribute('y1', cyA); dropAPh.setAttribute('y2', cyA);
+    dropAPh.setAttribute('x1', X0);  dropAPh.setAttribute('x2', cx);
+
+    var tagM = cyM, tagA = cyA;
+    if (Math.abs(cyM - cyA) < 16) {
+      var mid = (cyM + cyA) / 2;
+      tagM = mid - 8; tagA = mid + 8;
+    }
+    mpVal.setAttribute('y', tagM); mpVal.textContent = n1(mp);
+    mpTagBg.setAttribute('y', tagM - 7.5);
+    apVal.setAttribute('y', tagA); apVal.textContent = n1(ap);
+    apTagBg.setAttribute('y', tagA - 7.5);
+
+    // --- shared vertical sweep line through both plots ---
+    sweepLine.setAttribute('x1', cx); sweepLine.setAttribute('x2', cx);
+    var atTeach = TEACH.indexOf(L) !== -1;
+    sweepLine.classList.toggle('snap', atTeach);
+
+    // --- Labor readout under the shared axis ---
+    lVal.setAttribute('x', cx); lVal.textContent = 'L = ' + nStr(L);
+    lTagBg.setAttribute('x', cx - 22);
+
+    // --- readout grammar (muted state line + accent takeaway line) ---
+    var r = readout(L, tp, mp, ap);
+    rHint.textContent = r.hint;
+    layoutTrade(r.trade);
+
+    ptFocus.setAttribute('aria-valuenow', String(L));
+    ptFocus.setAttribute('aria-valuetext', r.hint + ' ' + r.trade);
+  }
+
+  // single state setter (clamp + snap + no-op guard + render) shared by drag,
+  // keyboard, and the debug hook, so state logic lives in one place
+  function setL(newL) {
+    var v = newL;
+    if (v < LLO) v = LLO;
+    if (v > LHI) v = LHI;
+    for (var i = 0; i < TEACH.length; i++) {
+      if (Math.abs(v - TEACH[i]) < SNAP) { v = TEACH[i]; break; }
+    }
+    v = Math.round(v * 10) / 10;
+    if (v === L) return;
+    L = v;
+    render();
+  }
+
+  function setFromPointer(evt) {
+    var pnt = toSvg(evt);
+    setL(toL(pnt.x));
+  }
+
+  // --- drag (pointer events + pointer capture so a fast drag can't get stuck) ---
+  var dragging = false;
+  var capturedEl = null, capturedId = null;
+  function onMove(evt) { if (dragging) { evt.preventDefault(); setFromPointer(evt); } }
+  function onUp() {
+    dragging = false;
+    svg.classList.remove('grabbing');
+    if (capturedEl && capturedId !== null) {
+      try { capturedEl.releasePointerCapture(capturedId); } catch (e) {}
+    }
+    capturedEl = null; capturedId = null;
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+  }
+  function onDown(evt) {
+    evt.preventDefault();
+    dragging = true;
+    svg.classList.add('grabbing');
+    capturedEl = evt.currentTarget; capturedId = evt.pointerId;
+    try { capturedEl.setPointerCapture(capturedId); } catch (e) {}
+    setFromPointer(evt);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }
+  hit.addEventListener('pointerdown', onDown);
+  hitCurve.addEventListener('pointerdown', onDown);
+  ptFocus.addEventListener('pointerdown', onDown);  // the point itself is draggable
+
+  // --- keyboard (arrows step Labor by 0.5, snapping near the teaching inputs) ---
+  ptFocus.addEventListener('keydown', function (evt) {
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') { setL(L + 0.5); }
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') { setL(L - 0.5); }
+    else return;
+    evt.preventDefault();
+  });
+
+  // Debug hook: lets a reviewer screenshot non-initial states via scripting.
+  window.__fig = {
+    set: function (v) { setL(+v); },
+    get: function () { return { L: L, TP: TP(L), MP: MP(L), AP: AP(L) }; }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

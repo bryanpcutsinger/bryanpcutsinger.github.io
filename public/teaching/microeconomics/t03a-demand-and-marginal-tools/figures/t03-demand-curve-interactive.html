@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive demand curve: price, quantity, and marginal personal worth</title>
+<!--
+  Interactive demand curve for the T3a blog post (website-styled, warm palette).
+  Recreates UE Fig 5.1 "Demand for X" (p.64). Self-contained: no libraries, no
+  network. The static FAU figure (figures/t03-demand-curve.{tex,svg}) is the
+  SLIDE version and is untouched; it is also the <noscript> fallback.
+
+  FAMILY F1 (trace-the-curve) + F5 (schedule-bar link). Geometry class:
+  single-panel, viewBox 440x540, aspect-ratio 4/5, max-width 480px.
+
+  GEOMETRY / coordinate frame:
+    Origin (Q=0, P=$0.00) at pixel (64, 360).
+    x scale: Q -> px x = 64 + Q*28  (Q=12 -> 400; axis line runs to 420).
+    y scale: P -> px y = 360 - P*(296/1.20) = 360 - P*246.667
+             (P=$1.20 -> 64; axis line runs up to 48).
+    The demand line is straight from (Q=0, P=$1.10)=(64, 88.67) to
+    (Q=11, P=$0.00)=(372, 360): P = 1.10 - 0.10*Q.
+    Ten schedule bars: bar k (k=1..10) spans x in [xq(k-1), xq(k)], its top at
+    py(1.10 - 0.10k), so the demand line touches each bar's top-right corner.
+    The draggable point snaps to integer quantities Q in [1,10] and therefore
+    always sits exactly on the demand line at a bar's top-right corner (the
+    "height = marginal personal worth of that unit" reading). Dragging or
+    arrowing steps it bar-to-bar; the nearest bar highlights (F5).
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;   /* warm bone background        */
+    --ink:     #1a1c1e;    /* demand line + headings      */
+    --text:    #16181a;    /* body text                   */
+    --muted:   #5c6066;    /* axes / captions / labels    */
+    --hairline:#e3ddd3;    /* bar strokes / droplines     */
+    --accent:  #b07a2c;    /* brass — the draggable point */
+    --accent-tint: #efe4d2;/* schedule bars               */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* min-width:0 defeats the flexbox min-width:auto default so the figure
+     scales DOWN to viewports narrower than the SVG's intrinsic width instead
+     of clipping (the right side would otherwise be cut off on phones). */
+  .fig { width: 100%; max-width: 480px; min-width: 0; }
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+
+  /* structural strokes */
+  .axis   { stroke: var(--muted); stroke-width: 1.4; }
+  .tickmark { stroke: var(--muted); stroke-width: 1; }
+  .curve  { stroke: var(--ink); stroke-width: 2.6; fill: none;
+            stroke-linecap: round; }
+  .drop   { stroke: var(--hairline); stroke-width: 1.6;
+            stroke-dasharray: 5 4; }
+
+  /* schedule bars (F5 evidence) */
+  .bar        { fill: var(--accent-tint); fill-opacity: 1;
+                stroke: var(--hairline); stroke-width: 1; cursor: pointer; }
+  .bar.bar-active { fill: var(--accent); fill-opacity: 0.28;
+                stroke: var(--accent); stroke-width: 1.8; }
+  .bar:hover:not(.bar-active) { fill-opacity: 0.55; }
+
+  /* draggable point + generous transparent hit targets */
+  .pt        { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5; }
+  .hit       { fill: transparent; stroke: transparent; touch-action: none;
+               cursor: grab; }
+  .hit-curve { fill: none; stroke: transparent; stroke-width: 26;
+               touch-action: none; cursor: grab; }
+  .pt-focus:focus-visible { outline: none; }
+  .pt-focus:focus-visible + .pt,
+  .grabbing .pt { stroke: var(--accent); stroke-width: 3.5; }
+
+  /* text */
+  .axtitle  { fill: var(--muted); font-size: 13px; font-weight: 600; }
+  .tick     { fill: var(--muted); font-size: 9.5px; }
+  .curvelbl { fill: var(--ink);   font-size: 12.5px; font-style: italic; }
+  /* live readout tags (accent, with a surface backing so they cover the
+     static tick they replace) */
+  .tagbg    { fill: var(--surface); }
+  .tagtxt   { fill: var(--accent); font-size: 12px; font-weight: 700; }
+  .sep      { stroke: var(--hairline); stroke-width: 1; }
+  .r-hint   { fill: var(--muted);  font-size: 12.5px; }
+  .r-trade  { fill: var(--accent); font-size: 13px; font-weight: 600; }
+  .fallback {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.35;
+    text-align: center;
+  }
+  .fallback a { color: var(--ink); }
+</style>
+</head>
+<body>
+<!-- Everything from here to </div> is REAL base SVG: a no-JS reader sees the
+     full figure (axes, ten schedule bars, the demand line, the "Demand for X"
+     label, an initial point at Q=6 with droplines, live tags, and the readout).
+     The script only ATTACHES drag / keyboard / live updates. -->
+<div class="fig">
+  <svg id="fig" viewBox="0 0 440 540" role="group"
+       aria-label="Demand curve for good X. Price is on the vertical axis and quantity on the horizontal axis; the ten-unit demand schedule is drawn as bars, with a straight demand line over them. Drag the point along the demand line to read, at each quantity, the price the buyer will pay — the marginal personal worth of that unit.">
+    <defs>
+      <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+    </defs>
+
+    <!-- axes (drawn first); extended past the data max so the arrowheads do not
+         crowd the bars/line -->
+    <line class="axis" x1="64" y1="360" x2="420" y2="360" marker-end="url(#arrow)" />
+    <line class="axis" x1="64" y1="360" x2="64"  y2="48"  marker-end="url(#arrow)" />
+
+    <!-- ten schedule bars, height = price at that quantity (1.10 - 0.10*k).
+         bar6 carries the initial active state -->
+    <rect id="bar1"  class="bar"            x="64"  y="113.33" width="28" height="246.67" />
+    <rect id="bar2"  class="bar"            x="92"  y="138.00" width="28" height="222.00" />
+    <rect id="bar3"  class="bar"            x="120" y="162.67" width="28" height="197.33" />
+    <rect id="bar4"  class="bar"            x="148" y="187.33" width="28" height="172.67" />
+    <rect id="bar5"  class="bar"            x="176" y="212.00" width="28" height="148.00" />
+    <rect id="bar6"  class="bar bar-active" x="204" y="236.67" width="28" height="123.33" />
+    <rect id="bar7"  class="bar"            x="232" y="261.33" width="28" height="98.67" />
+    <rect id="bar8"  class="bar"            x="260" y="286.00" width="28" height="74.00" />
+    <rect id="bar9"  class="bar"            x="288" y="310.67" width="28" height="49.33" />
+    <rect id="bar10" class="bar"            x="316" y="335.33" width="28" height="24.67" />
+
+    <!-- the straight demand line, over the bars, touching each bar's top-right
+         corner: (Q=0,P=1.10)=(64,88.67) to (Q=11,P=0)=(372,360) -->
+    <path class="curve" d="M64,88.67 L372,360" />
+    <text class="curvelbl" x="298" y="222" text-anchor="start">Demand for X</text>
+
+    <!-- axis titles -->
+    <text class="axtitle" x="232" y="398" text-anchor="middle">Amount of X Demanded per Period</text>
+    <text class="axtitle" x="12" y="212" text-anchor="middle"
+          transform="rotate(-90 12 212)">Price per Amount of X Demanded</text>
+
+    <!-- y-axis tick marks + labels (every $0.10) -->
+    <g>
+      <line class="tickmark" x1="60" y1="64.00"  x2="64" y2="64.00" />
+      <line class="tickmark" x1="60" y1="88.67"  x2="64" y2="88.67" />
+      <line class="tickmark" x1="60" y1="113.33" x2="64" y2="113.33" />
+      <line class="tickmark" x1="60" y1="138.00" x2="64" y2="138.00" />
+      <line class="tickmark" x1="60" y1="162.67" x2="64" y2="162.67" />
+      <line class="tickmark" x1="60" y1="187.33" x2="64" y2="187.33" />
+      <line class="tickmark" x1="60" y1="212.00" x2="64" y2="212.00" />
+      <line class="tickmark" x1="60" y1="236.67" x2="64" y2="236.67" />
+      <line class="tickmark" x1="60" y1="261.33" x2="64" y2="261.33" />
+      <line class="tickmark" x1="60" y1="286.00" x2="64" y2="286.00" />
+      <line class="tickmark" x1="60" y1="310.67" x2="64" y2="310.67" />
+      <line class="tickmark" x1="60" y1="335.33" x2="64" y2="335.33" />
+      <text class="tick" x="57" y="67.5"  text-anchor="end">$1.20</text>
+      <text class="tick" x="57" y="92.2"  text-anchor="end">$1.10</text>
+      <text class="tick" x="57" y="116.8" text-anchor="end">$1.00</text>
+      <text class="tick" x="57" y="141.5" text-anchor="end">$0.90</text>
+      <text class="tick" x="57" y="166.2" text-anchor="end">$0.80</text>
+      <text class="tick" x="57" y="190.8" text-anchor="end">$0.70</text>
+      <text class="tick" x="57" y="215.5" text-anchor="end">$0.60</text>
+      <text class="tick" x="57" y="240.2" text-anchor="end">$0.50</text>
+      <text class="tick" x="57" y="264.8" text-anchor="end">$0.40</text>
+      <text class="tick" x="57" y="289.5" text-anchor="end">$0.30</text>
+      <text class="tick" x="57" y="314.2" text-anchor="end">$0.20</text>
+      <text class="tick" x="57" y="338.8" text-anchor="end">$0.10</text>
+      <text class="tick" x="57" y="363.5" text-anchor="end">$0.00</text>
+    </g>
+
+    <!-- x-axis tick marks + labels (Q = 1..12) -->
+    <g>
+      <line class="tickmark" x1="92"  y1="360" x2="92"  y2="364" />
+      <line class="tickmark" x1="120" y1="360" x2="120" y2="364" />
+      <line class="tickmark" x1="148" y1="360" x2="148" y2="364" />
+      <line class="tickmark" x1="176" y1="360" x2="176" y2="364" />
+      <line class="tickmark" x1="204" y1="360" x2="204" y2="364" />
+      <line class="tickmark" x1="232" y1="360" x2="232" y2="364" />
+      <line class="tickmark" x1="260" y1="360" x2="260" y2="364" />
+      <line class="tickmark" x1="288" y1="360" x2="288" y2="364" />
+      <line class="tickmark" x1="316" y1="360" x2="316" y2="364" />
+      <line class="tickmark" x1="344" y1="360" x2="344" y2="364" />
+      <line class="tickmark" x1="372" y1="360" x2="372" y2="364" />
+      <line class="tickmark" x1="400" y1="360" x2="400" y2="364" />
+      <text class="tick" x="92"  y="378" text-anchor="middle">1</text>
+      <text class="tick" x="120" y="378" text-anchor="middle">2</text>
+      <text class="tick" x="148" y="378" text-anchor="middle">3</text>
+      <text class="tick" x="176" y="378" text-anchor="middle">4</text>
+      <text class="tick" x="204" y="378" text-anchor="middle">5</text>
+      <text class="tick" x="232" y="378" text-anchor="middle">6</text>
+      <text class="tick" x="260" y="378" text-anchor="middle">7</text>
+      <text class="tick" x="288" y="378" text-anchor="middle">8</text>
+      <text class="tick" x="316" y="378" text-anchor="middle">9</text>
+      <text class="tick" x="344" y="378" text-anchor="middle">10</text>
+      <text class="tick" x="372" y="378" text-anchor="middle">11</text>
+      <text class="tick" x="400" y="378" text-anchor="middle">12</text>
+    </g>
+
+    <!-- droplines from the point to both axes (initial: Q=6, P=$0.50) -->
+    <line id="dropV" class="drop" x1="232" y1="360" x2="232" y2="236.67" />
+    <line id="dropH" class="drop" x1="64"  y1="236.67" x2="232" y2="236.67" />
+
+    <!-- live axis readouts riding the dropline feet (accent tags with a surface
+         backing so they cleanly cover the static tick they replace) -->
+    <g id="qyTag">
+      <rect id="qyBg" class="tagbg" x="20" y="229.17" width="40" height="15" rx="2" />
+      <text id="qy" class="tagtxt" x="40" y="236.67" text-anchor="middle"
+            dominant-baseline="middle">$0.50</text>
+    </g>
+    <g id="qxTag">
+      <rect id="qxBg" class="tagbg" x="221" y="370.5" width="22" height="15" rx="2" />
+      <text id="qx" class="tagtxt" x="232" y="378" text-anchor="middle"
+            dominant-baseline="middle">6</text>
+    </g>
+
+    <!-- the draggable point + hit targets (fat invisible line + point circle) -->
+    <path id="hitCurve" class="hit-curve" d="M64,88.67 L372,360" />
+    <circle id="hit" class="hit" cx="232" cy="236.67" r="22" />
+    <circle id="pt"  class="pt"  cx="232" cy="236.67" r="7" />
+    <!-- focusable proxy for keyboard control -->
+    <circle id="ptFocus" class="pt-focus hit" cx="232" cy="236.67" r="22"
+            tabindex="0" role="slider" aria-label="Point on the demand curve (quantity demanded)"
+            aria-valuemin="1" aria-valuemax="10" aria-valuenow="6"
+            aria-valuetext="6 quarts at $0.50. The height of the curve at 6 units is the marginal personal worth of the 6th unit." />
+
+    <!-- readout band: hairline separator, muted STATE line, accent TAKEAWAY line
+         (the takeaway wraps to two lines; the static markup is pre-wrapped so a
+         no-JS reader sees it cleanly, and the script re-wraps it on each change) -->
+    <line class="sep" x1="44" y1="430" x2="396" y2="430" />
+    <text id="rHint"  class="r-hint"  x="220" y="454" text-anchor="middle">At a price of $0.50, the buyer demands 6 quarts.</text>
+    <text id="rTrade" class="r-trade" text-anchor="middle"><tspan x="220" y="476">The height of the curve at 6 units is the marginal</tspan><tspan x="220" y="494">personal worth of the 6th unit — $0.50.</tspan></text>
+  </svg>
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame is a still image: the demand schedule drawn as ten bars with a straight demand line over them, and a point marking one price-quantity pair. You can also <a href="t03-demand-curve.svg">open the static figure</a>.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var svg      = document.getElementById('fig');
+  var pt       = document.getElementById('pt');
+  var hit      = document.getElementById('hit');
+  var ptFocus  = document.getElementById('ptFocus');
+  var hitCurve = document.getElementById('hitCurve');
+  var dropV    = document.getElementById('dropV');
+  var dropH    = document.getElementById('dropH');
+  var qx       = document.getElementById('qx');
+  var qy       = document.getElementById('qy');
+  var qxBg     = document.getElementById('qxBg');
+  var qyBg     = document.getElementById('qyBg');
+  var rHint    = document.getElementById('rHint');
+  var rTrade   = document.getElementById('rTrade');
+  var bars     = {};
+  for (var k = 1; k <= 10; k++) { bars[k] = document.getElementById('bar' + k); }
+  var NS = 'http://www.w3.org/2000/svg';
+
+  // pixel frame + scale (mirrors the static SVG markup above)
+  var X0 = 64, Y0 = 360;
+  var DX = 28;                 // px per unit of quantity
+  var DY = 296 / 1.20;         // px per dollar of price (= 246.667)
+  var xq = function (q) { return X0 + q * DX; };            // quantity -> px x
+  var py = function (p) { return Y0 - p * DY; };            // price    -> px y
+  var toQ = function (px) { return (px - X0) / DX; };       // px x     -> quantity
+
+  // model: integer schedule, Q in [1,10], price = 1.10 - 0.10*Q
+  var QLO = 1, QHI = 10;
+  function priceAt(q) { return 1.10 - 0.10 * q; }
+
+  var q = 6; // initial state (matches the static markup): Q=6, P=$0.50
+
+  // convert a client event to SVG user coords (handles responsive scaling)
+  var spt = svg.createSVGPoint();
+  function toSvg(evt) {
+    spt.x = evt.clientX; spt.y = evt.clientY;
+    return spt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+
+  function ord(k) {
+    var s = ['th', 'st', 'nd', 'rd'], v = k % 100;
+    return k + (s[(v - 20) % 10] || s[v] || s[0]);
+  }
+  function money(p) { return '$' + p.toFixed(2); }
+
+  // Greedily word-wrap `str` into <tspan> lines inside the accent readout so it
+  // never overflows the 440-wide viewBox. Measures with getComputedTextLength.
+  function layoutTrade(str) {
+    var maxW = 404, x = 220, y0 = 476, lineH = 18;
+    while (rTrade.firstChild) rTrade.removeChild(rTrade.firstChild);
+    var probe = document.createElementNS(NS, 'tspan');
+    rTrade.appendChild(probe);
+    var words = str.split(' '), lines = [], cur = words[0] || '';
+    for (var i = 1; i < words.length; i++) {
+      probe.textContent = cur + ' ' + words[i];
+      if (probe.getComputedTextLength() > maxW) { lines.push(cur); cur = words[i]; }
+      else { cur = cur + ' ' + words[i]; }
+    }
+    lines.push(cur);
+    rTrade.removeChild(probe);
+    // center the block vertically on the readout row when it is a single line
+    var startY = (lines.length === 1) ? y0 + 4 : y0;
+    for (var j = 0; j < lines.length; j++) {
+      var t = document.createElementNS(NS, 'tspan');
+      t.setAttribute('x', x);
+      t.setAttribute('y', startY + j * lineH);
+      t.textContent = lines[j];
+      rTrade.appendChild(t);
+    }
+  }
+
+  function render() {
+    var p = priceAt(q);
+    var cx = xq(q), cy = py(p);
+
+    pt.setAttribute('cx', cx);      pt.setAttribute('cy', cy);
+    hit.setAttribute('cx', cx);     hit.setAttribute('cy', cy);
+    ptFocus.setAttribute('cx', cx); ptFocus.setAttribute('cy', cy);
+
+    dropV.setAttribute('x1', cx); dropV.setAttribute('x2', cx);
+    dropV.setAttribute('y1', Y0); dropV.setAttribute('y2', cy);
+    dropH.setAttribute('y1', cy); dropH.setAttribute('y2', cy);
+    dropH.setAttribute('x1', X0); dropH.setAttribute('x2', cx);
+
+    // live tags ride the dropline feet
+    qy.setAttribute('y', cy); qy.textContent = money(p);
+    qyBg.setAttribute('y', cy - 7.5);
+    qx.setAttribute('x', cx); qx.textContent = String(q);
+    qxBg.setAttribute('x', cx - 11);
+
+    // F5: highlight the bar for the current unit
+    for (var i = 1; i <= 10; i++) {
+      bars[i].classList.toggle('bar-active', i === q);
+    }
+
+    // readout grammar (muted state line + accent takeaway line)
+    var pStr = money(p);
+    var quart = (q === 1) ? 'quart' : 'quarts';
+    var hint = 'At a price of ' + pStr + ', the buyer demands ' + q + ' ' + quart + '.';
+    var trade;
+    if (q === 1) {
+      trade = 'The first unit is worth the most — ' + pStr + '.';
+    } else if (q >= 9) {
+      trade = 'Each extra unit is worth less — the ' + ord(q) + ' only ' + pStr + '.';
+    } else {
+      trade = 'The height of the curve at ' + q + ' units is the marginal ' +
+              'personal worth of the ' + ord(q) + ' unit — ' + pStr + '.';
+    }
+    rHint.textContent = hint;
+    layoutTrade(trade);
+
+    ptFocus.setAttribute('aria-valuenow', String(q));
+    ptFocus.setAttribute('aria-valuetext',
+      q + ' ' + quart + ' at ' + pStr + '. ' + trade);
+  }
+
+  // single state setter (clamp + no-op guard + render) shared by drag,
+  // keyboard, bar-tap, and the debug hook, so state logic lives in one place
+  function setQ(newQ) {
+    var qq = Math.round(newQ);
+    if (isNaN(qq)) return;
+    if (qq < QLO) qq = QLO;
+    if (qq > QHI) qq = QHI;
+    if (qq === q) return;
+    q = qq;
+    render();
+  }
+
+  function setFromPointer(evt) {
+    var pnt = toSvg(evt);
+    setQ(toQ(pnt.x));   // snap to the nearest integer unit
+  }
+
+  // --- drag (pointer events + pointer capture so a fast drag can't get stuck) ---
+  var dragging = false;
+  var capturedEl = null, capturedId = null;
+  function onMove(evt) { if (dragging) { evt.preventDefault(); setFromPointer(evt); } }
+  function onUp() {
+    dragging = false;
+    svg.classList.remove('grabbing');
+    if (capturedEl && capturedId !== null) {
+      try { capturedEl.releasePointerCapture(capturedId); } catch (e) {}
+    }
+    capturedEl = null; capturedId = null;
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+  }
+  function onDown(evt) {
+    evt.preventDefault();
+    dragging = true;
+    svg.classList.add('grabbing');
+    capturedEl = evt.currentTarget; capturedId = evt.pointerId;
+    try { capturedEl.setPointerCapture(capturedId); } catch (e) {}
+    setFromPointer(evt);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }
+  hit.addEventListener('pointerdown', onDown);
+  hitCurve.addEventListener('pointerdown', onDown);
+  ptFocus.addEventListener('pointerdown', onDown);  // the dot itself is draggable
+
+  // --- keyboard (arrows step one unit along the schedule) ---
+  ptFocus.addEventListener('keydown', function (evt) {
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') { setQ(q + 1); }
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') { setQ(q - 1); }
+    else return;
+    evt.preventDefault();
+  });
+
+  // --- F5: tap/click a schedule bar to jump straight to its quantity (same
+  // setter as drag/keyboard). Bars stay out of the tab order; keyboard access
+  // is via ptFocus above.
+  function onBarActivate(k) {
+    return function (evt) { evt.preventDefault(); setQ(k); };
+  }
+  for (var b = 1; b <= 10; b++) {
+    bars[b].addEventListener('pointerdown', onBarActivate(b));
+    bars[b].addEventListener('click', onBarActivate(b));
+  }
+
+  // Debug hook: lets a reviewer screenshot non-initial states via scripting.
+  window.__fig = {
+    set: function (v) { setQ(+v); },
+    get: function () { return { q: q, p: priceAt(q) }; }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

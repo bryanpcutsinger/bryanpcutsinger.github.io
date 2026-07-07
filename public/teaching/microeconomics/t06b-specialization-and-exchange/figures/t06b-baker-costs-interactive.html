@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive figure: Baker's marginal cost vs. marginal worth of cakes</title>
+<!--
+  Interactive figure for the t06b "Specialization and Exchange" blog post.
+  Recreates UE Fig 15.1 (p.215, data UE Table 15.1) — Baker Being Self-
+  Sufficient with No Trade or Specialization. Family F6 (firm cost/output,
+  self-sufficiency variant): the reader drags a quantity handle along the
+  x-axis (snapping to whole cakes 1-8, no partial cakes) and watches two
+  tracking dots ride Baker's rising Marginal Cost and falling Marginal Worth
+  (his own demand for cakes). A fixed reference dot marks the continuous
+  MC = MW crossover at Q = 8/3 (~2.667 cakes); Baker, who can only bake whole
+  cakes, actually stops at Q = 2 (the last cake whose worth to him still
+  meets or beats its cost) — the two black dots fixed at Q = 3 mark the
+  first cake he would NOT bake for himself (cost 0.80Y > worth 0.70Y),
+  matching the source figure's own callout exactly. Self-contained: no
+  libraries, no network. The static FAU figure (figures/t06b-baker-costs.svg)
+  is the SLIDE version and is untouched.
+
+  ARCHITECTURE: the base figure is REAL SVG markup drawn at the initial
+  state (q = 3) — axes, both curves + their labels, the fixed crossover
+  marker + dropline, the fixed Q=3 dots + labels + connector, the bottom
+  caption, and the two-line readout are all present without JavaScript. The
+  script only ATTACHES behavior (drag the handle, keyboard, live tracking
+  dots/droplines/readout); it never builds DOM.
+
+  GEOMETRY (single-panel, standard §4): viewBox 440 x 540, aspect-ratio 4/5,
+  max-width 480-560px. Pixel frame: y-axis at x = 70, baseline y = 380.
+  px(q) = 70 + 30*q (q = 0..~11.7 in view; teaching zone 1..8, integer-
+  snapped — Baker cannot bake half a cake). py(v) = 380 - 140*v (v = 0 -> 380,
+  v = 2.10 -> 86). Axes drawn past the data max (x to 420, y to 45) so the
+  arrowheads clear the curves. Baker's Marginal Cost MC(q) = 0.20 + 0.20*q
+  (UE Table 15.1 col 3); Baker's Marginal Worth MW(q) = 1.00 - 0.10*q (col 6).
+  MC = MW at q = 8/3 (~2.667), value 0.7333 — the continuous crossover;
+  since Baker can only produce whole cakes, he stops at the last INTEGER
+  quantity where MW still meets/beats MC, which is Q = 2 (MW .80 >= MC .60).
+  The fixed dots at Q=3 (MC .80, MW .70) show the first cake he'd skip.
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;   /* warm bone background        */
+    --ink:     #1a1c1e;    /* MC curve / fixed reference dots */
+    --text:    #16181a;    /* body text / annotations     */
+    --muted:   #5c6066;    /* MW curve + secondary labels  */
+    --hairline:#e3ddd3;    /* axes muting / droplines     */
+    --accent:  #b07a2c;    /* brass — handle / tracking dots */
+    --accent-tint: #efe4d2;/* unused fill token (kept for palette consistency) */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .fig { width: 100%; max-width: 520px; min-width: 0; }
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+
+  /* structural strokes */
+  .axis   { stroke: var(--muted); stroke-width: 1.4; }
+  .drop   { stroke: var(--hairline); stroke-width: 1.6; stroke-dasharray: 5 4; }
+  .conn   { stroke: var(--hairline); stroke-width: 1.6; stroke-dasharray: 4 3; }
+
+  /* curves (warm palette only) */
+  .mc     { stroke: var(--ink); stroke-width: 2.6; fill: none; stroke-linecap: round; }
+  .mw     { stroke: var(--muted); stroke-width: 2.2; fill: none; stroke-linecap: round;
+            stroke-dasharray: 7 5; }
+
+  /* dots */
+  .fixeddot  { fill: var(--ink); stroke: var(--surface); stroke-width: 1; }
+  .crossdot  { fill: var(--ink); stroke: var(--surface); stroke-width: 1; }
+  .crossdot.snap { stroke: var(--accent); stroke-width: 3; }
+  .trackdot  { fill: var(--accent); stroke: var(--surface); stroke-width: 2; }
+  .leader    { stroke: var(--ink); stroke-width: 1; }
+
+  /* handle: generous transparent hit target + keyboard proxy */
+  .hit       { fill: transparent; stroke: transparent; touch-action: none; cursor: grab; }
+  .hit-line  { fill: none; stroke: transparent; stroke-width: 30;
+               touch-action: none; cursor: grab; }
+  .grip      { fill: var(--accent); stroke: var(--surface); stroke-width: 1.5; }
+
+  /* text */
+  .axlabel  { fill: var(--muted); font-size: 13px; font-weight: 600; }
+  .ylab     { fill: var(--muted); font-size: 11.5px; }
+  .xtick    { fill: var(--muted); font-size: 12px; }
+  .clab     { font-size: 13px; font-weight: 700; }
+  .annot    { fill: var(--text); font-size: 11px; font-weight: 600; }
+  .liveval  { fill: var(--accent); font-size: 12px; font-weight: 700; }
+  .caption  { fill: var(--muted); font-size: 11.5px; }
+  .sep      { stroke: var(--hairline); stroke-width: 1; }
+  .r-state  { fill: var(--muted); font-size: 12px; }
+  .r-take   { fill: var(--accent); font-size: 12.5px; font-weight: 700; }
+  .fallback {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.35;
+    text-align: center;
+  }
+  .fallback a { color: var(--ink); }
+</style>
+</head>
+<body>
+<!-- Everything from here to </div> is REAL base SVG drawn at the initial state
+     q = 3, so a no-JS reader sees the complete chart. -->
+<div class="fig">
+  <svg id="fig" viewBox="0 0 440 540" role="group"
+       aria-label="Baker's rising marginal cost of baking cakes versus his falling marginal worth of cakes (his own demand). The two lines cross near 2.7 cakes a day. Because Baker can only bake whole cakes, being self-sufficient he actually stops after 2 cakes -- the last whole cake whose worth to him still meets or beats its cost. Two dots fixed at 3 cakes show the first cake he would skip: cost 0.80Y exceeds worth 0.70Y. Drag the handle along the x-axis, or use the arrow keys, to see the marginal cost and marginal worth at each whole cake from 1 to 8.">
+    <title>Baker's marginal cost vs. marginal worth: where a self-sufficient baker stops</title>
+    <defs>
+      <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+    </defs>
+
+    <!-- axes; extend past the data so the curves don't crowd the arrowheads -->
+    <line class="axis" x1="70" y1="380" x2="420" y2="380" marker-end="url(#arrow)" />
+    <line class="axis" x1="70" y1="380" x2="70"  y2="45"  marker-end="url(#arrow)" />
+
+    <!-- y-axis numeric scale (restored per fidelity audit): 0, 0.20 .. 2.00 -->
+    <text class="ylab" x="62" y="384" text-anchor="end">0</text>
+    <text class="ylab ytick" id="ytick1" x="62" y="356" text-anchor="end">0.20</text>
+    <text class="ylab ytick" id="ytick2" x="62" y="328" text-anchor="end">0.40</text>
+    <text class="ylab ytick" id="ytick3" x="62" y="300" text-anchor="end">0.60</text>
+    <text class="ylab ytick" id="ytick4" x="62" y="272" text-anchor="end" style="display:none">0.80</text>
+    <text class="ylab ytick" id="ytick5" x="62" y="244" text-anchor="end">1.00</text>
+    <text class="ylab ytick" id="ytick6" x="62" y="216" text-anchor="end">1.20</text>
+    <text class="ylab ytick" id="ytick7" x="62" y="188" text-anchor="end">1.40</text>
+    <text class="ylab ytick" id="ytick8" x="62" y="160" text-anchor="end">1.60</text>
+    <text class="ylab ytick" id="ytick9" x="62" y="132" text-anchor="end">1.80</text>
+    <text class="ylab ytick" id="ytick10" x="62" y="104" text-anchor="end">2.00</text>
+
+    <!-- x-axis integer ticks, 1-10 (the current q is bolded/accented by script) -->
+    <text class="xtick" id="xtick1" x="100" y="396" text-anchor="middle">1</text>
+    <text class="xtick" id="xtick2" x="130" y="396" text-anchor="middle">2</text>
+    <text class="xtick" id="xtick3" x="160" y="396" text-anchor="middle">3</text>
+    <text class="xtick" id="xtick4" x="190" y="396" text-anchor="middle">4</text>
+    <text class="xtick" id="xtick5" x="220" y="396" text-anchor="middle">5</text>
+    <text class="xtick" id="xtick6" x="250" y="396" text-anchor="middle">6</text>
+    <text class="xtick" id="xtick7" x="280" y="396" text-anchor="middle">7</text>
+    <text class="xtick" id="xtick8" x="310" y="396" text-anchor="middle">8</text>
+    <text class="xtick" id="xtick9" x="340" y="396" text-anchor="middle">9</text>
+    <text class="xtick" id="xtick10" x="370" y="396" text-anchor="middle">10</text>
+
+    <!-- axis titles -->
+    <text class="axlabel" x="245" y="412" text-anchor="middle">Cakes per Day</text>
+    <text class="axlabel" x="20" y="212" text-anchor="middle"
+          transform="rotate(-90 20 212)">Marginal Worth / Cost (units of Y forgone)</text>
+
+    <!-- Baker's Marginal Cost (rising, ink solid): MC(q) = 0.20 + 0.20q, q = 0.5..8 -->
+    <path class="mc" d="M85,338 L310,128" />
+    <text class="clab" x="259" y="142" text-anchor="end" fill="#1a1c1e">Baker's Marginal Cost</text>
+
+    <!-- Baker's Marginal Worth / Demand for Cakes (falling, muted dashed):
+         MW(q) = 1.00 - 0.10q, q = 0.5..8 -->
+    <path class="mw" d="M85,247 L310,352" />
+    <text class="clab" x="300" y="322" text-anchor="start" fill="#5c6066">Baker's Demand</text>
+    <text class="clab" x="300" y="337" text-anchor="start" fill="#5c6066">for Cakes</text>
+
+    <!-- fixed crossover marker: continuous MC=MW at q=8/3~2.667, value 0.7333 -->
+    <line class="drop" x1="150" y1="277.3" x2="150" y2="380" />
+    <circle id="crossDot" class="crossdot" cx="150" cy="277.3" r="3.6" />
+
+    <!-- fixed Q=3 dots (first cake Baker would NOT make for himself) + connector -->
+    <line class="conn" x1="160" y1="380" x2="160" y2="260" />
+    <circle class="fixeddot" cx="160" cy="268" r="3.2" />
+    <circle class="fixeddot" cx="160" cy="282" r="3.2" />
+    <line class="leader" x1="172" y1="266" x2="163" y2="268" />
+    <text class="annot" x="175" y="262" text-anchor="start">Marginal Cost = 0.80Y</text>
+    <line class="leader" x1="172" y1="292" x2="163" y2="282" />
+    <text class="annot" x="175" y="296" text-anchor="start">Marginal Worth = 0.70Y</text>
+
+    <!-- bottom caption (fixed; the teaching point independent of the drag state) -->
+    <text class="caption" x="245" y="428" text-anchor="middle">Self-sufficient Baker stops at 2 cakes per day.</text>
+
+    <!-- ===== dynamic tracking elements (script moves these with q) ===== -->
+    <line id="trackDrop" class="drop" x1="160" y1="380" x2="160" y2="260" />
+    <line id="mcDropH" class="drop" x1="70" y1="268" x2="160" y2="268" />
+    <line id="mwDropH" class="drop" x1="70" y1="282" x2="160" y2="282" />
+    <circle id="trackMc" class="trackdot" cx="160" cy="268" r="4.6" />
+    <circle id="trackMw" class="trackdot" cx="160" cy="282" r="4.6" />
+    <text id="mcVal" class="liveval" x="62" y="272" text-anchor="end" dominant-baseline="middle">0.80Y</text>
+    <text id="mwVal" class="liveval" x="62" y="286" text-anchor="end" dominant-baseline="middle">0.70Y</text>
+
+    <!-- ===== handle: fat hit line + grip + keyboard focus proxy ===== -->
+    <line id="qHit" class="hit-line" x1="160" y1="380" x2="160" y2="45" />
+    <circle id="qGrip" class="grip" cx="160" cy="380" r="5.5" />
+    <circle id="qFocus" class="hit" cx="160" cy="380" r="22"
+            tabindex="0" role="slider" aria-label="Cakes per day"
+            aria-valuemin="1" aria-valuemax="8" aria-valuenow="3"
+            aria-valuetext="3rd cake: marginal cost 0.80Y, marginal worth 0.70Y. Cost now beats worth -- Baker stops at 2 cakes for himself." />
+
+    <!-- readout band: hairline separator, muted STATE line, accent TAKEAWAY line -->
+    <line class="sep" x1="44" y1="442" x2="396" y2="442" />
+    <text class="r-state" x="220" y="464" text-anchor="middle">
+      <tspan id="rState1" x="220" dy="0">3rd cake: marginal cost 0.80Y,</tspan>
+      <tspan id="rState2" x="220" dy="17">marginal worth 0.70Y.</tspan>
+    </text>
+    <text class="r-take" x="220" y="503" text-anchor="middle">
+      <tspan id="rTake1" x="220" dy="0">Cost now beats worth --</tspan>
+      <tspan id="rTake2" x="220" dy="17">Baker stops at 2 cakes for himself.</tspan>
+    </text>
+  </svg>
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame is a still image: Baker's
+    rising marginal cost crosses his falling marginal worth of cakes near 2.7
+    cakes a day; being able to bake only whole cakes, a self-sufficient Baker
+    stops at 2, since the 3rd cake would cost him 0.80Y but is worth only
+    0.70Y to him. You can also
+    <a href="t06b-baker-costs.svg">open the static figure</a>.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var svg      = document.getElementById('fig');
+  var qHit     = document.getElementById('qHit');
+  var qGrip    = document.getElementById('qGrip');
+  var qFocus   = document.getElementById('qFocus');
+  var trackDrop = document.getElementById('trackDrop');
+  var mcDropH  = document.getElementById('mcDropH');
+  var mwDropH  = document.getElementById('mwDropH');
+  var trackMc  = document.getElementById('trackMc');
+  var trackMw  = document.getElementById('trackMw');
+  var mcVal    = document.getElementById('mcVal');
+  var mwVal    = document.getElementById('mwVal');
+  var crossDot = document.getElementById('crossDot');
+  var rState1  = document.getElementById('rState1');
+  var rState2  = document.getElementById('rState2');
+  var rTake1   = document.getElementById('rTake1');
+  var rTake2   = document.getElementById('rTake2');
+  var yticks = [];
+  for (var i = 1; i <= 10; i++) yticks.push(document.getElementById('ytick' + i));
+  var xticks = [];
+  for (var j = 1; j <= 10; j++) xticks.push(document.getElementById('xtick' + j));
+
+  // --- Baker's cost/worth family (UE Table 15.1) ---
+  function mc(q) { return 0.20 + 0.20 * q; }   // rising marginal cost
+  function mw(q) { return 1.00 - 0.10 * q; }   // falling marginal worth (his demand)
+
+  // --- pixel frame ---
+  var X0 = 70, Y0 = 380;
+  function px(q) { return X0 + 30 * q; }
+  function py(v) { return Y0 - 140 * v; }
+  function qFromX(x) { return (x - X0) / 30; }
+
+  var QLO = 1, QHI = 8;
+  var q = 3; // initial state matches the static base markup
+
+  function ordinal(n) {
+    var s = ['th', 'st', 'nd', 'rd'], v = n % 100;
+    return n + (s[(v - 20) % 10] || s[v] || s[0]);
+  }
+  function fmtY(v) { return v.toFixed(2) + 'Y'; }
+  function clamp(v, lo, hi) { return v < lo ? lo : (v > hi ? hi : v); }
+
+  var spt = svg.createSVGPoint();
+  function toSvg(evt) {
+    spt.x = evt.clientX; spt.y = evt.clientY;
+    return spt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+
+  function render() {
+    var pxq = px(q), mcv = mc(q), mwv = mw(q);
+    var mcpy = py(mcv), mwpy = py(mwv);
+    var topY = Math.min(mcpy, mwpy) - 8;
+
+    qHit.setAttribute('x1', pxq); qHit.setAttribute('x2', pxq);
+    qGrip.setAttribute('cx', pxq); qFocus.setAttribute('cx', pxq);
+
+    trackDrop.setAttribute('x1', pxq); trackDrop.setAttribute('x2', pxq);
+    trackDrop.setAttribute('y1', Y0);  trackDrop.setAttribute('y2', topY);
+    mcDropH.setAttribute('x2', pxq); mcDropH.setAttribute('y1', mcpy); mcDropH.setAttribute('y2', mcpy);
+    mwDropH.setAttribute('x2', pxq); mwDropH.setAttribute('y1', mwpy); mwDropH.setAttribute('y2', mwpy);
+    trackMc.setAttribute('cx', pxq); trackMc.setAttribute('cy', mcpy);
+    trackMw.setAttribute('cx', pxq); trackMw.setAttribute('cy', mwpy);
+
+    // reset all y-ticks visible, then hide the one the live values coincide with
+    for (var k = 0; k < yticks.length; k++) yticks[k].style.display = '';
+    function hideCoincidingTick(v) {
+      var idx = Math.round(v / 0.20);
+      if (idx >= 1 && idx <= 10 && Math.abs(v - idx * 0.20) < 0.001) {
+        yticks[idx - 1].style.display = 'none';
+      }
+    }
+    hideCoincidingTick(mcv);
+    hideCoincidingTick(mwv);
+    mcVal.setAttribute('y', mcpy + 4); mcVal.textContent = fmtY(mcv);
+    mwVal.setAttribute('y', mwpy + 4); mwVal.textContent = fmtY(mwv);
+
+    // highlight the current x tick
+    var qi = Math.round(q);
+    for (var m = 0; m < xticks.length; m++) {
+      if (m + 1 === qi) {
+        xticks[m].setAttribute('fill', '#b07a2c');
+        xticks[m].style.fontWeight = '700';
+      } else {
+        xticks[m].setAttribute('fill', '#5c6066');
+        xticks[m].style.fontWeight = '400';
+      }
+    }
+
+    // snap-highlight the fixed crossover marker when Baker sits at his true
+    // self-sufficiency stop (Q=2)
+    crossDot.classList.toggle('snap', q === 2);
+
+    // ---- two-line readout ----
+    var ord = ordinal(q);
+    var s1 = ord + ' cake: marginal cost ' + fmtY(mcv) + ',';
+    var s2 = 'marginal worth ' + fmtY(mwv) + '.';
+    var t1, t2;
+    if (q <= 2) {
+      t1 = 'Worth still beats cost --';
+      t2 = 'Baker bakes it.';
+    } else if (q === 3) {
+      t1 = 'Cost now beats worth --';
+      t2 = 'Baker stops at 2 cakes for himself.';
+    } else {
+      t1 = 'Far past his stopping point --';
+      t2 = "he'd never make this alone.";
+    }
+    rState1.textContent = s1; rState2.textContent = s2;
+    rTake1.textContent  = t1; rTake2.textContent  = t2;
+
+    qFocus.setAttribute('aria-valuenow', q);
+    qFocus.setAttribute('aria-valuetext', s1 + ' ' + s2 + ' ' + t1 + ' ' + t2);
+  }
+
+  function setQ(nq) {
+    nq = clamp(Math.round(nq), QLO, QHI);
+    if (nq !== q) { q = nq; render(); }
+  }
+
+  // ---- pointer drag (with capture so a fast drag can't get stuck) ----
+  var dragging = false, capEl = null, capId = null;
+  function onMove(evt) {
+    if (!dragging) return;
+    evt.preventDefault();
+    var p = toSvg(evt);
+    if (!isNaN(p.x)) setQ(qFromX(p.x));
+  }
+  function onUp() {
+    dragging = false;
+    svg.classList.remove('grabbing');
+    if (capEl && capId !== null) { try { capEl.releasePointerCapture(capId); } catch (e) {} }
+    capEl = null; capId = null;
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+  }
+  function onDown(evt) {
+    evt.preventDefault();
+    dragging = true;
+    svg.classList.add('grabbing');
+    capEl = evt.currentTarget; capId = evt.pointerId;
+    try { capEl.setPointerCapture(capId); } catch (e) {}
+    onMove(evt);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }
+  qHit.addEventListener('pointerdown', onDown);
+  qGrip.addEventListener('pointerdown', onDown);
+  qFocus.addEventListener('pointerdown', onDown);
+
+  // ---- keyboard ----
+  qFocus.addEventListener('keydown', function (evt) {
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') setQ(q + 1);
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') setQ(q - 1);
+    else if (evt.key === 'Home') setQ(QLO);
+    else if (evt.key === 'End') setQ(QHI);
+    else return;
+    evt.preventDefault();
+  });
+
+  // keyboard focus ring on the grip (kept in JS, not CSS sibling order, so it
+  // is robust regardless of markup order)
+  qFocus.addEventListener('focus', function () {
+    qGrip.setAttribute('stroke', '#b07a2c'); qGrip.setAttribute('stroke-width', '3.5');
+  });
+  qFocus.addEventListener('blur', function () {
+    qGrip.setAttribute('stroke', '#f7f4ef'); qGrip.setAttribute('stroke-width', '1.5');
+  });
+
+  // Debug hook: lets a reviewer screenshot non-initial states via scripting.
+  window.__fig = {
+    set: function (o) { o = o || {}; if (o.q !== undefined) setQ(+o.q); },
+    get: function () { return { q: q, mc: mc(q), mw: mw(q) }; }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive figure: long-run zero-profit equilibrium for a price searcher</title>
+<!--
+  Interactive recreation of UE Fig 19.5 (p.301) for the T8a blog post
+  (website-styled warm palette, not FAU). Self-contained: no libraries, no
+  network. DEFERRED FIGURE: no prior static .tex/.svg exists for this one, so
+  there is no static-figure fallback link in <noscript> (see below).
+
+  ARCHITECTURE: the base figure is REAL SVG markup. A no-JS reader sees the
+  FULL still image — the long-run (zero-profit) configuration: AC (U-shaped),
+  MC (rising, cutting AC at its minimum), a demand (D) line tangent to AC at
+  Q*=5, its MR bisector meeting MC at Q*=5, and the two reference dots (price
+  = AC at the tangency; MR = MC below it) with droplines. The script only
+  ATTACHES behavior (the "imitative entry" slider, live re-shading of the
+  profit rectangle, the readout); it never builds figure DOM.
+
+  GEOMETRY (family F2, single-panel): viewBox 440x540, aspect-ratio 4/5,
+  max-width 480px. Data: Q 0..10 on x (QMAX=10), $ 0..14 on y (PMAX=14).
+  Pixel frame: X0=64 (Q=0), X1=380 (Q=10); Y0=360 ($=0), Y1=56 ($=14).
+  qxpx(q) = 64 + (q/10)*316 ; pypx(p) = 360 - (p/14)*304.
+  Axes are drawn PAST the data max (to x=412, y=24) so the curve/arrowheads
+  have clearance.
+
+  MODEL (all curves are the single cost function used across this post's
+  deferred figures, TC(Q)=16+2Q+0.25Q^2):
+    AC(Q) = 16/Q + 2 + 0.25Q            (U-shaped, min at Q=8, AC(8)=$6)
+    MC(Q) = 2 + 0.5Q                    (rising line; MC(8)=$6=AC(8))
+  Demand (AR) and its MR bisector share one y-intercept a(t) and slope b(t),
+  linearly interpolated by the entry slider t in [0,1]:
+    a(t) = 13.5 + (8.4 - 13.5)*t        (13.5 pre-entry -> 8.4 at tangency)
+    b(t) = 0.9  + (0.39 - 0.9)*t        (0.9 pre-entry  -> 0.39 at tangency)
+    AR(Q,t) = a(t) - b(t)*Q ;  MR(Q,t) = a(t) - 2*b(t)*Q
+  This pair of end-states was solved so that Q*=5 is the MR=MC output at BOTH
+  t=0 and t=1 (and, by construction, at every t in between: MR(5,t) reduces
+  to the constant $4.50 for all t) — so the "MR=MC" dot never moves; only the
+  demand line's height at Q=5 falls from $9.00 (t=0, profit) to $6.45 (t=1,
+  = AC(5), tangency, zero profit). At t=1, AR is exactly tangent to AC at
+  Q=5 (AR slope -0.39 = AC'(5)).
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;
+    --ink:     #1a1c1e;
+    --text:    #16181a;
+    --muted:   #5c6066;
+    --hairline:#e3ddd3;
+    --accent:  #b07a2c;
+    --accent-tint: #efe4d2;
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .fig { width: 100%; max-width: 480px; min-width: 0; }
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+
+  /* structural strokes */
+  .axis      { stroke: var(--muted); stroke-width: 1.4; }
+  .curve     { stroke: var(--ink); stroke-width: 2.4; fill: none;
+               stroke-linecap: round; }
+  .curve-ghost { stroke: var(--muted); stroke-width: 2; fill: none;
+               stroke-dasharray: 6 5; opacity: 0.75; }
+  .mrline    { stroke: var(--ink); stroke-width: 1.8; fill: none;
+               stroke-dasharray: 7 4; }
+  .region    { fill: var(--accent-tint); opacity: 0.6; stroke: none; }
+  .drop      { stroke: var(--hairline); stroke-width: 1.6;
+               stroke-dasharray: 5 4; }
+  .shiftarrow{ stroke: var(--accent); stroke-width: 2.2; }
+
+  /* slider track */
+  .track     { stroke: var(--hairline); stroke-width: 4; stroke-linecap: round; }
+  .tick      { stroke: var(--muted); stroke-width: 1.4; }
+
+  /* points + hit targets */
+  .ctx-pt { fill: var(--muted); }
+  .pt     { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5; }
+  .hit       { fill: transparent; stroke: transparent; touch-action: none;
+               cursor: grab; }
+  .pt-focus:focus-visible { outline: none; }
+  .pt-focus:focus-visible + .pt,
+  .grabbing .pt { stroke: var(--accent); stroke-width: 3.5; }
+
+  /* text */
+  .panelhead { fill: var(--ink); font-size: 12px; font-weight: 700; }
+  .axlabel   { fill: var(--muted); font-size: 12.5px; font-weight: 600; }
+  .endlabel  { fill: var(--muted); font-size: 10.5px; font-weight: 600; }
+  .curvelabel{ fill: var(--ink); font-size: 11px; font-weight: 700; }
+  .curvelabel-ghost { fill: var(--muted); font-size: 10px; font-style: italic; }
+  .qlabel    { fill: var(--ink); font-size: 11px; font-weight: 700;
+               paint-order: stroke; stroke: var(--surface); stroke-width: 3px;
+               stroke-linejoin: round; }
+  .plabel-fixed { fill: var(--muted); font-size: 11px; font-weight: 700; }
+  .profitlabel { fill: var(--accent); font-size: 11.5px; font-weight: 700; }
+  .sep       { stroke: var(--hairline); stroke-width: 1; }
+  .r-hint    { fill: var(--muted); font-size: 11.5px; }
+  .r-trade   { fill: var(--accent); font-size: 12.5px; font-weight: 600; }
+  text       { pointer-events: none; }
+  .fallback  { margin: 8px 0 0; color: var(--muted); font-size: 13px;
+               line-height: 1.35; text-align: center; }
+</style>
+</head>
+<body>
+<div class="fig">
+  <svg id="fig" viewBox="0 0 440 540" role="group"
+       aria-label="Single-panel figure: a price searcher's demand, marginal revenue, marginal cost, and average cost curves. Drag the imitative-entry slider from 'before entry' to 'long run' to watch the demand curve shrink inward until it just touches average cost, driving profit to zero, even though marginal revenue still equals marginal cost at 5 units.">
+    <title>Interactive figure: long-run zero-profit equilibrium for a price searcher</title>
+    <defs>
+      <marker id="arw" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+      <marker id="acc" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#b07a2c" />
+      </marker>
+    </defs>
+
+    <!-- ============ entry slider (cause control) ============ -->
+    <text class="panelhead" x="222" y="12" text-anchor="middle">Imitative entry</text>
+    <line class="track" x1="130" y1="26" x2="314" y2="26" />
+    <line class="tick" x1="130" y1="20" x2="130" y2="32" />
+    <line class="tick" x1="314" y1="20" x2="314" y2="32" />
+    <text class="endlabel" x="130" y="44" text-anchor="start">Before</text>
+    <text class="endlabel" x="314" y="44" text-anchor="end">Zero profit</text>
+
+    <!-- ============ axes (drawn before curves) ============ -->
+    <line class="axis" x1="64" y1="360" x2="398" y2="360" marker-end="url(#arw)" />
+    <line class="axis" x1="64" y1="360" x2="64" y2="24" marker-end="url(#arw)" />
+    <text class="axlabel" x="238" y="384" text-anchor="middle">Output (Q)</text>
+    <text class="axlabel" x="8" y="210" text-anchor="middle"
+          transform="rotate(-90 8 210)">Price / cost ($)</text>
+
+    <!-- ============ AC (U-shaped, static) ============ -->
+    <path class="curve" d="M120.9,113.8 L133.8,147.4 L146.8,169.7 L159.7,185.5 L172.7,196.9 L185.7,205.4 L198.6,211.9 L211.6,216.8 L224.5,220.6 L237.5,223.5 L250.4,225.7 L263.4,227.3 L276.4,228.4 L289.3,229.1 L302.3,229.6 L315.2,229.7 L328.2,229.6 L341.1,229.3 L354.1,228.9 L367.0,228.3 L380.0,227.5" />
+    <text class="curvelabel" x="274" y="220" text-anchor="start">AC</text>
+
+    <!-- ============ MC (rising line, static; cuts AC at its minimum) ============ -->
+    <line class="curve" x1="64" y1="316.6" x2="380" y2="208.0" />
+    <text class="curvelabel" x="346" y="204" text-anchor="start">MC</text>
+
+    <!-- ============ ghost demand: fixed pre-entry reference (static) ============ -->
+    <line id="arGhost" class="curve-ghost" x1="64" y1="66.9" x2="380" y2="262.3" />
+    <text class="curvelabel-ghost" x="326" y="247" text-anchor="start">D (before)</text>
+
+    <!-- ============ live demand (AR) — y1 moves with the slider ============ -->
+    <line id="arLive" class="curve" x1="64" y1="177.6" x2="380" y2="262.3" />
+    <text id="dLabel" class="curvelabel" x="300" y="246" text-anchor="start">D</text>
+
+    <!-- ============ live marginal revenue (MR), dashed ============ -->
+    <line id="mrLive" class="mrline" x1="64" y1="177.6" x2="380" y2="347.0" />
+    <text id="mrLabel" class="curvelabel" x="196" y="244" text-anchor="start">MR</text>
+
+    <!-- ============ shift arrow (grows as entry proceeds) ============ -->
+    <line id="shiftArrow" class="shiftarrow" marker-end="url(#acc)"
+          x1="158.8" y1="125.5" x2="158.8" y2="203.0" />
+
+    <!-- ============ profit rectangle (shades pre-entry; 0 height at tangency) === -->
+    <rect id="profitRect" class="region" x="64" y="219.9" width="158" height="0" />
+    <text id="profitLabel" class="profitlabel" x="230" y="219.9" text-anchor="start"
+          style="opacity:0">profit/unit = $0.00</text>
+
+    <!-- ============ vertical dropline at Q*=5 (shared by both dots) ============ -->
+    <line id="dropV" class="drop" x1="222" y1="219.9" x2="222" y2="360" />
+    <text class="qlabel" x="222" y="376" text-anchor="middle">Q* = 5</text>
+
+    <!-- ============ AR (price) dropline + live price label ============ -->
+    <line id="dropH_AR" class="drop" x1="64" y1="219.9" x2="222" y2="219.9" />
+    <text id="priceLabel" class="qlabel" x="58" y="219.9" text-anchor="end"
+          dominant-baseline="middle">$6.45</text>
+
+    <!-- ============ MR=MC dropline + label — fixed forever at $4.50 ============ -->
+    <line class="drop" x1="64" y1="262.3" x2="222" y2="262.3" />
+    <text class="plabel-fixed" x="58" y="262.3" text-anchor="end"
+          dominant-baseline="middle">$4.50</text>
+
+    <!-- ============ the two reference dots at Q*=5 ============ -->
+    <circle id="dotAR" class="pt" cx="222" cy="219.9" r="6" />
+    <circle id="dotMRMC" class="pt" cx="222" cy="262.3" r="5" />
+    <text class="curvelabel-ghost" x="232" y="282" text-anchor="start">MR = MC</text>
+
+    <!-- ============ slider handle + hit target + keyboard proxy ============ -->
+    <circle id="handleHit" class="hit" cx="314" cy="26" r="22" />
+    <circle id="handlePt" class="pt" cx="314" cy="26" r="7" />
+    <circle id="handleFocus" class="pt-focus hit" cx="314" cy="26" r="22"
+            tabindex="0" role="slider" aria-label="Imitative entry, from before entry to long-run zero profit"
+            aria-valuemin="0" aria-valuemax="1" aria-valuenow="1"
+            aria-valuetext="Entry has pushed demand in until it just touches average cost. Price equals average cost, profit is zero — the long-run resting point, though marginal revenue still equals marginal cost." />
+
+    <!-- ============ readout band (each line pre-wrapped to fit 440px width) === -->
+    <line class="sep" x1="44" y1="406" x2="396" y2="406" />
+    <text class="r-hint" x="220" y="424" text-anchor="middle">
+      <tspan id="rHint1" x="220">Entry has pushed demand in until it just</tspan>
+      <tspan id="rHint2" x="220" dy="15">touches average cost.</tspan>
+    </text>
+    <text class="r-trade" x="220" y="460" text-anchor="middle">
+      <tspan id="rTrade1" x="220">Price = average cost, profit = 0 — the</tspan>
+      <tspan id="rTrade2" x="220" dy="16">long-run resting point, though MR = MC.</tspan>
+    </text>
+  </svg>
+
+  <noscript>
+    <p class="fallback">JavaScript is off, so the frame above is a still image
+      of the long-run resting point: demand has been pushed in by imitative
+      entry until it just touches average cost at 5 units, where marginal
+      revenue also equals marginal cost — price equals average cost and
+      profit is zero. (This figure has no separate static image; the frame
+      above is the complete picture.)</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var svg = document.getElementById('fig');
+  var byId = function (id) { return document.getElementById(id); };
+
+  var arGhost = byId('arGhost'), arLive = byId('arLive'), mrLive = byId('mrLive');
+  var dLabel = byId('dLabel'), mrLabel = byId('mrLabel');
+  var shiftArrow = byId('shiftArrow');
+  var profitRect = byId('profitRect'), profitLabel = byId('profitLabel');
+  var dropV = byId('dropV'), dropH_AR = byId('dropH_AR'), priceLabel = byId('priceLabel');
+  var dotAR = byId('dotAR'), dotMRMC = byId('dotMRMC');
+  var handleHit = byId('handleHit'), handlePt = byId('handlePt'), handleFocus = byId('handleFocus');
+  var rHint1 = byId('rHint1'), rHint2 = byId('rHint2');
+  var rTrade1 = byId('rTrade1'), rTrade2 = byId('rTrade2');
+
+  // ---- pixel frame (mirrors the markup / comment header) ----
+  var QMAX = 10, PMAX = 14;
+  var X0 = 64, X1 = 380, Y0 = 360, Y1 = 56;
+  var qxpx = function (q) { return X0 + (q / QMAX) * (X1 - X0); };
+  var pypx = function (p) { return Y0 - (p / PMAX) * (Y0 - Y1); };
+
+  // ---- demand/MR model: shared y-intercept a(t), slope b(t) ----
+  var A0 = 13.5, B0 = 0.9;   // t = 0: before entry (steep, high — profit)
+  var A1 = 8.4, B1 = 0.39;   // t = 1: tangent to AC at Q=5 (zero profit)
+  function aOf(t) { return A0 + (A1 - A0) * t; }
+  function bOf(t) { return B0 + (B1 - B0) * t; }
+  function AR(q, a, b) { return a - b * q; }
+  function MR(q, a, b) { return a - 2 * b * q; }
+
+  var AC5 = 6.45; // AC(5), constant — the tangency price / average-cost reference
+
+  // ---- slider track geometry ----
+  var TX0 = 130, TX1 = 314, TY = 26;
+
+  // ---- state ----
+  var t = 1.0; // default: long-run tangency (this figure's host-section role)
+
+  var spt = svg.createSVGPoint();
+  function toSvg(evt) {
+    spt.x = evt.clientX; spt.y = evt.clientY;
+    return spt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+
+  function activeText(price, profit) {
+    var priceStr = '$' + price.toFixed(2);
+    var profitStr = '$' + profit.toFixed(2);
+    return {
+      mutedLines: ['Price ' + priceStr + ' exceeds average cost', '$6.45 by ' + profitStr + ' per unit.'],
+      tradeLines: ['Positive profit attracts imitators —', 'entry keeps shrinking demand.'],
+      full: 'Price ' + priceStr + ' exceeds average cost $6.45 by ' + profitStr + ' per unit. ' +
+            'Positive profit attracts imitators, and entry keeps shrinking demand toward the ' +
+            'long-run resting point.'
+    };
+  }
+  function tangencyText() {
+    return {
+      mutedLines: ['Entry has pushed demand in until it just', 'touches average cost.'],
+      tradeLines: ['Price = average cost, profit = 0 — the', 'long-run resting point, though MR = MC.'],
+      full: 'Entry has pushed demand in until it just touches average cost. ' +
+            'Price equals average cost, profit is zero — the long-run resting point, though ' +
+            'marginal revenue still equals marginal cost.'
+    };
+  }
+
+  function render() {
+    var a = aOf(t), b = bOf(t);
+    var priceQ5 = AR(5, a, b);      // price on demand at Q=5 (falls 9.00 -> 6.45)
+    var mrQ5 = MR(5, a, b);         // invariant: always $4.50 (MR=MC by construction)
+
+    // live demand line: y-intercept moves, far end pinned at (Q=10, $4.50)
+    var y1AR = pypx(a);
+    arLive.setAttribute('y1', y1AR.toFixed(1));
+
+    // live MR line: same y-intercept as AR; far end clipped where MR hits $0
+    mrLive.setAttribute('y1', y1AR.toFixed(1));
+    var qZero = a / (2 * b);
+    var mrX2, mrY2;
+    if (qZero >= QMAX) {
+      mrX2 = X1; mrY2 = pypx(MR(QMAX, a, b));
+    } else {
+      mrX2 = qxpx(qZero); mrY2 = Y0;
+    }
+    mrLive.setAttribute('x2', mrX2.toFixed(1));
+    mrLive.setAttribute('y2', mrY2.toFixed(1));
+
+    // curve-hugging labels
+    var dY = pypx(AR(7.4, a, b)) - 4; // matches the "D" label's x=300 (Q=7.4)
+    dLabel.setAttribute('y', dY.toFixed(1));
+    var mrAt4 = MR(4, a, b); // label tracks the live MR line at Q=4 (matches its x=196 position)
+    if (mrAt4 > 0.15) {
+      mrLabel.style.opacity = 1;
+      mrLabel.setAttribute('y', (pypx(mrAt4) - 4).toFixed(1));
+    } else {
+      mrLabel.style.opacity = 0;
+    }
+
+    // shift arrow: fixed ghost point at Q=3 -> live point at Q=3
+    shiftArrow.setAttribute('y2', pypx(AR(3, a, b)).toFixed(1));
+    shiftArrow.style.opacity = (t < 0.03) ? 0 : 1;
+
+    // dots + droplines (Q*=5 is fixed; only the AR/price height moves)
+    var cyAR = pypx(priceQ5);
+    dotAR.setAttribute('cy', cyAR.toFixed(1));
+    dropV.setAttribute('y1', cyAR.toFixed(1));
+    dropH_AR.setAttribute('y1', cyAR.toFixed(1));
+    dropH_AR.setAttribute('y2', cyAR.toFixed(1));
+    priceLabel.setAttribute('y', cyAR.toFixed(1));
+    priceLabel.textContent = '$' + priceQ5.toFixed(2);
+
+    // profit rectangle: Q 0..5 wide, AC(5) up to price(Q5) tall
+    var profit = priceQ5 - AC5;
+    var top = pypx(priceQ5), bottom = pypx(AC5);
+    var h = Math.max(0, bottom - top);
+    profitRect.setAttribute('y', top.toFixed(1));
+    profitRect.setAttribute('height', h.toFixed(1));
+    if (profit > 0.05) {
+      profitRect.style.opacity = 0.6;
+      profitLabel.style.opacity = 1;
+      profitLabel.setAttribute('y', (top + h / 2 + 4).toFixed(1));
+      profitLabel.textContent = 'profit/unit = $' + profit.toFixed(2);
+    } else {
+      profitRect.style.opacity = 0;
+      profitLabel.style.opacity = 0;
+    }
+
+    // slider handle
+    var hx = TX0 + t * (TX1 - TX0);
+    handleHit.setAttribute('cx', hx.toFixed(1));
+    handlePt.setAttribute('cx', hx.toFixed(1));
+    handleFocus.setAttribute('cx', hx.toFixed(1));
+
+    // readout: honest for every reachable state, keyed off the SAME profit
+    // threshold that drives the shaded rectangle/label (profit > 0.05), not
+    // off slider position — so text, rectangle, and label never disagree.
+    var txt = (profit > 0.05) ? activeText(priceQ5, profit) : tangencyText();
+    rHint1.textContent = txt.mutedLines[0];
+    rHint2.textContent = txt.mutedLines[1];
+    rTrade1.textContent = txt.tradeLines[0];
+    rTrade2.textContent = txt.tradeLines[1];
+    handleFocus.setAttribute('aria-valuenow', t.toFixed(2));
+    handleFocus.setAttribute('aria-valuetext', txt.full);
+  }
+
+  function clampSnap(v) {
+    if (v < 0) v = 0;
+    if (v > 1) v = 1;
+    if (v > 0.94) v = 1;      // snap at the tangency end
+    if (v < 0.06) v = 0;      // snap at the pre-entry end
+    return v;
+  }
+
+  function setFromPointer(evt) {
+    var pnt = toSvg(evt);
+    var raw = (pnt.x - TX0) / (TX1 - TX0);
+    if (raw < 0) raw = 0;
+    if (raw > 1) raw = 1;
+    t = raw; // live drag: no snapping mid-motion, so the curve morphs smoothly
+    render();
+  }
+
+  // --- drag (pointer events + pointer capture) ---
+  var dragging = false, capturedEl = null, capturedId = null;
+  function onMove(evt) { if (dragging) { evt.preventDefault(); setFromPointer(evt); } }
+  function onUp() {
+    dragging = false;
+    svg.classList.remove('grabbing');
+    t = clampSnap(t);
+    render();
+    if (capturedEl && capturedId !== null) {
+      try { capturedEl.releasePointerCapture(capturedId); } catch (e) {}
+    }
+    capturedEl = null; capturedId = null;
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+  }
+  function onDown(evt) {
+    evt.preventDefault();
+    dragging = true;
+    svg.classList.add('grabbing');
+    capturedEl = evt.currentTarget; capturedId = evt.pointerId;
+    try { capturedEl.setPointerCapture(capturedId); } catch (e) {}
+    setFromPointer(evt);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }
+  handleHit.addEventListener('pointerdown', onDown);
+  handleFocus.addEventListener('pointerdown', onDown);
+
+  // --- keyboard (arrows step the entry slider; Home/End jump to the ends) ---
+  handleFocus.addEventListener('keydown', function (evt) {
+    var step = 0.1;
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') { t += step; }
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') { t -= step; }
+    else if (evt.key === 'Home') { t = 0; }
+    else if (evt.key === 'End') { t = 1; }
+    else return;
+    evt.preventDefault();
+    t = clampSnap(t);
+    render();
+  });
+
+  // Debug hook: lets a reviewer screenshot non-initial states via scripting.
+  window.__fig = {
+    set: function (v) {
+      v = v || {};
+      if (typeof v.t === 'number') t = clampSnap(v.t);
+      render();
+    },
+    get: function () {
+      var a = aOf(t), b = bOf(t);
+      return { t: t, price: AR(5, a, b), ac: AC5, mrmc: MR(5, a, b) };
+    }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

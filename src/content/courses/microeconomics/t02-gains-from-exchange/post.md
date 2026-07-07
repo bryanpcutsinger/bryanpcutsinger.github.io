@@ -17,6 +17,18 @@ Last time we ended with a list of ways a society can decide who gets a scarce th
 
 The short answer is that wealth is not the same as stuff. What you own is worth more when it sits in the hands that value it most, and trade is how scarce things find those hands. Once you see that, a lot of heated talk about commerce and middlemen starts to look different. Let me build the case in steps.
 
+<aside class="econ-callout econ-objectives">
+<p class="econ-callout__label">Learning objectives</p>
+<p>By the end of this post you should be able to:</p>
+<ul>
+<li>Explain how voluntary exchange creates wealth by moving goods to whoever values them most, even when no new goods are made and the traders end up holding fewer total goods.</li>
+<li>Distinguish the positive-sum decision of whether to trade from the zero-sum bargaining over the terms of the trade.</li>
+<li>Use personal worth to explain why a trade happens only when the buyer values the good above the price and the seller values it below.</li>
+<li>Explain why forbidding a trade does not erase the value at stake but pushes the competition for it into nonmonetary forms.</li>
+<li>Explain why middlemen lower the cost of trading, what caps the cut they can take, and how competition and reputation discipline them.</li>
+</ul>
+</aside>
+
 ## Trade Creates Wealth Without Creating New Goods
 
 Picture a relief camp after a hurricane. Each family receives the same monthly parcel: say, twenty bottles of water and twenty granola bars. Everyone starts with an identical basket, so on paper no one is richer than anyone else. Then a newcomer who got no parcel starts arranging trades. He notices that Sam would happily give up several granola bars to get more water, while Joe would gladly part with water for just a granola bar or two. The newcomer carries water from Joe to Sam and granola from Sam to Joe, and keeps a small cut for his trouble.
@@ -39,6 +51,18 @@ The two tables put numbers on it. Each man moves from his starting basket A to a
 
 This is why economists call trade a *positive-sum* activity: it can make every participant better off at once. It runs against a stubborn intuition that says one person's gain must be another's loss. That intuition fits a poker game, where the chips on the table are fixed and what you win I lose. It does not fit voluntary exchange, because in a trade each side hands over something it values less to get something it values more. Both sides climb. No one is fooled, and no one is robbed.
 
+<aside class="econ-callout econ-termset">
+<p class="econ-callout__label">Key term</p>
+<dl class="econ-term-list">
+<div><dt>Positive-Sum</dt><dd>A trade in which every participant can come out better off at once.</dd></div>
+</dl>
+</aside>
+
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>After the trades, Sam and Joe hold two fewer granola bars between them, yet both end up better off. How can a group end up with less total stuff and still be richer?</p>
+</aside>
+
 ## The Trade Is Positive-Sum, but the Haggling Is Zero-Sum
 
 If trade benefits both sides, why does it so often feel like a contest? Because two different things happen at once, and they pull in opposite directions. Whether to trade at all is the positive-sum part. Both people end up better off than if they had walked away, so on that question their interests line up. But the *terms* of the trade, the exact price, are a tug-of-war. Every granola bar the seller gains on the price is one the buyer loses. That haggling over how to split the gains is genuinely zero-sum, and it is the loud, visible part, so people mistake it for the whole story.
@@ -49,7 +73,19 @@ Keep the two separate and a common error dissolves. You will sometimes read that
 
 Let me put a name to the engine behind all of this. Your *personal worth* of a good is the most of other things you would give up to get one more unit of it, or the least you would accept to part with one you already hold. It is not a feeling or a wish. Talk is cheap, and saying you would "do anything" for something proves nothing. Personal worth shows up only in what you are actually willing and able to pay. Two people can want a good for completely different reasons, or even think each other foolish for wanting it, and none of that matters to whether they can trade. What matters is only that their personal worths differ.
 
+<aside class="econ-callout econ-termset">
+<p class="econ-callout__label">Key term</p>
+<dl class="econ-term-list">
+<div><dt>Personal Worth</dt><dd>The most of other things you would give up for one more unit of a good, or the least you would accept to part with one you hold.</dd></div>
+</dl>
+</aside>
+
 When they do differ, a mutually agreeable trade exists, and the direction is set by who values the good more. Whoever places the higher worth on water buys it; whoever places the lower worth sells. Put the buyer and the seller in one picture and a clean rule appears: a trade happens only when the buyer's personal worth of the good sits above the price and the seller's sits below it. The price lands somewhere between the two worths, and that gap is the gain the trade creates. The buyer pays less than the good is worth to him; the seller collects more than it was worth to her. Each side passes its own test, which is exactly why both come out ahead.
+
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>Suppose you would pay up to $40 for a used jacket and the seller would let it go for as little as $25. If it sells for $32, how much does each side gain, and why must the two worths straddle the price for a trade to happen?</p>
+</aside>
 
 As the trade proceeds, the gap narrows on its own. Recall a point from last time: the more of something you already have, the less you would give up for one more unit of it. So as Sam accumulates water, his worth of the next bottle falls, and as Joe runs low, his worth of each remaining bottle rises. Trading slides both people toward the point where their valuations meet, and there it stops, because no further swap would help either one. The gain to each is simply the gap between what the good was worth to them and what they paid. We will give that gain a fuller treatment when we get to demand. For now, hold on to the plain version: you gain whenever you value what you get more than what you give up.
 
@@ -59,11 +95,28 @@ Because a voluntary trade leaves both sides better off, blocking one destroys so
 
 Suppose your college gives you a permit for one of its scarce parking spaces, and gives a friend a desk in the library stacks, and each of you would rather have the other's. The college almost always forbids the swap. Why would it? The people who run it cannot pocket money from selling those spots, because the spots are not theirs to sell. Yet the power to decide who gets a scarce space is itself valuable, and that value does not disappear just because no money may change hands. It gets captured in nonmonetary forms instead: in favors, in goodwill, in the discretion to reward whoever the administration prefers. The lesson generalizes. Whenever an authority that cannot legally collect a price controls a scarce thing, the competition for it moves into nonmonetary channels, and someone still captures its value.
 
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>A resident adviser decides who gets the last available single dorm room but cannot legally sell it. The room's value does not disappear. Name one nonmonetary form that value might take instead.</p>
+</aside>
+
 None of this, by the way, says that trade is good and bans are bad. Economics tells you what will happen if people are allowed to trade, and what will happen if they are stopped. Whether a given result is good is a separate, normative question you settle with your own values. Keep the line from last time in view: the analysis gives you the "is," and the "should" is yours to add.
 
 ## Middlemen Lower the Cost of Trading, They Do Not Add to It
 
 Notice that in the relief camp, none of the good trades happened until the newcomer showed up to arrange them. That is not a detail. Most trades do not occur directly between the people who finally want the goods, and the reason is that trading is itself costly. Finding someone who has what you want and wants what you have, judging the quality of what is offered, traveling, and making sure the other side delivers all take time and effort. That is what intermediaries are for. The wholesaler, the retailer, and the broker exist because they can do the finding, sorting, and vouching at lower cost than you could alone. To see their value, imagine buying your food straight from farmers, your shoes from the factory, and your milk from a dairy. You would spend your life shopping. The middleman's cut is the price of being spared all that, and for most people it is a bargain. "Cut out the middleman and save" is usually a confusion, because eliminating him does not eliminate the work he did; it just dumps that work back on you. Sometimes doing it yourself really is cheaper, and then you should. Often it is not. And sometimes the cost of arranging a trade is so high that the trade simply does not happen. The gain a trade can create is only the gap between the two personal worths; if it costs more than that gap to set the trade up, there is nothing left over to share. In the camp the gap on those ten bottles is four granola bars, so if arranging the swap somehow cost six, no one would bother. The trade that looks worthwhile on paper never occurs, because the cost of doing it eats the whole gain and then some. Transaction costs are not always just a fee skimmed off a deal; when they run high enough they are a wall that blocks the deal entirely.
+
+<aside class="econ-callout econ-termset">
+<p class="econ-callout__label">Key term</p>
+<dl class="econ-term-list">
+<div><dt>Transaction Costs</dt><dd>The time and effort of finding a trading partner, judging quality, and making sure the deal is carried out.</dd></div>
+</dl>
+</aside>
+
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>A friend tells you to buy your groceries straight from farmers and cut out the middleman to save money. What work would you take on yourself, and when would cutting him out actually leave you worse off?</p>
+</aside>
 
 How large can that cut get? There is a ceiling, and it is set by the very gap that makes the trade worthwhile. A lone middleman who faces no rival can take as much as the whole gain from the trade: he can pay Joe just barely enough to coax the water loose and charge Sam just short of what the water is worth to him, pocketing everything in between. In the camp that ceiling is the four granola bars of value the exchange creates; the newcomer who keeps only two is already leaving half of it on the table for Sam and Joe. What he cannot do is take more than the whole gain, because then one side would rather walk away. So the most a middleman can ever extract is the entire gain the trade makes possible, and no more.
 
@@ -80,10 +133,19 @@ What keeps a middleman's cut well below that ceiling is competition from other m
 
 You might expect a middleman to grab the goods and never return, or to water down the granola and keep the difference. They rarely do, and the reason is reputation. A trader who cheats a customer not only loses that customer but gets a bad name that costs him far more future business than the one-time gain was worth. A good reputation is an asset worth protecting, so the discipline of repeat dealing keeps most intermediaries honest without anyone having to police them.
 
-## What's Next
-
-Step back and the through-line is simple. Wealth is not a fixed pile to be divided. Exchange enlarges it by moving goods to those who value them most, and the gain is real even though no new goods appear. Trade is positive-sum; only the bargaining over terms is a fight. Blocking a trade does not erase the value at stake; it just pushes the competition into other forms. And middlemen earn their keep by lowering the real cost of trading.
-
 We leaned the whole time on one source of gains: people differ in how much they *value* things. There is a deeper source we have not touched. People also differ in what it *costs* them to make things, and those cost differences let people specialize and produce more together than they ever could apart. We will work that out when we get to production and costs, and it turns out to be the most surprising result in the course: you can be worse at making everything and still have something worth selling.
 
 We also kept using one idea without unpacking it, that a good is worth less to you the more of it you already have, and that this is what brings trading to a stop. Next time we put that idea to work directly. We will build the law of demand, see why demand curves slope downward, and learn to tell a change in price apart from a change in demand itself. Bring the same skepticism. The most quoted claims about what people "need" rarely survive it.
+
+<div class="econ-review">
+<section class="econ-review__section">
+<h3>Key takeaways</h3>
+<ul>
+<li><strong>Trade creates wealth without new goods.</strong> Moving each good to whoever values it most makes both sides better off, even when the total quantity of goods falls.</li>
+<li><strong>The trade is positive-sum; the haggling is zero-sum.</strong> Both sides gain from trading at all, but every granola bar one side wins on the price the other loses.</li>
+<li><strong>Trade turns on differing personal worths.</strong> A deal happens only when the buyer's worth sits above the price and the seller's sits below it, and that gap is the gain.</li>
+<li><strong>Blocking a trade hides the value, it does not erase it.</strong> When an authority that cannot charge a price controls a scarce thing, the competition for it moves into favors, waiting, and goodwill.</li>
+<li><strong>Middlemen earn their keep.</strong> They lower the real cost of trading; a lone middleman can take at most the whole gain, and competition and reputation keep his cut far below that.</li>
+</ul>
+</section>
+</div>

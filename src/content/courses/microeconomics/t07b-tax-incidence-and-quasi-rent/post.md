@@ -18,9 +18,35 @@ In Part A we worked out how a single price-taker behaves and how a market of the
 
 All of that described a market sitting still under settled conditions. Now we set it in motion. First we add time and watch how the room to adjust grows. Then we drop a tax onto a competitive market and trace exactly who ends up paying it, the result that surprises almost everyone and is our main Exam 2 target. From there we name the surplus a sunk resource earns, see why underpricing a rival can be efficient rather than predatory, watch prices move before the events that justify them, and finish with the great churn of firms rising and falling, which turns out to be competition doing its job rather than failing at it. By the end you should be able to predict how a tax's burden splits and shifts over time, and explain why the constant turnover of who is on top serves consumers rather than harming them.
 
+<aside class="econ-callout econ-objectives">
+<p class="econ-callout__label">Learning objectives</p>
+<p>By the end of this post you should be able to:</p>
+<ul>
+<li>Explain why both demand and supply grow more elastic the longer the adjustment period, distinguishing the immediate run, the short run, and the long run.</li>
+<li>Explain why the legal side of a tax does not determine who bears it, and use the relative elasticities of demand and supply to predict how the burden splits.</li>
+<li>Explain why a tax on a single price-taker falls entirely on his own specialized resources.</li>
+<li>Trace how a broad tax's burden shifts over time, landing first on immobile resources and later on consumers, and explain why latecomers bear none of it.</li>
+<li>Define a quasi-rent and explain why a resource already in place can be charged down toward its operating cost without being driven out.</li>
+<li>Explain why cutting price below a rival's long-run cost on sunk capacity can be efficient rather than predatory.</li>
+<li>Explain why storable goods let a price move before an anticipated event, and why the response to bad news and good news is asymmetric.</li>
+<li>Explain why creative destruction creates more value than it destroys, so a rival's loss to a better product is lost profit rather than lost wealth.</li>
+<li>Explain why the constant rise and fall of firms serves consumers rather than signaling that competition has failed.</li>
+<li>Explain why losses discipline firms in a market as no planner can, and how the value of repeat business keeps sellers honest.</li>
+</ul>
+</aside>
+
 ## Adjustments Take Time, So Demand and Supply Get More Elastic the Longer We Wait
 
 Before we tax anything, one fact about timing makes the rest of the day click into place. People and firms do not respond to a price change all at once. They respond a little immediately, more over the following months, and most fully over years. Economists slice this into the *immediate run*, the *short run*, and the *long run*, each longer horizon allowing more adjustment.
+
+<aside class="econ-callout econ-termset">
+<p class="econ-callout__label">Key terms</p>
+<dl class="econ-term-list">
+<div><dt>Immediate Run</dt><dd>The period so short that buyers and sellers can barely adjust to a price change.</dd></div>
+<div><dt>Short Run</dt><dd>A period long enough for some adjustment but not a full one.</dd></div>
+<div><dt>Long Run</dt><dd>A period long enough for buyers and sellers to adjust as fully as they will.</dd></div>
+</dl>
+</aside>
 
 The upshot is that both demand and supply are more responsive, more elastic, the longer the period you allow. When gasoline jumps in price this week you can barely cut your driving; over a year you carpool; over a decade you buy a smaller car and move closer to work. Sellers are the same: this week's output is nearly fixed, but given years a high price draws new wells, new firms, new capacity. This is the key to how a tax's burden shifts over time, where we go next.
 
@@ -30,11 +56,19 @@ Now the centerpiece. Suppose the government puts a tax of ten cents on each gall
 
 Picture it two ways. Tax the sellers ten cents a gallon and you raise their cost of putting a gallon on the market by ten cents; their marginal-cost curve, and so the supply curve, shifts up by a dime, and the market clears at a higher price. Alternatively, tax the buyers ten cents a gallon. Now at every posted price buyers will pay the seller ten cents less, since the rest goes to the government, so the demand curve sellers see shifts down by a dime. Work either version through and you reach the identical place: the same quantity sold, the same price paid by buyers, the same net price kept by sellers. Whether the law names the buyer or the seller as the taxpayer is a political and emotional detail, not an economic one.
 
-![Two supply-and-demand diagrams showing that taxing sellers (supply shifts up by the tax) and taxing buyers (demand shifts down by the tax) produce identical prices and quantities, so who writes the check does not determine who pays.](/teaching/microeconomics/t07b-tax-incidence-and-quasi-rent/figures/t07b-tax-incidence.svg)
+<figure class="econ-figure" style="margin:1.5em 0;">
+<iframe src="/teaching/microeconomics/t07b-tax-incidence-and-quasi-rent/figures/t07b-tax-incidence-interactive.html" title="Drag the tax wedge to see that taxing sellers (supply shifts up) or taxing buyers (demand shifts down) reaches the identical price and quantity." loading="lazy" style="width:100%; max-width:640px; aspect-ratio:16/10; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t07b-tax-incidence-and-quasi-rent/figures/t07b-tax-incidence-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t07b-tax-incidence-and-quasi-rent/figures/t07b-tax-incidence.svg">view the static figure</a>.</p></iframe>
+<figcaption><strong>Who writes the check to the government does not decide who actually pays.</strong> A $0.10 tax on sellers (left) raises supply cost; the identical $0.10 tax on buyers (right) reduces what demand is worth to sellers. Either way, the buyer price, the seller's net, and the quantity traded end up the same. Drag the tax wedge to change the tax amount, or toggle demand between steeper and flatter to see how the split between buyers and sellers shifts. If the frame does not load, <a href="/teaching/microeconomics/t07b-tax-incidence-and-quasi-rent/figures/t07b-tax-incidence-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t07b-tax-incidence-and-quasi-rent/figures/t07b-tax-incidence.svg">view the static figure</a>.</figcaption>
+</figure>
 
 So who ends up paying? In UE's gasoline example the dime tax raises the price buyers pay by three cents and lowers the price sellers keep by seven cents. The tax splits, with neither side bearing all of it. What sets the split is which side can more easily back away from the deal, the relative responsiveness of demand and supply: the side that can dodge the tax more easily, by cutting back or switching to something else, pushes more of the burden onto the side that is stuck.
 
 That is exactly the error in a case worth remembering. Pittsburgh once put a 20 percent tax on the gross receipts of private parking lots while exempting the city's own lots. The Supreme Court upheld it and reasoned that, because parking was "in short supply," operators could pass the whole tax on to drivers, so customers would bear all of it. The economics is wrong. How much of a tax buyers bear has nothing to do with whether something is called a shortage; it depends on the relative elasticities of demand and supply. If drivers can switch to buses, trolleys, or parking elsewhere, the lot operators cannot pass the full tax along and must eat a share of it. A "shortage" does not hand sellers the power to off-load the entire burden.
+
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>A state taxes each gallon of gasoline ten cents. Drivers can easily carpool or switch to buses, but sellers cannot quickly cut output. Which side ends up bearing more of the tax, and why does it not matter whether the law names the buyer or the seller as the taxpayer?</p>
+</aside>
 
 One more cost of the tax escapes the price split, and we treat it verbally. The tax shrinks the quantity of gasoline produced and consumed. Those gallons no longer made were worth more to buyers than the resources freed up are now worth in whatever else they make. That lost value, the gap between what the foregone gallons were worth and what the displaced resources now produce, is a real cost of the tax, on top of the money the government collects. UE draws it as a measured triangle and calls it a deadweight loss; we keep the plain statement that some genuinely valued output is sacrificed and that loss is nobody's revenue.
 
@@ -50,13 +84,26 @@ Go back to taxing the whole peanut industry and watch the burden travel over tim
 
 Over the long run, things loosen. Marginal farmers, barely breaking even, give up peanuts and move their resources elsewhere. As output contracts the price rises further, and the survivors' land and equipment recover much of their lost value, because with fewer producers each remaining one earns more. So the value drop on specific resources is temporary for those who stay. The farmers who exited, though, bear a real and permanent loss: they ate the capitalized fall in their asset values on the way out. And as the price climbs toward covering the tax, consumers increasingly foot the bill at the register. In the long run, with supply more elastic, the tax lands mainly on consumers.
 
-![Two supply-and-demand diagrams comparing short-run tax incidence (steep inelastic curves, small quantity drop, burden falls on immobile producers) with long-run incidence (flatter elastic curves, larger quantity drop, burden shifts toward consumers).](/teaching/microeconomics/t07b-tax-incidence-and-quasi-rent/figures/t07b-tax-sr-lr.svg)
+<figure class="econ-figure" style="margin:1.5em 0;">
+<iframe src="/teaching/microeconomics/t07b-tax-incidence-and-quasi-rent/figures/t07b-tax-sr-lr-interactive.html" title="Drag the Short run / Long run toggle to see who bears a per-unit tax" loading="lazy" style="width:100%; max-width:640px; aspect-ratio:16/10; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t07b-tax-incidence-and-quasi-rent/figures/t07b-tax-sr-lr-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t07b-tax-incidence-and-quasi-rent/figures/t07b-tax-sr-lr.svg">view the static figure</a>.</p></iframe>
+<figcaption><strong>Steep curves keep the burden on producers; flat curves shift it onto consumers.</strong> In the short run, supply is steep because resources are stuck in place — the tax mostly shows up as a higher price, and quantity barely moves. Give it time: as marginal producers exit, supply flattens, the price rise gets a little smaller, and the quantity drop gets much larger — the burden migrates toward consumers. Tap Short run / Long run to compare, or use the arrow keys once it's focused. If the frame does not load, <a href="/teaching/microeconomics/t07b-tax-incidence-and-quasi-rent/figures/t07b-tax-sr-lr-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t07b-tax-incidence-and-quasi-rent/figures/t07b-tax-sr-lr.svg">view the static figure</a>.</figcaption>
+</figure>
 
 That carries a sharp corollary about latecomers. Suppose years after the tax, demand for peanuts grows, the surviving farms turn profitable, and a fresh investor buys in. How much of the tax does he bear? None of it. The price he pays for land and equipment already has the tax baked in, because their value already reflects the lower after-tax earnings; he earns a normal return on what he paid and carries no part of the burden. The tax was borne once and for all by whoever owned the specific resources when it was imposed. This also disposes of a popular bit of bad public finance, that it is fairer and gentler to "tax businesses, not households." Taxing the seller and taxing the buyer give the identical result: same quantity, same buyer price, same seller net. Routing a tax through firms rather than people changes who signs the check, not who carries the load.
 
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>A peanut tax was imposed years ago, and today an investor buys a peanut farm at its going market price. How much of that old tax does he bear, and why does the answer stay the same no matter how high the tax was?</p>
+</aside>
+
 ## A Resource in Place Earns a Quasi-Rent
 
-The peanut story leans on an idea worth naming. A resource already in place, with its cost sunk, earns what economists call a *quasi-rent*: a temporary surplus over its bare operating cost. You can cut that surplus, even cut it hard, without driving the resource out, because its original cost is gone and irrelevant. The only thing that shuts it down is a price so low it fails to cover the cost of operating it, not the cost of having built it. This applies to people too: the gap between what you currently earn and the most you could earn in your next-best job is your quasi-rent, and an employer could trim your pay toward that floor without losing you. The fuller treatment of specialized, hard-to-redeploy resources comes later in the course.
+The peanut story leans on an idea worth naming. A resource already in place, with its cost sunk, earns what economists call a *quasi-rent*: a temporary surplus over its bare operating cost.
+
+<aside class="econ-callout econ-def">
+<p class="econ-callout__label">Definition</p>
+<p>A quasi-rent is the temporary surplus a resource already in place earns over its bare operating cost.</p>
+</aside> You can cut that surplus, even cut it hard, without driving the resource out, because its original cost is gone and irrelevant. The only thing that shuts it down is a price so low it fails to cover the cost of operating it, not the cost of having built it. This applies to people too: the gap between what you currently earn and the most you could earn in your next-best job is your quasi-rent, and an employer could trim your pay toward that floor without losing you. The fuller treatment of specialized, hard-to-redeploy resources comes later in the course.
 
 ## Cutting Price Below a Rival's Cost Can Be Efficient, Not Predatory
 
@@ -80,6 +127,11 @@ Now a newcomer, "New," wants to lay modern fiber. Its costs are different.
 
 At first glance New looks like a winner: $675 long-run cost against Old's $1,200. But notice what happens if New builds. The market would then hold a hundred channels where there were fifty, and that flood of capacity would drive the price down. Old, with a short-run floor of just $200, can ride the price far below New's $675 long-run cost and keep operating on its sunk wire. When Old warns New, "build it and the price will fall below your cost," Old is not making a predatory threat; it is stating a fact about sunk capacity. The wasteful act would be New's premature investment, sinking $1.5 million into capacity the market does not yet need, not Old's willingness to keep using equipment it already owns. A price below a newcomer's long-run cost can be the efficient outcome, not foul play.
 
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>Old's long-run cost is $1,200 a channel, yet it keeps operating when the price falls to $300, below New's $675 long-run cost. Why is that not predatory pricing, and what does Old's $200 operating floor have to do with it?</p>
+</aside>
+
 ## Prices Move Before the Event, Because Stored Goods Bridge Present and Future
 
 One last piece of price behavior, because it surprises people and follows from the same logic. Prices often move before the thing everyone worries about actually happens, and they move asymmetrically. Consider coffee. Bad weather damages this year's crop and the price jumps right away, before any shortfall is felt on the shelf. Why? Because coffee can be stored. Anyone holding beans realizes they will be worth more later, so they hold them off the market today, and today's price rises immediately to reflect the coming scarcity. Present goods can be carried forward.
@@ -90,9 +142,28 @@ Now run it the other way. Word arrives that next year's harvest will be enormous
 
 Step back from the price-taker firm to the person who shakes the whole market up: the entrepreneur. Real growth comes from someone risking their own wealth on an experiment, a better product or a cheaper way of making an old one. Most such bets fail and the gambler eats the loss; the ones that work displace whatever came before. Joseph Schumpeter called this *creative destruction*, and the word "destruction" tempts people into thinking it is a wash, that what one firm gains another simply loses.
 
+<aside class="econ-callout econ-termset">
+<p class="econ-callout__label">Key term</p>
+<dl class="econ-term-list">
+<div><dt>Creative Destruction</dt><dd>The process by which better products and cheaper methods displace the ones that came before.</dd></div>
+</dl>
+</aside>
+
 It is not a wash, and a small example shows why. Suppose Coke spends three cents more a bottle to make a drink consumers value five cents more than Pepsi, and both still sell for a dollar. Buyers switch to Coke. Pepsi loses a dollar of sales on every switcher, so it looks as if the consumer, who gained only five cents of extra worth, imposed a full dollar of cost on Pepsi. That accounting is wrong twice over. First, Pepsi does not lose a dollar; it loses its profit on that bottle, far less than a dollar of revenue. Second, the resources Pepsi no longer uses do not vanish; they move to producing something else worth up to a dollar elsewhere. What looks like a dollar destroyed is really a transfer from Pepsi to consumers plus a reallocation of freed resources. Society is not poorer; it is richer by the improvement. A competitor's loss to a better product is lost profit, not lost wealth, and the innovator earns a genuine profit precisely because the new value created exceeds the old value displaced.
 
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>Buyers switch to Coke's better drink and Pepsi loses a dollar of sales on every switcher. Why is Pepsi's actual loss smaller than that dollar, and why is society richer rather than poorer after the switch?</p>
+</aside>
+
 The same logic explains how a market values resources nobody directly buys. Consumers buy finished goods, yet their willingness to pay for the product flows back, through competition among producers, to set what each contributing resource is worth. The value of the inputs is *imputed* from the value of the output. No committee assigns it; competition for the resources does, just as competition capitalized a machine's earnings into its price in Part A.
+
+<aside class="econ-callout econ-termset">
+<p class="econ-callout__label">Key term</p>
+<dl class="econ-term-list">
+<div><dt>Imputed</dt><dd>Assigned to a resource from the value of the output it helps produce.</dd></div>
+</dl>
+</aside>
 
 ## Firms Rise and Fall as Conditions Change, and That Is the Point
 
@@ -108,8 +179,20 @@ Why does this churn happen under competition but not under central planning? Bec
 
 That same discipline runs through one more channel, the only piece of our reputation material I want to pull in here. When a seller competes for repeat business, it is selling its *reputation* along with its product. Cheat a customer on quality and you may pocket a one-time gain, but you lose that customer and acquire a name that costs you far more future business than the gain was worth, so the prospect of repeat dealing keeps sellers honest with no one policing them. Heinz once sold horseradish in clear glass bottles precisely so buyers could see he was not hiding cheap fillers the way rivals in colored bottles could; a restaurant chain runs surprise inspections of its own suppliers because its name rides on every meal. The market makes honesty pay. A monopoly that cannot be deserted faces no such pressure, one reason we return to the market-versus-government comparison much later.
 
-## What's Next
-
-Pull the two parts of competitive markets together. In Part A a price-taker took the market price as given and produced where its marginal cost rose to meet that price; summed across firms, that gave an upward-sloping market supply producing the industry's output at the lowest possible total cost, with profits driven to a normal return. Today, in Part B, we set that machinery moving: a tax on the whole market splits between buyers and sellers according to who can more easily walk away, lands first on immobile resources and later on consumers, spares latecomers, and falls wholly on a lone price-taker who cannot pass it along. A resource in place earns a quasi-rent it can be charged for without leaving. Underpricing a rival on sunk capacity can be efficient rather than predatory. And the constant rise and fall of firms is not a malfunction; it is consumers being served by whoever serves them best this year.
-
-We assumed throughout both parts that no single seller could move the price. Drop that assumption and a new world opens. Next time we study the *price-searcher*: a seller large enough, or distinctive enough, that its own demand curve slopes down, so it must cut its price to sell more and its marginal revenue falls below price. We will see why such a firm produces less and charges more than a competitive industry would, what price discrimination is, and where today's tidy "price equals marginal cost" result breaks down. Bring both parts' tools; most still work. You just have to watch what changes when one seller finally gets a hand on the price.
+<div class="econ-review">
+<section class="econ-review__section">
+<h3>Key takeaways</h3>
+<ul>
+<li><strong>Elasticity grows with time.</strong> Both demand and supply respond more fully the longer the adjustment period, from the immediate run to the short run to the long run.</li>
+<li><strong>The check-writer is not the taxpayer.</strong> Whether the law taxes buyers or sellers, the burden splits the same way, set by which side can more easily walk away from the deal.</li>
+<li><strong>A lone price-taker bears his whole tax.</strong> He cannot move the market price, so a tax on him alone lands entirely on his specialized resources.</li>
+<li><strong>A broad tax travels over time.</strong> It falls first on immobile resources and later on consumers, while latecomers who buy in at the taxed price bear none of it.</li>
+<li><strong>A resource in place earns a quasi-rent.</strong> With its original cost sunk, it keeps operating as long as the price covers its operating cost, so its surplus can be trimmed without driving it out.</li>
+<li><strong>Underpricing sunk capacity is not predatory.</strong> A firm can ride the price below a newcomer's long-run cost because its own capital is already paid for, which can be efficient rather than foul play.</li>
+<li><strong>Storable goods move prices early and asymmetrically.</strong> Present goods can be held for the future, so bad news lifts today's price at once, while good news barely moves it because future goods cannot be pulled back.</li>
+<li><strong>Creative destruction creates more than it destroys.</strong> A rival's loss to a better product is lost profit, not lost wealth, and the freed resources move on to produce something else.</li>
+<li><strong>Churn serves consumers.</strong> The rise and fall of firms is competition working, rewarding whoever reads consumers best and replacing whoever stops.</li>
+<li><strong>Losses are the market's discipline.</strong> Red ink forces firms to change as no planner can, and the value of repeat business keeps sellers honest without anyone policing them.</li>
+</ul>
+</section>
+</div>

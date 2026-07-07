@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive dominant-firm diagram: residual demand sets a price above the price-taking level</title>
+<!--
+  Interactive figure for the t08b "Antitrust Law Often Protects Competitors
+  Rather Than Competition" blog post. Recreates UE Fig 21.2 (p.334) —
+  Representation of a Dominant Firm Situation. DEFERRED figure: there is no
+  prior static .tex/.svg to fall back to; this is a from-scratch build per
+  topics/t08b-antitrust-regulation/figures/interactive-specs.md.
+
+  Family F6 (firm cost/output): the reader drags an output handle q along the
+  horizontal axis. As q moves, dashed droplines mark where the vertical line
+  at q crosses the dominant firm's marginal revenue (MRd) and marginal cost
+  (MCd), and rides up to the residual demand curve (Dd) to read the price the
+  firm would charge at that output. The two marginal dots converge and the
+  price dot snaps to accent color exactly where MRd = MCd (Q ~ 4.7), which is
+  the dominant firm's profit-maximizing output. A FIXED reference marker (Qt,
+  Pt) shows the price-taking outcome (Dt intersect St) for contrast: the
+  point of the figure is Pd > Pt and Qd < Qt.
+
+  ARCHITECTURE: the base figure is REAL SVG markup, drawn at the default state
+  q = 4.7 (already snapped to the profit-max output), so a no-JS reader sees
+  the complete diagram: both axes, all six lines (Dt, So, Dd, MRd, MCd, St),
+  the fixed Pt/Qt reference marker with its droplines, the dynamic droplines
+  and dots at q = 4.7, and the two-line readout. The script only ATTACHES
+  behavior (drag q, keyboard, live readouts); it never builds the DOM.
+
+  GEOMETRY (single-panel, standard SS4): viewBox 440 x 540, aspect-ratio 4/5,
+  max-width 480-560px. Abstract 0-10 x 0-10 price/quantity scale (source has
+  no axis numbers). Pixel frame: x-axis at y = 380, y-axis at x = 70.
+  px(Q) = 70 + 30*Q ; py(P) = 380 - 30*P. Six lines, all straight (the source
+  figure is drawn with straight demand/supply/cost lines, not curves):
+    Dt  (total market demand):     P = 10 - 0.6*Q
+    So  (fringe/"other" supply):   P = 2 + 0.8*Q
+    Dd  (residual demand, Dt-So):  P = 6.57 - 0.343*Q
+    MRd (marginal revenue of Dd):  P = 6.57 - 0.686*Q   (twice Dd's slope)
+    MCd (dominant firm's MC):      P = 1 + 0.5*Q
+    St  (total supply, So+MCd):    P = 1.38 + 0.308*Q
+  Price-taking outcome Dt (intersect) St: Qt = 9.493, Pt = 4.304 (~9.5, ~4.3).
+  Dominant-firm outcome MRd = MCd: Q* = 4.696, MRd=MCd = 3.348 (~3.3), read up
+  to Dd for Pd = 4.959 (~5.0). Reconciliation note: the spec's illustrative
+  readout example for the "at optimum" state says "MRd = MCd ~ 2.6" — solving
+  the two line equations directly gives ~3.3 (verified against the q=3 example,
+  MR 4.5/MC 2.5, and the q=6.5 example, MC 4.3/MR 2.1, both of which check out
+  and bracket 3.3, not 2.6). This build reports the internally consistent 3.3
+  so the on-screen math is correct at every output level, not just the two
+  flanking examples.
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;   /* warm bone background        */
+    --ink:     #1a1c1e;    /* Dd / MRd / MCd (dominant-firm apparatus) */
+    --text:    #16181a;    /* body text / dynamic value labels */
+    --muted:   #5c6066;    /* Dt / So / St (market-context curves) */
+    --hairline:#e3ddd3;    /* axes muting / droplines     */
+    --accent:  #b07a2c;    /* brass — Pt/Qt reference + the optimum snap */
+    --accent-tint: #efe4d2;/* unused fill token, kept for palette-gate parity */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .fig { width: 100%; max-width: 520px; min-width: 0; }
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+
+  /* structural strokes */
+  .axis { stroke: var(--muted); stroke-width: 1.4; }
+  .drop { stroke: var(--hairline); stroke-width: 1.6; stroke-dasharray: 5 4; }
+
+  /* market-context curves (background: total demand, fringe supply, total supply) */
+  .dt { stroke: var(--muted); stroke-width: 2;   fill: none; }
+  .so { stroke: var(--muted); stroke-width: 2;   fill: none; stroke-dasharray: 6 4; }
+  .st { stroke: var(--muted); stroke-width: 2.2; fill: none; stroke-dasharray: 2 4; }
+
+  /* dominant-firm apparatus (foreground: residual demand, its MR, its MC) */
+  .dd  { stroke: var(--ink); stroke-width: 2.8; fill: none; stroke-linecap: round; }
+  .mrd { stroke: var(--ink); stroke-width: 2;   fill: none; stroke-dasharray: 7 5; }
+  .mcd { stroke: var(--ink); stroke-width: 2.2; fill: none; }
+
+  /* dots + handles */
+  .refdot  { fill: var(--accent); stroke: var(--surface); stroke-width: 1.5; }
+  .ctxdot  { fill: var(--muted);  stroke: var(--surface); stroke-width: 1; }
+  .pdot    { fill: var(--ink);    stroke: var(--surface); stroke-width: 2; }
+  .pdot.snap { fill: var(--accent); stroke: var(--accent); stroke-width: 2.5; }
+  .grip    { fill: var(--accent); stroke: var(--surface); stroke-width: 1.5; }
+
+  /* generous transparent hit targets + keyboard proxy */
+  .hit      { fill: transparent; stroke: transparent; touch-action: none; cursor: grab; }
+  .hit-line { fill: none; stroke: transparent; stroke-width: 28; touch-action: none; cursor: grab; }
+  .focus:focus-visible { outline: none; }
+  .focus:focus-visible ~ .grip,
+  .grabbing .grip { stroke: var(--accent); stroke-width: 3.5; }
+
+  /* text */
+  .axlabel  { fill: var(--muted); font-size: 15px; font-weight: 600; }
+  .lbl-muted{ font-size: 13px; font-weight: 700; fill: var(--muted); }
+  .lbl-ink  { font-size: 13px; font-weight: 700; fill: var(--ink); }
+  .reflabel { font-size: 13px; font-weight: 700; fill: var(--accent); }
+  .vlabel   { font-size: 13px; font-weight: 700; fill: var(--text); }
+  .sep      { stroke: var(--hairline); stroke-width: 1; }
+  .r-hint   { fill: var(--muted); font-size: 12.5px; }
+  .r-trade  { fill: var(--accent); font-size: 13.5px; font-weight: 600; }
+  .fallback {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.35;
+    text-align: center;
+  }
+  .fallback a { color: var(--ink); }
+</style>
+</head>
+<body>
+<!-- Everything from here to </div> is REAL base SVG drawn at the initial state
+     q = 4.7 (already near the profit-max output), so a no-JS reader sees the
+     complete diagram. -->
+<div class="fig">
+  <svg id="fig" viewBox="0 0 440 540" role="group"
+       aria-label="A price-quantity diagram of a dominant firm facing residual demand. Total market demand Dt and total market supply St cross at the price-taking quantity Qt and price Pt. Subtracting the small fringe firms' supply, So, from Dt gives the dominant firm's flatter residual demand, Dd. The dominant firm's marginal revenue, MRd, crosses its marginal cost, MCd, at the profit-maximizing output; reading up from there to Dd gives the dominant firm's price, Pd, which sits above the price-taking price Pt, while output is lower than the price-taking quantity Qt. Drag the output handle to see marginal revenue and marginal cost converge at the optimum.">
+    <title>Dominant firm facing residual demand: Pd above Pt, Qd below Qt</title>
+    <defs>
+      <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+    </defs>
+
+    <!-- axes (drawn first so every curve sits on top); extended past the data
+         max so the lines don't crowd the arrowheads -->
+    <line class="axis" x1="70" y1="380" x2="415" y2="380" marker-end="url(#arrow)" />
+    <line class="axis" x1="70" y1="380" x2="70"  y2="50"  marker-end="url(#arrow)" />
+
+    <!-- market-context curves (muted, background): Dt, So, St -->
+    <line class="dt" x1="70" y1="80"    x2="385" y2="269" />
+    <line class="so" x1="70" y1="320"   x2="340" y2="104" />
+    <line class="st" x1="70" y1="338.6" x2="400" y2="237" />
+
+    <!-- dominant-firm apparatus (ink, foreground): Dd, MRd, MCd -->
+    <line class="dd"  x1="70" y1="182.9" x2="400"   y2="296.1" />
+    <line class="mrd" x1="70" y1="182.9" x2="357.3" y2="380" />
+    <line class="mcd" x1="70" y1="350"   x2="400"   y2="185" />
+
+    <!-- curve labels (kept off every line) -->
+    <text class="lbl-muted" x="392" y="272" text-anchor="start">Dt</text>
+    <text class="lbl-muted" x="300" y="116" text-anchor="middle">So</text>
+    <text class="lbl-muted" x="405" y="240" text-anchor="start">St</text>
+    <text class="lbl-ink"   x="403" y="300" text-anchor="start">Dd</text>
+    <text class="lbl-ink"   x="310" y="368" text-anchor="middle">MRd</text>
+    <text class="lbl-ink"   x="310" y="195" text-anchor="middle">MCd</text>
+
+    <!-- axis titles -->
+    <text class="axlabel" x="242" y="422" text-anchor="middle">Quantity</text>
+    <text class="axlabel" x="22" y="215" text-anchor="middle"
+          transform="rotate(-90 22 215)">Price</text>
+
+    <!-- FIXED reference marker: the price-taking outcome Dt (intersect) St,
+         Qt ~ 9.5, Pt ~ 4.3. Always shown, never dragged; the accent color is
+         the one constant landmark the dynamic dot is compared against. -->
+    <line class="drop" x1="354.8" y1="380"   x2="354.8" y2="250.9" />
+    <line class="drop" x1="70"    y1="250.9" x2="354.8" y2="250.9" />
+    <circle class="refdot" cx="354.8" cy="250.9" r="4" />
+    <text class="reflabel" x="354.8" y="398" text-anchor="middle">Qt</text>
+    <text class="reflabel" x="62" y="250.9" text-anchor="end" dominant-baseline="middle">Pt</text>
+
+    <!-- DYNAMIC markers at the current output q (default q = 4.7) -->
+    <line id="qDrop" class="drop" x1="211.0" y1="380" x2="211.0" y2="231.3" />
+    <line id="ddDrop" class="drop" x1="70" y1="231.3" x2="211.0" y2="231.3" />
+    <circle id="mrdDot" class="ctxdot" cx="211.0" cy="279.6" r="3.2" />
+    <circle id="mcdDot" class="ctxdot" cx="211.0" cy="279.5" r="3.2" />
+    <circle id="ddDot" class="pdot snap" cx="211.0" cy="231.3" r="5" />
+    <text id="qFoot" class="reflabel" x="211.0" y="398" text-anchor="middle">Qd</text>
+    <text id="pVal" class="reflabel" x="62" y="231.3" text-anchor="end"
+          dominant-baseline="middle">Pd</text>
+
+    <!-- ===== hit target + keyboard proxy (drawn last, on top) ===== -->
+    <line id="qHit" class="hit-line" x1="211.0" y1="380" x2="211.0" y2="52" />
+    <circle id="qGrip" class="grip" cx="211.0" cy="380" r="5.5" />
+    <circle id="qFocus" class="hit focus" cx="211.0" cy="380" r="22"
+            tabindex="0" role="slider" aria-label="Dominant firm's output"
+            aria-valuemin="1" aria-valuemax="8" aria-valuenow="4.7"
+            aria-valuetext="Output 4.7. MRd equals MCd, about 3.3 — this is the profit-maximizing output. Reading up to Dd, the dominant firm sets a price of about 5.0, above the price-taking price of about 4.3, while output is below the price-taking quantity of about 9.5." />
+
+    <!-- readout band: hairline separator, muted STATE line, accent TAKEAWAY line -->
+    <line class="sep" x1="44" y1="436" x2="396" y2="436" />
+    <text class="r-hint" x="220" y="458" text-anchor="middle">
+      <tspan id="rState1" x="220" dy="0">At Q&#8776;4.7, MRd = MCd &#8776; 3.3.</tspan>
+      <tspan id="rState2" x="220" dy="17">This is the profit-maximizing output.</tspan>
+    </text>
+    <text class="r-trade" x="220" y="500" text-anchor="middle">
+      <tspan id="rTake1" x="220" dy="0">Pd &#8776; 5.0 sits above Pt &#8776; 4.3.</tspan>
+      <tspan id="rTake2" x="220" dy="17">Total output is now below Qt.</tspan>
+    </text>
+  </svg>
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame is a still image: the
+    full diagram above is the complete figure at its default state — a
+    dominant firm's residual demand (Dd, derived from total market demand Dt
+    minus the fringe firms' supply So) with its marginal revenue (MRd) crossing
+    its marginal cost (MCd) at the profit-maximizing output, read up to Dd for
+    the dominant price Pd, shown against the fixed price-taking reference point
+    Pt/Qt (where total demand Dt meets total supply St). There is no separate
+    static figure for this deferred diagram — the image above is it.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var svg     = document.getElementById('fig');
+  var qDrop   = document.getElementById('qDrop');
+  var ddDrop  = document.getElementById('ddDrop');
+  var mrdDot  = document.getElementById('mrdDot');
+  var mcdDot  = document.getElementById('mcdDot');
+  var ddDot   = document.getElementById('ddDot');
+  var qFoot   = document.getElementById('qFoot');
+  var pVal    = document.getElementById('pVal');
+  var qHit    = document.getElementById('qHit');
+  var qGrip   = document.getElementById('qGrip');
+  var qFocus  = document.getElementById('qFocus');
+  var rState1 = document.getElementById('rState1');
+  var rState2 = document.getElementById('rState2');
+  var rTake1  = document.getElementById('rTake1');
+  var rTake2  = document.getElementById('rTake2');
+
+  // --- the six lines (mirrors the static markup exactly) ---
+  function dt(q)  { return 10 - 0.6 * q; }        // total market demand
+  function so(q)  { return 2 + 0.8 * q; }         // fringe ("other") supply
+  function dd(q)  { return 6.57 - 0.343 * q; }    // residual demand, Dt - So
+  function mrd(q) { return 6.57 - 0.686 * q; }    // marginal revenue of Dd
+  function mcd(q) { return 1 + 0.5 * q; }         // dominant firm's marginal cost
+  function st(q)  { return 1.38 + 0.308 * q; }    // total supply, So + MCd
+
+  var PT = 4.304, QT = 9.493;                     // price-taking reference (fixed)
+  var QSTAR = 4.696;                               // MRd = MCd
+  var EPS = 0.15;                                  // snap tolerance on Q
+
+  // --- pixel frame (mirrors the SVG markup): px(Q) = 70+30Q, py(P) = 380-30P ---
+  var X0 = 70, Y0 = 380;
+  function px(q) { return X0 + 30 * q; }
+  function py(p) { return Y0 - 30 * p; }
+  function qFromX(x) { return (x - X0) / 30; }
+
+  var QLO = 1, QHI = 8;   // output-handle range (keeps Dd/MRd/MCd all in view)
+
+  var q = 4.7;            // state, in data units
+
+  function fmt(v) { return v.toFixed(1); }
+  function clamp(v, lo, hi) { return v < lo ? lo : (v > hi ? hi : v); }
+
+  var spt = svg.createSVGPoint();
+  function toSvg(evt) {
+    spt.x = evt.clientX; spt.y = evt.clientY;
+    return spt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+
+  function render() {
+    var pxq = px(q);
+    var mrdV = mrd(q), mcdV = mcd(q), ddV = dd(q);
+    var yMrd = py(mrdV), yMcd = py(mcdV), yDd = py(ddV);
+    var atOpt = Math.abs(mrdV - mcdV) < EPS;
+
+    // droplines: vertical q-line up to Dd(q); horizontal from Dd(q) to the P axis
+    qDrop.setAttribute('x1', pxq);  qDrop.setAttribute('x2', pxq);
+    qDrop.setAttribute('y2', yDd);
+    ddDrop.setAttribute('x2', pxq); ddDrop.setAttribute('y1', yDd); ddDrop.setAttribute('y2', yDd);
+
+    // context dots on MRd and MCd (converge as q approaches the optimum)
+    mrdDot.setAttribute('cx', pxq); mrdDot.setAttribute('cy', yMrd);
+    mcdDot.setAttribute('cx', pxq); mcdDot.setAttribute('cy', yMcd);
+
+    // the price dot on Dd: ink normally, snaps to accent at the optimum
+    ddDot.setAttribute('cx', pxq); ddDot.setAttribute('cy', yDd);
+    ddDot.classList.toggle('snap', atOpt);
+
+    // handle + foot label + side (price) label
+    qGrip.setAttribute('cx', pxq); qFocus.setAttribute('cx', pxq); qHit.setAttribute('x1', pxq); qHit.setAttribute('x2', pxq);
+    qFoot.setAttribute('x', pxq);
+    pVal.setAttribute('y', yDd);
+    // named "Qd"/"Pd" landmarks at the exact optimum (mirrors the fixed
+    // Qt/Pt reference); a plain live numeric readout while dragging elsewhere
+    if (atOpt) {
+      qFoot.setAttribute('class', 'reflabel');
+      qFoot.textContent = 'Qd';
+      pVal.setAttribute('class', 'reflabel');
+      pVal.textContent = 'Pd';
+    } else {
+      qFoot.setAttribute('class', 'vlabel');
+      qFoot.textContent = fmt(q);
+      pVal.setAttribute('class', 'vlabel');
+      pVal.textContent = fmt(ddV);
+    }
+
+    // ---- two-line readout (kept short: long lines clip at the mobile
+    // viewport edge, the same failure mode the t07a exemplar also shows) ----
+    var s1, s2, t1, t2;
+    if (atOpt) {
+      s1 = 'At Q≈' + fmt(q) + ', MRd = MCd ≈ ' + fmt((mrdV + mcdV) / 2) + '.';
+      s2 = 'This is the profit-maximizing output.';
+      t1 = 'Pd ≈ ' + fmt(ddV) + ' sits above Pt ≈ ' + fmt(PT) + '.';
+      t2 = 'Total output is now below Qt.';
+    } else if (mrdV > mcdV) {
+      s1 = 'At Q=' + fmt(q) + ', MRd (' + fmt(mrdV) + ') > MCd (' + fmt(mcdV) + ').';
+      s2 = 'One more unit earns more than it costs.';
+      t1 = 'MRd > MCd: the dominant firm should';
+      t2 = 'expand output toward the optimum.';
+    } else {
+      s1 = 'At Q=' + fmt(q) + ', MCd (' + fmt(mcdV) + ') > MRd (' + fmt(mrdV) + ').';
+      s2 = 'The last unit costs more than it earns.';
+      t1 = 'MRd < MCd: the dominant firm should';
+      t2 = 'pull back output toward the optimum.';
+    }
+    rState1.textContent = s1;
+    rState2.textContent = s2;
+    rTake1.textContent  = t1;
+    rTake2.textContent  = t2;
+
+    // ---- aria (full sentence; no line-length limit for the spoken form) ----
+    qFocus.setAttribute('aria-valuenow', fmt(q));
+    qFocus.setAttribute('aria-valuetext',
+      'Output ' + fmt(q) + '. ' + s1 + ' ' + s2 + ' ' + t1 + ' ' + t2 +
+      ' The price-taking reference is Qt about ' + fmt(QT) + ', Pt about ' + fmt(PT) + '.');
+  }
+
+  function setQ(nq) {
+    nq = clamp(nq, QLO, QHI);
+    if (nq !== q) { q = nq; render(); }
+  }
+
+  // ---- pointer drag (with capture so a fast drag can't get stuck) ----
+  var dragging = false, capEl = null, capId = null;
+  function onMove(evt) {
+    if (!dragging) return;
+    evt.preventDefault();
+    var p = toSvg(evt);
+    if (!isNaN(p.x)) setQ(qFromX(p.x));
+  }
+  function onUp() {
+    dragging = false;
+    svg.classList.remove('grabbing');
+    if (capEl && capId !== null) { try { capEl.releasePointerCapture(capId); } catch (e) {} }
+    capEl = null; capId = null;
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+  }
+  function onDown(evt) {
+    evt.preventDefault();
+    dragging = true;
+    svg.classList.add('grabbing');
+    capEl = evt.currentTarget; capId = evt.pointerId;
+    try { capEl.setPointerCapture(capId); } catch (e) {}
+    onMove(evt);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }
+  qHit.addEventListener('pointerdown', onDown);
+  qGrip.addEventListener('pointerdown', onDown);
+  qFocus.addEventListener('pointerdown', onDown);
+
+  // ---- keyboard ----
+  qFocus.addEventListener('keydown', function (evt) {
+    var nq = q;
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') nq = q + 0.2;
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') nq = q - 0.2;
+    else if (evt.key === 'Home') nq = QLO;
+    else if (evt.key === 'End') nq = QHI;
+    else return;
+    evt.preventDefault();
+    setQ(nq);
+  });
+
+  // Debug hook: lets a reviewer screenshot non-initial states via scripting.
+  window.__fig = {
+    set: function (o) {
+      o = o || {};
+      if (o.q !== undefined) { q = clamp(+o.q, QLO, QHI); }
+      render();
+    },
+    get: function () {
+      return { q: q, mrd: mrd(q), mcd: mcd(q), dd: dd(q), Pt: PT, Qt: QT, Qstar: QSTAR };
+    }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

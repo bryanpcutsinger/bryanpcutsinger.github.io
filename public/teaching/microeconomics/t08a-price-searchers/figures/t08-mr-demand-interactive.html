@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive figure: marginal revenue bisects demand</title>
+<!--
+  Interactive marginal-revenue/demand figure for the T8a blog post (website-
+  styled, warm palette). Recreates UE Fig 19.1 "Marginal Revenue and Demand"
+  (p.290). Self-contained: no libraries, no network. The static FAU figure
+  (figures/t08-mr-demand.{tex,svg}) is the SLIDE version and is untouched; it
+  is also the <noscript> fallback.
+
+  FAMILY F1 (trace-the-curve). Geometry class: single-panel, viewBox 440x540,
+  aspect-ratio 4/5, max-width 480px.
+
+  MODEL: Demand (AR) is P = 10 - Q; MR (its true bisector) is P = 10 - 2Q, so
+  MR's quantity intercept (5) is exactly half AR's (10). Q is dragged along AR
+  in whole units, Q in [1,5].
+    AR(Q) = 10 - Q          MR(Q) = 10 - 2Q          gap(Q) = AR(Q)-MR(Q) = Q
+
+  Two constructions ride the SAME dragged Q, both real at every position (not
+  just the illustrative P=6/Q=4 instance the static figure fixes):
+    - BISECTION (source's R): the horizontal price line at height AR(Q) from
+      the price axis to the dragged point P' crosses MR at R, whose quantity
+      is exactly Q/2 -- MR bisects the horizontal run 0->Q. Braces below the
+      axis mark the two equal halves 0->Q/2 and Q/2->Q.
+    - VERTICAL GAP (the interaction's tethered marker): the point on MR
+      directly below P', at the SAME Q, sits at MR(Q) -- the solid accent
+      segment between them is the "markdown" gap = price - MR = Q dollars.
+
+  GEOMETRY / coordinate frame:
+    Origin (Q=0, P=$0) at pixel (64, 360).
+    x scale: Q -> px x = 64 + Q*28   (Q=10 -> x=344; axis drawn to x=410).
+    y scale: P -> px y = 360 - P*29.6 (P=10 -> y=64; axis drawn to y=40).
+    AR line:  (Q=0,P=10)=(64,64)  to (Q=10,P=0)=(344,360).
+    MR line:  (Q=0,P=10)=(64,64)  to (Q=5,P=0)=(204,360).
+    Default/initial state Q=4 (matches the corrected-inventory illustration:
+    P=6, P'=(4,6), R=(2,6), braces 0-2 / 2-4) and also the interaction spec's
+    "Q=4 state" readout example.
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;   /* warm bone background        */
+    --ink:     #1a1c1e;    /* AR curve + headings         */
+    --text:    #16181a;    /* body text                   */
+    --muted:   #5c6066;    /* MR curve / axes / captions  */
+    --hairline:#e3ddd3;    /* droplines / brace ticks     */
+    --accent:  #b07a2c;    /* brass — the draggable point + gap */
+    --accent-tint: #efe4d2;/* tag backing / gap fill      */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* min-width:0 defeats the flexbox min-width:auto default so the figure
+     scales DOWN to viewports narrower than the SVG's intrinsic width instead
+     of clipping (the right side would otherwise be cut off on phones). */
+  .fig { width: 100%; max-width: 480px; min-width: 0; }
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+
+  /* structural strokes */
+  .axis    { stroke: var(--muted); stroke-width: 1.4; }
+  .curveAR { stroke: var(--ink);   stroke-width: 2.6; fill: none;
+             stroke-linecap: round; }
+  .curveMR { stroke: var(--muted); stroke-width: 2.2; fill: none;
+             stroke-linecap: round; }
+  .drop    { stroke: var(--hairline); stroke-width: 1.6;
+             stroke-dasharray: 5 4; }
+  .gap     { stroke: var(--accent); stroke-width: 3; stroke-linecap: round; }
+  .brace   { stroke: var(--muted); stroke-width: 1.2; }
+
+  /* points */
+  .ptAR   { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5; }
+  .ptR    { fill: var(--muted); }
+  .ptT2   { fill: var(--accent); stroke: var(--surface); stroke-width: 2; }
+  .hit       { fill: transparent; stroke: transparent; touch-action: none;
+               cursor: grab; }
+  .hit-curve { fill: none; stroke: transparent; stroke-width: 26;
+               touch-action: none; cursor: grab; }
+  .pt-focus:focus-visible { outline: none; }
+  .pt-focus:focus-visible + .ptAR,
+  .grabbing .ptAR { stroke: var(--accent); stroke-width: 3.5; }
+
+  /* text */
+  .axtitle  { fill: var(--muted); font-size: 13px; font-weight: 600; }
+  .curvelblAR { fill: var(--ink);   font-size: 12.5px; font-style: italic; }
+  .curvelblMR { fill: var(--muted); font-size: 12.5px; font-style: italic; }
+  .bracelbl { fill: var(--muted); font-size: 11px; font-weight: 600; }
+  .tagbg    { fill: var(--surface); }
+  .tagtxt   { fill: var(--accent); font-size: 12px; font-weight: 700; }
+  .gaplbl   { fill: var(--accent); font-size: 11.5px; font-weight: 700; }
+  .sep      { stroke: var(--hairline); stroke-width: 1; }
+  .r-hint   { fill: var(--muted);  font-size: 12.5px; }
+  .r-trade  { fill: var(--accent); font-size: 13px; font-weight: 600; }
+  .fallback {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.35;
+    text-align: center;
+  }
+  .fallback a { color: var(--ink); }
+</style>
+</head>
+<body>
+<!-- Everything from here to </div> is REAL base SVG: a no-JS reader sees the
+     full figure (axes, the AR and MR lines, the P'/R/T2 construction at the
+     default Q=4, braces marking the bisection, the vertical gap, live tags,
+     and the readout). The script only ATTACHES drag / keyboard / live
+     updates. -->
+<div class="fig">
+  <svg id="fig" viewBox="0 0 440 540" role="group"
+       aria-label="Marginal revenue and demand for a price searcher. Price is on the vertical axis, quantity on the horizontal. The demand, or average revenue, curve slopes down; the marginal revenue line lies strictly below it and reaches zero at half the demand curve's quantity intercept. Drag the point along the demand curve to see, at each quantity, the price, the marginal revenue directly below it at the same quantity, and how marginal revenue bisects the horizontal distance from the price axis to demand.">
+    <defs>
+      <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+    </defs>
+
+    <!-- axes (drawn first); extended past the data max -->
+    <line class="axis" x1="64" y1="360" x2="410" y2="360" marker-end="url(#arrow)" />
+    <line class="axis" x1="64" y1="360" x2="64"  y2="40"  marker-end="url(#arrow)" />
+    <text class="axtitle" x="237" y="428" text-anchor="middle">Quantity</text>
+    <text class="axtitle" x="20" y="200" text-anchor="middle"
+          transform="rotate(-90 20 200)">Price</text>
+
+    <!-- Demand (AR): P = 10 - Q, from (0,10) to (10,0) -->
+    <path class="curveAR" d="M64,64 L344,360" />
+    <text class="curvelblAR" x="262" y="252" text-anchor="start">Demand (AR)</text>
+
+    <!-- MR: P = 10 - 2Q, from (0,10) to (5,0) — exactly half AR's x-intercept -->
+    <path class="curveMR" d="M64,64 L204,360" />
+    <text class="curvelblMR" x="96" y="322" text-anchor="start">MR</text>
+
+    <!-- Bisection: horizontal price line from the price axis to P' crosses MR
+         at R, whose quantity is always Q/2 -- the braces below mark the two
+         equal halves 0->Q/2 and Q/2->Q. Initial Q=4: P'=(4,6), R=(2,6). -->
+    <line id="dropH" class="drop" x1="64" y1="182.4" x2="176" y2="182.4" />
+    <line id="dropVR" class="drop" x1="120" y1="182.4" x2="120" y2="360" />
+
+    <!-- vertical gap: P' (on AR) straight down to T2 (on MR) at the same Q;
+         the solid accent segment is the price-minus-MR markdown. Lower
+         portion (T2 down to the axis) stays a dashed hairline dropline. -->
+    <line id="dropVgap"   class="gap"  x1="176" y1="182.4" x2="176" y2="300.8" />
+    <line id="dropVlower" class="drop" x1="176" y1="300.8" x2="176" y2="360" />
+    <text id="gapLbl" class="gaplbl" x="184" y="245.6" text-anchor="start">$4 gap</text>
+
+    <!-- brace ruler: small ticks at 0, Q/2, Q with a connecting line just
+         below the axis; "equal" labels centered under each half -->
+    <g id="braceTicks">
+      <line class="brace" x1="64"  y1="362" x2="64"  y2="370" />
+      <line id="braceTickMid" class="brace" x1="120" y1="362" x2="120" y2="370" />
+      <line id="braceTickEnd" class="brace" x1="176" y1="362" x2="176" y2="370" />
+      <line id="braceLine1" class="brace" x1="64"  y1="370" x2="120" y2="370" />
+      <line id="braceLine2" class="brace" x1="120" y1="370" x2="176" y2="370" />
+    </g>
+    <!-- staggered vertically (not just side-by-side) so the two "equal" tags
+         never collide even when Q is small and the brace segments are narrow -->
+    <text id="braceLbl1" class="bracelbl" x="92"  y="380" text-anchor="middle">equal</text>
+    <text id="braceLbl2" class="bracelbl" x="148" y="396" text-anchor="middle">equal</text>
+
+    <!-- live price-axis tags (ride the dropline feet): AR price ("P") and MR
+         price, so the vertical price-minus-MR gap reads directly off the axis -->
+    <g id="pArTag">
+      <rect id="pArBg" class="tagbg" x="20" y="174.9" width="40" height="15" rx="2" />
+      <text id="pAr" class="tagtxt" x="40" y="182.4" text-anchor="middle"
+            dominant-baseline="middle">$6.00</text>
+    </g>
+    <g id="pMrTag">
+      <rect id="pMrBg" class="tagbg" x="20" y="293.3" width="40" height="15" rx="2" />
+      <text id="pMr" class="tagtxt" x="40" y="300.8" text-anchor="middle"
+            dominant-baseline="middle">$2.00</text>
+    </g>
+
+    <!-- live quantity-axis tag riding the dragged point's dropline foot -->
+    <g id="qArTag">
+      <rect id="qArBg" class="tagbg" x="164" y="402" width="24" height="14" rx="2" />
+      <text id="qAr" class="tagtxt" x="176" y="409" text-anchor="middle"
+            dominant-baseline="middle">4</text>
+    </g>
+
+    <!-- the bisection point R (annotation only, not draggable) -->
+    <circle id="ptR" class="ptR" cx="120" cy="182.4" r="5" />
+
+    <!-- the tethered marker T2: point on MR directly below the dragged Q -->
+    <circle id="ptT2" class="ptT2" cx="176" cy="300.8" r="6" />
+
+    <!-- the draggable point P' on AR + hit targets -->
+    <path id="hitCurve" class="hit-curve" d="M64,64 L344,360" />
+    <circle id="hit" class="hit" cx="176" cy="182.4" r="22" />
+    <circle id="ptAR" class="ptAR" cx="176" cy="182.4" r="7" />
+    <!-- focusable proxy for keyboard control -->
+    <circle id="ptFocus" class="pt-focus hit" cx="176" cy="182.4" r="22"
+            tabindex="0" role="slider" aria-label="Point on the demand curve (quantity sold)"
+            aria-valuemin="1" aria-valuemax="5" aria-valuenow="4"
+            aria-valuetext="At Q = 4, price = $6.00, marginal revenue = $2.00. Marginal revenue has fallen to $2, well below the $6 price; at Q = 5 it hits zero (revenue is maxed) and then goes negative." />
+
+    <!-- readout band: hairline separator, muted STATE line, accent TAKEAWAY line -->
+    <line class="sep" x1="44" y1="436" x2="396" y2="436" />
+    <text id="rHint"  class="r-hint"  x="220" y="458" text-anchor="middle">At Q = 4, price = $6.00, marginal revenue = $2.00.</text>
+    <text id="rTrade" class="r-trade" text-anchor="middle"><tspan x="220" y="476">Marginal revenue has fallen to $2, well below the $6 price; at Q = 5 it</tspan><tspan x="220" y="494">hits zero (revenue is maxed) and then goes negative.</tspan></text>
+  </svg>
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame is a still image: a downward demand (AR) line, an MR line below it that bisects any horizontal run from the price axis to demand, and a point marking one price-quantity pair. You can also <a href="t08-mr-demand.svg">open the static figure</a>.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var svg        = document.getElementById('fig');
+  var ptAR       = document.getElementById('ptAR');
+  var hit        = document.getElementById('hit');
+  var ptFocus    = document.getElementById('ptFocus');
+  var hitCurve   = document.getElementById('hitCurve');
+  var dropH      = document.getElementById('dropH');
+  var dropVR     = document.getElementById('dropVR');
+  var dropVgap   = document.getElementById('dropVgap');
+  var dropVlower = document.getElementById('dropVlower');
+  var gapLbl     = document.getElementById('gapLbl');
+  var braceTickMid = document.getElementById('braceTickMid');
+  var braceTickEnd = document.getElementById('braceTickEnd');
+  var braceLine1 = document.getElementById('braceLine1');
+  var braceLine2 = document.getElementById('braceLine2');
+  var braceLbl1  = document.getElementById('braceLbl1');
+  var braceLbl2  = document.getElementById('braceLbl2');
+  var pArBg      = document.getElementById('pArBg');
+  var pAr        = document.getElementById('pAr');
+  var pMrBg      = document.getElementById('pMrBg');
+  var pMr        = document.getElementById('pMr');
+  var qArBg      = document.getElementById('qArBg');
+  var qAr        = document.getElementById('qAr');
+  var ptR        = document.getElementById('ptR');
+  var ptT2       = document.getElementById('ptT2');
+  var rHint      = document.getElementById('rHint');
+  var rTrade     = document.getElementById('rTrade');
+  var NS = 'http://www.w3.org/2000/svg';
+
+  // pixel frame + scale (mirrors the static SVG markup above)
+  var X0 = 64, Y0 = 360;
+  var DX = 28;      // px per unit of quantity
+  var DY = 29.6;    // px per dollar of price
+  var qx = function (q) { return X0 + q * DX; };   // quantity -> px x
+  var py = function (p) { return Y0 - p * DY; };   // price    -> px y
+  var toQ = function (px) { return (px - X0) / DX; };
+
+  // model: AR(Q) = 10 - Q; MR(Q) = 10 - 2Q; gap(Q) = AR(Q) - MR(Q) = Q
+  var QLO = 1, QHI = 5;
+  function AR(q) { return 10 - q; }
+  function MR(q) { return 10 - 2 * q; }
+
+  var q = 4; // initial state (matches the static markup)
+
+  var spt = svg.createSVGPoint();
+  function toSvg(evt) {
+    spt.x = evt.clientX; spt.y = evt.clientY;
+    return spt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+  function money2(p) { return '$' + p.toFixed(2); }
+  function money0(p) { return '$' + p.toFixed(0); }
+
+  // Greedily word-wrap `str` into <tspan> lines inside the accent readout so
+  // it never overflows the 440-wide viewBox. Measures with getComputedTextLength.
+  function layoutTrade(str) {
+    var maxW = 404, x = 220, y0 = 476, lineH = 18;
+    while (rTrade.firstChild) rTrade.removeChild(rTrade.firstChild);
+    var probe = document.createElementNS(NS, 'tspan');
+    rTrade.appendChild(probe);
+    var words = str.split(' '), lines = [], cur = words[0] || '';
+    for (var i = 1; i < words.length; i++) {
+      probe.textContent = cur + ' ' + words[i];
+      if (probe.getComputedTextLength() > maxW) { lines.push(cur); cur = words[i]; }
+      else { cur = cur + ' ' + words[i]; }
+    }
+    lines.push(cur);
+    rTrade.removeChild(probe);
+    var startY = (lines.length === 1) ? y0 + 9 : y0;
+    for (var j = 0; j < lines.length; j++) {
+      var t = document.createElementNS(NS, 'tspan');
+      t.setAttribute('x', x);
+      t.setAttribute('y', startY + j * lineH);
+      t.textContent = lines[j];
+      rTrade.appendChild(t);
+    }
+  }
+
+  function accentText(qq, ar, mr, gap) {
+    if (qq <= 2) {
+      return 'Each extra unit adds only ' + money0(mr) + ' — not the ' +
+        money0(ar) + ' price — because the ' + money0(gap) +
+        ' gap is the markdown taken on units already sold.';
+    } else if (qq < 5) {
+      return 'Marginal revenue has fallen to ' + money0(mr) + ', well below the ' +
+        money0(ar) + ' price; at Q = 5 it hits zero (revenue is maxed) and then goes negative.';
+    } else {
+      return 'Marginal revenue has hit zero — total revenue is now at its maximum; ' +
+        'selling another unit would mean cutting price so much that revenue falls.';
+    }
+  }
+
+  function render() {
+    var ar = AR(q), mr = MR(q), gap = ar - mr;
+    var Rq = q / 2;
+    var pXar = qx(q), pYar = py(ar);      // P' on AR
+    var pYmr = py(mr);                     // T2 on MR (same x as P')
+    var Rx = qx(Rq);                       // R on MR (bisection)
+
+    // P' (draggable) + hit targets
+    ptAR.setAttribute('cx', pXar);    ptAR.setAttribute('cy', pYar);
+    hit.setAttribute('cx', pXar);     hit.setAttribute('cy', pYar);
+    ptFocus.setAttribute('cx', pXar); ptFocus.setAttribute('cy', pYar);
+
+    // R (bisection annotation)
+    ptR.setAttribute('cx', Rx); ptR.setAttribute('cy', pYar);
+
+    // T2 (tethered marker, same Q as P', on MR)
+    ptT2.setAttribute('cx', pXar); ptT2.setAttribute('cy', pYmr);
+
+    // horizontal price line (axis to P', passing through R)
+    dropH.setAttribute('x1', X0); dropH.setAttribute('y1', pYar);
+    dropH.setAttribute('x2', pXar); dropH.setAttribute('y2', pYar);
+
+    // R's dropline down to the quantity axis
+    dropVR.setAttribute('x1', Rx); dropVR.setAttribute('x2', Rx);
+    dropVR.setAttribute('y1', pYar); dropVR.setAttribute('y2', Y0);
+
+    // vertical gap (P' to T2, solid) + lower dashed dropline (T2 to axis)
+    dropVgap.setAttribute('x1', pXar); dropVgap.setAttribute('x2', pXar);
+    dropVgap.setAttribute('y1', pYar); dropVgap.setAttribute('y2', pYmr);
+    dropVlower.setAttribute('x1', pXar); dropVlower.setAttribute('x2', pXar);
+    dropVlower.setAttribute('y1', pYmr); dropVlower.setAttribute('y2', Y0);
+    gapLbl.setAttribute('x', pXar + 8);
+    gapLbl.setAttribute('y', (pYar + pYmr) / 2 + 3.5);
+    gapLbl.textContent = money0(gap) + ' gap';
+
+    // brace ruler: ticks at 0 (fixed), Q/2, Q; two connecting segments
+    braceTickMid.setAttribute('x1', Rx); braceTickMid.setAttribute('x2', Rx);
+    braceTickEnd.setAttribute('x1', pXar); braceTickEnd.setAttribute('x2', pXar);
+    braceLine1.setAttribute('x2', Rx);
+    braceLine2.setAttribute('x1', Rx); braceLine2.setAttribute('x2', pXar);
+    braceLbl1.setAttribute('x', (X0 + Rx) / 2);
+    braceLbl2.setAttribute('x', (Rx + pXar) / 2);
+
+    // live quantity-axis tag riding P's dropline foot
+    qAr.setAttribute('x', pXar); qAr.textContent = String(q);
+    qArBg.setAttribute('x', pXar - 12);
+
+    // live price-axis tags
+    pAr.setAttribute('y', pYar); pAr.textContent = money2(ar);
+    pArBg.setAttribute('y', pYar - 7.5);
+    pMr.setAttribute('y', pYmr); pMr.textContent = money2(mr);
+    pMrBg.setAttribute('y', pYmr - 7.5);
+
+    // readout grammar (muted state line + accent takeaway line)
+    rHint.textContent = 'At Q = ' + q + ', price = ' + money2(ar) +
+      ', marginal revenue = ' + money2(mr) + '.';
+    var trade = accentText(q, ar, mr, gap);
+    layoutTrade(trade);
+
+    ptFocus.setAttribute('aria-valuenow', String(q));
+    ptFocus.setAttribute('aria-valuetext', rHint.textContent + ' ' + trade);
+  }
+
+  // single state setter (clamp + no-op guard + render), shared by drag,
+  // keyboard, and the debug hook
+  function setQ(newQ) {
+    var qq = Math.round(newQ);
+    if (isNaN(qq)) return;
+    if (qq < QLO) qq = QLO;
+    if (qq > QHI) qq = QHI;
+    if (qq === q) return;
+    q = qq;
+    render();
+  }
+
+  function setFromPointer(evt) {
+    var pnt = toSvg(evt);
+    setQ(toQ(pnt.x));
+  }
+
+  // --- drag (pointer events + pointer capture so a fast drag can't get stuck) ---
+  var dragging = false;
+  var capturedEl = null, capturedId = null;
+  function onMove(evt) { if (dragging) { evt.preventDefault(); setFromPointer(evt); } }
+  function onUp() {
+    dragging = false;
+    svg.classList.remove('grabbing');
+    if (capturedEl && capturedId !== null) {
+      try { capturedEl.releasePointerCapture(capturedId); } catch (e) {}
+    }
+    capturedEl = null; capturedId = null;
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+  }
+  function onDown(evt) {
+    evt.preventDefault();
+    dragging = true;
+    svg.classList.add('grabbing');
+    capturedEl = evt.currentTarget; capturedId = evt.pointerId;
+    try { capturedEl.setPointerCapture(capturedId); } catch (e) {}
+    setFromPointer(evt);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }
+  hit.addEventListener('pointerdown', onDown);
+  hitCurve.addEventListener('pointerdown', onDown);
+  ptFocus.addEventListener('pointerdown', onDown);  // the dot itself is draggable
+
+  // --- keyboard (arrows step one unit along the schedule) ---
+  ptFocus.addEventListener('keydown', function (evt) {
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') { setQ(q + 1); }
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') { setQ(q - 1); }
+    else return;
+    evt.preventDefault();
+  });
+
+  // Debug hook: lets a reviewer screenshot non-initial states via scripting.
+  window.__fig = {
+    set: function (v) { setQ(+v); },
+    get: function () { return { q: q, ar: AR(q), mr: MR(q), gap: AR(q) - MR(q) }; }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

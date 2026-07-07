@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive straight-line demand curve: elasticity changes along one line</title>
+<!--
+  Interactive point-elasticity figure for the t03b (elasticity) blog post.
+  Recreates UE Fig 8.1 (p.112), the straight-line-demand / OP-PT elasticity
+  geometry. DEFERRED figure: no prior static .tex/.svg exists for this one, so
+  there is no FAU-palette fallback image — the <noscript> text below explains
+  that the visible base figure IS the complete still image.
+
+  Website-styled (warm-editorial palette), NOT the FAU slide palette.
+
+  ARCHITECTURE: the whole figure is REAL SVG markup — a no-JS reader sees the
+  full straight demand line, the T intercept label, both reference points
+  (M, P) and (M', P') with their droplines and live-value tags, and the
+  readout band. The script only ATTACHES the F1 interaction: drag the primary
+  point (M, P) anywhere along the line (pointer + arrow keys); a companion
+  point (M', P') trails exactly one quantity-unit behind it at every position,
+  reproducing the source figure's small P->P' step used to read local
+  elasticity. Crossing the line's midpoint flips the readout between
+  elastic / unit-elastic / inelastic. No area is shaded (verbal-marginal
+  scope lock — the takeaway stays verbal, not an algebraic ratio).
+
+  GEOMETRY (F1, single-panel, viewBox 440x540, aspect 4/5):
+    Data space: Quantity 0..8 on x, Price 0..8 on y (T=(0,8) to (8,0), slope -1).
+    Pixel frame: origin (64,360); 35 px per unit both axes; axes extend past
+    the data max so the line does not crowd the arrowheads.
+      px(Q) = 64 + 35*Q      py(P) = 360 - 35*P
+    T (top price intercept) = (0,8) = (64,80).
+    Primary point (M,P) is the draggable one, Q in [0,8]; its companion
+    (M',P') sits at Q-1 (clamped to 0), i.e. exactly the source's P->P' step.
+    Initial state Q=4, P=4 -- the line's true midpoint, the unit-elastic point
+    -- with companion at Q=3, P=5, matching the spec's worked example exactly.
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;   /* warm bone background        */
+    --ink:     #1a1c1e;    /* curve + headings            */
+    --text:    #16181a;    /* body text                   */
+    --muted:   #5c6066;    /* axes / captions / labels    */
+    --hairline:#e3ddd3;    /* droplines                   */
+    --accent:  #b07a2c;    /* brass — the draggable point */
+    --accent-tint: #efe4d2;/* unused here (no shading)    */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    /* NOTE: display:grid + place-items:center (NOT flex) — a flex parent
+       combined with a percentage-width child that contains a viewBox-only
+       <svg> fails to shrink below ~440px in this Chrome build (confirmed
+       with a minimal repro: the same bug reproduces in the sibling
+       t03-demand-curve-interactive.html, which also cuts off at 380px).
+       Grid centering does not trigger it and preserves the identical
+       centered look. */
+    display: grid;
+    place-items: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .fig { width: 100%; max-width: 520px; min-width: 0; }
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+
+  /* structural strokes */
+  .axis   { stroke: var(--muted); stroke-width: 1.4; }
+  .curve  { stroke: var(--ink); stroke-width: 2.6; fill: none;
+            stroke-linecap: round; }
+  .drop   { stroke: var(--hairline); stroke-width: 1.6;
+            stroke-dasharray: 5 4; }
+  .drop-mute { stroke: var(--hairline); stroke-width: 1.3;
+            stroke-dasharray: 4 3; opacity: 0.8; }
+
+  /* the two points: primary (draggable, accent) + companion (fixed offset, muted) */
+  .pt   { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5; }
+  .pt2  { fill: var(--ink);    stroke: var(--surface); stroke-width: 2; opacity: 0.85; }
+  .hit       { fill: transparent; stroke: transparent; touch-action: none;
+               cursor: grab; }
+  .hit-curve { fill: none; stroke: transparent; stroke-width: 26;
+               touch-action: none; cursor: grab; }
+  .pt-focus:focus-visible { outline: none; }
+  .pt-focus:focus-visible + .pt,
+  .grabbing .pt { stroke: var(--accent); stroke-width: 3.5; }
+
+  /* text */
+  .axlabel  { fill: var(--muted); font-size: 15px; font-weight: 600; }
+  .ptlabel  { fill: var(--muted); font-size: 12.5px; font-weight: 600; }
+  .tagbg    { fill: var(--surface); }
+  .tagtxt   { fill: var(--accent); font-size: 12px; font-weight: 700; }
+  .tagtxt2  { fill: var(--muted); font-size: 11px; font-weight: 700; }
+  .sep      { stroke: var(--hairline); stroke-width: 1; }
+  .r-hint   { fill: var(--muted); font-size: 12.5px; }
+  .r-trade  { fill: var(--accent); font-size: 13px; font-weight: 600; }
+  .fallback {
+    margin: 8px 0 0; color: var(--muted); font-size: 13px;
+    line-height: 1.35; text-align: center;
+  }
+  .fallback a { color: var(--ink); }
+</style>
+</head>
+<body>
+<!-- Everything from here to </div> is REAL base SVG: a no-JS reader sees the
+     complete figure (the straight demand line, the T intercept, both the
+     primary and companion points with droplines and live-value tags, and the
+     readout). The script only ATTACHES drag / keyboard / live updates. -->
+<div class="fig">
+  <svg id="fig" viewBox="0 0 440 540" role="group"
+       aria-label="A single straight-line demand curve running from the price axis to the quantity axis. Drag the accent point along the line to see how elasticity changes: high on the curve it is elastic, at the exact midpoint it is unit elastic, and low on the curve it is inelastic. A smaller companion point trails one quantity unit behind it, marking the small price-quantity step used to read local elasticity.">
+    <defs>
+      <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+    </defs>
+
+    <!-- axes (drawn before the curve so the curve sits on top); extended past
+         the data max so the line does not crowd the arrowheads -->
+    <line class="axis" x1="64" y1="360" x2="405" y2="360" marker-end="url(#arrow)" />
+    <line class="axis" x1="64" y1="360" x2="64"  y2="38"  marker-end="url(#arrow)" />
+    <text class="axlabel" x="36" y="42" text-anchor="start">Price</text>
+    <text class="axlabel" x="396" y="382" text-anchor="end">Quantity</text>
+
+    <!-- the single straight demand line: T(0,8) -> (8,0) -->
+    <path class="curve" d="M64,80 L344,360" />
+    <text class="ptlabel" x="78" y="70" text-anchor="start">T</text>
+
+    <!-- companion point's droplines + live tags (Q-1 behind the primary point) -->
+    <line id="dropV2" class="drop-mute" x1="169" y1="360" x2="169" y2="185" />
+    <line id="dropH2" class="drop-mute" x1="64"  y1="185" x2="169" y2="185" />
+    <g id="qx2Tag">
+      <rect id="qx2Bg" class="tagbg" x="140" y="386" width="58" height="14" rx="2" />
+      <text id="qx2" class="tagtxt2" x="169" y="393" text-anchor="middle"
+            dominant-baseline="middle">M&#8242; = 3.0</text>
+    </g>
+    <g id="qy2Tag">
+      <rect id="qy2Bg" class="tagbg" x="4" y="177.5" width="56" height="14" rx="2" />
+      <text id="qy2" class="tagtxt2" x="32" y="185" text-anchor="middle"
+            dominant-baseline="middle">P&#8242; = 5.0</text>
+    </g>
+    <circle id="pt2" class="pt2" cx="169" cy="185" r="5" />
+
+    <!-- primary point's droplines + live tags -->
+    <line id="dropV" class="drop" x1="204" y1="360" x2="204" y2="220" />
+    <line id="dropH" class="drop" x1="64"  y1="220" x2="204" y2="220" />
+    <g id="qxTag">
+      <rect id="qxBg" class="tagbg" x="178" y="368" width="52" height="15" rx="2" />
+      <text id="qx" class="tagtxt" x="204" y="376" text-anchor="middle"
+            dominant-baseline="middle">M = 4.0</text>
+    </g>
+    <g id="qyTag">
+      <rect id="qyBg" class="tagbg" x="4" y="212.5" width="52" height="15" rx="2" />
+      <text id="qy" class="tagtxt" x="30" y="220" text-anchor="middle"
+            dominant-baseline="middle">P = 4.0</text>
+    </g>
+
+    <!-- the draggable point + hit targets (fat invisible line + point circle) -->
+    <path id="hitCurve" class="hit-curve" d="M64,80 L344,360" />
+    <circle id="hit" class="hit" cx="204" cy="220" r="22" />
+    <circle id="pt"  class="pt"  cx="204" cy="220" r="7" />
+    <!-- focusable proxy for keyboard control -->
+    <circle id="ptFocus" class="pt-focus hit" cx="204" cy="220" r="22"
+            tabindex="0" role="slider" aria-label="Point on the demand curve (quantity demanded)"
+            aria-valuemin="0" aria-valuemax="8" aria-valuenow="4"
+            aria-valuetext="Quantity 4.0, price 4.0. Middle of the curve. Unit elastic — total revenue is at its peak; a small price move barely changes it." />
+
+    <!-- readout band: hairline separator, muted STATE line, accent TAKEAWAY line -->
+    <line class="sep" x1="44" y1="434" x2="396" y2="434" />
+    <text id="rHint"  class="r-hint"  text-anchor="middle">
+      <tspan x="220" y="452">Middle of the curve.</tspan>
+    </text>
+    <text id="rTrade" class="r-trade" text-anchor="middle">
+      <tspan x="220" y="486">Unit elastic — total revenue is at its peak;</tspan>
+      <tspan x="220" y="502">a small price move barely changes it.</tspan>
+    </text>
+  </svg>
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame is a still image: the
+      complete figure — a single straight demand line from its price-axis
+      intercept T to its quantity-axis intercept, with a point (M, P) and its
+      companion point (M&#8242;, P&#8242;) one unit behind it, each with
+      droplines to both axes. There is no separate static figure to open; the
+      image above is the whole thing.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var svg      = document.getElementById('fig');
+  var pt       = document.getElementById('pt');
+  var pt2      = document.getElementById('pt2');
+  var hit      = document.getElementById('hit');
+  var ptFocus  = document.getElementById('ptFocus');
+  var hitCurve = document.getElementById('hitCurve');
+  var dropV    = document.getElementById('dropV');
+  var dropH    = document.getElementById('dropH');
+  var dropV2   = document.getElementById('dropV2');
+  var dropH2   = document.getElementById('dropH2');
+  var qx       = document.getElementById('qx');
+  var qy       = document.getElementById('qy');
+  var qxBg     = document.getElementById('qxBg');
+  var qyBg     = document.getElementById('qyBg');
+  var qx2      = document.getElementById('qx2');
+  var qy2      = document.getElementById('qy2');
+  var qx2Bg    = document.getElementById('qx2Bg');
+  var qy2Bg    = document.getElementById('qy2Bg');
+  var rHint    = document.getElementById('rHint');
+  var rTrade   = document.getElementById('rTrade');
+  var NS = 'http://www.w3.org/2000/svg';
+
+  // pixel frame + scale: px(Q) = X0 + Q*SCALE ; py(P) = Y0 - P*SCALE
+  var X0 = 64, Y0 = 360, SCALE = 35;
+  var qpx = function (q) { return X0 + q * SCALE; };
+  var ppy = function (p) { return Y0 - p * SCALE; };
+  var toQ = function (px) { return (px - X0) / SCALE; };
+
+  // model: straight demand line P = 8 - Q, Q in [0,8]
+  var QLO = 0, QHI = 8, MID = 4, EPS = 0.15;
+  function priceAt(q) { return 8 - q; }
+  function companionQ(q) { return Math.max(0, q - 1); }
+
+  var q = 4; // initial state (matches the static markup): Q=4, P=4 (midpoint)
+
+  // convert a client event to SVG user coords (handles responsive scaling)
+  var spt = svg.createSVGPoint();
+  function toSvg(evt) {
+    spt.x = evt.clientX; spt.y = evt.clientY;
+    return spt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+
+  // readout copy for the three elasticity states
+  var COPY = {
+    elastic:   { hint: ['High on the curve: P high, Q small.'],
+                 trade: ['Elastic here (response more than proportional)',
+                         '— a price cut would raise total revenue.'] },
+    mid:       { hint: ['Middle of the curve.'],
+                 trade: ['Unit elastic — total revenue is at its peak;',
+                         'a small price move barely changes it.'] },
+    inelastic: { hint: ['Low on the curve: P low, Q large.'],
+                 trade: ['Inelastic here — a price cut would lower',
+                         'total revenue.'] }
+  };
+
+  function setLines(el, lines, y0, dy) {
+    while (el.firstChild) el.removeChild(el.firstChild);
+    for (var i = 0; i < lines.length; i++) {
+      var t = document.createElementNS(NS, 'tspan');
+      t.setAttribute('x', 220);
+      t.setAttribute('y', y0 + i * dy);
+      t.textContent = lines[i];
+      el.appendChild(t);
+    }
+  }
+
+  function stateFor(qq) {
+    if (Math.abs(qq - MID) <= EPS) return 'mid';
+    return (qq < MID) ? 'elastic' : 'inelastic';
+  }
+
+  function render() {
+    var p = priceAt(q);
+    var cx = qpx(q), cy = ppy(p);
+
+    var qc = companionQ(q);
+    var pc = priceAt(qc);
+    var cx2 = qpx(qc), cy2 = ppy(pc);
+
+    pt.setAttribute('cx', cx);      pt.setAttribute('cy', cy);
+    hit.setAttribute('cx', cx);     hit.setAttribute('cy', cy);
+    ptFocus.setAttribute('cx', cx); ptFocus.setAttribute('cy', cy);
+    pt2.setAttribute('cx', cx2);    pt2.setAttribute('cy', cy2);
+
+    dropV.setAttribute('x1', cx); dropV.setAttribute('x2', cx);
+    dropV.setAttribute('y1', Y0); dropV.setAttribute('y2', cy);
+    dropH.setAttribute('y1', cy); dropH.setAttribute('y2', cy);
+    dropH.setAttribute('x1', X0); dropH.setAttribute('x2', cx);
+
+    dropV2.setAttribute('x1', cx2); dropV2.setAttribute('x2', cx2);
+    dropV2.setAttribute('y1', Y0);  dropV2.setAttribute('y2', cy2);
+    dropH2.setAttribute('y1', cy2); dropH2.setAttribute('y2', cy2);
+    dropH2.setAttribute('x1', X0);  dropH2.setAttribute('x2', cx2);
+
+    // live tags ride the dropline feet
+    qx.setAttribute('x', cx); qx.textContent = 'M = ' + q.toFixed(1);
+    qxBg.setAttribute('x', cx - 26);
+    qy.setAttribute('y', cy); qy.textContent = 'P = ' + p.toFixed(1);
+    qyBg.setAttribute('y', cy - 7.5);
+
+    qx2.setAttribute('x', cx2); qx2.textContent = 'M′ = ' + qc.toFixed(1);
+    qx2Bg.setAttribute('x', cx2 - 29);
+    qy2.setAttribute('y', cy2); qy2.textContent = 'P′ = ' + pc.toFixed(1);
+    qy2Bg.setAttribute('y', cy2 - 7);
+
+    // readout grammar (muted state line + accent takeaway line)
+    var st = stateFor(q);
+    var c = COPY[st];
+    setLines(rHint, c.hint, 452, 16);
+    setLines(rTrade, c.trade, 486, 16);
+
+    ptFocus.setAttribute('aria-valuenow', q.toFixed(1));
+    ptFocus.setAttribute('aria-valuetext',
+      'Quantity ' + q.toFixed(1) + ', price ' + p.toFixed(1) + '. ' +
+      c.hint.join(' ') + ' ' + c.trade.join(' '));
+  }
+
+  function setQ(newQ) {
+    var qq = newQ;
+    if (isNaN(qq)) return;
+    if (qq < QLO) qq = QLO;
+    if (qq > QHI) qq = QHI;
+    q = qq;
+    render();
+  }
+
+  function setFromPointer(evt) {
+    var pnt = toSvg(evt);
+    setQ(toQ(pnt.x));
+  }
+
+  // --- drag (pointer events + pointer capture so a fast drag can't get stuck) ---
+  var dragging = false;
+  var capturedEl = null, capturedId = null;
+  function onMove(evt) { if (dragging) { evt.preventDefault(); setFromPointer(evt); } }
+  function onUp() {
+    dragging = false;
+    svg.classList.remove('grabbing');
+    if (capturedEl && capturedId !== null) {
+      try { capturedEl.releasePointerCapture(capturedId); } catch (e) {}
+    }
+    capturedEl = null; capturedId = null;
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+  }
+  function onDown(evt) {
+    evt.preventDefault();
+    dragging = true;
+    svg.classList.add('grabbing');
+    capturedEl = evt.currentTarget; capturedId = evt.pointerId;
+    try { capturedEl.setPointerCapture(capturedId); } catch (e) {}
+    setFromPointer(evt);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }
+  hit.addEventListener('pointerdown', onDown);
+  hitCurve.addEventListener('pointerdown', onDown);
+  ptFocus.addEventListener('pointerdown', onDown);  // the dot itself is draggable
+
+  // --- keyboard (arrows step the control) ---
+  ptFocus.addEventListener('keydown', function (evt) {
+    var step = 0.2;
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') { q += step; }
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') { q -= step; }
+    else return;
+    evt.preventDefault();
+    setQ(q);
+  });
+
+  // Debug hook: lets a reviewer screenshot non-initial states via scripting.
+  window.__fig = {
+    set: function (v) { setQ(+v); },
+    get: function () {
+      var qc = companionQ(q);
+      return { q: q, p: priceAt(q), qPrime: qc, pPrime: priceAt(qc), state: stateFor(q) };
+    }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

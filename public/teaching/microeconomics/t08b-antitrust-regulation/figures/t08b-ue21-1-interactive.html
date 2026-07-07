@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive geographic pricing: Seattle base price and freight to five markets</title>
+<!--
+  Interactive spatial-pricing diagram for the T8b blog post (website-styled,
+  warm palette). Recreates UE Fig 21.1 "Pricing and Marketing Tactics" (p.330):
+  a production site (Seattle, base price $70) radiates freight arrows to five
+  markets; each market's price = base + freight. Self-contained: no libraries,
+  no network. DEFERRED FIGURE — there is no static .svg for this one; the
+  <noscript> fallback describes the base figure directly (no static link).
+
+  FAMILY F5 (schedule-bar link, the interaction floor). Geometry class:
+  single-panel, viewBox 440x540, aspect-ratio 4/5, max-width 480px.
+
+  GEOMETRY / coordinate frame (this is a spatial/topology diagram, not an
+  axis graph — there are no axes; only the hub->spoke topology + arithmetic
+  base+freight=price is invariant, per the spec's "illustrative" note):
+    Hub (Seattle) at (85,130). Five destinations, arrow tip pixel coords:
+      Chicago     (295, 55)  freight $30  price = base + 30
+      New York    (335, 175) freight $40  price = base + 40
+      Atlanta     (295, 325) freight $20  price = base + 20
+      Los Angeles (85,  380) freight $20  price = base + 20  (arrow straight down)
+    Freight labels sit at each shaft's midpoint, offset perpendicular off the
+    line (never on it); city-name + live price labels sit just past each tip,
+    continuing in the arrow's direction.
+
+    INTERACTION (two controls):
+      1. cityProxy (role=slider, 0..4): arrow keys / tap-on-a-tip cycle the
+         focused market Seattle(0) -> Chicago(1) -> New York(2) -> Atlanta(3)
+         -> Los Angeles(4). The focused arrow + its labels highlight accent;
+         the readout decomposes base + freight = price for that city.
+      2. base-price handle (role=slider, $50..$90, default $70): a small
+         vertical slider to the left of the hub. Dragging (or arrow-keying)
+         it re-labels EVERY city price in lockstep (each = new base + its
+         fixed freight) — the readout switches to the "tied together"
+         aggregate statement. Track pixel math is 1:1 ($1 = 1px): the track
+         runs y=112 (price $90) to y=152 (price $50), so pixelY = 202 - price.
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;   /* warm bone background        */
+    --ink:     #1a1c1e;    /* arrows + headings           */
+    --text:    #16181a;    /* body text                   */
+    --muted:   #5c6066;    /* freight labels / ticks       */
+    --hairline:#e3ddd3;    /* track / separators           */
+    --accent:  #b07a2c;    /* brass — focus + drag handle */
+    --accent-tint: #efe4d2;/* (unused placeholder, kept for token parity) */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* min-width:0 defeats the flexbox min-width:auto default so the figure
+     scales DOWN to viewports narrower than the SVG's intrinsic width instead
+     of clipping (the right side would otherwise be cut off on phones). */
+  .fig { width: 100%; max-width: 480px; min-width: 0; }
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+
+  /* the five price-linkage arrows */
+  .arrow        { stroke: var(--ink); stroke-width: 2; fill: none; }
+  .arrow.active { stroke: var(--accent); stroke-width: 3; }
+  .hit-tap      { fill: transparent; stroke: transparent; cursor: pointer;
+                  touch-action: manipulation; }
+
+  /* hub (Seattle) */
+  .hub          { fill: var(--ink); }
+  .hub.active   { fill: var(--accent); }
+  .hublabel        { fill: var(--ink); font-size: 13px; font-weight: 700; }
+  .hublabel.active { fill: var(--accent); }
+
+  /* city + freight labels */
+  .citylabel        { fill: var(--ink); font-size: 13px; font-weight: 600; }
+  .citylabel.active { fill: var(--accent); }
+  .pricelabel        { fill: var(--ink); font-size: 13px; font-weight: 700; }
+  .pricelabel.active { fill: var(--accent); }
+  .freightlabel { fill: var(--muted); font-size: 11px; font-style: italic; }
+
+  /* base-price mini slider */
+  .track     { stroke: var(--hairline); stroke-width: 2; }
+  .ticklabel { fill: var(--muted); font-size: 9.5px; }
+  .handle    { fill: var(--accent); stroke: var(--surface); stroke-width: 2; }
+  .basetag   { fill: var(--accent); font-size: 13px; font-weight: 700; }
+  .tagbg     { fill: var(--surface); }
+
+  /* generous transparent hit targets + focus proxies */
+  .hit { fill: transparent; stroke: transparent; cursor: grab; touch-action: none; }
+  .hit:focus-visible { outline: none; stroke: var(--accent); stroke-width: 3; fill: none; }
+  .grabbing .handle { stroke: var(--accent); stroke-width: 3; }
+
+  /* readout band */
+  .sep     { stroke: var(--hairline); stroke-width: 1; }
+  .r-hint  { fill: var(--muted); font-size: 12.5px; }
+  .r-trade { fill: var(--accent); font-size: 13px; font-weight: 600; }
+  .fallback {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.35;
+    text-align: center;
+  }
+  .fallback a { color: var(--ink); }
+</style>
+</head>
+<body>
+<!-- Everything from here to </div> is REAL base SVG: a no-JS reader sees the
+     full figure (Seattle hub + base price, five destination arrows with
+     freight + price labels, the base-price mini slider, and the readout).
+     The script only ATTACHES cycling / dragging / live updates. -->
+<div class="fig">
+  <svg id="fig" viewBox="0 0 440 540" role="group"
+       aria-label="Geographic pricing diagram. A single production site, Seattle, ships to five markets. Each market's consumer price equals Seattle's base price plus the freight cost to reach it. Cycle the markets to see how each price decomposes into base plus freight, or drag Seattle's base price to see every city's price move with it.">
+    <title>Pricing and marketing tactics: base price plus freight, tied across five markets</title>
+    <defs>
+      <marker id="arrowInk" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#1a1c1e" />
+      </marker>
+      <marker id="arrowAccent" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#b07a2c" />
+      </marker>
+    </defs>
+
+    <!-- five destination arrows (drawn before labels) -->
+    <path id="arrChicago" class="arrow" marker-end="url(#arrowInk)" d="M85,130 L295,55" />
+    <path id="arrNY"      class="arrow" marker-end="url(#arrowInk)" d="M85,130 L335,175" />
+    <path id="arrAtlanta" class="arrow" marker-end="url(#arrowInk)" d="M85,130 L295,325" />
+    <path id="arrLA"      class="arrow" marker-end="url(#arrowInk)" d="M85,130 L85,380" />
+
+    <!-- freight-cost labels on each shaft (never over the line) -->
+    <text class="freightlabel" x="185" y="79"  text-anchor="middle">$30</text>
+    <text class="freightlabel" x="213" y="139" text-anchor="middle">$40</text>
+    <text class="freightlabel" x="202" y="214" text-anchor="middle">$20</text>
+    <text class="freightlabel" x="65"  y="255" text-anchor="end">$20</text>
+
+    <!-- city name + live price labels at each arrowhead -->
+    <text id="lblChicago" class="citylabel"  x="307" y="49"  text-anchor="start">Chicago</text>
+    <text id="prChicago"  class="pricelabel" x="307" y="65"  text-anchor="start">$100</text>
+
+    <text id="lblNY" class="citylabel"  x="347" y="169" text-anchor="start">New York</text>
+    <text id="prNY"  class="pricelabel" x="347" y="185" text-anchor="start">$110</text>
+
+    <text id="lblAtlanta" class="citylabel"  x="307" y="331" text-anchor="start">Atlanta</text>
+    <text id="prAtlanta"  class="pricelabel" x="307" y="347" text-anchor="start">$90</text>
+
+    <text id="lblLA" class="citylabel"  x="85" y="400" text-anchor="middle">Los Angeles</text>
+    <text id="prLA"  class="pricelabel" x="85" y="416" text-anchor="middle">$90</text>
+
+    <!-- Seattle hub -->
+    <text id="hubLabel" class="hublabel" x="85" y="103" text-anchor="middle">Seattle</text>
+    <circle id="hubDot" class="hub" cx="85" cy="130" r="5" />
+
+    <!-- base-price mini slider (the "hub handle"): track $90 (top) to $50
+         (bottom), 1px per dollar; handle default $70 -->
+    <line class="track" x1="45" y1="112" x2="45" y2="152" />
+    <text class="ticklabel" x="30" y="115" text-anchor="end">$90</text>
+    <text class="ticklabel" x="30" y="155" text-anchor="end">$50</text>
+    <circle id="handleDot" class="handle" cx="45" cy="132" r="6" />
+    <rect id="baseTagBg" class="tagbg" x="63" y="124.5" width="34" height="15" rx="2" />
+    <text id="baseTag" class="basetag" x="80" y="132" text-anchor="middle"
+          dominant-baseline="middle">$70</text>
+
+    <!-- tap targets: one per city (city-cycle) + one on the hub (Seattle) -->
+    <circle id="hitSeattle" class="hit-tap" cx="85"  cy="130" r="26" />
+    <circle id="hitChicago" class="hit-tap" cx="295" cy="55"  r="26" />
+    <circle id="hitNY"      class="hit-tap" cx="335" cy="175" r="26" />
+    <circle id="hitAtlanta" class="hit-tap" cx="295" cy="325" r="26" />
+    <circle id="hitLA"      class="hit-tap" cx="85"  cy="380" r="26" />
+
+    <!-- keyboard proxy 1: cycles the focused market (moves to the focused
+         tip so its focus ring lands where the highlight is) -->
+    <circle id="cityProxy" class="hit" cx="85" cy="130" r="26"
+            tabindex="0" role="slider"
+            aria-label="Focused market: Seattle, Chicago, New York, Atlanta, or Los Angeles"
+            aria-valuemin="0" aria-valuemax="4" aria-valuenow="0"
+            aria-valuetext="Seattle: $70 base price, the production site." />
+
+    <!-- keyboard proxy 2 + drag target: the base-price handle -->
+    <circle id="handleHit" class="hit" cx="45" cy="132" r="26"
+            tabindex="0" role="slider" aria-label="Seattle base price"
+            aria-valuemin="50" aria-valuemax="90" aria-valuenow="70"
+            aria-valuetext="Base price $70." />
+
+    <!-- readout band: hairline separator, muted STATE line, accent TAKEAWAY line -->
+    <line class="sep" x1="44" y1="440" x2="396" y2="440" />
+    <text id="rHint"  class="r-hint"  x="220" y="464" text-anchor="middle">Seattle: $70 base price — the production site.</text>
+    <text id="rTrade" class="r-trade" text-anchor="middle"><tspan x="220" y="486">Every city&#8217;s price starts here; freight is</tspan><tspan x="220" y="504">added on top.</tspan></text>
+  </svg>
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame is a still image: the base figure above already shows the complete diagram — Seattle&#8217;s hub price, the five destination arrows with their freight costs, and each city&#8217;s resulting price (base plus freight).</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var svg        = document.getElementById('fig');
+  var hubDot     = document.getElementById('hubDot');
+  var hubLabel   = document.getElementById('hubLabel');
+  var handleDot  = document.getElementById('handleDot');
+  var handleHit  = document.getElementById('handleHit');
+  var baseTag    = document.getElementById('baseTag');
+  var baseTagBg  = document.getElementById('baseTagBg');
+  var cityProxy  = document.getElementById('cityProxy');
+  var rHint      = document.getElementById('rHint');
+  var rTrade     = document.getElementById('rTrade');
+  var NS = 'http://www.w3.org/2000/svg';
+
+  // --- data: the four destinations (index 1..4); index 0 = Seattle itself ---
+  var CITIES = {
+    1: { name: 'Chicago',     freight: 30, tipX: 295, tipY: 55,
+         arrow: 'arrChicago', lbl: 'lblChicago', pr: 'prChicago' },
+    2: { name: 'New York',    freight: 40, tipX: 335, tipY: 175,
+         arrow: 'arrNY',      lbl: 'lblNY',      pr: 'prNY' },
+    3: { name: 'Atlanta',     freight: 20, tipX: 295, tipY: 325,
+         arrow: 'arrAtlanta', lbl: 'lblAtlanta', pr: 'prAtlanta' },
+    4: { name: 'Los Angeles', freight: 20, tipX: 85,  tipY: 380,
+         arrow: 'arrLA',      lbl: 'lblLA',      pr: 'prLA' }
+  };
+  var TIP0 = { x: 85, y: 130 }; // Seattle hub position (index 0)
+  var els = {}; // cache of arrow/label/price DOM nodes per city index
+  for (var k = 1; k <= 4; k++) {
+    var c = CITIES[k];
+    els[k] = {
+      arrow: document.getElementById(c.arrow),
+      lbl:   document.getElementById(c.lbl),
+      pr:    document.getElementById(c.pr)
+    };
+  }
+
+  // --- state ---
+  var index = 0;          // 0 = Seattle, 1..4 = CITIES key
+  var base  = 70;          // dollars, $50..$90
+  var mode  = 'city';       // 'city' | 'base'
+
+  // base-price track is 1px per dollar: y=112 -> $90, y=152 -> $50
+  function baseY(v) { return 202 - v; }
+  function toBase(py) { return 202 - py; }
+  function money(v) { return '$' + Math.round(v); }
+
+  // convert a client event to SVG user coords (handles responsive scaling)
+  var spt = svg.createSVGPoint();
+  function toSvg(evt) {
+    spt.x = evt.clientX; spt.y = evt.clientY;
+    return spt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+
+  // Greedily word-wrap `str` into <tspan> lines inside the accent readout so
+  // it never overflows the 440-wide viewBox. Measures with getComputedTextLength.
+  function layoutTrade(str) {
+    var maxW = 404, x = 220, y0 = 486, lineH = 18;
+    while (rTrade.firstChild) rTrade.removeChild(rTrade.firstChild);
+    var probe = document.createElementNS(NS, 'tspan');
+    rTrade.appendChild(probe);
+    var words = str.split(' '), lines = [], cur = words[0] || '';
+    for (var i = 1; i < words.length; i++) {
+      probe.textContent = cur + ' ' + words[i];
+      if (probe.getComputedTextLength() > maxW) { lines.push(cur); cur = words[i]; }
+      else { cur = cur + ' ' + words[i]; }
+    }
+    lines.push(cur);
+    rTrade.removeChild(probe);
+    var startY = (lines.length === 1) ? y0 + 4 : y0;
+    for (var j = 0; j < lines.length; j++) {
+      var t = document.createElementNS(NS, 'tspan');
+      t.setAttribute('x', x);
+      t.setAttribute('y', startY + j * lineH);
+      t.textContent = lines[j];
+      rTrade.appendChild(t);
+    }
+  }
+
+  function cityTradeText(k) {
+    switch (k) {
+      case 1: return "Chicago's price is just Seattle's price plus the cost of shipping there.";
+      case 2: return "The most distant market pays the most; the gap is transport cost, not extra profit.";
+      case 3: return "Atlanta and Los Angeles pay the same freight, so they land at the same price.";
+      case 4: return "Los Angeles ties with Atlanta — same freight, same price, though the routes differ.";
+      default: return '';
+    }
+  }
+
+  function render() {
+    // 1. recompute + write every city's live price (always current, all modes)
+    var priceOf = {};
+    for (var k = 1; k <= 4; k++) {
+      priceOf[k] = base + CITIES[k].freight;
+      els[k].pr.textContent = money(priceOf[k]);
+    }
+
+    // 2. base-price handle position + tag
+    var hy = baseY(base);
+    handleDot.setAttribute('cy', hy);
+    handleHit.setAttribute('cy', hy);
+    baseTag.setAttribute('y', hy);
+    baseTagBg.setAttribute('y', hy - 7.5);
+    baseTag.textContent = money(base);
+    handleHit.setAttribute('aria-valuenow', String(Math.round(base)));
+
+    // 3. clear all highlight state, then apply the current one
+    hubDot.classList.remove('active');
+    hubLabel.classList.remove('active');
+    for (k = 1; k <= 4; k++) {
+      els[k].arrow.classList.remove('active');
+      els[k].lbl.classList.remove('active');
+      els[k].pr.classList.remove('active');
+      els[k].arrow.setAttribute('marker-end', 'url(#arrowInk)');
+    }
+
+    var hint, trade, proxyPos;
+    if (mode === 'city') {
+      if (index === 0) {
+        hubDot.classList.add('active');
+        hubLabel.classList.add('active');
+        proxyPos = TIP0;
+        hint  = 'Seattle: ' + money(base) + ' base price — the production site.';
+        trade = 'Every city’s price starts here; freight is added on top.';
+      } else {
+        var c = CITIES[index];
+        els[index].arrow.classList.add('active');
+        els[index].arrow.setAttribute('marker-end', 'url(#arrowAccent)');
+        els[index].lbl.classList.add('active');
+        els[index].pr.classList.add('active');
+        proxyPos = { x: c.tipX, y: c.tipY };
+        hint  = c.name + ': ' + money(base) + ' base + ' + money(c.freight) +
+                ' freight = ' + money(priceOf[index]) + '.';
+        trade = cityTradeText(index);
+      }
+      cityProxy.setAttribute('aria-valuenow', String(index));
+      cityProxy.setAttribute('aria-valuetext', hint + ' ' + trade);
+    } else {
+      // mode === 'base': aggregate "tied together" readout; no single city
+      // highlighted, the hub + handle carry the emphasis instead.
+      hubDot.classList.add('active');
+      hubLabel.classList.add('active');
+      proxyPos = TIP0;
+      hint = 'Base now ' + money(base) + ' → New York ' + money(priceOf[2]) +
+             ', Chicago ' + money(priceOf[1]) + ', Atlanta/LA ' + money(priceOf[3]) + '.';
+      var delta = base - 70;
+      if (delta === 0) {
+        trade = 'Base back to $70 — every city returns to its original price, still tied one-for-one.';
+      } else if (delta > 0) {
+        trade = 'Raise the base $' + delta + ' and every city rises $' + delta +
+                ': the prices are tied together, one-for-one.';
+      } else {
+        trade = 'Lower the base $' + (-delta) + ' and every city falls $' + (-delta) +
+                ': the prices are tied together, one-for-one.';
+      }
+      handleHit.setAttribute('aria-valuetext', 'Base price ' + money(base) + '. ' + trade);
+      cityProxy.setAttribute('aria-valuenow', String(index));
+      cityProxy.setAttribute('aria-valuetext', hint + ' ' + trade);
+    }
+
+    cityProxy.setAttribute('cx', proxyPos.x);
+    cityProxy.setAttribute('cy', proxyPos.y);
+
+    rHint.textContent = hint;
+    layoutTrade(trade);
+  }
+
+  // --- state setters (single choke point so drag / keyboard / tap / the
+  // debug hook all share one code path) ---
+  function setIndex(i) {
+    if (i < 0) i = 0;
+    if (i > 4) i = 4;
+    mode = 'city';
+    index = i;
+    render();
+  }
+  function setBase(v) {
+    if (isNaN(v)) return;
+    if (v < 50) v = 50;
+    if (v > 90) v = 90;
+    mode = 'base';
+    base = v;
+    render();
+  }
+
+  // --- tap-to-focus a city (or Seattle) ---
+  function tapIndex(i) { return function (evt) { evt.preventDefault(); setIndex(i); }; }
+  document.getElementById('hitSeattle').addEventListener('pointerdown', tapIndex(0));
+  document.getElementById('hitSeattle').addEventListener('click', tapIndex(0));
+  document.getElementById('hitChicago').addEventListener('pointerdown', tapIndex(1));
+  document.getElementById('hitChicago').addEventListener('click', tapIndex(1));
+  document.getElementById('hitNY').addEventListener('pointerdown', tapIndex(2));
+  document.getElementById('hitNY').addEventListener('click', tapIndex(2));
+  document.getElementById('hitAtlanta').addEventListener('pointerdown', tapIndex(3));
+  document.getElementById('hitAtlanta').addEventListener('click', tapIndex(3));
+  document.getElementById('hitLA').addEventListener('pointerdown', tapIndex(4));
+  document.getElementById('hitLA').addEventListener('click', tapIndex(4));
+
+  // --- city-cycle keyboard proxy ---
+  cityProxy.addEventListener('keydown', function (evt) {
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') { setIndex(index + 1); }
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') { setIndex(index - 1); }
+    else return;
+    evt.preventDefault();
+  });
+
+  // --- base-price handle: drag (pointer capture) + keyboard ---
+  var dragging = false;
+  var capturedEl = null, capturedId = null;
+  function onMove(evt) {
+    if (!dragging) return;
+    evt.preventDefault();
+    var pnt = toSvg(evt);
+    setBase(Math.round(toBase(pnt.y)));
+  }
+  function onUp() {
+    dragging = false;
+    svg.classList.remove('grabbing');
+    if (capturedEl && capturedId !== null) {
+      try { capturedEl.releasePointerCapture(capturedId); } catch (e) {}
+    }
+    capturedEl = null; capturedId = null;
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+  }
+  function onDown(evt) {
+    evt.preventDefault();
+    dragging = true;
+    svg.classList.add('grabbing');
+    capturedEl = evt.currentTarget; capturedId = evt.pointerId;
+    try { capturedEl.setPointerCapture(capturedId); } catch (e) {}
+    var pnt = toSvg(evt);
+    setBase(Math.round(toBase(pnt.y)));
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }
+  handleHit.addEventListener('pointerdown', onDown);
+
+  handleHit.addEventListener('keydown', function (evt) {
+    if (evt.key === 'ArrowUp' || evt.key === 'ArrowRight') { setBase(base + 5); }
+    else if (evt.key === 'ArrowDown' || evt.key === 'ArrowLeft') { setBase(base - 5); }
+    else return;
+    evt.preventDefault();
+  });
+
+  // Debug hook: lets a reviewer screenshot non-initial states via scripting.
+  window.__fig = {
+    set: function (v) {
+      if (v && typeof v === 'object') {
+        if ('base' in v) setBase(+v.base);
+        if ('index' in v) setIndex(+v.index);
+      } else {
+        setIndex(+v);
+      }
+    },
+    get: function () { return { index: index, base: base, mode: mode }; }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

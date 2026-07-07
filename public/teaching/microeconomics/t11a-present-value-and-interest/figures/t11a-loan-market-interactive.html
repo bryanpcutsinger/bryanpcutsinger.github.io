@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive loan market: the interest rate as the price of current income</title>
+<!--
+  Interactive loan-market diagram for the t11a-present-value-and-interest blog
+  post (website-styled warm palette, NOT the FAU slide palette). Self-contained:
+  vanilla SVG + JS, no libraries, no network, no build step. The static FAU
+  figure (figures/t11a-loan-market.{tex,svg}) is the SLIDE version, untouched,
+  and is the <noscript> fallback.
+
+  Recreates UE Fig 36.1 (p.574), "Income Transfers of Loanable Current Income
+  (in 'Loanable Funds' Markets)". Ordinary supply-and-demand cross: horizontal
+  axis = current income transferred (claims to consumption, $); vertical axis
+  = the interest rate (the % premium of next year's income per dollar of
+  current income now). Demand (borrowers wanting more current income) slopes
+  DOWN; supply (savers/lenders offering current income) slopes UP; a single
+  crossing at (Q*=5, r*=5%) is the market-clearing rate. Front-half loan
+  market ONLY -- no money-supply curve.
+
+  Family F3 (policy line / wedge): the horizontal RATE line is draggable in
+  price (vertical drag; arrow keys step it). At the chosen trial rate, a dot
+  marks where that rate crosses each curve -- Qd on demand, Qs on supply --
+  with droplines to the quantity axis and a shaded gap between them. Above the
+  5% clearing rate, savers offer more than borrowers want (a saving surplus
+  that pushes the rate down); below it, borrowers want more than savers offer
+  (a shortage that pushes the rate up). The line snaps to r*=5% within a small
+  tolerance and the equilibrium dot enlarges to flag the match.
+
+  ARCHITECTURE: the base figure is REAL SVG markup -- a no-JS reader sees the
+  full still figure (both curves, the fixed equilibrium dot + droplines, the
+  rate line at its initial trial rate, the Qd/Qs dots + droplines + gap
+  shading, and the readout for that initial state). The script only ATTACHES
+  behavior (drag the rate line, keyboard, live readouts + shading); it never
+  builds the DOM.
+
+  DATA SPACE: Q (current income) 0..10 on x; r (interest rate, %) 0..10 on y.
+  Curves are drawn only over their stated domain Q in [0.5, 9].
+  PIXEL FRAME: origin (64,360). Q=10 -> x=380, r=10 -> y=56. Axes extend past
+  the data max (x to 415, y to 28) so the curve/arrowheads never crowd.
+  sx = (380-64)/10 = 31.6 px/unit; sy = (360-56)/10 = 30.4 px/unit.
+  D: r = 9 - 0.8Q over Q in [0.5,9] -> px (79.8,98.56) to (348.4,305.28).
+  S: r = 1 + 0.8Q over Q in [0.5,9] -> px (79.8,317.44) to (348.4,110.72).
+  Equilibrium (Q*=5, r*=5) -> px (222,208).
+  Valid trial-rate range keeping both Qd,Qs within [0.5,9]: r in [1.8, 8.2].
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;   /* warm bone background        */
+    --ink:     #1a1c1e;    /* primary curves + headings   */
+    --text:    #16181a;    /* body text                   */
+    --muted:   #5c6066;    /* axes / secondary labels      */
+    --hairline:#e3ddd3;    /* axis muting / droplines     */
+    --accent:  #b07a2c;    /* brass -- rate line + Qd/Qs   */
+    --accent-tint: #efe4d2;/* shaded gap                  */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .fig { width: 100%; max-width: 520px; min-width: 0; }
+  svg { width: 100%; max-width: 100%; height: auto; display: block;
+        touch-action: pan-y; }
+
+  /* structural strokes */
+  .axis      { stroke: var(--muted); stroke-width: 1.4; }
+  .curve     { stroke: var(--ink); stroke-width: 2.6; fill: none;
+               stroke-linecap: round; }
+  .drop      { stroke: var(--hairline); stroke-width: 1.6;
+               stroke-dasharray: 5 4; }
+
+  /* the draggable rate line + shaded gap */
+  .rateline  { stroke: var(--accent); stroke-width: 2.6; fill: none;
+               stroke-linecap: round; }
+  .band      { fill: var(--accent-tint); opacity: 0.8; stroke: none; }
+  .bracket   { stroke: var(--accent); stroke-width: 1.8; fill: none;
+               stroke-linecap: round; }
+
+  /* guard rect behind a descriptive tag, masking any curve passing underneath */
+  .tagbg     { fill: var(--surface); stroke: none; }
+
+  /* points */
+  .pt-eq     { fill: var(--accent); stroke: var(--surface); stroke-width: 1.6; }
+  .pt        { fill: var(--accent); stroke: var(--surface); stroke-width: 2.2; }
+  .knob      { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5;
+               pointer-events: none; }
+
+  /* transparent hit targets */
+  .hit       { fill: transparent; stroke: transparent; touch-action: none;
+               cursor: grab; }
+  .hit-line  { fill: none; stroke: transparent; stroke-width: 28;
+               touch-action: none; cursor: ns-resize; }
+  .pt-focus:focus-visible { outline: none; }
+  .pt-focus:focus-visible + .knob,
+  .grabbing .knob { stroke: var(--ink); stroke-width: 3.2; }
+
+  /* text */
+  .lab     { fill: var(--ink); font-size: 13px; font-weight: 600; }
+  .tag     { fill: var(--muted); font-size: 11px; font-weight: 600; }
+  .axlab   { fill: var(--muted); font-size: 13.5px; font-weight: 600; }
+  .plab    { fill: var(--muted); font-size: 12.5px; font-weight: 600; }
+  .qlab    { fill: var(--muted); font-size: 12px; font-weight: 600; }
+  .rate-lab{ fill: var(--accent); font-size: 13px; font-weight: 700; }
+  .brlab   { fill: var(--accent); font-size: 12px; font-weight: 700; }
+  .sep     { stroke: var(--hairline); stroke-width: 1; }
+  .readout { font-family: var(--font-body); text-align: center; }
+  .r-hint  { color: var(--muted); font-size: 12.5px; line-height: 1.3;
+             margin-bottom: 5px; }
+  .r-trade { color: var(--accent); font-size: 14px; font-weight: 600;
+             line-height: 1.3; }
+  .fallback {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.35;
+    text-align: center;
+  }
+  .fallback a { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="fig">
+  <svg id="fig" viewBox="0 0 440 540" role="group"
+       aria-label="A loan-market diagram. Demand for more current income (borrowers) slopes down; supply of current income offered (savers) slopes up; they cross at a five-percent equilibrium rate. Drag the horizontal rate line up or down: above five percent savers offer more than borrowers want, a surplus that pushes the rate down; below five percent borrowers want more than savers offer, a shortage that pushes the rate up.">
+    <defs>
+      <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+    </defs>
+
+    <!-- static droplines to the fixed equilibrium (drawn first, under the curves) -->
+    <line class="drop" x1="222" y1="208" x2="222" y2="360" />
+    <line class="drop" x1="64"  y1="208" x2="222" y2="208" />
+
+    <!-- axes (drawn before the curves; extended past the data max) -->
+    <line class="axis" x1="64" y1="360" x2="415" y2="360" marker-end="url(#arrow)" />
+    <line class="axis" x1="64" y1="360" x2="64"  y2="28"  marker-end="url(#arrow)" />
+
+    <!-- shaded gap between Qd and Qs at the trial rate (under the curves/dots).
+         Initial r=8: Qd=1.25 -> x=103.5, Qs=8.75 -> x=340.5. -->
+    <rect id="band" class="band" x="103.5" y="110.8" width="237" height="12" />
+
+    <!-- Demand D: r = 9 - 0.8Q, over Q in [0.5,9] -->
+    <line class="curve" x1="79.8" y1="98.56" x2="348.4" y2="305.28" />
+    <!-- Supply S: r = 1 + 0.8Q, over Q in [0.5,9] -->
+    <line class="curve" x1="79.8" y1="317.44" x2="348.4" y2="110.72" />
+
+    <!-- axis titles -->
+    <text class="axlab" x="240" y="404" text-anchor="middle">Current income transferred</text>
+    <text class="axlab" x="240" y="420" text-anchor="middle">(claims to consumption, $)</text>
+    <text class="axlab" x="24" y="194" text-anchor="middle"
+          transform="rotate(-90 24 194)">Rate of interest (%)</text>
+
+    <!-- curve end labels: D at both ends -->
+    <text class="lab" x="84" y="92" text-anchor="start">D</text>
+    <text class="lab" x="353" y="317" text-anchor="start">D</text>
+    <!-- curve end labels: S at both ends -->
+    <text class="lab" x="72" y="332" text-anchor="end">S</text>
+    <text class="lab" x="353" y="105" text-anchor="start">S</text>
+
+    <!-- descriptive tags, each on a surface-colored guard rect (the D/S lines
+         are steep enough in pixel space that a ~150px-wide text line cannot
+         clear both across its full span by placement alone -- masking the
+         curve underneath is the standard fix, per the static .tex figure's
+         "fill=white, inner sep=2pt" guard, same technique as supply-demand.md).
+         The two <g> wrappers let the script fade a tag out for the few trial
+         rates where the draggable rate line would otherwise pass through it
+         (r roughly 5.8-7.1 for the demand tag, 3.5-5.0 for the supply tag). -->
+    <g id="demandTag">
+      <rect class="tagbg" x="82" y="143" width="178" height="40" />
+      <text class="tag" x="88" y="160" text-anchor="start">Demand for more</text>
+      <text class="tag" x="88" y="176" text-anchor="start">current income (borrowers)</text>
+    </g>
+    <g id="supplyTag">
+      <rect class="tagbg" x="224" y="207" width="166" height="46" />
+      <text class="tag" x="230" y="230" text-anchor="start">Supply of current income</text>
+      <text class="tag" x="230" y="246" text-anchor="start">offered (savers)</text>
+    </g>
+
+    <!-- fixed equilibrium marker + axis ticks -->
+    <circle id="eqDot" class="pt-eq" cx="222" cy="208" r="4.5" />
+    <text class="plab" x="55" y="212" text-anchor="end">r*</text>
+    <text class="qlab" x="222" y="377" text-anchor="middle">Q*</text>
+
+    <!-- the draggable trial-rate line, initial r = 8.0 -> y = py(8) = 116.8.
+         Drawn AFTER the tag guard-rects (not right after the curves) so the
+         accent line is never masked when it passes behind a tag's background.
+         Shortened to x2=352 (not the full 400) so the value label at x=356
+         has room to sit inside the viewBox (440) without clipping. -->
+    <line id="rateLine" class="rateline" x1="64" y1="116.8" x2="352" y2="116.8" />
+
+    <!-- moving Qd / Qs dots on the rate line + their droplines.
+         Initial r=8: Qd=1.25 -> x=103.5, Qs=8.75 -> x=340.5. -->
+    <line id="dropD" class="drop" x1="103.5" y1="116.8" x2="103.5" y2="360" />
+    <line id="dropS" class="drop" x1="340.5" y1="116.8" x2="340.5" y2="360" />
+    <circle id="dotD" class="pt" cx="103.5" cy="116.8" r="5.5" />
+    <circle id="dotS" class="pt" cx="340.5" cy="116.8" r="5.5" />
+    <text id="labD" class="qlab" x="103.5" y="393" text-anchor="middle">Qd</text>
+    <text id="labS" class="qlab" x="340.5" y="393" text-anchor="middle">Qs</text>
+
+    <!-- gap bracket below the axis, between Qd and Qs (midpoint is always
+         Q=5 -> x=222, since Qd+Qs=10 identically for this symmetric cross) -->
+    <path id="bracket" class="bracket" d="M103.5,405 L103.5,415 M103.5,410 L340.5,410 M340.5,405 L340.5,415" />
+    <text id="bracketLabel" class="brlab" x="222" y="428" text-anchor="middle">Surplus</text>
+
+    <!-- rate-line value label, held clear at the line's (shortened) right end;
+         x=356 keeps "r = 8.2%" (its longest state) inside the 440 viewBox -->
+    <text id="rateLabel" class="rate-lab" x="356" y="122" text-anchor="start">r = 8.0%</text>
+
+    <!-- fat invisible hit line over the rate line (grab anywhere) -->
+    <line id="rateHit" class="hit-line" x1="64" y1="116.8" x2="352" y2="116.8" />
+    <!-- keyboard proxy (screen-reader slider) beneath the visible knob -->
+    <circle id="ptFocus" class="pt-focus hit" cx="100" cy="116.8" r="22"
+            tabindex="0" role="slider" aria-label="Trial interest rate"
+            aria-valuemin="1.8" aria-valuemax="8.2" aria-valuenow="8"
+            aria-valuetext="At r = 8.0%, savers offer 8.75 of current income but borrowers want only 1.25. Saving exceeds borrowing -- the surplus pushes the rate down toward 5%." />
+    <!-- visible drag knob on the rate line -->
+    <circle id="rateKnob" class="knob" cx="100" cy="116.8" r="6" />
+
+    <!-- readout band: hairline separator, muted STATE line, accent TAKEAWAY line.
+         A foreignObject lets the full-sentence readouts wrap so nothing clips. -->
+    <line class="sep" x1="44" y1="452" x2="396" y2="452" />
+    <foreignObject x="38" y="458" width="364" height="78">
+      <div xmlns="http://www.w3.org/1999/xhtml" class="readout">
+        <div id="rHint"  class="r-hint">At r = 8.0%, savers offer 8.75 of current income but borrowers want only 1.25.</div>
+        <div id="rTrade" class="r-trade">Saving exceeds borrowing &#8212; the surplus pushes the rate down toward 5%.</div>
+      </div>
+    </foreignObject>
+  </svg>
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame is a still image: demand for more current income sloping down, supply of current income offered sloping up, crossing at a five-percent equilibrium rate. You can also <a href="t11a-loan-market.svg">open the static figure</a>.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var svg = document.getElementById('fig');
+  var rateLine = document.getElementById('rateLine');
+  var rateHit  = document.getElementById('rateHit');
+  var rateKnob = document.getElementById('rateKnob');
+  var ptFocus  = document.getElementById('ptFocus');
+  var rateLabel= document.getElementById('rateLabel');
+  var dotD     = document.getElementById('dotD');
+  var dotS     = document.getElementById('dotS');
+  var dropD    = document.getElementById('dropD');
+  var dropS    = document.getElementById('dropS');
+  var labD     = document.getElementById('labD');
+  var labS     = document.getElementById('labS');
+  var band     = document.getElementById('band');
+  var bracket  = document.getElementById('bracket');
+  var bracketLabel = document.getElementById('bracketLabel');
+  var eqDot    = document.getElementById('eqDot');
+  var demandTag = document.getElementById('demandTag');
+  var supplyTag = document.getElementById('supplyTag');
+  var rHint    = document.getElementById('rHint');
+  var rTrade   = document.getElementById('rTrade');
+
+  // pixel frame + scale (mirrors the base SVG markup)
+  var QMAX = 10, RMAX = 10;
+  var X0 = 64, X1 = 380, Y0 = 360, Y1 = 56;
+  var px = function (q) { return X0 + (q / QMAX) * (X1 - X0); };  // qty  -> px x
+  var py = function (r) { return Y0 - (r / RMAX) * (Y0 - Y1); };  // rate -> px y
+  var toR = function (yy) { return ((Y0 - yy) / (Y0 - Y1)) * RMAX; };
+
+  // model constants (read off the corrected element inventory)
+  var REQ = 5, QEQ = 5;              // equilibrium rate + quantity
+  var RMIN = 1.8, RMAX_TRIAL = 8.2;  // keeps Qd,Qs within the drawn Q in [0.5,9]
+  var SNAP_TOL = 0.15;               // magnetic snap window around r* = 5
+
+  // the two descriptive tags' pixel y-spans (see their guard-rect coords) +
+  // a small buffer; the rate line fades a tag out while crossing its band so
+  // the accent line is never read as cutting through the label text
+  var DEMAND_TAG_Y = [143 - 6, 183 + 6];
+  var SUPPLY_TAG_Y = [207 - 6, 253 + 6];
+
+  function qDemanded(r) { return (9 - r) / 0.8; }   // Q where the D line sits at rate r
+  function qSupplied(r) { return (r - 1) / 0.8; }   // Q where the S line sits at rate r
+
+  // State in DATA units.
+  var r = 8.0;   // initial trial rate
+
+  // convert a client event to SVG user coords (handles responsive scaling)
+  var spt = svg.createSVGPoint();
+  function toSvg(evt) {
+    spt.x = evt.clientX; spt.y = evt.clientY;
+    return spt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+
+  // format a quantity: keep 2dp only when needed ("8.75"), else drop to "5.0"
+  function fmt(v) {
+    var r2 = Math.round(v * 100) / 100;
+    var r1 = Math.round(v * 10) / 10;
+    return (Math.abs(r2 - r1) < 0.005) ? r1.toFixed(1) : r2.toFixed(2);
+  }
+
+  function render() {
+    var cy = py(r);
+    var qd = qDemanded(r);
+    var qs = qSupplied(r);
+    var xd = px(qd), xs = px(qs);
+    var gap = Math.abs(qd - qs);
+    var atEq = gap <= 0.05;
+
+    // fade a descriptive tag out while the rate line is crossing its band, so
+    // the accent line is never seen cutting through the label text
+    demandTag.style.visibility =
+      (cy >= DEMAND_TAG_Y[0] && cy <= DEMAND_TAG_Y[1]) ? 'hidden' : 'visible';
+    supplyTag.style.visibility =
+      (cy >= SUPPLY_TAG_Y[0] && cy <= SUPPLY_TAG_Y[1]) ? 'hidden' : 'visible';
+
+    // rate line + its handle, hit target, value label
+    rateLine.setAttribute('y1', cy); rateLine.setAttribute('y2', cy);
+    rateHit.setAttribute('y1', cy); rateHit.setAttribute('y2', cy);
+    rateKnob.setAttribute('cy', cy);
+    ptFocus.setAttribute('cy', cy);
+    rateLabel.setAttribute('y', cy + 5);
+    rateLabel.textContent = 'r = ' + r.toFixed(1) + '%';
+
+    // Qd / Qs dots + droplines + axis labels
+    dotD.setAttribute('cx', xd); dotD.setAttribute('cy', cy);
+    dotS.setAttribute('cx', xs); dotS.setAttribute('cy', cy);
+    dropD.setAttribute('x1', xd); dropD.setAttribute('x2', xd);
+    dropD.setAttribute('y1', cy); dropD.setAttribute('y2', Y0);
+    dropS.setAttribute('x1', xs); dropS.setAttribute('x2', xs);
+    dropS.setAttribute('y1', cy); dropS.setAttribute('y2', Y0);
+    labD.setAttribute('x', xd);
+    labS.setAttribute('x', xs);
+    // at equilibrium Qd = Qs = Q*, so hide the moving labels/dots/droplines --
+    // the fixed Q*/r* markers already speak for that point, avoiding overprint
+    var hideMoving = atEq;
+    dotD.style.visibility = hideMoving ? 'hidden' : 'visible';
+    dotS.style.visibility = hideMoving ? 'hidden' : 'visible';
+    dropD.style.visibility = hideMoving ? 'hidden' : 'visible';
+    dropS.style.visibility = hideMoving ? 'hidden' : 'visible';
+    labD.style.visibility = hideMoving ? 'hidden' : 'visible';
+    labS.style.visibility = hideMoving ? 'hidden' : 'visible';
+
+    // shaded gap band + below-axis bracket
+    var lo = Math.min(xd, xs), hi = Math.max(xd, xs);
+    if (!atEq) {
+      band.setAttribute('x', lo);
+      band.setAttribute('width', hi - lo);
+      band.setAttribute('y', cy - 6);
+      bracket.setAttribute('d',
+        'M' + lo + ',405 L' + lo + ',415 ' +
+        'M' + lo + ',410 L' + hi + ',410 ' +
+        'M' + hi + ',405 L' + hi + ',415');
+      bracketLabel.setAttribute('x', (lo + hi) / 2);
+      bracketLabel.textContent = (r > REQ) ? 'Surplus' : 'Shortage';
+      band.style.visibility = 'visible';
+      bracket.style.visibility = 'visible';
+      bracketLabel.style.visibility = 'visible';
+    } else {
+      band.style.visibility = 'hidden';
+      bracket.style.visibility = 'hidden';
+      bracketLabel.style.visibility = 'hidden';
+    }
+
+    // snap-highlight the equilibrium dot when the trial rate matches it
+    eqDot.setAttribute('r', atEq ? 6.5 : 4.5);
+    eqDot.style.stroke = atEq ? 'var(--ink)' : 'var(--surface)';
+
+    // readout grammar: muted state line + accent takeaway line
+    var hint, trade, aria;
+    if (atEq) {
+      hint  = 'At r = ' + r.toFixed(1) + '%, savers offer ' + fmt(qs) +
+              ' and borrowers want ' + fmt(qd) + ' — they match.';
+      trade = 'This is the equilibrium: the price of current income that clears the loan market.';
+    } else if (r > REQ) {
+      hint  = 'At r = ' + r.toFixed(1) + '%, savers offer ' + fmt(qs) +
+              ' of current income but borrowers want only ' + fmt(qd) + '.';
+      trade = 'Saving exceeds borrowing — the surplus pushes the rate down toward 5%.';
+    } else {
+      hint  = 'At r = ' + r.toFixed(1) + '%, borrowers want ' + fmt(qd) +
+              ' but savers offer only ' + fmt(qs) + '.';
+      trade = 'Borrowing exceeds saving — the shortage pushes the rate up toward 5%.';
+    }
+    rHint.textContent  = hint;
+    rTrade.textContent = trade;
+
+    ptFocus.setAttribute('aria-valuenow', r.toFixed(1));
+    ptFocus.setAttribute('aria-valuetext', hint + ' ' + trade);
+  }
+
+  function setRate(v) {
+    var rr = v;
+    if (rr < RMIN) rr = RMIN;
+    if (rr > RMAX_TRIAL) rr = RMAX_TRIAL;
+    if (Math.abs(rr - REQ) < SNAP_TOL) rr = REQ;  // magnetic snap to equilibrium
+    r = rr;
+    render();
+  }
+
+  function setFromPointer(evt) {
+    var p = toSvg(evt);
+    var rr = toR(p.y);
+    if (isNaN(rr)) return;
+    setRate(rr);
+  }
+
+  // --- drag (pointer events + pointer capture so a fast drag can't get stuck) ---
+  var dragging = false;
+  var capturedEl = null, capturedId = null;
+  function onMove(evt) { if (dragging) { evt.preventDefault(); setFromPointer(evt); } }
+  function onUp() {
+    dragging = false;
+    svg.classList.remove('grabbing');
+    if (capturedEl && capturedId !== null) {
+      try { capturedEl.releasePointerCapture(capturedId); } catch (e) {}
+    }
+    capturedEl = null; capturedId = null;
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+  }
+  function onDown(evt) {
+    evt.preventDefault();
+    dragging = true;
+    svg.classList.add('grabbing');
+    capturedEl = evt.currentTarget; capturedId = evt.pointerId;
+    try { capturedEl.setPointerCapture(capturedId); } catch (e) {}
+    setFromPointer(evt);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }
+  rateHit.addEventListener('pointerdown', onDown);
+  ptFocus.addEventListener('pointerdown', onDown);
+
+  // --- keyboard: arrows step the trial rate ---
+  ptFocus.addEventListener('keydown', function (evt) {
+    var step = 0.2;
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') { setRate(r + step); }
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') { setRate(r - step); }
+    else return;
+    evt.preventDefault();
+  });
+
+  // Debug hook (inert for students): set/get the trial rate.
+  window.__fig = {
+    set: function (v) { setRate(+v); },
+    get: function () { return { r: r, qDemanded: qDemanded(r), qSupplied: qSupplied(r) }; }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

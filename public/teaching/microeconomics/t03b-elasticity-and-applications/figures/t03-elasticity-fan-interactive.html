@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive fan of demand curves: elasticity grows with time</title>
+<!--
+  Interactive "fan of demand curves" for the t03b (elasticity) blog post.
+  Recreates UE Fig 8.5 (p.118), "Effect of Time on Price Elasticity of Demand."
+  Website-styled (warm-editorial palette), NOT the FAU slide palette. The static
+  FAU figure (figures/t03-elasticity-fan.svg) is the SLIDE version, untouched.
+
+  ARCHITECTURE: the whole figure is REAL SVG markup — a no-JS reader (or the
+  <noscript> still image) sees every curve, the pivot, the P1/P2 lines, all five
+  X-droplines and labels, and the curve labels. The script only ATTACHES the F9
+  interaction: a "time since the price change" slider (Short run -> Long run)
+  that sweeps the ACTIVE curve from steepest (1) to flattest (L). The active
+  curve is accent-highlighted, the rest fade to muted hairlines; an accent dot
+  marks the active curve's quantity at P2 and the readout band updates.
+
+  GEOMETRY (F9, single-panel, viewBox 440x540, aspect 4/5):
+    Data space: Quantity 0..10 on x, Price 0..10 on y.
+    Pixel frame: origin (64,360); x-unit 31.6 px, y-unit 30.4 px. Axes extend
+    past the data so curves do not crowd the arrowheads.
+      px(x) = 64 + 31.6*x     py(p) = 360 - 30.4*p
+    Common pivot at (X=3, P1=6) = (158.8, 177.6). Five demand curves radiate
+    through it, each straight, ordered by steepness at the pivot:
+      curve 1 (short run, steepest, slope -3.00)  crosses P2=3 at X1 = 4.0
+      curve 2 (slope -1.667)                       crosses P2=3 at X2 = 4.8
+      curve 3 (slope -1.111)                       crosses P2=3 at X3 = 5.7
+      curve 4 (slope -0.789)                       crosses P2=3 at X4 = 6.8
+      curve L (long run, flattest, slope -0.577)   crosses P2=3 at XL = 8.2
+    P2=3 line at py 268.8. After the price falls P1->P2, the quantity response
+    grows the longer the elapsed time: steep curve 1 -> small X1, flat curve L
+    -> large XL (the "second law of demand"). Initial X=3 sits left of X1.
+
+  DEVIATION (documented): the fan curves are drawn STRAIGHT rather than the
+  source's slight convexity. Straight lines guarantee each accent crossing dot
+  sits EXACTLY on its curve (no drift); the current static .svg is also straight.
+  The load-bearing invariants (one common pivot; steeper=short run=smaller X;
+  monotone down-sloping; ordered X1<...<XL) are exact.
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;   /* warm bone background        */
+    --ink:     #1a1c1e;    /* curves + headings           */
+    --text:    #16181a;    /* body text                   */
+    --muted:   #5c6066;    /* captions / secondary labels */
+    --hairline:#e3ddd3;    /* axes muting / droplines     */
+    --accent:  #b07a2c;    /* brass — active curve / point */
+    --accent-tint: #efe4d2;/* shaded region               */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .fig { width: 100%; max-width: 520px; }
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+
+  /* structural strokes */
+  .axis      { stroke: var(--muted); stroke-width: 1.4; }
+  .curve     { stroke: var(--ink); stroke-width: 2; fill: none;
+               stroke-linecap: round; }
+  .drop      { stroke: var(--hairline); stroke-width: 1.6;
+               stroke-dasharray: 5 4; }
+  .drop-key  { stroke: var(--muted); stroke-width: 1.3;
+               stroke-dasharray: 4 3; opacity: 0.85; }
+
+  /* pivot + active crossing point */
+  .pivot     { fill: var(--accent); stroke: var(--surface); stroke-width: 1.5; }
+  .pt        { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5; }
+
+  /* generous transparent hit targets */
+  .hit-curve { fill: none; stroke: transparent; stroke-width: 26;
+               touch-action: none; cursor: pointer; }
+  .hit       { fill: transparent; stroke: transparent; touch-action: none;
+               cursor: grab; }
+  .knob      { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5; }
+  .knob-focus:focus-visible { outline: none; }
+  .knob-focus:focus-visible + .knob,
+  .grabbing .knob { stroke: var(--accent); stroke-width: 3.5; }
+  .track     { stroke: var(--hairline); stroke-width: 4; stroke-linecap: round; }
+  .tick      { stroke: var(--muted); stroke-width: 1.4; opacity: 0.55; }
+
+  /* text */
+  .axlabel  { fill: var(--muted); font-size: 15px; font-weight: 600; }
+  .ptlabel  { fill: var(--muted); font-size: 12.5px; font-weight: 600; }
+  .clabel   { fill: var(--ink); font-size: 12.5px; font-weight: 700; }
+  .clabel-lr{ fill: var(--muted); font-size: 12px; font-weight: 600; }
+  .slabel   { fill: var(--muted); font-size: 12px; font-weight: 600; }
+  .stitle   { fill: var(--ink); font-size: 12.5px; font-weight: 700; }
+  .sep      { stroke: var(--hairline); stroke-width: 1; }
+  .r-hint   { fill: var(--muted); font-size: 12px; }
+  .r-trade  { fill: var(--accent); font-size: 13px; font-weight: 600; }
+  .fallback {
+    margin: 8px 0 0; color: var(--muted); font-size: 13px;
+    line-height: 1.35; text-align: center;
+  }
+  .fallback a { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="fig">
+  <svg id="fig" viewBox="0 0 440 540" role="group"
+       aria-label="A fan of five demand curves radiating from one common price-quantity point. Move the time slider from short run to long run to sweep the active curve from the steepest short-run curve to the flattest long-run curve; the quantity response to a price fall grows the more time has elapsed.">
+    <defs>
+      <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+    </defs>
+
+    <!-- axes (drawn before the curves so the curves sit on top); extended past data -->
+    <line class="axis" x1="64" y1="360" x2="415" y2="360" marker-end="url(#arrow)" />
+    <line class="axis" x1="64" y1="360" x2="64"  y2="28"  marker-end="url(#arrow)" />
+    <text class="axlabel" x="36" y="42" text-anchor="start">Price</text>
+    <text class="axlabel" x="412" y="382" text-anchor="end">Quantity</text>
+
+    <!-- P1 and P2 reference lines (dotted) with labels on the price axis -->
+    <line class="drop-key" x1="64" y1="177.6" x2="158.8" y2="177.6" />
+    <line class="drop-key" x1="64" y1="268.8" x2="323.12" y2="268.8" />
+    <text class="ptlabel" x="58" y="177.6" text-anchor="end" dominant-baseline="middle">P&#8321;</text>
+    <text class="ptlabel" x="58" y="268.8" text-anchor="end" dominant-baseline="middle">P&#8322;</text>
+
+    <!-- pivot dropline to the x-axis, marking the initial quantity X -->
+    <line class="drop-key" x1="158.8" y1="177.6" x2="158.8" y2="360" />
+
+    <!-- the five demand curves (all straight, all through the pivot). Real
+         markup so the no-JS figure is complete. JS restyles active vs muted. -->
+    <path id="c0" class="curve" d="M125.1,80.3 L209.36,323.52" />
+    <path id="c1" class="curve" d="M108.24,96.53 L240.96,309.33" />
+    <path id="c2" class="curve" d="M98.76,113.42 L275.72,302.58" />
+    <path id="c3" class="curve" d="M92.44,127.2 L316.8,297.6" />
+    <path id="c4" class="curve" d="M86.12,137.26 L364.2,291.6" />
+
+    <!-- five X-droplines from each curve's P2 crossing down to the x-axis -->
+    <line id="xd0" class="drop" x1="190.4"  y1="268.8" x2="190.4"  y2="360" />
+    <line id="xd1" class="drop" x1="215.68" y1="268.8" x2="215.68" y2="360" />
+    <line id="xd2" class="drop" x1="244.12" y1="268.8" x2="244.12" y2="360" />
+    <line id="xd3" class="drop" x1="278.88" y1="268.8" x2="278.88" y2="360" />
+    <line id="xd4" class="drop" x1="323.12" y1="268.8" x2="323.12" y2="360" />
+
+    <!-- upper-end curve labels (1,2,3,4,L), placed just above each end -->
+    <text class="clabel" x="126" y="72"  text-anchor="middle">1</text>
+    <text class="clabel" x="110" y="90"  text-anchor="middle">2</text>
+    <text class="clabel" x="100" y="106" text-anchor="middle">3</text>
+    <text class="clabel" x="93"  y="120" text-anchor="middle">4</text>
+    <text class="clabel" x="86"  y="130" text-anchor="middle">L</text>
+    <text class="clabel-lr" x="150" y="60" text-anchor="start">Short Run</text>
+
+    <!-- lower-end curve labels (1,2,3,4) + "Long Run" at the L curve -->
+    <text class="clabel" x="204" y="337" text-anchor="middle">1</text>
+    <text class="clabel" x="238" y="323" text-anchor="middle">2</text>
+    <text class="clabel" x="274" y="316" text-anchor="middle">3</text>
+    <text class="clabel" x="316" y="311" text-anchor="middle">4</text>
+    <text class="clabel-lr" x="370" y="288" text-anchor="middle">Long Run</text>
+
+    <!-- x-axis quantity marks: X (initial), then X1..XL -->
+    <text class="ptlabel" x="158.8" y="376" text-anchor="middle">X</text>
+    <text class="ptlabel" x="190.4" y="376" text-anchor="middle">X&#8321;</text>
+    <text class="ptlabel" x="215.68" y="376" text-anchor="middle">X&#8322;</text>
+    <text class="ptlabel" x="244.12" y="376" text-anchor="middle">X&#8323;</text>
+    <text class="ptlabel" x="278.88" y="376" text-anchor="middle">X&#8324;</text>
+    <text class="ptlabel" x="323.12" y="376" text-anchor="middle">X&#8343;</text>
+
+    <!-- pivot dot -->
+    <circle class="pivot" cx="158.8" cy="177.6" r="4" />
+
+    <!-- ACTIVE crossing dot (moves with the slider; initial = curve 1 at X1) -->
+    <circle id="activePt" class="pt" cx="190.4" cy="268.8" r="6.5" />
+
+    <!-- transparent per-curve hit paths (tap a curve to select it) -->
+    <path id="hc0" class="hit-curve" d="M125.1,80.3 L209.36,323.52" />
+    <path id="hc1" class="hit-curve" d="M108.24,96.53 L240.96,309.33" />
+    <path id="hc2" class="hit-curve" d="M98.76,113.42 L275.72,302.58" />
+    <path id="hc3" class="hit-curve" d="M92.44,127.2 L316.8,297.6" />
+    <path id="hc4" class="hit-curve" d="M86.12,137.26 L364.2,291.6" />
+
+    <!-- time slider: Short run -> Long run -->
+    <text class="stitle" x="240" y="399" text-anchor="middle">Time since the price change</text>
+    <line class="track" x1="140" y1="415" x2="340" y2="415" />
+    <line class="tick" x1="140" y1="410" x2="140" y2="420" />
+    <line class="tick" x1="190" y1="410" x2="190" y2="420" />
+    <line class="tick" x1="240" y1="410" x2="240" y2="420" />
+    <line class="tick" x1="290" y1="410" x2="290" y2="420" />
+    <line class="tick" x1="340" y1="410" x2="340" y2="420" />
+    <text class="slabel" x="124" y="419" text-anchor="end">Short run</text>
+    <text class="slabel" x="356" y="419" text-anchor="start">Long run</text>
+    <circle id="knob"    class="knob"    cx="140" cy="415" r="8" />
+    <circle id="knobHit" class="knob-focus hit" cx="140" cy="415" r="22"
+            tabindex="0" role="slider"
+            aria-label="Time since the price change"
+            aria-valuemin="1" aria-valuemax="5" aria-valuenow="1"
+            aria-valuetext="Short run, curve 1. Right after a price change, quantity barely moves; demand is least elastic." />
+
+    <!-- readout band: hairline separator, muted STATE lines, accent TAKEAWAY lines -->
+    <line class="sep" x1="44" y1="434" x2="396" y2="434" />
+    <text id="rHint"  class="r-hint"  x="220" y="452" text-anchor="middle">
+      <tspan x="220" dy="0">Short run &#183; steep curve 1 &#183; quantity at P&#8322; = X&#8321;</tspan>
+      <tspan x="220" dy="16">(small response).</tspan>
+    </text>
+    <text id="rTrade" class="r-trade" x="220" y="486" text-anchor="middle">
+      <tspan x="220" dy="0">Right after a price change, quantity barely</tspan>
+      <tspan x="220" dy="16">moves &#8212; demand is least elastic.</tspan>
+    </text>
+  </svg>
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame is a still image: a fan
+      of five demand curves through one common price-quantity point, growing
+      flatter (more elastic) the longer the time after a price change. You can
+      also <a href="t03-elasticity-fan.svg">open the static figure</a>.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var svg = document.getElementById('fig');
+  var knob = document.getElementById('knob');
+  var knobHit = document.getElementById('knobHit');
+  var activePt = document.getElementById('activePt');
+  var rHint = document.getElementById('rHint');
+  var rTrade = document.getElementById('rTrade');
+
+  // per-curve elements + the pixel coordinate of each curve's P2 crossing (Xi)
+  var curves = [];
+  for (var i = 0; i < 5; i++) {
+    curves.push({
+      path: document.getElementById('c' + i),
+      hit:  document.getElementById('hc' + i),
+      drop: document.getElementById('xd' + i)
+    });
+  }
+  var XPX = [190.4, 215.68, 244.12, 278.88, 323.12]; // X1..XL pixel x
+  var P2Y = 268.8;                                    // P2 pixel y
+
+  // slider track geometry (index 0..4 -> pixel x)
+  var TX0 = 140, TSTEP = 50;
+  function idxToX(i) { return TX0 + i * TSTEP; }
+  function xToIdx(px) {
+    var i = Math.round((px - TX0) / TSTEP);
+    return Math.max(0, Math.min(4, i));
+  }
+
+  // readout copy per curve (index 0 = short run ... 4 = long run).
+  // Lines are pre-split so they never overflow the SVG width.
+  var COPY = [
+    { muted: ['Short run · steep curve 1 · quantity at P₂ = X₁',
+              '(small response).'],
+      trade: ['Right after a price change, quantity barely',
+              'moves — demand is least elastic.'] },
+    { muted: ['A short while later · curve 2 ·',
+              'quantity at P₂ = X₂.'],
+      trade: ['A bit more time flattens the curve —',
+              'quantity responds more.'] },
+    { muted: ['About a year out · curve 3 · quantity = X₃.'],
+      trade: ['More time → flatter curve →',
+              'bigger quantity response.'] },
+    { muted: ['Well after the change · curve 4 ·',
+              'quantity = X₄.'],
+      trade: ['Still more time → flatter still →',
+              'quantity responds more.'] },
+    { muted: ['Long run · flattest curve · quantity = X_L',
+              '(largest).'],
+      trade: ['The second law of demand: demand is more',
+              'elastic the longer the interval after a',
+              'price change.'] }
+  ];
+
+  var idx = 0; // active curve index
+
+  function setLines(el, lines, y0, dy) {
+    while (el.firstChild) el.removeChild(el.firstChild);
+    for (var k = 0; k < lines.length; k++) {
+      var t = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+      t.setAttribute('x', 220);
+      t.setAttribute('dy', k === 0 ? 0 : dy);
+      t.textContent = lines[k];
+      el.appendChild(t);
+    }
+  }
+
+  function render() {
+    // style curves: active = accent + thick; others = muted hairline
+    for (var i = 0; i < 5; i++) {
+      var active = (i === idx);
+      var p = curves[i].path, d = curves[i].drop;
+      p.setAttribute('stroke', active ? 'var(--accent)' : 'var(--muted)');
+      p.setAttribute('stroke-width', active ? 3 : 1.4);
+      p.setAttribute('opacity', active ? 1 : 0.32);
+      d.setAttribute('stroke', active ? 'var(--accent)' : 'var(--hairline)');
+      d.setAttribute('stroke-width', active ? 1.8 : 1.6);
+      d.setAttribute('opacity', active ? 1 : 0.9);
+    }
+    // move the active crossing dot to this curve's Xi at P2
+    activePt.setAttribute('cx', XPX[idx]);
+    activePt.setAttribute('cy', P2Y);
+
+    // slider knob
+    var kx = idxToX(idx);
+    knob.setAttribute('cx', kx);
+    knobHit.setAttribute('cx', kx);
+
+    // readout band
+    var c = COPY[idx];
+    setLines(rHint, c.muted, 452, 16);
+    setLines(rTrade, c.trade, 486, 16);
+
+    // aria
+    knobHit.setAttribute('aria-valuenow', idx + 1);
+    knobHit.setAttribute('aria-valuetext',
+      c.muted.join(' ') + ' ' + c.trade.join(' '));
+  }
+
+  function setIdx(i) {
+    i = Math.max(0, Math.min(4, i));
+    if (i !== idx) { idx = i; render(); }
+  }
+
+  // convert a client event to SVG user coords (handles responsive scaling)
+  var spt = svg.createSVGPoint();
+  function toSvg(evt) {
+    spt.x = evt.clientX; spt.y = evt.clientY;
+    return spt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+
+  // --- slider drag (pointer capture so a fast drag can't get stuck) ---
+  var dragging = false, capId = null;
+  function onMove(evt) {
+    if (!dragging) return;
+    evt.preventDefault();
+    setIdx(xToIdx(toSvg(evt).x));
+  }
+  function onUp() {
+    dragging = false;
+    svg.classList.remove('grabbing');
+    if (capId !== null) { try { knobHit.releasePointerCapture(capId); } catch (e) {} }
+    capId = null;
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+  }
+  function onKnobDown(evt) {
+    evt.preventDefault();
+    dragging = true;
+    svg.classList.add('grabbing');
+    capId = evt.pointerId;
+    try { knobHit.setPointerCapture(capId); } catch (e) {}
+    setIdx(xToIdx(toSvg(evt).x));
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }
+  knobHit.addEventListener('pointerdown', onKnobDown);
+
+  // tap a curve to select it directly
+  for (var j = 0; j < 5; j++) {
+    (function (n) {
+      curves[n].hit.addEventListener('pointerdown', function (evt) {
+        evt.preventDefault();
+        setIdx(n);
+      });
+    })(j);
+  }
+
+  // --- keyboard on the slider proxy ---
+  knobHit.addEventListener('keydown', function (evt) {
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') { setIdx(idx + 1); }
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') { setIdx(idx - 1); }
+    else if (evt.key === 'Home') { setIdx(0); }
+    else if (evt.key === 'End') { setIdx(4); }
+    else return;
+    evt.preventDefault();
+  });
+
+  // Debug hook: lets a reviewer screenshot non-initial states via scripting.
+  window.__fig = {
+    set: function (v) { setIdx(Math.round(+v)); },
+    get: function () { return { idx: idx, curve: idx + 1 }; }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

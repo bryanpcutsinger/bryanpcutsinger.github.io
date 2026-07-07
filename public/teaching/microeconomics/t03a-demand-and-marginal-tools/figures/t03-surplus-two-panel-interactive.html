@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive figure: buyer's surplus plus market value equals total worth, at a small vs. a large quantity</title>
+<!--
+  Interactive "Surplus Two-Panel" area-accounting figure for the T3a blog post
+  (website-styled, warm palette). Recreates UE Fig 5.5 "Buyer's Surplus plus
+  Market Value Equals Total Worth" (p.72). Self-contained: no libraries, no
+  network. The static FAU figure (figures/t03-surplus-two-panel.{tex,svg}) is
+  the SLIDE version and is untouched; it is also the <noscript> fallback.
+
+  FAMILY F4 (area accounting), two-panel. Geometry class: viewBox 720x460,
+  aspect-ratio 16/10, max-width 640px.
+
+  MODEL: ONE demand line, identical in both panels: P = 8 - Q (Q in [0,8]).
+  Left panel = "small quantity, high price" (Q1 in [1,3]); right panel =
+  "large quantity, low price" (Q2 in [6,7.5]). The two panels are linked by a
+  SINGLE control t = (Q2-6)/1.5 in [0,1]: Q1 = 3 - 2t. At t=0 both panels sit
+  at the static figure's original values (Q1=3,P1=5 / Q2=6,P2=2); dragging
+  toward t=1 sharpens the contrast (Q1->1,P1->7 "thin sliver"; Q2->7.5,P2->0.5).
+  This lets ONE price handle (grabbable from either panel, since both curves
+  are the same line) sweep between the two named states while both panels'
+  regions re-shade, per the widget spec's "one price handle ... drags between
+  the high-price/small-Q and low-price/large-Q states."
+  Area identities (triangle-under-a-straight-demand-line): with P = 8 - Q,
+  total worth TW(Q) = 8Q - Q^2/2, market value MV(Q) = (8-Q)Q, so consumer
+  surplus CS(Q) = TW - MV = Q^2/2 exactly (a clean closed form, honoring the
+  same numeric-honesty rule the marginal-worths widget uses).
+  A small dashed "ghost" ring in each panel marks the figure's ORIGINAL
+  (t=0) point, so the reader can see how far they have dragged from the
+  source figure's own numbers.
+
+  GEOMETRY / coordinate frame:
+    Left panel:  X0=70,  axis 70->300 (x), 350->90 (y, arrows past data max).
+    Right panel: X0=410, axis 410->640 (x), 350->90 (y).
+    Shared: Y0=350 (P=0), PER_X=25 px/unit Q, PER_Y=28 px/unit P,
+    YTOP=126 (both panels' curve at Q=0, since P=8 -> y=350-8*28=126).
+    Curve left:  M70,126  L270,350 (Q:0..8).
+    Curve right: M410,126 L610,350 (Q:0..8).
+    Draggable sub-ranges: left Q in [1,3] -> x in [95,145];
+    right Q in [6,7.5] -> x in [560,597.5].
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;   /* warm bone background        */
+    --ink:     #1a1c1e;    /* demand curves + headings    */
+    --text:    #16181a;    /* body text                   */
+    --muted:   #5c6066;    /* axes / market-value fill    */
+    --hairline:#e3ddd3;    /* droplines / faint strokes   */
+    --accent:  #b07a2c;    /* brass — handle + surplus    */
+    --accent-tint: #efe4d2;/* consumer-surplus shading    */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* min-width:0 defeats the flexbox min-width:auto default so the figure
+     scales DOWN to viewports narrower than the SVG's intrinsic width instead
+     of clipping the right side on phones. */
+  .fig { width: 100%; max-width: 640px; min-width: 0; }
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+
+  /* structural strokes */
+  .axis     { stroke: var(--muted); stroke-width: 1.4; }
+  .curve    { stroke: var(--ink); stroke-width: 2.4; fill: none;
+              stroke-linecap: round; }
+
+  /* shaded regions (F4 evidence) */
+  .region-market  { fill: var(--muted); fill-opacity: 0.20; stroke: none; }
+  .region-surplus { fill: var(--accent-tint); fill-opacity: 1; stroke: none; }
+  .priceline { stroke: var(--accent); stroke-width: 1.8; }
+  .qtyline   { stroke: var(--muted);  stroke-width: 1.6; }
+  .ghost     { fill: none; stroke: var(--muted); stroke-width: 1.4;
+               stroke-dasharray: 3 3; opacity: 0.8; }
+
+  /* region-label arrows */
+  .lbl-arrow { stroke: var(--ink); stroke-width: 1.3; fill: none; }
+
+  /* draggable handle + generous transparent hit targets */
+  .pt        { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5; }
+  .hit       { fill: transparent; stroke: transparent; touch-action: none;
+               cursor: grab; }
+  .hit-curve { fill: none; stroke: transparent; stroke-width: 26;
+               touch-action: none; cursor: grab; }
+  .pt-focus:focus-visible { outline: none; }
+  .pt-focus:focus-visible + .pt,
+  .grabbing .pt { stroke: var(--accent); stroke-width: 3.5; }
+
+  /* text */
+  .panelhead{ fill: var(--ink); font-size: 13px; font-weight: 700; }
+  .axtitle  { fill: var(--muted); font-size: 12px; font-weight: 600; }
+  .curvelbl { fill: var(--ink);   font-size: 12px; font-style: italic; }
+  .lbl-surplus { fill: var(--ink); font-size: 11.5px; font-weight: 600; }
+  .lbl-market  { fill: var(--muted); font-size: 11.5px; font-weight: 600; }
+  /* live axis readout tags (accent, with a surface backing so they cover the
+     line they replace) */
+  .tagbg    { fill: var(--surface); }
+  .tagtxt   { fill: var(--accent); font-size: 11.5px; font-weight: 700; }
+  .sep      { stroke: var(--hairline); stroke-width: 1; }
+  .r-hint   { fill: var(--muted);  font-size: 12.5px; }
+  .r-trade  { fill: var(--accent); font-size: 13px; font-weight: 600; }
+  .fallback {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.35;
+    text-align: center;
+  }
+  .fallback a { color: var(--ink); }
+</style>
+</head>
+<body>
+<!-- Everything from here to </div> is REAL base SVG: a no-JS reader sees the
+     full two-panel figure (both demand lines, both market-value rectangles,
+     both consumer-surplus triangles, region labels + arrows, ghost markers of
+     the original figure values, and the readout). The script only ATTACHES
+     drag / keyboard / live re-shading. -->
+<div class="fig">
+  <svg id="fig" viewBox="0 0 720 460" role="group"
+       aria-label="Two panels of the same demand curve. The left panel is a small quantity at a high price; the right panel is a large quantity at a low price. In each, a gray rectangle below the price line is the market value and a tinted triangle above it is the buyer's surplus. A dashed ring in each panel marks the figure's original point. Drag either point, or use the arrow keys, to move between a small extreme and a large extreme along the curve and watch both areas change.">
+    <title>Buyer's surplus and market value at a small vs. a large quantity</title>
+    <defs>
+      <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+      <marker id="lblArrow" markerWidth="8" markerHeight="8" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L7,4 L0,8 Z" fill="#1a1c1e" />
+      </marker>
+    </defs>
+
+    <!-- ================= LEFT PANEL: small quantity, high price ================= -->
+    <g id="panelL">
+      <text class="panelhead" x="185" y="18" text-anchor="middle">Small quantity, high price</text>
+
+      <!-- axes (drawn first); extended past the data max so arrowheads don't
+           crowd the curve -->
+      <line class="axis" x1="70" y1="350" x2="300" y2="350" marker-end="url(#arrow)" />
+      <line class="axis" x1="70" y1="350" x2="70"  y2="90"  marker-end="url(#arrow)" />
+
+      <!-- shaded regions (initial Q1=3, P1=$5). Drawn UNDER the curve. Both
+           regenerated by the script. -->
+      <rect id="marketRectL" class="region-market" x="70" y="210" width="75" height="140" />
+      <path id="surplusRegionL" class="region-surplus" d="M70,126 L145,210 L70,210 Z" />
+
+      <!-- price line at P1 (also horizontal connector to y-axis) and the
+           quantity line at Q1 (vertical connector to x-axis) -->
+      <line id="priceLineL" class="priceline" x1="70" y1="210" x2="145" y2="210" />
+      <line id="qtyLineL"   class="qtyline"   x1="145" y1="210" x2="145" y2="350" />
+
+      <!-- the demand line (same curve, Q:0..8) -->
+      <path class="curve" d="M70,126 L270,350" />
+
+      <!-- axis titles -->
+      <text class="axtitle" x="185" y="380" text-anchor="middle">Quantity of good</text>
+      <!-- placed at y=280 (below the live price tag's full drag range,
+           146.5-217.5) so it never sits behind the tag's opaque background -->
+      <text class="axtitle" x="34" y="280" text-anchor="middle"
+            transform="rotate(-90 34 280)">Price</text>
+
+      <!-- ghost ring: the static figure's ORIGINAL point (Q1=3, P1=$5) -->
+      <circle id="ghostL" class="ghost" cx="145" cy="210" r="6" />
+
+      <!-- region labels + pointer arrows (text position fixed; arrow tip
+           tracks the region dynamically) -->
+      <text class="lbl-surplus" x="58" y="104" text-anchor="end">Buyer's</text>
+      <text class="lbl-surplus" x="58" y="116" text-anchor="end">surplus</text>
+      <line id="surplusArrowL" class="lbl-arrow" x1="62" y1="110" x2="95" y2="182" marker-end="url(#lblArrow)" />
+      <text id="marketLblL1" class="lbl-market" x="107.5" y="276" text-anchor="middle">Market</text>
+      <text id="marketLblL2" class="lbl-market" x="107.5" y="288" text-anchor="middle">value</text>
+
+      <!-- live price/quantity readout tags riding the dropline feet -->
+      <g id="pyTagL">
+        <rect id="pyBgL" class="tagbg" x="24" y="202.5" width="40" height="15" rx="2" />
+        <text id="pyL" class="tagtxt" x="60" y="210" text-anchor="end"
+              dominant-baseline="middle">$5.00</text>
+      </g>
+      <g id="qxTagL">
+        <rect id="qxBgL" class="tagbg" x="128" y="355" width="34" height="15" rx="2" />
+        <text id="qxL" class="tagtxt" x="145" y="366" text-anchor="middle"
+              dominant-baseline="middle">3.0</text>
+      </g>
+
+      <!-- the draggable handle + hit targets -->
+      <path id="hitCurveL" class="hit-curve" d="M95,154 L145,210" />
+      <circle id="hitL" class="hit" cx="145" cy="210" r="22" />
+      <circle id="ptL"  class="pt"  cx="145" cy="210" r="7" />
+      <!-- not independently focusable: the RIGHT panel's proxy is the one
+           shared keyboard control for this single shared quantity -->
+      <circle id="ptFocusL" class="pt-focus hit" cx="145" cy="210" r="22"
+              tabindex="-1" aria-hidden="true" />
+    </g>
+
+    <!-- ================= RIGHT PANEL: large quantity, low price ================= -->
+    <g id="panelR">
+      <text class="panelhead" x="525" y="18" text-anchor="middle">Large quantity, low price</text>
+
+      <line class="axis" x1="410" y1="350" x2="640" y2="350" marker-end="url(#arrow)" />
+      <line class="axis" x1="410" y1="350" x2="410" y2="90"  marker-end="url(#arrow)" />
+
+      <!-- shaded regions (initial Q2=6, P2=$2) -->
+      <rect id="marketRectR" class="region-market" x="410" y="294" width="150" height="56" />
+      <path id="surplusRegionR" class="region-surplus" d="M410,126 L560,294 L410,294 Z" />
+
+      <line id="priceLineR" class="priceline" x1="410" y1="294" x2="560" y2="294" />
+      <line id="qtyLineR"   class="qtyline"   x1="560" y1="294" x2="560" y2="350" />
+
+      <path class="curve" d="M410,126 L610,350" />
+
+      <text class="axtitle" x="525" y="380" text-anchor="middle">Quantity of good</text>
+      <text class="axtitle" x="374" y="205" text-anchor="middle"
+            transform="rotate(-90 374 205)">Price</text>
+
+      <!-- ghost ring: the static figure's ORIGINAL point (Q2=6, P2=$2) -->
+      <circle id="ghostR" class="ghost" cx="560" cy="294" r="6" />
+
+      <text class="lbl-surplus" x="398" y="104" text-anchor="end">Buyer's</text>
+      <text class="lbl-surplus" x="398" y="116" text-anchor="end">surplus</text>
+      <line id="surplusArrowR" class="lbl-arrow" x1="402" y1="110" x2="460" y2="238" marker-end="url(#lblArrow)" />
+      <text id="marketLblR1" class="lbl-market" x="485" y="318" text-anchor="middle">Market</text>
+      <text id="marketLblR2" class="lbl-market" x="485" y="330" text-anchor="middle">value</text>
+
+      <g id="pyTagR">
+        <rect id="pyBgR" class="tagbg" x="364" y="286.5" width="40" height="15" rx="2" />
+        <text id="pyR" class="tagtxt" x="400" y="294" text-anchor="end"
+              dominant-baseline="middle">$2.00</text>
+      </g>
+      <g id="qxTagR">
+        <rect id="qxBgR" class="tagbg" x="543" y="355" width="34" height="15" rx="2" />
+        <text id="qxR" class="tagtxt" x="560" y="366" text-anchor="middle"
+              dominant-baseline="middle">6.0</text>
+      </g>
+
+      <path id="hitCurveR" class="hit-curve" d="M560,294 L597.5,336" />
+      <circle id="hitR" class="hit" cx="560" cy="294" r="22" />
+      <circle id="ptR"  class="pt"  cx="560" cy="294" r="7" />
+      <!-- the shared keyboard-focusable proxy for the single Q2 control -->
+      <circle id="ptFocusR" class="pt-focus hit" cx="560" cy="294" r="22"
+              tabindex="0" role="slider"
+              aria-label="Quantity, linked across both panels (dragging either point moves both)"
+              aria-valuemin="6" aria-valuemax="7.5" aria-valuenow="6"
+              aria-valuetext="Large-quantity panel: 6.0 units at $2.00 (surplus $18.00). Small-quantity panel: 3.0 units at $5.00 (surplus $4.50)." />
+    </g>
+
+    <!-- readout band: hairline separator, muted STATE line, accent TAKEAWAY line -->
+    <line class="sep" x1="60" y1="396" x2="660" y2="396" />
+    <text id="rHint"  class="r-hint"  x="360" y="416" text-anchor="middle">High price, small quantity ($5.00, 3.0 units): surplus is a thin sliver — $4.50.</text>
+    <text id="rTrade" class="r-trade" text-anchor="middle"><tspan x="360" y="438">Move to a lower price → more units, bigger total worth and</tspan><tspan x="360" y="454">bigger surplus (at $2.00, 6.0 units: surplus $18.00).</tspan></text>
+  </svg>
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame is a still image: two panels of the same demand curve, one at a small quantity and high price, one at a large quantity and low price, each with a gray market-value rectangle below the price line and a tinted consumer-surplus triangle above it. You can also <a href="t03-surplus-two-panel.svg">open the static figure</a>.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var svg = document.getElementById('fig');
+  var byId = function (id) { return document.getElementById(id); };
+
+  var ptL = byId('ptL'), hitL = byId('hitL'), ptFocusL = byId('ptFocusL'), hitCurveL = byId('hitCurveL');
+  var ptR = byId('ptR'), hitR = byId('hitR'), ptFocusR = byId('ptFocusR'), hitCurveR = byId('hitCurveR');
+  var marketRectL = byId('marketRectL'), surplusRegionL = byId('surplusRegionL');
+  var marketRectR = byId('marketRectR'), surplusRegionR = byId('surplusRegionR');
+  var priceLineL = byId('priceLineL'), qtyLineL = byId('qtyLineL');
+  var priceLineR = byId('priceLineR'), qtyLineR = byId('qtyLineR');
+  var surplusArrowL = byId('surplusArrowL'), surplusArrowR = byId('surplusArrowR');
+  var marketLblL1 = byId('marketLblL1'), marketLblL2 = byId('marketLblL2');
+  var marketLblR1 = byId('marketLblR1'), marketLblR2 = byId('marketLblR2');
+  var pyL = byId('pyL'), pyBgL = byId('pyBgL'), qxL = byId('qxL'), qxBgL = byId('qxBgL');
+  var pyR = byId('pyR'), pyBgR = byId('pyBgR'), qxR = byId('qxR'), qxBgR = byId('qxBgR');
+  var rHint = byId('rHint'), rTrade = byId('rTrade');
+  var NS = 'http://www.w3.org/2000/svg';
+
+  // pixel frame + scale (mirrors the static markup above)
+  var X0L = 70, X0R = 410, Y0 = 350, PX = 25, PY = 28, YTOP = 126;
+  var xL = function (q) { return X0L + q * PX; };
+  var xR = function (q) { return X0R + q * PX; };
+  var yP = function (p) { return Y0 - p * PY; };
+  var toQL = function (px) { return (px - X0L) / PX; };
+  var toQR = function (px) { return (px - X0R) / PX; };
+
+  // model: one demand line P = 8 - Q shared by both panels
+  function priceAt(q) { return 8 - q; }
+  function surplus(q) { return q * q / 2; }         // area under a straight line
+  function marketValue(q) { return priceAt(q) * q; }
+  function totalWorth(q) { return surplus(q) + marketValue(q); }
+
+  // ONE shared control: Q2 (large-quantity panel), Q1 derived so both panels
+  // sweep together between the figure's original values (t=0) and a sharper
+  // contrast (t=1).
+  var Q2_LO = 6, Q2_HI = 7.5;
+  var q2 = 6; // initial state (matches the static markup)
+  function tOf(q2v) { return (q2v - Q2_LO) / (Q2_HI - Q2_LO); }
+  function q1Of(q2v) { return 3 - 2 * tOf(q2v); }
+
+  var spt = svg.createSVGPoint();
+  function toSvg(evt) {
+    spt.x = evt.clientX; spt.y = evt.clientY;
+    return spt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+
+  function money(v) { return '$' + v.toFixed(2); }
+
+  // Greedily word-wrap `str` into <tspan> lines inside the accent readout so
+  // it never overflows the viewBox. Measures with getComputedTextLength.
+  function layoutTrade(str) {
+    var maxW = 600, x = 360, y0 = 438, lineH = 16;
+    while (rTrade.firstChild) rTrade.removeChild(rTrade.firstChild);
+    var probe = document.createElementNS(NS, 'tspan');
+    rTrade.appendChild(probe);
+    var words = str.split(' '), lines = [], cur = words[0] || '';
+    for (var i = 1; i < words.length; i++) {
+      probe.textContent = cur + ' ' + words[i];
+      if (probe.getComputedTextLength() > maxW) { lines.push(cur); cur = words[i]; }
+      else { cur = cur + ' ' + words[i]; }
+    }
+    lines.push(cur);
+    rTrade.removeChild(probe);
+    var startY = (lines.length === 1) ? y0 + 8 : y0;
+    for (var j = 0; j < lines.length; j++) {
+      var t = document.createElementNS(NS, 'tspan');
+      t.setAttribute('x', x);
+      t.setAttribute('y', startY + j * lineH);
+      t.textContent = lines[j];
+      rTrade.appendChild(t);
+    }
+  }
+
+  function render() {
+    var q1 = q1Of(q2);
+    var p1 = priceAt(q1), p2 = priceAt(q2);
+    var xr1 = xL(q1), yr1 = yP(p1);
+    var xr2 = xR(q2), yr2 = yP(p2);
+    var CS1 = surplus(q1), MV1 = marketValue(q1);
+    var CS2 = surplus(q2), MV2 = marketValue(q2);
+
+    // ---- left panel re-shade ----
+    marketRectL.setAttribute('x', X0L); marketRectL.setAttribute('y', yr1);
+    marketRectL.setAttribute('width', xr1 - X0L); marketRectL.setAttribute('height', Y0 - yr1);
+    surplusRegionL.setAttribute('d', 'M' + X0L + ',' + YTOP + ' L' + xr1.toFixed(2) + ',' + yr1.toFixed(2) + ' L' + X0L + ',' + yr1.toFixed(2) + ' Z');
+    priceLineL.setAttribute('x2', xr1); priceLineL.setAttribute('y1', yr1); priceLineL.setAttribute('y2', yr1);
+    qtyLineL.setAttribute('x1', xr1); qtyLineL.setAttribute('x2', xr1); qtyLineL.setAttribute('y1', yr1);
+    ptL.setAttribute('cx', xr1); ptL.setAttribute('cy', yr1);
+    hitL.setAttribute('cx', xr1); hitL.setAttribute('cy', yr1);
+    ptFocusL.setAttribute('cx', xr1); ptFocusL.setAttribute('cy', yr1);
+    // surplus-arrow tip tracks the triangle's centroid
+    var cxL = (2 * X0L + xr1) / 3, cyL = (YTOP + 2 * yr1) / 3;
+    surplusArrowL.setAttribute('x2', cxL.toFixed(2)); surplusArrowL.setAttribute('y2', cyL.toFixed(2));
+    // market-value label tracks the rectangle's center — but only when the
+    // rectangle is big enough to hold it without crossing the qty/price lines
+    // at its edges (near the drag extremes the rectangle can shrink to a
+    // sliver; hiding the label there is safer than cramming or overflowing it)
+    var mxL = (X0L + xr1) / 2, myL = (yr1 + Y0) / 2;
+    var rectWL = xr1 - X0L, rectHL = Y0 - yr1;
+    var showLblL = (rectWL >= 50 && rectHL >= 24);
+    marketLblL1.textContent = showLblL ? 'Market' : '';
+    marketLblL2.textContent = showLblL ? 'value' : '';
+    marketLblL1.setAttribute('x', mxL); marketLblL1.setAttribute('y', myL - 6);
+    marketLblL2.setAttribute('x', mxL); marketLblL2.setAttribute('y', myL + 6);
+    pyL.setAttribute('y', yr1); pyL.textContent = money(p1);
+    pyBgL.setAttribute('y', yr1 - 7.5);
+    qxL.setAttribute('x', xr1); qxL.textContent = q1.toFixed(1);
+    qxBgL.setAttribute('x', xr1 - 17);
+    // ghost stays fixed at the original (t=0) point — no update needed
+
+    // ---- right panel re-shade ----
+    marketRectR.setAttribute('x', X0R); marketRectR.setAttribute('y', yr2);
+    marketRectR.setAttribute('width', xr2 - X0R); marketRectR.setAttribute('height', Y0 - yr2);
+    surplusRegionR.setAttribute('d', 'M' + X0R + ',' + YTOP + ' L' + xr2.toFixed(2) + ',' + yr2.toFixed(2) + ' L' + X0R + ',' + yr2.toFixed(2) + ' Z');
+    priceLineR.setAttribute('x2', xr2); priceLineR.setAttribute('y1', yr2); priceLineR.setAttribute('y2', yr2);
+    qtyLineR.setAttribute('x1', xr2); qtyLineR.setAttribute('x2', xr2); qtyLineR.setAttribute('y1', yr2);
+    ptR.setAttribute('cx', xr2); ptR.setAttribute('cy', yr2);
+    hitR.setAttribute('cx', xr2); hitR.setAttribute('cy', yr2);
+    ptFocusR.setAttribute('cx', xr2); ptFocusR.setAttribute('cy', yr2);
+    var cxR = (2 * X0R + xr2) / 3, cyR = (YTOP + 2 * yr2) / 3;
+    surplusArrowR.setAttribute('x2', cxR.toFixed(2)); surplusArrowR.setAttribute('y2', cyR.toFixed(2));
+    var mxR = (X0R + xr2) / 2, myR = (yr2 + Y0) / 2;
+    var rectWR = xr2 - X0R, rectHR = Y0 - yr2;
+    var showLblR = (rectWR >= 50 && rectHR >= 24);
+    marketLblR1.textContent = showLblR ? 'Market' : '';
+    marketLblR2.textContent = showLblR ? 'value' : '';
+    marketLblR1.setAttribute('x', mxR); marketLblR1.setAttribute('y', myR - 6);
+    marketLblR2.setAttribute('x', mxR); marketLblR2.setAttribute('y', myR + 6);
+    pyR.setAttribute('y', yr2); pyR.textContent = money(p2);
+    pyBgR.setAttribute('y', yr2 - 7.5);
+    qxR.setAttribute('x', xr2); qxR.textContent = q2.toFixed(1);
+    qxBgR.setAttribute('x', xr2 - 17);
+
+    // ---- readout grammar (muted state line + accent takeaway line) ----
+    var t = tOf(q2);
+    var hint, trade;
+    if (t < 0.5) {
+      hint = 'High price, small quantity (' + money(p1) + ', ' + q1.toFixed(1) +
+             ' units): surplus is a thin sliver — ' + money(CS1) + '.';
+      trade = 'Move to a lower price → more units, bigger total worth and bigger surplus (at ' +
+              money(p2) + ', ' + q2.toFixed(1) + ' units: surplus ' + money(CS2) + ').';
+    } else {
+      hint = 'Low price, large quantity (' + money(p2) + ', ' + q2.toFixed(1) +
+             ' units): market value is ' + money(MV2) + ' — even smaller than the high-price panel’s ' + money(MV1) + '.';
+      trade = 'Total worth and surplus are still larger — quantity is what drives them.';
+    }
+    rHint.textContent = hint;
+    layoutTrade(trade);
+
+    ptFocusR.setAttribute('aria-valuenow', q2.toFixed(2));
+    ptFocusR.setAttribute('aria-valuetext',
+      'Large-quantity panel: ' + q2.toFixed(1) + ' units at ' + money(p2) + ' (surplus ' + money(CS2) +
+      '). Small-quantity panel: ' + q1.toFixed(1) + ' units at ' + money(p1) + ' (surplus ' + money(CS1) + ').');
+  }
+
+  // single state setter (clamp + no-op guard + render) shared by drag,
+  // keyboard, and the debug hook, so state logic lives in one place
+  function setQ2(newQ2) {
+    var q = newQ2;
+    if (isNaN(q)) return;
+    if (q < Q2_LO) q = Q2_LO;
+    if (q > Q2_HI) q = Q2_HI;
+    if (q === q2) return;
+    q2 = q;
+    render();
+  }
+
+  function setFromLeftPointer(evt) {
+    var pnt = toSvg(evt);
+    var q1 = toQL(pnt.x);
+    if (isNaN(q1)) return;
+    if (q1 < 1) q1 = 1;
+    if (q1 > 3) q1 = 3;
+    var t = (3 - q1) / 2;                 // invert q1Of()
+    setQ2(Q2_LO + t * (Q2_HI - Q2_LO));
+  }
+  function setFromRightPointer(evt) {
+    var pnt = toSvg(evt);
+    setQ2(toQR(pnt.x));
+  }
+
+  // --- drag (pointer events + pointer capture so a fast drag can't get stuck) ---
+  var dragging = false, dragSide = null, capturedEl = null, capturedId = null;
+  function onMove(evt) {
+    if (!dragging) return;
+    evt.preventDefault();
+    if (dragSide === 'L') setFromLeftPointer(evt); else setFromRightPointer(evt);
+  }
+  function onUp() {
+    dragging = false; dragSide = null;
+    svg.classList.remove('grabbing');
+    if (capturedEl && capturedId !== null) {
+      try { capturedEl.releasePointerCapture(capturedId); } catch (e) {}
+    }
+    capturedEl = null; capturedId = null;
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+  }
+  function onDown(side) {
+    return function (evt) {
+      evt.preventDefault();
+      dragging = true; dragSide = side;
+      svg.classList.add('grabbing');
+      capturedEl = evt.currentTarget; capturedId = evt.pointerId;
+      try { capturedEl.setPointerCapture(capturedId); } catch (e) {}
+      if (side === 'L') setFromLeftPointer(evt); else setFromRightPointer(evt);
+      window.addEventListener('pointermove', onMove);
+      window.addEventListener('pointerup', onUp);
+    };
+  }
+  hitL.addEventListener('pointerdown', onDown('L'));
+  hitCurveL.addEventListener('pointerdown', onDown('L'));
+  ptFocusL.addEventListener('pointerdown', onDown('L'));
+  hitR.addEventListener('pointerdown', onDown('R'));
+  hitCurveR.addEventListener('pointerdown', onDown('R'));
+  ptFocusR.addEventListener('pointerdown', onDown('R'));
+
+  // --- keyboard (arrows step the single shared control, Q2) ---
+  ptFocusR.addEventListener('keydown', function (evt) {
+    var step = 0.15;
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowDown') { setQ2(q2 + step); }
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowUp') { setQ2(q2 - step); }
+    else return;
+    evt.preventDefault();
+  });
+
+  // Debug hook: lets a reviewer screenshot non-initial states via scripting.
+  window.__fig = {
+    set: function (v) { setQ2(+v); },
+    get: function () {
+      var q1 = q1Of(q2);
+      return {
+        q1: q1, p1: priceAt(q1), surplus1: surplus(q1), marketValue1: marketValue(q1),
+        q2: q2, p2: priceAt(q2), surplus2: surplus(q2), marketValue2: marketValue(q2)
+      };
+    }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

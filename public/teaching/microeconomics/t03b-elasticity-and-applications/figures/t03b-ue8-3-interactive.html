@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive rectangular hyperbola: constant revenue at every point (unit elasticity)</title>
+<!--
+  Interactive "rectangular hyperbola = unit elasticity" figure for the T3b
+  blog post (website-styled, warm palette). Recreates UE Fig 8.3 (p.114),
+  the OP/PT tangent-line construction that shows e = 1 everywhere on a
+  demand curve of the form P*Q = k. DEFERRED FIGURE: there is no static
+  .tex/.svg for this one yet, so this widget IS the figure (no fallback
+  static image; see the <noscript> block).
+
+  FAMILY F4 (area accounting). Geometry class: single-panel, viewBox
+  440x540, aspect-ratio 4/5, max-width 480-560px.
+
+  MODEL: P = 12/Q (so P*Q = 12 everywhere -- the "rectangular hyperbola").
+  Two points from the spec sit on the curve:
+    - (M,P)   = (2,6)  -- this is the DRAGGABLE point (family F4's handle).
+    - (M',P') = (4,3)  -- a FIXED second illustrative point, always shown,
+      proving the same e=1 relationship holds at a second, different spot
+      on the curve (this is exactly what UE Fig 8.3 draws: two examples,
+      not one, to make the invariance visible).
+  Elasticity geometry: a straight line tangent to the curve at any point
+  (Q0,P0) meets the price axis at T = 2*P0 (a property of P=k/Q curves);
+  UE's construction reads elasticity off that tangent as e = OP/PT, and
+  since T = 2P here, OP/PT = P/(2P-P) = 1 at every point -- unit elastic
+  everywhere. The dragged point's OWN tangent + its axis intercept T
+  recompute live; the fixed point's tangent + T' never move, so the two
+  constructions sit side by side as a permanent proof-by-two-examples.
+
+  GEOMETRY / coordinate frame:
+    Origin (Q=0, P=$0) at pixel (64, 360).
+    x scale: Q -> px x = 64 + Q*28.
+    y scale: P -> px y = 360 - P*24.
+    Draggable range Q in [2.0, 9.3] (keeps the tangent intercept T=2P
+    within the drawn axis frame; Q=2 is the spec's own left-hand example
+    so the static/no-JS state and the JS initial state match exactly).
+    The curve itself is drawn slightly past that range (Q 1.9-9.4) so it
+    doesn't look truncated at the interactive boundary.
+
+  LIVE ELEMENTS (ids, all re-rendered by render()): pt/hit/ptFocus (the
+  draggable point), rectLive (market-value rectangle, area always $12),
+  tanLive (the point's own dashed tangent line), dropVLive/dropHLive
+  (droplines), mLabel/pLabel/tLabel (letter+live-value labels for the
+  dragged point's M/P/T), rHint/rTrade (the readout band).
+
+  STATIC (fixed forever): axes, the curve path, the "e = 1" curve label,
+  the second point (4,3) with its own tangent/droplines/rect outline and
+  plain-letter labels M'/P'/T', the O origin label, axis titles.
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;   /* warm bone background        */
+    --ink:     #1a1c1e;    /* curve + headings            */
+    --text:    #16181a;    /* body text                   */
+    --muted:   #5c6066;    /* axes / fixed-point styling  */
+    --hairline:#e3ddd3;    /* droplines / faint strokes   */
+    --accent:  #b07a2c;    /* brass -- the live/dragged point */
+    --accent-tint: #efe4d2;/* live market-value shading   */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* min-width:0 defeats the flexbox min-width:auto default so the figure
+     scales DOWN to viewports narrower than the SVG's intrinsic width
+     instead of clipping the right side on phones. */
+  .fig { width: 100%; max-width: 480px; min-width: 0; }
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+
+  /* structural strokes */
+  .axis   { stroke: var(--muted); stroke-width: 1.4; }
+  .curve  { stroke: var(--ink); stroke-width: 2.6; fill: none;
+            stroke-linecap: round; stroke-linejoin: round; }
+  .drop   { stroke: var(--hairline); stroke-width: 1.6; stroke-dasharray: 5 4; }
+
+  /* fixed-point (M',P') construction -- muted, dashed */
+  .tan-fixed  { stroke: var(--muted); stroke-width: 1.4; stroke-dasharray: 6 4;
+                fill: none; opacity: 0.85; }
+  .drop-fixed { stroke: var(--muted); stroke-width: 1.2; stroke-dasharray: 4 4;
+                opacity: 0.55; }
+  .rect-fixed { fill: none; stroke: var(--muted); stroke-width: 1.3;
+                stroke-dasharray: 3 3; opacity: 0.7; }
+  .pt-fixed   { fill: var(--muted); stroke: var(--surface); stroke-width: 2; }
+  .lbl-fixed  { fill: var(--muted); font-size: 12.5px; font-weight: 600; }
+
+  /* live (dragged) point construction -- accent */
+  .tan-live  { stroke: var(--accent); stroke-width: 1.6; stroke-dasharray: 6 4;
+               fill: none; }
+  .rect-live { fill: var(--accent-tint); fill-opacity: 1; stroke: none; }
+  .lbl-live  { fill: var(--accent); font-size: 12.5px; font-weight: 700; }
+
+  /* draggable handle + generous transparent hit targets */
+  .pt        { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5; }
+  .hit       { fill: transparent; stroke: transparent; touch-action: none;
+               cursor: grab; }
+  .hit-curve { fill: none; stroke: transparent; stroke-width: 26;
+               touch-action: none; cursor: grab; }
+  .pt-focus:focus-visible { outline: none; }
+  .pt-focus:focus-visible + .pt,
+  .grabbing .pt { stroke: var(--accent); stroke-width: 3.5; }
+
+  /* text */
+  .axtitle  { fill: var(--muted); font-size: 13px; font-weight: 600; }
+  .curvelbl { fill: var(--ink); font-size: 13px; font-weight: 600; }
+  .origin   { fill: var(--muted); font-size: 12px; }
+  .sep      { stroke: var(--hairline); stroke-width: 1; }
+  .r-hint   { fill: var(--muted); font-size: 12.5px; }
+  .r-trade  { fill: var(--accent); font-size: 13px; font-weight: 600; }
+  .fallback {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.35;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<!-- Everything from here to </div> is REAL base SVG: a no-JS reader sees
+     the full figure -- axes, the rectangular-hyperbola demand curve, BOTH
+     illustrative points (2,6) and (4,3) with their tangent lines and
+     letter labels, and the readout band. The script only ATTACHES drag /
+     keyboard / live re-rendering to the (2,6) point. -->
+<div class="fig">
+  <svg id="fig" viewBox="0 0 440 540" role="group"
+       aria-label="A rectangular hyperbola demand curve, price times quantity equals twelve dollars everywhere on it. Two points are marked, quantity two at six dollars and quantity four at three dollars; each has its own dashed tangent line meeting the price axis at twice that point's price -- the geometric proof that elasticity equals one at every point. Drag the accent point along the curve to watch its own tangent and market-value rectangle update while the market value stays fixed at twelve dollars.">
+    <title>Interactive rectangular hyperbola (unit-elastic demand curve)</title>
+    <defs>
+      <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+    </defs>
+
+    <!-- axes (drawn first); extended past the data max so the curve/
+         tangents do not crowd the arrowheads -->
+    <line class="axis" x1="64" y1="360" x2="400" y2="360" marker-end="url(#arrow)" />
+    <line class="axis" x1="64" y1="360" x2="64"  y2="40"  marker-end="url(#arrow)" />
+
+    <!-- FIXED point (4,3): market-value rectangle (outline only), tangent
+         line to T'=(0,6), and droplines. Drawn first / underneath so the
+         live elements and the curve sit on top. -->
+    <rect id="rectFixed" class="rect-fixed" x="64" y="288" width="112" height="72" />
+    <line id="tanFixed" class="tan-fixed" x1="64" y1="216" x2="288" y2="360" />
+    <line id="dropHFixed" class="drop-fixed" x1="64" y1="288" x2="176" y2="288" />
+    <line id="dropVFixed" class="drop-fixed" x1="176" y1="288" x2="176" y2="360" />
+
+    <!-- LIVE point (initial Q=2, P=$6): market-value rectangle (filled),
+         its own tangent to T, and droplines. Re-shaded/repositioned by
+         the script; markup below matches the Q=2 initial state exactly. -->
+    <rect id="rectLive" class="rect-live" x="64" y="216" width="56" height="144" />
+    <line id="tanLive" class="tan-live" x1="64" y1="72" x2="176" y2="360" />
+    <line id="dropHLive" class="drop" x1="64" y1="216" x2="120" y2="216" />
+    <line id="dropVLive" class="drop" x1="120" y1="216" x2="120" y2="360" />
+
+    <!-- the demand curve: P = 12/Q, drawn on top of the shaded regions and
+         tangent lines so its outline stays clean -->
+    <path id="curve" class="curve"
+          d="M117.2,208.4 L121.4,219.5 L125.6,229.1 L129.8,237.4 L134.0,244.8 L138.2,251.3 L142.4,257.1 L146.6,262.4 L150.8,267.1 L155.0,271.4 L159.2,275.3 L163.4,278.9 L167.6,282.2 L171.8,285.2 L176.0,288.0 L180.2,290.6 L184.4,293.0 L188.6,295.3 L192.8,297.4 L197.0,299.4 L201.2,301.2 L205.4,303.0 L209.6,304.6 L213.8,306.2 L218.0,307.6 L222.2,309.0 L226.4,310.3 L230.6,311.6 L234.8,312.8 L239.0,313.9 L243.2,315.0 L247.4,316.0 L251.6,317.0 L255.8,318.0 L260.0,318.9 L264.2,319.7 L268.4,320.6 L272.6,321.3 L276.8,322.1 L281.0,322.8 L285.2,323.5 L289.4,324.2 L293.6,324.9 L297.8,325.5 L302.0,326.1 L306.2,326.7 L310.4,327.3 L314.6,327.8 L318.8,328.4 L323.0,328.9 L327.2,329.4" />
+    <text class="curvelbl" x="310" y="320" text-anchor="start">e = 1</text>
+
+    <!-- FIXED point marker + plain-letter labels (never move) -->
+    <circle class="pt-fixed" cx="176" cy="288" r="5" />
+    <text class="lbl-fixed" x="176" y="378" text-anchor="middle">M&#8242;</text>
+    <text class="lbl-fixed" x="58"  y="288" text-anchor="end" dominant-baseline="middle">P&#8242;</text>
+    <text class="lbl-fixed" x="58"  y="202" text-anchor="end" dominant-baseline="middle">T&#8242;</text>
+
+    <!-- origin + axis titles -->
+    <text class="origin"  x="54"  y="378" text-anchor="end">O</text>
+    <text class="axtitle" x="232" y="398" text-anchor="middle">Quantity</text>
+    <text class="axtitle" x="20"  y="200" text-anchor="middle"
+          transform="rotate(-90 20 200)">Price</text>
+
+    <!-- LIVE point letter + live-value labels (re-rendered on drag) -->
+    <text id="mLabel" class="lbl-live" x="120" y="378" text-anchor="middle">M 2.0</text>
+    <text id="pLabel" class="lbl-live" x="58"  y="216" text-anchor="end" dominant-baseline="middle">P $6.00</text>
+    <text id="tLabel" class="lbl-live" x="58"  y="72"  text-anchor="end" dominant-baseline="middle">T $12.00</text>
+
+    <!-- the draggable handle + hit targets (fat invisible curve-path +
+         point); ptFocus is the keyboard-focusable slider proxy -->
+    <path id="hitCurve" class="hit-curve"
+          d="M117.2,208.4 L121.4,219.5 L125.6,229.1 L129.8,237.4 L134.0,244.8 L138.2,251.3 L142.4,257.1 L146.6,262.4 L150.8,267.1 L155.0,271.4 L159.2,275.3 L163.4,278.9 L167.6,282.2 L171.8,285.2 L176.0,288.0 L180.2,290.6 L184.4,293.0 L188.6,295.3 L192.8,297.4 L197.0,299.4 L201.2,301.2 L205.4,303.0 L209.6,304.6 L213.8,306.2 L218.0,307.6 L222.2,309.0 L226.4,310.3 L230.6,311.6 L234.8,312.8 L239.0,313.9 L243.2,315.0 L247.4,316.0 L251.6,317.0 L255.8,318.0 L260.0,318.9 L264.2,319.7 L268.4,320.6 L272.6,321.3 L276.8,322.1 L281.0,322.8 L285.2,323.5 L289.4,324.2 L293.6,324.9 L297.8,325.5 L302.0,326.1 L306.2,326.7 L310.4,327.3 L314.6,327.8 L318.8,328.4 L323.0,328.9 L327.2,329.4" />
+    <circle id="hit" class="hit" cx="120" cy="216" r="22" />
+    <circle id="pt"  class="pt"  cx="120" cy="216" r="7" />
+    <circle id="ptFocus" class="pt-focus hit" cx="120" cy="216" r="22"
+            tabindex="0" role="slider" aria-label="Point on the rectangular-hyperbola demand curve"
+            aria-valuemin="2" aria-valuemax="9.3" aria-valuenow="2"
+            aria-valuetext="Quantity 2.0, price $6.00, market value $12.00. Price times quantity always equals $12 -- unit elastic (e = 1) everywhere on this curve." />
+
+    <!-- readout band: hairline separator, muted STATE line, accent
+         TAKEAWAY line (pre-wrapped for the no-JS/initial state; the
+         script re-wraps it on every change) -->
+    <line class="sep" x1="44" y1="430" x2="396" y2="430" />
+    <text id="rHint" class="r-hint" x="220" y="454" text-anchor="middle">P = $6.00, Q = 2.0 &#8594; market value = $12.00.</text>
+    <text id="rTrade" class="r-trade" text-anchor="middle"><tspan x="220" y="476">Slide anywhere: price &#215; quantity always equals $12 --</tspan><tspan x="220" y="494">a rectangular hyperbola is unit-elastic (e = 1) everywhere.</tspan></text>
+  </svg>
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame is a still image: a
+    rectangular-hyperbola demand curve with two marked points, (2,$6) and
+    (4,$3), each with its own dashed tangent line reaching the price axis at
+    exactly twice that point's price. That is the complete figure -- there
+    is no separate static image for this one.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var svg      = document.getElementById('fig');
+  var pt       = document.getElementById('pt');
+  var hit      = document.getElementById('hit');
+  var ptFocus  = document.getElementById('ptFocus');
+  var hitCurve = document.getElementById('hitCurve');
+  var rectLive = document.getElementById('rectLive');
+  var tanLive  = document.getElementById('tanLive');
+  var dropHLive = document.getElementById('dropHLive');
+  var dropVLive = document.getElementById('dropVLive');
+  var mLabel = document.getElementById('mLabel');
+  var pLabel = document.getElementById('pLabel');
+  var tLabel = document.getElementById('tLabel');
+  var rHint  = document.getElementById('rHint');
+  var rTrade = document.getElementById('rTrade');
+  var NS = 'http://www.w3.org/2000/svg';
+
+  // pixel frame + scale (mirrors the static SVG markup above)
+  var X0 = 64, Y0 = 360, DX = 28, DY = 24;
+  var xq = function (q) { return X0 + q * DX; };   // quantity -> px x
+  var py = function (p) { return Y0 - p * DY; };    // price    -> px y
+  var toQ = function (px) { return (px - X0) / DX; };
+
+  // model: P = 12/Q (a rectangular hyperbola -- P*Q = 12 everywhere).
+  // Draggable range keeps the tangent intercept T = 2P inside the drawn
+  // axis frame; Q=2 is the spec's own left-hand example (initial state).
+  var QLO = 2.0, QHI = 9.3;
+  function priceAt(q) { return 12 / q; }
+
+  var q = 2.0; // initial state (matches the static markup)
+
+  // convert a client event to SVG user coords (handles responsive scaling)
+  var spt = svg.createSVGPoint();
+  function toSvg(evt) {
+    spt.x = evt.clientX; spt.y = evt.clientY;
+    return spt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+
+  function money(v) { return '$' + v.toFixed(2); }
+
+  // Greedily word-wrap `str` into <tspan> lines inside the accent readout
+  // so it never overflows the 440-wide viewBox. Measures with
+  // getComputedTextLength (same approach as the T3a marginal-worths widget).
+  function layoutTrade(str) {
+    var maxW = 404, x = 220, y0 = 476, lineH = 18;
+    while (rTrade.firstChild) rTrade.removeChild(rTrade.firstChild);
+    var probe = document.createElementNS(NS, 'tspan');
+    rTrade.appendChild(probe);
+    var words = str.split(' '), lines = [], cur = words[0] || '';
+    for (var i = 1; i < words.length; i++) {
+      probe.textContent = cur + ' ' + words[i];
+      if (probe.getComputedTextLength() > maxW) { lines.push(cur); cur = words[i]; }
+      else { cur = cur + ' ' + words[i]; }
+    }
+    lines.push(cur);
+    rTrade.removeChild(probe);
+    var startY = (lines.length === 1) ? y0 + 4 : y0;
+    for (var j = 0; j < lines.length; j++) {
+      var t = document.createElementNS(NS, 'tspan');
+      t.setAttribute('x', x);
+      t.setAttribute('y', startY + j * lineH);
+      t.textContent = lines[j];
+      rTrade.appendChild(t);
+    }
+  }
+
+  function render() {
+    var P = priceAt(q);
+    var T = 2 * P;               // tangent's price-axis intercept
+    var xint = 2 * q;            // tangent's quantity-axis intercept
+    var xr = xq(q), yr = py(P);
+    var MV = P * q;              // market value -- always $12
+
+    // re-shade the live market-value rectangle (origin to (q,P))
+    rectLive.setAttribute('x', X0);
+    rectLive.setAttribute('y', yr);
+    rectLive.setAttribute('width', xr - X0);
+    rectLive.setAttribute('height', Y0 - yr);
+
+    // the point's own tangent line: from T on the price axis, through
+    // the point, to its quantity-axis intercept (2q)
+    tanLive.setAttribute('y1', py(T));
+    tanLive.setAttribute('x2', xq(xint));
+
+    // droplines to both axes
+    dropHLive.setAttribute('y1', yr); dropHLive.setAttribute('y2', yr);
+    dropHLive.setAttribute('x2', xr);
+    dropVLive.setAttribute('x1', xr); dropVLive.setAttribute('x2', xr);
+    dropVLive.setAttribute('y1', yr);
+
+    // the draggable handle
+    pt.setAttribute('cx', xr);      pt.setAttribute('cy', yr);
+    hit.setAttribute('cx', xr);     hit.setAttribute('cy', yr);
+    ptFocus.setAttribute('cx', xr); ptFocus.setAttribute('cy', yr);
+
+    // live letter + value labels (M/P/T track the moving point)
+    mLabel.setAttribute('x', xr);
+    mLabel.textContent = 'M ' + q.toFixed(1);
+    pLabel.setAttribute('y', yr);
+    pLabel.textContent = 'P ' + money(P);
+    tLabel.setAttribute('y', py(T));
+    tLabel.textContent = 'T ' + money(T);
+
+    // readout grammar: muted state line (current P, Q, market value) +
+    // accent takeaway line (the invariant -- constant across the curve)
+    rHint.textContent = 'P = ' + money(P) + ', Q = ' + q.toFixed(1) +
+      ' → market value = ' + money(MV) + '.';
+    layoutTrade('Slide anywhere: price × quantity always equals $12 — ' +
+      'a rectangular hyperbola is unit-elastic (e = 1) everywhere.');
+
+    ptFocus.setAttribute('aria-valuenow', q.toFixed(2));
+    ptFocus.setAttribute('aria-valuetext',
+      'Quantity ' + q.toFixed(1) + ', price ' + money(P) + ', market value ' +
+      money(MV) + '. Price times quantity always equals $12 — unit elastic ' +
+      '(e = 1) everywhere on this curve.');
+  }
+
+  // single state setter (clamp + no-op guard + render) shared by drag,
+  // keyboard, and the debug hook, so state logic lives in one place
+  function setQ(newQ) {
+    if (isNaN(newQ)) return;
+    var qq = Math.max(QLO, Math.min(QHI, newQ));
+    if (Math.abs(qq - q) < 1e-9) return;
+    q = qq;
+    render();
+  }
+
+  function setFromPointer(evt) {
+    var pnt = toSvg(evt);
+    setQ(toQ(pnt.x));
+  }
+
+  // --- drag (pointer events + pointer capture so a fast drag can't get stuck) ---
+  var dragging = false;
+  var capturedEl = null, capturedId = null;
+  function onMove(evt) { if (dragging) { evt.preventDefault(); setFromPointer(evt); } }
+  function onUp() {
+    dragging = false;
+    svg.classList.remove('grabbing');
+    if (capturedEl && capturedId !== null) {
+      try { capturedEl.releasePointerCapture(capturedId); } catch (e) {}
+    }
+    capturedEl = null; capturedId = null;
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+  }
+  function onDown(evt) {
+    evt.preventDefault();
+    dragging = true;
+    svg.classList.add('grabbing');
+    capturedEl = evt.currentTarget; capturedId = evt.pointerId;
+    try { capturedEl.setPointerCapture(capturedId); } catch (e) {}
+    setFromPointer(evt);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }
+  hit.addEventListener('pointerdown', onDown);
+  hitCurve.addEventListener('pointerdown', onDown);
+  ptFocus.addEventListener('pointerdown', onDown);  // the handle itself is draggable
+
+  // --- keyboard (arrows step 0.2 units of quantity along the curve) ---
+  ptFocus.addEventListener('keydown', function (evt) {
+    var step = 0.2;
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowDown') { setQ(q + step); }
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowUp') { setQ(q - step); }
+    else return;
+    evt.preventDefault();
+  });
+
+  // Debug hook: lets a reviewer screenshot non-initial states via scripting.
+  window.__fig = {
+    set: function (v) { setQ(+v); },
+    get: function () {
+      var P = priceAt(q);
+      return { q: q, price: P, marketValue: P * q, T: 2 * P };
+    }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive random-walk fan: fifty steps from a common start</title>
+<!--
+  Interactive "random-walk fan" for the t11b (capital values & profit) blog post.
+  Recreates UE Fig 35.1 (p.563), "Paths of Series of Accumulated Random
+  Independent Changes." DEFERRED figure — no static .tex/.svg exists; this
+  widget IS the figure. Website-styled (warm-editorial palette), NOT the FAU
+  slide palette.
+
+  ARCHITECTURE: the whole figure is REAL SVG markup — a no-JS reader (or the
+  <noscript> still image) sees all seven full-length paths (all 50 steps),
+  the axes, gridlines, and the start-level reference line. The script only
+  ATTACHES the F9 interaction: a step scrubber (1..50) that CLIPS the seven
+  paths to reveal them growing left-to-right, a live "now" cursor with
+  droplines to both axes (step on the x-axis, current spread min/max on the
+  y-axis), a two-line readout, and a re-roll button that regenerates a fresh
+  set of paths.
+
+  REPRODUCIBILITY (research-integrity): the seven paths are legitimately
+  SIMULATED equal-odds +-1 random walks, not fabricated data. They were
+  generated with a FIXED seed (mulberry32 PRNG, seed 12345) so the static
+  base SVG and the JS initial state AGREE exactly — the same value array
+  (INITIAL_VALS below) both produced the hardcoded <path d="..."> strings AND
+  is embedded here for the live readout math. Re-roll uses Math.random() (not
+  seed-reproducible) because its whole point is "a fresh, unpredictable set."
+
+  GEOMETRY (F9, single-panel, viewBox 440x540, aspect 4/5):
+    Data space: Accumulated value 30..70 on y (ticks/gridlines every 5),
+    Step 1..50 on x (ticks every 5). Pixel frame:
+      X0=64, XDATA=390 (step 50), axis drawn to 415 (arrowhead)
+      Y0=360 (value 30), YTOP=56 (value 70), axis drawn to 28 (arrowhead)
+      pxX(step) = 64 + (step-1)/49*326
+      pxY(v)    = 360 - (v-30)*7.6
+    Seven paths start at (step=1, value=50) = pixel (64, 208) — the common
+    start level 50 is marked with a distinct (non-dashed-light) reference
+    line. Each path is a 50-point polyline (49 equal-odds +-1 steps).
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;   /* warm bone background        */
+    --ink:     #1a1c1e;    /* curves + headings           */
+    --text:    #16181a;    /* body text                   */
+    --muted:   #5c6066;    /* captions / secondary labels */
+    --hairline:#e3ddd3;    /* axes muting / droplines     */
+    --accent:  #b07a2c;    /* brass — active cursor / controls */
+    --accent-tint: #efe4d2;/* shaded region / button fill */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .fig { width: 100%; max-width: 540px; min-width: 0; }
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+
+  /* structural strokes */
+  .axis      { stroke: var(--muted); stroke-width: 1.4; }
+  .grid      { stroke: var(--hairline); stroke-width: 1; stroke-dasharray: 3 4;
+               opacity: 0.65; }
+  .startline { stroke: var(--hairline); stroke-width: 1.8; opacity: 0.95; }
+  .xtick     { stroke: var(--muted); stroke-width: 1.2; opacity: 0.6; }
+  .curve     { fill: none; stroke: var(--ink); stroke-width: 2;
+               stroke-linecap: round; stroke-linejoin: round; }
+  .drop      { stroke: var(--muted); stroke-width: 1.4; stroke-dasharray: 4 3;
+               opacity: 0.75; }
+  .cursor    { stroke: var(--accent); stroke-width: 1.4; stroke-dasharray: 3 3;
+               opacity: 0.6; }
+
+  /* current-position dots + generous transparent hit targets */
+  .nowdot    { fill: var(--accent); stroke: var(--surface); stroke-width: 1.4; }
+  .knob      { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5; }
+  .hit       { fill: transparent; stroke: transparent; touch-action: none;
+               cursor: grab; }
+  .knob-focus:focus-visible { outline: none; }
+  .knob-focus:focus-visible + .knob,
+  .grabbing .knob { stroke: var(--accent); stroke-width: 3.5; }
+  .track     { stroke: var(--hairline); stroke-width: 4; stroke-linecap: round; }
+
+  /* buttons */
+  .btn-rect  { fill: var(--accent-tint); stroke: var(--hairline);
+               stroke-width: 1.2; cursor: pointer; }
+  .btn:focus-visible .btn-rect { stroke: var(--accent); stroke-width: 2; }
+  .btn-text  { fill: var(--ink); font-size: 13px; font-weight: 700;
+               pointer-events: none; }
+
+  /* text */
+  .axlabel  { fill: var(--muted); font-size: 13px; font-weight: 600; }
+  .ytick    { fill: var(--muted); font-size: 11px; }
+  .xticklbl { fill: var(--muted); font-size: 11px; }
+  .steplbl  { fill: var(--ink); font-size: 12.5px; font-weight: 700; }
+  .startlbl { fill: var(--muted); font-size: 11px; }
+  .livelbl  { fill: var(--ink); font-size: 12px; font-weight: 700; }
+  .stitle   { fill: var(--ink); font-size: 12.5px; font-weight: 700; }
+  .endlbl   { fill: var(--muted); font-size: 12px; font-weight: 600; }
+  .sep      { stroke: var(--hairline); stroke-width: 1; }
+  .r-hint   { fill: var(--muted); font-size: 12.5px; }
+  .r-trade  { fill: var(--accent); font-size: 13px; font-weight: 600; }
+  .fallback {
+    margin: 8px 0 0; color: var(--muted); font-size: 13px;
+    line-height: 1.4; text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="fig">
+  <svg id="fig" viewBox="0 0 440 540" role="group"
+       aria-label="Seven random walks, each starting at the value 50, fanning out over 50 steps of equal-odds up-or-down moves. Drag the step scrubber to watch the fan grow, or re-roll for a fresh set of paths.">
+    <title>Fan of seven fifty-step random walks, each starting at 50</title>
+    <defs>
+      <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+      <clipPath id="stepClip">
+        <rect id="clipRect" x="60" y="24" width="334" height="340" />
+      </clipPath>
+    </defs>
+
+    <!-- y gridlines (30,35,...,70) drawn first, before axes/curves -->
+    <line class="grid" x1="64" y1="360" x2="390" y2="360" />
+    <line class="grid" x1="64" y1="322" x2="390" y2="322" />
+    <line class="grid" x1="64" y1="284" x2="390" y2="284" />
+    <line class="grid" x1="64" y1="246" x2="390" y2="246" />
+    <!-- start level (50) — distinct solid-ish hairline, not dashed-light -->
+    <line class="startline" x1="64" y1="208" x2="390" y2="208" />
+    <line class="grid" x1="64" y1="170" x2="390" y2="170" />
+    <line class="grid" x1="64" y1="132" x2="390" y2="132" />
+    <line class="grid" x1="64" y1="94"  x2="390" y2="94" />
+    <line class="grid" x1="64" y1="56"  x2="390" y2="56" />
+
+    <!-- axes (drawn before the curves so the curves sit on top); extend past data -->
+    <line class="axis" x1="64" y1="360" x2="415" y2="360" marker-end="url(#arrow)" />
+    <line class="axis" x1="64" y1="360" x2="64"  y2="28"  marker-end="url(#arrow)" />
+
+    <!-- y tick labels -->
+    <text class="ytick" x="54" y="360" text-anchor="end" dominant-baseline="middle">30</text>
+    <text class="ytick" x="54" y="322" text-anchor="end" dominant-baseline="middle">35</text>
+    <text class="ytick" x="54" y="284" text-anchor="end" dominant-baseline="middle">40</text>
+    <text class="ytick" x="54" y="246" text-anchor="end" dominant-baseline="middle">45</text>
+    <text class="ytick" x="54" y="208" text-anchor="end" dominant-baseline="middle">50</text>
+    <text class="ytick" x="54" y="170" text-anchor="end" dominant-baseline="middle">55</text>
+    <text class="ytick" x="54" y="132" text-anchor="end" dominant-baseline="middle">60</text>
+    <text class="ytick" x="54" y="94"  text-anchor="end" dominant-baseline="middle">65</text>
+    <text class="ytick" x="54" y="56"  text-anchor="end" dominant-baseline="middle">70</text>
+    <!-- "start" annotation moved past the curves' max x (390) into the blank
+         margin, so it never sits over a path at any step / no-JS render -->
+    <text class="startlbl" x="396" y="212" text-anchor="start">start</text>
+
+    <!-- x tick marks every 5 steps (short hatches on the axis) -->
+    <line class="xtick" x1="90.61"  y1="360" x2="90.61"  y2="366" />
+    <line class="xtick" x1="123.88" y1="360" x2="123.88" y2="366" />
+    <line class="xtick" x1="157.14" y1="360" x2="157.14" y2="366" />
+    <line class="xtick" x1="190.41" y1="360" x2="190.41" y2="366" />
+    <line class="xtick" x1="223.67" y1="360" x2="223.67" y2="366" />
+    <line class="xtick" x1="256.94" y1="360" x2="256.94" y2="366" />
+    <line class="xtick" x1="290.20" y1="360" x2="290.20" y2="366" />
+    <line class="xtick" x1="323.47" y1="360" x2="323.47" y2="366" />
+    <line class="xtick" x1="356.73" y1="360" x2="356.73" y2="366" />
+    <line class="xtick" x1="390"    y1="360" x2="390"    y2="366" />
+
+    <!-- axis name tags -->
+    <text class="axlabel" x="20" y="30" text-anchor="start"
+          transform="rotate(-90 20 208)">Accumulated value</text>
+    <text class="axlabel" x="408" y="352" text-anchor="end">Step</text>
+
+    <!-- the seven random-walk paths (real markup; full 50 steps so a no-JS
+         reader sees the complete fan). Clipped by the step scrubber. -->
+    <g id="curvesGroup" clip-path="url(#stepClip)">
+      <path id="rw0" class="curve" style="opacity:0.55" d="M64.00,208.00 L70.65,215.60 L77.31,208.00 L83.96,215.60 L90.61,208.00 L97.27,215.60 L103.92,223.20 L110.57,230.80 L117.22,223.20 L123.88,215.60 L130.53,208.00 L137.18,200.40 L143.84,208.00 L150.49,200.40 L157.14,192.80 L163.80,185.20 L170.45,177.60 L177.10,170.00 L183.76,162.40 L190.41,170.00 L197.06,162.40 L203.71,170.00 L210.37,177.60 L217.02,170.00 L223.67,177.60 L230.33,185.20 L236.98,192.80 L243.63,185.20 L250.29,177.60 L256.94,170.00 L263.59,162.40 L270.24,170.00 L276.90,177.60 L283.55,170.00 L290.20,177.60 L296.86,170.00 L303.51,177.60 L310.16,185.20 L316.82,177.60 L323.47,185.20 L330.12,192.80 L336.78,185.20 L343.43,192.80 L350.08,200.40 L356.73,208.00 L363.39,215.60 L370.04,208.00 L376.69,200.40 L383.35,208.00 L390.00,215.60" />
+      <path id="rw1" class="curve" style="opacity:0.75" d="M64.00,208.00 L70.65,215.60 L77.31,208.00 L83.96,200.40 L90.61,208.00 L97.27,200.40 L103.92,192.80 L110.57,200.40 L117.22,192.80 L123.88,185.20 L130.53,177.60 L137.18,185.20 L143.84,192.80 L150.49,200.40 L157.14,208.00 L163.80,215.60 L170.45,223.20 L177.10,215.60 L183.76,223.20 L190.41,215.60 L197.06,223.20 L203.71,215.60 L210.37,223.20 L217.02,230.80 L223.67,238.40 L230.33,246.00 L236.98,253.60 L243.63,246.00 L250.29,253.60 L256.94,261.20 L263.59,268.80 L270.24,276.40 L276.90,284.00 L283.55,291.60 L290.20,299.20 L296.86,306.80 L303.51,299.20 L310.16,291.60 L316.82,284.00 L323.47,291.60 L330.12,284.00 L336.78,291.60 L343.43,284.00 L350.08,276.40 L356.73,284.00 L363.39,276.40 L370.04,284.00 L376.69,291.60 L383.35,284.00 L390.00,291.60" />
+      <path id="rw2" class="curve" style="opacity:0.35" d="M64.00,208.00 L70.65,215.60 L77.31,208.00 L83.96,215.60 L90.61,223.20 L97.27,215.60 L103.92,208.00 L110.57,200.40 L117.22,208.00 L123.88,200.40 L130.53,192.80 L137.18,200.40 L143.84,192.80 L150.49,185.20 L157.14,192.80 L163.80,200.40 L170.45,192.80 L177.10,200.40 L183.76,208.00 L190.41,215.60 L197.06,223.20 L203.71,215.60 L210.37,223.20 L217.02,215.60 L223.67,223.20 L230.33,215.60 L236.98,223.20 L243.63,215.60 L250.29,208.00 L256.94,200.40 L263.59,192.80 L270.24,185.20 L276.90,192.80 L283.55,200.40 L290.20,192.80 L296.86,185.20 L303.51,192.80 L310.16,185.20 L316.82,192.80 L323.47,200.40 L330.12,208.00 L336.78,215.60 L343.43,223.20 L350.08,215.60 L356.73,223.20 L363.39,230.80 L370.04,238.40 L376.69,246.00 L383.35,238.40 L390.00,246.00" />
+      <path id="rw3" class="curve" style="opacity:0.85" d="M64.00,208.00 L70.65,200.40 L77.31,208.00 L83.96,215.60 L90.61,208.00 L97.27,200.40 L103.92,192.80 L110.57,185.20 L117.22,192.80 L123.88,200.40 L130.53,208.00 L137.18,200.40 L143.84,192.80 L150.49,200.40 L157.14,192.80 L163.80,185.20 L170.45,177.60 L177.10,170.00 L183.76,177.60 L190.41,185.20 L197.06,177.60 L203.71,170.00 L210.37,162.40 L217.02,154.80 L223.67,147.20 L230.33,154.80 L236.98,162.40 L243.63,170.00 L250.29,177.60 L256.94,185.20 L263.59,177.60 L270.24,185.20 L276.90,177.60 L283.55,170.00 L290.20,177.60 L296.86,170.00 L303.51,177.60 L310.16,185.20 L316.82,192.80 L323.47,185.20 L330.12,177.60 L336.78,185.20 L343.43,192.80 L350.08,185.20 L356.73,192.80 L363.39,200.40 L370.04,192.80 L376.69,185.20 L383.35,177.60 L390.00,185.20" />
+      <path id="rw4" class="curve" style="opacity:0.45" d="M64.00,208.00 L70.65,200.40 L77.31,192.80 L83.96,200.40 L90.61,192.80 L97.27,200.40 L103.92,208.00 L110.57,200.40 L117.22,192.80 L123.88,200.40 L130.53,208.00 L137.18,200.40 L143.84,192.80 L150.49,200.40 L157.14,208.00 L163.80,200.40 L170.45,208.00 L177.10,200.40 L183.76,192.80 L190.41,185.20 L197.06,177.60 L203.71,185.20 L210.37,177.60 L217.02,170.00 L223.67,162.40 L230.33,154.80 L236.98,162.40 L243.63,170.00 L250.29,162.40 L256.94,170.00 L263.59,177.60 L270.24,185.20 L276.90,177.60 L283.55,170.00 L290.20,177.60 L296.86,185.20 L303.51,177.60 L310.16,185.20 L316.82,177.60 L323.47,170.00 L330.12,162.40 L336.78,154.80 L343.43,162.40 L350.08,154.80 L356.73,147.20 L363.39,139.60 L370.04,132.00 L376.69,139.60 L383.35,132.00 L390.00,124.40" />
+      <path id="rw5" class="curve" style="opacity:0.65" d="M64.00,208.00 L70.65,200.40 L77.31,208.00 L83.96,215.60 L90.61,208.00 L97.27,215.60 L103.92,223.20 L110.57,230.80 L117.22,238.40 L123.88,246.00 L130.53,238.40 L137.18,230.80 L143.84,238.40 L150.49,230.80 L157.14,238.40 L163.80,246.00 L170.45,253.60 L177.10,261.20 L183.76,253.60 L190.41,246.00 L197.06,238.40 L203.71,230.80 L210.37,238.40 L217.02,246.00 L223.67,238.40 L230.33,246.00 L236.98,253.60 L243.63,261.20 L250.29,253.60 L256.94,246.00 L263.59,238.40 L270.24,230.80 L276.90,238.40 L283.55,246.00 L290.20,238.40 L296.86,230.80 L303.51,223.20 L310.16,230.80 L316.82,238.40 L323.47,230.80 L330.12,238.40 L336.78,246.00 L343.43,253.60 L350.08,261.20 L356.73,253.60 L363.39,261.20 L370.04,268.80 L376.69,261.20 L383.35,268.80 L390.00,276.40" />
+      <path id="rw6" class="curve" style="opacity:0.30" d="M64.00,208.00 L70.65,200.40 L77.31,208.00 L83.96,200.40 L90.61,192.80 L97.27,200.40 L103.92,192.80 L110.57,200.40 L117.22,192.80 L123.88,185.20 L130.53,192.80 L137.18,185.20 L143.84,192.80 L150.49,185.20 L157.14,177.60 L163.80,170.00 L170.45,162.40 L177.10,170.00 L183.76,162.40 L190.41,170.00 L197.06,162.40 L203.71,170.00 L210.37,177.60 L217.02,170.00 L223.67,162.40 L230.33,154.80 L236.98,147.20 L243.63,154.80 L250.29,147.20 L256.94,154.80 L263.59,147.20 L270.24,154.80 L276.90,147.20 L283.55,154.80 L290.20,162.40 L296.86,170.00 L303.51,162.40 L310.16,170.00 L316.82,177.60 L323.47,170.00 L330.12,162.40 L336.78,154.80 L343.43,147.20 L350.08,139.60 L356.73,132.00 L363.39,124.40 L370.04,132.00 L376.69,124.40 L383.35,132.00 L390.00,139.60" />
+    </g>
+
+    <!-- live vertical "now" cursor (dropline to the x-axis) -->
+    <line id="cursorLine" class="cursor" x1="390" y1="28" x2="390" y2="360" />
+
+    <!-- live horizontal droplines to the y-axis, marking the current spread -->
+    <line id="dropMax" class="drop" x1="64" y1="124.40" x2="390" y2="124.40" />
+    <line id="dropMin" class="drop" x1="64" y1="291.60" x2="390" y2="291.60" />
+    <text id="lblMax" class="livelbl" x="38" y="124.40" text-anchor="end" dominant-baseline="middle">61</text>
+    <text id="lblMin" class="livelbl" x="38" y="291.60" text-anchor="end" dominant-baseline="middle">39</text>
+
+    <!-- seven "current position" dots (mark where each path stands now) -->
+    <circle id="dot0" class="nowdot" r="3.2" cx="390" cy="215.60" />
+    <circle id="dot1" class="nowdot" r="3.2" cx="390" cy="291.60" />
+    <circle id="dot2" class="nowdot" r="3.2" cx="390" cy="246.00" />
+    <circle id="dot3" class="nowdot" r="3.2" cx="390" cy="185.20" />
+    <circle id="dot4" class="nowdot" r="3.2" cx="390" cy="124.40" />
+    <circle id="dot5" class="nowdot" r="3.2" cx="390" cy="276.40" />
+    <circle id="dot6" class="nowdot" r="3.2" cx="390" cy="139.60" />
+
+    <!-- live "Step N" label, rides the cursor's foot on the x-axis -->
+    <text id="lblStep" class="steplbl" x="390" y="392" text-anchor="middle">Step 50</text>
+
+    <!-- step scrubber -->
+    <text class="stitle" x="227" y="410" text-anchor="middle">Step (drag, or use ←/→)</text>
+    <line class="track" x1="64" y1="424" x2="390" y2="424" />
+    <line class="xtick" x1="90.61"  y1="419" x2="90.61"  y2="429" />
+    <line class="xtick" x1="123.88" y1="419" x2="123.88" y2="429" />
+    <line class="xtick" x1="157.14" y1="419" x2="157.14" y2="429" />
+    <line class="xtick" x1="190.41" y1="419" x2="190.41" y2="429" />
+    <line class="xtick" x1="223.67" y1="419" x2="223.67" y2="429" />
+    <line class="xtick" x1="256.94" y1="419" x2="256.94" y2="429" />
+    <line class="xtick" x1="290.20" y1="419" x2="290.20" y2="429" />
+    <line class="xtick" x1="323.47" y1="419" x2="323.47" y2="429" />
+    <line class="xtick" x1="356.73" y1="419" x2="356.73" y2="429" />
+    <text class="endlbl" x="52"  y="428" text-anchor="end">1</text>
+    <text class="endlbl" x="402" y="428" text-anchor="start">50</text>
+    <circle id="knob"    class="knob"       cx="390" cy="424" r="8" />
+    <circle id="knobHit" class="knob-focus hit" cx="390" cy="424" r="22"
+            tabindex="0" role="slider"
+            aria-label="Step through the random-walk fan"
+            aria-valuemin="1" aria-valuemax="50" aria-valuenow="50"
+            aria-valuetext="Step 50. After 50 steps the spread is widest, about 39 to 61. No path tends back to 50; the best guess of any path's next value is wherever it stands now." />
+
+    <!-- re-roll button -->
+    <g id="rerollBtn" class="btn" tabindex="0" role="button"
+       aria-label="Re-roll: generate a fresh set of seven random walks">
+      <rect class="btn-rect" x="170" y="440" width="100" height="24" rx="6" />
+      <text class="btn-text" x="220" y="456" text-anchor="middle">Re-roll</text>
+    </g>
+
+    <!-- readout band: hairline separator, muted STATE line, accent TAKEAWAY line -->
+    <line class="sep" x1="44" y1="472" x2="396" y2="472" />
+    <text id="rHint"  class="r-hint"  x="220" y="488" text-anchor="middle">
+      <tspan x="220" dy="0">After 50 steps the spread is widest,</tspan>
+      <tspan x="220" dy="14">about 39 to 61.</tspan>
+    </text>
+    <text id="rTrade" class="r-trade" x="220" y="518" text-anchor="middle">
+      <tspan x="220" dy="0">No path tends back to 50; the best guess of</tspan>
+      <tspan x="220" dy="14">any path&#8217;s next value is wherever it stands now.</tspan>
+    </text>
+  </svg>
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame is a still image, and it
+      is the complete figure: seven random walks, each starting at the value
+      50, fanning out over 50 equal-odds up-or-down steps with no tendency to
+      return to 50 or to each other.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var svg = document.getElementById('fig');
+  var clipRect = document.getElementById('clipRect');
+  var cursorLine = document.getElementById('cursorLine');
+  var dropMax = document.getElementById('dropMax');
+  var dropMin = document.getElementById('dropMin');
+  var lblMax = document.getElementById('lblMax');
+  var lblMin = document.getElementById('lblMin');
+  var lblStep = document.getElementById('lblStep');
+  var knob = document.getElementById('knob');
+  var knobHit = document.getElementById('knobHit');
+  var rerollBtn = document.getElementById('rerollBtn');
+  var rHint = document.getElementById('rHint');
+  var rTrade = document.getElementById('rTrade');
+
+  var paths = [], dots = [];
+  for (var i = 0; i < 7; i++) {
+    paths.push(document.getElementById('rw' + i));
+    dots.push(document.getElementById('dot' + i));
+  }
+
+  // Pixel frame (matches the hardcoded base-SVG geometry exactly).
+  var X0 = 64, XDATA = 390, Y0 = 360, YTOP = 56, VMIN = 30, VMAX = 70;
+  function pxX(step) { return X0 + (step - 1) / 49 * (XDATA - X0); }
+  function pxY(v)    { return Y0 - (v - VMIN) * 7.6; }
+
+  // FIXED-SEED value arrays (mulberry32, seed 12345) — the same numbers that
+  // produced the hardcoded <path d="..."> strings above, so JS math and the
+  // static markup agree exactly (reproducibility; see the header comment).
+  var VALS = [[50, 49, 50, 49, 50, 49, 48, 47, 48, 49, 50, 51, 50, 51, 52, 53, 54, 55, 56, 55, 56, 55, 54, 55, 54, 53, 52, 53, 54, 55, 56, 55, 54, 55, 54, 55, 54, 53, 54, 53, 52, 53, 52, 51, 50, 49, 50, 51, 50, 49],
+                [50, 49, 50, 51, 50, 51, 52, 51, 52, 53, 54, 53, 52, 51, 50, 49, 48, 49, 48, 49, 48, 49, 48, 47, 46, 45, 44, 45, 44, 43, 42, 41, 40, 39, 38, 37, 38, 39, 40, 39, 40, 39, 40, 41, 40, 41, 40, 39, 40, 39],
+                [50, 49, 50, 49, 48, 49, 50, 51, 50, 51, 52, 51, 52, 53, 52, 51, 52, 51, 50, 49, 48, 49, 48, 49, 48, 49, 48, 49, 50, 51, 52, 53, 52, 51, 52, 53, 52, 53, 52, 51, 50, 49, 48, 49, 48, 47, 46, 45, 46, 45],
+                [50, 51, 50, 49, 50, 51, 52, 53, 52, 51, 50, 51, 52, 51, 52, 53, 54, 55, 54, 53, 54, 55, 56, 57, 58, 57, 56, 55, 54, 53, 54, 53, 54, 55, 54, 55, 54, 53, 52, 53, 54, 53, 52, 53, 52, 51, 52, 53, 54, 53],
+                [50, 51, 52, 51, 52, 51, 50, 51, 52, 51, 50, 51, 52, 51, 50, 51, 50, 51, 52, 53, 54, 53, 54, 55, 56, 57, 56, 55, 56, 55, 54, 53, 54, 55, 54, 53, 54, 53, 54, 55, 56, 57, 56, 57, 58, 59, 60, 59, 60, 61],
+                [50, 51, 50, 49, 50, 49, 48, 47, 46, 45, 46, 47, 46, 47, 46, 45, 44, 43, 44, 45, 46, 47, 46, 45, 46, 45, 44, 43, 44, 45, 46, 47, 46, 45, 46, 47, 48, 47, 46, 47, 46, 45, 44, 43, 44, 43, 42, 43, 42, 41],
+                [50, 51, 50, 51, 52, 51, 52, 51, 52, 53, 52, 53, 52, 53, 54, 55, 56, 55, 56, 55, 56, 55, 54, 55, 56, 57, 58, 57, 58, 57, 58, 57, 58, 57, 56, 55, 56, 55, 54, 55, 56, 57, 58, 59, 60, 61, 60, 61, 60, 59]];
+
+  function buildD(vals) {
+    var pts = [];
+    for (var s = 1; s <= 50; s++) {
+      pts.push(pxX(s).toFixed(2) + ',' + pxY(vals[s - 1]).toFixed(2));
+    }
+    return 'M' + pts.join(' L');
+  }
+
+  var step = 50;          // 1..50, default = fully revealed (matches the static base)
+  var justRerolled = false;
+
+  // simple word-wrap: split a string into at most 2 lines near its midpoint
+  function wrapLine(str, maxLen) {
+    if (str.length <= maxLen) return [str];
+    var mid = Math.floor(str.length / 2);
+    var left = str.lastIndexOf(' ', mid);
+    var right = str.indexOf(' ', mid);
+    var idx;
+    if (left < 0) idx = right;
+    else if (right < 0) idx = left;
+    else idx = (mid - left <= right - mid) ? left : right;
+    if (idx < 0) idx = mid;
+    return [str.slice(0, idx).trim(), str.slice(idx).trim()];
+  }
+
+  function setLines(el, text, y0, dy, maxLen) {
+    var lines = wrapLine(text, maxLen);
+    while (el.firstChild) el.removeChild(el.firstChild);
+    for (var k = 0; k < lines.length; k++) {
+      var t = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+      t.setAttribute('x', 220);
+      t.setAttribute('dy', k === 0 ? 0 : dy);
+      t.textContent = lines[k];
+      el.appendChild(t);
+    }
+    return lines;
+  }
+
+  function spreadAt(s) {
+    var min = Infinity, max = -Infinity;
+    for (var i = 0; i < 7; i++) {
+      var v = VALS[i][s - 1];
+      if (v < min) min = v;
+      if (v > max) max = v;
+    }
+    return { min: min, max: max };
+  }
+
+  function render() {
+    var cx = pxX(step);
+
+    // clip the seven paths to reveal only steps <= current (pad so the
+    // rightmost dot is never clipped mid-marker)
+    clipRect.setAttribute('width', Math.max(0, cx - 60 + 6));
+
+    // "now" cursor + droplines to both axes
+    cursorLine.setAttribute('x1', cx); cursorLine.setAttribute('x2', cx);
+
+    var spread = spreadAt(step);
+    var yMax = pxY(spread.max), yMin = pxY(spread.min);
+    dropMax.setAttribute('x2', cx); dropMax.setAttribute('y1', yMax); dropMax.setAttribute('y2', yMax);
+    dropMin.setAttribute('x2', cx); dropMin.setAttribute('y1', yMin); dropMin.setAttribute('y2', yMin);
+    lblMax.setAttribute('y', yMax); lblMax.textContent = spread.max;
+    lblMin.setAttribute('y', yMin); lblMin.textContent = spread.min;
+
+    // seven current-position dots
+    for (var i = 0; i < 7; i++) {
+      dots[i].setAttribute('cx', cx);
+      dots[i].setAttribute('cy', pxY(VALS[i][step - 1]));
+    }
+
+    // live "Step N" label + slider knob (same x-scale as the plot)
+    lblStep.setAttribute('x', cx); lblStep.textContent = 'Step ' + step;
+    knob.setAttribute('cx', cx);
+    knobHit.setAttribute('cx', cx);
+
+    // readout band
+    var stateText, tradeText;
+    if (justRerolled) {
+      stateText = 'A fresh set of coin-flips — a different fan, same rules.';
+      tradeText = 'Whichever series leads changes every time; past moves give no edge on the next.';
+    } else if (step === 1) {
+      stateText = 'All seven paths start at the same point: 50.';
+      tradeText = 'Each began at 50 on equal coin-flips — the leader’s edge so far is luck, not skill.';
+    } else if (step === 50) {
+      stateText = 'After 50 steps the spread is widest, about ' + spread.min + ' to ' + spread.max + '.';
+      tradeText = 'No path tends back to 50; the best guess of any path’s next value is wherever it stands now.';
+    } else {
+      stateText = 'After ' + step + ' steps the paths span about ' + spread.min + ' to ' + spread.max + '.';
+      tradeText = step <= 25
+        ? 'Each began at 50 on equal coin-flips — the leader’s edge so far is luck, not skill.'
+        : 'No path tends back to 50; the best guess of any path’s next value is wherever it stands now.';
+    }
+    setLines(rHint, stateText, 488, 14, 40);
+    setLines(rTrade, tradeText, 518, 14, 44);
+
+    knobHit.setAttribute('aria-valuenow', step);
+    knobHit.setAttribute('aria-valuetext', 'Step ' + step + '. ' + stateText + ' ' + tradeText);
+  }
+
+  function setStep(s) {
+    s = Math.max(1, Math.min(50, Math.round(s)));
+    if (s !== step) { step = s; justRerolled = false; render(); }
+  }
+
+  // convert a client event to SVG user coords (handles responsive scaling)
+  var spt = svg.createSVGPoint();
+  function toSvg(evt) {
+    spt.x = evt.clientX; spt.y = evt.clientY;
+    return spt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+  function stepFromX(px) { return 1 + (px - X0) / (XDATA - X0) * 49; }
+
+  // --- slider drag (pointer capture so a fast drag can't get stuck) ---
+  var dragging = false, capId = null;
+  function onMove(evt) {
+    if (!dragging) return;
+    evt.preventDefault();
+    setStep(stepFromX(toSvg(evt).x));
+  }
+  function onUp() {
+    dragging = false;
+    svg.classList.remove('grabbing');
+    if (capId !== null) { try { knobHit.releasePointerCapture(capId); } catch (e) {} }
+    capId = null;
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+  }
+  function onKnobDown(evt) {
+    evt.preventDefault();
+    dragging = true;
+    svg.classList.add('grabbing');
+    capId = evt.pointerId;
+    try { knobHit.setPointerCapture(capId); } catch (e) {}
+    setStep(stepFromX(toSvg(evt).x));
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }
+  knobHit.addEventListener('pointerdown', onKnobDown);
+
+  // --- keyboard on the slider proxy ---
+  knobHit.addEventListener('keydown', function (evt) {
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') { setStep(step + 1); }
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') { setStep(step - 1); }
+    else if (evt.key === 'Home') { setStep(1); }
+    else if (evt.key === 'End') { setStep(50); }
+    else if (evt.key === 'PageUp') { setStep(step + 5); }
+    else if (evt.key === 'PageDown') { setStep(step - 5); }
+    else return;
+    evt.preventDefault();
+  });
+
+  // --- re-roll: fresh equal-odds +-1 walks (Math.random — not seed-locked;
+  //     the whole point is an unpredictable new fan each click) ---
+  function reroll() {
+    for (var i = 0; i < 7; i++) {
+      var v = 50;
+      var vals = [v];
+      for (var s = 0; s < 49; s++) {
+        v += (Math.random() < 0.5 ? -1 : 1);
+        vals.push(v);
+      }
+      VALS[i] = vals;
+      paths[i].setAttribute('d', buildD(vals));
+    }
+    justRerolled = true;
+    render();
+  }
+  rerollBtn.addEventListener('pointerdown', function (evt) { evt.preventDefault(); reroll(); });
+  rerollBtn.addEventListener('keydown', function (evt) {
+    if (evt.key === 'Enter' || evt.key === ' ' || evt.key === 'Spacebar') {
+      evt.preventDefault(); reroll();
+    }
+  });
+
+  // Debug hook: lets a reviewer screenshot non-initial states via scripting.
+  window.__fig = {
+    set: function (v) { setStep(+v); },
+    get: function () { return { step: step, vals: VALS.map(function (a) { return a[step - 1]; }) }; },
+    reroll: function () { reroll(); }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

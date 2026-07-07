@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive figure: taxing the seller or the buyer reaches the same price and quantity</title>
+<!--
+  Interactive recreation of UE Fig 17.1A "Tax as a Rise in Supply Cost" + 17.1B
+  "Tax as a Reduction of Demand" (p.256) for the t07b blog post (website-styled
+  warm palette, not FAU). Self-contained: vanilla SVG + JS, no libraries, no
+  network, no build step. The static FAU figure
+  (figures/t07b-tax-incidence.{tex,svg}) is the SLIDE version, untouched, and
+  is this widget's <noscript> fallback.
+
+  ARCHITECTURE: the base figure is REAL SVG markup for the default state (tax
+  $0.10, steeper/base demand elasticity). A no-JS reader sees the full
+  two-panel still: both panels' D/S curves, E0/E1 points + droplines, the
+  three price gridlines, the two shaded incidence bands, the tax wedge (panel
+  A) / shift arrow (panel B), the left-axis tax brackets, and the readout for
+  the default state. The script only ATTACHES behavior (drag the wedge,
+  keyboard, the elasticity toggle, live re-shading/readouts); it never builds
+  the DOM from scratch.
+
+  ECONOMIC MODEL (linear, closed-form so the tax and elasticity controls have
+  an exact equilibrium at every state):
+    Demand:  P = a - b*Q      (b = 0.0375 "steeper", 0.02 "flatter")
+    Supply:  P = c + d*Q      (d = 0.0875, fixed -- only demand toggles)
+    No-tax eq is pinned at (Q0,P0) = (7, $1.00) for ANY b by solving
+    a = P0 + b*Q0, c = 0.3875 fixed.
+    A per-unit tax t (seller-side, panel A) or (buyer-side, panel B, same t)
+    solves Q1 = (a - c - t)/(b+d); buyerP = a - b*Q1; sellerP = buyerP - t.
+    At t=0.10, b=0.0375: Q1=6.2, buyerP=$1.03, sellerP=$0.93 (30/70 split,
+    matches the UE source numbers exactly). At t=0.04: buyerP=$1.012,
+    sellerP=$0.972 (verified against the spec's worked example). Buyer share
+    of any tax = b/(b+d); flatter demand (b=0.02) => buyer share ~18.6%,
+    matching the spec's "~$1.02 / ~$0.92" example at t=0.10.
+
+  GEOMETRY (family F3, two-panel, per diagram-guides/interactive-widget-
+  standard.md): viewBox 720x460, aspect-ratio 16/10, max-width 640px.
+  Data: Quantity 0..12 on x, Price $0.80..$1.25 on y (a "zoomed" price window
+  -- the whole point of the figure is a narrow 3-10 cent band of movement,
+  with headroom above $1.17 for the tax-wedge handle at Q=7.6 to swing the
+  full $0.00-$0.20 range without crowding the top edge). Pixel frame:
+  qx(q,offset) = offset + q*22 (offset 70 left panel, 400 right panel);
+  py(p) = 353 - (p-0.80)*724.44. Axes drawn from the box edges; curves are
+  clipped to the visible price window [0.80,1.25] each render so they never
+  crowd the plot edges.
+
+  Curves are drawn as gently convex quadratic Beziers (a cosmetic upgrade over
+  the static SVG's straight lines, per the audit) using a perpendicular bow of
+  16px toward lower price at the segment midpoint -- true for both a convex
+  decreasing demand curve and a convex increasing supply curve.
+
+  INTERACTION (family F3): the draggable tax-WEDGE handle (panel A, at a fixed
+  Q=7.6, always to the right of every reachable E1 and clear of the fixed E0)
+  sets the tax $0.00-$0.20; dragging slides S1 up in panel A and D1 down in
+  panel B in lockstep, re-solving both equilibria and re-shading both
+  incidence bands identically. A secondary two-state Steeper/Flatter
+  demand-elasticity toggle changes which side absorbs more of the tax.
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;   /* warm bone background        */
+    --ink:     #1a1c1e;    /* primary curves + headings   */
+    --text:    #16181a;    /* body text                   */
+    --muted:   #5c6066;    /* axes / secondary labels      */
+    --hairline:#e3ddd3;    /* axis muting / droplines     */
+    --accent:  #b07a2c;    /* brass -- tax wedge + shading */
+    --accent-tint: #efe4d2;/* shaded incidence bands       */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .fig { width: 100%; max-width: 640px; min-width: 0; }
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+
+  /* elasticity toggle bar (above the panels) */
+  .modebar { display: flex; align-items: center; gap: 8px;
+             margin: 0 0 8px; flex-wrap: wrap; justify-content: center; }
+  .modelabel { color: var(--muted); font-size: 13px; font-weight: 600; }
+  .seg { font-family: inherit; font-size: 13px; font-weight: 600;
+         color: var(--ink); background: var(--surface);
+         border: 1.5px solid var(--hairline); border-radius: 6px;
+         padding: 5px 14px; cursor: pointer; }
+  .seg + .seg { margin-left: -1px; }
+  .seg.on { background: var(--accent); color: var(--surface);
+            border-color: var(--accent); }
+  .seg:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* structural strokes */
+  .axis        { stroke: var(--muted); stroke-width: 1.4; }
+  .curve       { stroke: var(--ink); stroke-width: 2.4; fill: none;
+                 stroke-linecap: round; }
+  .curve-ghost { stroke: var(--muted); stroke-width: 2; fill: none;
+                 stroke-dasharray: 6 5; opacity: 0.75; }
+  .curve-accent{ stroke: var(--accent); stroke-width: 2.6; fill: none;
+                 stroke-linecap: round; }
+  .drop        { stroke: var(--hairline); stroke-width: 1.5;
+                 stroke-dasharray: 5 4; }
+  .grid        { stroke: var(--hairline); stroke-width: 1.3;
+                 stroke-dasharray: 3 3; }
+
+  /* incidence bands */
+  .band-consumer { fill: var(--accent-tint); opacity: 0.85; stroke: none; }
+  .band-producer { fill: var(--accent-tint); opacity: 0.55; stroke: none; }
+
+  /* wedge + brackets + shift arrow */
+  .wedge     { stroke: var(--accent); stroke-width: 2.4; fill: none; }
+  .bracket   { stroke: var(--accent); stroke-width: 1.7; fill: none;
+               stroke-linecap: round; }
+  .shiftarrow{ stroke: var(--accent); stroke-width: 2.2; fill: none; }
+
+  /* points */
+  .pt-static { fill: var(--ink); stroke: var(--surface); stroke-width: 1.5; }
+  .pt        { fill: var(--accent); stroke: var(--surface); stroke-width: 2.4; }
+  .knob      { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5;
+               pointer-events: none; }
+
+  /* transparent hit targets */
+  .hit-line  { fill: none; stroke: transparent; stroke-width: 28;
+               touch-action: none; cursor: ns-resize; }
+  .hit       { fill: transparent; stroke: transparent; touch-action: none;
+               cursor: grab; }
+  .pt-focus:focus-visible { outline: none; }
+  .pt-focus:focus-visible + .knob,
+  .grabbing .knob { stroke: var(--ink); stroke-width: 3.2; }
+
+  /* text */
+  .panelhead  { fill: var(--ink); font-size: 12px; font-weight: 700; }
+  .axlabel    { fill: var(--muted); font-size: 11px; font-weight: 600; }
+  .lab        { fill: var(--ink); font-size: 11.5px; font-weight: 600; }
+  .lab-ghost  { fill: var(--muted); font-size: 11px; font-style: italic; }
+  .lab-accent { fill: var(--accent); font-size: 11.5px; font-weight: 700; }
+  .plab       { fill: var(--muted); font-size: 10.8px; font-weight: 600; }
+  .qlab       { fill: var(--muted); font-size: 11px; font-weight: 600; }
+  .taxlab     { fill: var(--accent); font-size: 11px; font-weight: 700; }
+  .annot      { fill: var(--text); font-size: 10px; font-weight: 600;
+                text-anchor: middle; }
+  .sep        { stroke: var(--hairline); stroke-width: 1; }
+  .r-hint     { color: var(--muted); font-size: 12px; line-height: 1.3;
+                margin-bottom: 4px; text-align: center; }
+  .r-trade    { color: var(--accent); font-size: 13.5px; font-weight: 600;
+                line-height: 1.3; text-align: center; }
+  .fallback   { margin: 8px 0 0; color: var(--muted); font-size: 13px;
+                line-height: 1.35; text-align: center; }
+  .fallback a { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="fig">
+  <div class="modebar" role="group" aria-label="Choose the elasticity of demand">
+    <span class="modelabel">Demand:</span>
+    <button id="btnSteep" class="seg on" type="button" tabindex="0" aria-pressed="true">Steeper</button>
+    <button id="btnFlat" class="seg" type="button" tabindex="0" aria-pressed="false">Flatter</button>
+  </div>
+
+  <svg id="fig" viewBox="0 0 720 460" role="group"
+       aria-label="Two panels showing a per-unit tax on the same market. Left: the tax raises the seller's supply cost, shifting supply up. Right: the same tax is subtracted from what buyers' demand is worth to sellers, shifting demand down. Both panels land at the identical buyer price, seller price, and quantity. Drag the tax wedge in the left panel to change the tax; toggle demand between steeper and flatter to see who bears more of it.">
+    <defs>
+      <marker id="arw" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+      <marker id="acc" markerWidth="8" markerHeight="8" refX="5" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L7,4 L0,8 Z" fill="#b07a2c" />
+      </marker>
+      <marker id="accRev" markerWidth="8" markerHeight="8" refX="2" refY="4"
+              orient="auto-start-reverse" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L7,4 L0,8 Z" fill="#b07a2c" />
+      </marker>
+    </defs>
+
+    <!-- ============================ PANEL A ============================ -->
+    <text class="panelhead" x="204" y="13" text-anchor="middle">Tax as a Rise in Supply Cost</text>
+
+    <!-- incidence bands (drawn first, under the axes/curves) -->
+    <rect id="bandConsL" class="band-consumer" x="70" y="186.4" width="136.4" height="21.7" />
+    <rect id="bandProdL" class="band-producer" x="70" y="208.1" width="136.4" height="50.7" />
+
+    <!-- axes -->
+    <line class="axis" x1="70" y1="353" x2="339" y2="353" marker-end="url(#arw)" />
+    <line class="axis" x1="70" y1="353" x2="70" y2="20" marker-end="url(#arw)" />
+    <text class="axlabel" x="204" y="388" text-anchor="middle">Quantity</text>
+    <text class="axlabel" x="16" y="190" text-anchor="middle"
+          transform="rotate(-90 16 190)">Price ($)</text>
+
+    <!-- price gridlines (dashed droplines to the y-axis) -->
+    <line id="gridBuyL" class="grid" x1="70" y1="186.4" x2="206.4" y2="186.4" />
+    <line class="grid" x1="70" y1="208.1" x2="224" y2="208.1" />
+    <line id="gridSellL" class="grid" x1="70" y1="258.8" x2="206.4" y2="258.8" />
+    <text id="pBuyLabL" class="plab" x="62" y="189.8" text-anchor="end">$1.03</text>
+    <text class="plab" x="62" y="211.5" text-anchor="end">$1.00</text>
+    <text id="pSellLabL" class="plab" x="62" y="262.2" text-anchor="end">$0.93</text>
+
+    <!-- quantity droplines -->
+    <line class="drop" x1="224" y1="353" x2="224" y2="208.1" />
+    <line id="dropQ1L" class="drop" x1="206.4" y1="353" x2="206.4" y2="186.4" />
+    <text class="qlab" x="224" y="372" text-anchor="middle">Q<tspan baseline-shift="sub" font-size="8">0</tspan></text>
+    <text id="q1LabL" class="qlab" x="206.4" y="372" text-anchor="middle">Q<tspan baseline-shift="sub" font-size="8">1</tspan></text>
+
+    <!-- curves: D (slope flips with the elasticity toggle), S0 (no tax,
+         fixed), S1 (with tax) -->
+    <path id="d0L" class="curve" d="M77.3,27.0 Q193.2,195.5 334.0,343.9" />
+    <path class="curve" d="M173.7,353.0 Q245.4,195.2 286.9,27.0" />
+    <path id="s1L" class="curve-accent" d="M148.6,353.0 Q220.3,195.2 261.7,27.0" />
+    <text id="d0LabL" class="lab" x="338" y="347" text-anchor="start">D</text>
+    <text class="lab" x="291" y="20" text-anchor="start">S<tspan baseline-shift="sub" font-size="8">0</tspan></text>
+    <text id="s1LabL" class="lab-accent" x="256" y="20" text-anchor="end">S<tspan baseline-shift="sub" font-size="8">1</tspan></text>
+
+    <!-- equilibrium points -->
+    <circle class="pt-static" cx="224" cy="208.1" r="4.5" />
+    <text class="lab" x="231" y="201" text-anchor="start">E<tspan baseline-shift="sub" font-size="8">0</tspan></text>
+    <circle id="e1L" class="pt" cx="206.4" cy="186.4" r="5.5" />
+    <text id="e1LabL" class="lab-accent" x="182" y="182" text-anchor="end">E<tspan baseline-shift="sub" font-size="8">1</tspan></text>
+
+    <!-- incidence annotations -->
+    <text id="consL" class="annot" x="138.2" y="200.75">Consumer +$0.03</text>
+    <text id="prodL" class="annot" x="138.2" y="237.0">Producer &#8722;$0.07</text>
+
+    <!-- tax wedge (draggable): fixed Q=7.6 (clear of both every reachable E1
+         and the fixed E0 at Q0=7), S0 point fixed, S1 point moves with t -->
+    <line id="wedgeLine" class="wedge" x1="237.2" y1="170.1" x2="237.2" y2="97.6"
+          marker-start="url(#accRev)" marker-end="url(#acc)" />
+    <text id="wedgeLab" class="taxlab" x="243.2" y="90.6" text-anchor="start">$0.10 tax</text>
+    <!-- fat invisible hit-line for easy grabbing anywhere along the wedge -->
+    <line id="wedgeHit" class="hit-line" x1="237.2" y1="170.1" x2="237.2" y2="97.6" />
+    <!-- keyboard proxy (screen-reader slider), the primary drag control -->
+    <circle id="wedgeFocus" class="pt-focus hit" cx="237.2" cy="97.6" r="22"
+            tabindex="0" role="slider" aria-label="Per-unit tax"
+            aria-valuemin="0" aria-valuemax="0.2" aria-valuenow="0.10"
+            aria-valuetext="Tax 10 cents. Buyers pay $1.03, sellers keep $0.93, quantity falls from 7.0 to 6.2." />
+    <!-- visible drag knob -->
+    <circle id="wedgeKnob" class="knob" cx="237.2" cy="97.6" r="6" />
+
+    <!-- left-axis tax bracket (drawn just inside the axis, clear of the price
+         labels to its left and the incidence-band annotations to its right) -->
+    <path id="bracketL" class="bracket" d="M74,186.4 L82,186.4 M78,186.4 L78,258.8 M74,258.8 L82,258.8" />
+    <text id="bracketLabL" class="taxlab" x="80" y="180.4" text-anchor="start">Tax $0.10</text>
+
+    <!-- ============================ PANEL B ============================ -->
+    <text class="panelhead" x="534" y="13" text-anchor="middle">Tax as a Reduction of Demand</text>
+
+    <rect id="bandConsR" class="band-consumer" x="400" y="186.4" width="136.4" height="21.7" />
+    <rect id="bandProdR" class="band-producer" x="400" y="208.1" width="136.4" height="50.7" />
+
+    <line class="axis" x1="400" y1="353" x2="669" y2="353" marker-end="url(#arw)" />
+    <line class="axis" x1="400" y1="353" x2="400" y2="20" marker-end="url(#arw)" />
+    <text class="axlabel" x="534" y="388" text-anchor="middle">Quantity</text>
+
+    <line id="gridBuyR" class="grid" x1="400" y1="186.4" x2="536.4" y2="186.4" />
+    <line class="grid" x1="400" y1="208.1" x2="554" y2="208.1" />
+    <line id="gridSellR" class="grid" x1="400" y1="258.8" x2="536.4" y2="258.8" />
+    <text id="pBuyLabR" class="plab" x="392" y="189.8" text-anchor="end">$1.03</text>
+    <text class="plab" x="392" y="211.5" text-anchor="end">$1.00</text>
+    <text id="pSellLabR" class="plab" x="392" y="262.2" text-anchor="end">$0.93</text>
+
+    <line class="drop" x1="554" y1="353" x2="554" y2="208.1" />
+    <line id="dropQ1R" class="drop" x1="536.4" y1="353" x2="536.4" y2="258.8" />
+    <text class="qlab" x="554" y="372" text-anchor="middle">Q<tspan baseline-shift="sub" font-size="8">0</tspan></text>
+    <text id="q1LabR" class="qlab" x="536.4" y="372" text-anchor="middle">Q<tspan baseline-shift="sub" font-size="8">1</tspan></text>
+
+    <!-- curves: D0 (before, muted ghost), S0 (unchanged), D1 (net of tax, accent) -->
+    <path id="d0R" class="curve-ghost" d="M407.3,27.0 Q523.2,195.5 664.0,343.9" />
+    <path class="curve" d="M503.7,353.0 Q575.4,195.2 616.9,27.0" />
+    <path id="d1R" class="curve-accent" d="M400.0,90.4 Q493.9,231.8 612.7,353.0" />
+    <text id="d0LabR" class="lab-ghost" x="668" y="347" text-anchor="start">D<tspan baseline-shift="sub" font-size="8">0</tspan></text>
+    <text class="lab" x="624" y="38" text-anchor="start">S<tspan baseline-shift="sub" font-size="8">0</tspan></text>
+    <text id="d1LabR" class="lab-accent" x="404" y="98" text-anchor="start">D<tspan baseline-shift="sub" font-size="8">1</tspan></text>
+
+    <circle class="pt-static" cx="554" cy="208.1" r="4.5" />
+    <text class="lab" x="561" y="201" text-anchor="start">E<tspan baseline-shift="sub" font-size="8">0</tspan></text>
+    <circle id="e1R" class="pt" cx="536.4" cy="258.8" r="5.5" />
+    <text id="e1LabR" class="lab-accent" x="543" y="252.8" text-anchor="start">E<tspan baseline-shift="sub" font-size="8">1</tspan></text>
+
+    <text id="consR" class="annot" x="468.2" y="200.75">Consumer +$0.03</text>
+    <text id="prodR" class="annot" x="468.2" y="237.0">Producer &#8722;$0.07</text>
+
+    <!-- tax shift arrow: D0 (Q=8) down to D1 (Q=8), reflects the same tax as the wedge -->
+    <line id="shiftArrowR" class="shiftarrow" x1="576" y1="235.3" x2="576" y2="307.7"
+          marker-end="url(#acc)" />
+    <text id="shiftLabR" class="taxlab" x="582" y="275.5" text-anchor="start">$0.10 tax</text>
+
+    <path id="bracketR" class="bracket" d="M404,186.4 L412,186.4 M408,186.4 L408,258.8 M404,258.8 L412,258.8" />
+    <text id="bracketLabR" class="taxlab" x="410" y="180.4" text-anchor="start">Tax $0.10</text>
+
+    <!-- ============================ readout band ============================ -->
+    <line class="sep" x1="40" y1="398" x2="680" y2="398" />
+    <foreignObject x="34" y="404" width="652" height="52">
+      <div xmlns="http://www.w3.org/1999/xhtml">
+        <div id="rHint" class="r-hint">Tax $0.10 &#183; buyers pay $1.03 &#183; sellers keep $0.93 &#183; quantity 7.0&#8594;6.2</div>
+        <div id="rTrade" class="r-trade">Buyers bear 3&#162;, sellers 7&#162; &#8212; identical whether you tax the seller (left) or the buyer (right).</div>
+      </div>
+    </foreignObject>
+  </svg>
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame is a still image: a $0.10
+      tax raises supply cost in the left panel and reduces demand in the right
+      panel, but both land at the same $1.03 buyer price, $0.93 seller price,
+      and lower quantity &#8212; who writes the check does not change who pays.
+      You can also <a href="t07b-tax-incidence.svg">open the static figure</a>.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var byId = function (id) { return document.getElementById(id); };
+
+  // ---- pixel frame + scale (mirrors the base SVG markup) ----
+  var QMIN = 0, QMAX = 12, PMIN = 0.80, PMAX = 1.25;
+  var SX = 22, Y0 = 353, Y1 = 27, SY = (Y0 - Y1) / (PMAX - PMIN);
+  var OFF_L = 70, OFF_R = 400;
+  function qx(q, offset) { return offset + q * SX; }
+  function py(p) { return Y0 - (p - PMIN) * SY; }
+  function toP(pixelY) { return PMIN + (Y0 - pixelY) / SY; }
+
+  // ---- economic model ----
+  var Q0 = 7, P0 = 1.00;
+  var B_STEEP = 0.0375, B_FLAT = 0.02, SUPPLY_D = 0.0875, C_INT = 0.3875;
+  function bOf(mode) { return mode === 'flat' ? B_FLAT : B_STEEP; }
+  function computeState(t, mode) {
+    var b = bOf(mode), d = SUPPLY_D, a = P0 + b * Q0, c = C_INT;
+    var Q1 = (a - c - t) / (b + d);
+    var buyerP = a - b * Q1;
+    var sellerP = buyerP - t;
+    return { b: b, d: d, a: a, c: c, Q1: Q1, buyerP: buyerP, sellerP: sellerP };
+  }
+
+  // ---- clip a line P = m*Q + k to the visible [QMIN,QMAX] x [PMIN,PMAX] box ----
+  function clipRange(m, k) {
+    var qAtPmin = (PMIN - k) / m, qAtPmax = (PMAX - k) / m;
+    var lo = Math.min(qAtPmin, qAtPmax), hi = Math.max(qAtPmin, qAtPmax);
+    lo = Math.max(QMIN, lo); hi = Math.min(QMAX, hi);
+    return [lo, hi];
+  }
+  function bowPath(m, k, offset, mag) {
+    var r = clipRange(m, k), qlo = r[0], qhi = r[1];
+    var x1 = qx(qlo, offset), y1 = py(m * qlo + k);
+    var x2 = qx(qhi, offset), y2 = py(m * qhi + k);
+    var dx = x2 - x1, dy = y2 - y1, len = Math.hypot(dx, dy) || 1;
+    var perpX = -dy / len, perpY = dx / len;
+    var mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+    var cx = mx + perpX * mag, cy = my + perpY * mag;
+    return { d: 'M' + x1.toFixed(1) + ',' + y1.toFixed(1) + ' Q' + cx.toFixed(1) + ',' +
+             cy.toFixed(1) + ' ' + x2.toFixed(1) + ',' + y2.toFixed(1),
+             x1: x1, y1: y1, x2: x2, y2: y2 };
+  }
+  var BOW = 16;
+
+  // ---- DOM refs ----
+  var d0L = byId('d0L'), d0LabL = byId('d0LabL'), s1L = byId('s1L'), s1LabL = byId('s1LabL'), wedgeLab = byId('wedgeLab');
+  var d0R = byId('d0R'), d0LabR = byId('d0LabR'), d1R = byId('d1R'), d1LabR = byId('d1LabR');
+  var e1L = byId('e1L'), e1LabL = byId('e1LabL'), e1R = byId('e1R'), e1LabR = byId('e1LabR');
+  var gridBuyL = byId('gridBuyL'), gridSellL = byId('gridSellL');
+  var gridBuyR = byId('gridBuyR'), gridSellR = byId('gridSellR');
+  var pBuyLabL = byId('pBuyLabL'), pSellLabL = byId('pSellLabL');
+  var pBuyLabR = byId('pBuyLabR'), pSellLabR = byId('pSellLabR');
+  var dropQ1L = byId('dropQ1L'), dropQ1R = byId('dropQ1R');
+  var q1LabL = byId('q1LabL'), q1LabR = byId('q1LabR');
+  var bandConsL = byId('bandConsL'), bandProdL = byId('bandProdL');
+  var bandConsR = byId('bandConsR'), bandProdR = byId('bandProdR');
+  var consL = byId('consL'), prodL = byId('prodL'), consR = byId('consR'), prodR = byId('prodR');
+  var wedgeLine = byId('wedgeLine'), wedgeHit = byId('wedgeHit');
+  var wedgeFocus = byId('wedgeFocus'), wedgeKnob = byId('wedgeKnob');
+  var bracketL = byId('bracketL'), bracketLabL = byId('bracketLabL');
+  var bracketR = byId('bracketR'), bracketLabR = byId('bracketLabR');
+  var shiftArrowR = byId('shiftArrowR'), shiftLabR = byId('shiftLabR');
+  var rHint = byId('rHint'), rTrade = byId('rTrade');
+  var btnSteep = byId('btnSteep'), btnFlat = byId('btnFlat');
+  var svg = byId('fig');
+
+  // handle sits at a fixed Q, always to the right of every reachable E1 (and
+  // clear of the fixed E0 at Q0=7)
+  var HANDLE_Q = 7.6;
+  var TMIN = 0, TMAX = 0.20, TDEFAULT = 0.10;
+
+  // ---- format helpers ----
+  function fmtP(v) {
+    var v3 = Math.round(v * 1000) / 1000, v2 = Math.round(v * 100) / 100;
+    return (Math.abs(v3 - v2) < 0.0005) ? v2.toFixed(2) : v3.toFixed(3);
+  }
+  function fmtQ(v) { return (Math.round(v * 10) / 10).toFixed(1); }
+
+  // ---- state ----
+  var t = TDEFAULT;      // current per-unit tax, dollars
+  var mode = 'steep';    // 'steep' | 'flat'
+
+  function render() {
+    var st = computeState(t, mode);
+    var b = st.b, d = st.d, a = st.a, c = st.c;
+    var Q1 = st.Q1, buyerP = st.buyerP, sellerP = st.sellerP;
+
+    // -------- Panel A: D (slope moves with elasticity), S0 (fixed),
+    // S1 (moves with t) --------
+    var d0L_path = bowPath(-b, a, OFF_L, BOW);
+    d0L.setAttribute('d', d0L_path.d);
+    d0LabL.setAttribute('x', d0L_path.x2 + 4); d0LabL.setAttribute('y', d0L_path.y2 + 4);
+    var s1 = bowPath(d, c + t, OFF_L, BOW);
+    s1L.setAttribute('d', s1.d);
+    s1LabL.setAttribute('x', s1.x2 - 5.6); s1LabL.setAttribute('y', s1.y2 - 7);
+
+    var e1Lx = qx(Q1, OFF_L), e1Ly = py(buyerP);
+    e1L.setAttribute('cx', e1Lx); e1L.setAttribute('cy', e1Ly);
+    e1LabL.setAttribute('x', e1Lx - 24); e1LabL.setAttribute('y', e1Ly - 4.5);
+
+    gridBuyL.setAttribute('y1', e1Ly); gridBuyL.setAttribute('y2', e1Ly);
+    gridBuyL.setAttribute('x2', e1Lx);
+    gridSellL.setAttribute('y1', py(sellerP)); gridSellL.setAttribute('y2', py(sellerP));
+    gridSellL.setAttribute('x2', e1Lx);
+    pBuyLabL.setAttribute('y', e1Ly + 3.4); pBuyLabL.textContent = '$' + fmtP(buyerP);
+    pSellLabL.setAttribute('y', py(sellerP) + 3.4); pSellLabL.textContent = '$' + fmtP(sellerP);
+
+    dropQ1L.setAttribute('x1', e1Lx); dropQ1L.setAttribute('x2', e1Lx);
+    dropQ1L.setAttribute('y2', e1Ly);
+    q1LabL.setAttribute('x', e1Lx);
+
+    bandConsL.setAttribute('x', OFF_L); bandConsL.setAttribute('width', e1Lx - OFF_L);
+    bandConsL.setAttribute('y', e1Ly); bandConsL.setAttribute('height', Math.max(0, py(1.00) - e1Ly));
+    bandProdL.setAttribute('x', OFF_L); bandProdL.setAttribute('width', e1Lx - OFF_L);
+    bandProdL.setAttribute('height', Math.max(0, py(sellerP) - py(1.00)));
+
+    consL.setAttribute('x', (OFF_L + e1Lx) / 2);
+    consL.setAttribute('y', (e1Ly + py(1.00)) / 2 + 3.5);
+    consL.textContent = 'Consumer +$' + fmtP(buyerP - 1.00).replace(/^0/, '0');
+    prodL.setAttribute('x', (OFF_L + e1Lx) / 2);
+    prodL.setAttribute('y', (py(1.00) + py(sellerP)) / 2 + 3.5);
+    prodL.textContent = 'Producer −$' + fmtP(1.00 - sellerP).replace(/^0/, '0');
+
+    // -------- wedge: draggable, fixed Q, S0 fixed / S1 moves --------
+    var s0AtHandle = d * HANDLE_Q + c;   // supply is fixed regardless of tax/elasticity
+    var s1AtHandle = s0AtHandle + t;
+    var wx = qx(HANDLE_Q, OFF_L);
+    var wyBottom = py(s0AtHandle), wyTop = py(s1AtHandle);
+    wedgeLine.setAttribute('x1', wx); wedgeLine.setAttribute('y1', wyBottom);
+    wedgeLine.setAttribute('x2', wx); wedgeLine.setAttribute('y2', wyTop);
+    wedgeHit.setAttribute('x1', wx); wedgeHit.setAttribute('y1', wyBottom);
+    wedgeHit.setAttribute('x2', wx); wedgeHit.setAttribute('y2', wyTop);
+    wedgeKnob.setAttribute('cx', wx); wedgeKnob.setAttribute('cy', wyTop);
+    wedgeFocus.setAttribute('cx', wx); wedgeFocus.setAttribute('cy', wyTop);
+    // near the very top of the drag range the knob crowds the S0/S1 curve
+    // labels -- drop the wedge label below the knob instead of above it
+    var wedgeLabBelow = wyTop < 55;
+    wedgeLab.setAttribute('x', wx + 6);
+    wedgeLab.setAttribute('y', wedgeLabBelow ? wyTop + 15 : wyTop - 7);
+    wedgeLab.textContent = '$' + fmtP(t) + ' tax';
+
+    var taxCents = Math.round(t * 100);
+    var brkTopL = e1Ly, brkBotL = py(sellerP), brkXL = OFF_L + 8;
+    bracketL.setAttribute('d', 'M' + (brkXL - 4) + ',' + brkTopL + ' L' + (brkXL + 4) + ',' + brkTopL +
+      ' M' + brkXL + ',' + brkTopL + ' L' + brkXL + ',' + brkBotL +
+      ' M' + (brkXL - 4) + ',' + brkBotL + ' L' + (brkXL + 4) + ',' + brkBotL);
+    bracketLabL.setAttribute('x', brkXL + 2); bracketLabL.setAttribute('y', brkTopL - 6);
+    bracketLabL.textContent = 'Tax $' + fmtP(t);
+
+    // -------- Panel B: D0 (ghost, fixed), S0 (fixed), D1 (moves with t) --------
+    var d1 = bowPath(-b, a - t, OFF_R, BOW);
+    d1R.setAttribute('d', d1.d);
+    d1LabR.setAttribute('x', d1.x1 + 4); d1LabR.setAttribute('y', d1.y1 + 8);
+    // D0 ghost also redraws when elasticity changes (its slope is b)
+    var d0 = bowPath(-b, a, OFF_R, BOW);
+    d0R.setAttribute('d', d0.d);
+    d0LabR.setAttribute('x', d0.x2 + 4); d0LabR.setAttribute('y', d0.y2 + 4);
+
+    var e1Rx = qx(Q1, OFF_R), e1Ry = py(sellerP);
+    e1R.setAttribute('cx', e1Rx); e1R.setAttribute('cy', e1Ry);
+    e1LabR.setAttribute('x', e1Rx + 7); e1LabR.setAttribute('y', e1Ry - 6);
+
+    gridBuyR.setAttribute('y1', e1Ly); gridBuyR.setAttribute('y2', e1Ly);
+    gridBuyR.setAttribute('x2', e1Rx);
+    gridSellR.setAttribute('y1', e1Ry); gridSellR.setAttribute('y2', e1Ry);
+    gridSellR.setAttribute('x2', e1Rx);
+    pBuyLabR.setAttribute('y', e1Ly + 3.4); pBuyLabR.textContent = '$' + fmtP(buyerP);
+    pSellLabR.setAttribute('y', e1Ry + 3.4); pSellLabR.textContent = '$' + fmtP(sellerP);
+
+    dropQ1R.setAttribute('x1', e1Rx); dropQ1R.setAttribute('x2', e1Rx);
+    dropQ1R.setAttribute('y2', e1Ry);
+    q1LabR.setAttribute('x', e1Rx);
+
+    bandConsR.setAttribute('x', OFF_R); bandConsR.setAttribute('width', e1Rx - OFF_R);
+    bandConsR.setAttribute('y', e1Ly); bandConsR.setAttribute('height', Math.max(0, py(1.00) - e1Ly));
+    bandProdR.setAttribute('x', OFF_R); bandProdR.setAttribute('width', e1Rx - OFF_R);
+    bandProdR.setAttribute('height', Math.max(0, e1Ry - py(1.00)));
+
+    consR.setAttribute('x', (OFF_R + e1Rx) / 2);
+    consR.setAttribute('y', (e1Ly + py(1.00)) / 2 + 3.5);
+    consR.textContent = 'Consumer +$' + fmtP(buyerP - 1.00);
+    prodR.setAttribute('x', (OFF_R + e1Rx) / 2);
+    prodR.setAttribute('y', (py(1.00) + e1Ry) / 2 + 3.5);
+    prodR.textContent = 'Producer −$' + fmtP(1.00 - sellerP);
+
+    // shift arrow: D0 -> D1 at a fixed Q=8 reference
+    var qShift = 8;
+    var d0y = py(a - b * qShift), d1y = py((a - t) - b * qShift);
+    var sxPix = qx(qShift, OFF_R);
+    shiftArrowR.setAttribute('x1', sxPix); shiftArrowR.setAttribute('y1', d0y);
+    shiftArrowR.setAttribute('x2', sxPix); shiftArrowR.setAttribute('y2', d1y);
+    shiftLabR.setAttribute('x', sxPix + 6); shiftLabR.setAttribute('y', (d0y + d1y) / 2 + 4);
+    shiftLabR.textContent = '$' + fmtP(t) + ' tax';
+
+    var brkXR = OFF_R + 8;
+    bracketR.setAttribute('d', 'M' + (brkXR - 4) + ',' + e1Ly + ' L' + (brkXR + 4) + ',' + e1Ly +
+      ' M' + brkXR + ',' + e1Ly + ' L' + brkXR + ',' + e1Ry +
+      ' M' + (brkXR - 4) + ',' + e1Ry + ' L' + (brkXR + 4) + ',' + e1Ry);
+    bracketLabR.setAttribute('x', brkXR + 2); bracketLabR.setAttribute('y', e1Ly - 6);
+    bracketLabR.textContent = 'Tax $' + fmtP(t);
+
+    // near-zero tax: the two bands/annotations/brackets collapse to nothing
+    // and Q1 lands on top of Q0 -- hide the redundant decorations rather than
+    // let them stack illegibly on top of the $1.00 / Q0 labels
+    var taxNear0 = t < 0.005;
+    var decorDisplay = taxNear0 ? 'none' : '';
+    [bandConsL, bandProdL, consL, prodL, bracketL, bracketLabL,
+     bandConsR, bandProdR, consR, prodR, bracketR, bracketLabR].forEach(function (el) {
+      el.style.display = decorDisplay;
+    });
+    var q1NearQ0 = Math.abs(Q1 - Q0) < 0.15;
+    q1LabL.style.visibility = q1NearQ0 ? 'hidden' : 'visible';
+    q1LabR.style.visibility = q1NearQ0 ? 'hidden' : 'visible';
+
+    // -------- readout grammar: muted state line + accent takeaway line --------
+    var dQ = Q0 - Q1;
+    var hint, trade;
+    if (mode === 'flat') {
+      hint = 'Demand more elastic · buyers pay ~$' + buyerP.toFixed(2) +
+             ' · sellers keep ~$' + sellerP.toFixed(2);
+      trade = 'The side that dodges more easily (buyers) bears less — elasticity sets the split, not who’s taxed.';
+    } else {
+      var qPhrase = (dQ < 0.05) ? 'quantity unchanged'
+                                : (dQ < 0.5) ? 'quantity barely falls'
+                                : ('quantity ' + fmtQ(Q0) + '→' + fmtQ(Q1));
+      hint = 'Tax $' + fmtP(t) + ' · buyers pay $' + fmtP(buyerP) +
+             ' · sellers keep $' + fmtP(sellerP) + ' · ' + qPhrase;
+      if (Math.abs(t - TDEFAULT) < 0.005) {
+        var buyerShare = b / (b + d);
+        var buyerCents = Math.round(taxCents * buyerShare);
+        var sellerCents = taxCents - buyerCents;
+        trade = 'Buyers bear ' + buyerCents + '¢, sellers ' + sellerCents +
+                '¢ — identical whether you tax the seller (left) or the buyer (right).';
+      } else {
+        trade = 'Same split ratio, both panels still land together — who’s taxed never matters.';
+      }
+    }
+    rHint.textContent = hint;
+    rTrade.textContent = trade;
+
+    wedgeFocus.setAttribute('aria-valuenow', t.toFixed(2));
+    wedgeFocus.setAttribute('aria-valuetext', hint + ' ' + trade);
+  }
+
+  // ---- drag the wedge (sets t) ----
+  var spt = svg.createSVGPoint();
+  function toSvg(evt) {
+    spt.x = evt.clientX; spt.y = evt.clientY;
+    return spt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+  function s0AtHandle() {
+    var st = computeState(t, mode);
+    return st.d * HANDLE_Q + st.c;
+  }
+  function setFromPointer(evt) {
+    var p = toSvg(evt);
+    var pVal = toP(p.y);
+    var newT = pVal - s0AtHandle();
+    if (isNaN(newT)) return;
+    if (newT < TMIN) newT = TMIN;
+    if (newT > TMAX) newT = TMAX;
+    t = newT;
+    render();
+  }
+
+  var dragging = false, capturedEl = null, capturedId = null;
+  function onMove(evt) { if (dragging) { evt.preventDefault(); setFromPointer(evt); } }
+  function onUp() {
+    dragging = false;
+    svg.classList.remove('grabbing');
+    if (capturedEl && capturedId !== null) {
+      try { capturedEl.releasePointerCapture(capturedId); } catch (e) {}
+    }
+    capturedEl = null; capturedId = null;
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+  }
+  function onDown(evt) {
+    evt.preventDefault();
+    dragging = true;
+    svg.classList.add('grabbing');
+    capturedEl = evt.currentTarget; capturedId = evt.pointerId;
+    try { capturedEl.setPointerCapture(capturedId); } catch (e) {}
+    setFromPointer(evt);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }
+  wedgeHit.addEventListener('pointerdown', onDown);
+  wedgeFocus.addEventListener('pointerdown', onDown);
+
+  // ---- keyboard: arrows step the tax in $0.01 increments ----
+  wedgeFocus.addEventListener('keydown', function (evt) {
+    var step = 0.01;
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') { t += step; }
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') { t -= step; }
+    else return;
+    evt.preventDefault();
+    t = Math.round(t * 100) / 100;
+    if (t < TMIN) t = TMIN;
+    if (t > TMAX) t = TMAX;
+    render();
+  });
+
+  // ---- elasticity toggle ----
+  function setMode(m) {
+    mode = m;
+    btnSteep.classList.toggle('on', mode === 'steep');
+    btnFlat.classList.toggle('on', mode === 'flat');
+    btnSteep.setAttribute('aria-pressed', mode === 'steep' ? 'true' : 'false');
+    btnFlat.setAttribute('aria-pressed', mode === 'flat' ? 'true' : 'false');
+    render();
+  }
+  btnSteep.addEventListener('click', function () { setMode('steep'); });
+  btnFlat.addEventListener('click', function () { setMode('flat'); });
+
+  // Debug hook (inert for students): lets a reviewer screenshot non-initial
+  // states via scripting.
+  window.__fig = {
+    set: function (v) {
+      v = v || {};
+      if (typeof v.t === 'number') t = Math.max(TMIN, Math.min(TMAX, v.t));
+      if (v.mode === 'flat' || v.mode === 'steep') {
+        mode = v.mode;
+        btnSteep.classList.toggle('on', mode === 'steep');
+        btnFlat.classList.toggle('on', mode === 'flat');
+      }
+      render();
+    },
+    get: function () {
+      var st = computeState(t, mode);
+      return { t: t, mode: mode, Q1: st.Q1, buyerP: st.buyerP, sellerP: st.sellerP };
+    }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

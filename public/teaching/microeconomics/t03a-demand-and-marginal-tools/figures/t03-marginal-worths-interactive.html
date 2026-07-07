@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive marginal worths: total worth, market value, and consumer surplus</title>
+<!--
+  Interactive "Marginal Worths" area-accounting figure for the T3a blog post
+  (website-styled, warm palette). Recreates UE Fig 5.4 "Marginal Worths" (p.71).
+  Self-contained: no libraries, no network. The static FAU figure
+  (figures/t03-marginal-worths.{tex,svg}) is the SLIDE version and is untouched;
+  it is also the <noscript> fallback.
+
+  FAMILY F4 (area accounting). Geometry class: single-panel, viewBox 440x540,
+  aspect-ratio 4/5, max-width 480px.
+
+  WHY STEPPED BARS (higher-fidelity option in the spec): UE 5.4 draws marginal
+  worth as a descending STAIRCASE, so the three areas are exact discrete sums:
+  at Q=6, P*=$0.50 the total personal worth is $1+.90+.80+.70+.60+.50 = $4.50,
+  the market value is $.50*6 = $3.00, and the consumer surplus is the remainder,
+  $1.50. A smooth-triangle version would put surplus at $1.80 and total at $4.80
+  — contradicting the pinned numbers the readout must state. The staircase keeps
+  the numbers honest AND matches the source figure.
+
+  GEOMETRY / coordinate frame (shared with t03-demand-curve so the two read as a
+  pair):
+    Origin (Q=0, worth=$0.00) at pixel (64, 360).
+    x scale: Q -> px x = 64 + Q*28   (Q=10 -> 344; axis line runs to 420).
+    y scale: worth -> px y = 360 - worth*(296/1.20) = 360 - worth*246.667.
+    Marginal worth of unit k is priceAt(k) = 1.10 - 0.10*k, so the staircase
+    tops are py(1.00)=113.33 (unit 1) down to py(0.10)=335.33 (unit 10).
+    The draggable handle rides the marginal unit's top-right corner
+    (xq(Q), py(P*)) where P* = priceAt(Q). Dragging / arrowing steps Q in [1,10]:
+      - gray MARKET-VALUE rectangle  = P* * Q  (below the price line, 0->Q)
+      - accent-tint CONSUMER-SURPLUS staircase = the steps above the price line
+      - the whole shaded stack       = TOTAL PERSONAL WORTH = market value + surplus
+    all re-shade live. A legend keys the three regions; the readout states the
+    identity in dollars.
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;   /* warm bone background        */
+    --ink:     #1a1c1e;    /* demand staircase + headings */
+    --text:    #16181a;    /* body text                   */
+    --muted:   #5c6066;    /* axes / market-value fill    */
+    --hairline:#e3ddd3;    /* droplines / faint strokes   */
+    --accent:  #b07a2c;    /* brass — handle + surplus    */
+    --accent-tint: #efe4d2;/* consumer-surplus shading    */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* min-width:0 defeats the flexbox min-width:auto default so the figure scales
+     DOWN to viewports narrower than the SVG's intrinsic width instead of
+     clipping the right side on phones. */
+  .fig { width: 100%; max-width: 480px; min-width: 0; }
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+
+  /* structural strokes */
+  .axis     { stroke: var(--muted); stroke-width: 1.4; }
+  .tickmark { stroke: var(--muted); stroke-width: 1; }
+  .curve    { stroke: var(--ink); stroke-width: 2.4; fill: none;
+              stroke-linejoin: round; stroke-linecap: round; }
+
+  /* shaded regions (F4 evidence) */
+  .region-market  { fill: var(--muted); fill-opacity: 0.20; stroke: none; }
+  .region-surplus { fill: var(--accent-tint); fill-opacity: 1; stroke: none; }
+  .priceline { stroke: var(--accent); stroke-width: 1.8; }
+  .qtyline   { stroke: var(--muted);  stroke-width: 1.6; }
+
+  /* legend swatches */
+  .sw-surplus { fill: var(--accent-tint); stroke: var(--accent); stroke-width: 0.8; }
+  .sw-market  { fill: var(--muted); fill-opacity: 0.20; stroke: var(--muted); stroke-width: 0.8; }
+
+  /* draggable handle + generous transparent hit targets */
+  .pt        { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5; }
+  .hit       { fill: transparent; stroke: transparent; touch-action: none;
+               cursor: grab; }
+  .hit-curve { fill: none; stroke: transparent; stroke-width: 26;
+               touch-action: none; cursor: grab; }
+  .pt-focus:focus-visible { outline: none; }
+  .pt-focus:focus-visible + .pt,
+  .grabbing .pt { stroke: var(--accent); stroke-width: 3.5; }
+
+  /* text */
+  .axtitle  { fill: var(--muted); font-size: 13px; font-weight: 600; }
+  .tick     { fill: var(--muted); font-size: 10px; }
+  .curvelbl { fill: var(--ink);   font-size: 13px; font-style: italic; }
+  .leg      { font-size: 11px; }
+  .leg-surplus { fill: var(--accent); font-weight: 600; }
+  .leg-market  { fill: var(--muted);  font-weight: 600; }
+  .leg-total   { fill: var(--ink);    font-weight: 700; }
+  /* live axis readout tags (accent, with a surface backing so they cover the
+     static tick they replace) */
+  .tagbg    { fill: var(--surface); }
+  .tagtxt   { fill: var(--accent); font-size: 12px; font-weight: 700; }
+  .sep      { stroke: var(--hairline); stroke-width: 1; }
+  .r-hint   { fill: var(--muted);  font-size: 12.5px; }
+  .r-trade  { fill: var(--accent); font-size: 13px; font-weight: 600; }
+  .fallback {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.35;
+    text-align: center;
+  }
+  .fallback a { color: var(--ink); }
+</style>
+</head>
+<body>
+<!-- Everything from here to </div> is REAL base SVG: a no-JS reader sees the
+     full figure (axes, the descending demand staircase, the market-value
+     rectangle, the consumer-surplus steps, the price/quantity lines, the region
+     legend, live tags, and the readout). The script only ATTACHES drag /
+     keyboard / live re-shading. -->
+<div class="fig">
+  <svg id="fig" viewBox="0 0 440 540" role="group"
+       aria-label="Marginal worths for a good. The descending staircase is the demand curve; the height of each step is the marginal personal worth of that unit. At the chosen quantity, a gray rectangle below the price line is the market value (price times quantity), the tinted steps above the price line are the consumer surplus, and the whole shaded stack is the total personal worth. Drag the handle down and to the right to take more units at a lower price and watch the three areas change.">
+    <defs>
+      <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+    </defs>
+
+    <!-- axes (drawn first); extended past the data max so the arrowheads do not
+         crowd the staircase -->
+    <line class="axis" x1="64" y1="360" x2="420" y2="360" marker-end="url(#arrow)" />
+    <line class="axis" x1="64" y1="360" x2="64"  y2="48"  marker-end="url(#arrow)" />
+
+    <!-- shaded regions (initial Q=6, P*=$0.50). Drawn UNDER the staircase so the
+         curve outline sits on top. Both are regenerated by the script. -->
+    <rect id="marketRect" class="region-market" x="64" y="236.67" width="168" height="123.33" />
+    <path id="surplusRegion" class="region-surplus"
+          d="M64,113.33 H92 V138.00 H120 V162.67 H148 V187.33 H176 V212.00 H204 V236.67 H232 H64 Z" />
+
+    <!-- price line at P* (accent; also the horizontal connector to the y-axis)
+         and the quantity line at Q (also the vertical connector to the x-axis) -->
+    <line id="priceLine" class="priceline" x1="64" y1="236.67" x2="232" y2="236.67" />
+    <line id="qtyLine"   class="qtyline"   x1="232" y1="236.67" x2="232" y2="360" />
+
+    <!-- the demand staircase (marginal worth of each unit, 1..10) -->
+    <path class="curve"
+          d="M64,113.33 H92 V138.00 H120 V162.67 H148 V187.33 H176 V212.00 H204 V236.67 H232 V261.33 H260 V286.00 H288 V310.67 H316 V335.33 H344" />
+    <text class="curvelbl" x="74" y="107" text-anchor="start">D</text>
+
+    <!-- axis titles -->
+    <text class="axtitle" x="232" y="398" text-anchor="middle">Quantity of good</text>
+    <text class="axtitle" x="14" y="208" text-anchor="middle"
+          transform="rotate(-90 14 208)">Marginal personal worth ($)</text>
+
+    <!-- region legend (in the always-clear top strip, above the staircase) -->
+    <g class="leg">
+      <rect class="sw-surplus" x="250" y="49"   width="14" height="11" />
+      <text class="leg-surplus" x="270" y="58">Consumer surplus</text>
+      <rect class="sw-market"  x="250" y="69"   width="14" height="11" />
+      <text class="leg-market"  x="270" y="78">Market value</text>
+      <rect class="sw-surplus" x="250" y="89"   width="14" height="5.5" />
+      <rect class="sw-market"  x="250" y="94.5" width="14" height="5.5" />
+      <text class="leg-total"   x="270" y="98">Total personal worth</text>
+    </g>
+
+    <!-- x-axis tick marks + labels (Q = 1..10) -->
+    <g>
+      <line class="tickmark" x1="92"  y1="360" x2="92"  y2="364" />
+      <line class="tickmark" x1="120" y1="360" x2="120" y2="364" />
+      <line class="tickmark" x1="148" y1="360" x2="148" y2="364" />
+      <line class="tickmark" x1="176" y1="360" x2="176" y2="364" />
+      <line class="tickmark" x1="204" y1="360" x2="204" y2="364" />
+      <line class="tickmark" x1="232" y1="360" x2="232" y2="364" />
+      <line class="tickmark" x1="260" y1="360" x2="260" y2="364" />
+      <line class="tickmark" x1="288" y1="360" x2="288" y2="364" />
+      <line class="tickmark" x1="316" y1="360" x2="316" y2="364" />
+      <line class="tickmark" x1="344" y1="360" x2="344" y2="364" />
+      <text class="tick" x="92"  y="378" text-anchor="middle">1</text>
+      <text class="tick" x="120" y="378" text-anchor="middle">2</text>
+      <text class="tick" x="148" y="378" text-anchor="middle">3</text>
+      <text class="tick" x="176" y="378" text-anchor="middle">4</text>
+      <text class="tick" x="204" y="378" text-anchor="middle">5</text>
+      <text class="tick" x="232" y="378" text-anchor="middle">6</text>
+      <text class="tick" x="260" y="378" text-anchor="middle">7</text>
+      <text class="tick" x="288" y="378" text-anchor="middle">8</text>
+      <text class="tick" x="316" y="378" text-anchor="middle">9</text>
+      <text class="tick" x="344" y="378" text-anchor="middle">10</text>
+    </g>
+
+    <!-- live price readout riding the price line's foot on the y-axis -->
+    <g id="qyTag">
+      <rect id="qyBg" class="tagbg" x="20" y="229.17" width="40" height="15" rx="2" />
+      <text id="qy" class="tagtxt" x="40" y="236.67" text-anchor="middle"
+            dominant-baseline="middle">$0.50</text>
+    </g>
+    <!-- live quantity readout riding the quantity line's foot on the x-axis -->
+    <g id="qxTag">
+      <rect id="qxBg" class="tagbg" x="221" y="370.5" width="22" height="15" rx="2" />
+      <text id="qx" class="tagtxt" x="232" y="378" text-anchor="middle"
+            dominant-baseline="middle">6</text>
+    </g>
+
+    <!-- the draggable handle + hit targets (fat invisible staircase + point) -->
+    <path id="hitCurve" class="hit-curve"
+          d="M64,113.33 H92 V138.00 H120 V162.67 H148 V187.33 H176 V212.00 H204 V236.67 H232 V261.33 H260 V286.00 H288 V310.67 H316 V335.33 H344" />
+    <circle id="hit" class="hit" cx="232" cy="236.67" r="22" />
+    <circle id="pt"  class="pt"  cx="232" cy="236.67" r="7" />
+    <!-- focusable proxy for keyboard control -->
+    <circle id="ptFocus" class="pt-focus hit" cx="232" cy="236.67" r="22"
+            tabindex="0" role="slider" aria-label="Quantity taken (the marginal unit)"
+            aria-valuemin="1" aria-valuemax="10" aria-valuenow="6"
+            aria-valuetext="6 units at $0.50. Total worth $4.50 = market value $3.00 + consumer surplus $1.50; the buyer gains $1.50." />
+
+    <!-- readout band: hairline separator, muted STATE line, accent TAKEAWAY line
+         (the takeaway wraps to two lines; the static markup is pre-wrapped so a
+         no-JS reader sees it cleanly, and the script re-wraps it on each change) -->
+    <line class="sep" x1="44" y1="430" x2="396" y2="430" />
+    <text id="rHint"  class="r-hint"  x="220" y="454" text-anchor="middle">At $0.50 the buyer takes 6 units. Market value = $3.00.</text>
+    <text id="rTrade" class="r-trade" text-anchor="middle"><tspan x="220" y="476">Total worth $4.50 = market value $3.00 +</tspan><tspan x="220" y="494">consumer surplus $1.50 — the buyer gains $1.50.</tspan></text>
+  </svg>
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame is a still image: a descending demand staircase with a gray market-value rectangle below the price line, tinted consumer-surplus steps above it, and the two together making up total personal worth. You can also <a href="t03-marginal-worths.svg">open the static figure</a>.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var svg      = document.getElementById('fig');
+  var pt       = document.getElementById('pt');
+  var hit      = document.getElementById('hit');
+  var ptFocus  = document.getElementById('ptFocus');
+  var hitCurve = document.getElementById('hitCurve');
+  var marketRect    = document.getElementById('marketRect');
+  var surplusRegion = document.getElementById('surplusRegion');
+  var priceLine = document.getElementById('priceLine');
+  var qtyLine   = document.getElementById('qtyLine');
+  var qx    = document.getElementById('qx');
+  var qy    = document.getElementById('qy');
+  var qxBg  = document.getElementById('qxBg');
+  var qyBg  = document.getElementById('qyBg');
+  var rHint = document.getElementById('rHint');
+  var rTrade = document.getElementById('rTrade');
+  var NS = 'http://www.w3.org/2000/svg';
+
+  // pixel frame + scale (mirrors the static SVG markup above)
+  var X0 = 64, Y0 = 360;
+  var DX = 28;                 // px per unit of quantity
+  var DY = 296 / 1.20;         // px per dollar of worth (= 246.667)
+  var xq = function (q) { return X0 + q * DX; };            // quantity -> px x
+  var py = function (p) { return Y0 - p * DY; };            // worth    -> px y
+  var toQ = function (px) { return (px - X0) / DX; };       // px x     -> quantity
+
+  // model: integer schedule, Q in [1,10]; marginal worth of unit k = 1.10 - 0.10k
+  var QLO = 1, QHI = 10;
+  function worthAt(k) { return 1.10 - 0.10 * k; }
+  // discrete area accounting (staircase sums, so surplus is exact)
+  function totalWorth(Q) { var s = 0; for (var k = 1; k <= Q; k++) s += worthAt(k); return s; }
+  function marketValue(Q) { return worthAt(Q) * Q; }
+
+  var q = 6; // initial state (matches the static markup): Q=6, P*=$0.50
+
+  // convert a client event to SVG user coords (handles responsive scaling)
+  var spt = svg.createSVGPoint();
+  function toSvg(evt) {
+    spt.x = evt.clientX; spt.y = evt.clientY;
+    return spt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+
+  function money(v) { return '$' + v.toFixed(2); }
+
+  // consumer-surplus path: the staircase tops of units 1..Q, closed along the
+  // price line P* = worthAt(Q). Zero-area at Q=1 (no surplus on the first unit).
+  function surplusPath(Q) {
+    var d = 'M64,' + py(worthAt(1)).toFixed(2);
+    for (var k = 1; k <= Q; k++) {
+      d += ' H' + xq(k).toFixed(2);
+      if (k < Q) d += ' V' + py(worthAt(k + 1)).toFixed(2);
+    }
+    d += ' H64 Z';
+    return d;
+  }
+
+  // Greedily word-wrap `str` into <tspan> lines inside the accent readout so it
+  // never overflows the 440-wide viewBox. Measures with getComputedTextLength.
+  function layoutTrade(str) {
+    var maxW = 404, x = 220, y0 = 476, lineH = 18;
+    while (rTrade.firstChild) rTrade.removeChild(rTrade.firstChild);
+    var probe = document.createElementNS(NS, 'tspan');
+    rTrade.appendChild(probe);
+    var words = str.split(' '), lines = [], cur = words[0] || '';
+    for (var i = 1; i < words.length; i++) {
+      probe.textContent = cur + ' ' + words[i];
+      if (probe.getComputedTextLength() > maxW) { lines.push(cur); cur = words[i]; }
+      else { cur = cur + ' ' + words[i]; }
+    }
+    lines.push(cur);
+    rTrade.removeChild(probe);
+    var startY = (lines.length === 1) ? y0 + 4 : y0;
+    for (var j = 0; j < lines.length; j++) {
+      var t = document.createElementNS(NS, 'tspan');
+      t.setAttribute('x', x);
+      t.setAttribute('y', startY + j * lineH);
+      t.textContent = lines[j];
+      rTrade.appendChild(t);
+    }
+  }
+
+  function render() {
+    var P = worthAt(q);         // marginal / market price P*
+    var xr = xq(q), yr = py(P);
+    var TW = totalWorth(q), MV = marketValue(q), CS = TW - MV;
+
+    // re-shade the three regions
+    marketRect.setAttribute('x', X0);
+    marketRect.setAttribute('y', yr);
+    marketRect.setAttribute('width', xr - X0);
+    marketRect.setAttribute('height', Y0 - yr);
+    surplusRegion.setAttribute('d', surplusPath(q));
+
+    // price line (to the y-axis) and quantity line (to the x-axis)
+    priceLine.setAttribute('x2', xr); priceLine.setAttribute('y1', yr); priceLine.setAttribute('y2', yr);
+    qtyLine.setAttribute('x1', xr); qtyLine.setAttribute('x2', xr); qtyLine.setAttribute('y1', yr);
+
+    // handle at the marginal unit's top-right corner
+    pt.setAttribute('cx', xr);      pt.setAttribute('cy', yr);
+    hit.setAttribute('cx', xr);     hit.setAttribute('cy', yr);
+    ptFocus.setAttribute('cx', xr); ptFocus.setAttribute('cy', yr);
+
+    // live tags ride the line feet on the axes
+    qy.setAttribute('y', yr); qy.textContent = money(P);
+    qyBg.setAttribute('y', yr - 7.5);
+    qx.setAttribute('x', xr); qx.textContent = String(q);
+    qxBg.setAttribute('x', xr - 11);
+
+    // readout grammar (muted state line + accent takeaway line)
+    var unit = (q === 1) ? 'unit' : 'units';
+    var hint = 'At ' + money(P) + ' the buyer takes ' + q + ' ' + unit +
+               '. Market value = ' + money(MV) + '.';
+    var trade;
+    if (q <= 3) {
+      // high-price / small-quantity state
+      trade = 'Fewer units → smaller total worth and smaller surplus.';
+    } else {
+      trade = 'Total worth ' + money(TW) + ' = market value ' + money(MV) +
+              ' + consumer surplus ' + money(CS) + ' — the buyer gains ' + money(CS) + '.';
+    }
+    rHint.textContent = hint;
+    layoutTrade(trade);
+
+    ptFocus.setAttribute('aria-valuenow', String(q));
+    ptFocus.setAttribute('aria-valuetext',
+      q + ' ' + unit + ' at ' + money(P) + '. Total worth ' + money(TW) +
+      ' = market value ' + money(MV) + ' + consumer surplus ' + money(CS) +
+      '; the buyer gains ' + money(CS) + '.');
+  }
+
+  // single state setter (clamp + no-op guard + render) shared by drag,
+  // keyboard, and the debug hook, so state logic lives in one place
+  function setQ(newQ) {
+    var qq = Math.round(newQ);
+    if (isNaN(qq)) return;
+    if (qq < QLO) qq = QLO;
+    if (qq > QHI) qq = QHI;
+    if (qq === q) return;
+    q = qq;
+    render();
+  }
+
+  function setFromPointer(evt) {
+    var pnt = toSvg(evt);
+    setQ(toQ(pnt.x));   // snap to the nearest integer unit
+  }
+
+  // --- drag (pointer events + pointer capture so a fast drag can't get stuck) ---
+  var dragging = false;
+  var capturedEl = null, capturedId = null;
+  function onMove(evt) { if (dragging) { evt.preventDefault(); setFromPointer(evt); } }
+  function onUp() {
+    dragging = false;
+    svg.classList.remove('grabbing');
+    if (capturedEl && capturedId !== null) {
+      try { capturedEl.releasePointerCapture(capturedId); } catch (e) {}
+    }
+    capturedEl = null; capturedId = null;
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+  }
+  function onDown(evt) {
+    evt.preventDefault();
+    dragging = true;
+    svg.classList.add('grabbing');
+    capturedEl = evt.currentTarget; capturedId = evt.pointerId;
+    try { capturedEl.setPointerCapture(capturedId); } catch (e) {}
+    setFromPointer(evt);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }
+  hit.addEventListener('pointerdown', onDown);
+  hitCurve.addEventListener('pointerdown', onDown);
+  ptFocus.addEventListener('pointerdown', onDown);  // the handle itself is draggable
+
+  // --- keyboard (arrows step one unit; right/down = more units, lower price) ---
+  ptFocus.addEventListener('keydown', function (evt) {
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowDown') { setQ(q + 1); }
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowUp') { setQ(q - 1); }
+    else return;
+    evt.preventDefault();
+  });
+
+  // Debug hook: lets a reviewer screenshot non-initial states via scripting.
+  window.__fig = {
+    set: function (v) { setQ(+v); },
+    get: function () {
+      var TW = totalWorth(q), MV = marketValue(q);
+      return { q: q, price: worthAt(q), totalWorth: TW, marketValue: MV, surplus: TW - MV };
+    }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

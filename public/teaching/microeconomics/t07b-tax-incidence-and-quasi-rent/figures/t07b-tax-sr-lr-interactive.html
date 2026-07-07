@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive figure: short-run versus long-run tax incidence</title>
+<!--
+  Interactive recreation of UE Fig 17.2A "Short-Run Effects" + 17.2B "Short- and
+  Long-Run Effects of Tax" (p.259) for the T7b blog post (website-styled warm
+  palette, not FAU). Self-contained: no libraries, no network. The static FAU
+  figure (figures/t07b-tax-sr-lr.{tex,svg}) is the SLIDE version and is
+  untouched; it is also this widget's <noscript> fallback.
+
+  ARCHITECTURE: the base figure is REAL SVG markup. A no-JS reader sees the
+  FULL two-panel still: Panel A's short-run construction (D_SR, pre-tax S,
+  taxed S_SR, the tax arrow, E_0 and E_SR with droplines) AND Panel B's full
+  SR+LR overlay (all six curves, both post-tax equilibria, the larger-ΔQ
+  bracket). The script only ATTACHES behavior (the Short run | Long run
+  toggle, which run's curves/point read as solid+accented vs faded, Panel A's
+  wash/dim, live readout text); it never builds figure DOM.
+
+  GEOMETRY (family F2, two-panel side-by-side): viewBox 720 x 460,
+  aspect-ratio 16/10, max-width 640px.
+    Panel A frame: x = 70  + Q*25 (Q=10 -> 320); y = 350 - P*28 (P=10 -> 70).
+    Panel B frame: x = 410 + Q*25 (Q=10 -> 660); same y.
+  Axes are drawn PAST the data max so the curves do not crowd the arrowheads.
+
+  DATA MODEL (mirrors the audited static t07b-tax-sr-lr.tex derivation, same
+  abstract P/Q units, tax = 2; all four pre-tax curves pass through E_0=(5,5)):
+    D_SR (steep, short-run demand):  P = 15 - 2Q
+    D_LR (flat,  long-run demand):   P = 7.5 - 0.5Q
+    S    (pre-tax supply, Panel A) / S_SR (pre-tax, Panel B): P = Q
+    S_LR (pre-tax, Panel B):                                 P = 0.5Q + 2.5
+    S_SR-taxed  (Panel A "S_SR") / S_SRtax (Panel B): P = Q + 2       (S + tax)
+    S_LRtax (Panel B):                                P = 0.5Q + 4.5 (S_LR + tax)
+  Post-tax equilibria (D ∩ taxed-S):
+    SR: D_SR = S_SRtax -> 15-2Q = Q+2 -> Q_SR = 13/3 ≈ 4.333, P_SRtax = 19/3 ≈ 6.333
+    LR: D_LR = S_LRtax -> 7.5-0.5Q = 0.5Q+4.5 -> Q_LR = 3, P_LRtax = 6.0
+  Verified: P_SRtax (6.333) > P_LRtax (6.0) > P_0 (5); Q_LR (3) < Q_SR (4.333) < Q_0 (5)
+  — steep short-run curves give a bigger price rise and a smaller quantity
+  drop; flatter long-run curves give a smaller price rise and a bigger
+  quantity drop. Verbal-marginal LOCK: no measured DWL triangle, no surplus
+  shading (per interactive-specs.md scope note).
+
+  The "P_sell" seller-net label from an earlier static-figure enrichment is
+  intentionally OMITTED here — the true UE 17.2A source shows only P_SR and
+  P_O, and the interactive-specs.md cosmetic note says to drop it to match
+  the source when it would crowd a smaller frame.
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;   /* warm bone background        */
+    --ink:     #1a1c1e;    /* primary curves + headings   */
+    --text:    #16181a;    /* body text                   */
+    --muted:   #5c6066;    /* captions / secondary labels */
+    --hairline:#e3ddd3;    /* axes muting / droplines     */
+    --accent:  #b07a2c;    /* brass — taxed curves/points */
+    --accent-tint: #efe4d2;/* active-panel wash           */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .fig { width: 100%; max-width: 640px; min-width: 0; }
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+
+  /* segmented time-horizon control (one slider-semantics control, two visual
+     segments) — above the panels */
+  .modebar { display: flex; align-items: center; gap: 8px;
+             margin: 0 0 8px; flex-wrap: wrap; }
+  .modelabel { color: var(--muted); font-size: 13px; font-weight: 600; }
+  .seg-track { display: inline-flex; border: 1.5px solid var(--hairline);
+               border-radius: 7px; cursor: pointer; user-select: none; }
+  .seg-track:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .seg { font-family: inherit; font-size: 13px; font-weight: 600;
+         color: var(--ink); padding: 5px 14px; border-radius: 5px; }
+  .seg.on { background: var(--accent); color: var(--surface); }
+
+  /* structural strokes */
+  .axis      { stroke: var(--muted); stroke-width: 1.4; }
+  .curve       { stroke: var(--ink); stroke-width: 2.6; fill: none;
+                 stroke-linecap: round; }
+  .curve-ghost { stroke: var(--muted); stroke-width: 2; fill: none;
+                 stroke-dasharray: 6 5; opacity: 0.75; }
+  .curve-accent{ stroke: var(--accent); stroke-width: 2.6; fill: none;
+                 stroke-linecap: round; }
+  .drop      { stroke: var(--hairline); stroke-width: 1.6;
+               stroke-dasharray: 5 4; }
+  .uparrow   { stroke: var(--accent); stroke-width: 2.2; }
+  .bracket   { stroke: var(--muted); stroke-width: 1.4; }
+
+  /* points */
+  .ctx-pt { fill: var(--muted); }
+  .pt     { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5; }
+
+  /* panel-level dim (Panel A fades when Long run is active) */
+  .panel-wash { fill: var(--accent-tint); opacity: 0; transition: opacity 0.15s ease; }
+  .panel { transition: opacity 0.15s ease; }
+  .panel.dim { opacity: 0.32; }
+
+  /* Panel B's SR/LR curve subsets fade against each other */
+  .runset { transition: opacity 0.15s ease; }
+  .runset.faded { opacity: 0.28; }
+
+  /* text */
+  .panelhead { fill: var(--ink); font-size: 12px; font-weight: 700; }
+  .axlabel   { fill: var(--muted); font-size: 12px; font-weight: 600; }
+  .curvelabel{ fill: var(--muted); font-size: 10.5px; font-style: italic; }
+  .taglabel  { fill: var(--accent); font-size: 10px; font-weight: 600; }
+  .qlabel    { fill: var(--ink); font-size: 11.5px; font-weight: 700;
+               paint-order: stroke; stroke: var(--surface); stroke-width: 3px;
+               stroke-linejoin: round; }
+  .plabel    { fill: var(--ink); font-size: 11px; font-weight: 700;
+               paint-order: stroke; stroke: var(--surface); stroke-width: 3px;
+               stroke-linejoin: round; }
+  .bracketlabel { fill: var(--muted); font-size: 10.5px; font-weight: 600;
+               paint-order: stroke; stroke: var(--surface); stroke-width: 3px;
+               stroke-linejoin: round; }
+  .sub       { font-size: 8px; }
+  .sep       { stroke: var(--hairline); stroke-width: 1; }
+  .r-hint    { fill: var(--muted); font-size: 12.5px; }
+  .r-trade   { fill: var(--accent); font-size: 13.5px; font-weight: 600; }
+  .fallback  { margin: 8px 0 0; color: var(--muted); font-size: 13px;
+               line-height: 1.35; text-align: center; }
+  .fallback a { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="fig">
+  <div class="modebar" role="group" aria-label="Compare the short run and the long run">
+    <span class="modelabel">Time horizon:</span>
+    <div id="runToggle" class="seg-track" tabindex="0" role="slider"
+         aria-label="Short run or long run"
+         aria-valuemin="0" aria-valuemax="1" aria-valuenow="0"
+         aria-valuetext="Short run: supply steep (resources stuck), price rises a lot, quantity barely falls. The tax lands on immobile producers — their peanut-specific land and equipment lose value.">
+      <span id="segSR" class="seg on">Short run</span>
+      <span id="segLR" class="seg">Long run</span>
+    </div>
+  </div>
+
+  <svg id="fig" viewBox="0 0 720 460" role="group"
+       aria-label="Two panels. Left: the short-run construction alone — steep demand and a supply curve shifted up by the tax, buyer price rises a lot, quantity barely falls. Right: the same short-run curves overlaid with flatter long-run curves — the long-run price rise is smaller but the quantity drop is much larger. Use the Short run / Long run control above to see which run is highlighted in both panels.">
+    <title>Short-run versus long-run tax incidence: steep curves shift more of the tax onto price; flat curves shift more of it onto quantity</title>
+    <defs>
+      <marker id="arrowM" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+      <marker id="arrowA" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#b07a2c" />
+      </marker>
+    </defs>
+
+    <!-- ================= PANEL A : Short-Run Effects (17.2A) ================= -->
+    <g id="panelA" class="panel">
+      <rect id="washA" class="panel-wash" x="50" y="20" width="270" height="350" />
+
+      <text class="panelhead" x="195" y="18" text-anchor="middle">Short-Run Effects</text>
+
+      <!-- axes (drawn before curves); extended past the data max -->
+      <line class="axis" x1="70" y1="350" x2="310" y2="350" marker-end="url(#arrowM)" />
+      <line class="axis" x1="70" y1="350" x2="70"  y2="60"  marker-end="url(#arrowM)" />
+      <text class="axlabel" x="195" y="388" text-anchor="middle">Quantity</text>
+      <text class="axlabel" x="36" y="205" text-anchor="middle"
+            transform="rotate(-90 36 205)">Price ($)</text>
+
+      <!-- demand D_SR (steep, P = 15 - 2Q) -->
+      <path class="curve" d="M138.75,84 L226.25,280" />
+      <text class="curvelabel" x="230" y="286" text-anchor="start">D<tspan class="sub" dy="2">SR</tspan></text>
+
+      <!-- supply S (pre-tax, P = Q) — the no-tax supply, drawn as a ghost -->
+      <path class="curve-ghost" d="M132.5,280 L257.5,140" />
+      <text class="curvelabel" x="262" y="138" text-anchor="start">S</text>
+
+      <!-- supply S_SR (taxed, P = Q + 2) — solid + accented -->
+      <path class="curve-accent" d="M82.5,280 L213.75,133" />
+      <text class="curvelabel" x="218" y="128" text-anchor="start">S<tspan class="sub" dy="2">SR</tspan></text>
+
+      <!-- tax arrow: upward from S to S_SR at Q=5.2 -->
+      <line class="uparrow" x1="200" y1="204.4" x2="200" y2="148.4" marker-end="url(#arrowA)" />
+      <text class="taglabel" x="206" y="177" text-anchor="start">Tax</text>
+
+      <!-- E_0 (pre-tax, common reference) -->
+      <line class="drop" x1="195" y1="350" x2="195" y2="210" />
+      <line class="drop" x1="70"  y1="210" x2="195" y2="210" />
+      <circle class="ctx-pt" cx="195" cy="210" r="4" />
+
+      <!-- E_SR (post-tax buyer price) -->
+      <line class="drop" x1="178.33" y1="350" x2="178.33" y2="172.67" />
+      <line class="drop" x1="70"     y1="172.67" x2="178.33" y2="172.67" />
+      <circle class="pt" cx="178.33" cy="172.67" r="5" />
+
+      <!-- quantity labels -->
+      <text class="qlabel" x="173" y="366" text-anchor="end">Q<tspan class="sub" dy="2">SR</tspan></text>
+      <text class="qlabel" x="200" y="366" text-anchor="start">Q<tspan class="sub" dy="2">0</tspan></text>
+
+      <!-- price labels -->
+      <text class="plabel" x="66" y="172.67" text-anchor="end" dominant-baseline="middle">P<tspan class="sub" dy="2">SR</tspan></text>
+      <text class="plabel" x="66" y="210" text-anchor="end" dominant-baseline="middle">P<tspan class="sub" dy="2">0</tspan></text>
+    </g>
+
+    <!-- ================= PANEL B : Short- and Long-Run Effects (17.2B) ================= -->
+    <g id="panelB">
+      <text class="panelhead" x="535" y="18" text-anchor="middle">Short- and Long-Run Effects</text>
+
+      <line class="axis" x1="410" y1="350" x2="665" y2="350" marker-end="url(#arrowM)" />
+      <line class="axis" x1="410" y1="350" x2="410" y2="60"  marker-end="url(#arrowM)" />
+      <text class="axlabel" x="535" y="388" text-anchor="middle">Quantity</text>
+      <text class="axlabel" x="336" y="205" text-anchor="middle"
+            transform="rotate(-90 336 205)">Price ($)</text>
+
+      <!-- common pre-tax equilibrium E_0: all four no-tax curves pass through here -->
+      <line class="drop" x1="535" y1="350" x2="535" y2="210" />
+      <line class="drop" x1="410" y1="210" x2="535" y2="210" />
+      <circle class="ctx-pt" cx="535" cy="210" r="4" />
+      <text class="qlabel" x="540" y="366" text-anchor="start">Q<tspan class="sub" dy="2">0</tspan></text>
+      <text class="plabel" x="406" y="210" text-anchor="end" dominant-baseline="middle">P<tspan class="sub" dy="2">0</tspan></text>
+
+      <!-- "larger ΔQ" bracket: Q_0 -> Q_LR, always visible (a timeless contrast,
+           not tied to either run's fade state) -->
+      <line class="bracket" x1="485" y1="300" x2="535" y2="300" />
+      <line class="bracket" x1="485" y1="294" x2="485" y2="306" />
+      <line class="bracket" x1="535" y1="294" x2="535" y2="306" />
+      <text class="bracketlabel" x="510" y="316" text-anchor="middle">larger &#916;Q</text>
+
+      <!-- ============ SR curve set (fades when Long run is active) ============ -->
+      <g id="srSet" class="runset">
+        <!-- demand D_SR (steep, P = 15 - 2Q) -->
+        <path class="curve" d="M476.25,78.4 L565,277.2" />
+        <text class="curvelabel" x="468" y="84" text-anchor="end">D<tspan class="sub" dy="2">SR</tspan></text>
+
+        <!-- supply S_SR pre-tax (P = Q) — the no-tax supply, ghost -->
+        <path class="curve-ghost" d="M472.5,280 L642.5,89.6" />
+        <text class="curvelabel" x="646" y="80" text-anchor="start">S<tspan class="sub" dy="2">SR</tspan></text>
+
+        <!-- supply S_SRtax (taxed, P = Q + 2) — solid + accented -->
+        <path class="curve-accent" d="M422.5,280 L595,86.8" />
+        <text class="curvelabel" x="598" y="82" text-anchor="start">S<tspan class="sub" dy="2">SRtax</tspan></text>
+
+        <!-- tax arrow: upward from S_SR to S_SRtax at Q=6.5 -->
+        <line class="uparrow" x1="572.5" y1="168" x2="572.5" y2="112" marker-end="url(#arrowA)" />
+        <text class="taglabel" x="578" y="141" text-anchor="start">Tax</text>
+
+        <!-- SR post-tax equilibrium -->
+        <line class="drop" x1="518.33" y1="350" x2="518.33" y2="172.67" />
+        <line class="drop" x1="410"    y1="172.67" x2="518.33" y2="172.67" />
+        <circle class="pt" cx="518.33" cy="172.67" r="5" />
+        <text class="qlabel" x="513" y="366" text-anchor="end">Q<tspan class="sub" dy="2">SR</tspan></text>
+        <text class="plabel" x="400" y="168" text-anchor="end" dominant-baseline="middle">P<tspan class="sub" dy="2">SRtax</tspan></text>
+      </g>
+
+      <!-- ============ LR curve set (fades when Short run is active) ============ -->
+      <g id="lrSet" class="runset">
+        <!-- demand D_LR (flat, P = 7.5 - 0.5Q) -->
+        <path class="curve" d="M410,140 L621.25,258.3" />
+        <text class="curvelabel" x="600" y="250" text-anchor="start">D<tspan class="sub" dy="2">LR</tspan></text>
+
+        <!-- supply S_LR pre-tax (P = 0.5Q + 2.5) — the no-tax supply, ghost -->
+        <path class="curve-ghost" d="M410,280 L637.5,152.6" />
+        <text class="curvelabel" x="642" y="128" text-anchor="start">S<tspan class="sub" dy="2">LR</tspan></text>
+
+        <!-- supply S_LRtax (taxed, P = 0.5Q + 4.5) — solid + accented -->
+        <path class="curve-accent" d="M410,224 L637.5,96.6" />
+        <text class="curvelabel" x="646" y="104" text-anchor="start">S<tspan class="sub" dy="2">LRtax</tspan></text>
+
+        <!-- tax arrow: upward from S_LR to S_LRtax at Q=7.8 -->
+        <line class="uparrow" x1="605" y1="170.8" x2="605" y2="114.8" marker-end="url(#arrowA)" />
+        <text class="taglabel" x="610" y="144" text-anchor="start">Tax</text>
+
+        <!-- LR post-tax equilibrium -->
+        <line class="drop" x1="485" y1="350" x2="485" y2="182" />
+        <line class="drop" x1="410" y1="182" x2="485" y2="182" />
+        <circle class="pt" cx="485" cy="182" r="5" />
+        <text class="qlabel" x="485" y="366" text-anchor="middle">Q<tspan class="sub" dy="2">LR</tspan></text>
+        <text class="plabel" x="400" y="190" text-anchor="end" dominant-baseline="middle">P<tspan class="sub" dy="2">LRtax</tspan></text>
+      </g>
+    </g>
+
+    <!-- ================= readout band ================= -->
+    <line class="sep" x1="55" y1="406" x2="675" y2="406" />
+    <text id="rHint"  class="r-hint"  x="365" y="428" text-anchor="middle">Short run: supply steep (resources stuck) &#183; price rises a lot &#183; quantity barely falls</text>
+    <text id="rTrade" class="r-trade" x="365" y="450" text-anchor="middle">The tax lands on immobile producers &#8212; their peanut-specific land and equipment lose value.</text>
+  </svg>
+
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame is a still image showing
+      both the short-run construction (left) and the short-run/long-run overlay
+      (right): steep short-run curves mean a bigger price rise and a smaller
+      quantity drop; flatter long-run curves mean a smaller price rise but a
+      much larger quantity drop. You can also <a href="t07b-tax-sr-lr.svg">open
+      the static figure</a>.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var byId = function (id) { return document.getElementById(id); };
+
+  var panelA = byId('panelA'), washA = byId('washA');
+  var srSet = byId('srSet'), lrSet = byId('lrSet');
+  var segSR = byId('segSR'), segLR = byId('segLR'), runToggle = byId('runToggle');
+  var rHint = byId('rHint'), rTrade = byId('rTrade');
+
+  var SR_HINT  = 'Short run: supply steep (resources stuck) · price rises a lot · quantity barely falls';
+  var SR_TAKE  = 'The tax lands on immobile producers — their peanut-specific land and equipment lose value.';
+  var LR_HINT  = 'Long run: supply flat (marginal farmers exit) · price rises a little more · quantity falls a lot';
+  var LR_TAKE  = 'As producers exit, the burden shifts onto consumers at the register.';
+  var SR_VALUETEXT = SR_HINT + '. ' + SR_TAKE;
+  var LR_VALUETEXT = LR_HINT + '. ' + LR_TAKE;
+
+  // ---- state ----
+  var run = 'sr'; // 'sr' | 'lr'
+
+  function render() {
+    var sr = (run === 'sr');
+
+    // Panel A is exclusively the short-run construction; it dims when the
+    // reader is looking at the long run instead.
+    panelA.classList.toggle('dim', !sr);
+    washA.style.opacity = sr ? '0.35' : '0';
+
+    // Panel B carries both curve sets always (full fidelity even without JS);
+    // the inactive run's set fades so the active one reads as the story.
+    srSet.classList.toggle('faded', !sr);
+    lrSet.classList.toggle('faded', sr);
+
+    segSR.classList.toggle('on', sr);
+    segLR.classList.toggle('on', !sr);
+    runToggle.setAttribute('aria-valuenow', sr ? '0' : '1');
+    runToggle.setAttribute('aria-valuetext', sr ? SR_VALUETEXT : LR_VALUETEXT);
+
+    rHint.textContent = sr ? SR_HINT : LR_HINT;
+    rTrade.textContent = sr ? SR_TAKE : LR_TAKE;
+  }
+
+  function setRun(r) {
+    if (r !== 'sr' && r !== 'lr') return;
+    run = r;
+    render();
+  }
+
+  segSR.addEventListener('click', function () { setRun('sr'); runToggle.focus(); });
+  segLR.addEventListener('click', function () { setRun('lr'); runToggle.focus(); });
+
+  runToggle.addEventListener('keydown', function (evt) {
+    if (evt.key === 'ArrowLeft' || evt.key === 'ArrowUp' || evt.key === 'Home') {
+      setRun('sr');
+    } else if (evt.key === 'ArrowRight' || evt.key === 'ArrowDown' || evt.key === 'End') {
+      setRun('lr');
+    } else {
+      return;
+    }
+    evt.preventDefault();
+  });
+
+  // Debug hook: lets a reviewer screenshot non-initial states via scripting.
+  // Inert for students.
+  window.__fig = {
+    set: function (v) {
+      v = v || {};
+      if (v.run === 'sr' || v.run === 'lr') run = v.run;
+      render();
+    },
+    get: function () { return { run: run }; }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

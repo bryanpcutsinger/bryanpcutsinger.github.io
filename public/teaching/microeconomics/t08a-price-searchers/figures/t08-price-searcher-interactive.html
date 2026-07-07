@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive price-searcher: output where marginal revenue equals marginal cost</title>
+<!--
+  Interactive figure for the t08a "Price-Searchers" blog post.
+  Recreates UE Fig 19.4 (p.299) -- Price-Searcher's Profit-Maximizing Output and
+  Price. Family F6 (firm cost/output): the reader drags an output handle q along
+  the x-axis and watches three DISTINCT heights track it -- price (read up to
+  demand), average cost, and the marginal-revenue-equals-marginal-cost condition
+  -- plus a profit/loss bracket and a fixed marker for the forgone 6th unit.
+  Self-contained: no libraries, no network. The static FAU figure
+  (figures/t08-price-searcher.svg) is the SLIDE version and is untouched.
+
+  ARCHITECTURE: the base figure is REAL SVG markup at the default state q = 5,
+  which is simultaneously the textbook's profit-maximizing answer -- a no-JS
+  reader (or the <noscript> still image) sees price $16, average cost $15, and
+  MR = MC = $11 as three distinct dots, the $1 profit bracket, the fixed 6th-unit
+  marker, and the two-line readout. The script only ATTACHES behavior (drag q,
+  keyboard, live readouts); it never builds DOM.
+
+  ONE cost/demand function set drives every curve and every number in this file
+  (matches figures/t08-price-searcher.tex exactly, so the static slide figure and
+  this widget teach identical values):
+    AR(q) = 21 - q                              demand / average revenue
+    MR(q) = 21 - 2q                              bisector of AR; MR=MC at q=5
+    MC(q) = 7.5 + 0.45q + 0.05q^2                rising, convex
+    AC(q) = 29.79/q + 7.5 + 0.225q + 0.016667q^2 U-shaped; MC cuts AC at its min
+  At Q*=5: price (AR) = $16, AC = $15 (profit/unit $1), MR = MC = $11 (the
+  profit-max condition; read price UP from here to demand). MC(6) = $12 is the
+  cost of the forgone 6th unit (fixed marker, independent of the drag handle):
+  worth ~$16 to buyers, costs only ~$12 to make, and goes unmade because MR (not
+  price) governs the seller's decision. No measured deadweight-loss triangle is
+  drawn (verbal-marginal course scope lock) -- the distortion is stated in words.
+
+  GEOMETRY (single-panel, standard SS4): viewBox 440 x 540, aspect-ratio 4/5,
+  max-width 480px. Pixel frame: y-axis at x = 70, price-zero baseline at y = 336
+  (room is left BELOW it for Marginal Revenue to dive negative past its q=10.5
+  zero-crossing, matching the source figure). Output scale px(q) = 70 + 26*q.
+  Price scale py(v) = 336 - 12.8*v ($22 -> y=54 top; -$5 -> y=400, still clear of
+  the y=426 readout separator). Draggable output range q in [2.5, 10] (keeps
+  average cost inside the drawn frame; teaching zone 3/5/6 all fall inside it).
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;   /* warm bone background        */
+    --ink:     #1a1c1e;    /* AR / MR (revenue family)    */
+    --text:    #16181a;    /* body text / annotations     */
+    --muted:   #5c6066;    /* AC + captions                */
+    --hairline:#e3ddd3;    /* axes muting / droplines     */
+    --accent:  #b07a2c;    /* brass -- MC curve / handle / snap */
+    --accent-tint: #efe4d2;/* profit bracket fill / tint   */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .fig { width: 100%; max-width: 480px; min-width: 0; }
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+
+  /* structural strokes */
+  .axis     { stroke: var(--muted); stroke-width: 1.4; }
+  .drop     { stroke: var(--hairline); stroke-width: 1.6; stroke-dasharray: 5 4; }
+  .fixdrop  { stroke: var(--hairline); stroke-width: 1.4; stroke-dasharray: 2 4; }
+
+  /* curve family */
+  .ar   { stroke: var(--ink);   stroke-width: 2.6; fill: none; stroke-linecap: round; }
+  .mr   { stroke: var(--ink);   stroke-width: 2.2; fill: none; stroke-linecap: round;
+          stroke-dasharray: 7 5; }
+  .mc   { stroke: var(--accent);stroke-width: 2.6; fill: none; stroke-linecap: round; }
+  .ac   { stroke: var(--muted); stroke-width: 2.2; fill: none; stroke-linecap: round; }
+
+  /* dots + handles */
+  .arDot   { fill: var(--ink);    stroke: var(--surface); stroke-width: 2; }
+  .acDot   { fill: var(--muted);  stroke: var(--surface); stroke-width: 1.6; }
+  .mcDot   { fill: var(--accent); stroke: var(--surface); stroke-width: 2; }
+  .mrDot   { fill: var(--ink);    stroke: var(--surface); stroke-width: 1.6; }
+  .mcDot.snap, .mrDot.snap { stroke: var(--accent); stroke-width: 3.2; }
+  .fixdot  { fill: var(--muted); stroke: var(--surface); stroke-width: 1; }
+  .grip    { fill: var(--accent); stroke: var(--surface); stroke-width: 1.5; }
+
+  /* profit / loss bracket */
+  .bracket  { stroke: var(--text); stroke-width: 1.3; }
+  .bracket.loss { stroke: var(--muted); }
+
+  /* generous transparent hit targets + keyboard proxy */
+  .hit      { fill: transparent; stroke: transparent; touch-action: none; cursor: grab; }
+  .hit-line { fill: none; stroke: transparent; stroke-width: 30;
+              touch-action: none; cursor: grab; }
+  .focus:focus-visible { outline: none; }
+  .focus.qf:focus-visible ~ .qgrip,
+  .grabbing-q .qgrip { stroke: var(--accent); stroke-width: 3.5; }
+
+  /* text */
+  .axlabel { fill: var(--muted); font-size: 14px; font-weight: 600; }
+  .ylab    { fill: var(--muted); font-size: 10.5px; }
+  .qlab    { fill: var(--accent); font-size: 13px; font-weight: 700; }
+  .clab    { font-size: 12.5px; font-weight: 700; font-style: italic; }
+  .annot   { fill: var(--text); font-size: 11px; font-weight: 600; }
+  .leader  { stroke: var(--muted); stroke-width: 1.1; fill: none; }
+  .bktlab  { fill: var(--text); font-size: 12px; font-weight: 700; }
+  .sep     { stroke: var(--hairline); stroke-width: 1; }
+  .r-state { fill: var(--muted); font-size: 12px; }
+  .r-take  { fill: var(--accent); font-size: 12.5px; font-weight: 700; }
+  .fallback {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.35;
+    text-align: center;
+  }
+  .fallback a { color: var(--ink); }
+</style>
+</head>
+<body>
+<!-- Everything from here to </div> is REAL base SVG drawn at the initial state
+     q = 5 (the profit-maximizing output), so a no-JS reader sees the complete
+     chart. -->
+<div class="fig">
+  <svg id="fig" viewBox="0 0 440 540" role="group"
+       aria-label="A price-searcher's demand, marginal revenue, marginal cost, and average cost curves. Marginal revenue lies below demand and bisects it, crossing marginal cost at five units of output, a height of eleven dollars. Reading price up from that point to the demand curve gives sixteen dollars; average cost at five units is fifteen dollars, so profit per unit is one dollar. A sixth unit would cost about twelve dollars to make but is worth about sixteen dollars to buyers -- it goes unmade because marginal revenue, not price, guides the seller. Drag the output handle to explore other quantities.">
+    <title>Price-searcher's profit-maximizing output and price</title>
+    <defs>
+      <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+      <marker id="arrowLeader" markerWidth="7" markerHeight="7" refX="5" refY="3.5"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L7,3.5 L0,7 Z" fill="#5c6066" />
+      </marker>
+    </defs>
+
+    <!-- axes; horizontal axis is the price-zero baseline (MR is allowed to dip
+         below it into blank space); vertical axis only runs upward from zero -->
+    <line class="axis" x1="70" y1="336" x2="421" y2="336" marker-end="url(#arrow)" />
+    <line class="axis" x1="70" y1="336" x2="70"  y2="45"  marker-end="url(#arrow)" />
+
+    <!-- ===== curves (fixed; drawn before dots/labels) ===== -->
+    <!-- AC: U-shaped, AC(5)=$15, min ~$14.1 near Q~7.8; MC cuts AC at that min -->
+    <path class="ac" d="M129.8,66.5 L137.6,84.4 L145.4,98.4 L153.2,109.4 L161.0,118.4 L168.8,125.6 L176.6,131.6 L184.4,136.5 L192.2,140.6 L200.0,144.0 L207.8,146.8 L215.6,149.1 L223.4,151.0 L231.2,152.4 L239.0,153.6 L246.8,154.5 L254.6,155.1 L262.4,155.5 L270.2,155.7 L278.0,155.6 L285.8,155.5 L293.6,155.1 L301.4,154.6 L309.2,154.0 L317.0,153.2 L324.8,152.4 L332.6,151.4 L340.4,150.3 L348.2,149.1 L356.0,147.8 L363.8,146.5 L371.6,145.0 L379.4,143.5 L387.2,141.9 L395.0,140.2" />
+    <!-- MC: rising, convex; MC(5)=$11=MR(5), MC(6)=$12 (the forgone-unit cost) -->
+    <path class="mc" d="M77.8,238.2 L90.8,235.0 L103.8,231.4 L116.8,227.6 L129.8,223.4 L142.8,218.9 L155.8,214.0 L168.8,208.9 L181.8,203.4 L194.8,197.6 L207.8,191.5 L220.8,185.1 L233.8,178.3 L246.8,171.2 L259.8,163.8 L272.8,156.1 L285.8,148.1 L298.8,139.8 L311.8,131.1 L324.8,122.1 L337.8,112.8 L350.8,103.1 L363.8,93.2 L376.8,82.9 L389.8,72.3 L395.0,68.0" />
+    <!-- AR / Demand: P = 21 - Q, from (0,21) to (12.5,8.5) -->
+    <path class="ar" d="M70.0,67.2 L395.0,227.2" />
+    <!-- MR: P = 21 - 2Q, same intercept, double slope; dives below the x-axis
+         past its Q=10.5 zero-crossing (matches the interactive-spec inventory) -->
+    <path class="mr" d="M70.0,67.2 L395.0,387.2" />
+
+    <!-- ===== FIXED 6th-unit forgone-unit marker (independent of the drag
+         handle -- always shown, like a floor reference) ===== -->
+    <line class="fixdrop" x1="226" y1="336"   x2="226" y2="182.4" />
+    <line class="fixdrop" x1="70"  y1="182.4" x2="226" y2="182.4" />
+    <circle class="fixdot" cx="226" cy="182.4" r="3.2" />
+    <path class="leader" d="M292,245 L230,188" marker-end="url(#arrowLeader)" />
+    <text class="annot" x="270" y="238" text-anchor="start">
+      <tspan x="270" dy="0">6th unit: worth &#8776;$16,</tspan>
+      <tspan x="270" dy="14">costs only &#8776;$12 &#8212;</tspan>
+      <tspan x="270" dy="14">goes unmade</tspan>
+    </text>
+
+    <!-- ===== FIXED profit-max annotation (points at the permanent MR=MC
+         crossing of the MC/MR curves -- true regardless of drag position) === -->
+    <path class="leader" d="M176,251 L199,201" marker-end="url(#arrowLeader)" />
+    <text class="annot" x="85" y="260" text-anchor="start">
+      <tspan x="85" dy="0">profit-max: MR = MC</tspan>
+      <tspan x="85" dy="14">(read price up to demand)</tspan>
+    </text>
+
+    <!-- y-axis tick marks + value labels: $16, $15, $12, $11, and 0 -->
+    <line class="axis" x1="66" y1="131.2" x2="70" y2="131.2" />
+    <line class="axis" x1="66" y1="144.0" x2="70" y2="144.0" />
+    <line class="axis" x1="66" y1="182.4" x2="70" y2="182.4" />
+    <line class="axis" x1="66" y1="195.2" x2="70" y2="195.2" />
+    <text class="ylab" x="61" y="134.5" text-anchor="end">$16</text>
+    <text class="ylab" x="61" y="147.3" text-anchor="end">$15</text>
+    <text class="ylab" x="61" y="185.7" text-anchor="end">$12</text>
+    <text class="ylab" x="61" y="198.5" text-anchor="end">$11</text>
+    <text class="ylab" x="61" y="339.3" text-anchor="end">0</text>
+
+    <!-- x-axis tick labels: 5 (the profit-max output) and 6 (the forgone unit) -->
+    <text class="ylab" x="200" y="352" text-anchor="middle">5</text>
+    <text class="ylab" x="226" y="352" text-anchor="middle">6</text>
+
+    <!-- axis titles -->
+    <text class="axlabel" x="245" y="414" text-anchor="middle">Output</text>
+    <text class="axlabel" x="20" y="200" text-anchor="middle"
+          transform="rotate(-90 20 200)">Price (dollars)</text>
+
+    <!-- curve labels (clear of every line; see build notes for clearance checks) -->
+    <text class="clab" x="250" y="212" text-anchor="start" fill="#1a1c1e">D (Average Revenue)</text>
+    <text class="clab" x="310" y="397" text-anchor="start" fill="#1a1c1e">Marginal Revenue</text>
+    <text class="clab" x="300" y="55"  text-anchor="start" fill="#b07a2c">Marginal Cost</text>
+    <text class="clab" x="325" y="139" text-anchor="start" fill="#5c6066" font-size="10.5px">Average Cost</text>
+
+    <!-- ===== dynamic elements (q = 5 default; script moves these) ===== -->
+    <!-- vertical dropline from the axis up to the topmost of the four points -->
+    <line id="qDrop" class="drop" x1="200" y1="336" x2="200" y2="131.2" />
+
+    <!-- horizontal price dropline (price is read UP to demand) + live label -->
+    <line id="priceDrop" class="drop" x1="70" y1="131.2" x2="200" y2="131.2" />
+    <text id="priceVal" class="qlab" x="61" y="128" text-anchor="end" fill="#1a1c1e">$16</text>
+
+    <!-- the four tracked points along the current-output dropline -->
+    <circle id="acDot" class="acDot" cx="200" cy="144.0"  r="3.6" />
+    <circle id="mrDot" class="mrDot" cx="200" cy="195.2"  r="3.4" />
+    <circle id="mcDot" class="mcDot snap" cx="200" cy="195.2" r="4.6" />
+    <circle id="arDot" class="arDot" cx="200" cy="131.2"  r="4.6" />
+
+    <!-- profit/loss bracket, offset to the right of the output line -->
+    <line id="bktTop" class="bracket" x1="212" y1="131.2" x2="220" y2="131.2" />
+    <line id="bktBot" class="bracket" x1="212" y1="144.0" x2="220" y2="144.0" />
+    <line id="bktMid" class="bracket" x1="216" y1="131.2" x2="216" y2="144.0" />
+    <text id="bktLab" class="bktlab" x="224" y="141" text-anchor="start">profit/unit = $1</text>
+
+    <!-- q foot label -->
+    <text id="qFoot" class="qlab" x="200" y="368" text-anchor="middle">5</text>
+
+    <!-- ===== hit target + keyboard proxy (drawn last, on top) ===== -->
+    <line id="qHit" class="hit-line" x1="200" y1="336" x2="200" y2="52" />
+    <circle id="qGrip" class="grip qgrip" cx="200" cy="336" r="5.5" />
+    <circle id="qFocus" class="hit focus qf" cx="200" cy="336" r="22"
+            tabindex="0" role="slider" aria-label="Output (units)"
+            aria-valuemin="2.5" aria-valuemax="10" aria-valuenow="5"
+            aria-valuetext="5 units. Price $16, average cost $15, MR = MC = $11. Profit per unit $1 -- this is the profit-maximizing output." />
+
+    <!-- readout band: hairline separator, muted STATE line, accent TAKEAWAY line -->
+    <line class="sep" x1="44" y1="426" x2="396" y2="426" />
+    <text class="r-state" x="220" y="448" text-anchor="middle">
+      <tspan id="rState1" x="220" dy="0">At Q = 5: price $16, average cost $15,</tspan>
+      <tspan id="rState2" x="220" dy="17">MR = MC &#8776; $11.</tspan>
+    </text>
+    <text class="r-take" x="220" y="490" text-anchor="middle">
+      <tspan id="rTake1" x="220" dy="0">MR = MC &#8212; profit-maximizing output;</tspan>
+      <tspan id="rTake2" x="220" dy="17">price is read up to demand at $16, for $1 profit per unit.</tspan>
+    </text>
+  </svg>
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame is a still image: a
+    price-searcher produces 5 units, where marginal revenue equals marginal
+    cost at $11; reading up to demand gives a price of $16, one dollar above
+    the $15 average cost. A sixth unit would cost about $12 but is worth about
+    $16 to buyers -- it goes unmade. You can also
+    <a href="t08-price-searcher.svg">open the static figure</a>.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var svg       = document.getElementById('fig');
+  var qDrop     = document.getElementById('qDrop');
+  var priceDrop = document.getElementById('priceDrop');
+  var priceVal  = document.getElementById('priceVal');
+  var acDot     = document.getElementById('acDot');
+  var mrDot     = document.getElementById('mrDot');
+  var mcDot     = document.getElementById('mcDot');
+  var arDot     = document.getElementById('arDot');
+  var bktTop    = document.getElementById('bktTop');
+  var bktBot    = document.getElementById('bktBot');
+  var bktMid    = document.getElementById('bktMid');
+  var bktLab    = document.getElementById('bktLab');
+  var qFoot     = document.getElementById('qFoot');
+  var qHit      = document.getElementById('qHit');
+  var qGrip     = document.getElementById('qGrip');
+  var qFocus    = document.getElementById('qFocus');
+  var rState1   = document.getElementById('rState1');
+  var rState2   = document.getElementById('rState2');
+  var rTake1    = document.getElementById('rTake1');
+  var rTake2    = document.getElementById('rTake2');
+
+  // --- ONE cost/demand function set (mirrors the static t08-price-searcher.tex) ---
+  function AR(q) { return 21 - q; }
+  function MR(q) { return 21 - 2 * q; }
+  function MC(q) { return 7.5 + 0.45 * q + 0.05 * q * q; }
+  function AC(q) { return 29.79 / q + 7.5 + 0.225 * q + 0.016667 * q * q; }
+
+  // --- pixel frame (mirrors the SVG markup) ---
+  var X0 = 70, Y0 = 336, S = 26, K = 12.8;
+  function px(q) { return X0 + S * q; }
+  function py(v) { return Y0 - K * v; }
+  function qFromX(x) { return (x - X0) / S; }
+
+  var QLO = 2.5, QHI = 10, QSTAR = 5;
+
+  // state
+  var q = QSTAR;
+
+  function money(v) {
+    var r = Math.round(v);
+    return (Math.abs(v - r) < 0.005) ? ('$' + r) : ('$' + v.toFixed(2));
+  }
+  function clamp(v, lo, hi) { return v < lo ? lo : (v > hi ? hi : v); }
+
+  var spt = svg.createSVGPoint();
+  function toSvg(evt) {
+    spt.x = evt.clientX; spt.y = evt.clientY;
+    return spt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+
+  function render() {
+    var pxq = px(q);
+    var arq = AR(q), acq = AC(q), mcq = MC(q), mrq = MR(q);
+    var yAR = py(arq), yAC = py(acq), yMC = py(mcq), yMR = py(mrq);
+    var atOpt = Math.abs(q - QSTAR) < 0.15;
+    var yTop = Math.min(yAR, yAC, yMC, yMR);
+
+    qDrop.setAttribute('x1', pxq); qDrop.setAttribute('x2', pxq);
+    qDrop.setAttribute('y2', yTop);
+
+    priceDrop.setAttribute('x2', pxq); priceDrop.setAttribute('y1', yAR);
+    priceDrop.setAttribute('y2', yAR);
+    priceVal.setAttribute('y', yAR - 3.5);
+    priceVal.textContent = money(arq);
+
+    arDot.setAttribute('cx', pxq); arDot.setAttribute('cy', yAR);
+    acDot.setAttribute('cx', pxq); acDot.setAttribute('cy', yAC);
+    mcDot.setAttribute('cx', pxq); mcDot.setAttribute('cy', yMC);
+    mrDot.setAttribute('cx', pxq); mrDot.setAttribute('cy', yMR);
+    mcDot.classList.toggle('snap', atOpt);
+    mrDot.classList.toggle('snap', atOpt);
+
+    // profit/loss bracket, offset to the right of the output line
+    var bx = pxq + 12, bx2 = pxq + 20;
+    var isProfit = arq >= acq;
+    var gap = Math.abs(arq - acq);
+    bktTop.setAttribute('x1', bx); bktTop.setAttribute('x2', bx2);
+    bktTop.setAttribute('y1', yAR); bktTop.setAttribute('y2', yAR);
+    bktBot.setAttribute('x1', bx); bktBot.setAttribute('x2', bx2);
+    bktBot.setAttribute('y1', yAC); bktBot.setAttribute('y2', yAC);
+    bktMid.setAttribute('x1', bx2); bktMid.setAttribute('x2', bx2);
+    bktMid.setAttribute('y1', Math.min(yAR, yAC)); bktMid.setAttribute('y2', Math.max(yAR, yAC));
+    [bktTop, bktBot, bktMid].forEach(function (el) { el.classList.toggle('loss', !isProfit); });
+    bktLab.setAttribute('x', bx2 + 5);
+    bktLab.setAttribute('y', (yAR + yAC) / 2 + 4);
+    bktLab.textContent = (isProfit ? 'profit/unit = ' : 'loss/unit = ') + money(gap);
+
+    qFoot.setAttribute('x', pxq);
+    qFoot.textContent = (Math.abs(q - Math.round(q)) < 0.05) ? String(Math.round(q)) : q.toFixed(1);
+    qHit.setAttribute('x1', pxq); qHit.setAttribute('x2', pxq);
+    qGrip.setAttribute('cx', pxq); qFocus.setAttribute('cx', pxq);
+
+    // ---- two-line readout ----
+    var s1, s2, t1, t2;
+    var qLab = qFoot.textContent;
+    if (atOpt) {
+      s1 = 'At Q = 5: price $16, average cost $15,';
+      s2 = 'MR = MC ≈ $11.';
+      t1 = 'MR = MC — profit-maximizing output;';
+      t2 = 'price is read up to demand at $16, for $1 profit per unit.';
+    } else if (Math.abs(q - 6) < 0.15) {
+      s1 = 'At Q = 6: marginal cost ≈ $12,';
+      s2 = 'marginal revenue below it.';
+      t1 = 'The 6th unit is worth about $16 to buyers but the firm';
+      t2 = 'won’t make it — MR sits below price, so valuable units go unproduced.';
+    } else if (Math.abs(q - 3) < 0.15) {
+      s1 = 'At Q = 3: MR is above MC.';
+      s2 = '';
+      t1 = 'MR still exceeds MC — the firm should';
+      t2 = 'expand toward Q = 5.';
+    } else if (q > QSTAR) {
+      s1 = 'At Q = ' + qLab + ': marginal cost ' + money(mcq) + ',';
+      s2 = 'marginal revenue ' + money(mrq) + ' — MR is below MC.';
+      t1 = 'Producing here costs more at the margin than it';
+      t2 = 'earns — pull output back toward Q = 5.';
+    } else {
+      s1 = 'At Q = ' + qLab + ': marginal revenue ' + money(mrq) + ',';
+      s2 = 'marginal cost ' + money(mcq) + ' — MR exceeds MC.';
+      t1 = 'MR still exceeds MC — expand output toward Q = 5,';
+      t2 = 'where marginal revenue meets marginal cost.';
+    }
+    rState1.textContent = s1;
+    rState2.textContent = s2;
+    rTake1.textContent = t1;
+    rTake2.textContent = t2;
+
+    qFocus.setAttribute('aria-valuenow', q.toFixed(1));
+    qFocus.setAttribute('aria-valuetext',
+      qLab + ' units. Price ' + money(arq) + ', average cost ' + money(acq) +
+      ', MR ' + money(mrq) + ', MC ' + money(mcq) + '. ' +
+      (s2 ? s1 + ' ' + s2 : s1) + ' ' + t1 + ' ' + t2);
+  }
+
+  // ---- setters ----
+  function setQ(nq) { nq = clamp(nq, QLO, QHI); if (nq !== q) { q = nq; render(); } }
+
+  // ---- pointer drag (with capture so a fast drag can't get stuck) ----
+  var dragging = false, capEl = null, capId = null;
+  function onMove(evt) {
+    if (!dragging) return;
+    evt.preventDefault();
+    var p = toSvg(evt);
+    if (!isNaN(p.x)) setQ(qFromX(p.x));
+  }
+  function onUp() {
+    dragging = false;
+    svg.classList.remove('grabbing-q');
+    if (capEl && capId !== null) { try { capEl.releasePointerCapture(capId); } catch (e) {} }
+    capEl = null; capId = null;
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+  }
+  function onDown(evt) {
+    evt.preventDefault();
+    dragging = true;
+    svg.classList.add('grabbing-q');
+    capEl = evt.currentTarget; capId = evt.pointerId;
+    try { capEl.setPointerCapture(capId); } catch (e) {}
+    onMove(evt);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }
+  qHit.addEventListener('pointerdown', onDown);
+  qGrip.addEventListener('pointerdown', onDown);
+  qFocus.addEventListener('pointerdown', onDown);
+
+  // ---- keyboard: arrow keys step a whole unit ----
+  qFocus.addEventListener('keydown', function (evt) {
+    var nq = q;
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') nq = q + 1;
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') nq = q - 1;
+    else if (evt.key === 'Home') nq = QLO;
+    else if (evt.key === 'End') nq = QHI;
+    else return;
+    evt.preventDefault();
+    setQ(nq);
+  });
+
+  // Debug hook: lets a reviewer screenshot non-initial states via scripting.
+  window.__fig = {
+    set: function (o) { o = o || {}; if (o.q !== undefined) setQ(+o.q); },
+    get: function () { return { q: q, AR: AR(q), AC: AC(q), MC: MC(q), MR: MR(q) }; }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

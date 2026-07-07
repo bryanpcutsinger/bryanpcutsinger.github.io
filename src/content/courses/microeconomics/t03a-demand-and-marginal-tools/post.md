@@ -5,7 +5,7 @@ course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 4 (Thu 9/3)"]
 ue_anchors: ["UE 5", "UE 7"]
 be_anchors: ["BE 2 (unmet-needs/demand-vs-need slice)"]
-word_target: "3500-4500"
+word_target: "3500-5500"
 status: approved        # one-per-lecture split; approved 2026-07-01
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Source-of-truth for the session-4 deck; section headers are claims that map to slide titles. Verbal-marginal throughout: no indifference curves, no measured surplus triangles. Covers the laws of demand, marginal personal worth and verbal consumer surplus, and the cross-cutting marginal toolkit (totals/marginals/averages, the marginal-not-average rule, the equimarginal principle) reused in later topics."
@@ -18,9 +18,32 @@ Last time we built the case that trade creates wealth by moving goods toward who
 
 Keep one puzzle in mind. Almost everyone agrees that people "need" food, housing, medicine, and clean water. Politicians announce national priorities and unmet needs; reports declare that a city needs more parking or more golf courses. Yet the moment you ask "how much, and at what price?" the language of need falls apart. By the end of this post you should see why there is no such thing as a fixed need, only a quantity people will buy at a given price, and why that is not a cold dismissal of human wants but the only honest way to think about them.
 
+<aside class="econ-callout econ-objectives">
+<p class="econ-callout__label">Learning objectives</p>
+<p>By the end of this post you should be able to:</p>
+<ul>
+<li>State the first law of demand and read a demand schedule as the whole set of quantities a buyer would take at each price, not a sequence of purchases over time.</li>
+<li>Tell a change in quantity demanded (a slide along the curve) from a change in demand (a shift of the whole curve), and use the shifters to sort substitutes from complements.</li>
+<li>Explain why the demand curve slopes downward using marginal personal worth and its diminishing as quantity rises, and read that worth as a rate at which one good trades for another.</li>
+<li>Measure a buyer's gain verbally as consumer surplus, total personal worth minus what is paid, and explain why revenue is not a measure of welfare.</li>
+<li>Explain why demand is a rate of consumption over time, not a fixed pile, and distinguish the rate from the stock you would buy or hold.</li>
+<li>Distinguish total, marginal, and average, and make decisions on the marginal rather than the average.</li>
+<li>Apply the equimarginal principle to spread a scarce input across competing uses so its marginal return is equal everywhere.</li>
+<li>Explain why a price is an exchange rate between goods that can exist without money, so the relative price is what governs a choice.</li>
+<li>Explain why there is no such thing as a fixed need, only a quantity people will buy at a given price.</li>
+</ul>
+</aside>
+
 ## At a Higher Price People Buy Less, at a Lower Price They Buy More
 
-Start with what we will call the *first law of demand*: at a higher price, people buy a smaller quantity of a good; at a lower price, they buy a larger quantity, holding everything else the same. That is it. It is the most dependable regularity economists have, and almost nothing in the course will contradict it.
+Start with what we will call the *first law of demand*:
+
+<aside class="econ-callout econ-def">
+<p class="econ-callout__label">Definition</p>
+<p>At a higher price, people buy a smaller quantity of a good; at a lower price, they buy a larger quantity, holding everything else the same.</p>
+</aside>
+
+That is it. It is the most dependable regularity economists have, and almost nothing in the course will contradict it.
 
 The word *demand* needs care, because we use it precisely and the world uses it loosely. By a person's demand for a good I do not mean the single amount they happen to buy at today's price. I mean the whole schedule: how much they would buy at each of the prices they might face. Think of it as a snapshot taken at one moment, showing what the buyer would do across a range of possible prices, not a record of purchases made one after another as price drifts over time. Here is such a schedule for one person's weekly purchases of milk.
 
@@ -39,9 +62,15 @@ The word *demand* needs care, because we use it precisely and the world uses it 
 
 Read this correctly and a few common errors disappear. The schedule is not a story of someone buying one quart this hour, then two the next as the price ticks down; it is a single description of what this buyer would do at each price right now. Plotted on a graph, with price up the vertical axis and quantity along the horizontal, it traces a curve that slopes downward to the right and never upward. The exact shape, whether straight or bowed or stepped, does not matter; what holds in every case is the negative tilt.
 
-![A demand schedule shown as a bar chart with a straight downward-sloping demand line drawn over it: price on the vertical axis, quantity on the horizontal axis. The line starts at the price axis and falls to meet the quantity axis, and each bar's height is the price at that quantity.](/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-demand-curve.svg)
+<figure class="econ-figure" style="margin:1.5em 0;">
+<iframe src="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-demand-curve-interactive.html" title="Drag the point along the demand line to see, at each quantity, the price the buyer will pay; the height of the curve at that unit is its marginal personal worth." loading="lazy" style="width:100%; max-width:480px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-demand-curve-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-demand-curve.svg">view the static figure</a>.</p></iframe>
+<figcaption><strong>The height of the demand curve at any quantity is the marginal personal worth of that unit.</strong> Each bar's height is the most a buyer will pay for that unit, and later units are worth less, so the curve slopes down. Drag the point (or use the arrow keys) to step through the schedule and read the price at each quantity, or the quantity demanded at each price. If the frame does not load, <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-demand-curve-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-demand-curve.svg">view the static figure</a>.</figcaption>
+</figure>
 
-*A demand curve for one buyer, drawn as a straight line over the bars of the demand schedule. The curve slopes downward because each additional unit is worth less than the one before. The height of the curve at any quantity equals the buyer's marginal personal worth of that unit; the horizontal distance at any price equals the quantity demanded at that price.*
+<figure class="econ-figure" style="margin:1.5em 0;">
+<iframe src="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03a-ue5-2-interactive.html" title="Toggle through straight, curved, stepped, and vertical-stretch demand curves to see the one rule every shape obeys: it never slopes upward." loading="lazy" style="width:100%; max-width:480px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03a-ue5-2-interactive.html">Open the interactive figure directly</a>.</p></iframe>
+<figcaption><strong>Demand curves come in many shapes: smooth, curved, straight, even stepped or with a flat vertical stretch where quantity holds over a range of prices.</strong> Every one is a legitimate demand curve for one reason: none of them ever slopes upward. Toggle through the shapes (or use the arrow keys) to see the single rule they all obey. If the frame does not load, <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03a-ue5-2-interactive.html">open the interactive figure directly</a>.</figcaption>
+</figure>
 
 Notice too that "quantity" is richer than a simple count. Suppose someone protests that cheaper vacations should make them take more, yet they still take just one a year, so the law must be wrong. It is not. A larger quantity of vacation can mean a longer one, a fancier one, or a more frequent one, not only a higher number on a calendar. You respond to a lower price by taking more of the good along whatever margin is open to you.
 
@@ -59,19 +88,43 @@ Run a quick test: what raises the demand for wigs? A raise in your salary, a ris
 
 The related-goods case deserves a name of its own. Some goods are *substitutes*: a rise in the price of butter raises the demand for margarine, because people switch toward the cheaper alternative, shifting margarine's whole curve to the right. Other goods are *complements*, used together: a rise in the price of butter lowers the demand for dinner rolls, shifting that curve to the left. How the price of one good shifts the demand for another is how we tell substitutes from complements.
 
-![Two panels showing the distinction between a change in quantity demanded and a change in demand: Panel A shows a point sliding down along a fixed curve when price falls; Panel B shows the entire curve shifting rightward to a new position.](/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-demand-shift-vs-move.svg)
+<figure class="econ-figure" style="margin:1.5em 0;">
+<iframe src="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-demand-shift-vs-move-interactive.html" title="Drag the point in the left panel to slide along a fixed demand curve, or toggle Lower/Higher in the right panel to shift the whole curve" loading="lazy" style="width:100%; max-width:640px; aspect-ratio:16/10; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-demand-shift-vs-move-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-demand-shift-vs-move.svg">view the static figure</a>.</p></iframe>
+<figcaption><strong>A change in the amount demanded is not a change in demand.</strong> Left: a fall in the good's own price moves the buyer along one fixed demand curve; drag the point (or use the arrow keys) to slide it and watch the price/quantity readout update. Right: a change in income, tastes, or a related good's price shifts the whole curve to a new position; toggle Lower/Higher to shift Demand itself while the good's own price is held at $0.50. Same slope, two different causes. If the frame does not load, <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-demand-shift-vs-move-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-demand-shift-vs-move.svg">view the static figure</a>.</figcaption>
+</figure>
 
-*Panel A: a fall in the good's own price moves the buyer from one point to another along the same fixed demand curve — a change in quantity demanded. Panel B: a change in anything other than the good's own price (income, tastes, related-goods prices) shifts the entire curve to a new position — a change in demand itself.*
+<figure class="econ-figure" style="margin:1.5em 0;">
+<iframe src="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-cross-price-interactive.html" title="Toggle butter's price between normal and higher to see margarine demand shift right (a substitute) and dinner-roll demand shift left (a complement)." loading="lazy" style="width:100%; max-width:640px; aspect-ratio:16/10; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-cross-price-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-cross-price.svg">view the static figure</a>.</p></iframe>
+<figcaption><strong>A price change in one good can shift the demand for a completely different good.</strong> When butter gets more expensive, margarine is a substitute, so its whole demand curve shifts right and buyers demand more of it at every price. Dinner rolls are a complement, so their whole demand curve shifts left and buyers demand less of them at every price. Toggle butter's price to see each related good move; the direction of the shift identifies whether the goods are substitutes or complements. If the frame does not load, <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-cross-price-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-cross-price.svg">view the static figure</a>.</figcaption>
+</figure>
 
-![Two panels showing cross-price effects: the left panel shows margarine's demand curve shifting right when butter's price rises (substitutes); the right panel shows dinner-roll demand shifting left when butter's price rises (complements).](/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-cross-price.svg)
+<aside class="econ-callout econ-termset">
+<p class="econ-callout__label">Key terms</p>
+<dl class="econ-term-list">
+<div><dt>Substitutes</dt><dd>Goods people switch between, so a rise in one's price raises demand for the other.</dd></div>
+<div><dt>Complements</dt><dd>Goods used together, so a rise in one's price lowers demand for the other.</dd></div>
+</dl>
+</aside>
 
-*When butter's price rises, consumers switch away from butter. Margarine's demand curve shifts right (substitutes move together in price but opposite in quantity). Dinner rolls, used alongside butter, see their demand curve shift left (complements fall together). The direction of the shift identifies whether goods are substitutes or complements.*
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>Two things happen to the coffee market: first the price of coffee falls, and later a study links coffee to better health. For each event, say whether it slides the buyer along a fixed coffee demand curve or shifts the whole curve, and which one is a change in quantity demanded rather than a change in demand.</p>
+</aside>
 
 ## The Height of the Demand Curve Is What One More Unit Is Worth to You
 
 Why does the demand curve slope downward in the first place? The answer takes a phrase from last time and gives it a sharper edge.
 
-Your *marginal personal worth* of a good is the most you would pay for one more unit of it. On the demand schedule, it is exactly the height of the curve at that quantity. Look again at the milk buyer, now with the worth of each successive quart spelled out.
+Your *marginal personal worth* of a good is the most you would pay for one more unit of it. On the demand schedule, it is exactly the height of the curve at that quantity.
+
+<aside class="econ-callout econ-termset">
+<p class="econ-callout__label">Key term</p>
+<dl class="econ-term-list">
+<div><dt>Marginal Personal Worth</dt><dd>The most you would pay for one more unit of a good.</dd></div>
+</dl>
+</aside>
+
+Look again at the milk buyer, now with the worth of each successive quart spelled out.
 
 | Price | Quantity | Marginal personal worth | Total personal worth |
 |---|---|---|---|
@@ -102,6 +155,13 @@ A buyer keeps buying as long as the next unit is worth at least its price, and s
 
 Here is the same schedule with two more columns: the *total market value* the buyer pays (price times quantity) and the *consumer surplus*, the buyer's net gain, total personal worth minus what was paid.
 
+<aside class="econ-callout econ-termset">
+<p class="econ-callout__label">Key term</p>
+<dl class="econ-term-list">
+<div><dt>Consumer Surplus</dt><dd>A buyer's net gain, total personal worth minus what was paid.</dd></div>
+</dl>
+</aside>
+
 | Price | Quantity | Total personal worth | Marginal worth | Total market value | Consumer surplus |
 |---|---|---|---|---|---|
 | $1.00 | 1 | $1.00 | $1.00 | $1.00 | $0.00 |
@@ -117,15 +177,22 @@ Here is the same schedule with two more columns: the *total market value* the bu
 
 At $0.50, the buyer pays $3.00 for milk they value at $4.50, walking away with a net gain worth $1.50, which is the whole point of buying. We keep this verbal and arithmetic on purpose: *consumer surplus* is simply total personal worth minus total expenditure, a gap, not a geometric area you measure off a diagram. We will use the idea again when we judge how sellers with market power price their goods, but we will not turn it into a machine for calculating "deadweight loss."
 
-![A demand curve with three labeled regions: the entire area under the curve labeled total personal worth, a rectangle below the price line labeled total market value, and the gap between the two labeled consumer surplus — the buyer's net gain.](/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-marginal-worths.svg)
-
-*At market price P, the buyer purchases quantity Q. The total area under the demand curve (from zero to Q) is total personal worth — the sum of marginal worths for each unit. The price-times-quantity rectangle is total market value paid. Consumer surplus, the buyer's net gain, is the gap between the two: what the goods are worth minus what was paid.*
+<figure class="econ-figure" style="margin:1.5em 0;">
+<iframe src="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-marginal-worths-interactive.html" title="Drag the handle down and to the right to take more units at a lower price and watch total personal worth split into the market value paid and the consumer surplus gained." loading="lazy" style="width:100%; max-width:480px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-marginal-worths-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-marginal-worths.svg">view the static figure</a>.</p></iframe>
+<figcaption><strong>Total personal worth splits into the market value paid plus the consumer surplus the buyer keeps.</strong> The height of each step is the marginal personal worth of that unit; adding the steps up to the quantity bought gives total personal worth, which divides into the money spent (price times quantity, the market value) and the buyer's net gain (consumer surplus). Drag the handle down and to the right (or use the arrow keys) to take more units at a lower price and see the two areas change. If the frame does not load, <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-marginal-worths-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-marginal-worths.svg">view the static figure</a>.</figcaption>
+</figure>
 
 The surplus column also exposes a fallacy that sounds reasonable and is dead wrong. A governor once defended cutting back farm labor by noting that the smaller crop sold for more total dollars than the larger crop had, so, he claimed, no harm was done. The error is treating total market value, the revenue, as a measure of welfare. Read down the table: market value rises, peaks, and falls as quantity grows, but total personal worth and consumer surplus rise the whole way. A smaller quantity always means smaller total worth and smaller surplus, even when its market value is higher. Destroying part of a crop can raise its revenue while making everyone, growers and eaters together, worse off. Revenue is not welfare, and confusing the two is one of the most expensive mistakes in policy.
 
-![Two side-by-side panels comparing a small quantity at a high price versus a large quantity at a low price, each showing total worth divided into market value and consumer surplus, illustrating that total worth and surplus are larger with more quantity even when market value is similar.](/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-surplus-two-panel.svg)
+<figure class="econ-figure" style="margin:1.5em 0;">
+<iframe src="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-surplus-two-panel-interactive.html" title="Drag either point to compare buyer's surplus and market value at a small vs. a large quantity" loading="lazy" style="width:100%; max-width:640px; aspect-ratio:16/10; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-surplus-two-panel-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-surplus-two-panel.svg">view the static figure</a>.</p></iframe>
+<figcaption><strong>A smaller quantity always means a smaller total worth and a smaller surplus.</strong> Both panels show the same demand curve. The left panel is a small quantity at a high price; the right is a large quantity at a low price. In each, the gray rectangle below the price line is the market value and the tinted triangle above it is the buyer's surplus. Drag either point (or tab to the control and use the arrow keys) to sweep between the two states and watch both areas change, and notice that market value can end up smaller at the larger quantity, even though total worth and surplus are always bigger. If the frame does not load, <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-surplus-two-panel-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-surplus-two-panel.svg">view the static figure</a>.</figcaption>
+</figure>
 
-*Left panel: a small quantity sold at a high price. Right panel: a larger quantity sold at a lower price. In both panels the area under the demand curve (total personal worth) splits into the price rectangle (market value) and the consumer surplus above it. Total personal worth and consumer surplus are larger in the right panel even though market value may be similar or even smaller — smaller quantity always means smaller total worth and smaller surplus.*
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>A frost destroys part of the orange crop, and the smaller harvest sells for more total dollars than the full crop did. A grower concludes that no one was made worse off. Using total personal worth and consumer surplus, explain what that argument overlooks.</p>
+</aside>
 
 ## Demand Is a Rate, Not a Pile
 
@@ -139,7 +206,18 @@ Because demand is a rate, not a weekly delivery slip, you cannot read a year's d
 
 One general-purpose habit of thought underlies not just demand but cost, output, and hiring: keep your eye on the *marginal*. It is worth pulling out of the demand story and setting down on its own, because you will reach for it again and again this term.
 
-Three numbers travel together for any quantity: the *total* is the running sum; the *marginal* is the change in the total when you add one more unit; the *average* is the total divided by the number of units. Confusing them is a reliable way to make a bad decision. The cleanest illustration is test scores.
+Three numbers travel together for any quantity: the *total* is the running sum; the *marginal* is the change in the total when you add one more unit; the *average* is the total divided by the number of units. Confusing them is a reliable way to make a bad decision.
+
+<aside class="econ-callout econ-termset">
+<p class="econ-callout__label">Key terms</p>
+<dl class="econ-term-list">
+<div><dt>Total</dt><dd>The running sum across all the units.</dd></div>
+<div><dt>Marginal</dt><dd>The change in the total when you add one more unit.</dd></div>
+<div><dt>Average</dt><dd>The total divided by the number of units.</dd></div>
+</dl>
+</aside>
+
+The cleanest illustration is test scores.
 
 | Tests taken | Marginal (this test's score) | Total | Average |
 |---|---|---|---|
@@ -175,6 +253,11 @@ One more warning, because it is the kind of error that costs real money. The mar
 The second clerk's marginal contribution is $800, the rise in the store's total, even if that clerk personally rang up more than $800, because better service from two clerks lifts everyone's sales. "Who did it?" is the wrong question; "how much did the total change?" is the right one.
 
 Now the decision rule. Choices should be made on the margin, not the average. A hospital bills $15,000 for a five-day stay, which averages $3,000 a day. Should you stay a sixth day to be safe? The average tells you nothing useful. The decision turns on the marginal cost and marginal benefit of that one extra day, which may be far below $3,000, since the bulk of the cost was the surgery on day one, and near zero in benefit if you have already recovered. The average summarizes the past; only the marginal speaks to the next choice. The same logic explains why we add a seatbelt to every car but an airbag only where its marginal safety gain justifies its marginal cost. Averages describe; marginals decide.
+
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>A yearlong gym membership costs $600, which works out to $50 a month. A member is deciding whether to keep it for one more month. Why is the $50 average the wrong number to look at, and what should he compare instead?</p>
+</aside>
 
 ## To Get the Most from Limited Means, Equalize the Marginal Returns
 
@@ -223,19 +306,40 @@ Dump all ten into A and you collect $110; all ten into B, $127.50. Since B's tot
 
 The result, $150.50, beats either machine alone, and you end with the two machines' marginal returns roughly equalized. That is the *equimarginal principle*: to maximize a total, spread a scarce input so the marginal return is the same in every use. Its mirror is just as useful: to produce a given output at the lowest total cost across several plants, equalize the marginal cost in each. This is the logic behind how a firm chooses its output, spreads production across factories, and decides how many workers to hire, and we will meet it again and again.
 
-![A two-machine allocation diagram showing tokens shifted from a machine with lower marginal return to one with higher marginal return, with the optimum reached when marginal returns are equalized across both uses.](/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-equimarginal.svg)
+<aside class="econ-callout econ-termset">
+<p class="econ-callout__label">Key term</p>
+<dl class="econ-term-list">
+<div><dt>Equimarginal Principle</dt><dd>Spreading a scarce input so its marginal return is equal in every use gives the largest total.</dd></div>
+</dl>
+</aside>
 
-*Allocating a fixed number of tokens between two machines. If machine A's marginal return exceeds machine B's, moving a token from B to A raises total output. Shifting continues until marginal returns are equalized — the equimarginal principle. The same logic governs any fixed resource spread across competing uses.*
+<figure class="econ-figure" style="margin:1.5em 0;">
+<iframe src="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-equimarginal-interactive.html" title="Drag the split of ten tokens between two machines to see the total payoff and the two marginal payoffs; the total is largest, and the marginals are as equal as an integer split allows, at four tokens in A and six in B." loading="lazy" style="width:100%; max-width:640px; aspect-ratio:16/10; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-equimarginal-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-equimarginal.svg">view the static figure</a>.</p></iframe>
+<figcaption><strong>Split the resource so the marginal payoffs are as equal as they can be.</strong> Machine A's payoffs start higher but fall faster than B's, so the best use of ten tokens puts four in A and six in B, the split that makes the two marginal payoffs as equal as an integer allocation allows and maximizes the total ($150.50). Drag the split (or use the arrow keys) to send tokens to A or B and watch the total and the equalized-marginal line respond. The same logic governs any scarce resource spread across competing uses. If the frame does not load, <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-equimarginal-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-equimarginal.svg">view the static figure</a>.</figcaption>
+</figure>
+
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>You have a fixed number of study hours to split between two courses, and each hour helps less than the one before. One course would earn more total points if you gave it every hour. Why is loading all your hours into that course still the wrong move, and what rule tells you where to stop?</p>
+</aside>
 
 Note one more pattern in the kind of production table behind these machines, because we will need it when we study costs. Feeding more of a variable input into a fixed setup gives *diminishing marginal returns*: the marginal product rises at first, then falls, and total output eventually peaks and even declines. Marginal cuts the average at the average's highest point, and total output stops rising exactly where the marginal product reaches zero. That machinery is the foundation of the cost curves we will build later.
 
-![Three curves on one panel showing total product, marginal product, and average product of a variable input; marginal product peaks first and then cuts through the average product curve at its peak, after which all three decline.](/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-product-curves.svg)
-
-*Total, marginal, and average product as a variable input (say, labor) is added to a fixed setup. Marginal product — the extra output from one more unit — rises at first (specialization gains), peaks, then falls (diminishing returns). Average product peaks later, exactly where the marginal curve crosses it from above. This shape — marginal cuts average at its maximum — recurs in cost curves later in the course.*
+<figure class="econ-figure" style="margin:1.5em 0;">
+<iframe src="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-product-curves-interactive.html" title="Drag the labor handle to sweep total product, marginal product, and average product together, and watch marginal cut average exactly at the average's peak." loading="lazy" style="width:100%; max-width:480px; aspect-ratio:5/7; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-product-curves-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-product-curves.svg">view the static figure</a>.</p></iframe>
+<figcaption><strong>Marginal product cuts average product exactly at the average's peak, and total product peaks exactly where marginal product hits zero.</strong> Total product (top) rises fastest while marginal product (gold) is rising, keeps rising, more slowly, while marginal is falling but still positive, and stops rising the instant marginal reaches zero. Average product (black) climbs as long as marginal is above it and falls once marginal drops below it. Drag the handle (or use the arrow keys) to sweep a labor value through both stacked plots. This marginal-cuts-average shape recurs in the cost curves later in the course. If the frame does not load, <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-product-curves-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-product-curves.svg">view the static figure</a>.</figcaption>
+</figure>
 
 ## A Price Is an Exchange Rate, and It Can Exist Without Money
 
 Underneath every dollar figure is something more basic. A *price* is an exchange rate between goods, how much of one thing you give up to get another. Money is just one good we happen to quote prices in, which means prices can exist with no money at all. Picture a setting with no money in play, children swapping snacks at lunch or a disaster zone where cash has stopped circulating: a bottle of water might trade for three granola bars, and that granola-per-bottle rate is a real price, every bit as binding as a dollar tag. So the price that actually governs your choices is the *relative* price, what a good costs in terms of other goods, not its dollar tag in isolation. We will lean on that idea heavily when we take up elasticity and its applications next.
+
+<aside class="econ-callout econ-termset">
+<p class="econ-callout__label">Key term</p>
+<dl class="econ-term-list">
+<div><dt>Relative Price</dt><dd>How much of other goods you give up to get one unit of a good.</dd></div>
+</dl>
+</aside>
 
 ## There Is No Such Thing as a Fixed Need
 
@@ -247,8 +351,19 @@ Because there is no fixed need, the political language built on it tends to misl
 
 A bonus from taking this seriously: the law of demand turns out to be nearly universal. The number of children people choose to have, the number of immigrants who seek entry, the rate of divorces, the demand for pianos, for winning sports teams, for high grades, even for medical procedures, all respond to the price, broadly understood, of getting them. Wherever a desire confronts a cost, the law of demand is at work.
 
-## What's Next
-
-Step back and this half of the topic has a clean shape. The first law of demand says quantity falls as price rises, and the whole point of buying is that you pay less than the goods are worth to you. A change in the good's own price slides you along the curve; anything else shifts it, and keeping those two apart is the difference between clear thinking and confusion. Marginal worth, falling as you get more, is what tilts the curve downward. And the marginal-not-average habit, together with the equimarginal principle, is a general tool we will reuse for cost, output, and hiring all term.
-
-Next we sharpen the first law into a measurement. Knowing that quantity falls when price rises is not the same as knowing by how much, and that number, elasticity, decides whether a seller who cuts price ends up richer or poorer. From there we turn to a set of applications built on the relative-price lens, capped by a striking theorem about why the best produce so often gets shipped away, all of which show that the real price of anything is always its price in terms of other goods.
+<div class="econ-review">
+<section class="econ-review__section">
+<h3>Key takeaways</h3>
+<ul>
+<li><strong>The first law of demand is the most reliable regularity in economics.</strong> At a higher price people buy a smaller quantity and at a lower price a larger one, and a demand curve is the whole schedule of what a buyer would do at each price right now.</li>
+<li><strong>Keep a slide apart from a shift.</strong> A change in the good's own price slides you along a fixed curve, a change in quantity demanded; anything else moves the whole curve, a change in demand, and how one good's price shifts another's demand tells substitutes from complements.</li>
+<li><strong>Diminishing marginal worth tilts the curve down.</strong> The height of the demand curve is what one more unit is worth to you, that worth falls as you get more, and it can be read as a rate at which one good trades for another.</li>
+<li><strong>Buyers gain because they pay less than the goods are worth.</strong> Consumer surplus is total personal worth minus what was paid, a gap you can total without a triangle, and it is why revenue is not a measure of welfare.</li>
+<li><strong>Demand is a rate, not a pile.</strong> It describes a flow of consumption over time, which you have to keep separate from the stock you would buy or already hold.</li>
+<li><strong>Decide on the marginal, never the average.</strong> The total, marginal, and average travel together, the marginal is the change in the total, and only the marginal speaks to the next choice.</li>
+<li><strong>Equalize the marginal returns.</strong> To get the most from a scarce input spread across competing uses, allocate it so the marginal return is the same in every use.</li>
+<li><strong>A price is an exchange rate that can exist without money.</strong> What governs your choice is the relative price, what a good costs in terms of other goods, not its dollar tag in isolation.</li>
+<li><strong>There is no such thing as a fixed need.</strong> The amount of any good a person or society takes depends on its price, always a matter of how much at what price, never all-or-none.</li>
+</ul>
+</section>
+</div>

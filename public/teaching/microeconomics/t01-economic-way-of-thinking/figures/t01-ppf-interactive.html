@@ -53,7 +53,9 @@
     padding: 8px;
     -webkit-font-smoothing: antialiased;
   }
-  .ppf { width: 100%; max-width: 560px; }
+  /* min-width:0 defeats the flexbox min-width:auto default so the figure
+     scales DOWN to narrow viewports instead of clipping the right side. */
+  .ppf { width: 100%; max-width: 560px; min-width: 0; }
   svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
 
   /* structural strokes */

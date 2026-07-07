@@ -18,6 +18,18 @@ Almost every decision worth making spans time. You spend money now to earn a deg
 
 This topic gives you the tool that solves it. It is called *present value*, and it puts amounts arriving at different times onto a single ruler so they can be compared. Out of that one idea comes a surprising amount: what interest really is and where it comes from, how to price a loan, why a future payment is worth less than a present one, and why the interest rate you pick can swing the answer to a public debate. We build the arithmetic first in this post, then point it at durable assets, your own earnings, profit, and politics in the next. Everything here is one tool used over and over; state it clearly now and the rest of the topic falls out of it.
 
+<aside class="econ-callout econ-objectives">
+<p class="econ-callout__label">Learning objectives</p>
+<p>By the end of this post you should be able to:</p>
+<ul>
+<li>Use the formula P × (1 + r) = F to grow a present amount into a future one, and apply the Rule of 72 to estimate how fast a sum doubles.</li>
+<li>Discount a future amount back to its present value, and explain why that value shrinks as the horizon lengthens or the interest rate rises.</li>
+<li>Explain where interest comes from, the productivity of investment and time preference, and how the loan market sets it as the price of current income.</li>
+<li>Value a stream of payments as an annuity or a perpetuity, and show how a level loan payment splits into interest and principal.</li>
+<li>Explain why interest is a real cost of waiting even when you never borrow, and use capital value to judge whether a venture that spans years is worthwhile.</li>
+</ul>
+</aside>
+
 ## A Future Dollar Is Worth Less Than a Present Dollar
 
 Start with the most basic move. If you put $100 in an account paying 6 percent a year, in a year you have $106. The thing that turned $100 into $106 is the *rate of interest*, the rate at which a present amount grows into a future one. Write it as a formula and the whole topic unfolds from it:
@@ -25,6 +37,14 @@ Start with the most basic move. If you put $100 in an account paying 6 percent a
 P × (1 + r) = F
 
 Here P is the present amount, r is the interest rate, and F is the future amount. With P = $100 and r = 0.06, F comes out to $106. This forward direction, present amount to future amount, is *compounding*, and over many years it does more than beginners expect, because each year's interest itself earns interest. The table below shows what $1 grows to over time at various rates. Read it as a multiplier: at 7 percent for ten years, $1 becomes $1.97, so $350 becomes about $690.
+
+<aside class="econ-callout econ-termset">
+<p class="econ-callout__label">Key terms</p>
+<dl class="econ-term-list">
+<div><dt>Interest Rate</dt><dd>The rate at which a present amount grows into a future one.</dd></div>
+<div><dt>Compounding</dt><dd>Growth in which each period's interest itself earns interest.</dd></div>
+</dl>
+</aside>
 
 **Future value of $1 (what a present $1 grows to).** Selected rates and years.
 
@@ -40,6 +60,11 @@ Here P is the present amount, r is the interest rate, and F is the future amount
 
 A couple of the entries are worth pausing on, because they show up in questions you will be asked. Put $250 in at 7 percent for three years and you have about $306 ($250 × 1.23). And notice how fast money doubles: at 5 percent, $1 grows past $2 in about fourteen years; at 10 percent, in about seven. That regularity has a handy shortcut called the *Rule of 72*: divide 72 by the interest rate and you get the rough number of years it takes money to double. At 7 percent, 72 ÷ 7 is about ten years. At 12 percent, about six. It is an approximation, but a good enough one to do in your head.
 
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>At 8 percent, about how many years does it take a sum of money to double? Work it out with the Rule of 72, then check your answer against the future-value table above.</p>
+</aside>
+
 Compounding also explains how modest-looking sums become large fortunes. A piece of land bought for $5,000 that is worth $85,000 thirty years later has grown seventeenfold; scan the thirty-year row and you find that a seventeenfold gain corresponds to about 10 percent a year, the kind of return a broad stock-market investment has historically delivered. Compounding is quiet but relentless. The same arithmetic runs in a barnyard: a population of rabbits, or a stored stock of grain that is planted and harvested, grows by a net percentage each year, and that physical growth rate is just an interest rate wearing a different coat. Whenever something you hold compounds at a steady percentage, you are looking at the rate at which a present amount grows into a future one.
 
 ## Present Value Reverses the Arithmetic
@@ -49,6 +74,14 @@ Now run the formula backward. If a future amount F is worth P × (1 + r) when it
 P = F ÷ (1 + r)
 
 Take $220 due one year from now at 10 percent. Its present value is $220 ÷ 1.10 = $200. We say the future $220 has been *discounted* back to a present value of $200. The number you multiply by, 1 ÷ (1 + r), is the *discount factor*; here it is 0.909, so $220 × 0.909 = $200. This is the single most useful operation in finance, because it lets you take any amount arriving at any future date and express it in today's dollars, where it can be compared with anything else.
+
+<aside class="econ-callout econ-termset">
+<p class="econ-callout__label">Key terms</p>
+<dl class="econ-term-list">
+<div><dt>Present Value</dt><dd>Today's worth of an amount arriving in the future, found by discounting.</dd></div>
+<div><dt>Discount Factor</dt><dd>The multiplier 1 ÷ (1 + r) that converts a future dollar into its present value.</dd></div>
+</dl>
+</aside>
 
 The table below gives the discount factors directly. Each entry is the present value of $1 received after the listed number of years. (These are simply the reciprocals of the future-value table above.)
 
@@ -67,6 +100,11 @@ Two patterns in this table are themselves economic lessons. First, hold the rate
 
 Once you can do this, comparing options that pay off at different times becomes routine. Suppose someone offers you either $30,000 in ten years or $40,000 in fifteen years. Which is better? It depends on the rate. Discount each back to today and compare. At 6 percent, $30,000 in ten years is worth about $16,800 (0.56) and $40,000 in fifteen years about $16,800 (0.42), a near tie; at 4 percent the longer, larger prize pulls ahead. The lesson is not the particular answer but the method: reduce every alternative to its present value, then they sit on the same ruler. A subsidized loan reveals the same logic from the other side. A college "loan" of $1,000 at no interest, repaid years later, is partly a gift: the present value of the repayment is less than $1,000, and the difference is what the lender has handed you. Whenever a future obligation is fixed in dollars but those dollars are discounted, the gap between the face amount and the present value is the real subsidy.
 
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>Someone offers you either $30,000 in ten years or $40,000 in fifteen years. Why can't you say which is better until you settle on an interest rate, and what do you do to each amount to put them on the same ruler?</p>
+</aside>
+
 ## Interest Is the Price of Current Income, Set Where Saving Meets Investment
 
 We have used the interest rate as a given. Where does it come from, and why is it positive at all? Why will people pay extra to have things now rather than later?
@@ -77,11 +115,22 @@ But not every roundabout, time-consuming method pays off. The claim that "more r
 
 The second reason is *time preference*. People generally prefer goods sooner rather than later, partly from simple impatience, partly because the future is uncertain and life is finite. Given the choice between a feast today and the same feast a year from now, most take it today. That preference, too, makes current income command a premium over future income.
 
+<aside class="econ-callout econ-termset">
+<p class="econ-callout__label">Key terms</p>
+<dl class="econ-term-list">
+<div><dt>Productivity of Investment</dt><dd>The capacity of resources put to work now to yield more value later.</dd></div>
+<div><dt>Time Preference</dt><dd>The general preference for goods sooner rather than later.</dd></div>
+</dl>
+</aside>
+
 Put these together in a market and the interest rate is a price like any other, set by supply and demand, the *price of current income in terms of future income*. People who want current income they don't yet have, to invest or to consume, demand it; people willing to part with current income in exchange for more future income supply it. The buyers and sellers meet in what we can call the loan market, and the price that clears it is the interest rate. If $100 today trades for a promise of $105 next year, the rate is 5 percent: r = (F − P) ÷ P = (105 − 100) ÷ 100.
 
 In that market, the words run backward from ordinary usage. A *lender* is buying a future income (you hand over money now to buy the borrower's promise to pay later), and a *borrower* is selling future income (selling a claim on next year's money to get cash now). The demand for current income slopes down: at a lower interest rate, more investment projects clear the bar and more current income is demanded. The supply slopes up: a higher rate coaxes out more saving.
 
-![The loan market: a downward-sloping demand for current income meets an upward-sloping supply of saving, with the equilibrium market interest rate determined at their intersection.](/teaching/microeconomics/t11a-present-value-and-interest/figures/t11a-loan-market.svg)
+<figure class="econ-figure" style="margin:1.5em 0;">
+<iframe src="/teaching/microeconomics/t11a-present-value-and-interest/figures/t11a-loan-market-interactive.html" title="Drag the horizontal interest-rate line up or down to see savers' offered current income and borrowers' wanted current income converge on the five-percent rate that clears the loan market." loading="lazy" style="width:100%; max-width:520px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t11a-present-value-and-interest/figures/t11a-loan-market-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t11a-present-value-and-interest/figures/t11a-loan-market.svg">view the static figure</a>.</p></iframe>
+<figcaption><strong>The interest rate is the price of current income, and it settles where borrowing and saving match.</strong> Demand for more current income (from borrowers) slopes down; supply of current income offered (from savers) slopes up. Above the five-percent equilibrium rate, savers offer more than borrowers want and the surplus pushes the rate down; below it, borrowers want more than savers offer and the shortage pushes the rate up. Drag the rate line (or use the arrow keys) to see the gap close at the market-clearing rate. If the frame does not load, <a href="/teaching/microeconomics/t11a-present-value-and-interest/figures/t11a-loan-market-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t11a-present-value-and-interest/figures/t11a-loan-market.svg">view the static figure</a>.</figcaption>
+</figure>
 
 It does not matter whether the current income is wanted for consumption or for investment; both wants press on the same market and help set the same rate. And though we often say that saving equals investment by definition, the economy still has to coordinate the people who save with the people who invest, because they are usually different people acting for different reasons. The saver setting aside money for retirement and the entrepreneur building a plant never meet, yet the interest rate brings their plans into line, rationing current income to its most valued uses, exactly as any price coordinates strangers.
 
@@ -90,6 +139,13 @@ One warning about what interest is not: it is not "the price of money." Printing
 ## An Annuity Is a Stream, and a Perpetuity Lasts Forever
 
 Most real decisions involve not a single future amount but a *stream* of them: a pension that pays every year, a loan repaid in installments, a building that throws off rent for decades. A level stream of equal annual payments is an *annuity*. Its present value is just the sum of the discounted individual payments, but adding up a column of discount factors every time is tedious, so we tabulate the totals. The table below gives the present value of $1 received at the end of each year for the listed number of years, an *annuity factor*: multiply it by the annual payment to get the whole stream's present value.
+
+<aside class="econ-callout econ-termset">
+<p class="econ-callout__label">Key term</p>
+<dl class="econ-term-list">
+<div><dt>Annuity</dt><dd>A level stream of equal payments made at the end of each year.</dd></div>
+</dl>
+</aside>
 
 **Present value of $1 received at the end of each year (annuity factors).** Selected rates and years.
 
@@ -118,6 +174,11 @@ Here is the part worth slowing down for: every one of those level payments split
 
 In the first year, $4,000 of the $6,400 payment just covers interest, leaving $2,400 to build equity. In the second year, you owe less ($77,600), so interest falls to $3,880 and $2,520 of the same payment goes to principal. The payment never changes, but its composition does, which is why your equity grows faster and faster as the years pass and why paying a mortgage down feels glacial at the start. It is the present-value arithmetic of an annuity, read one year at a time.
 
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>Your loan payment is the same dollar figure every year, yet your equity builds faster and faster over time. Why does the interest piece of each payment keep shrinking as the years pass?</p>
+</aside>
+
 Streams need not be level. When the yearly amounts vary, you discount each separately and add. The next table works a six-year stream at 8 percent. Multiply each future amount by its discount factor, then sum the present-value column.
 
 **Present value of a six-year varying annuity at 8%.**
@@ -139,6 +200,13 @@ Now stretch the stream out forever. An annuity that pays a constant amount in ev
 P = A ÷ r
 
 The present value of a perpetuity is just the annual amount divided by the interest rate. A perpetuity of $1 a year at 5 percent is worth $1 ÷ 0.05 = $20. That seems impossibly small for an endless stream, until you see why: invest $20 at 5 percent, collect the $1 of interest each year, spend it, and the $20 is still there to repeat the trick forever. The distant future barely adds anything, because those far-off dollars are discounted to almost nothing. The next table makes this concrete by splitting a perpetuity into its first fifty years and everything after.
+
+<aside class="econ-callout econ-termset">
+<p class="econ-callout__label">Key term</p>
+<dl class="econ-term-list">
+<div><dt>Perpetuity</dt><dd>A stream that pays a constant amount every year forever.</dd></div>
+</dl>
+</aside>
 
 **How much of a perpetuity's value comes from the distant future.**
 
@@ -176,10 +244,22 @@ At 7 percent the venture earns a profit (the two figures, $136 and $155, are the
 
 No money was borrowed in either case, yet the interest rate decides whether the venture makes money. This is why a firm flush with its own cash is not immune to interest rates: it can always lend its funds out at the market rate instead of tying them up in a project, so every internal project competes against that alternative, and the market rate still binds. Ignore interest and you will count phantom profits by adding up dollars from different years as if they were the same dollars. That is also why a lottery paying "$1,000,000" as $100,000 a year for ten years is not really a million-dollar prize: its present value is smaller, because the later payments are worth less today. Capital value, costs and receipts discounted to one date, is therefore the honest measure of cost in any decision that spans time. (Why this is also the honest measure of *profit*, and what profit precisely means, is a thread we pick up in Part B.)
 
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>The venture spends only its own cash and borrows nothing, yet at a 15 percent interest rate it runs a loss. If no loan was ever taken out, where does the interest cost come from?</p>
+</aside>
+
 The same insight settles a question businesses face constantly: should you lease an asset or borrow and buy it? A leasing pitch promises you avoid "tying up capital" and avoid "the loss of depreciation." Both claims dissolve once you think in present value. The leasing company is simply lending you the asset and charging rent that already builds in the depreciation it bears and the interest on the money it has sunk into the asset; you could instead borrow the purchase price, buy the asset, and pay interest on the loan. At the same implied interest rate, the two paths cost the same, because the underlying real cost (the asset's services over its life, discounted) is identical no matter how you finance it. The honest way to compare is to set the purchase price against the present value of the lease payments and see which is cheaper at the going rate. What genuinely tips a real lease-versus-buy decision is usually not the financing romance but the tax code: in the United States, lease payments, loan interest, and (when you own) depreciation can all be deductible, and which deductions a buyer can claim is what actually swings the after-tax cost one way or the other. Strip out the tax differences and financing form changes nothing real; that is the lesson capital value keeps teaching.
 
-## What's Next
-
-We now have the whole tool. Present value puts amounts arriving at different times onto one ruler; from it we read what interest is (the price of current over future income), where it comes from (the productivity of investment and time preference), how saving and investment are coordinated in the loan market, how a stream of payments is valued as an annuity or a perpetuity, how a loan's payment splits into interest and equity, and why interest is a real cost of waiting even when you never borrow. Keep the one formula, P × (1 + r) = F and its reverse P = F ÷ (1 + r), in front of you; it is doing all the work.
-
-In Part B we point that tool at the things people actually own and earn. The same present-value arithmetic prices a bond, a house, a machine, and an apple tree; it values your own future earnings (your single biggest asset); it tells you when to harvest a growing asset and why we never quite "run out" of a natural resource; it defines, precisely, what profit is; and it explains why a future loss is felt the moment it becomes foreseeable, which is exactly why private markets handle the future better than politicians do. Bring the formula. Every one of those answers is built on it.
+<div class="econ-review">
+<section class="econ-review__section">
+<h3>Key takeaways</h3>
+<ul>
+<li><strong>A future dollar is worth less than a present one.</strong> A present amount grows by P × (1 + r) = F, and the Rule of 72 tells you roughly how fast it doubles.</li>
+<li><strong>Present value reverses compounding.</strong> Divide instead of multiply to bring a future amount back to today, and its value shrinks the farther off it lies and the higher the interest rate.</li>
+<li><strong>Interest is the price of current income.</strong> It comes from the productivity of investment and time preference, and the loan market sets it where saving meets investment.</li>
+<li><strong>A stream has a single present value.</strong> An annuity multiplies the payment by a table factor, a perpetuity is just A ÷ r, and each level loan payment splits into interest and principal.</li>
+<li><strong>Interest is a cost of waiting.</strong> It bears on any multi-year choice even when you never borrow, so capital value discounted to one date is the honest measure of cost.</li>
+</ul>
+</section>
+</div>

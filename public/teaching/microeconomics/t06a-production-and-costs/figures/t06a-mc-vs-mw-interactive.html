@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive marginal cost vs. marginal worth: Adam's daily cakes</title>
+<!--
+  Interactive marginal-cost/marginal-worth figure for the T6a blog post
+  (website-styled, warm palette). Recreates UE Fig 14.2 "Adam's Marginal
+  Costs and Marginal Worths at Various Rates of Daily Production" (p.204).
+  Self-contained: no libraries, no network. The static FAU figure
+  (figures/t06a-mc-vs-mw.{tex,svg}) is the SLIDE version and is untouched; it
+  is also the <noscript> fallback.
+
+  FAMILY F1 (trace-the-curve). Geometry class: single-panel, viewBox 440x540,
+  aspect-ratio 4/5, max-width 480px.
+
+  GEOMETRY / coordinate frame:
+    Origin (q=0, v=0) at pixel (64, 360). x scale: q -> px x = 64 + (q-1)*28 + 14
+    (bar/point CENTER for integer q, matching the ten-bar spacing used across
+    the family's other schedule figures); q=1 -> x=78, q=10 -> x=330. Axis line
+    runs to x=415 (past the data). y scale: v (units of product Y) -> px y =
+    360 - v*152 (v=2.0 -> y=56); axis line runs up to y=28 (past the data).
+
+    Marginal cost (rising, linear): MC(q) = 0.80 + 0.10*q, drawn as ten light
+    bars (faithful to the UE bar rendering) — bar k spans x in
+    [64+(k-1)*28+2, 64+(k-1)*28+26], top at py(MC(k)).
+    Marginal worth (falling, linear): MW(q) = 1.25 - 0.10*q, drawn as a
+    straight accent line from (q=1)=(78,185.2) to (q=10)=(330,322), with a
+    small dot at each of the ten integer quantities. The draggable point rides
+    this line, snapping to integer q in [1,10]; the corresponding MC bar
+    highlights (bar-active) so both series read together.
+
+    MW(q) exceeds MC(q) through q=2 (1.05 vs 1.00) and MC(q) overtakes MW(q)
+    at q=3 (1.10 vs 0.95); Adam stops at 2 cakes. A dashed vertical marker at
+    x=120 (the gap between bar 2 and bar 3) with the label "Adam stops at 2
+    cakes" is always drawn; it snap-emphasizes (accent, heavier stroke) when
+    the point is at q=2.
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;   /* warm bone background        */
+    --ink:     #1a1c1e;    /* MW dots + headings          */
+    --text:    #16181a;    /* body text                   */
+    --muted:   #5c6066;    /* axes / captions / labels    */
+    --hairline:#e3ddd3;    /* bar strokes / droplines     */
+    --accent:  #b07a2c;    /* brass — MW line + draggable point */
+    --accent-tint: #efe4d2;/* marginal-cost bars          */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* min-width:0 defeats the flexbox min-width:auto default so the figure
+     scales DOWN to viewports narrower than the SVG's intrinsic width instead
+     of clipping (the right side would otherwise be cut off on phones). */
+  .fig { width: 100%; max-width: 480px; min-width: 0; }
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+
+  /* structural strokes */
+  .axis   { stroke: var(--muted); stroke-width: 1.4; }
+  .tickmark { stroke: var(--muted); stroke-width: 1; }
+  .curve  { stroke: var(--accent); stroke-width: 2.6; fill: none;
+            stroke-linecap: round; }
+  .drop   { stroke: var(--hairline); stroke-width: 1.6;
+            stroke-dasharray: 5 4; }
+
+  /* marginal-cost bars (static series; highlight follows the dragged point) */
+  .bar        { fill: var(--accent-tint); fill-opacity: 1;
+                stroke: var(--hairline); stroke-width: 1; }
+  .bar.bar-active { fill: var(--accent); fill-opacity: 0.30;
+                stroke: var(--accent); stroke-width: 1.8; }
+
+  /* the ten marginal-worth schedule dots (falling line + dots per spec) */
+  .mwdot  { fill: var(--ink); opacity: 0.55; }
+
+  /* stopping marker: "Adam stops at 2 cakes" */
+  .stopline { stroke: var(--muted); stroke-width: 1.6; stroke-dasharray: 6 4;
+              opacity: 0.7; }
+  .stopline.stop-active { stroke: var(--accent); stroke-width: 2.2;
+              stroke-dasharray: none; opacity: 1; }
+  .stoplbl  { fill: var(--muted); font-size: 11px; font-weight: 600; }
+  .stoplbl.stop-active { fill: var(--accent); }
+
+  /* draggable point + generous transparent hit targets */
+  .pt        { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5; }
+  .hit       { fill: transparent; stroke: transparent; touch-action: none;
+               cursor: grab; }
+  .hit-curve { fill: none; stroke: transparent; stroke-width: 26;
+               touch-action: none; cursor: grab; }
+  .pt-focus:focus-visible { outline: none; }
+  .pt-focus:focus-visible + .pt,
+  .grabbing .pt { stroke: var(--accent); stroke-width: 3.5; }
+
+  /* text */
+  .axtitle  { fill: var(--muted); font-size: 13px; font-weight: 600; }
+  .tick     { fill: var(--muted); font-size: 9.5px; }
+  .curvelbl { fill: var(--ink);   font-size: 12.5px; font-style: italic; }
+  /* live readout tags (accent, with a surface backing so they cover the
+     static tick they replace) */
+  .tagbg    { fill: var(--surface); }
+  .tagtxt   { fill: var(--accent); font-size: 12px; font-weight: 700; }
+  .sep      { stroke: var(--hairline); stroke-width: 1; }
+  .r-hint   { fill: var(--muted);  font-size: 12.5px; }
+  .r-trade  { fill: var(--accent); font-size: 13px; font-weight: 600; }
+  .fallback {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.35;
+    text-align: center;
+  }
+  .fallback a { color: var(--ink); }
+</style>
+</head>
+<body>
+<!-- Everything from here to </div> is REAL base SVG: a no-JS reader sees the
+     full figure (axes, ten marginal-cost bars, the marginal-worth line with
+     its ten schedule dots, the stopping marker, live tags, and the readout).
+     The script only ATTACHES drag / keyboard / live updates. -->
+<div class="fig">
+  <svg id="fig" viewBox="0 0 440 540" role="group"
+       aria-label="Adam's marginal cost and marginal worth of baking cakes. Marginal cost rises with each additional cake, drawn as bars; marginal worth falls, drawn as a line. Drag the point along the marginal-worth line to compare the two schedules at each quantity — Adam stops baking where marginal worth falls to meet marginal cost, at 2 cakes.">
+    <defs>
+      <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+    </defs>
+
+    <!-- axes (drawn first); extended past the data max so the arrowheads do
+         not crowd the bars/line -->
+    <line class="axis" x1="64" y1="360" x2="415" y2="360" marker-end="url(#arrow)" />
+    <line class="axis" x1="64" y1="360" x2="64"  y2="28"  marker-end="url(#arrow)" />
+
+    <!-- ten marginal-cost bars, height = MC(k) = 0.80 + 0.10k. bar2 carries
+         the initial active state (initial point at q=2) -->
+    <rect id="mcBar1"  class="bar"            x="66"  y="223.2" width="24" height="136.8" />
+    <rect id="mcBar2"  class="bar bar-active" x="94"  y="208.0" width="24" height="152.0" />
+    <rect id="mcBar3"  class="bar"            x="122" y="192.8" width="24" height="167.2" />
+    <rect id="mcBar4"  class="bar"            x="150" y="177.6" width="24" height="182.4" />
+    <rect id="mcBar5"  class="bar"            x="178" y="162.4" width="24" height="197.6" />
+    <rect id="mcBar6"  class="bar"            x="206" y="147.2" width="24" height="212.8" />
+    <rect id="mcBar7"  class="bar"            x="234" y="132.0" width="24" height="228.0" />
+    <rect id="mcBar8"  class="bar"            x="262" y="116.8" width="24" height="243.2" />
+    <rect id="mcBar9"  class="bar"            x="290" y="101.6" width="24" height="258.4" />
+    <rect id="mcBar10" class="bar"            x="318" y="86.4"  width="24" height="273.6" />
+
+    <!-- the straight marginal-worth line, over the bars: MW(q) = 1.25 - 0.10q,
+         from (q=1)=(78,185.2) to (q=10)=(330,322) -->
+    <path class="curve" d="M78,185.2 L330,322" />
+    <text class="curvelbl" x="86" y="168" text-anchor="start">Marginal worth</text>
+    <text class="curvelbl" x="252" y="76" text-anchor="start">Marginal cost</text>
+
+    <!-- the ten marginal-worth schedule dots (falling line + dots, per spec) -->
+    <circle class="mwdot" cx="78"  cy="185.2" r="2.6" />
+    <circle class="mwdot" cx="106" cy="200.4" r="2.6" />
+    <circle class="mwdot" cx="134" cy="215.6" r="2.6" />
+    <circle class="mwdot" cx="162" cy="230.8" r="2.6" />
+    <circle class="mwdot" cx="190" cy="246.0" r="2.6" />
+    <circle class="mwdot" cx="218" cy="261.2" r="2.6" />
+    <circle class="mwdot" cx="246" cy="276.4" r="2.6" />
+    <circle class="mwdot" cx="274" cy="291.6" r="2.6" />
+    <circle class="mwdot" cx="302" cy="306.8" r="2.6" />
+    <circle class="mwdot" cx="330" cy="322.0" r="2.6" />
+
+    <!-- stopping marker: MW meets MC between q=2 and q=3; snap-emphasizes at
+         q=2 (script toggles .stop-active) -->
+    <line id="stopLine" class="stopline" x1="120" y1="360" x2="120" y2="78" />
+    <text id="stopLbl1" class="stoplbl" x="120" y="58" text-anchor="middle">Adam stops</text>
+    <text id="stopLbl2" class="stoplbl" x="120" y="70" text-anchor="middle">at 2 cakes</text>
+
+    <!-- axis titles -->
+    <text class="axtitle" x="232" y="398" text-anchor="middle">Daily output of cakes</text>
+    <text class="axtitle" x="10" y="208" text-anchor="middle"
+          transform="rotate(-90 10 208)">Units of product Y</text>
+
+    <!-- y-axis tick marks + labels (every 0.2 unit) -->
+    <g>
+      <line class="tickmark" x1="60" y1="56.0"   x2="64" y2="56.0" />
+      <line class="tickmark" x1="60" y1="86.4"   x2="64" y2="86.4" />
+      <line class="tickmark" x1="60" y1="116.8"  x2="64" y2="116.8" />
+      <line class="tickmark" x1="60" y1="147.2"  x2="64" y2="147.2" />
+      <line class="tickmark" x1="60" y1="177.6"  x2="64" y2="177.6" />
+      <line class="tickmark" x1="60" y1="208.0"  x2="64" y2="208.0" />
+      <line class="tickmark" x1="60" y1="238.4"  x2="64" y2="238.4" />
+      <line class="tickmark" x1="60" y1="268.8"  x2="64" y2="268.8" />
+      <line class="tickmark" x1="60" y1="299.2"  x2="64" y2="299.2" />
+      <line class="tickmark" x1="60" y1="329.6"  x2="64" y2="329.6" />
+      <line class="tickmark" x1="60" y1="360.0"  x2="64" y2="360.0" />
+      <text class="tick" x="57" y="59.5"  text-anchor="end">2.0</text>
+      <text class="tick" x="57" y="89.9"  text-anchor="end">1.8</text>
+      <text class="tick" x="57" y="120.3" text-anchor="end">1.6</text>
+      <text class="tick" x="57" y="150.7" text-anchor="end">1.4</text>
+      <text class="tick" x="57" y="181.1" text-anchor="end">1.2</text>
+      <text class="tick" x="57" y="211.5" text-anchor="end">1.0</text>
+      <text class="tick" x="57" y="241.9" text-anchor="end">0.8</text>
+      <text class="tick" x="57" y="272.3" text-anchor="end">0.6</text>
+      <text class="tick" x="57" y="302.7" text-anchor="end">0.4</text>
+      <text class="tick" x="57" y="333.1" text-anchor="end">0.2</text>
+      <text class="tick" x="57" y="363.5" text-anchor="end">0</text>
+    </g>
+
+    <!-- x-axis tick marks + labels (daily cakes 1..10) -->
+    <g>
+      <line class="tickmark" x1="78"  y1="360" x2="78"  y2="364" />
+      <line class="tickmark" x1="106" y1="360" x2="106" y2="364" />
+      <line class="tickmark" x1="134" y1="360" x2="134" y2="364" />
+      <line class="tickmark" x1="162" y1="360" x2="162" y2="364" />
+      <line class="tickmark" x1="190" y1="360" x2="190" y2="364" />
+      <line class="tickmark" x1="218" y1="360" x2="218" y2="364" />
+      <line class="tickmark" x1="246" y1="360" x2="246" y2="364" />
+      <line class="tickmark" x1="274" y1="360" x2="274" y2="364" />
+      <line class="tickmark" x1="302" y1="360" x2="302" y2="364" />
+      <line class="tickmark" x1="330" y1="360" x2="330" y2="364" />
+      <text class="tick" x="78"  y="378" text-anchor="middle">1</text>
+      <text class="tick" x="106" y="378" text-anchor="middle">2</text>
+      <text class="tick" x="134" y="378" text-anchor="middle">3</text>
+      <text class="tick" x="162" y="378" text-anchor="middle">4</text>
+      <text class="tick" x="190" y="378" text-anchor="middle">5</text>
+      <text class="tick" x="218" y="378" text-anchor="middle">6</text>
+      <text class="tick" x="246" y="378" text-anchor="middle">7</text>
+      <text class="tick" x="274" y="378" text-anchor="middle">8</text>
+      <text class="tick" x="302" y="378" text-anchor="middle">9</text>
+      <text class="tick" x="330" y="378" text-anchor="middle">10</text>
+    </g>
+
+    <!-- droplines from the point to both axes (initial: q=2, MW=1.05) -->
+    <line id="dropV" class="drop" x1="106" y1="360" x2="106" y2="200.4" />
+    <line id="dropH" class="drop" x1="64"  y1="200.4" x2="106" y2="200.4" />
+
+    <!-- live axis readouts riding the dropline feet (accent tags with a
+         surface backing so they cleanly cover the static tick they replace) -->
+    <g id="qyTag">
+      <rect id="qyBg" class="tagbg" x="20" y="192.9" width="40" height="15" rx="2" />
+      <text id="qy" class="tagtxt" x="40" y="200.4" text-anchor="middle"
+            dominant-baseline="middle">1.05Y</text>
+    </g>
+    <g id="qxTag">
+      <rect id="qxBg" class="tagbg" x="95" y="370.5" width="22" height="15" rx="2" />
+      <text id="qx" class="tagtxt" x="106" y="378" text-anchor="middle"
+            dominant-baseline="middle">2</text>
+    </g>
+
+    <!-- the draggable point + hit targets (fat invisible line + point circle) -->
+    <path id="hitCurve" class="hit-curve" d="M78,185.2 L330,322" />
+    <circle id="hit" class="hit" cx="106" cy="200.4" r="22" />
+    <circle id="pt"  class="pt"  cx="106" cy="200.4" r="7" />
+    <!-- focusable proxy for keyboard control -->
+    <circle id="ptFocus" class="pt-focus hit" cx="106" cy="200.4" r="22"
+            tabindex="0" role="slider" aria-label="Point on the marginal-worth line (daily cakes baked)"
+            aria-valuemin="1" aria-valuemax="10" aria-valuenow="2"
+            aria-valuetext="2 cakes. Marginal worth 1.05Y, marginal cost 1.00Y. Worth still beats cost — bake the 2nd cake." />
+
+    <!-- readout band: hairline separator, muted STATE line, accent TAKEAWAY
+         line (pre-wrapped for a no-JS reader; the script re-wraps on change) -->
+    <line class="sep" x1="44" y1="430" x2="396" y2="430" />
+    <text id="rHint"  class="r-hint"  x="220" y="454" text-anchor="middle">At 2 cakes: marginal worth 1.05Y · marginal cost 1.00Y</text>
+    <text id="rTrade" class="r-trade" text-anchor="middle"><tspan x="220" y="480">Worth still beats cost — bake the 2nd cake.</tspan></text>
+  </svg>
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame is a still image: ten marginal-cost bars rising left to right, a falling marginal-worth line over them, and a point marking one quantity where the two are compared. You can also <a href="t06a-mc-vs-mw.svg">open the static figure</a>.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var svg      = document.getElementById('fig');
+  var pt       = document.getElementById('pt');
+  var hit      = document.getElementById('hit');
+  var ptFocus  = document.getElementById('ptFocus');
+  var hitCurve = document.getElementById('hitCurve');
+  var dropV    = document.getElementById('dropV');
+  var dropH    = document.getElementById('dropH');
+  var qx       = document.getElementById('qx');
+  var qy       = document.getElementById('qy');
+  var qxBg     = document.getElementById('qxBg');
+  var qyBg     = document.getElementById('qyBg');
+  var rHint    = document.getElementById('rHint');
+  var rTrade   = document.getElementById('rTrade');
+  var stopLine = document.getElementById('stopLine');
+  var stopLbl1 = document.getElementById('stopLbl1');
+  var stopLbl2 = document.getElementById('stopLbl2');
+  var bars     = {};
+  for (var k = 1; k <= 10; k++) { bars[k] = document.getElementById('mcBar' + k); }
+  var NS = 'http://www.w3.org/2000/svg';
+
+  // pixel frame + scale (mirrors the static SVG markup above)
+  var X0 = 64, Y0 = 360;
+  var DX = 28;            // px per cake (bar spacing / point step)
+  var DY = 152;            // px per unit of product Y (v=2.0 -> y=56)
+  var xq = function (q) { return X0 + (q - 1) * DX + 14; };  // quantity -> px x (bar/point center)
+  var py = function (v) { return Y0 - v * DY; };             // value -> px y
+  var toQ = function (px) { return (px - X0 - 14) / DX + 1; }; // px x -> quantity
+
+  // model: integer schedule, q in [1,10]
+  var QLO = 1, QHI = 10;
+  function mcAt(q) { return 0.80 + 0.10 * q; }
+  function mwAt(q) { return 1.25 - 0.10 * q; }
+
+  var q = 2; // initial state (matches the static markup): q=2
+
+  // convert a client event to SVG user coords (handles responsive scaling)
+  var spt = svg.createSVGPoint();
+  function toSvg(evt) {
+    spt.x = evt.clientX; spt.y = evt.clientY;
+    return spt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+
+  function fmt(v) { return v.toFixed(2) + 'Y'; }
+
+  // Greedily word-wrap `str` into <tspan> lines inside the accent readout so
+  // it never overflows the 440-wide viewBox. Measures with getComputedTextLength.
+  function layoutTrade(str) {
+    var maxW = 404, x = 220, y0 = 476, lineH = 18;
+    while (rTrade.firstChild) rTrade.removeChild(rTrade.firstChild);
+    var probe = document.createElementNS(NS, 'tspan');
+    rTrade.appendChild(probe);
+    var words = str.split(' '), lines = [], cur = words[0] || '';
+    for (var i = 1; i < words.length; i++) {
+      probe.textContent = cur + ' ' + words[i];
+      if (probe.getComputedTextLength() > maxW) { lines.push(cur); cur = words[i]; }
+      else { cur = cur + ' ' + words[i]; }
+    }
+    lines.push(cur);
+    rTrade.removeChild(probe);
+    // center the block vertically on the readout row when it is a single line
+    var startY = (lines.length === 1) ? y0 + 4 : y0;
+    for (var j = 0; j < lines.length; j++) {
+      var t = document.createElementNS(NS, 'tspan');
+      t.setAttribute('x', x);
+      t.setAttribute('y', startY + j * lineH);
+      t.textContent = lines[j];
+      rTrade.appendChild(t);
+    }
+  }
+
+  function render() {
+    var mw = mwAt(q), mc = mcAt(q);
+    var cx = xq(q), cy = py(mw);
+
+    pt.setAttribute('cx', cx);      pt.setAttribute('cy', cy);
+    hit.setAttribute('cx', cx);     hit.setAttribute('cy', cy);
+    ptFocus.setAttribute('cx', cx); ptFocus.setAttribute('cy', cy);
+
+    dropV.setAttribute('x1', cx); dropV.setAttribute('x2', cx);
+    dropV.setAttribute('y1', Y0); dropV.setAttribute('y2', cy);
+    dropH.setAttribute('y1', cy); dropH.setAttribute('y2', cy);
+    dropH.setAttribute('x1', X0); dropH.setAttribute('x2', cx);
+
+    // live tags ride the dropline feet
+    qy.setAttribute('y', cy); qy.textContent = fmt(mw);
+    qyBg.setAttribute('y', cy - 7.5);
+    qx.setAttribute('x', cx); qx.textContent = String(q);
+    qxBg.setAttribute('x', cx - 11);
+
+    // highlight the marginal-cost bar for the current quantity
+    for (var i = 1; i <= 10; i++) {
+      bars[i].classList.toggle('bar-active', i === q);
+    }
+
+    // stopping marker snap-emphasizes exactly at q=2
+    var atStop = (q === 2);
+    stopLine.classList.toggle('stop-active', atStop);
+    stopLbl1.classList.toggle('stop-active', atStop);
+    stopLbl2.classList.toggle('stop-active', atStop);
+
+    // readout grammar (muted state line + accent takeaway line)
+    var cake = (q === 1) ? 'cake' : 'cakes';
+    var hint = 'At ' + q + ' ' + cake + ': marginal worth ' + fmt(mw) +
+               ' · marginal cost ' + fmt(mc);
+    var trade;
+    if (q === 1) {
+      trade = 'Worth far above cost — keep baking.';
+    } else if (q === 2) {
+      trade = 'Worth still beats cost — bake the 2nd cake.';
+    } else {
+      trade = 'Cost now exceeds worth — Adam stops at 2 cakes.';
+    }
+    rHint.textContent = hint;
+    layoutTrade(trade);
+
+    ptFocus.setAttribute('aria-valuenow', String(q));
+    ptFocus.setAttribute('aria-valuetext', q + ' ' + cake + '. ' + hint + '. ' + trade);
+  }
+
+  // single state setter (clamp + no-op guard + render) shared by drag,
+  // keyboard, and the debug hook, so state logic lives in one place
+  function setQ(newQ) {
+    var qq = Math.round(newQ);
+    if (isNaN(qq)) return;
+    if (qq < QLO) qq = QLO;
+    if (qq > QHI) qq = QHI;
+    if (qq === q) return;
+    q = qq;
+    render();
+  }
+
+  function setFromPointer(evt) {
+    var pnt = toSvg(evt);
+    setQ(toQ(pnt.x));   // snap to the nearest integer cake
+  }
+
+  // --- drag (pointer events + pointer capture so a fast drag can't get stuck) ---
+  var dragging = false;
+  var capturedEl = null, capturedId = null;
+  function onMove(evt) { if (dragging) { evt.preventDefault(); setFromPointer(evt); } }
+  function onUp() {
+    dragging = false;
+    svg.classList.remove('grabbing');
+    if (capturedEl && capturedId !== null) {
+      try { capturedEl.releasePointerCapture(capturedId); } catch (e) {}
+    }
+    capturedEl = null; capturedId = null;
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+  }
+  function onDown(evt) {
+    evt.preventDefault();
+    dragging = true;
+    svg.classList.add('grabbing');
+    capturedEl = evt.currentTarget; capturedId = evt.pointerId;
+    try { capturedEl.setPointerCapture(capturedId); } catch (e) {}
+    setFromPointer(evt);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }
+  hit.addEventListener('pointerdown', onDown);
+  hitCurve.addEventListener('pointerdown', onDown);
+  ptFocus.addEventListener('pointerdown', onDown);  // the dot itself is draggable
+
+  // --- keyboard (arrows step one cake along the schedule) ---
+  ptFocus.addEventListener('keydown', function (evt) {
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') { setQ(q + 1); }
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') { setQ(q - 1); }
+    else return;
+    evt.preventDefault();
+  });
+
+  // Debug hook: lets a reviewer screenshot non-initial states via scripting.
+  window.__fig = {
+    set: function (v) { setQ(+v); },
+    get: function () { return { q: q, mc: mcAt(q), mw: mwAt(q) }; }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

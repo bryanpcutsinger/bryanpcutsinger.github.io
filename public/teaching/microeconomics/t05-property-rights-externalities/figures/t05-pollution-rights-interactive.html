@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive figure: trading pollution rights between a paint maker and a refiner</title>
+<!--
+  Interactive recreation of UE Fig 13.1 "Mutual Gains from Trading Pollution
+  Rights" (p.174) for the T5 blog post (website-styled warm palette, not FAU).
+  Self-contained: no libraries, no network. The static FAU figure
+  (figures/t05-pollution-rights.{tex,svg}) is the SLIDE version and is
+  untouched; it is also this widget's <noscript> fallback.
+
+  ARCHITECTURE (family F8 -- allocation / two-agent margins): the base figure
+  is REAL SVG markup. A no-JS reader sees the FULL back-to-back still -- both
+  marginal-value schedules, the shared price line, the trade arrow, both
+  "start" ghost droplines, the equilibrium dots, the verbal gain-zone labels,
+  and the Coase-invariance caption. The script only ATTACHES behavior (drag
+  the trade handle t; both dots + droplines + quantities update; snap-
+  highlight at the equilibrium); it never builds figure DOM.
+
+  GEOMETRY (two-panel back-to-back mirror, per interactive-specs.md's
+  corrected element inventory): viewBox 720x460, aspect-ratio 16/10,
+  max-width 640px. Shared dollar value scale on a common vertical axis.
+    X0 = 90 (px for TikZ x=0); PXPERCM = 30 (px per TikZ cm); Y0 = 290 (px
+    baseline, value=0); PXPERY = 55 (px per $1).
+    Left panel (paint maker, buyer): xPaint(pollution) = 90 + pollution*10.5
+      (TikZ x = pollution*0.35). MV_paint(pollution) = 4.2 - pollution/15.
+      Drawn 0..30 units; matches inventory endpoints (0,4.2)->(10.5,2.2)cm.
+    Right panel (refiner, seller), x-axis MIRRORED: xRefiner(pollution) =
+      645 - pollution*10.5 (TikZ x = 18.5 - pollution*0.35).
+      MV_refiner(pollution) = 3.3 - 0.11*pollution. Drawn 20..0 units;
+      matches inventory endpoints (11.5,1.1)->(18.5,3.3)cm.
+    Shared: yVal(v) = 290 - v*55. P* = 2.2 -> y=169, spanning both panels.
+    Center divider at px x=420 (TikZ x=11.0); gap [405,435] holds the fixed
+    trade arrow (px 406.5-433.5, y=86.5) -- kept static (documents the whole
+    ~10-unit trade, does not track t live; the schedules and arrow are the
+    spec's "shared elements," not part of the live interaction).
+
+  INTERACTION (F8): a single trade handle t moves BOTH firms symmetrically --
+  paint maker pollution = 20+t (dot slides right along MV_paint), refiner
+  pollution = 20-t (dot slides toward the divider along MV_refiner). Total
+  pollution stays 40 by construction. Each panel ALSO keeps a fixed "ghost"
+  dropline at pollution=20 (the pre-trade start, per the inventory's literal
+  drop-line heights: paint's start ghost is capped at P*=2.2, NOT its actual
+  curve height 2.867 -- this matches the audited static figure's own
+  (7.0,0)--(7.0,2.2) construction, reproduced verbatim; refiner's start ghost
+  reaches its actual curve height 1.1). The moving dot/dropline coincides
+  with the inventory's "Equilibrium dot" bullet at the default t=10 state.
+
+  DELIBERATE SCOPE DEVIATION (documented, not silent): the spec's INTERACTION
+  block says t ranges "0 -> ~15," but the corrected inventory's own panel
+  geometry (paint's drawn schedule stops at pollution=30, immediately at the
+  1cm center gap's edge; there is no slack to extend it to pollution=35
+  without the dot visually crossing into the refiner panel) makes 0-15
+  geometrically impossible without redrawing the whole layout. All three
+  given worked readout examples (t=0, 5, 10) are also <= 10. This build caps
+  the draggable range at t: 0..10 (0 = pre-trade, 10 = the Coase equilibrium,
+  which is also the geometric max) so Home/End map cleanly to "t=0 and the
+  equilibrium" exactly as the spec's keyboard bullet describes, with full
+  fidelity to the pinned panel geometry and zero invented over-trade text.
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;   /* warm bone background        */
+    --ink:     #1a1c1e;    /* marginal-value schedules     */
+    --text:    #16181a;    /* body text                   */
+    --muted:   #5c6066;    /* axes / secondary labels     */
+    --hairline:#e3ddd3;    /* droplines / divider / muting */
+    --accent:  #b07a2c;    /* brass -- price line / dots / trade arrow */
+    --accent-tint: #efe4d2;/* unused wash reserve          */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .fig { width: 100%; max-width: 640px; min-width: 0; }
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+
+  /* structural strokes */
+  .axis     { stroke: var(--muted); stroke-width: 1.4; }
+  .mline    { stroke: var(--ink); stroke-width: 2.6; fill: none;
+              stroke-linecap: round; }
+  .drop     { stroke: var(--hairline); stroke-width: 1.6; stroke-dasharray: 5 4; }
+  .price-line { stroke: var(--accent); stroke-width: 1.8; stroke-dasharray: 7 5; }
+  .divider  { stroke: var(--hairline); stroke-width: 1.4; }
+  .trade-arrow { stroke: var(--accent); stroke-width: 2.6; }
+
+  /* points + generous transparent hit targets */
+  .pt        { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5; }
+  .pt.opt    { stroke: var(--accent); stroke-width: 1; r: 7.5; }
+  .hit       { fill: transparent; stroke: transparent; touch-action: none;
+               cursor: grab; }
+  .hit-curve { fill: none; stroke: transparent; stroke-width: 26;
+               touch-action: none; cursor: grab; }
+  .pt-focus:focus-visible { outline: none; }
+  .pt-focus:focus-visible + .pt,
+  .grabbing .pt { stroke: var(--accent); stroke-width: 3.5; }
+
+  /* text */
+  .axlabel    { fill: var(--muted); font-size: 12.5px; font-weight: 600; }
+  .panel-title tspan.strong { font-weight: 700; }
+  .ticklabel  { fill: var(--muted); font-size: 11px; }
+  .tick-note  { fill: var(--muted); font-size: 10px; font-style: italic; opacity: 0.85; }
+  .linelabel  { fill: var(--ink); font-size: 12px; font-style: italic; }
+  .linelabel tspan { font-size: 9px; }
+  .gain-label { fill: var(--muted); font-size: 10.5px; }
+  .price-label{ fill: var(--accent); font-size: 10px; font-weight: 600; }
+  .coase-label{ fill: var(--muted); font-size: 11px; }
+  .coase-label tspan.strong { fill: var(--ink); font-weight: 700; }
+  .qlabel     { fill: var(--ink); font-size: 12.5px; font-weight: 700;
+                paint-order: stroke; stroke: var(--surface); stroke-width: 3px;
+                stroke-linejoin: round; }
+  .sep        { stroke: var(--hairline); stroke-width: 1; }
+  .r-hint     { fill: var(--muted); font-size: 12px; }
+  .r-trade    { fill: var(--accent); font-size: 13.5px; font-weight: 600; }
+  .fallback   { margin: 8px 0 0; color: var(--muted); font-size: 13px;
+                line-height: 1.35; text-align: center; }
+  .fallback a { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="fig">
+  <svg id="fig" viewBox="0 0 720 460" role="group"
+       aria-label="Two firms trade pollution rights. A paint maker starts at 20 units where its marginal value of output is above the common price; a refiner starts at 20 units where its marginal value is below the price. Drag the trade handle to move rights from the refiner to the paint maker. Both firms' marginal values equal the common price of 2.2 when the paint maker holds 30 units and the refiner holds 10 -- the Coase-invariant equilibrium.">
+    <defs>
+      <marker id="ax-arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+      <marker id="trade-arrow-head" markerWidth="8" markerHeight="8" refX="4" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#b07a2c" />
+      </marker>
+    </defs>
+
+    <!-- ===================== shared price line (both panels) ===================== -->
+    <line class="price-line" x1="88" y1="169" x2="648" y2="169" />
+    <line class="axis" x1="86" y1="169" x2="90" y2="169" />
+    <text class="price-label" x="80" y="169" text-anchor="end" dominant-baseline="middle">P*</text>
+    <text class="price-label" x="713" y="180" text-anchor="end">Price of a</text>
+    <text class="price-label" x="713" y="194" text-anchor="end">pollution right</text>
+
+    <!-- ===================== center divider + trade arrow ===================== -->
+    <line class="divider" x1="420" y1="45" x2="420" y2="300" />
+    <line class="trade-arrow" x1="406.5" y1="86.5" x2="433.5" y2="86.5"
+          marker-start="url(#trade-arrow-head)" marker-end="url(#trade-arrow-head)" />
+    <text class="gain-label" x="420" y="66" text-anchor="middle" fill="#b07a2c" font-weight="600">buys &#8776;10 rights</text>
+    <text class="gain-label" x="420" y="77" text-anchor="middle" fill="#b07a2c" font-weight="600">from refiner</text>
+
+    <!-- ===================== y-axis title (shared value scale) ===================== -->
+    <text class="axlabel" x="28" y="163" text-anchor="middle"
+          transform="rotate(-90 28 163)">Marginal market value of output</text>
+
+    <!-- ===================== LEFT PANEL -- Paint maker (buyer) ===================== -->
+    <line class="axis" x1="86" y1="290" x2="418" y2="290" marker-end="url(#ax-arrow)" />
+    <line class="axis" x1="90" y1="296" x2="90"  y2="37"  marker-end="url(#ax-arrow)" />
+
+    <!-- x-axis ticks + numbers -->
+    <g class="ticklabel">
+      <line class="axis" x1="90"  y1="290" x2="90"  y2="295" />
+      <text x="90"  y="306" text-anchor="middle">0</text>
+      <line class="axis" x1="195" y1="290" x2="195" y2="295" />
+      <text x="195" y="306" text-anchor="middle">10</text>
+      <line class="axis" x1="300" y1="290" x2="300" y2="295" />
+      <text x="300" y="306" text-anchor="middle">20</text>
+      <line class="axis" x1="405" y1="290" x2="405" y2="295" />
+      <text x="405" y="306" text-anchor="middle">30</text>
+    </g>
+    <text class="tick-note" x="300" y="322" text-anchor="middle">(start)</text>
+    <text class="tick-note" x="405" y="322" text-anchor="middle">(end)</text>
+    <text class="panel-title axlabel" x="248" y="336" text-anchor="middle">
+      <tspan class="strong">Paint maker</tspan><tspan> &#8212; units of pollution</tspan>
+    </text>
+
+    <!-- MV_paint schedule: (pollution=0, 4.2) -> (pollution=30, 2.2) -->
+    <line class="mline" x1="90" y1="59" x2="405" y2="169" />
+    <text class="linelabel" x="95" y="50" text-anchor="start">MV<tspan dy="2">paint</tspan></text>
+
+    <!-- fixed "start" ghost dropline (pollution=20; height capped at P*=2.2, per the
+         audited static figure's own construction, NOT the actual curve height 2.867) -->
+    <line class="drop" x1="300" y1="290" x2="300" y2="169" />
+
+    <!-- verbal gain-zone label -->
+    <text class="gain-label" x="99" y="140" text-anchor="start">MV &gt; price:</text>
+    <text class="gain-label" x="99" y="152" text-anchor="start">gains from buying rights</text>
+
+    <!-- dynamic dot + dropline + live quantity (rides MV_paint; default = equilibrium) -->
+    <g id="gPaint">
+      <line id="dropPaintV" class="drop" x1="405" y1="290" x2="405" y2="169" />
+      <text id="qPaint" class="qlabel" x="405" y="282" text-anchor="middle">30</text>
+      <circle id="dotPaint" class="pt opt" cx="405" cy="169" r="6.5" />
+    </g>
+
+    <!-- drag hit targets -->
+    <line id="hitCurvePaint" class="hit-curve" x1="90" y1="59" x2="405" y2="169" />
+    <circle id="hitDotPaint" class="hit" cx="405" cy="169" r="24" />
+
+    <!-- ===================== RIGHT PANEL -- Refiner (seller), mirrored ===================== -->
+    <line class="axis" x1="423" y1="290" x2="657" y2="290" marker-end="url(#ax-arrow)" />
+    <line class="axis" x1="435" y1="296" x2="435" y2="37"  marker-end="url(#ax-arrow)" />
+
+    <!-- x-axis ticks + numbers (mirrored: 20 nearest divider, 0 far right) -->
+    <g class="ticklabel">
+      <line class="axis" x1="435" y1="290" x2="435" y2="295" />
+      <text x="435" y="306" text-anchor="middle">20</text>
+      <line class="axis" x1="540" y1="290" x2="540" y2="295" />
+      <text x="540" y="306" text-anchor="middle">10</text>
+      <line class="axis" x1="645" y1="290" x2="645" y2="295" />
+      <text x="645" y="306" text-anchor="middle">0</text>
+    </g>
+    <text class="tick-note" x="435" y="322" text-anchor="middle">(start)</text>
+    <text class="tick-note" x="540" y="322" text-anchor="middle">(end)</text>
+    <text class="panel-title axlabel" x="540" y="336" text-anchor="middle">
+      <tspan class="strong">Refiner</tspan><tspan> &#8212; units of pollution (&#8592; increasing)</tspan>
+    </text>
+
+    <!-- MV_refiner schedule: (pollution=20, 1.1) -> (pollution=0, 3.3) -->
+    <line class="mline" x1="435" y1="229.5" x2="645" y2="108.5" />
+    <text class="linelabel" x="642" y="100" text-anchor="end">MV<tspan dy="2">refiner</tspan></text>
+
+    <!-- fixed "start" ghost dropline (pollution=20; reaches its actual curve height
+         1.1 -- this overlaps the right panel's own y-axis, reproducing the audited
+         static figure's (11.5,0)--(11.5,1.1) construction verbatim) -->
+    <line class="drop" x1="435" y1="290" x2="435" y2="229.5" />
+
+    <!-- verbal gain-zone label -->
+    <text class="gain-label" x="470" y="225" text-anchor="start">MV &lt; price:</text>
+    <text class="gain-label" x="470" y="237" text-anchor="start">gains from selling rights</text>
+
+    <!-- dynamic dot + dropline + live quantity (rides MV_refiner; default = equilibrium) -->
+    <g id="gRefiner">
+      <line id="dropRefinerV" class="drop" x1="540" y1="290" x2="540" y2="169" />
+      <text id="qRefiner" class="qlabel" x="540" y="282" text-anchor="middle">10</text>
+      <circle id="dotRefiner" class="pt opt" cx="540" cy="169" r="6.5" />
+    </g>
+
+    <!-- drag hit targets -->
+    <line id="hitCurveRefiner" class="hit-curve" x1="435" y1="229.5" x2="645" y2="108.5" />
+    <circle id="hitDotRefiner" class="hit" cx="540" cy="169" r="24" />
+
+    <!-- focusable keyboard slider proxy (rides the paint-maker dot) -->
+    <circle id="ptFocus" class="pt-focus hit" cx="405" cy="169" r="24"
+            tabindex="0" role="slider" aria-label="Rights traded from refiner to paint maker"
+            aria-valuemin="0" aria-valuemax="10" aria-valuenow="10"
+            aria-valuetext="Paint maker: 30 units, MV = 2.2. Refiner: 10 units, MV = 2.2. Both equal P* = 2.2. Trade stops when each firm's marginal output value equals the rights price -- the fixed total of pollution now yields the most valuable output." />
+
+    <!-- ===================== Coase-invariance caption ===================== -->
+    <text class="coase-label" x="368" y="352" text-anchor="middle">
+      <tspan class="strong">Coase invariance:</tspan><tspan> the right ends up where it is worth most, whoever held it first &#8212;</tspan>
+    </text>
+    <text class="coase-label" x="368" y="366" text-anchor="middle">initial assignment changes only who ends up richer.</text>
+
+    <!-- ===================== readout band ===================== -->
+    <line class="sep" x1="60" y1="380" x2="660" y2="380" />
+    <text id="rHint"  class="r-hint"  text-anchor="middle"><tspan x="360" y="398">Paint maker: 30 units, MV = 2.2. Refiner: 10 units, MV = 2.2. Both equal P* = 2.2.</tspan></text>
+    <text id="rTrade" class="r-trade" text-anchor="middle"><tspan x="360" y="422">Trade stops when each firm's marginal output value equals the rights price —</tspan><tspan x="360" y="438">the fixed total of pollution now yields the most valuable output.</tspan></text>
+  </svg>
+
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame is a still image: two
+      back-to-back marginal-value schedules for a paint maker and a refiner,
+      each starting at 20 units of pollution, with the Coase equilibrium
+      marked where the paint maker holds 30 units and the refiner holds 10 --
+      both firms' marginal output values equal to the common price of a
+      pollution right. You can also
+      <a href="t05-pollution-rights.svg">open the static figure</a>.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var svg = document.getElementById('fig');
+  var NS = 'http://www.w3.org/2000/svg';
+  var byId = function (id) { return document.getElementById(id); };
+
+  var dotPaint = byId('dotPaint'), dotRefiner = byId('dotRefiner');
+  var dropPaintV = byId('dropPaintV'), dropRefinerV = byId('dropRefinerV');
+  var qPaint = byId('qPaint'), qRefiner = byId('qRefiner');
+  var hitCurvePaint = byId('hitCurvePaint'), hitCurveRefiner = byId('hitCurveRefiner');
+  var hitDotPaint = byId('hitDotPaint'), hitDotRefiner = byId('hitDotRefiner');
+  var ptFocus = byId('ptFocus');
+  var rHint = byId('rHint'), rTrade = byId('rTrade');
+
+  // --- pixel frame + scale (mirrors the markup above) ---
+  var Y0 = 290, PXPERY = 55;
+  var TMIN = 0, TMAX = 10;   // see the header comment: capped to the pinned geometry
+  function yVal(v)      { return Y0 - v * PXPERY; }
+  function xPaint(p)    { return 90 + p * 10.5; }
+  function xRefiner(p)  { return 645 - p * 10.5; }
+
+  // --- the model ---
+  function mvPaint(p)   { return 4.2 - p / 15; }
+  function mvRefiner(p) { return 3.3 - 0.11 * p; }
+  function fmt1(x) { return (Math.round(x * 10 + 1e-9) / 10).toFixed(1); }
+
+  // --- state: rights traded from refiner to paint maker (0..10) ---
+  var t = 10;   // default = the Coase equilibrium (matches the corrected inventory)
+
+  var spt = svg.createSVGPoint();
+  function toSvg(evt) {
+    spt.x = evt.clientX; spt.y = evt.clientY;
+    return spt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+
+  // readout text -- the spec's example states verbatim, generic otherwise
+  function text(tv) {
+    if (tv === 0) return {
+      m: 'Paint maker: 20 units, MV of output ≈ 2.9. Refiner: 20 units, MV ≈ 1.1. Price of a right P* = 2.2.',
+      a: 'The paint maker values a right more than P*, the refiner less — gains from trade are on the table.'
+    };
+    if (tv === 5) return {
+      m: 'Paint maker: 25 units, MV ≈ 2.5. Refiner: 15 units, MV ≈ 1.7. Total pollution still 40.',
+      a: 'Rights are flowing to the paint maker; both marginal values are moving toward the common price.'
+    };
+    if (tv === 10) return {
+      m: 'Paint maker: 30 units, MV = 2.2. Refiner: 10 units, MV = 2.2. Both equal P* = 2.2.',
+      a: "Trade stops when each firm's marginal output value equals the rights price — the fixed total of pollution now yields the most valuable output."
+    };
+    var pp = 20 + tv, pr = 20 - tv;
+    return {
+      m: 'Paint maker: ' + pp + ' units, MV ≈ ' + fmt1(mvPaint(pp)) + '. Refiner: ' + pr +
+         ' units, MV ≈ ' + fmt1(mvRefiner(pr)) + '. Total pollution still 40.',
+      a: 'Rights are flowing to the paint maker; both marginal values are moving toward the common price.'
+    };
+  }
+
+  // Greedily word-wrap `str` into <tspan> lines inside `el` so the readout
+  // band never overflows the 720-wide viewBox. Measures with
+  // getComputedTextLength (after the framework example in the T3a marginal-
+  // worths widget). Returns the number of lines used.
+  function wrapText(el, str, cx, y0, maxW, lineH) {
+    while (el.firstChild) el.removeChild(el.firstChild);
+    var probe = document.createElementNS(NS, 'tspan');
+    el.appendChild(probe);
+    var words = str.split(' '), lines = [], cur = words[0] || '';
+    for (var i = 1; i < words.length; i++) {
+      probe.textContent = cur + ' ' + words[i];
+      if (probe.getComputedTextLength() > maxW) { lines.push(cur); cur = words[i]; }
+      else { cur = cur + ' ' + words[i]; }
+    }
+    lines.push(cur);
+    el.removeChild(probe);
+    for (var j = 0; j < lines.length; j++) {
+      var tp = document.createElementNS(NS, 'tspan');
+      tp.setAttribute('x', cx); tp.setAttribute('y', y0 + j * lineH);
+      tp.textContent = lines[j];
+      el.appendChild(tp);
+    }
+    return lines.length;
+  }
+
+  function render() {
+    var pp = 20 + t, pr = 20 - t;
+    var vp = mvPaint(pp), vr = mvRefiner(pr);
+    var px = xPaint(pp), py = yVal(vp);
+    var rx = xRefiner(pr), ry = yVal(vr);
+    var atEq = (t === TMAX);
+
+    dotPaint.setAttribute('cx', px); dotPaint.setAttribute('cy', py);
+    dotPaint.setAttribute('class', atEq ? 'pt opt' : 'pt');
+    dropPaintV.setAttribute('x1', px); dropPaintV.setAttribute('x2', px);
+    dropPaintV.setAttribute('y2', py);
+    qPaint.setAttribute('x', px); qPaint.textContent = pp;
+
+    dotRefiner.setAttribute('cx', rx); dotRefiner.setAttribute('cy', ry);
+    dotRefiner.setAttribute('class', atEq ? 'pt opt' : 'pt');
+    dropRefinerV.setAttribute('x1', rx); dropRefinerV.setAttribute('x2', rx);
+    dropRefinerV.setAttribute('y2', ry);
+    qRefiner.setAttribute('x', rx); qRefiner.textContent = pr;
+
+    hitDotPaint.setAttribute('cx', px); hitDotPaint.setAttribute('cy', py);
+    hitDotRefiner.setAttribute('cx', rx); hitDotRefiner.setAttribute('cy', ry);
+    ptFocus.setAttribute('cx', px); ptFocus.setAttribute('cy', py);
+
+    var rd = text(t);
+    var hintLines = wrapText(rHint, rd.m, 360, 398, 610, 15);
+    wrapText(rTrade, rd.a, 360, 398 + hintLines * 15 + 9, 610, 16);
+    ptFocus.setAttribute('aria-valuenow', t);
+    ptFocus.setAttribute('aria-valuetext', rd.m + ' ' + rd.a);
+  }
+
+  // pointer -> t: left panel drags the paint-maker side, right panel the refiner side
+  function setFromPointer(evt) {
+    var p = toSvg(evt);
+    if (isNaN(p.x)) return;
+    var nt;
+    if (p.x <= 420) {
+      var pp = Math.round((p.x - 90) / 10.5);
+      nt = pp - 20;
+    } else {
+      var pr = Math.round((645 - p.x) / 10.5);
+      nt = 20 - pr;
+    }
+    if (nt < TMIN) nt = TMIN;
+    if (nt > TMAX) nt = TMAX;
+    t = nt;
+    render();
+  }
+
+  // --- drag (pointer capture so a fast drag can't get stuck) ---
+  var dragging = false, capturedEl = null, capturedId = null;
+  function onMove(evt) { if (dragging) { evt.preventDefault(); setFromPointer(evt); } }
+  function onUp() {
+    dragging = false;
+    svg.classList.remove('grabbing');
+    if (capturedEl && capturedId !== null) {
+      try { capturedEl.releasePointerCapture(capturedId); } catch (e) {}
+    }
+    capturedEl = null; capturedId = null;
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+  }
+  function onDown(evt) {
+    evt.preventDefault();
+    dragging = true;
+    svg.classList.add('grabbing');
+    capturedEl = evt.currentTarget; capturedId = evt.pointerId;
+    try { capturedEl.setPointerCapture(capturedId); } catch (e) {}
+    setFromPointer(evt);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }
+  hitCurvePaint.addEventListener('pointerdown', onDown);
+  hitCurveRefiner.addEventListener('pointerdown', onDown);
+  hitDotPaint.addEventListener('pointerdown', onDown);
+  hitDotRefiner.addEventListener('pointerdown', onDown);
+  ptFocus.addEventListener('pointerdown', onDown);
+
+  // --- keyboard: step t by one unit; Home/End jump to the two documented targets ---
+  ptFocus.addEventListener('keydown', function (evt) {
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') { t += 1; }
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') { t -= 1; }
+    else if (evt.key === 'Home') { t = TMIN; }
+    else if (evt.key === 'End') { t = TMAX; }
+    else return;
+    evt.preventDefault();
+    if (t < TMIN) t = TMIN;
+    if (t > TMAX) t = TMAX;
+    render();
+  });
+
+  // --- debug hook (inert for students) ---
+  window.__fig = {
+    set: function (v) {
+      var nt = (v && typeof v.t === 'number') ? v.t : v;
+      nt = Math.round(+nt);
+      if (!isNaN(nt)) { t = Math.max(TMIN, Math.min(TMAX, nt)); render(); }
+    },
+    get: function () {
+      var pp = 20 + t, pr = 20 - t;
+      return { t: t, pollutionPaint: pp, pollutionRefiner: pr, mvPaint: mvPaint(pp), mvRefiner: mvRefiner(pr) };
+    }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

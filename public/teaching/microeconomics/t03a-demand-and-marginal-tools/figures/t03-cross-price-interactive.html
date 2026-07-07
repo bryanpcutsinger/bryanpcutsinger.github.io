@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive figure: cross-price effects on margarine and dinner rolls</title>
+<!--
+  Interactive recreation of UE Fig 5.6 (p.74) for the T3a blog post
+  (website-styled warm palette, not FAU). Self-contained: no libraries, no
+  network. The static FAU figure (figures/t03-cross-price.{tex,svg}) is the
+  SLIDE version and is untouched; it is also this widget's <noscript> fallback.
+
+  ARCHITECTURE: the base figure is REAL SVG markup. A no-JS reader sees the
+  FULL two-panel still in the "higher" (post-shift) state — both panels
+  complete with D1 (before, dashed ghost), D2 (after, accent solid), the
+  shift arrow, and every label the UE source teaches. The script only
+  ATTACHES behavior (the Normal|Higher toggle, showing/hiding the after-group,
+  swapping D1's ghost/solid class, live readout); it never builds figure DOM.
+
+  DATA (from t03-cross-price.tex, both panels share xmin=ymin=0, xmax=ymax=7.5):
+    Left panel  (Substitute — Margarine): D1 = 5.8 - x, domain x in [0.4,5.2]
+      (before); D2 = 7.8 - x, domain x in [1.0,6.8] (after, shifted RIGHT +2.0).
+      Shift arrow (2.75,3.3) -> (3.75,3.3).
+    Right panel (Complement — Dinner Rolls): D1 = 7.8 - x, domain x in [1.0,6.8]
+      (before, upper-right); D2 = 5.8 - x, domain x in [0.4,5.2] (after,
+      shifted LEFT). Shift arrow (3.75,3.3) -> (2.75,3.3).
+
+  GEOMETRY (family F2, two-panel side-by-side): viewBox 720 x 460,
+  aspect-ratio 16/10, max-width 640px.
+    Pixel frame: qx(q) = X0 + q*35 (X0 = 70 left panel, 410 right panel);
+                 py(p) = 353 - p*40 (shared).
+    Axes drawn PAST the data max (to Q=7.7 / P=7.7) so the curves do not
+    crowd the arrowheads.
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;   /* warm bone background        */
+    --ink:     #1a1c1e;    /* D1 "before" curve + headings */
+    --text:    #16181a;    /* body text                   */
+    --muted:   #5c6066;    /* captions / secondary labels */
+    --hairline:#e3ddd3;    /* axes muting                 */
+    --accent:  #b07a2c;    /* brass — D2 "after" + arrows  */
+    --accent-tint: #efe4d2;/* unused reserve tint          */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .fig { width: 100%; max-width: 640px; min-width: 0; }
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+
+  /* toggle bar (above the panels) */
+  .modebar { display: flex; align-items: center; gap: 8px;
+             margin: 0 0 8px; flex-wrap: wrap; }
+  .modelabel { color: var(--muted); font-size: 13px; font-weight: 600; }
+  .seg { font-family: inherit; font-size: 13px; font-weight: 600;
+         color: var(--ink); background: var(--surface);
+         border: 1.5px solid var(--hairline); border-radius: 6px;
+         padding: 5px 14px; cursor: pointer; }
+  .seg + .seg { margin-left: -1px; }
+  .seg.on { background: var(--accent); color: var(--surface);
+            border-color: var(--accent); }
+  .seg:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* structural strokes */
+  .axis        { stroke: var(--muted); stroke-width: 1.4; }
+  .curve       { stroke: var(--ink); stroke-width: 2.6; fill: none;
+                 stroke-linecap: round; }
+  .curve-ghost { stroke: var(--muted); stroke-width: 2; fill: none;
+                 stroke-dasharray: 6 5; opacity: 0.75; }
+  .curve-accent{ stroke: var(--accent); stroke-width: 2.6; fill: none;
+                 stroke-linecap: round; }
+  .shift       { stroke: var(--accent); stroke-width: 2.2; }
+  .after-group { transition: opacity 0.15s ease; }
+
+  /* text */
+  .panelhead    { fill: var(--ink); font-size: 12.5px; font-weight: 700; }
+  .axlabel      { fill: var(--muted); font-size: 11.5px; font-weight: 600; }
+  .curvelabel-ink    { fill: var(--ink); font-size: 11px; font-style: italic; }
+  .curvelabel-accent { fill: var(--accent); font-size: 11px; font-style: italic; }
+  .sub          { font-size: 8px; }
+  .beforelabel  { fill: var(--muted); font-size: 10.5px; }
+  .afterlabel   { fill: var(--accent); font-size: 10.5px; font-weight: 600; }
+  .shiftlabel   { fill: var(--accent); font-size: 10.5px; font-weight: 600; }
+  .subcap       { fill: var(--muted); font-size: 10px; }
+  .subcap b     { font-weight: 700; }
+  .sep          { stroke: var(--hairline); stroke-width: 1; }
+  .r-hint       { fill: var(--muted); font-size: 12.5px; }
+  .r-trade      { fill: var(--accent); font-size: 13.5px; font-weight: 600; }
+  .fallback     { margin: 8px 0 0; color: var(--muted); font-size: 13px;
+                  line-height: 1.35; text-align: center; }
+  .fallback a   { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="fig">
+  <div class="modebar" role="group" aria-label="Choose butter's price">
+    <span class="modelabel">Butter's price:</span>
+    <button id="btnNormal" class="seg" type="button" tabindex="0" aria-pressed="false">Normal</button>
+    <button id="btnHigher" class="seg on" type="button" tabindex="0" aria-pressed="true">Higher</button>
+  </div>
+
+  <svg id="fig" viewBox="0 0 720 460" role="group"
+       aria-label="Two panels. Left: a rise in butter's price shifts margarine demand right, because margarine is a substitute. Right: the same rise shifts dinner-roll demand left, because dinner rolls are a complement. Toggle butter's price between normal and higher to see each curve shift.">
+    <defs>
+      <marker id="arw" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+      <marker id="acc" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#b07a2c" />
+      </marker>
+    </defs>
+
+    <!-- ================= LEFT PANEL: Substitute Goods (Margarine) ================= -->
+    <text class="panelhead" x="205" y="18" text-anchor="middle">Substitute Goods</text>
+
+    <!-- axes (drawn before curves); extended past the data max (Q=7.7 / P=7.7) -->
+    <line class="axis" x1="70" y1="353" x2="339.5" y2="353" marker-end="url(#arw)" />
+    <line class="axis" x1="70" y1="353" x2="70" y2="45" marker-end="url(#arw)" />
+    <text class="axlabel" x="205" y="373" text-anchor="middle">Quantity of Margarine Demanded</text>
+    <text class="axlabel" x="32" y="199" text-anchor="middle"
+          transform="rotate(-90 32 199)">Price of Margarine</text>
+
+    <!-- D1: before butter price rises. Toggles curve (solid, Normal) <-> curve-ghost (dashed, Higher) -->
+    <path id="d1Left" class="curve-ghost" d="M84,137 L252,329" />
+    <text class="curvelabel-ink" x="257" y="344" text-anchor="start">D<tspan class="sub" dy="3">1</tspan></text>
+
+    <!-- "Before butter price rises" — always visible (the baseline framing) -->
+    <text class="beforelabel" x="87.5" y="253" text-anchor="start">Before butter</text>
+    <text class="beforelabel" x="87.5" y="265" text-anchor="start">price rises</text>
+
+    <!-- after-group: visible only in the Higher state -->
+    <g id="afterLeft" class="after-group">
+      <path class="curve-accent" d="M105,81 L308,313" />
+      <text class="curvelabel-accent" x="313" y="325" text-anchor="start">D<tspan class="sub" dy="3">2</tspan></text>
+      <line class="shift" x1="166.3" y1="221" x2="201.3" y2="221" marker-end="url(#acc)" />
+      <text class="afterlabel" x="301" y="152" text-anchor="end">After butter</text>
+      <text class="afterlabel" x="301" y="164" text-anchor="end">price rises</text>
+      <text class="shiftlabel" x="157.5" y="298" text-anchor="middle">demand shifts right</text>
+    </g>
+
+    <!-- panel subcaption (always visible) -->
+    <text class="subcap" x="205" y="388" text-anchor="middle">When butter's price rises,</text>
+    <text class="subcap" x="205" y="400" text-anchor="middle">margarine demand shifts <tspan font-weight="700">right</tspan>.</text>
+
+    <!-- ================= RIGHT PANEL: Complement Goods (Dinner Rolls) ================= -->
+    <text class="panelhead" x="545" y="18" text-anchor="middle">Complement Goods</text>
+
+    <line class="axis" x1="410" y1="353" x2="679.5" y2="353" marker-end="url(#arw)" />
+    <line class="axis" x1="410" y1="353" x2="410" y2="45" marker-end="url(#arw)" />
+    <text class="axlabel" x="545" y="373" text-anchor="middle">Quantity of Dinner Rolls Demanded</text>
+    <text class="axlabel" x="372" y="199" text-anchor="middle"
+          transform="rotate(-90 372 199)">Price of Dinner Rolls</text>
+
+    <!-- D1: before butter price rises (upper-right here). Same toggle as the left panel. -->
+    <path id="d1Right" class="curve-ghost" d="M445,81 L648,313" />
+    <text class="curvelabel-ink" x="652" y="323" text-anchor="start">D<tspan class="sub" dy="3">1</tspan></text>
+
+    <text class="beforelabel" x="641" y="152" text-anchor="end">Before butter</text>
+    <text class="beforelabel" x="641" y="164" text-anchor="end">price rises</text>
+
+    <g id="afterRight" class="after-group">
+      <path class="curve-accent" d="M424,137 L592,329" />
+      <text class="curvelabel-accent" x="596" y="339" text-anchor="start">D<tspan class="sub" dy="3">2</tspan></text>
+      <line class="shift" x1="541.3" y1="221" x2="506.3" y2="221" marker-end="url(#acc)" />
+      <text class="afterlabel" x="445" y="281" text-anchor="start">After butter</text>
+      <text class="afterlabel" x="445" y="293" text-anchor="start">price rises</text>
+      <text class="shiftlabel" x="599" y="246" text-anchor="start">demand shifts left</text>
+    </g>
+
+    <text class="subcap" x="545" y="388" text-anchor="middle">When butter's price rises,</text>
+    <text class="subcap" x="545" y="400" text-anchor="middle">dinner-roll demand shifts <tspan font-weight="700">left</tspan>.</text>
+
+    <!-- ================= readout band ================= -->
+    <line class="sep" x1="50" y1="414" x2="670" y2="414" />
+    <text id="rHint"  class="r-hint"  x="360" y="434" text-anchor="middle">Butter's price rose.</text>
+    <text id="rTrade" class="r-trade" x="360" y="454" text-anchor="middle">Margarine (a substitute) shifts RIGHT; dinner rolls (a complement) shift LEFT.</text>
+  </svg>
+
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame is a still image showing
+      what happens after butter's price rises: margarine demand (a substitute)
+      shifts right, and dinner-roll demand (a complement) shifts left. You can
+      also <a href="t03-cross-price.svg">open the static figure</a>.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var byId = function (id) { return document.getElementById(id); };
+
+  var d1Left = byId('d1Left'), d1Right = byId('d1Right');
+  var afterLeft = byId('afterLeft'), afterRight = byId('afterRight');
+  var rHint = byId('rHint'), rTrade = byId('rTrade');
+  var btnNormal = byId('btnNormal'), btnHigher = byId('btnHigher');
+
+  // ---- state ----
+  var higher = true; // 'Higher' is the default, most-informative state
+
+  function render() {
+    var d1Class = higher ? 'curve-ghost' : 'curve';
+    d1Left.setAttribute('class', d1Class);
+    d1Right.setAttribute('class', d1Class);
+    afterLeft.style.opacity = higher ? 1 : 0;
+    afterRight.style.opacity = higher ? 1 : 0;
+    afterLeft.style.pointerEvents = higher ? 'auto' : 'none';
+    afterRight.style.pointerEvents = higher ? 'auto' : 'none';
+
+    if (higher) {
+      rHint.textContent = "Butter's price rose.";
+      rTrade.textContent = 'Margarine (a substitute) shifts RIGHT; dinner rolls (a complement) shift LEFT.';
+    } else {
+      rHint.textContent = 'Butter at its normal price.';
+      rTrade.textContent = "Toggle butter's price to see each related good move.";
+    }
+
+    btnNormal.classList.toggle('on', !higher);
+    btnHigher.classList.toggle('on', higher);
+    btnNormal.setAttribute('aria-pressed', higher ? 'false' : 'true');
+    btnHigher.setAttribute('aria-pressed', higher ? 'true' : 'false');
+  }
+
+  btnNormal.addEventListener('click', function () { higher = false; render(); });
+  btnHigher.addEventListener('click', function () { higher = true; render(); });
+
+  // Debug hook: lets a reviewer screenshot non-initial states via scripting.
+  // Inert for students.
+  window.__fig = {
+    set: function (v) {
+      v = v || {};
+      if (typeof v.higher === 'boolean') higher = v.higher;
+      render();
+    },
+    get: function () { return { higher: higher }; }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

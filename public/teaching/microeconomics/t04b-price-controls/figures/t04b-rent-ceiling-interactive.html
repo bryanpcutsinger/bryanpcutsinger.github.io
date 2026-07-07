@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive rent ceiling: a cap below the clearing rent opens a shortage</title>
+<!--
+  Interactive rent-ceiling diagram for the t04b-price-controls blog post
+  (website-styled warm palette, NOT the FAU slide palette). Self-contained:
+  vanilla SVG + JS, no libraries, no network, no build step. The static FAU
+  figure (figures/t04b-rent-ceiling.{tex,svg}) is the SLIDE version, untouched,
+  and is the <noscript> fallback.
+
+  Recreates UE Fig 12.1 (p.158). Family F3 (policy line / wedge): the horizontal
+  CEILING line is draggable in price (vertical drag; arrow keys step it). Housing
+  supply is a FIXED vertical stock at Qs = F = 5. Aggregate demand has risen as
+  the city grew (Da+Db -> Da+D'b), pushing the free-market clearing rent up to
+  P2 = 7 at E2. The quantity renters demand at the capped rent is read off the
+  NEW demand: Qd = 12 - ceiling (point G). While the ceiling sits below the 7.0
+  clearing rent, Qd > 5 and the F->G gap is the shortage; the shortage band and
+  the below-axis bracket shade it. Raise the ceiling to 7 and the cap stops
+  binding: quantity demanded falls to the 5 that exist, the gap closes.
+
+  ARCHITECTURE: the base figure is REAL SVG markup — a no-JS reader sees the
+  full still figure (both demand lines, fixed supply, ceiling, E1/E2/G, the
+  P1/P2 and Qs/Qd axis labels, droplines, the shortage band + bracket, and the
+  readout for the initial ceiling = 4.0 state). The script only ATTACHES
+  behavior (drag the ceiling, keyboard, live readouts + shading); it never
+  builds the DOM.
+
+  DATA SPACE: x = quantity 0..10.5, y = price 0..10.5.
+  PIXEL FRAME: origin (64,360). Data max maps q=10.5 -> x=392, p=10.5 -> y=44.
+  Axes extend PAST the data max (x to 418, y to 24) so lines never crowd the
+  arrowheads. sx = 328/10.5 = 31.238 px/unit; sy = 316/10.5 = 30.095 px/unit.
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;   /* warm bone background        */
+    --ink:     #1a1c1e;    /* primary curves + headings   */
+    --text:    #16181a;    /* body text                   */
+    --muted:   #5c6066;    /* axes / secondary labels     */
+    --hairline:#e3ddd3;    /* axis muting / droplines     */
+    --accent:  #b07a2c;    /* brass — ceiling + shortage  */
+    --accent-tint: #efe4d2;/* shaded shortage gap         */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* min-width:0 lets this flex item shrink below the SVG's min-content width,
+     so the figure tracks the viewport instead of overflowing on narrow screens */
+  .fig { width: 100%; max-width: 480px; min-width: 0; }
+  svg { width: 100%; max-width: 100%; height: auto; display: block;
+        touch-action: pan-y; }
+
+  /* structural strokes */
+  .axis      { stroke: var(--muted); stroke-width: 1.4; }
+  .curve     { stroke: var(--ink); stroke-width: 2.6; fill: none;
+               stroke-linecap: round; }
+  .drop      { stroke: var(--hairline); stroke-width: 1.6;
+               stroke-dasharray: 5 4; }
+
+  /* ceiling (draggable policy line) + shortage shading */
+  .ceiling   { stroke: var(--accent); stroke-width: 2.6; fill: none;
+               stroke-linecap: round; }
+  .band      { fill: var(--accent-tint); opacity: 0.75; stroke: none; }
+  .bracket   { stroke: var(--accent); stroke-width: 1.8; fill: none;
+               stroke-linecap: round; }
+
+  /* points */
+  .pt-static { fill: var(--ink); stroke: var(--surface); stroke-width: 1.5; }
+  .pt        { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5; }
+  .knob      { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5;
+               pointer-events: none; }
+
+  /* transparent hit targets */
+  .hit       { fill: transparent; stroke: transparent; touch-action: none;
+               cursor: grab; }
+  .hit-line  { fill: none; stroke: transparent; stroke-width: 28;
+               touch-action: none; cursor: ns-resize; }
+  .pt-focus:focus-visible { outline: none; }
+  .pt-focus:focus-visible + .knob,
+  .grabbing .knob { stroke: var(--ink); stroke-width: 3.2; }
+
+  /* text */
+  .lab     { fill: var(--ink); font-size: 13px; font-weight: 600; }
+  .axlab   { fill: var(--muted); font-size: 14px; font-weight: 600; }
+  .plab    { fill: var(--muted); font-size: 12.5px; font-weight: 600; }
+  .qlab    { fill: var(--muted); font-size: 12px; font-weight: 600; }
+  .ceil-lab{ fill: var(--accent); font-size: 13px; font-weight: 700; }
+  .brlab   { fill: var(--accent); font-size: 12px; font-weight: 700; }
+  .sep     { stroke: var(--hairline); stroke-width: 1; }
+  .readout { font-family: var(--font-body); text-align: center; }
+  .r-hint  { color: var(--muted); font-size: 12.5px; line-height: 1.3;
+             margin-bottom: 5px; }
+  .r-trade { color: var(--accent); font-size: 14px; font-weight: 600;
+             line-height: 1.3; }
+  .fallback {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.35;
+    text-align: center;
+  }
+  .fallback a { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="fig">
+  <svg id="fig" viewBox="0 0 440 540" role="group"
+       aria-label="A rent-ceiling diagram. Housing supply is a fixed vertical stock of five units; demand has risen so the free-market clearing rent is seven. Drag the horizontal rent ceiling up or down: when it sits below the clearing rent, renters want more units than exist and a shortage opens between the fixed supply and the quantity demanded.">
+    <defs>
+      <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+    </defs>
+
+    <!-- static droplines (drawn first so curves sit on top) -->
+    <!-- P2 -> E2 horizontal dropline -->
+    <line class="drop" x1="64" y1="149.3" x2="220.2" y2="149.3" />
+    <!-- F vertical dropline at x=5 (coincident with the supply line) -->
+    <line class="drop" x1="220.2" y1="239.6" x2="220.2" y2="360" />
+    <!-- G vertical dropline at Qd (moves with the ceiling) -->
+    <line id="dropG" class="drop" x1="313.9" y1="239.6" x2="313.9" y2="360" />
+
+    <!-- axes (drawn before the curves; extended past the data max) -->
+    <line class="axis" x1="64" y1="360" x2="418" y2="360" marker-end="url(#arrow)" />
+    <line class="axis" x1="64" y1="360" x2="64"  y2="24"  marker-end="url(#arrow)" />
+
+    <!-- shortage band along the ceiling, F -> G (below the demands so they read on top) -->
+    <rect id="band" class="band" x="220.2" y="233.6" width="93.7" height="12" />
+
+    <!-- fixed vertical supply S (total available stock) at x=5 -->
+    <line class="curve" x1="220.2" y1="360" x2="220.2" y2="74.1" />
+
+    <!-- original aggregate demand Da+Db: P = 9 - x, x in [0.8, 8.8] -->
+    <line class="curve" x1="89.0" y1="113.2" x2="338.9" y2="354.0" />
+    <!-- new (higher) aggregate demand Da+D'b: P = 12 - x, x in [2.5, 9.5] -->
+    <line class="curve" x1="142.1" y1="74.1" x2="360.8" y2="284.8" />
+
+    <!-- the draggable ceiling line at P1 = 4 -->
+    <line id="ceiling" class="ceiling" x1="64" y1="239.6" x2="370.1" y2="239.6" />
+
+    <!-- axis titles -->
+    <text class="axlab" x="228" y="430" text-anchor="middle">Quantity of apartments</text>
+    <text class="axlab" x="22" y="200" text-anchor="middle"
+          transform="rotate(-90 22 200)">Rent</text>
+
+    <!-- curve labels (held clear of the lines) -->
+    <text class="lab" x="228" y="72" text-anchor="start">S</text>
+    <text class="lab" x="342" y="349" text-anchor="start">D<tspan baseline-shift="sub" font-size="9.5">a</tspan> + D<tspan baseline-shift="sub" font-size="9.5">b</tspan></text>
+    <text class="lab" x="364" y="296" text-anchor="start">D<tspan baseline-shift="sub" font-size="9.5">a</tspan> + D&#8242;<tspan baseline-shift="sub" font-size="9.5">b</tspan></text>
+    <text id="ceilLabel" class="ceil-lab" x="374" y="235" text-anchor="start">Ceiling</text>
+
+    <!-- price-axis reference labels -->
+    <text class="plab" x="55" y="243" text-anchor="end">P<tspan baseline-shift="sub" font-size="9.5">1</tspan></text>
+    <text class="plab" x="55" y="153" text-anchor="end">P<tspan baseline-shift="sub" font-size="9.5">2</tspan></text>
+
+    <!-- static context points E1, E2 -->
+    <circle class="pt-static" cx="220.2" cy="239.6" r="4.5" />
+    <text class="lab" x="231" y="231" text-anchor="start">E<tspan baseline-shift="sub" font-size="9.5">1</tspan></text>
+    <circle class="pt-static" cx="220.2" cy="149.3" r="4.5" />
+    <text class="lab" x="231" y="143" text-anchor="start">E<tspan baseline-shift="sub" font-size="9.5">2</tspan></text>
+
+    <!-- the moving point G = new demand at the ceiling (quantity demanded) -->
+    <circle id="gDot" class="pt" cx="313.9" cy="239.6" r="6" />
+
+    <!-- quantity-axis labels -->
+    <text class="qlab" x="220.2" y="377" text-anchor="middle">Q<tspan baseline-shift="sub" font-size="9.5">s</tspan> (F)</text>
+    <text id="qdLabel" class="qlab" x="313.9" y="377" text-anchor="middle">Q<tspan baseline-shift="sub" font-size="9.5">d</tspan> (G)</text>
+
+    <!-- shortage bracket below the x-axis, F -> G -->
+    <path id="bracket" class="bracket" d="M220.2,393 L220.2,403 M220.2,398 L313.9,398 M313.9,393 L313.9,403" />
+    <text id="bracketLabel" class="brlab" x="267.0" y="414" text-anchor="middle">Shortage (FG)</text>
+
+    <!-- fat invisible hit line over the ceiling (grab anywhere) -->
+    <line id="ceilHit" class="hit-line" x1="64" y1="239.6" x2="370.1" y2="239.6" />
+    <!-- keyboard proxy (screen-reader slider) beneath the visible knob -->
+    <circle id="ptFocus" class="pt-focus hit" cx="100" cy="239.6" r="22"
+            tabindex="0" role="slider" aria-label="Rent ceiling"
+            aria-valuemin="2.5" aria-valuemax="9" aria-valuenow="4"
+            aria-valuetext="Ceiling at 4.0. Renters want 8 units; only 5 exist. The cap holds rent below the 7.0 clearing rent, so the 3-unit gap is the shortage." />
+    <!-- visible drag knob on the ceiling -->
+    <circle id="ceilKnob" class="knob" cx="100" cy="239.6" r="6" />
+
+    <!-- readout band: hairline separator, muted STATE line, accent TAKEAWAY line.
+         A foreignObject lets the full-sentence readouts wrap so nothing clips. -->
+    <line class="sep" x1="44" y1="446" x2="396" y2="446" />
+    <foreignObject x="38" y="452" width="364" height="86">
+      <div xmlns="http://www.w3.org/1999/xhtml" class="readout">
+        <div id="rHint"  class="r-hint">Ceiling at 4.0 &#8594; renters want 8 units; only 5 exist.</div>
+        <div id="rTrade" class="r-trade">The cap holds rent below the 7.0 clearing rent &#8212; the 3-unit gap is the shortage.</div>
+      </div>
+    </foreignObject>
+  </svg>
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame is a still image: a fixed vertical housing supply, a risen demand whose clearing rent P<sub>2</sub> sits above the rent ceiling P<sub>1</sub>, and the resulting FG shortage. You can also <a href="t04b-rent-ceiling.svg">open the static figure</a>.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var svg = document.getElementById('fig');
+  var ceiling  = document.getElementById('ceiling');
+  var ceilHit  = document.getElementById('ceilHit');
+  var ceilKnob = document.getElementById('ceilKnob');
+  var ptFocus  = document.getElementById('ptFocus');
+  var ceilLabel= document.getElementById('ceilLabel');
+  var gDot     = document.getElementById('gDot');
+  var dropG    = document.getElementById('dropG');
+  var qdLabel  = document.getElementById('qdLabel');
+  var band     = document.getElementById('band');
+  var bracket  = document.getElementById('bracket');
+  var bracketLabel = document.getElementById('bracketLabel');
+  var rHint    = document.getElementById('rHint');
+  var rTrade   = document.getElementById('rTrade');
+
+  // pixel frame + scale (mirrors the base SVG markup)
+  var QMAX = 10.5, PMAX = 10.5;
+  var X0 = 64, X1 = 392, Y0 = 360, Y1 = 44;
+  var px = function (q) { return X0 + (q / QMAX) * (X1 - X0); };  // qty   -> px x
+  var py = function (p) { return Y0 - (p / PMAX) * (Y0 - Y1); };  // price -> px y
+  var toP = function (yy) { return ((Y0 - yy) / (Y0 - Y1)) * PMAX; };
+
+  // model constants (read off the .tex / corrected inventory)
+  var QS = 5;          // fixed available stock (vertical supply at x = 5)
+  var PCLEAR = 7;      // new free-market clearing rent (P2 = E2 height)
+  var XF = px(QS);     // pixel x of F = 5
+
+  // ceiling range (in price). Min 2.5 keeps G on the drawn new-demand segment
+  // (Qd <= 9.5); max 9.0 lifts the cap well above the clearing rent.
+  var CMIN = 2.5, CMAX = 9.0;
+
+  // demand read: quantity demanded at the ceiling, off the NEW demand P = 12 - x
+  function qDemanded(c) { return 12 - c; }
+
+  // State in DATA units.
+  var c = 4.0;   // initial ceiling = P1
+
+  // convert a client event to SVG user coords (handles responsive scaling)
+  var spt = svg.createSVGPoint();
+  function toSvg(evt) {
+    spt.x = evt.clientX; spt.y = evt.clientY;
+    return spt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+
+  // format a quantity: drop a trailing .0 so "8" not "8.0"
+  function fmt(v) {
+    var r = Math.round(v * 10) / 10;
+    return (Math.abs(r - Math.round(r)) < 0.05) ? String(Math.round(r)) : r.toFixed(1);
+  }
+
+  function setShortageVisible(on) {
+    var v = on ? 'visible' : 'hidden';
+    band.style.visibility = v;
+    bracket.style.visibility = v;
+    bracketLabel.style.visibility = v;
+  }
+
+  function render() {
+    var cy = py(c);
+    var qd = qDemanded(c);
+    var gx = px(qd);
+    var gap = qd - QS;
+    var shortage = gap > 0.05;
+
+    // ceiling line + its handle, hit target, label
+    ceiling.setAttribute('y1', cy); ceiling.setAttribute('y2', cy);
+    ceilHit.setAttribute('y1', cy); ceilHit.setAttribute('y2', cy);
+    ceilKnob.setAttribute('cy', cy);
+    ptFocus.setAttribute('cy', cy);
+    ceilLabel.setAttribute('y', cy - 5);
+
+    // G point (quantity demanded on the new demand) + its dropline + label
+    gDot.setAttribute('cx', gx); gDot.setAttribute('cy', cy);
+    dropG.setAttribute('x1', gx); dropG.setAttribute('x2', gx);
+    dropG.setAttribute('y1', cy); dropG.setAttribute('y2', Y0);
+    qdLabel.setAttribute('x', gx);
+    // at the clearing rent Qd = Qs, so G's foot coincides with F's — hide the
+    // Qd (G) axis label to avoid it overprinting Qs (F)
+    qdLabel.style.visibility = (Math.abs(gx - XF) < 26) ? 'hidden' : 'visible';
+
+    // shortage shading (band along the ceiling F->G) + below-axis bracket
+    if (shortage) {
+      band.setAttribute('x', XF);
+      band.setAttribute('width', gx - XF);
+      band.setAttribute('y', cy - 6);
+      bracket.setAttribute('d',
+        'M' + XF + ',393 L' + XF + ',403 ' +
+        'M' + XF + ',398 L' + gx + ',398 ' +
+        'M' + gx + ',393 L' + gx + ',403');
+      bracketLabel.setAttribute('x', (XF + gx) / 2);
+      setShortageVisible(true);
+    } else {
+      setShortageVisible(false);
+    }
+
+    // readout grammar: muted state line + accent takeaway line
+    var hint, trade, aria;
+    if (shortage) {
+      hint  = 'Ceiling at ' + c.toFixed(1) + ' → renters want ' + fmt(qd) +
+              ' units; only 5 exist.';
+      trade = 'The cap holds rent below the ' + PCLEAR.toFixed(1) +
+              ' clearing rent — the ' + fmt(gap) + '-unit gap is the shortage.';
+    } else if (Math.abs(qd - QS) <= 0.05) {
+      hint  = 'Ceiling at ' + c.toFixed(1) +
+              ' → quantity demanded 5 = quantity supplied.';
+      trade = 'At the clearing rent the cap stops binding — no shortage.';
+    } else {
+      hint  = 'Ceiling at ' + c.toFixed(1) + ' → quantity demanded ' +
+              fmt(qd) + ', quantity supplied 5.';
+      trade = 'Above the ' + PCLEAR.toFixed(1) +
+              ' clearing rent the cap stops binding — no shortage.';
+    }
+    rHint.textContent  = hint;
+    rTrade.textContent = trade;
+
+    ptFocus.setAttribute('aria-valuenow', c.toFixed(1));
+    ptFocus.setAttribute('aria-valuetext', hint + ' ' + trade);
+  }
+
+  function setFromPointer(evt) {
+    var p = toSvg(evt);
+    var cc = toP(p.y);
+    if (isNaN(cc)) return;
+    if (cc < CMIN) cc = CMIN;
+    if (cc > CMAX) cc = CMAX;
+    c = cc;
+    render();
+  }
+
+  // --- drag (pointer events + pointer capture so a fast drag can't get stuck) ---
+  var dragging = false;
+  var capturedEl = null, capturedId = null;
+  function onMove(evt) { if (dragging) { evt.preventDefault(); setFromPointer(evt); } }
+  function onUp() {
+    dragging = false;
+    svg.classList.remove('grabbing');
+    if (capturedEl && capturedId !== null) {
+      try { capturedEl.releasePointerCapture(capturedId); } catch (e) {}
+    }
+    capturedEl = null; capturedId = null;
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+  }
+  function onDown(evt) {
+    evt.preventDefault();
+    dragging = true;
+    svg.classList.add('grabbing');
+    capturedEl = evt.currentTarget; capturedId = evt.pointerId;
+    try { capturedEl.setPointerCapture(capturedId); } catch (e) {}
+    setFromPointer(evt);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }
+  ceilHit.addEventListener('pointerdown', onDown);
+  ptFocus.addEventListener('pointerdown', onDown);
+
+  // --- keyboard: arrows step the ceiling in price ---
+  ptFocus.addEventListener('keydown', function (evt) {
+    var step = 0.2;
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') { c += step; }
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') { c -= step; }
+    else return;
+    evt.preventDefault();
+    if (c < CMIN) c = CMIN;
+    if (c > CMAX) c = CMAX;
+    render();
+  });
+
+  // Debug hook (inert for students): set/get the ceiling price.
+  window.__fig = {
+    set: function (v) { c = Math.max(CMIN, Math.min(CMAX, +v)); render(); },
+    get: function () { return { ceiling: c, qDemanded: qDemanded(c), qSupplied: QS }; }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

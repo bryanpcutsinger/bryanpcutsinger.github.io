@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive figure: price discrimination as marginal-revenue equalization across two customers</title>
+<!--
+  Interactive recreation of UE Fig 20.1 (p.312, "Equating Price with Marginal
+  Revenue of Each Customer") for the T8a blog post (website-styled warm
+  palette, not FAU). Self-contained: no libraries, no network. The static FAU
+  figure (figures/t08-price-discrimination.{tex,svg}) is the SLIDE version and
+  is untouched; it is also this widget's <noscript> fallback.
+
+  ARCHITECTURE (family F8 -- allocation / two-agent margins): the base figure
+  is REAL SVG markup. A no-JS reader sees the FULL two-panel still: both
+  demand curves (D_A, D_B), both dashed MR bisectors, the fixed MC = AC
+  reference line, the shared MR* handle at its profit-max resting position,
+  both optimum dots with droplines, and every label the corrected element
+  inventory calls for. The script only ATTACHES behavior (drag the shared
+  MR* level, both panels' quantities/prices/droplines update, snap-highlight
+  at the optimum); it never builds figure DOM.
+
+  MODEL (numbers grounded in the post's own worked table, §7):
+    Customer A: demand P = 13 - Q_A (intercept (0,13) -> (13,0));
+                MR_A bisector P = 13 - 2*Q_A (dashed, to x-intercept (6.5,0)).
+    Customer B: demand P = 9 - Q_B  (intercept (0,9)  -> (9,0));
+                MR_B bisector P = 9 - 2*Q_B  (dashed, to x-intercept (4.5,0)).
+    Shared fixed reference: MC = AC = $4 (horizontal, spans both panels).
+    Draggable state = mrStar, an INTEGER dollar level in [0,10], default 4
+    (the profit-max resting state, matching the corrected element inventory's
+    labelled optimum dots). Given mrStar, each panel's discrete profit-max
+    quantity is the largest integer Q with that customer's discrete marginal
+    revenue >= mrStar (produce while the next unit's marginal revenue still
+    covers the target level), which works out to:
+      Q_A(mrStar) = floor((14 - mrStar) / 2),  P_A = 13 - Q_A
+      Q_B(mrStar) = floor((10 - mrStar) / 2),  P_B = 9  - Q_B
+    These floors reproduce the post's table exactly: mrStar=4 -> Q_A=5,P_A=$8
+    and Q_B=3,P_B=$6 (the headline optimum); mrStar=2 -> Q_A=6,P_A=$7 and
+    Q_B=4,P_B=$5 (the spec's second worked example). Because BOTH quantities
+    are driven by the one shared mrStar, MR_A = MR_B always -- dragging can
+    only show equalized states; the "before" unequal-MR $7-common-price case
+    is the paragraph directly above this figure in the post, so the widget
+    does not re-litigate it, it demonstrates the equalizing MOVE the paragraph
+    describes. A small continuous-vs-discrete offset is expected and accepted
+    (per the spec): the drawn MR bisector lines are the continuous tangent
+    lines, but the labelled optimum dots sit at the discrete table quantities.
+
+  GEOMETRY (two-panel side by side): viewBox 720 x 460, aspect-ratio 16/10,
+  max-width 640px. Shared vertical dollar scale across BOTH panels so the
+  MC = AC / MR* horizontal lines are literally level:
+    y(P) = 350 - P * (300/14)   [P=0 -> y=350, P=14 -> y=50]
+  Panel A (left): quantity axis at x=100 (Q=0), 16 px/unit, drawn out past the
+    Q=13 intercept to x=340 for the arrowhead.
+    x_A(Q) = 100 + 16*Q
+  Panel B (right): quantity axis at x=460 (Q=0), 20 px/unit, drawn out past
+    the Q=9 intercept to x=675 for the arrowhead.
+    x_B(Q) = 460 + 20*Q
+  The MC = AC fixed reference (y = y(4), dashed, muted) and the draggable MR*
+  handle (y = y(mrStar), solid accent, thickened + "opt" at mrStar = 4) both
+  span the full width x=85..685, crossing the gap between panels so they read
+  as ONE shared line, not two separate per-panel lines.
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;   /* warm bone background        */
+    --ink:     #1a1c1e;    /* demand curves + headings    */
+    --text:    #16181a;    /* body text                   */
+    --muted:   #5c6066;    /* axes / secondary labels     */
+    --hairline:#e3ddd3;    /* droplines / muting          */
+    --accent:  #b07a2c;    /* brass -- the MR* handle + dots */
+    --accent-tint: #efe4d2;/* (unused wash, kept for palette-token gate) */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* min-width:0 lets the figure scale DOWN to narrow phones instead of clipping */
+  .fig { width: 100%; max-width: 640px; min-width: 0; }
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y;
+        user-select: none; -webkit-user-select: none; }
+
+  /* structural strokes */
+  .axis     { stroke: var(--muted); stroke-width: 1.4; }
+  .curve    { stroke: var(--ink); stroke-width: 2.6; fill: none;
+              stroke-linecap: round; }
+  .curve-dashed { stroke: var(--ink); stroke-width: 2; fill: none;
+              stroke-dasharray: 6 5; }
+  .mc-line  { stroke: var(--muted); stroke-width: 1.8; stroke-dasharray: 6 5; }
+  .mr-line  { stroke: var(--accent); stroke-width: 2.8; }
+  .mr-line.opt { stroke-width: 4; }
+  .drop     { stroke: var(--hairline); stroke-width: 1.6; stroke-dasharray: 5 4; }
+  .meet-dot { fill: var(--accent); opacity: 0.55; }
+
+  /* draggable point + generous transparent hit targets */
+  .pt        { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5; }
+  .pt.opt    { stroke: var(--accent); }
+  .hit       { fill: transparent; stroke: transparent; touch-action: none;
+               cursor: grab; }
+  .hit-curve { fill: none; stroke: transparent; stroke-width: 28;
+               touch-action: none; cursor: grab; }
+  .pt-focus:focus-visible { outline: none; }
+  .pt-focus:focus-visible + .pt,
+  .grabbing .pt { stroke: var(--accent); stroke-width: 3.5; }
+
+  /* text */
+  .panel-title { fill: var(--ink); font-size: 14px; font-weight: 700; }
+  .axlabel   { fill: var(--muted); font-size: 13px; font-weight: 600; }
+  .ticklabel { fill: var(--muted); font-size: 11px; }
+  .linelabel { fill: var(--muted); font-size: 12px; font-style: italic; }
+  .mclabel   { fill: var(--muted); font-size: 11.5px; font-weight: 600; }
+  .mrlabel   { fill: var(--accent); font-size: 12.5px; font-weight: 700; }
+  .qlabel    { fill: var(--ink); font-size: 12.5px; font-weight: 700;
+               paint-order: stroke; stroke: var(--surface); stroke-width: 3px;
+               stroke-linejoin: round; }
+  .sep       { stroke: var(--hairline); stroke-width: 1; }
+  .r-hint    { fill: var(--muted); font-size: 12.5px; }
+  .r-trade   { fill: var(--accent); font-size: 13px; font-weight: 600; }
+  .fallback  { margin: 8px 0 0; color: var(--muted); font-size: 13px;
+               line-height: 1.35; text-align: center; }
+  .fallback a { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="fig">
+  <svg id="fig" viewBox="0 0 720 460" role="group"
+       aria-label="Two customer panels, A and B, each with its own downward demand curve and a dashed marginal-revenue bisector. A shared marginal-revenue level, drawn as one horizontal handle spanning both panels, sets the profit-maximizing quantity and price in each panel at once. Drag the handle to change that shared level; at the default level of four dollars, equal to marginal cost, Customer A buys five units at eight dollars and Customer B buys three units at six dollars -- the less price-sensitive buyer, A, pays the higher price.">
+    <title>Price discrimination: marginal revenue equalized across two customer panels</title>
+    <defs>
+      <marker id="ax-arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+    </defs>
+
+    <!-- ===================== panel titles ===================== -->
+    <text class="panel-title" x="220" y="20" text-anchor="middle">Customer A</text>
+    <text class="panel-title" x="567" y="20" text-anchor="middle">Customer B</text>
+
+    <!-- ===================== axes ===================== -->
+    <line class="axis" x1="100" y1="350" x2="100" y2="38"  marker-end="url(#ax-arrow)" />
+    <line class="axis" x1="100" y1="350" x2="340" y2="350" marker-end="url(#ax-arrow)" />
+    <line class="axis" x1="460" y1="350" x2="460" y2="38"  marker-end="url(#ax-arrow)" />
+    <line class="axis" x1="460" y1="350" x2="675" y2="350" marker-end="url(#ax-arrow)" />
+
+    <!-- shared vertical dollar scale (labelled once, per house precedent) -->
+    <text class="axlabel" x="22" y="205" text-anchor="middle"
+          transform="rotate(-90 22 205)">Price ($)</text>
+    <text class="axlabel" x="220" y="388" text-anchor="middle">Quantity</text>
+    <text class="axlabel" x="567" y="388" text-anchor="middle">Quantity</text>
+    <g class="ticklabel">
+      <text x="100" y="364" text-anchor="middle">0</text>
+      <text x="460" y="364" text-anchor="middle">0</text>
+    </g>
+
+    <!-- ===================== demand + MR curves (static, never move) ===== -->
+    <!-- Customer A: D_A (0,13)->(13,0); MR_A dashed (0,13)->(6.5,0) -->
+    <path class="curve" d="M100,71.43 L308,350" />
+    <path class="curve-dashed" d="M100,71.43 L204,350" />
+    <text class="linelabel" x="250" y="330" text-anchor="start">D_A</text>
+    <text class="linelabel" x="150" y="245" text-anchor="start">MR_A</text>
+
+    <!-- Customer B: D_B (0,9)->(9,0); MR_B dashed (0,9)->(4.5,0) -->
+    <path class="curve" d="M460,157.14 L640,350" />
+    <path class="curve-dashed" d="M460,157.14 L550,350" />
+    <text class="linelabel" x="540" y="300" text-anchor="start">D_B</text>
+    <text class="linelabel" x="466" y="200" text-anchor="start">MR_B</text>
+
+    <!-- ===================== fixed MC = AC reference ($4, static) ===== -->
+    <line class="mc-line" x1="85" y1="264.29" x2="685" y2="264.29" />
+    <text class="mclabel" x="622" y="254" text-anchor="start">MC = AC</text>
+    <!-- static $4 axis ticks (both customer panels) -->
+    <line class="axis" x1="96" y1="264.29" x2="100" y2="264.29" />
+    <text class="mclabel" x="92" y="264.29" text-anchor="end"
+          dominant-baseline="middle">$4</text>
+    <line class="axis" x1="456" y1="264.29" x2="460" y2="264.29" />
+    <text class="mclabel" x="440" y="250" text-anchor="end">$4</text>
+
+    <!-- ===================== draggable shared MR* handle ===================== -->
+    <line id="mrLine" class="mr-line opt" x1="85" y1="264.29" x2="685" y2="264.29" />
+    <text id="mrLabel" class="mrlabel" x="380" y="254.29" text-anchor="middle">MR* = $4</text>
+
+    <!-- ===================== Customer A dot + droplines ===================== -->
+    <g id="gDotA">
+      <line id="dropAV" class="drop" x1="180" y1="350"   x2="180" y2="178.57" />
+      <line id="dropAH" class="drop" x1="100" y1="178.57" x2="180" y2="178.57" />
+      <circle id="meetA" class="meet-dot" cx="180" cy="264.29" r="3.5" />
+      <text id="qA"  class="qlabel" x="180" y="366" text-anchor="middle">5</text>
+      <text id="pA"  class="qlabel" x="94"  y="178.57" text-anchor="end"
+            dominant-baseline="middle">$8</text>
+      <circle id="dotA" class="pt opt" cx="180" cy="178.57" r="6.5" />
+    </g>
+
+    <!-- ===================== Customer B dot + droplines ===================== -->
+    <g id="gDotB">
+      <line id="dropBV" class="drop" x1="520" y1="350"   x2="520" y2="221.43" />
+      <line id="dropBH" class="drop" x1="460" y1="221.43" x2="520" y2="221.43" />
+      <circle id="meetB" class="meet-dot" cx="520" cy="264.29" r="3.5" />
+      <text id="qB"  class="qlabel" x="520" y="366" text-anchor="middle">3</text>
+      <text id="pB"  class="qlabel" x="454" y="221.43" text-anchor="end"
+            dominant-baseline="middle">$6</text>
+      <circle id="dotB" class="pt opt" cx="520" cy="221.43" r="6.5" />
+    </g>
+
+    <!-- ===================== drag hit targets (set the shared MR* level) === -->
+    <line id="hitMR" class="hit-curve" x1="85" y1="264.29" x2="685" y2="264.29" />
+    <circle id="hitHandle" class="hit" cx="380" cy="264.29" r="24" />
+    <circle id="ptFocus" class="pt-focus hit" cx="380" cy="264.29" r="24"
+            tabindex="0" role="slider" aria-label="Shared marginal-revenue level"
+            aria-valuemin="0" aria-valuemax="10" aria-valuenow="4"
+            aria-valuetext="Marginal revenue four dollars, equal to marginal cost. Customer A buys five units at eight dollars; Customer B buys three units at six dollars. The less price-sensitive buyer, A, pays the higher price -- this is the profit-maximizing split." />
+    <circle id="handleDot" class="pt opt" cx="380" cy="264.29" r="7" />
+
+    <!-- ===================== readout band (2-line accent -- the equalized
+         takeaway sentences run long, so they wrap onto two <text> lines,
+         same pattern as t03-demand-shift-vs-move's tradeA1/tradeA2) ===== -->
+    <line class="sep" x1="60" y1="402" x2="660" y2="402" />
+    <text id="rHint"   class="r-hint"  x="360" y="417" text-anchor="middle">MR* = $4. Customer A: 5 units at $8. Customer B: 3 units at $6.</text>
+    <text id="rTrade1" class="r-trade" x="360" y="432" text-anchor="middle">Marginal revenue is equal ($4) across both buyers and equal to marginal cost --</text>
+    <text id="rTrade2" class="r-trade" x="360" y="447" text-anchor="middle">the less price-sensitive buyer (A) pays the higher price, $8 vs $6.</text>
+  </svg>
+
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame is a still image: two
+      customer demand panels with a shared marginal-revenue level equalized at
+      $4 (equal to marginal cost) -- Customer A buys 5 units at $8, Customer B
+      buys 3 units at $6. You can also
+      <a href="t08-price-discrimination.svg">open the static figure</a>.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var svg = document.getElementById('fig');
+  var byId = function (id) { return document.getElementById(id); };
+
+  var mrLine = byId('mrLine'), mrLabel = byId('mrLabel');
+  var gDotA = byId('gDotA'), gDotB = byId('gDotB');
+  var dotA = byId('dotA'), dotB = byId('dotB');
+  var dropAV = byId('dropAV'), dropAH = byId('dropAH');
+  var dropBV = byId('dropBV'), dropBH = byId('dropBH');
+  var meetA = byId('meetA'), meetB = byId('meetB');
+  var qA = byId('qA'), pA = byId('pA'), qB = byId('qB'), pB = byId('pB');
+  var hitMR = byId('hitMR'), hitHandle = byId('hitHandle');
+  var ptFocus = byId('ptFocus'), handleDot = byId('handleDot');
+  var rHint = byId('rHint'), rTrade1 = byId('rTrade1'), rTrade2 = byId('rTrade2');
+
+  // --- pixel frame + shared price scale (mirrors the markup above) ---
+  var Y0 = 350, PER_P = 300 / 14;                 // P=0 -> y=350, P=14 -> y=50
+  var AX0 = 100, PER_QA = 16;                     // Customer A quantity axis
+  var BX0 = 460, PER_QB = 20;                     // Customer B quantity axis
+  var HANDLE_X = 380, MR_X0 = 85, MR_X1 = 685;    // shared MR* handle span
+  var MR_LO = 0, MR_HI = 10;                      // draggable dollar range
+  var MC = 4;                                     // fixed marginal-cost level
+
+  function yP(p)   { return Y0 - p * PER_P; }
+  function toP(py)  { return (Y0 - py) / PER_P; }
+  function xA(q)   { return AX0 + q * PER_QA; }
+  function xB(q)   { return BX0 + q * PER_QB; }
+
+  // --- the model: shared MR* -> each customer's discrete profit-max Q, P ---
+  function qaOf(mr) { return Math.max(0, Math.min(12, Math.floor((14 - mr) / 2))); }
+  function qbOf(mr) { return Math.max(0, Math.min(9,  Math.floor((10 - mr) / 2))); }
+  function paOf(q)  { return 13 - q; }
+  function pbOf(q)  { return 9 - q; }
+
+  // --- state: the shared marginal-revenue level (integer dollars) ---
+  var mrStar = 4;
+
+  var spt = svg.createSVGPoint();
+  function toSvg(evt) {
+    spt.x = evt.clientX; spt.y = evt.clientY;
+    return spt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+
+  // readout text -- the spec's example states verbatim, generic otherwise.
+  // The accent (takeaway) sentence runs long, so it is returned as TWO lines
+  // (a1/a2) that render on separate <text> elements -- same wrap pattern as
+  // t03-demand-shift-vs-move's tradeA1/tradeA2.
+  function unit(n) { return n === 1 ? 'unit' : 'units'; }
+  function text(mr, qa, pa, qb, pb) {
+    if (mr === 4) return {
+      m: 'MR* = $4. Customer A: 5 units at $8. Customer B: 3 units at $6.',
+      a1: 'Marginal revenue is equal ($4) across both buyers and equal to marginal cost —',
+      a2: 'the less price-sensitive buyer (A) pays the higher price, $8 vs $6.'
+    };
+    if (mr === 2) return {
+      m: 'MR* = $2. Customer A: 6 units at $7. Customer B: 4 units at $5.',
+      a1: 'Pushing output to MR* = $2 sells more but below the $4 marginal cost —',
+      a2: 'the seller is over-producing.'
+    };
+    var m = 'MR* = $' + mr + '. Customer A: ' + qa + ' ' + unit(qa) + ' at $' + pa +
+            '. Customer B: ' + qb + ' ' + unit(qb) + ' at $' + pb + '.';
+    var a1, a2;
+    if (mr > MC) {
+      a1 = 'MR* = $' + mr + ' sits above the $' + MC + ' marginal cost — output can still';
+      a2 = 'expand toward $' + MC + ' to raise profit further.';
+    } else {
+      a1 = 'MR* = $' + mr + ' is below the $' + MC + ' marginal cost — the seller is';
+      a2 = 'over-producing; pull the level back toward $' + MC + '.';
+    }
+    return { m: m, a1: a1, a2: a2 };
+  }
+
+  function render() {
+    var qa = qaOf(mrStar), pa = paOf(qa);
+    var qb = qbOf(mrStar), pb = pbOf(qb);
+    var yMR = yP(mrStar);
+    var opt = (mrStar === MC);
+
+    // the shared MR* handle
+    mrLine.setAttribute('y1', yMR); mrLine.setAttribute('y2', yMR);
+    mrLine.setAttribute('class', opt ? 'mr-line opt' : 'mr-line');
+    mrLabel.setAttribute('y', yMR - 10);
+    mrLabel.textContent = 'MR* = $' + mrStar;
+    hitMR.setAttribute('y1', yMR); hitMR.setAttribute('y2', yMR);
+    hitHandle.setAttribute('cy', yMR);
+    ptFocus.setAttribute('cy', yMR);
+    handleDot.setAttribute('cy', yMR);
+    handleDot.setAttribute('class', opt ? 'pt opt' : 'pt');
+
+    // Customer A dot + droplines (hidden if A buys nothing, never happens in range)
+    var paxA = xA(qa), payA = yP(pa);
+    gDotA.style.display = (qa === 0) ? 'none' : '';
+    dotA.setAttribute('cx', paxA); dotA.setAttribute('cy', payA);
+    dotA.setAttribute('class', opt ? 'pt opt' : 'pt');
+    dropAV.setAttribute('x1', paxA); dropAV.setAttribute('x2', paxA);
+    dropAV.setAttribute('y2', payA);
+    dropAH.setAttribute('y1', payA); dropAH.setAttribute('y2', payA);
+    dropAH.setAttribute('x2', paxA);
+    meetA.setAttribute('cx', paxA); meetA.setAttribute('cy', yMR);
+    qA.setAttribute('x', paxA); qA.textContent = qa;
+    pA.setAttribute('y', payA); pA.textContent = '$' + pa;
+
+    // Customer B dot + droplines (hidden if B buys nothing)
+    var paxB = xB(qb), payB = yP(pb);
+    gDotB.style.display = (qb === 0) ? 'none' : '';
+    dotB.setAttribute('cx', paxB); dotB.setAttribute('cy', payB);
+    dotB.setAttribute('class', opt ? 'pt opt' : 'pt');
+    dropBV.setAttribute('x1', paxB); dropBV.setAttribute('x2', paxB);
+    dropBV.setAttribute('y2', payB);
+    dropBH.setAttribute('y1', payB); dropBH.setAttribute('y2', payB);
+    dropBH.setAttribute('x2', paxB);
+    meetB.setAttribute('cx', paxB); meetB.setAttribute('cy', yMR);
+    qB.setAttribute('x', paxB); qB.textContent = qb;
+    pB.setAttribute('y', payB); pB.textContent = '$' + pb;
+
+    // readouts + spoken state
+    var t = text(mrStar, qa, pa, qb, pb);
+    rHint.textContent = t.m;
+    rTrade1.textContent = t.a1;
+    rTrade2.textContent = t.a2;
+    ptFocus.setAttribute('aria-valuenow', mrStar);
+    ptFocus.setAttribute('aria-valuetext', t.m + ' ' + t.a1 + ' ' + t.a2);
+  }
+
+  // pointer Y -> the shared MR* level (rounded to the nearest whole dollar)
+  function setFromPointer(evt) {
+    var p = toSvg(evt);
+    if (isNaN(p.y)) return;
+    var mr = Math.round(toP(p.y));
+    if (mr < MR_LO) mr = MR_LO;
+    if (mr > MR_HI) mr = MR_HI;
+    mrStar = mr;
+    render();
+  }
+
+  // --- drag (pointer capture so a fast drag can't get stuck) ---
+  var dragging = false, capturedEl = null, capturedId = null;
+  function onMove(evt) { if (dragging) { evt.preventDefault(); setFromPointer(evt); } }
+  function onUp() {
+    dragging = false;
+    svg.classList.remove('grabbing');
+    if (capturedEl && capturedId !== null) {
+      try { capturedEl.releasePointerCapture(capturedId); } catch (e) {}
+    }
+    capturedEl = null; capturedId = null;
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+  }
+  function onDown(evt) {
+    evt.preventDefault();
+    dragging = true;
+    svg.classList.add('grabbing');
+    capturedEl = evt.currentTarget; capturedId = evt.pointerId;
+    try { capturedEl.setPointerCapture(capturedId); } catch (e) {}
+    setFromPointer(evt);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }
+  hitMR.addEventListener('pointerdown', onDown);
+  hitHandle.addEventListener('pointerdown', onDown);
+  ptFocus.addEventListener('pointerdown', onDown);
+
+  // --- keyboard: step the shared MR* level by one dollar ---
+  ptFocus.addEventListener('keydown', function (evt) {
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') { mrStar += 1; }
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') { mrStar -= 1; }
+    else return;
+    evt.preventDefault();
+    if (mrStar < MR_LO) mrStar = MR_LO;
+    if (mrStar > MR_HI) mrStar = MR_HI;
+    render();
+  });
+
+  // --- debug hook (inert for students) ---
+  window.__fig = {
+    set: function (v) {
+      var mr = (v && typeof v.mrStar === 'number') ? v.mrStar : v;
+      mr = Math.round(+mr);
+      if (!isNaN(mr)) { mrStar = Math.max(MR_LO, Math.min(MR_HI, mr)); render(); }
+    },
+    get: function () {
+      var qa = qaOf(mrStar), qb = qbOf(mrStar);
+      return { mrStar: mrStar, qa: qa, pa: paOf(qa), qb: qb, pb: pbOf(qb) };
+    }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

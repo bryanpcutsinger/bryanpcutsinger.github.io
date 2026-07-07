@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive figure: Adam and Baker's marginal-cost curves (comparative cost)</title>
+<!--
+  Interactive recreation of UE Fig 15.3 (p.217) for the T6b blog post
+  (website-styled warm palette, not FAU). Self-contained: no libraries, no
+  network. The static FAU figure (figures/t06b-comparative-cost.{tex,svg}) is
+  the SLIDE version and is untouched; it is also this widget's <noscript>
+  fallback.
+
+  ARCHITECTURE (family F8 -- two-agent margins / equalization): the base
+  figure is REAL SVG markup. A no-JS reader sees the FULL still: both rising
+  marginal-cost lines (Baker's steeper, Adam's flatter), the numeric axes, and
+  the permanent crossover dot + droplines at (6, 1.40Y). The script only
+  ATTACHES behavior (drag a shared quantity handle; two tracking dots ride
+  MC_B(q) and MC_A(q); droplines + value callouts move; snap-highlight at the
+  q=6 equalization); it never builds figure DOM.
+
+  GEOMETRY (single panel): viewBox 440x540, aspect-ratio 4/5, max-width 560px.
+    X0=64 (q=0), pxPerX=28 (per cake). Y0=360 (cost=0), pxPerY=130 (per unit Y).
+    xPix(q) = 64 + 28*q ;  yPix(cost) = 360 - 130*cost.
+    Axes drawn past the data max (x to q=11, y to cost~2.4) so the arrowheads
+    clear the curve labels.
+  Data (MC in units of Y per additional cake, UE Tables 14.2 Adam + 15.1 Baker):
+    Baker: MC_B(q) = 0.20 + 0.20*q ; drawn q=0..8.5 (Baker's table stops at 8).
+    Adam:  MC_A(q) = 0.80 + 0.10*q ; drawn q=0..10.
+    Crossover at EXACTLY (6, 1.40) -- below it Baker is cheaper, above it Adam
+    is cheaper. The draggable handle snaps to integers 1..10; for q=9,10
+    (beyond Baker's drawn line/table) Baker's dot/dropline/value hide and the
+    readout notes the extrapolation, since only Adam's line is drawn that far.
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;   /* warm bone background        */
+    --ink:     #1a1c1e;    /* both marginal-cost lines    */
+    --text:    #16181a;    /* body text                   */
+    --muted:   #5c6066;    /* axes / secondary labels     */
+    --hairline:#e3ddd3;    /* droplines / muting          */
+    --accent:  #b07a2c;    /* brass -- dots / crossover / takeaway */
+    --accent-tint: #efe4d2;/* unused tint reserved for family consistency */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .fig { width: 100%; max-width: 560px; min-width: 0; }
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+
+  /* structural strokes */
+  .axis   { stroke: var(--muted); stroke-width: 1.4; }
+  .tick   { stroke: var(--muted); stroke-width: 1.2; }
+  .curveB { stroke: var(--ink); stroke-width: 2.6; fill: none; stroke-linecap: round; }
+  .curveA { stroke: var(--ink); stroke-width: 2.6; fill: none; stroke-linecap: round; }
+  .drop   { stroke: var(--hairline); stroke-width: 1.6; stroke-dasharray: 5 4; }
+  .cross-drop { stroke: var(--hairline); stroke-width: 1.6; stroke-dasharray: 5 4; }
+
+  /* points + generous transparent hit targets */
+  .pt        { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5; }
+  .pt.opt    { stroke: var(--accent); stroke-width: 3.5; }
+  .pt-cross  { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5; }
+  .hit       { fill: transparent; stroke: transparent; touch-action: none; cursor: grab; }
+  .hit-area  { fill: transparent; touch-action: none; cursor: grab; }
+  .pt-focus:focus-visible { outline: none; }
+  .pt-focus:focus-visible + .pt,
+  .grabbing .pt { stroke: var(--accent); stroke-width: 3.5; }
+
+  /* text */
+  .axlabel   { fill: var(--muted); font-size: 13px; font-weight: 600; }
+  .ylabel    { fill: var(--muted); font-size: 11px; font-weight: 600; }
+  .ticklabel { fill: var(--muted); font-size: 11px; }
+  .curvelabel{ fill: var(--muted); font-size: 12px; font-weight: 600; }
+  .vlabel    { fill: var(--ink); font-size: 12px; font-weight: 700;
+               paint-order: stroke; stroke: var(--surface); stroke-width: 3px;
+               stroke-linejoin: round; }
+  .vlabel.opt{ fill: var(--accent); }
+  .qlabel    { fill: var(--accent); font-size: 13px; font-weight: 700;
+               paint-order: stroke; stroke: var(--surface); stroke-width: 3px;
+               stroke-linejoin: round; }
+  .sep       { stroke: var(--hairline); stroke-width: 1; }
+  .r-hint    { fill: var(--muted); font-size: 12.5px; }
+  .r-trade   { fill: var(--accent); font-size: 14px; font-weight: 600; }
+  .fallback  { margin: 8px 0 0; color: var(--muted); font-size: 13px;
+               line-height: 1.35; text-align: center; }
+  .fallback a { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="fig">
+  <svg id="fig" viewBox="0 0 440 540" role="group"
+       aria-label="Two rising marginal-cost lines for Baker and Adam's cakes. Baker's marginal cost starts lower but rises steeply; Adam's starts higher but rises more gently. They cross at exactly six cakes per day, where both cost 1.40Y. Drag the quantity handle along the x-axis to compare who is the cheaper maker at each quantity.">
+    <title>Adam and Baker's marginal-cost curves for cakes per day, crossing at six cakes</title>
+    <defs>
+      <marker id="ax-arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+    </defs>
+
+    <!-- ===================== axes (drawn before curves) ===================== -->
+    <line class="axis" x1="64" y1="360" x2="372" y2="360" marker-end="url(#ax-arrow)" />
+    <line class="axis" x1="64" y1="360" x2="64"  y2="48"  marker-end="url(#ax-arrow)" />
+
+    <!-- x-axis ticks: minor (odd, unlabeled) + major (even, labeled) -->
+    <g class="tick">
+      <line x1="92"  y1="360" x2="92"  y2="364" />
+      <line x1="148" y1="360" x2="148" y2="364" />
+      <line x1="204" y1="360" x2="204" y2="364" />
+      <line x1="260" y1="360" x2="260" y2="364" />
+      <line x1="316" y1="360" x2="316" y2="364" />
+      <line x1="120" y1="360" x2="120" y2="367" />
+      <line x1="176" y1="360" x2="176" y2="367" />
+      <line x1="232" y1="360" x2="232" y2="367" />
+      <line x1="288" y1="360" x2="288" y2="367" />
+      <line x1="344" y1="360" x2="344" y2="367" />
+    </g>
+    <g class="ticklabel">
+      <text x="120" y="379" text-anchor="middle">2</text>
+      <text x="176" y="379" text-anchor="middle">4</text>
+      <text x="232" y="379" text-anchor="middle">6</text>
+      <text x="288" y="379" text-anchor="middle">8</text>
+      <text x="344" y="379" text-anchor="middle">10</text>
+    </g>
+    <text class="axlabel" x="218" y="402" text-anchor="middle">Cakes per Day</text>
+
+    <!-- y-axis ticks 0.20 .. 2.00, every 0.20 -->
+    <g class="tick">
+      <line x1="58" y1="334" x2="64" y2="334" />
+      <line x1="58" y1="308" x2="64" y2="308" />
+      <line x1="58" y1="282" x2="64" y2="282" />
+      <line x1="58" y1="256" x2="64" y2="256" />
+      <line x1="58" y1="230" x2="64" y2="230" />
+      <line x1="58" y1="204" x2="64" y2="204" />
+      <line x1="58" y1="178" x2="64" y2="178" />
+      <line x1="58" y1="152" x2="64" y2="152" />
+      <line x1="58" y1="126" x2="64" y2="126" />
+      <line x1="58" y1="100" x2="64" y2="100" />
+    </g>
+    <g class="ticklabel">
+      <text x="54" y="334" text-anchor="end" dominant-baseline="middle">0.20</text>
+      <text x="54" y="308" text-anchor="end" dominant-baseline="middle">0.40</text>
+      <text x="54" y="282" text-anchor="end" dominant-baseline="middle">0.60</text>
+      <text x="54" y="256" text-anchor="end" dominant-baseline="middle">0.80</text>
+      <text x="54" y="230" text-anchor="end" dominant-baseline="middle">1.00</text>
+      <text x="54" y="204" text-anchor="end" dominant-baseline="middle">1.20</text>
+      <text x="54" y="178" text-anchor="end" dominant-baseline="middle">1.40</text>
+      <text x="54" y="152" text-anchor="end" dominant-baseline="middle">1.60</text>
+      <text x="54" y="126" text-anchor="end" dominant-baseline="middle">1.80</text>
+      <text x="54" y="100" text-anchor="end" dominant-baseline="middle">2.00</text>
+    </g>
+    <text class="ylabel" x="16" y="204" text-anchor="middle"
+          transform="rotate(-90 16 204)">Marginal Cost of Cakes per Day (units of Y forgone)</text>
+
+    <!-- ===================== the two marginal-cost lines ===================== -->
+    <!-- Baker's MC: (q=0, 0.20Y) -> (q=8.5, 1.90Y); the source table stops at 8 -->
+    <path id="curveB" class="curveB" d="M64,334 L302,113" />
+    <!-- Adam's MC: (q=0, 0.80Y) -> (q=10, 1.80Y) -->
+    <path id="curveA" class="curveA" d="M64,256 L344,126" />
+
+    <!-- curve labels, two lines each, in clear space above both lines' ends -->
+    <text class="curvelabel" x="246" y="80.5" text-anchor="middle">
+      <tspan x="246" dy="0">Baker's</tspan>
+      <tspan x="246" dy="13">Marginal Cost</tspan>
+    </text>
+    <text class="curvelabel" x="341" y="80.5" text-anchor="middle">
+      <tspan x="341" dy="0">Adam's</tspan>
+      <tspan x="341" dy="13">Marginal Cost</tspan>
+    </text>
+
+    <!-- ===================== permanent crossover marker (static) ===================== -->
+    <!-- Exactly (q=6, 1.40Y): below it Baker is cheaper, above it Adam is cheaper -->
+    <line class="cross-drop" x1="232" y1="178" x2="232" y2="360" />
+    <line class="cross-drop" x1="64"  y1="178" x2="232" y2="178" />
+    <circle class="pt-cross" cx="232" cy="178" r="4.5" />
+
+    <!-- ===================== dynamic dropline + dots (JS moves these) ===================== -->
+    <line id="dropV"  class="drop" x1="232" y1="360" x2="232" y2="178" />
+    <line id="dropHB" class="drop" x1="64" y1="178" x2="232" y2="178" />
+    <line id="dropHA" class="drop" x1="64" y1="178" x2="232" y2="178" />
+
+    <text id="qLabel" class="qlabel" x="232" y="349" text-anchor="middle">6</text>
+    <text id="vLabelB" class="vlabel" x="232" y="194" text-anchor="middle">1.40Y</text>
+    <text id="vLabelA" class="vlabel" x="232" y="194" text-anchor="middle">1.40Y</text>
+
+    <circle id="dotB" class="pt opt" cx="232" cy="178" r="6.5" />
+    <circle id="dotA" class="pt opt" cx="232" cy="178" r="6.5" />
+
+    <!-- ===================== drag hit targets ===================== -->
+    <!-- big invisible drag surface over the whole plot area -->
+    <rect id="hitArea" class="hit-area" x="60" y="44" width="286" height="316" />
+    <circle id="hitDotB" class="hit" cx="232" cy="178" r="24" />
+    <circle id="hitDotA" class="hit" cx="232" cy="178" r="24" />
+    <!-- focusable keyboard slider proxy (rides Adam's dot -- always in domain) -->
+    <circle id="ptFocus" class="pt-focus hit" cx="232" cy="178" r="24"
+            tabindex="0" role="slider" aria-label="Quantity of cakes per day"
+            aria-valuemin="1" aria-valuemax="10" aria-valuenow="6"
+            aria-valuetext="6th cake: both cost 1.40Y. Costs are equal here -- the crossover." />
+
+    <!-- ===================== readout band ===================== -->
+    <line class="sep" x1="44" y1="430" x2="396" y2="430" />
+    <text id="rHint"  class="r-hint"  x="220" y="458" text-anchor="middle">6th cake: both cost 1.40Y.</text>
+    <text id="rTrade" class="r-trade" x="220" y="486" text-anchor="middle">Costs are equal here — the crossover.</text>
+  </svg>
+
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame is a still image: Baker's
+      and Adam's marginal-cost curves for cakes per day, crossing at exactly
+      six cakes (both cost 1.40Y) -- below six Baker is the cheaper maker,
+      above six Adam is. You can also
+      <a href="t06b-comparative-cost.svg">open the static figure</a>.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var svg = document.getElementById('fig');
+  var byId = function (id) { return document.getElementById(id); };
+
+  var dotB = byId('dotB'), dotA = byId('dotA');
+  var dropV = byId('dropV'), dropHB = byId('dropHB'), dropHA = byId('dropHA');
+  var qLabel = byId('qLabel'), vLabelB = byId('vLabelB'), vLabelA = byId('vLabelA');
+  var hitArea = byId('hitArea'), hitDotB = byId('hitDotB'), hitDotA = byId('hitDotA');
+  var ptFocus = byId('ptFocus');
+  var rHint = byId('rHint'), rTrade = byId('rTrade');
+
+  // --- pixel frame + scale (mirrors the static markup above) ---
+  var X0 = 64, PER_X = 28, Y0 = 360, PER_Y = 130;
+  var QLO = 1, QHI = 10, B_MAX = 8;   // Baker's line/table stops at 8
+  function xPix(q)   { return X0 + q * PER_X; }
+  function yPix(cost) { return Y0 - cost * PER_Y; }
+  function toQ(px)    { return Math.round((px - X0) / PER_X); }
+
+  // --- the model (read off UE Tables 14.2 Adam + 15.1 Baker) ---
+  function costB(q) { return 0.20 + 0.20 * q; }
+  function costA(q) { return 0.80 + 0.10 * q; }
+  var Q_CROSS = 6;
+
+  // --- state: shared quantity q (integer 1..10) ---
+  var q = 6;
+
+  var spt = svg.createSVGPoint();
+  function toSvg(evt) {
+    spt.x = evt.clientX; spt.y = evt.clientY;
+    return spt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+
+  function money(x) { return x.toFixed(2) + 'Y'; }
+  function ordinal(n) {
+    var s = ['th', 'st', 'nd', 'rd'], v = n % 100;
+    return n + (s[(v - 20) % 10] || s[v] || s[0]);
+  }
+
+  // readout text -- the spec's verbatim strings at q=3,6,8; a matching generic
+  // rule elsewhere (early cakes / equalization / past-6 / past-Baker's-table)
+  function text(qv) {
+    var cB = costB(qv), cA = costA(qv);
+    if (qv === 3) return { m: "3rd cake: Baker's cost 0.80Y, Adam's cost 1.10Y.",
+                            a: 'Baker is the cheaper maker of the early cakes.' };
+    if (qv === 6) return { m: '6th cake: both cost 1.40Y.',
+                            a: 'Costs are equal here — the crossover.' };
+    if (qv === 8) return { m: "8th cake: Baker's cost 1.80Y, Adam's cost 1.60Y.",
+                            a: 'Past 6, Adam is now the cheaper maker.' };
+    if (qv < Q_CROSS) {
+      return { m: ordinal(qv) + " cake: Baker's cost " + money(cB) + ", Adam's cost " + money(cA) + '.',
+               a: 'Baker is the cheaper maker of the early cakes.' };
+    }
+    if (qv <= B_MAX) {
+      return { m: ordinal(qv) + " cake: Baker's cost " + money(cB) + ", Adam's cost " + money(cA) + '.',
+               a: 'Past 6, Adam is now the cheaper maker.' };
+    }
+    return { m: ordinal(qv) + " cake: beyond Baker's table; Adam's cost " + money(cA) + '.',
+             a: 'Well past 6 — Adam is clearly the cheaper maker now.' };
+  }
+
+  function render() {
+    var cB = costB(q), cA = costA(q);
+    var pxQ = xPix(q);
+    var pyB = yPix(cB), pyA = yPix(cA);
+    var showB = (q <= B_MAX);
+    var atCross = (q === Q_CROSS);
+
+    // shared vertical dropline: axis up to the topmost visible point
+    var topY = showB ? Math.min(pyB, pyA) : pyA;
+    dropV.setAttribute('x1', pxQ); dropV.setAttribute('x2', pxQ);
+    dropV.setAttribute('y2', topY);
+
+    // Baker's dot + horizontal dropline (hidden past his table, q=9,10)
+    dotB.style.display = showB ? '' : 'none';
+    dropHB.style.display = showB ? '' : 'none';
+    vLabelB.style.display = showB ? '' : 'none';
+    hitDotB.style.display = showB ? '' : 'none';
+    if (showB) {
+      dotB.setAttribute('cx', pxQ); dotB.setAttribute('cy', pyB);
+      dotB.setAttribute('class', atCross ? 'pt opt' : 'pt');
+      dropHB.setAttribute('x2', pxQ); dropHB.setAttribute('y1', pyB); dropHB.setAttribute('y2', pyB);
+      hitDotB.setAttribute('cx', pxQ); hitDotB.setAttribute('cy', pyB);
+    }
+
+    // Adam's dot + horizontal dropline (always in domain)
+    dotA.setAttribute('cx', pxQ); dotA.setAttribute('cy', pyA);
+    dotA.setAttribute('class', atCross ? 'pt opt' : 'pt');
+    dropHA.setAttribute('x2', pxQ); dropHA.setAttribute('y1', pyA); dropHA.setAttribute('y2', pyA);
+    hitDotA.setAttribute('cx', pxQ); hitDotA.setAttribute('cy', pyA);
+
+    // value callouts: merge at the crossover; else nudge apart if close so the
+    // two value labels never collide (the dots/droplines stay at the true y)
+    if (atCross) {
+      vLabelB.style.display = 'none';
+      vLabelA.textContent = money(cB);
+      vLabelA.setAttribute('x', pxQ); vLabelA.setAttribute('y', pyA - 12);
+      vLabelA.setAttribute('class', 'vlabel opt');
+    } else if (showB) {
+      var labelYB = pyB, labelYA = pyA;
+      var gap = Math.abs(pyB - pyA), MIN_GAP = 18;
+      if (gap < MIN_GAP) {
+        var mid = (pyB + pyA) / 2;
+        if (pyB < pyA) { labelYB = mid - MIN_GAP / 2; labelYA = mid + MIN_GAP / 2; }
+        else           { labelYB = mid + MIN_GAP / 2; labelYA = mid - MIN_GAP / 2; }
+      }
+      // offset each label away from the other dot along its own side
+      var offB = (pyB > pyA) ? 16 : -10;   // Baker below when cheaper, above when dearer
+      var offA = (pyA > pyB) ? 16 : -10;
+      vLabelB.textContent = money(cB);
+      vLabelB.setAttribute('x', pxQ); vLabelB.setAttribute('y', labelYB + offB);
+      vLabelB.setAttribute('class', 'vlabel');
+      vLabelA.textContent = money(cA);
+      vLabelA.setAttribute('x', pxQ); vLabelA.setAttribute('y', labelYA + offA);
+      vLabelA.setAttribute('class', 'vlabel');
+    } else {
+      // q=9,10: only Adam's dot exists
+      vLabelA.textContent = money(cA);
+      vLabelA.setAttribute('x', pxQ); vLabelA.setAttribute('y', pyA - 10);
+      vLabelA.setAttribute('class', 'vlabel');
+    }
+
+    // quantity label just above the x-axis
+    qLabel.setAttribute('x', pxQ); qLabel.textContent = q;
+
+    // focus proxy rides Adam's dot (always visible across the full domain)
+    ptFocus.setAttribute('cx', pxQ); ptFocus.setAttribute('cy', pyA);
+
+    // readouts + spoken state
+    var t = text(q);
+    rHint.textContent = t.m;
+    rTrade.textContent = t.a;
+    ptFocus.setAttribute('aria-valuenow', q);
+    ptFocus.setAttribute('aria-valuetext', t.m + ' ' + t.a);
+  }
+
+  function setFromPointer(evt) {
+    var p = toSvg(evt);
+    if (isNaN(p.x)) return;
+    var qq = toQ(p.x);
+    if (qq < QLO) qq = QLO;
+    if (qq > QHI) qq = QHI;
+    q = qq;
+    render();
+  }
+
+  // --- drag (pointer capture so a fast drag can't get stuck) ---
+  var dragging = false, capturedEl = null, capturedId = null;
+  function onMove(evt) { if (dragging) { evt.preventDefault(); setFromPointer(evt); } }
+  function onUp() {
+    dragging = false;
+    svg.classList.remove('grabbing');
+    if (capturedEl && capturedId !== null) {
+      try { capturedEl.releasePointerCapture(capturedId); } catch (e) {}
+    }
+    capturedEl = null; capturedId = null;
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+  }
+  function onDown(evt) {
+    evt.preventDefault();
+    dragging = true;
+    svg.classList.add('grabbing');
+    capturedEl = evt.currentTarget; capturedId = evt.pointerId;
+    try { capturedEl.setPointerCapture(capturedId); } catch (e) {}
+    setFromPointer(evt);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }
+  hitArea.addEventListener('pointerdown', onDown);
+  hitDotB.addEventListener('pointerdown', onDown);
+  hitDotA.addEventListener('pointerdown', onDown);
+  ptFocus.addEventListener('pointerdown', onDown);
+
+  // --- keyboard: step the quantity by one cake ---
+  ptFocus.addEventListener('keydown', function (evt) {
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') { q += 1; }
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') { q -= 1; }
+    else return;
+    evt.preventDefault();
+    if (q < QLO) q = QLO;
+    if (q > QHI) q = QHI;
+    render();
+  });
+
+  // --- debug hook (inert for students) ---
+  window.__fig = {
+    set: function (v) {
+      var qq = (v && typeof v.q === 'number') ? v.q : v;
+      qq = Math.round(+qq);
+      if (!isNaN(qq)) { q = Math.max(QLO, Math.min(QHI, qq)); render(); }
+    },
+    get: function () {
+      return { q: q, costB: (q <= B_MAX) ? costB(q) : null, costA: costA(q) };
+    }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

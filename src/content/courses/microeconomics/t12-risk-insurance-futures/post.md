@@ -15,9 +15,34 @@ note: "Self-contained — assumes no access to the textbooks. Source-of-truth fo
 
 The future is never fully known. Crops fail, ships sink, houses burn, prices swing, and people die at unpredictable times. You cannot make any of that go away. What you can do, and what this topic is about, is decide who bears the consequences. A wheat miller does not know what wheat will cost him in July; a homeowner does not know whether this is the year the kitchen catches fire. The danger is real, but the loss need not land on the person standing closest to it. Markets have built remarkable institutions, insurance and futures contracts among them, whose whole purpose is to take a danger off someone who does not want it and put it onto someone who will. Before we get there, we need one distinction that does more work in this topic than any other.
 
+<aside class="econ-callout econ-objectives">
+<p class="econ-callout__label">Learning objectives</p>
+<p>By the end of this post you should be able to:</p>
+<ul>
+<li>Distinguish risk from uncertainty, explain why risk is only moved not destroyed, and why zero risk is neither possible nor wise.</li>
+<li>Explain how insurance spreads an independent loss across a pool, turning a small chance of ruin into a sure premium.</li>
+<li>State the five conditions for private insurability, and tell adverse selection from moral hazard by whether the problem strikes before or after signing.</li>
+<li>Explain why insurance is a positive-sum trade, because pooling reduces the risk rather than merely shifting it.</li>
+<li>Explain why a large holder self-insures, and how diversification narrows the range of outcomes without lowering the average.</li>
+<li>Analyze government guarantees that break the five conditions, from deposit insurance to disaster relief, as taxpayer-financed relief that breeds moral hazard.</li>
+<li>Explain how futures contracts and options transfer a price risk through a two-sided hedge, and work out an option's break-even.</li>
+<li>Explain the social service speculators perform, smoothing consumption and making the futures price the market's best forecast, and why banning a futures market backfires.</li>
+<li>Explain the risk-return trade-off as a law of competitive markets: no higher return without a wider spread.</li>
+<li>Distinguish term from straight life insurance, and explain why the same people who insure also buy lottery tickets.</li>
+</ul>
+</aside>
+
 ## Risk Is Not the Same as Uncertainty
 
 When economists are careful, they mean two different things by these words. A *risk* is a hazard whose odds you can put a number on: you do not know whether your particular house will burn this year, but across a million houses the fraction that burn is steady and measurable, so risk can be priced, pooled, bought, sold, and offset. *Uncertainty* is the genuinely unknowable, a future you cannot attach odds to at all. A useful shorthand is that risk is the "known unknown" and uncertainty is the "unknown unknown."
+
+<aside class="econ-callout econ-termset">
+<p class="econ-callout__label">Key terms</p>
+<dl class="econ-term-list">
+<div><dt>Risk</dt><dd>A hazard whose odds can be measured, so it can be priced, pooled, and traded.</dd></div>
+<div><dt>Uncertainty</dt><dd>A future you cannot attach odds to at all, so it cannot be priced or traded.</dd></div>
+</dl>
+</aside>
 
 That difference decides what markets can do. Because risk can be quantified, it can be exchanged between people, transformed from one kind into another, and hedged against; uncertainty cannot be quantified, so it cannot be traded or hedged. Here is the line to carry through everything that follows. Risk behaves the way physicists say matter does: it is neither created nor destroyed. When a market handles risk well, it has not made the danger smaller; it has moved the risk to whoever will bear it most cheaply. One consequence runs against intuition: if a person voluntarily takes on more risk, that is not automatically bad. A gambler chooses a wider spread of outcomes on purpose, and so does an oil driller. Taking on risk is a choice, not a sin.
 
@@ -26,6 +51,11 @@ That difference decides what markets can do. Because risk can be quantified, it 
 There is no such thing as a life without risk. You could cut your odds of a fatal car crash to nearly nothing by never driving again, but no one does, because the cost of that "safety" is absurd. People go skydiving for fun, take dangerous jobs when the pay is high enough, and eat foods they know shorten their lives a little, an ordinary trade-off among safety, wealth, and the other things we enjoy.
 
 This matters for how we judge accidents. Suppose two airplanes collide in midair, and someone declares the crash proves there was too little air-traffic control. The bare fact proves no such thing. The only way to drive the risk of mid-air collisions to zero would be to ban flying, which costs far more than it is worth. What settles whether we spent too little is the marginal cost of safety, the cost of one more increment of protection, not the average or the total, and safety gets dramatically more expensive as you chase the last bit of it. When a rule spends, say, five times as much to save one life as some cheaper measure would, it has effectively cost several other lives, the ones we never see because the money was used up here. So the right question is never "did a bad thing happen?" but "would one more dollar of prevention buy us more than that dollar could buy somewhere else?"
+
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>A proposed rule would spend five times as much to save one life as a cheaper measure would. Judging at the margin, is that a bargain? What happens to the people the same money could have saved elsewhere?</p>
+</aside>
 
 ## Insurance Spreads Losses, It Does Not Erase Them
 
@@ -48,6 +78,14 @@ Not every danger can be insured by a company that has to stay in business. A ris
 **Adverse selection is controlled.** *Adverse selection* bites *before* the contract is signed: some applicants know they are high-risk and hide it. If the company charged everyone the same price, high-risk people would crowd in and low-risk people would stay away, and premiums would not cover losses. So insurers classify applicants by observable signs of risk, a driver's record and age, whether a building is wood or steel. These proxies are imperfect, but do not confuse imperfect with biased. A classroom test is imperfect too, yet that does not make it rigged against the short or the left-handed. As long as young men really do crash more than young women, charging them more is not prejudice; it is what keeps the pool from collapsing.
 
 **Moral hazard is controlled.** *Moral hazard* is the mirror-image problem, biting *after* the contract is signed: once someone else pays for the loss, people take more risk, driving faster or guarding the jewelry less carefully. The insured behavior is worse than the uninsured, so the true claim rate runs higher than the raw statistics predict. Insurers fight back with *deductibles* (you pay the first chunk of any claim), *coinsurance* (you bear a fixed share of every loss), and exclusions for losses you can easily cause. A car warranty covers a generator that fails on its own but not engine damage from skipping oil changes, precisely because the second is within your control.
+
+<aside class="econ-callout econ-termset">
+<p class="econ-callout__label">Key terms</p>
+<dl class="econ-term-list">
+<div><dt>Adverse Selection</dt><dd>Hidden high-risk applicants crowding in before a contract is signed.</dd></div>
+<div><dt>Moral Hazard</dt><dd>Less care taken once someone else will pay for the loss, after the contract is signed.</dd></div>
+</dl>
+</aside>
 
 When all five hold, a private insurer can offer the coverage and stay solvent. When one or more fails, what gets called "insurance" is usually something else wearing the name.
 
@@ -109,6 +147,11 @@ A put is insurance against a fall. If you own a share worth its strike price and
 
 A call is insurance against a rise, useful to someone who has committed to buy. The break-even logic trips students up, so make it a rule: with a call you do not profit until the price clears the strike plus the premium you paid. Buy a call with a strike of fifty for a premium of six dollars a share, and the stock has to rise past fifty-six before you are ahead. And you never exercise an option that is "out of the money": if a call lets you buy at fifty but the market price is forty-nine, you let it expire and buy cheaper on the market. Run those two rules and the arithmetic of any option problem falls out.
 
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>You buy a call with a strike of forty dollars for a three-dollar-a-share premium. Above what market price do you start to make money? If the stock sits at thirty-nine, do you exercise the call or let it expire?</p>
+</aside>
+
 ## Speculators Smooth Consumption Between Harvests
 
 So far the people in our story are hedgers, businesses laying off a risk they do not want. Who takes the other side? Often a *speculator*, willing to hold the price risk in hopes of a profit, and far from being a parasite he performs a genuine social service.
@@ -141,8 +184,20 @@ Two smaller puzzles round out the picture. First, life insurance comes in two ba
 
 Second, a genuine puzzle: the same people who buy insurance, and so look risk-averse, also buy lottery tickets, which are an unfair bet, paying far more than the expected winnings. That looks inconsistent until you remember that a wider spread of outcomes is something a person can deliberately choose. The resolution is the *full payoff* of a lottery ticket. The buyer is not paying only for the slim chance of money; he is buying the contemplation of a drastic, spectacular change in life, a possibility that for many people no other cheap purchase can offer at all. Once you count that non-money payoff, buying insurance against the downside and buying a tiny chance at the upside are not contradictory. They are the same person spending a little to narrow the bad tail and a little to widen the good one.
 
-## What's Next
-
-One idea threads through everything. Risk is not destroyed by insurance, by futures, or by a government guarantee; it is only moved, and the interesting question is always to whom and on what terms. Insurance pools an independent loss so no one carries the whole catastrophe, and when government ignores the five conditions it produces relief dressed up as insurance, moral hazard along for the ride. Futures and options let hedgers hand a price risk to speculators, who in return smooth consumption across time and broadcast the best available price forecast. And the deepest version, that you cannot buy a higher return without accepting a wider spread, is scarcity and trade-offs showing up one more time.
-
-We have spent this term mostly inside markets: how prices form, how trade creates value, how firms and resource owners respond to incentives. Next we turn the same tools on government itself. If only individuals really choose, and if people respond to incentives in the voting booth and the legislature just as they do in the store, we can analyze politics the way we have analyzed markets, and ask why well-meaning policies so often produce the consequences they do. Bring the skepticism you have been building. It travels well across the line from markets to politics.
+<div class="econ-review">
+<section class="econ-review__section">
+<h3>Key takeaways</h3>
+<ul>
+<li><strong>Risk is moved, not destroyed.</strong> Measurable odds can be priced and traded; uncertainty cannot, and no one can buy zero risk.</li>
+<li><strong>Insurance spreads losses.</strong> Pooling independent risks turns a small chance of ruin into a small, certain premium, without lowering anyone's odds.</li>
+<li><strong>Five conditions make a risk insurable.</strong> Premiums must cover costs on independent, measurable events, with adverse selection and moral hazard held in check.</li>
+<li><strong>Insurance is positive-sum.</strong> Pooling reduces the risk rather than merely shifting it, so coverage is worth more to the buyer than it costs the insurer.</li>
+<li><strong>Big holders self-insure.</strong> A large, varied pool is already diversified, and diversification narrows outcomes without lowering the average.</li>
+<li><strong>Guarantees can be relief in disguise.</strong> Breaking the five conditions stops pricing risk, breeds moral hazard, and shifts the loss to taxpayers.</li>
+<li><strong>Futures and options hand off a price risk.</strong> A two-sided hedge trades away a favorable move for protection against an unfavorable one; an option pays only past strike plus premium.</li>
+<li><strong>Speculators perform a service.</strong> They smooth consumption over time and make the futures price the best forecast, so a ban only removes the cheap public version.</li>
+<li><strong>No high return at low risk.</strong> Competition prices away any bargain offering both, so a wider spread buys a higher expected return.</li>
+<li><strong>Name the bundled pieces.</strong> Straight life bundles insurance with forced saving, and lottery tickets sell the non-money payoff of a possible dramatic change.</li>
+</ul>
+</section>
+</div>
