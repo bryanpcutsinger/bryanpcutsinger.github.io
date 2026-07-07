@@ -17,13 +17,20 @@ const topics = (await getCollection('courses'))
     (e) => previewDrafts || (e.data.status ?? '').toLowerCase() === 'approved',
   )
   .map((e) => {
-    const code = (e.data.topic ?? '').match(/T\d+/)?.[0] ?? '';
-    const num = parseInt(code.replace(/\D/g, '') || '999', 10);
+    // Order and the "T#" badge come from the directory slug (t01, t03a, t03b…),
+    // which is authoritative and always well-formed — NOT the `topic:` prose,
+    // whose upstream label is inconsistent (T6/T10 still carry the old lowercase
+    // bundled name, which the case-sensitive /T\d+/ missed → they sorted to the
+    // end with no badge). The slug also encodes the a/b/c lecture split.
+    const slug = e.id.split('/')[1];
+    const m = slug.match(/^t(\d+)([a-z]?)/i);
+    const num = m ? parseInt(m[1], 10) : 999;
+    const part = m?.[2] ? m[2].toLowerCase().charCodeAt(0) - 96 : 0; // a=1,b=2,c=3
     return {
-      slug: e.id.split('/')[1],
+      slug,
       title: e.data.title,
-      code,
-      order: e.data.order ?? num,
+      code: num < 999 ? `T${num}` : '',
+      order: e.data.order ?? num * 100 + part,
       isDraft: (e.data.status ?? '').toLowerCase() !== 'approved',
     };
   })

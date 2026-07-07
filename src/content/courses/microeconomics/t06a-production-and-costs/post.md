@@ -1,6 +1,6 @@
 ---
 title: "Production and Costs"
-topic: "t06-production-costs-specialization (Part A)"
+topic: "T6 — Production, Costs, and Specialization (Part A)"
 course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 12 (Thu 10/1)"]
 ue_anchors: ["UE 14 (Productivity and Costs)", "UE 17 (SR/LR taxonomy + sunk-cost / quasi-rent only)"]

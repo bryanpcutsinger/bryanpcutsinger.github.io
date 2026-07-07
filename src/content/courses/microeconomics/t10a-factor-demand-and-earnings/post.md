@@ -1,6 +1,6 @@
 ---
 title: "Factor Markets and Labor, Part A: What an Extra Worker Is Worth"
-topic: "t10-factor-markets-labor (Part A)"
+topic: "T10 — Factor Markets and Labor (Part A)"
 course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 21 (Tue 11/3)"]
 ue_anchors: ["UE 29", "UE 39", "UE 22 (Codlandia)"]

@@ -19,9 +19,16 @@ import CTABand from '../../../components/marketing/CTABand.astro';
 export async function getStaticPaths() {
   const COURSE = 'microeconomics';
   const previewDrafts = import.meta.env.DEV;
-  const topicOrder = (entry: any): number => {
-    const fromCode = (entry.data.topic ?? '').match(/T(\d+)/)?.[1];
-    return entry.data.order ?? parseInt(fromCode ?? '999', 10);
+  // Order comes from the directory slug (t01, t03a, t03b…), which is
+  // authoritative and always well-formed — NOT the `topic:` prose, whose
+  // upstream label is inconsistent (T6/T10 still carry the old lowercase
+  // bundled name, which the case-sensitive /T\d+/ missed → they sorted last).
+  // The slug also encodes the a/b/c lecture split: t04a < t04b < t04c.
+  const topicOrder = (slug: string, entry: any): number => {
+    const m = slug.match(/^t(\d+)([a-z]?)/i);
+    const num = m ? parseInt(m[1], 10) : 999;
+    const part = m?.[2] ? m[2].toLowerCase().charCodeAt(0) - 96 : 0; // a=1,b=2,c=3
+    return entry.data.order ?? num * 100 + part;
   };
   const isPublished = (e: any) =>
     previewDrafts || (e.data.status ?? '').toLowerCase() === 'approved';
@@ -30,7 +37,7 @@ export async function getStaticPaths() {
     .filter((e) => e.id.split('/')[0] === COURSE)
     .filter(isPublished)
     .map((e) => ({ entry: e, slug: e.id.split('/')[1] }))
-    .sort((a, b) => topicOrder(a.entry) - topicOrder(b.entry));
+    .sort((a, b) => topicOrder(a.slug, a.entry) - topicOrder(b.slug, b.entry));
 
   const link = (x: { entry: any; slug: string }) => ({
     slug: x.slug,
@@ -57,7 +64,12 @@ const courseLabel = (data.course ?? 'Principles of Microeconomics').replace(
   /\s*\(.*\)\s*$/,
   '',
 );
-const topicCode = (data.topic ?? '').match(/T\d+/)?.[0] ?? '';
+// Badge derives from the slug (see topicOrder above) so every topic — incl. the
+// T6/T10 posts whose `topic:` prose lacks an uppercase "T#" — shows its number.
+const topicCode = (() => {
+  const m = entry.id.split('/')[1].match(/^t(\d+)/i);
+  return m ? `T${parseInt(m[1], 10)}` : '';
+})();
 
 // In-page TOC from the post's ## claim headers. Collapses (hidden) on short
 // posts. Astro auto-assigns slug ids to headings, so #slug anchors resolve.

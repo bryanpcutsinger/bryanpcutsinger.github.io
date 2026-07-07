@@ -1,6 +1,6 @@
 ---
 title: "Factor Markets and Labor, Part B: Coalitions and Constraints"
-topic: "t10-factor-markets-labor (Part B)"
+topic: "T10 — Factor Markets and Labor (Part B)"
 course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 22 (Thu 11/5)"]
 ue_anchors: ["UE 40", "UE 41", "UE 39 (gender-earnings sections)"]

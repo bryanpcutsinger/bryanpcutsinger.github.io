@@ -1,6 +1,6 @@
 ---
 title: "Specialization and Exchange"
-topic: "t06-production-costs-specialization (Part B)"
+topic: "T6 — Production, Costs, and Specialization (Part B)"
 course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 13 (Tue 10/6)"]
 ue_anchors: ["UE 15 (Specialization and Exchange)"]
