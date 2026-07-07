@@ -356,20 +356,26 @@ source repo, same source-of-truth → import → commit model as the guide/micro
 
 - **Source of truth = `bryanpcutsinger/cv`** (private; local `~/Documents/CV`). A
   **self-contained LaTeX CV**: `cutsinger_CV.tex` (`\documentclass[11pt]{article}`, no
-  custom `.cls`/inputs/graphics) + its committed compiled **`cutsinger_CV.pdf`**. Bryan
-  updates it there — edit `.tex` → `latexmk -pdf` → commit **both** .tex and .pdf → push.
-  Editing happens **in this repo, not Overleaf** (Overleaf was retired for the CV to avoid
-  two diverging sources; the seed was his last Overleaf export, 2026-06-04).
-- **Refresh on the website:** `npm run import:cv` (`scripts/import-cv.sh`, via `gh`) pulls
-  the compiled PDF into a **generated, never-hand-edited committed copy** at
-  `public/downloads/cutsinger-cv.pdf`. The script **guards** the fetch (must be `%PDF-` and
-  ≥1 KB — refuses to publish an error payload or an accidental source push, leaving the
-  existing CV untouched). No compile happens here (CI stays hermetic/Node-only); the PDF is
-  built in the source repo and served as-is.
+  custom `.cls`/inputs/graphics) + its committed compiled **`cutsinger_CV.pdf`**. Editing
+  happens **in this repo, not Overleaf** (Overleaf was retired for the CV to avoid two
+  diverging sources; the seed was his last Overleaf export, 2026-06-04).
+- **AUTO-PUBLISH (2026-07-07): the CV repo pushes itself to the website.** A **Publish CV**
+  Action in the `cv` repo (`.github/workflows/publish-cv.yml`) fires on any push touching
+  `cutsinger_CV.tex`: it (1) compiles the PDF (pdflatex/latexmk — **CI is the compiler, so
+  no local TeX needed**), (2) commits the PDF back to the `cv` repo, (3) copies it into
+  **this** repo's `public/downloads/cutsinger-cv.pdf` and pushes — which triggers this repo's
+  normal `deploy.yml`. So Bryan's whole loop is now just: **edit `cutsinger_CV.tex` → push**;
+  the live CV updates itself in ~2 min. Needs a `WEBSITE_SYNC_TOKEN` secret on the `cv` repo
+  (fine-grained PAT, Contents:rw on this repo only); until it's set the Action compiles but
+  skips the sync (no failed runs). The sync commits directly to `main` here — the deploy build
+  itself stays hermetic (it only ever builds committed files; the PAT is used by the CV repo's
+  job, not by this repo's CI).
+- **Manual fallback:** `npm run import:cv` (`scripts/import-cv.sh`, via `gh`) pulls the
+  compiled PDF into `public/downloads/cutsinger-cv.pdf` (same **`%PDF-`/≥1 KB guard**), for
+  when the Action is disabled. Then `npm run build` → commit + push.
 - **Rendering:** `research.astro`'s `DownloadCard` uses `fileUrl="/downloads/cutsinger-cv.pdf"`
-  (real **"Download my CV (PDF)"** button; the request-fallback path is gone).
-- **Full loop after a CV edit:** (in `~/Documents/CV`) edit → `latexmk` → commit → push;
-  then (here) `npm run import:cv` → `npm run build` → commit + push to deploy.
+  (real **"Download my CV (PDF)"** button; the request-fallback path is gone). The generated
+  PDF is **never hand-edited** — it's owned by the CV repo / import.
 
 ## Current status (as of 2026-07-07)
 
