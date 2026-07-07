@@ -256,10 +256,13 @@ output is byte-unchanged) strips HTML comments at render; (3) a `postbuild` gate
 **Publish gate:** topic pages render/route **only when frontmatter `status: approved`** in
 the PRODUCTION build. `astro dev` also previews drafts (mirrors Starlight's `draft:`
 behavior) with a "Draft preview" badge, so Bryan can read in-progress topics locally
-without publishing them. As of 2026-06-17 **no source topic is `approved`** (T1 was
-re-set to `draft` after a 2026-06-06 rebuild — "re-approval pending"), so the live topic
-index renders **empty** until Bryan flips a topic to `approved` and re-imports. T1 is
-imported into the working tree for verification.
+without publishing them. As of 2026-07-06 the **full 21-topic course is approved
+upstream and imported here** (T1, T2, T3a/b, T4a/b/c, T5, T6a/b, T7a/b, T8a/b, T9,
+T10a/b, T11a/b, T12, T13 — the one-per-lecture split; the legacy un-split folders
+t03/t04/t06/t07/t08/t10/t11 upstream have no `post.md` and are not imported), so the
+live topic index renders all 21. To refresh after an upstream edit, re-run
+`npm run import:topic -- <slug> microeconomics` for the changed topics (or loop over
+`src/content/courses/microeconomics/`), rebuild, and commit.
 
 **Rendering:** `src/pages/teaching/microeconomics/[topic].astro` (`getStaticPaths` +
 `render()`) — eyebrow band (course · T#), in-page TOC from `##` claim headers, scoped
@@ -344,9 +347,19 @@ trees API but slugs assume a flat layout). Why import-then-commit rather than an
 remote loader: keeps CI hermetic (no build-time private-repo auth) and every change is
 visible in `git diff`.
 
-## Current status (as of 2026-07-01)
+## Current status (as of 2026-07-06)
 
-**Latest (2026-07-01) — full front-end REDESIGN committed + pushed + deployed (`369cf5f`,
+**Latest (2026-07-06) — full 21-topic micro course published + pushed + deployed
+(`b8b0acc`, still `noindex`ed):** Closes the "micro course publish gap" below. Re-imported
+**all 21 approved Micro-Economic Principles topics** from `bryanpcutsinger/micro-principles`
+(loop over `src/content/courses/microeconomics/` → `npm run import:topic -- <slug>
+microeconomics`), pulling in Bryan's revised prose across **22 posts** (~2,500 insertions /
+~700 deletions) and many new **interactive HTML figures**. Instructor notes stripped at
+import; build green (63 pages, postbuild `INSTRUCTOR NOTES` gate passed); deploy run
+`28832685598`. Pure content re-import — no code changes. The live micro course now renders
+all 21 topics (was T1-only). See the updated **Publish gate** note in the Teaching section.
+
+**Prior (2026-07-01) — full front-end REDESIGN committed + pushed + deployed (`369cf5f`,
 still `noindex`ed):** The marketing site was rebuilt from scratch as the **outward-first
 "public economist" system** (paper/ink/**ledger-green**; Fraunces + Newsreader + Inter). See
 the rewritten **Marketing site** and **Stack → Theming** sections above for the full spec, and
@@ -392,13 +405,9 @@ Codex review + a 5-adversary red-team; client chose outward-first / design-first
   across 38 sources**. Pure content re-import (no code changes): `T1 post.md` + its
   interactive figure, and `src/data/price-theory/problems.json`. Build green (26 pages,
   postbuild gate passed).
-  - **⚠️ Micro course publish gap (deliberate, still open):** upstream `micro-principles`
-    now has **19 approved topics** (T1, T2, T3, T3b, T4a, T4b, T5, T6a, T6b, T7a, T7b, T8,
-    T9, T10a, T10b, T11a, T11b, T12, T13 — check `status: approved` via `gh api`), but only
-    **T1 is imported here**, so the live course shows just T1. Bryan scoped this update to
-    T1 only on purpose. To publish the rest later: `npm run import:topic -- <slug>
-    microeconomics` for each, then build + commit. (An interrupted bulk-import loop left
-    stray t02–t05 folders this session; they were removed.)
+  - **✅ Micro course publish gap — RESOLVED 2026-07-06** (see the Latest entry): the full
+    21-topic course is now imported and live. (At this 2026-06-20 point only T1 was imported;
+    Bryan had scoped that update to T1 on purpose.)
 
 **Prior (2026-06-20) — committed + pushed to `main` (`eba9b95`, deployed, still `noindex`ed):**
 - **Price Theory landing redesigned: search results are on-demand; topic grid leads.**
