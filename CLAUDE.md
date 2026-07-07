@@ -82,16 +82,18 @@ completely separate from Starlight (which still owns `/ai/`).
 - **LIVE** (redesign deployed 2026-07-01, commit `369cf5f`); still **`noindex`ed**.
 
 **Placeholders Bryan still owes (marked `[PLACEHOLDER]` in code; all `noindex`, but
-publicly viewable by link on the live site):** real **publications** (`data/publications.json`
-— Research page; paste from a CV / Google Scholar / ORCID, verified only); real **essay/press
+publicly viewable by link on the live site):** real **essay/press
 URLs** (`data/writing.json` — Writing page); the home **Recent** list (literals in
 `index.astro`); Web3Forms access key + booking email (booking form inert until then —
 `BookingForm.astro`) and a list provider for `EmailCapture` (mailto fallback until then);
-**CV PDF** → `public/downloads/`; speaker **one-sheet PDF** + a **video reel** (Speaking's
+speaker **one-sheet PDF** + a **video reel** (Speaking's
 paid-speaking launch gate: at least one on-stage photo + short clip before lifting `noindex`);
 **testimonials** (`testimonials.json` empty → section auto-hidden; named quotes only);
 `sameAs` profile URLs for the `Person` JSON-LD (Scholar/ORCID/SSRN). **Already real:** talk
-topics (`data/topics.json`), short + long bio + credentials (`about.astro`). Verified facts
+topics (`data/topics.json`), short + long bio + credentials (`about.astro`), **publications**
+(`data/publications.json` — Research page; 12 articles + 3 chapters + 1 book in press + 4 under
+review, transcribed from Bryan's CV, no DOIs yet), and the **CV PDF** (`import:cv` pipeline — see
+below). Verified facts
 only: "Featured in" = National Review, The Hill, The Washington Examiner, RealClearEducation;
 credentials = interim director of the **AIER Sound Money Project**, Associate Editor of
 *Public Choice*, FAU economics professor (WSJ was a letter to the editor — not featured).
@@ -347,9 +349,42 @@ trees API but slugs assume a flat layout). Why import-then-commit rather than an
 remote loader: keeps CI hermetic (no build-time private-repo auth) and every change is
 visible in `git diff`.
 
-## Current status (as of 2026-07-06)
+## CV — imported from its own repo (built 2026-07-07)
 
-**Latest (2026-07-06) — full 21-topic micro course published + pushed + deployed
+The **Curriculum vitae** download on `/research/` is **imported** from a dedicated
+source repo, same source-of-truth → import → commit model as the guide/micro/price-theory.
+
+- **Source of truth = `bryanpcutsinger/cv`** (private; local `~/Documents/CV`). A
+  **self-contained LaTeX CV**: `cutsinger_CV.tex` (`\documentclass[11pt]{article}`, no
+  custom `.cls`/inputs/graphics) + its committed compiled **`cutsinger_CV.pdf`**. Bryan
+  updates it there — edit `.tex` → `latexmk -pdf` → commit **both** .tex and .pdf → push.
+  Editing happens **in this repo, not Overleaf** (Overleaf was retired for the CV to avoid
+  two diverging sources; the seed was his last Overleaf export, 2026-06-04).
+- **Refresh on the website:** `npm run import:cv` (`scripts/import-cv.sh`, via `gh`) pulls
+  the compiled PDF into a **generated, never-hand-edited committed copy** at
+  `public/downloads/cutsinger-cv.pdf`. The script **guards** the fetch (must be `%PDF-` and
+  ≥1 KB — refuses to publish an error payload or an accidental source push, leaving the
+  existing CV untouched). No compile happens here (CI stays hermetic/Node-only); the PDF is
+  built in the source repo and served as-is.
+- **Rendering:** `research.astro`'s `DownloadCard` uses `fileUrl="/downloads/cutsinger-cv.pdf"`
+  (real **"Download my CV (PDF)"** button; the request-fallback path is gone).
+- **Full loop after a CV edit:** (in `~/Documents/CV`) edit → `latexmk` → commit → push;
+  then (here) `npm run import:cv` → `npm run build` → commit + push to deploy.
+
+## Current status (as of 2026-07-07)
+
+**Latest (2026-07-07) — Research page populated + CV pipeline built:** (1) Micro topic
+ordering fixed and topics renumbered as sequential **"Lecture N"** (dropping the repeating
+"T#" badge that read as duplicate titles) — commits `412e60a`/`64478d9`. (2) **Research page
+filled from Bryan's CV** (`1e18509`): 12 refereed articles + 3 book chapters + 1 book in press
++ 4 works under review in `data/publications.json`, all real (no DOIs — none on the CV,
+nothing fabricated). (3) **CV download is now a live PDF** via a new **`import:cv` pipeline**
+from the new `bryanpcutsinger/cv` source repo (see "CV — imported from its own repo" above).
+Build green throughout (63 pages, INSTRUCTOR NOTES gate passed). **Open:** confirm the CV seed
+is current vs. any post-2026-06-04 Overleaf edits; add DOIs/`sameAs` when available; Writing
+page (`data/writing.json`) still placeholder.
+
+**Prior (2026-07-06) — full 21-topic micro course published + pushed + deployed
 (`b8b0acc`, still `noindex`ed):** Closes the "micro course publish gap" below. Re-imported
 **all 21 approved Micro-Economic Principles topics** from `bryanpcutsinger/micro-principles`
 (loop over `src/content/courses/microeconomics/` → `npm run import:topic -- <slug>
