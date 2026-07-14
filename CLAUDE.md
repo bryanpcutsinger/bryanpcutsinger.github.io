@@ -366,8 +366,15 @@ source repo, same source-of-truth → import → commit model as the guide/micro
   **this** repo's `public/downloads/cutsinger-cv.pdf` and pushes — which triggers this repo's
   normal `deploy.yml`. So Bryan's whole loop is now just: **edit `cutsinger_CV.tex` → push**;
   the live CV updates itself in ~2 min. Needs a `WEBSITE_SYNC_TOKEN` secret on the `cv` repo
-  (fine-grained PAT, Contents:rw on this repo only); until it's set the Action compiles but
-  skips the sync (no failed runs). The sync commits directly to `main` here — the deploy build
+  (fine-grained PAT, Contents:rw on this repo only); if it's missing/expired the Action still
+  compiles but silently skips the sync (no failed runs — only a run warning). **Token SET +
+  pipeline verified end-to-end 2026-07-14** (run `29369969519`: compile → `cv-sync[bot]` push
+  → Pages deploy → live PDF confirmed). **⚠️ The PAT EXPIRES 2026-10-12** (90 days): after
+  that, CV pushes quietly stop reaching the website — regenerate the token
+  (github.com/settings/personal-access-tokens, `cv-to-website-sync`) and paste it into the
+  `cv` repo's `WEBSITE_SYNC_TOKEN` secret via the GitHub web UI (NOT `! gh secret set` —
+  the `!` prefix can't handle its interactive paste prompt and stores an empty value).
+  The sync commits directly to `main` here — the deploy build
   itself stays hermetic (it only ever builds committed files; the PAT is used by the CV repo's
   job, not by this repo's CI).
 - **Manual fallback:** `npm run import:cv` (`scripts/import-cv.sh`, via `gh`) pulls the
@@ -377,7 +384,14 @@ source repo, same source-of-truth → import → commit model as the guide/micro
   (real **"Download my CV (PDF)"** button; the request-fallback path is gone). The generated
   PDF is **never hand-edited** — it's owned by the CV repo / import.
 
-## Current status (as of 2026-07-07)
+## Current status (as of 2026-07-14)
+
+**Latest (2026-07-14) — CV auto-publish ACTIVATED (config-only, no code change):** Bryan
+created the fine-grained PAT and set the `cv` repo's `WEBSITE_SYNC_TOKEN` secret; a manual
+`workflow_dispatch` test verified the full chain (compile → `cv-sync[bot]` push to this repo
+→ Pages deploy → live PDF serving fresh). The bot's sync commit (`6dcd811`, PDF 177→226 KB —
+CI font embedding differs from the Overleaf seed; expected) was pulled into the local clone.
+**⚠️ PAT expires 2026-10-12** — see the renewal note in the CV section above.
 
 **Latest (2026-07-07) — Research page populated + CV pipeline built:** (1) Micro topic
 ordering fixed and topics renumbered as sequential **"Lecture N"** (dropping the repeating
