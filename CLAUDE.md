@@ -407,6 +407,41 @@ source repo, same source-of-truth → import → commit model as the guide/micro
   (real **"Download my CV (PDF)"** button; the request-fallback path is gone). The generated
   PDF is **never hand-edited** — it's owned by the CV repo / import.
 
+## Research overview — self-refreshing prose (built 2026-07-15)
+
+The `/research/` page (`src/pages/research.astro`) opens with a two-paragraph **Overview**
+("What I work on.") that summarizes Bryan's published work (¶1) and current/forthcoming work
+(¶2), written from the **actual content** of the papers, not their titles. Unlike the
+citation lists below it (which render from the auto-generated `publications.json`), the
+overview prose is **hand-authored inline** in `research.astro` and refreshed on demand. It
+replaced the old two-column "Fields" placeholder block. The CV `DownloadCard` was also
+**promoted** from the page bottom to just under the Overview.
+
+- **Grounding layer: `src/data/research-abstracts.json`** — VERBATIM abstracts of Bryan's own
+  papers, keyed by `title` (matching `publications.json` exactly; titles are unique per the CV
+  parser). **Hand-maintained, NOT generated, NOT imported by the build** — it exists solely to
+  ground the overview so refreshes draft from real content. INTEGRITY: every `abstract` is
+  copied verbatim from its `source`; a paper with no abstract is **omitted, never summarized**
+  into that field. Holds 13 entries (11 published articles + the *As Good as Gold* and
+  *Rethinking Deflation* working papers). Intentionally absent: the Symposium Introduction (no
+  abstract exists), the book + book chapters, and **5 early working papers awaiting drafts**
+  (Captured Gatekeepers; the Fed 2025 framework-review paper; Democracy, Dictatorship, and the
+  Monetary Commons; Free Banking Reform / antebellum; Monetary Rules without Romance) — add
+  each verbatim when Bryan pushes its draft, then refresh the prose (see below).
+- **Refresh ritual (when publications change):** the *list* updates itself from the CV
+  (`publications.json` — see the CV section). To refresh the *prose*: (1) add/update the
+  paper's verbatim abstract in `research-abstracts.json`; (2) ask Claude to **"refresh the
+  research overview"** → it re-drafts the two paragraphs from the abstracts + current
+  `publications.json`; (3) **Bryan reviews**; (4) `npm run build` → commit. Deliberately **NOT**
+  auto-generated in CI (keeps the build hermetic and the public-facing prose reviewed — an
+  LLM-in-CI approach was considered and rejected).
+- Prose is kept **thematic** (monetary theory/history · seigniorage · public choice · price
+  theory) so a single paper moving working→published rarely forces a rewrite. The 5 not-yet-
+  drafted working papers are currently summarized only at the theme level (no paper-specific
+  claims) until their drafts land. Page section backgrounds alternate surface/raised via a
+  computed `variantOf()` helper (robust to the conditionally-rendered chapters/books sections),
+  not hardcoded variants.
+
 ## Current status (as of 2026-07-15)
 
 **Latest (2026-07-15) — publications now auto-publish from the CV:** the Research

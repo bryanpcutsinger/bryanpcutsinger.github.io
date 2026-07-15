@@ -7,20 +7,6 @@ import DownloadCard from '../components/marketing/DownloadCard.astro';
 import CloseBand from '../components/marketing/CloseBand.astro';
 import pubs from '../data/publications.json';
 
-// Research fields — Bryan's actual areas (stated facts, not fabricated).
-const fields = [
-  {
-    label: 'Field 01',
-    heading: 'Monetary theory & history',
-    body: 'How monetary institutions and policy regimes shape prices, output, and the value of money — read through the historical record.',
-  },
-  {
-    label: 'Field 02',
-    heading: 'Public choice & political economy',
-    body: 'The incentives facing policymakers and institutions, and how those incentives explain the rules we actually get.',
-  },
-];
-
 // Map the forgiving JSON to CitationList entries. A link renders only for real
 // (non-placeholder) rows with a URL — scaffolds never show an invented DOI.
 const toEntries = (rows: any[]) =>
@@ -39,6 +25,20 @@ const worksInPress = toEntries(pubs.worksInPress ?? []);
 const articles = toEntries(pubs.articles ?? []);
 const bookChapters = toEntries(pubs.bookChapters ?? []);
 const workingPapers = toEntries(pubs.workingPapers ?? []);
+
+// Section backgrounds alternate surface/raised across ALL rendered sections. Kept
+// data-driven (not hardcoded) so the conditionally-rendered Book chapters / Books
+// sections can be empty as publications.json changes without breaking the rhythm.
+const sectionOrder = [
+  'overview',
+  'cv',
+  'articles',
+  ...(bookChapters.length > 0 ? ['chapters'] : []),
+  ...(worksInPress.length > 0 ? ['books'] : []),
+  'working',
+];
+const variantOf = (key: string) =>
+  sectionOrder.indexOf(key) % 2 === 0 ? 'surface' : 'raised';
 ---
 <MarketingLayout
   title="Research — Bryan Cutsinger"
@@ -54,24 +54,54 @@ const workingPapers = toEntries(pubs.workingPapers ?? []);
     </Fragment>
   </PageHead>
 
-  <!-- Fields -->
-  <Section variant="surface">
-    <div class="head"><p class="kicker">Fields</p><h2>What I work on.</h2></div>
-    <div class="fields">
-      {
-        fields.map((f) => (
-          <div class="field">
-            <span class="label label--accent">{f.label}</span>
-            <h3 class="field__heading">{f.heading}</h3>
-            <p class="field__body">{f.body}</p>
-          </div>
-        ))
-      }
+  <!-- Overview -->
+  <Section variant={variantOf('overview')}>
+    <div class="head"><p class="kicker">Overview</p><h2>What I work on.</h2></div>
+    <div class="overview">
+      <p>
+        Most of my published research sits at the intersection of monetary economics and
+        economic history. A recurring theme is seigniorage — the revenue governments raise
+        by creating money — and how monetary institutions determine who ultimately bears its
+        cost. I've examined episodes ranging from the hyperinflation of Revolutionary France
+        and paper money in colonial French North America to money and seigniorage in the
+        Confederate South, alongside present-day questions about the Federal Reserve's
+        post-2008 operating regime, interest on reserves, and whether a return to the gold
+        standard is feasible. A second strand brings public choice — the economics of
+        political incentives — to bear on legislation, from the durability of legislative
+        benefits to the insurance of legislative wealth transfers. Running through much of it
+        is a methodological argument, made with Alexander Salter, for putting price theory
+        back at the center of how economists work, and for defending the economic approach to
+        human behavior against calls to replace it.
+      </p>
+      <p>
+        My current work carries these questions forward. In monetary theory and history, a
+        framework developed with Joshua Hendrickson explains how an issuer's credibility in
+        redeeming paper money for gold shapes note discounts, exchange rates, and the price
+        level; a cross-country study with Casey Pender asks whether deflation's consequences
+        depend on its source, using thirteen economies under the classical gold standard to
+        show that supply-driven price declines behave nothing like the demand-driven kind.
+        Other projects, several under review, take up the political economy of monetary and
+        academic institutions — the Federal Reserve's 2025 framework review, how regime type
+        governs the "monetary commons," the competitiveness of antebellum free-banking
+        systems, and structural conflicts of interest in higher education. A book with
+        Alexander Salter, <em>Based Money: A Citizen's Guide to Money Mischief and Fiscal
+        Folly</em>, is under contract with the Independent Institute and expected in 2027.
+      </p>
     </div>
   </Section>
 
+  <!-- CV (promoted from the bottom of the page) -->
+  <Section variant={variantOf('cv')}>
+    <DownloadCard
+      title="Curriculum vitae"
+      description="The full record — publications, teaching, presentations, service, and appointments — on a single PDF."
+      fileUrl="/downloads/cutsinger-cv.pdf"
+      downloadLabel="Download my CV (PDF)"
+    />
+  </Section>
+
   <!-- Peer-reviewed articles -->
-  <Section variant="raised">
+  <Section variant={variantOf('articles')}>
     <div class="head">
       <p class="kicker">Publications</p>
       <h2>Peer-reviewed articles.</h2>
@@ -82,7 +112,7 @@ const workingPapers = toEntries(pubs.workingPapers ?? []);
   <!-- Book chapters -->
   {
     bookChapters.length > 0 && (
-      <Section variant="surface">
+      <Section variant={variantOf('chapters')}>
         <div class="head">
           <p class="kicker">Publications</p>
           <h2>Book chapters.</h2>
@@ -95,7 +125,7 @@ const workingPapers = toEntries(pubs.workingPapers ?? []);
   <!-- Books -->
   {
     worksInPress.length > 0 && (
-      <Section variant="raised">
+      <Section variant={variantOf('books')}>
         <div class="head">
           <p class="kicker">Publications</p>
           <h2>Books.</h2>
@@ -106,23 +136,13 @@ const workingPapers = toEntries(pubs.workingPapers ?? []);
   }
 
   <!-- Working papers -->
-  <Section variant="surface">
+  <Section variant={variantOf('working')}>
     <div class="head">
       <p class="kicker">In progress</p>
       <h2>Working papers.</h2>
       <p class="lede">Current projects — drafts available on request.</p>
     </div>
     <CitationList entries={workingPapers} />
-  </Section>
-
-  <!-- CV + profiles -->
-  <Section variant="raised">
-    <DownloadCard
-      title="Curriculum vitae"
-      description="The full record — publications, teaching, presentations, service, and appointments — on a single PDF."
-      fileUrl="/downloads/cutsinger-cv.pdf"
-      downloadLabel="Download my CV (PDF)"
-    />
   </Section>
 
   <CloseBand
@@ -137,11 +157,11 @@ const workingPapers = toEntries(pubs.workingPapers ?? []);
   .head { margin-bottom: var(--sp-8); }
   .head h2 { max-width: 22ch; }
   .head .lede { margin-top: var(--sp-3); }
-  .fields {
-    display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-12);
+  /* Overview — research-statement prose. Paragraphs inherit the base Newsreader
+     reading face, 68ch measure, and line-height from site.css; we only add the
+     hairline top-rule (kept from the old .fields block) and trim the last margin. */
+  .overview {
     border-top: 1px solid var(--hairline); padding-top: var(--sp-8);
   }
-  .field__heading { font-size: var(--fs-h3); margin: var(--sp-3) 0; }
-  .field__body { margin: 0; color: var(--muted); }
-  @media (max-width: 720px) { .fields { grid-template-columns: 1fr; gap: var(--sp-8); } }
+  .overview p:last-child { margin-bottom: 0; }
 </style>
