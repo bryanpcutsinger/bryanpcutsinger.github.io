@@ -60,7 +60,7 @@ function authorParts(authors?: string) {
       // Group consecutive same-year entries: only the first of a run shows the folio.
       const repeatYear = i > 0 && !!e.year && entries[i - 1].year === e.year;
       return (
-        <li class:list={['cite', { 'is-placeholder': e.placeholder }]}>
+        <li class:list={['cite', { 'is-placeholder': e.placeholder, 'cite--repeat': repeatYear }]}>
           <span
             class:list={['cite__year', { 'cite__year--repeat': repeatYear }]}
             aria-hidden={!e.year || repeatYear}
@@ -113,7 +113,7 @@ function authorParts(authors?: string) {
     list-style: none;
     margin: 0;
     padding: 0;
-    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
   }
   .cite {
     display: grid;
@@ -121,7 +121,13 @@ function authorParts(authors?: string) {
     align-items: baseline;
     gap: var(--sp-2) clamp(var(--sp-4), 2vw, var(--sp-8));
     padding: var(--sp-6) 0;
-    border-bottom: 1px solid var(--rule);
+    border-top: 1px solid var(--rule);
+  }
+  /* hairlines separate YEARS, not entries: rows continuing a year run drop
+     their rule and tuck up under the group's first entry */
+  .cite--repeat {
+    border-top: none;
+    padding-top: 0;
   }
 
   /* the marginal folio: publication year, hanging left in Newsreader claret */
