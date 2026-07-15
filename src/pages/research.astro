@@ -46,7 +46,6 @@ const workingPapers = toEntries(pubs.workingPapers ?? []);
 >
   <PageHead
     kicker="Research"
-    edition="Selected work"
     headline="Money, institutions, and the incentives behind policy."
     lede="My research asks how monetary institutions shape economies, and why the rules governing money look the way they do — spanning monetary theory and economic history, read through the lens of public choice."
   >
@@ -71,26 +70,11 @@ const workingPapers = toEntries(pubs.workingPapers ?? []);
     </div>
   </Section>
 
-  <!-- Book in press -->
-  {
-    worksInPress.length > 0 && (
-      <Section variant="raised">
-        <div class="head">
-          <p class="kicker">Book</p>
-          <h2>In press.</h2>
-          <p class="lede">A book-length project under contract.</p>
-        </div>
-        <CitationList entries={worksInPress} />
-      </Section>
-    )
-  }
-
   <!-- Peer-reviewed articles -->
-  <Section variant="surface">
+  <Section variant="raised">
     <div class="head">
       <p class="kicker">Publications</p>
       <h2>Peer-reviewed articles.</h2>
-      <p class="lede">Published work in economics and economic-history journals.</p>
     </div>
     <CitationList entries={articles} />
   </Section>
@@ -98,13 +82,25 @@ const workingPapers = toEntries(pubs.workingPapers ?? []);
   <!-- Book chapters -->
   {
     bookChapters.length > 0 && (
-      <Section variant="raised">
+      <Section variant="surface">
         <div class="head">
           <p class="kicker">Publications</p>
           <h2>Book chapters.</h2>
-          <p class="lede">Invited contributions to edited volumes.</p>
         </div>
         <CitationList entries={bookChapters} />
+      </Section>
+    )
+  }
+
+  <!-- Books -->
+  {
+    worksInPress.length > 0 && (
+      <Section variant="raised">
+        <div class="head">
+          <p class="kicker">Publications</p>
+          <h2>Books.</h2>
+        </div>
+        <CitationList entries={worksInPress} />
       </Section>
     )
   }

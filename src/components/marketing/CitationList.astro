@@ -8,7 +8,12 @@
 //
 // Entries flagged `placeholder: true` render dimmed with a [PLACEHOLDER] chip so a
 // scaffolded list never reads as a fabricated citation. `authorHighlight` (default
-// "Cutsinger") is bolded wherever it appears in an entry's `authors` string.
+// "Bryan P. Cutsinger") is bolded wherever it appears in an entry's `authors` string.
+//
+// Consecutive entries sharing a year are grouped: the folio renders only on the
+// first entry of a run (assumes the list arrives sorted by year). Repeated-year
+// rows keep the year as visually-hidden text so each citation stays complete for
+// screen readers.
 interface Link {
   label: string;
   href: string;
@@ -30,7 +35,7 @@ interface Props {
 }
 const {
   entries,
-  authorHighlight = 'Cutsinger',
+  authorHighlight = 'Bryan P. Cutsinger',
   class: className = '',
 } = Astro.props;
 
@@ -49,15 +54,21 @@ function authorParts(authors?: string) {
 ---
 <ol class:list={['cites', className]}>
   {
-    entries.map((e) => {
+    entries.map((e, i) => {
       const TitleTag = e.href ? 'a' : 'span';
       const parts = authorParts(e.authors);
+      // Group consecutive same-year entries: only the first of a run shows the folio.
+      const repeatYear = i > 0 && !!e.year && entries[i - 1].year === e.year;
       return (
         <li class:list={['cite', { 'is-placeholder': e.placeholder }]}>
-          <span class="cite__year" aria-hidden={!e.year}>
-            {e.year ?? '—'}
+          <span
+            class:list={['cite__year', { 'cite__year--repeat': repeatYear }]}
+            aria-hidden={!e.year || repeatYear}
+          >
+            {repeatYear ? '' : e.year}
           </span>
           <div class="cite__body">
+            {repeatYear && <span class="sr-only">{e.year}</span>}
             {parts && (
               <p class="cite__authors">
                 {parts.map((p) =>
@@ -126,6 +137,18 @@ function authorParts(authors?: string) {
 
   .cite__body {
     min-width: 0;
+  }
+  /* year for screen readers on repeated-year rows (folio suppressed visually) */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
   .cite__authors {
     margin: 0 0 var(--sp-1);
@@ -224,6 +247,10 @@ function authorParts(authors?: string) {
     .cite__year {
       grid-column: 1 / -1;
       font-size: 1.25rem;
+    }
+    /* a suppressed repeat-year folio would leave a blank row here — drop it */
+    .cite__year--repeat {
+      display: none;
     }
     .cite__flag {
       grid-column: 2;
