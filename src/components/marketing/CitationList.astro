@@ -2,9 +2,10 @@
 // CitationList — the signature academic pattern. A bibliography rendered as
 // editorial back-matter: the publication YEAR hangs in the left margin as a folio
 // (mirroring EditorialIndex's numeral grammar, but the number is real data, not a
-// sequence), with the entry set as a proper citation line — authors, a Newsreader
-// title (linked when a real href exists), an italic venue, an optional detail
-// (volume/pages or a status note), and mono resource links (DOI / PDF / SSRN).
+// sequence), with the entry set as a proper citation line — a Newsreader title
+// (linked when a real href exists), an italic venue, an optional detail
+// (volume/pages or a status note), the authors underneath, and mono resource
+// links (DOI / PDF / SSRN).
 //
 // Entries flagged `placeholder: true` render dimmed with a [PLACEHOLDER] chip so a
 // scaffolded list never reads as a fabricated citation. `authorHighlight` (default
@@ -69,13 +70,6 @@ function authorParts(authors?: string) {
           </span>
           <div class="cite__body">
             {repeatYear && <span class="sr-only">{e.year}</span>}
-            {parts && (
-              <p class="cite__authors">
-                {parts.map((p) =>
-                  p.strong ? <strong>{p.text}</strong> : p.text,
-                )}
-              </p>
-            )}
             <p class="cite__title-line">
               <TitleTag
                 class:list={['cite__title', { 'is-link': !!e.href }]}
@@ -91,6 +85,13 @@ function authorParts(authors?: string) {
               )}
               {e.detail && <span class="cite__detail">{e.detail}</span>}
             </p>
+            {parts && (
+              <p class="cite__authors">
+                {parts.map((p) =>
+                  p.strong ? <strong>{p.text}</strong> : p.text,
+                )}
+              </p>
+            )}
             {e.links && e.links.length > 0 && (
               <p class="cite__links">
                 {e.links.map((l) => (
@@ -157,7 +158,7 @@ function authorParts(authors?: string) {
     border: 0;
   }
   .cite__authors {
-    margin: 0 0 var(--sp-1);
+    margin: var(--sp-1) 0 0;
     font-size: 0.95rem;
     color: var(--text-muted);
     max-width: none;
