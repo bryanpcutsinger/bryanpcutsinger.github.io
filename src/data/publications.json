@@ -1,5 +1,5 @@
 {
-  "_note": "Bryan's research record, transcribed from his CV (T&P copy, 2026-06-04). Lists: `worksInPress` (book under contract), `articles` (refereed journal articles), `bookChapters`, `workingPapers` (under review / R&R). Each item: year, title, authors, venue (journal/book/press — rendered italic), status (→ the `detail` line: vol/pages for articles, editor/press for chapters, review status for papers), url (DOI/publisher — EMPTY here; none were on the CV). INTEGRITY: every row is verified from Bryan's own CV. NEVER fabricate a citation, DOI, coauthor, or venue. Add a `url` only when you have a verified DOI/publisher link. Set placeholder:true on any row not yet real (renders dimmed, never a real citation).",
+  "_note": "GENERATED — do not hand-edit. Derived deterministically from cutsinger_CV.tex by scripts/generate_publications.py in bryanpcutsinger/cv; edit the CV and push (the Publish CV Action regenerates and syncs this file), or run `npm run import:cv` on the website. INTEGRITY: every row is parsed verbatim from the CV; the parser fails closed rather than guess. Never fabricate a citation, DOI, coauthor, venue, or author ordering. `url` stays empty until the CV itself carries a verified link.",
   "worksInPress": [
     {
       "year": "2027",
@@ -113,7 +113,7 @@
       "year": "2024",
       "title": "There's No Such Thing as a Wage-Price Spiral",
       "authors": "Bryan P. Cutsinger",
-      "venue": "The War on Prices",
+      "venue": "The War on Prices: How Popular Misconceptions about Inflation, Prices, and Value Create Bad Policy",
       "status": "Ed. Ryan Bourne · Cato Institute · 29–39",
       "url": ""
     },
@@ -130,7 +130,7 @@
       "title": "Is the Gold Standard Feasible?",
       "authors": "Bryan P. Cutsinger",
       "venue": "The Gold Standard: Retrospect and Prospect",
-      "status": "Eds. Peter C. Earle & William J. Luther · AIER · 165–182",
+      "status": "Eds. Peter C. Earle & William J. Luther · American Institute for Economic Research · 165–182",
       "url": ""
     }
   ],
@@ -145,9 +145,9 @@
     },
     {
       "year": "",
-      "title": "Reviewing the Federal Reserve's 2025 Monetary Policy Framework Review",
-      "authors": "Bryan P. Cutsinger, Peter N. Ireland, and William J. Luther",
-      "venue": "Quarterly Journal of Political Science",
+      "title": "Captured Gatekeepers: Structural Conflicts of Interest in U.S. Higher Education",
+      "authors": "Bryan P. Cutsinger and Siri Terjesen",
+      "venue": "European Economic Review",
       "status": "Under review",
       "url": ""
     },
@@ -161,10 +161,34 @@
     },
     {
       "year": "",
-      "title": "Captured Gatekeepers: Structural Conflicts of Interest in U.S. Higher Education",
-      "authors": "Bryan P. Cutsinger and Siri Terjesen",
-      "venue": "European Economic Review",
+      "title": "Reviewing the Federal Reserve's 2025 Monetary Policy Framework Review",
+      "authors": "Bryan P. Cutsinger, Peter N. Ireland, and William J. Luther",
+      "venue": "",
       "status": "Under review",
+      "url": ""
+    },
+    {
+      "year": "",
+      "title": "Democracy, Dictatorship, and the Monetary Commons",
+      "authors": "With João Ricardo Faria and Louis Rouanet",
+      "venue": "",
+      "status": "Working paper",
+      "url": ""
+    },
+    {
+      "year": "",
+      "title": "Free Banking Reform and the Competitiveness of Antebellum Banking Systems",
+      "authors": "With Mitchell Harvey and Louis Rouanet",
+      "venue": "",
+      "status": "Working paper",
+      "url": ""
+    },
+    {
+      "year": "",
+      "title": "Monetary Rules without Romance",
+      "authors": "",
+      "venue": "",
+      "status": "Working paper",
       "url": ""
     }
   ]

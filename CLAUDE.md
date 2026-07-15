@@ -91,8 +91,9 @@ paid-speaking launch gate: at least one on-stage photo + short clip before lifti
 **testimonials** (`testimonials.json` empty → section auto-hidden; named quotes only);
 `sameAs` profile URLs for the `Person` JSON-LD (Scholar/ORCID/SSRN). **Already real:** talk
 topics (`data/topics.json`), short + long bio + credentials (`about.astro`), **publications**
-(`data/publications.json` — Research page; 12 articles + 3 chapters + 1 book in press + 4 under
-review, transcribed from Bryan's CV, no DOIs yet), and the **CV PDF** (`import:cv` pipeline — see
+(`data/publications.json` — Research page; GENERATED from the CV since 2026-07-15, see the
+CV section; 12 articles + 3 chapters + 1 book in press + 4 under review + 3 working papers,
+no DOIs yet — the CV carries none), and the **CV PDF** (`import:cv` pipeline — see
 below). Verified facts
 only: "Featured in" = National Review, The Hill, The Washington Examiner, RealClearEducation;
 credentials = interim director of the **AIER Sound Money Project**, Associate Editor of
@@ -349,10 +350,24 @@ trees API but slugs assume a flat layout). Why import-then-commit rather than an
 remote loader: keeps CI hermetic (no build-time private-repo auth) and every change is
 visible in `git diff`.
 
-## CV — imported from its own repo (built 2026-07-07)
+## CV — imported from its own repo (built 2026-07-07; publications added 2026-07-15)
 
-The **Curriculum vitae** download on `/research/` is **imported** from a dedicated
+The **Curriculum vitae** download on `/research/` **and the Research page's
+publication data (`src/data/publications.json`)** are **imported** from a dedicated
 source repo, same source-of-truth → import → commit model as the guide/micro/price-theory.
+
+- **`src/data/publications.json` is GENERATED — never hand-edit it (2026-07-15).**
+  It is compiled deterministically from `cutsinger_CV.tex` by
+  `scripts/generate_publications.py` **in the `cv` repo** (a fail-closed LaTeX→JSON
+  parser: any CV entry that doesn't match a known citation grammar fails the run
+  rather than publish a garbled citation; it never fabricates a DOI, venue, or
+  author ordering — early-stage working papers render authors as "With …" because
+  the CV states no ordering). To change the publication list: **edit the CV .tex and
+  push** (the Publish CV Action regenerates + syncs it here), or run
+  `npm run import:cv` (which fetches the .tex + parser and regenerates locally).
+  Sections mapped: Refereed Journal Articles → `articles`, Books → `worksInPress`,
+  Book Chapters → `bookChapters`, Under Review + Working Papers → `workingPapers`
+  (under-review first); Book Reviews are deliberately CV-only.
 
 - **Source of truth = `bryanpcutsinger/cv`** (private; local `~/Documents/CV`). A
   **self-contained LaTeX CV**: `cutsinger_CV.tex` (`\documentclass[11pt]{article}`, no
@@ -378,15 +393,35 @@ source repo, same source-of-truth → import → commit model as the guide/micro
   itself stays hermetic (it only ever builds committed files; the PAT is used by the CV repo's
   job, not by this repo's CI).
 - **Manual fallback:** `npm run import:cv` (`scripts/import-cv.sh`, via `gh`) pulls the
-  compiled PDF into `public/downloads/cutsinger-cv.pdf` (same **`%PDF-`/≥1 KB guard**), for
-  when the Action is disabled. Then `npm run build` → commit + push.
+  compiled PDF into `public/downloads/cutsinger-cv.pdf` (same **`%PDF-`/≥1 KB guard**)
+  **and regenerates `src/data/publications.json`** — it fetches `cutsinger_CV.tex` plus
+  the parser from the `cv` repo pinned to ONE commit SHA and runs it locally (one
+  parser, never a drifting copy; aborts before touching the committed JSON if parsing
+  fails). Then `npm run build` → commit + push.
+- **Sync failures are now LOUD (2026-07-15):** the CV repo's Action **fails red** when
+  `WEBSITE_SYNC_TOKEN` is missing/expired or the push is rejected (was warning-only) —
+  decided when publications joined the pipeline, so a stale site can't masquerade as a
+  successful publish. When the PAT expires (2026-10-12), CV pushes will turn red until
+  the token is renewed (see the renewal note above).
 - **Rendering:** `research.astro`'s `DownloadCard` uses `fileUrl="/downloads/cutsinger-cv.pdf"`
   (real **"Download my CV (PDF)"** button; the request-fallback path is gone). The generated
   PDF is **never hand-edited** — it's owned by the CV repo / import.
 
-## Current status (as of 2026-07-14)
+## Current status (as of 2026-07-15)
 
-**Latest (2026-07-14) — CV auto-publish ACTIVATED (config-only, no code change):** Bryan
+**Latest (2026-07-15) — publications now auto-publish from the CV:** the Research
+page's `publications.json` is GENERATED from `cutsinger_CV.tex` by a fail-closed
+parser in the `cv` repo; the Publish CV Action now syncs PDF + JSON to this repo in
+ONE commit, and a missing/failed sync fails the run red (was warning-only). First
+generated import landed with exactly the expected content diffs (War-on-Prices full
+subtitle; AIER spelled out; stale QJPS venue dropped — Bryan confirmed the CV is
+right; 3 early-stage working papers added, authors as "With …" since the CV states
+no ordering). `import:cv` fallback regenerates the JSON too. Design went through a
+blind two-leg review (Claude Plan agent + Codex gpt-5.6-sol), synthesized. Earlier
+same-week: research-page presentation cleanup (`26dffb9`, `f8a0365`, `4a7fd5e` —
+section order, year-grouped hairlines, authors under titles, full-name bold).
+
+**Prior (2026-07-14) — CV auto-publish ACTIVATED (config-only, no code change):** Bryan
 created the fine-grained PAT and set the `cv` repo's `WEBSITE_SYNC_TOKEN` secret; a manual
 `workflow_dispatch` test verified the full chain (compile → `cv-sync[bot]` push to this repo
 → Pages deploy → live PDF serving fresh). The bot's sync commit (`6dcd811`, PDF 177→226 KB —
