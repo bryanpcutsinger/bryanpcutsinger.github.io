@@ -8,15 +8,15 @@ be_anchors: ["BE 8", "BE Part II (Q6, Q14)"]
 word_target: "2000-6000"
 status: approved        # one-per-lecture split; approved 2026-07-01
 audience: students
-note: "Self-contained — assumes no access to the textbooks. Second of two market-power posts (session 17); session 16 built the price-searcher tool and pricing tactics."
+note: "Self-contained — assumes no access to the textbooks. Second of two market-power posts. Integrates antitrust, capture, durable government-enforced cartels, farm/producer protections, and the political marketplace."
 # brief: ../t08-market-power/brief.md
 ---
 
 # Market Power II: Antitrust and Regulation
 
-Last session we built the price-searcher tool. Recall the two ideas we lean on here. First, most real firms are *price-searchers*, not *price-takers*: unlike a wheat farmer who must accept whatever the market pays, a price-searcher sets its own price and faces a downward-sloping demand, so it has some pricing discretion. That discretion is nearly universal and, on its own, mild, because real competition is a *condition* of a market, the pressure of who could enter, not a head count of how many sellers you can see today.
+Part A built the price-searcher tool. Recall the two ideas we lean on here. First, most real firms are *price-searchers*, not *price-takers*: unlike a wheat farmer who must accept whatever the market pays, a price-searcher sets its own price and faces a downward-sloping demand, so it has some pricing discretion. That discretion is nearly universal and, on its own, mild, because real competition is a *condition* of a market, the pressure of who could enter, not a head count of how many sellers you can see at one moment.
 
-Second, and this is the hinge of the whole topic, what makes market power durable and costly is not the number of sellers but whether the market is *open* or *closed*. A market is open when nothing but cost stands between a would-be competitor and entry; it is closed when entry is blocked by something else: a license, a patent, an exclusive franchise, a tariff, an acreage cap, a professional board. An open market keeps even a lone seller honest, because charging too much invites entry; a closed market lets the protected seller hold prices up and let costs drift, because the door behind it is locked. And closed doors are usually held shut by government, not by the market. We also saw that firms sometimes try to fake a closed market by colluding, forming a *cartel* to hold prices up, but a purely private cartel tends to cheat itself to death unless the law enforces it. Keep that open-versus-closed distinction in hand; everything today turns on it.
+Second, and this is the hinge of the whole topic, what makes market power durable and costly is not the number of sellers but whether the market is *open* or *closed*. A market is open when nothing but cost stands between a would-be competitor and entry; it is closed when entry is blocked by something else: a license, a patent, an exclusive franchise, a tariff, an acreage cap, a professional board. An open market keeps even a lone seller honest, because charging too much invites entry; a closed market lets the protected seller hold prices up and let costs drift, because the door behind it is locked. And closed doors are usually held shut by government, not by the market. We also saw that firms sometimes try to fake a closed market by colluding, forming a *cartel* to hold prices up, but a purely private cartel tends to cheat itself to death unless the law enforces it. Keep that open-versus-closed distinction in hand; everything in this post turns on it.
 
 <aside class="econ-callout econ-objectives">
 <p class="econ-callout__label">Learning objectives</p>
@@ -24,6 +24,8 @@ Second, and this is the hinge of the whole topic, what makes market power durabl
 <ul>
 <li>Explain why antitrust law, judged by whether a practice raises or lowers the worth delivered to consumers, often punishes the very behavior competition is supposed to produce.</li>
 <li>Explain the logic of regulatory capture: why an agency created to restrain a monopoly tends to end up shielding the regulated firms from more efficient rivals.</li>
+<li>Explain why durable cartels and producer protections usually require government enforcement, using concentrated benefits and dispersed costs.</li>
+<li>Diagnose farm programs by separating their stated purpose from their mechanism, realized outcome, beneficiaries, and payers.</li>
 <li>Explain why sustained private monopoly is rare without a government lock on the door, given diseconomies of scale and substitutes from other industries.</li>
 <li>Distinguish the positive analysis of these practices from the normative verdict, which comes from your own values rather than from the economics.</li>
 </ul>
@@ -88,9 +90,19 @@ The histories are blunt about it. The Interstate Commerce Commission was created
 
 A close cousin of capture is the case for prohibiting particular marketing tactics, "predatory pricing" above all. The theory says a deep-pocketed giant prices below cost to bankrupt rivals, then jacks prices up once alone; it sounds plausible and almost never happens. The predator loses money heavier than its smaller prey while the war lasts; the bankrupt firm's plant and workers do not vanish, they get bought cheaply and re-enter, often stronger with lower costs; and recoupment afterward requires barriers to entry an open market does not supply. Asked for a single documented case of predatory pricing succeeding, a Nobel laureate said he knew of none. A lower price from a genuinely lower-cost entrant is not predation but efficient competition, which is exactly why the "predatory" charge is so often aimed at it. And the cost the regulator must find to set a "fair" price often does not exist: the swing between an off-peak kilowatt-hour and a peak one is many times over, so there is no single "the" cost a commission can price against, as California learned in 2001 when average-cost rate-setting collided with above-average generation cost and the lights went out.
 
+## Durable Cartels and Producer Protections Are Political Arrangements
+
+Private cartels are unstable because each member can gain by secretly cutting price and because a high cartel price invites entry. Government can solve both problems for producers: it can require participation, restrict imports, cap acreage or output, and deny licenses to potential entrants. The longest-lived cartels are therefore not private agreements hiding from the state; they are restrictions enforced by it.
+
+That does not mean officials are outside the market correcting it from above. They control scarce permissions, contracts, subsidies, and legal barriers, and organized groups compete for those benefits. Suppress price competition and competition moves into lobbying, votes, campaign support, administrative hearings, and personal connections. Politics is a marketplace in that precise sense: incentives still operate, but the currency and the allocation rule change.
+
+The distribution of stakes explains which restrictions persist. A sugar quota or rice tariff may cost each household only a few dollars while delivering a large gain to a small group of producers. The producers know exactly what is at stake and organize; millions of consumers each have little reason to learn the rule, much less campaign against it. Concentrated benefits and dispersed costs let a policy survive even when the total consumer loss exceeds the producer gain.
+
+Farm programs make the mechanism visible. An above-market dairy support price creates the same surplus as any other price floor, so government must restrict herds, buy the excess, or let output go to waste. Import restrictions on sugar, peanuts, or rice use a different instrument but close the same door. The stated purpose may be food security or aid to farmers; the realized mechanism is restricted entry or supply, a higher price, and a transfer toward protected incumbents. The right diagnostic is not the policy's label but what it does, who gains, and who pays.
+
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
-<p>A large firm is accused of pricing below cost to bankrupt a smaller rival and then raising prices once it is alone. Name two reasons the scheme rarely pays off, and explain why a lower price from a genuinely lower-cost entrant is not predation at all.</p>
+<p>A quota costs each household $6 a year and delivers millions of dollars to a small group of producers. Which side will organize more intensely, and why can the restriction persist even when consumers lose more in total than producers gain?</p>
 </aside>
 
 ## Why Sustained Private Monopoly Is Rare
@@ -112,6 +124,8 @@ One last reminder, the same one we have returned to all term. Everything in this
 <ul>
 <li><strong>Antitrust often protects competitors, not competition.</strong> Judged by whether consumers are made better off, the law has punished lower prices, bulk discounts, and efficient scale, the very things competition is supposed to produce.</li>
 <li><strong>Regulators drift toward capture.</strong> Because the regulated firms are few and permanently engaged while the public is large and diffuse, an agency built to restrain a monopoly ends up shielding incumbents from more efficient rivals.</li>
+<li><strong>Durable cartels are political arrangements.</strong> Law can bar entrants and compel participation where a private agreement would unravel.</li>
+<li><strong>Producer protections have asymmetric politics.</strong> Concentrated beneficiaries organize more readily than dispersed consumers, so farm restrictions can persist despite a net loss.</li>
 <li><strong>Sustained private monopoly is rare.</strong> Diseconomies of scale cap how big a firm can efficiently get and substitutes from other industries discipline even a lone seller, so lasting monopoly usually needs a government lock on the door.</li>
 <li><strong>Economics explains these practices without pronouncing on them.</strong> The analysis says what each practice does; whether it is good or bad is a verdict your own values supply on top of the economics.</li>
 </ul>

@@ -1,27 +1,29 @@
 ---
-title: "Production and Costs"
+title: "Marginal Analysis, Production, and Costs"
 topic: "T6 — Production, Costs, and Specialization (Part A)"
 course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 12 (Thu 10/1)"]
-ue_anchors: ["UE 14 (Productivity and Costs)", "UE 17 (SR/LR taxonomy + sunk-cost / quasi-rent only)"]
+ue_anchors: ["UE 7 (totals, marginals, averages, equimarginal allocation)", "UE 14 (Productivity and Costs)"]
 be_anchors: ["BE 10 (complementary inputs + capital-labor / 'what is efficiency' sections only)"]
 word_target: "2500-6000"
 status: approved        # Stage-2 sign-off 2026-06-15
 audience: students
-note: "Self-contained — assumes no access to the textbooks. Part A of t06-production-costs-specialization: the cost machinery (UE 14 + UE 17 sunk-cost/quasi-rent/SR-LR + BE 10 productivity/efficiency). Part B (specialization & exchange) covers UE 15 + BE 6. Source-of-truth for the Part-A deck; section headers are claims that map to slide titles. Teaches one continuous worked example (Bill/Susan, then Adam). UE 17 used ONLY for the SR/LR timing taxonomy and sunk-cost/quasi-rent; UE 17's tax-incidence material is T4/T7."
+note: "Self-contained — assumes no access to the textbooks. Part A of T6: UE 7's general marginal toolkit followed by UE 14 production and cost. Part B covers specialization and exchange. UE 17 is owned by T7 and is not pre-taught here."
 # brief: ../t06-production-costs-specialization/brief.md
 ---
 
-# Production and Costs
+# Marginal Analysis, Production, and Costs
 
 Back when we studied trade, I left you with a promise and a puzzle. The promise was a second, deeper source of gains from exchange that we had not yet touched. We had explained how trading makes everyone richer because people value the same goods differently, and I said something else was going on too: people also differ in what it costs them to make things. The puzzle was a claim that sounds impossible: you can be worse at producing everything than the person next to you and still have something worth selling to them.
 
-We make good on both over the next two sessions. Today we lay the foundation, and to do it we have to ask a question that seems too simple to bother with: what does it actually cost to produce something? The honest answer is surprising, and once we have it the rest follows, including the resolution of that puzzle, why a less talented person can still be the cheaper producer of something, and a handful of cost ideas that will do real work for us all semester. Next time we put this machinery to use on specialization and exchange.
+We make good on both across this two-part topic. Part A first builds the total/marginal/average and equimarginal tools, then asks a question that seems too simple to bother with: what does it actually cost to produce something? The honest answer is surprising, and once we have it the rest follows, including the resolution of that puzzle, why a less talented person can still be the cheaper producer of something, and a handful of cost ideas that will do real work throughout the course. Part B puts this machinery to use on specialization and exchange.
 
 <aside class="econ-callout econ-objectives">
 <p class="econ-callout__label">Learning objectives</p>
 <p>By the end of this post you should be able to:</p>
 <ul>
+<li>Distinguish totals, marginals, and averages; explain how the marginal pulls the average; and identify which measure governs the next production choice.</li>
+<li>Apply the equimarginal principle to allocate a fixed productive resource across competing uses.</li>
 <li>Explain why the cost of producing something is the best alternative given up, not the dollars on the invoice or the hours on the clock.</li>
 <li>Distinguish absolute advantage from comparative advantage, and explain why no one can be the lowest-cost producer of everything.</li>
 <li>Distinguish marginal cost from average cost, and explain why a rising marginal cost pulls average cost up behind it.</li>
@@ -31,11 +33,50 @@ We make good on both over the next two sessions. Today we lay the foundation, an
 <li>Explain why a higher-wage worker can be the lower-cost worker once you account for productivity.</li>
 <li>Explain why a worker's productivity depends on the tools, management, and co-workers around him, not on the worker alone.</li>
 <li>Explain why capital and labor substitute for each other, and why "efficiency" has no meaning until you name the goal.</li>
-<li>Explain why only present and future costs are costs, and why a sunk cost is irrelevant to what you should do now.</li>
-<li>Explain how quasi-rent keeps an existing resource in use even when it could never earn enough to justify replacing it.</li>
-<li>Distinguish the immediate, short, and long runs, and explain why an economy adjusts to change in stages.</li>
 </ul>
 </aside>
+
+## Totals, Marginals, and Averages Answer Different Questions
+
+Production gives us the right home for a general toolkit that we will reuse for cost, output, revenue, and hiring. For any quantity, the *total* is the running sum, the *marginal* is the change in that total caused by one more unit, and the *average* is the total divided by the number of units. They travel together, but they answer different questions.
+
+<aside class="econ-callout econ-termset">
+<p class="econ-callout__label">Key terms</p>
+<dl class="econ-term-list">
+<div><dt>Total</dt><dd>The running sum across all units.</dd></div>
+<div><dt>Marginal</dt><dd>The change in the total when one more unit is added.</dd></div>
+<div><dt>Average</dt><dd>The total divided by the number of units.</dd></div>
+</dl>
+</aside>
+
+Suppose a worker scores 80 on a first quality check, 86 on a second, and 89 on a third. The three marginal observations are 80, 86, and 89; the totals are 80, 166, and 255; and the averages are 80, 83, and 85. The new observation pulls the average toward itself. A marginal above the current average raises the average; a marginal below it lowers the average; and a marginal equal to it leaves the average unchanged. This marginal-average rule is arithmetic, not a special feature of test scores. It governs average product and average cost too.
+
+The decision-relevant number is usually marginal. A store's sales rise from $1,000 with one clerk to $1,800 with two. The second clerk's marginal contribution is $800, the change in the store's total, even if that clerk personally rings up a different amount. The same reasoning applies to a factory deciding whether to add a shift: compare what the next shift adds with what it costs. An average summarizes all units already chosen; the marginal tells you what changes if you choose one more.
+
+Revenue uses the same arithmetic. Suppose a chair seller can sell one chair for $110 but must cut the price to $100 to sell two. Total revenue rises from $110 to $200, so the second chair's marginal revenue is $90, not its $100 selling price: the lower price also costs the seller $10 on the first chair. Average revenue is $100 per chair. The details of how a price-setting seller uses marginal revenue belong to market power; the general lesson here is that a marginal is always the change in the total, not merely the amount attached to the newest unit.
+
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>A plant's average cost is $12 per unit and the next unit costs $15. What happens to average cost if the plant makes it? What if the next unit instead costs $9?</p>
+</aside>
+
+## Efficient Allocation Equalizes Marginal Returns Across Uses
+
+The toolkit becomes most useful when a producer has a fixed resource and several places to put it. Suppose ten machine-hours can be split between production lines A and B. Line A's first hours are very productive but its marginal return falls quickly; line B begins lower but declines slowly. Sending every hour to whichever line has the larger *total* return is the wrong comparison. The producer should assign each next hour to the line offering the largest remaining marginal return.
+
+In the worked schedule, the best split assigns four hours to A and six to B. That combination produces a total return of 150.5, more than putting all ten into A (110) or all ten into B (127.5). At the best integer split, the last hours assigned to the two lines have nearly equal returns. Moving an hour from one line to the other would give up more at the source than it adds at the destination.
+
+<aside class="econ-callout econ-def">
+<p class="econ-callout__label">Definition</p>
+<p>The equimarginal principle says that a fixed resource produces the largest total return when it is allocated across uses so their marginal returns are equal, or as close to equal as indivisible units permit.</p>
+</aside>
+
+<figure class="econ-figure" style="margin:1.5em 0;">
+<iframe src="/teaching/microeconomics/t06a-production-and-costs/figures/t03-equimarginal-interactive.html" title="Drag the split of ten units between two production lines to compare total output and marginal returns." loading="lazy" style="width:100%; max-width:640px; aspect-ratio:16/10; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t06a-production-and-costs/figures/t03-equimarginal-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t06a-production-and-costs/figures/t03-equimarginal.svg">view the static figure</a>.</p></iframe>
+<figcaption><strong>Allocate the resource until marginal returns are as equal as the units allow.</strong> Line A starts higher but falls faster, so four units in A and six in B maximize the combined total. Drag the split to see why favoring the larger total or average leaves gains unrealized. The mirror-image cost rule is equally important: a firm minimizes the cost of a fixed output by equalizing marginal cost across its plants.</figcaption>
+</figure>
+
+This principle is not an extra rule laid on top of production. It is the logic connecting a production schedule to a decision. The same scarce hour cannot be in both factories, so its opportunity cost in one use is the marginal return forgone in the other. Efficient allocation keeps moving units until no such move can raise the total.
 
 ## The Cost of Producing Something Is the Best Thing You Give Up to Make It
 
@@ -67,7 +108,7 @@ You would think the better producer must be the cheaper producer of everything. 
 
 Bill, to make one cake, gives up half a jam, because in the time it takes him to make ten cakes he could have made five jams. Susan, to make one cake, gives up two-thirds of a jam. So even though Susan is the more talented cake-maker in absolute terms, Bill is the cheaper cake-maker, because he sacrifices less to produce one. Susan, in turn, is the cheaper jam-maker.
 
-This is not a fluke of these numbers but a law of arithmetic. No matter what abilities you write into that table, one person cannot have lower costs in both goods, because cost in one good is just the flip side of cost in the other: if Susan gives up little jam per cake, she must give up a lot of cake per jam. The conclusion is completely general: no one can be the lowest-cost producer of everything, which means everyone is the lowest-cost producer of something. We call the thing you give up the least to make your *comparative advantage*. There is the answer to the puzzle. You can be worse at making every single good, like Bill, and still be the cheaper producer of one of them, and that is exactly what gives you something worth selling. Next session we cash this in: that gap in costs is the whole engine of specialization and trade.
+This is not a fluke of these numbers but a law of arithmetic. No matter what abilities you write into that table, one person cannot have lower costs in both goods, because cost in one good is just the flip side of cost in the other: if Susan gives up little jam per cake, she must give up a lot of cake per jam. The conclusion is completely general: no one can be the lowest-cost producer of everything, which means everyone is the lowest-cost producer of something. We call the thing you give up the least to make your *comparative advantage*. There is the answer to the puzzle. You can be worse at making every single good, like Bill, and still be the cheaper producer of one of them, and that is exactly what gives you something worth selling. Part B cashes this in: that gap in costs is the whole engine of specialization and trade.
 
 <aside class="econ-callout econ-termset">
 <p class="econ-callout__label">Key term</p>
@@ -183,7 +224,7 @@ Here is the production-side version of a rule you already know from demand. How 
 
 Look at the last column of Table 2, the marginal worth of each cake to Adam, the most Y he would give up to have it. As we saw on the first day, the more cake he already has, the less he will give up for one more, so those worths fall: 1.15, 1.05, 0.95. His marginal costs, meanwhile, rise: 0.90, 1.00, 1.10. Adam keeps baking while the next cake is worth more to him than it costs. The first is worth 1.15 and costs 0.90; the second is worth 1.05 and costs 1.00; the third would cost 1.10 but is worth only 0.95, so he stops at two cakes a day.
 
-That is the stopping rule, and it is the mirror image of demand: a producer makes a good up to the point where its marginal worth, or its price, has fallen to its marginal cost, and not one unit further. This rising marginal-cost relationship is the single most useful thing you will carry out of this topic, because it is what a firm reads off to decide how much to produce when we study competitive markets next. It reads its decision straight off the marginal-cost curve we built today.
+That is the stopping rule, and it is the mirror image of demand: a producer makes a good up to the point where its marginal worth, or its price, has fallen to its marginal cost, and not one unit further. This rising marginal-cost relationship is the single most useful thing you will carry out of this topic, because it is what a firm reads off to decide how much to produce in competitive markets. It reads its decision straight off the marginal-cost curve built here.
 
 <figure class="econ-figure" style="margin:1.5em 0;">
 <iframe src="/teaching/microeconomics/t06a-production-and-costs/figures/t06a-mc-vs-mw-interactive.html" title="Drag the point along Adam's marginal-worth line to see where it meets marginal cost" loading="lazy" style="width:100%; max-width:480px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t06a-production-and-costs/figures/t06a-mc-vs-mw-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t06a-production-and-costs/figures/t06a-mc-vs-mw.svg">view the static figure</a>.</p></iframe>
@@ -222,56 +263,12 @@ That brings us to a word people throw around as if it were obvious: *efficiency*
 
 Once a goal is named, we can say precisely what efficient production means, and there are two ways to say the same thing. One: production is efficient when the output of one good is as large as it can be for whatever amounts of the other goods you have chosen to make. Two: production is efficient when you cannot make more of one good without making less of another. The two phrasings are equivalent. Each says that nothing is being wasted, that you have squeezed everything possible out of the resources, so the only way to get more of one thing is to give up some of another. Notice that this definition does not assume anyone has perfect knowledge. Efficient production uses the knowledge that actually exists and lets it be tested against results; knowledge is itself a costly resource, so being ignorant of something is not always wasteful or irrational, since gathering the information would have had its own cost.
 
-## Only Present and Future Costs Are Really Costs
-
-I have saved the cleanest, most counterintuitive idea for last, and it sharpens everything we have said about cost. Costs lie in the future, never the past. A cost is something you give up by a present or future choice. Money already spent, on a decision you cannot undo, is a *sunk cost*, and it is irrelevant to what you should do now.
-
-<aside class="econ-callout econ-termset">
-<p class="econ-callout__label">Key term</p>
-<dl class="econ-term-list">
-<div><dt>Sunk Cost</dt><dd>Money already spent on a past choice that no current decision can recover.</dd></div>
-</dl>
-</aside>
-
-Suppose you already own a taxi. What it cost to buy is gone, sunk, and should play no part in whether you drive today. The only question is whether the fares you will earn cover the costs you can still avoid, the gas and your time. As long as driving brings in more than those forward-looking costs, you drive, regardless of what the cab originally cost. The same logic governs a refinery whose owners would never build it again at today's prices but keep running it because the revenue still beats the cost of operating it, and it governs your own education: the years and money already poured in are sunk, and the only sensible question is your best move from here. We met this on the first day with the failing term paper, the twenty hours already spent being no reason to keep going. Here it gets a sharper edge: any decision rule that weighs sunk costs wastes resources.
-
-<aside class="econ-callout econ-check">
-<p class="econ-callout__label">Pause and check</p>
-<p>You paid $2,000 for a laptop a year ago. Today a repair would cost $300 and a replacement $500. Which figure is sunk, and which figures should actually decide what you do now?</p>
-</aside>
-
-This has an implication we will lean on later. Once a cost is fully baked into the price of an asset, it cannot burden whoever buys the asset afterward. If some old, one-time charge has already pushed down what a piece of equipment sells for, the new buyer pays the lower price and bears none of the original charge; it is already priced in. We will use this for taxes later, when we ask who really bears a tax laid on an asset.
-
-## Quasi-Rent Keeps Old Resources Working Even When They'd Never Be Replaced
-
-One last wrinkle follows straight from sunk costs. An existing, hard-to-move resource keeps being used as long as it earns more than the cost of operating it, even if it could never earn enough to justify building it again. That surplus, the gap between what it earns and the bare cost of keeping it in use, is called *quasi-rent*. "Quasi" because it is temporary: it lasts only as long as the resource does, and disappears once the resource wears out and the question becomes whether to replace it.
-
-<aside class="econ-callout econ-termset">
-<p class="econ-callout__label">Key term</p>
-<dl class="econ-term-list">
-<div><dt>Quasi-Rent</dt><dd>The surplus an existing resource earns above the bare cost of keeping it in use.</dd></div>
-</dl>
-</aside>
-
-Picture an old house that would cost far more to build today than anyone would now pay to rent it. The cost of building it is sunk. But the house exists, and renting it out earns more than the trivial cost of letting someone live there, so it stays occupied. Its rent is quasi-rent: enough to keep it in service, not nearly enough to justify building its twin. Or think of an engineer trained for a specialty that has since dried up. If his next-best job pays twenty thousand dollars less than his current one, he hangs on to the current job even though no one, knowing what we know now, would pay to train a new engineer for that dying field. That gap is quasi-rent, keeping a specialized, hard-to-redeploy resource at work while it lasts, squeezing the last value out of resources already here without pretending they will be replaced.
-
-## Adjustments Take Time: The Immediate, Short, and Long Runs
-
-The thread running through sunk costs and quasi-rent is time. When conditions change, an economy does not jump instantly to its new resting place; it adjusts in stages, and economists name three. In the *immediate run*, nothing can change but the price: a sudden shortage just bids the price up, because the quantity on hand is fixed. In the *short run*, producers can change how fast they run their existing facilities, the rate of production, but cannot yet build or scrap the facilities themselves. In the *long run*, even the stock of facilities adjusts as firms build new plants or let old ones go. This taxonomy frames everything about cost behavior: the rising marginal-cost curves we drew are short-run pictures, with the kitchen and oven fixed, while in the long run those fixed things become changeable and the cost story can look quite different. When we study how competitive markets respond to taxes and shocks, this short-run-versus-long-run distinction will do a lot of the heavy lifting.
-
-<aside class="econ-callout econ-termset">
-<p class="econ-callout__label">Key terms</p>
-<dl class="econ-term-list">
-<div><dt>Immediate Run</dt><dd>The period in which only the price can change because the quantity on hand is fixed.</dd></div>
-<div><dt>Short Run</dt><dd>The period in which producers can change how fast they run existing facilities but cannot build or scrap them.</dd></div>
-<div><dt>Long Run</dt><dd>The period in which even the stock of facilities changes as firms build new plants or retire old ones.</dd></div>
-</dl>
-</aside>
-
 <div class="econ-review">
 <section class="econ-review__section">
 <h3>Key takeaways</h3>
 <ul>
+<li><strong>Marginals govern change.</strong> Totals accumulate, averages summarize, and the next marginal pulls the average toward itself.</li>
+<li><strong>Equalize marginal returns.</strong> A fixed productive resource yields the largest total when its marginal returns are equal across uses.</li>
 <li><strong>Cost is opportunity cost.</strong> The cost of making something is the best alternative those resources could have produced, not the dollars on the invoice or the hours on the clock.</li>
 <li><strong>No one is the low-cost producer of everything.</strong> Absolute talent and low cost are different things, so everyone has a comparative advantage in something, even a person who is worse at making every good.</li>
 <li><strong>Marginal cost pulls average cost.</strong> Marginal cost is the cost of the next unit; when it runs above the average it drags the average up, and when it runs below the average it pulls it down.</li>
@@ -281,9 +278,6 @@ The thread running through sunk costs and quasi-rent is time. When conditions ch
 <li><strong>High wages are not high costs.</strong> A higher-paid worker can be the cheaper input per unit when higher productivity more than covers the higher pay.</li>
 <li><strong>Productivity is a joint product.</strong> How much a worker produces depends on the tools, management, and co-workers around him, not on the worker alone.</li>
 <li><strong>Efficiency needs a goal.</strong> Capital and labor substitute for each other, and "efficient" means nothing until you name which scarce resource you are trying to stretch.</li>
-<li><strong>Only present and future costs are costs.</strong> Money already spent is a sunk cost and irrelevant to what you should do now.</li>
-<li><strong>Quasi-rent keeps old resources working.</strong> An existing resource stays in use as long as it earns more than the cost of operating it, even when it could never earn enough to justify replacing it.</li>
-<li><strong>Adjustment takes time.</strong> Only the price moves in the immediate run, the rate of production in the short run, and the stock of facilities in the long run.</li>
 </ul>
 </section>
 </div>

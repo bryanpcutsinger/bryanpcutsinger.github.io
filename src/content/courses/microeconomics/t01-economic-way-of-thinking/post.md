@@ -2,7 +2,7 @@
 title: "The Economic Way of Thinking"
 topic: "T1 — Introduction and the Economic Way of Thinking"
 course: "Principles of Microeconomics (FAU)"
-sessions: ["Fall 2026 — content session 1 (Thu 8/27)"]
+sessions: ["Fall 2026 — content session 2 (Thu 8/27)"]
 ue_anchors: ["UE 1", "UE 2", "UE 3"]
 be_anchors: ["BE 1", "BE 25"]
 word_target: "2000-6000"

@@ -1,21 +1,21 @@
 ---
-title: "Property Rights, Externalities, and Public Goods"
-topic: "T5 — Property Rights, Externalities, and Public Goods"
+title: "Property Rights and Externalities"
+topic: "T5 — Property Rights, Externalities, and Public Goods (Part A)"
 course: "Principles of Microeconomics (FAU)"
-sessions: ["Fall 2026 — content session 9 (Tue 9/22)"]
+sessions: ["Fall 2026 — content session 8 (Thu 9/17)"]
 ue_anchors: ["UE 13", "UE 3 (externalities section)", "UE 17 (negative-externality section)"]
 be_anchors: []
 word_target: "3000-6000"
 status: approved        # Stage-2 sign-off 2026-06-15
 audience: students
-note: "Self-contained — assumes no access to the textbooks. Source-of-truth for the T5 deck; section headers are claims that map to slide titles. Closes the Exam-1 block."
+note: "Self-contained — assumes no access to the textbooks. Part A of T5: property rights, externalities, environmental trade-offs, Coasean bargaining, and tradable permits. Part B covers public goods, clubs, commons, and institutional choice."
 ---
 
-# Property Rights, Externalities, and Public Goods
+# Property Rights and Externalities
 
 Apples on a tree in a public park get picked before they ripen. Public beaches end up littered. Garbage gets dumped in rivers, and the air over a big city fills with smog. People reach for an easy label when they see these things: the market has failed, commerce fouls the commons, and the government must step in.
 
-I want to convince you the label points at the wrong culprit. None of those problems is a place where buying and selling broke down. They are places where it never got started, because nobody owns the thing being spoiled, so nobody can sell it, defend it, or charge for ruining it. The unripe apples, the trashed beach, the polluted river: each is a property-rights problem wearing a market-failure costume. Once you see it that way, a long list of controversies, from pollution to overfishing to the supposed squalor of public services, turns out to run on one engine. By the end of today you should be able to define an externality and a public good, diagnose an alleged market failure as a missing property right, and weigh the remedies people propose, including who ends up paying for the one that gets chosen. This is also where a thread from our first week pays off: back then I said owning something means holding several powers at once, and promised we would build that idea out later. Today is later.
+I want to convince you the label points at the wrong culprit. None of those problems is a place where buying and selling broke down. They are places where it never got started, because nobody owns the thing being spoiled, so nobody can sell it, defend it, or charge for ruining it. The unripe apples, the trashed beach, the polluted river: each is a property-rights problem wearing a market-failure costume. Once you see it that way, a long list of controversies, from pollution to overfishing to the supposed squalor of public services, turns out to run on one engine. By the end of this post you should be able to define an externality, diagnose an alleged market failure as a missing property right, and compare bargaining, taxes, and tradable permits as remedies. This is also where a thread from the opening topic pays off: owning something means holding several powers at once, and now we build that idea out.
 
 <aside class="econ-callout econ-objectives">
 <p class="econ-callout__label">Learning objectives</p>
@@ -26,10 +26,6 @@ I want to convince you the label points at the wrong culprit. None of those prob
 <li>Explain why economy versus environment is a trade-off.</li>
 <li>Apply the Coase result to a two-party dispute.</li>
 <li>Explain how trading pollution rights applies the gains from exchange.</li>
-<li>Define a public good by nonrivalry.</li>
-<li>Explain the free-rider problem and its three fixes.</li>
-<li>Explain why unowned resources get used up too soon.</li>
-<li>Explain why choosing a remedy is a political question.</li>
 </ul>
 </aside>
 
@@ -96,6 +92,11 @@ Suppose you want to put up a building that will block the view from my apartment
 
 That is the Coasean result, named for the economist Ronald Coase: when rights are clearly assigned and freely salable, the parties bargain their way to the value-maximizing use, and the *use* that results does not depend on *who* was handed the right first. The right flows to whoever values it most, the way any good does in a trade. Two cautions keep this from being a fairy tale. First, the initial assignment still matters enormously to people, since it decides who is made richer. Second, bargaining only works when the parties are few and the rights are clear. When a refinery's odor would settle over thousands of scattered households, striking a separate deal with each is hopelessly expensive and private bargaining stalls. That is the kind of situation that gets handed to a government agency instead, where we turn next.
 
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>A builder values a new floor at $200,000 and neighboring tenants value the preserved view at $120,000. If rights are clear and bargaining is cheap, what use wins under either initial assignment, and what does the assignment still change?</p>
+</aside>
+
 ## Tradable Pollution Rights Apply the Gains From Exchange to the Right to Emit
 
 When bargaining one-on-one is too costly, a market can still be built deliberately, by creating rights to pollute and letting firms trade them. Years ago Los Angeles capped the total pollutants its firms could emit and scheduled the cap downward over a decade. Each firm got an allowance, usually based on what it had been emitting, and, crucially, could sell that allowance to another firm. A market in pollution rights sprang up at once.
@@ -113,48 +114,7 @@ We are reasoning verbally here, the way we have all term, not drawing supply-and
 <figcaption><strong>Rights trade until each firm's marginal output value equals the price.</strong> The paint maker starts at 20 units of pollution where its marginal value of output is above the common price of a right; the refiner starts at 20 units where its marginal value is below that price. Dragging rights from the refiner to the paint maker (or using the arrow keys) raises the refiner's marginal value and lowers the paint maker's until both equal the price, at 30 units and 10 units respectively — the same equilibrium regardless of who held the rights first. Total pollution is fixed; only who holds the rights and what gets produced changes. If the frame does not load, <a href="/teaching/microeconomics/t05-property-rights-externalities/figures/t05-pollution-rights-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t05-property-rights-externalities/figures/t05-pollution-rights.svg">view the static figure</a>.</figcaption>
 </figure>
 
-## A Public Good Is One Whose Use by One Person Does Not Reduce Another's
-
-We have been talking about goods that one person consumes: if I eat an apple, you cannot. Those are *private goods*. A *public good* is different. Once it has been produced, one person's use of it does not reduce the amount or worth available to anyone else. My getting more of it does not leave you with less. A mathematical theorem, a broadcast program, a lighthouse beam, some forms of national defense: my having the benefit leaves yours untouched. Economists call this *nonrivalry* in consumption, and it is the defining feature. A second feature often travels with it, *nonexcludability*, the difficulty of keeping non-payers out, but nonrivalry is the heart of the definition.
-
-Two confusions are worth heading off, since exam questions love both. The first: nonrivalry is a fact about consumption, not about production. Someone might claim we can produce more of a public good without giving up other goods, but that is false. Producing the broadcast, writing the theorem, building the defense, all of it consumes scarce resources like anything else. What is costless is the extra use of the good once it exists, not its creation. The second confusion is to think anything shared is a public good. A theater performance is shared, but it is not a public good, since seats are limited and every spectator who gets in keeps someone else out. Goods with limited capacity are rival, and rivalry, not the mere fact of being enjoyed together, separates a public good from a private or congestible one.
-
-## The Free-Rider Problem Makes Public Goods Hard to Pay For, and There Are Three Standard Fixes
-
-If a good is nonrival and hard to exclude people from, a problem appears for anyone who would supply it. Why pay for something you can enjoy whether or not you chip in? This is the *free-rider problem*: since non-payers cannot easily be shut out, the reward for creating and maintaining a public good is hard to collect, so too little tends to get made. Three remedies recur, all variations on one theme, finding a way to make the beneficiaries pay.
-
-The first is government provision financed by taxes. A government can do what a private supplier cannot: use force to collect payment and punish free-riding, jailing or fining the person who refuses to pay. This is how we fund mosquito control, flood control, streets, and police patrols, which carry strong public-good features. When the government charges a fee for access, people sometimes protest the very idea of an admission price, but the price serves a purpose beyond raising money. It rations use, and rationing can keep a shared good from being loved to death, which brings us to the commons shortly.
-
-The second fix is the private *club*: a firm in which the investors and the customers are the same people, who band together to provide a public good for themselves and pay for building and running it. A members-only golf course, a yacht club, or a fraternal hall all work this way. What makes a club possible is excludability. Since members can keep non-members out, they can be sure those who enjoy the good are the ones who paid for it, which defeats the free-rider problem from the inside. How a club hands out membership matters here. A closed group that admits new members only by sale, the way a country club does, gives each member a stake he can cash out, so members tend to husband the place; an open group whose membership cannot be sold weakens that stewardship, since no one captures the value of caring for what he will simply leave behind. Shared ownership of this open, nonsalable kind is exactly why your college, where you cannot sell your place in the student body, runs short on the control and alienability that make a private owner careful. Whole nations have a faintly club-like quality, part of why residents so often resent newcomers who arrive without having paid in.
-
-The third fix is the *tie-in*, the cleverest. Some public goods cannot exclude non-payers at all yet get supplied privately anyway, sometimes precisely because the free-riders are welcome. Broadcast television and radio are the classic case. You pay nothing to watch, and nobody is shut out, but the program is not really free: the price is your attention during the advertisements, time that has other uses. The broadcaster cannot force you to watch the ads, but when you tune in for the program, the ads ride along as the price of admission. Newspapers and magazines, priced far below what they cost to make, are funded the same way. One useful corollary of such tied and charitable financing: a gift earmarked for something the recipient would have bought anyway frees up his own funds for other uses, since a dollar is a dollar wherever it comes from. We will leave the full who-gains-what arithmetic of earmarked gifts for class; the principle is what matters here.
-
-## The Tragedy of the Commons: Unowned Resources Get Used Up Too Soon
-
-The flip side of the public good is the *common-pool resource*, where the absence of property rights bites hardest. A common-pool resource is open to all but used up in the using: a fishery, a public pasture, a forest, the apples on that park tree. Picture the tree again. Why do the apples get picked before they ripen? Not because anyone prefers sour fruit, but because no one owns the tree. If you wait for an apple to ripen, someone else picks it green first, so the rational move for each person is to grab it now, and the result is a resource harvested too soon and too hard. The same logic drove the American bison to the edge of extinction and threatens whales and seals: with no owner to husband the stock, each taker races the others to the kill. An owner faces the opposite incentive, since the future value of the herd or orchard is captured in what he could sell it for, so he has every reason to preserve it and harvest at the right time and rate.
-
-Stock a lake with fish nobody owns, and you get the fishery version. The fish caught run younger and smaller than in a privately owned lake, for the same reason the park apples come down green: the only way to capture a fish's value is to catch it before someone else does. Worse, the open lake draws in too much effort. Each fisher judges the worth of his own catch, never the total drain on the stock, so people pour more boats, gear, and hours into catching fish than the extra fish are worth to society. That double waste, fish taken too young and resources squandered racing to take them, traces straight back to a missing, unenforced property right.
-
-<aside class="econ-callout econ-check">
-<p class="econ-callout__label">Pause and check</p>
-<p>No one owns the lake, so the fish come up young and small. Why would an owner wait?</p>
-</aside>
-
-This is also why "public good" and "commons" shade into each other once a crowd shows up. Let everyone in for free and the park, the road, or the beach gets congested, and now my use really does subtract from yours. Yesterday's public good becomes today's congested good, and the response is the same tool we keep meeting: control entry, or charge a price that rations access before the good is destroyed.
-
-## Who Bears the Cost Is a Political Question, Not Just an Economic One
-
-I want to close by widening the lens from allocation to politics, since every remedy we have discussed lands its costs on some identifiable group, and the one a society actually adopts depends on who can capture the gains and who can be made to bear the costs. A ban, a tax, a permit market, public provision: none is free, and choosing among them is as much a political contest as an economic calculation.
-
-The decision-maker's own incentives steer the outcome. A private owner who can pocket the proceeds, the residual claimant on what he controls, has every reason to price a resource to clear and redeploy it when it would be worth more elsewhere; he eats the consequences of getting it wrong. A salaried administrator who cannot personally bank the gain answers to other rewards, prestige, popularity, the approval of donors, and so he may keep a public golf course underpriced long after a private owner would have sold the land, or hand out admissions and licenses below clearing to serve goals unrelated to revenue. The same divide explains why a license awarded "to the most deserving" rather than sold to the highest bidder draws lawyers and lobbyists who burn real resources competing for it, sometimes spending nearly as much as the license is worth.
-
-The contest also tilts toward concentrated interests. The cost of a remedy is often spread thinly across millions of taxpayers while its benefits pile up on a few, or the reverse, and the side whose stake is concentrated has far more reason to organize, lobby, and vote than the side whose stake is diffuse. So the remedy that wins is frequently not the one that does the most good overall but the one whose winners were best positioned to push it through.
-
-Watch all of this play out in one ordinary fight. A town owns an airport, and a developer holds a large parcel nearby. The town fears that families who move into new homes will complain about the noise and force the airport to cut back its operations, so it passes a zoning rule forbidding houses on the parcel. Notice first that any rule of this kind is two-sided. Whenever the law clarifies one party's right, it necessarily curtails another's: if a city says your neighbor's building may not cast a shadow on your land at midday, it has strengthened your right to sunlight and, in the same stroke, narrowed his right to build as he pleases. There is no clarification that adds to one side without subtracting from the other. So whose rights does the airport rule curtail? If the developer bought the land when home-building was already allowed, the new rule takes a right he had paid for. But if there was no such rule when he bought, the ordinance is not really a taking; it defines and assigns, for the first time, a right that had been left vague, which is exactly why a careful buyer asks what the land may be used for before he pays, rather than after.
-
-And zoning is not the only fix. A lighter one leaves the rights where they are and writes the conflict into a contract: require that any sale of the land to a home-builder disclose the airport next door. Buyers who know about the noise will pay less, the lower price reflects the nuisance, and the families who do move in have no standing to complain about a cost they were told of and accepted. The damage gets priced rather than prohibited, which is the Coasean move in another guise. Which fix a town actually picks, though, turns on the politics. A taxpayer who lives nowhere near the airport tends to vote for the homes, since more houses mean more residents paying property taxes for schools and services he uses, and his stake, like the developer's, is concentrated enough to organize around, while the scattered would-be neighbors' is not. Diagnosing an externality as a missing or unassigned property right tells you the economics; asking who bears the cost of the cure, and who has the motive and means to choose it, tells you the politics.
-
-That diagnostic frame is one we reach for again, and we return to it when we take a wider look at economic reasoning about policy near the end of the course. Next come production, costs, and the surprising arithmetic of specialization, where you will find that a person who is worse at making everything can still have something well worth selling.
+This first half has stayed with harms and benefits that can be tied to identifiable users. Part B asks what changes when use is shared, exclusion is difficult, or the resource is open to everyone.
 
 <div class="econ-review">
 <section class="econ-review__section">
@@ -163,13 +123,9 @@ That diagnostic frame is one we reach for again, and we return to it when we tak
 <li><strong>Property rights must be salable.</strong> Control and specification make them so.</li>
 <li><strong>Suppressing a price does not erase value.</strong> It resurfaces as queues and favors.</li>
 <li><strong>An externality is an uncompensated spillover.</strong> The test is agreeable compensation.</li>
-<li><strong>Economy versus environment is a trade-off.</strong> Cleaner air costs income.</li>
-<li><strong>The efficient use is independent of the right's holder.</strong> Assignment changes only who gains.</li>
-<li><strong>Tradable pollution rights are gains from exchange.</strong> The right flows to who values it most.</li>
-<li><strong>A public good is nonrival.</strong> One person's use leaves others' untouched.</li>
-<li><strong>The free-rider problem has three fixes.</strong> Government, clubs, and tie-ins.</li>
-<li><strong>Unowned commons get used up too soon.</strong> No owner captures the future value.</li>
-<li><strong>Who bears the cost is political.</strong> The winner favors concentrated interests.</li>
+<li><strong>Economy versus environment is a trade-off.</strong> Cleaner air uses resources that could produce other goods.</li>
+<li><strong>Clear rights enable bargaining.</strong> Assignment changes who gains; low-cost exchange directs the right toward the higher-valued use.</li>
+<li><strong>Tradable pollution rights apply gains from exchange.</strong> The right flows toward the firm that values it most at a fixed aggregate cap.</li>
 </ul>
 </section>
 </div>

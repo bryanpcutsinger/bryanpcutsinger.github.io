@@ -2,7 +2,7 @@
 title: "Gains from Exchange"
 topic: "T2 — Gains from Exchange (Pure Reallocation)"
 course: "Principles of Microeconomics (FAU)"
-sessions: ["Fall 2026 — content session 2 (Tue 9/1)"]
+sessions: ["Fall 2026 — content session 3 (Tue 9/1)"]
 ue_anchors: ["UE 4"]
 be_anchors: []
 word_target: "2000-6000"
@@ -13,7 +13,7 @@ note: "Self-contained — assumes no access to the textbooks. Source-of-truth fo
 
 # Gains from Exchange
 
-Last time we ended with a list of ways a society can decide who gets a scarce thing, and I said this course mostly studies one of them: exchange. Today we make good on that, and we start with a puzzle. In a simple trade, no new bread is baked and no new car rolls off a line. The same goods just change hands. So where does the gain come from? If trading only moves existing things around, how can both people walk away better off?
+The opening topic ended with a list of ways a society can decide who gets a scarce thing, and I said this course mostly studies one of them: exchange. Here we make good on that, and we start with a puzzle. In a simple trade, no new bread is baked and no new car rolls off a line. The same goods just change hands. So where does the gain come from? If trading only moves existing things around, how can both people walk away better off?
 
 The short answer is that wealth is not the same as stuff. What you own is worth more when it sits in the hands that value it most, and trade is how scarce things find those hands. Once you see that, a lot of heated talk about commerce and middlemen starts to look different. Let me build the case in steps.
 
@@ -87,7 +87,7 @@ When they do differ, a mutually agreeable trade exists, and the direction is set
 <p>Suppose you would pay up to $40 for a used jacket and the seller would let it go for as little as $25. If it sells for $32, how much does each side gain, and why must the two worths straddle the price for a trade to happen?</p>
 </aside>
 
-As the trade proceeds, the gap narrows on its own. Recall a point from last time: the more of something you already have, the less you would give up for one more unit of it. So as Sam accumulates water, his worth of the next bottle falls, and as Joe runs low, his worth of each remaining bottle rises. Trading slides both people toward the point where their valuations meet, and there it stops, because no further swap would help either one. The gain to each is simply the gap between what the good was worth to them and what they paid. We will give that gain a fuller treatment when we get to demand. For now, hold on to the plain version: you gain whenever you value what you get more than what you give up.
+As the trade proceeds, the gap narrows on its own. Recall an earlier point: the more of something you already have, the less you would give up for one more unit of it. So as Sam accumulates water, his worth of the next bottle falls, and as Joe runs low, his worth of each remaining bottle rises. Trading slides both people toward the point where their valuations meet, and there it stops, because no further swap would help either one. The gain to each is simply the gap between what the good was worth to them and what they paid. The demand topic gives that gain a fuller treatment. For now, hold on to the plain version: you gain whenever you value what you get more than what you give up.
 
 ## When Trade Is Forbidden, the Gains Do Not Vanish
 
@@ -100,7 +100,7 @@ Suppose your college gives you a permit for one of its scarce parking spaces, an
 <p>A resident adviser decides who gets the last available single dorm room but cannot legally sell it. The room's value does not disappear. Name one nonmonetary form that value might take instead.</p>
 </aside>
 
-None of this, by the way, says that trade is good and bans are bad. Economics tells you what will happen if people are allowed to trade, and what will happen if they are stopped. Whether a given result is good is a separate, normative question you settle with your own values. Keep the line from last time in view: the analysis gives you the "is," and the "should" is yours to add.
+None of this, by the way, says that trade is good and bans are bad. Economics tells you what will happen if people are allowed to trade, and what will happen if they are stopped. Whether a given result is good is a separate, normative question you settle with your own values. Keep the earlier positive-normative line in view: the analysis gives you the "is," and the "should" is yours to add.
 
 ## Middlemen Lower the Cost of Trading, They Do Not Add to It
 
@@ -135,7 +135,7 @@ You might expect a middleman to grab the goods and never return, or to water dow
 
 We leaned the whole time on one source of gains: people differ in how much they *value* things. There is a deeper source we have not touched. People also differ in what it *costs* them to make things, and those cost differences let people specialize and produce more together than they ever could apart. We will work that out when we get to production and costs, and it turns out to be the most surprising result in the course: you can be worse at making everything and still have something worth selling.
 
-We also kept using one idea without unpacking it, that a good is worth less to you the more of it you already have, and that this is what brings trading to a stop. Next time we put that idea to work directly. We will build the law of demand, see why demand curves slope downward, and learn to tell a change in price apart from a change in demand itself. Bring the same skepticism. The most quoted claims about what people "need" rarely survive it.
+We also kept using one idea without unpacking it, that a good is worth less to you the more of it you already have, and that this is what brings trading to a stop. The demand topic puts that idea to work directly by building the law of demand, explaining why demand curves slope downward, and separating a change in price from a change in demand. Bring the same skepticism. The most quoted claims about what people "need" rarely survive it.
 
 <div class="econ-review">
 <section class="econ-review__section">

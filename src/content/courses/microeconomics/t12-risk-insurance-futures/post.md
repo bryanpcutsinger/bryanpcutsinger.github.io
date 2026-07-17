@@ -1,19 +1,19 @@
 ---
-title: "Risk, Insurance, and Futures"
-topic: "T12 — Risk, Insurance, and Futures"
+title: "Risk, Return, Diversification, and Insurance"
+topic: "T12 — Risk, Insurance, and Financial Markets (Part A)"
 course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 25 (Tue 11/17)"]
-ue_anchors: ["UE 34", "UE 37", "UE 35 (risk section)"]
+ue_anchors: ["UE 34", "UE 35 (risk, return, and diversification)"]
 be_anchors: ["BE 14 (partial)"]
-word_target: "5000-6000"   # lower bound aligned to brief topic_target (5000-5400); upper = §4 6,000 hard cap. Heavy 3-UE-anchor topic; structural length.
+word_target: "3000-5500"
 status: approved        # Stage-2 sign-off 2026-06-15
 audience: students
-note: "Self-contained — assumes no access to the textbooks. Source-of-truth for the T12 deck; section headers are claims that map to slide titles. Assumes T11 (present value, interest) is taught; PV is used by one-line callback, not re-derived."
+note: "Self-contained — assumes no access to the textbooks. Part A of T12: risk versus uncertainty, risk-return, diversification, private insurance, and the political economy of government guarantees. Part B covers speculation, futures/options, asset-price information, and intermediation."
 ---
 
-# Risk, Insurance, and Futures
+# Risk, Return, Diversification, and Insurance
 
-The future is never fully known. Crops fail, ships sink, houses burn, prices swing, and people die at unpredictable times. You cannot make any of that go away. What you can do, and what this topic is about, is decide who bears the consequences. A wheat miller does not know what wheat will cost him in July; a homeowner does not know whether this is the year the kitchen catches fire. The danger is real, but the loss need not land on the person standing closest to it. Markets have built remarkable institutions, insurance and futures contracts among them, whose whole purpose is to take a danger off someone who does not want it and put it onto someone who will. Before we get there, we need one distinction that does more work in this topic than any other.
+The future is never fully known. Crops fail, ships sink, houses burn, prices swing, and people die at unpredictable times. You cannot make any of that go away. What you can do, and what this topic is about, is decide who bears the consequences. A wheat miller does not know what wheat will cost him in July; a homeowner does not know whether this is the year the kitchen catches fire. The danger is real, but the loss need not land on the person standing closest to it. Markets have built institutions—insurance, diversification, and financial contracting—whose purpose is to spread measurable losses and place them with people better able or more willing to bear them. Before we get there, we need one distinction that does more work in this topic than any other.
 
 <aside class="econ-callout econ-objectives">
 <p class="econ-callout__label">Learning objectives</p>
@@ -25,8 +25,6 @@ The future is never fully known. Crops fail, ships sink, houses burn, prices swi
 <li>Explain why insurance is a positive-sum trade, because pooling reduces the risk rather than merely shifting it.</li>
 <li>Explain why a large holder self-insures, and how diversification narrows the range of outcomes without lowering the average.</li>
 <li>Analyze government guarantees that break the five conditions, from deposit insurance to disaster relief, as taxpayer-financed relief that breeds moral hazard.</li>
-<li>Explain how futures contracts and options transfer a price risk through a two-sided hedge, and work out an option's break-even.</li>
-<li>Explain the social service speculators perform, smoothing consumption and making the futures price the market's best forecast, and why banning a futures market backfires.</li>
 <li>Explain the risk-return trade-off as a law of competitive markets: no higher return without a wider spread.</li>
 <li>Distinguish term from straight life insurance, and explain why the same people who insure also buy lottery tickets.</li>
 </ul>
@@ -129,45 +127,6 @@ What relief unquestionably changes, and not for the better, is behavior. Because
 
 Private insurers also handle disasters better, because competition forces them to: after a hurricane, insurers flew in teams and set up hotlines to settle claims fast to keep their customers, while a government-owned bridge sat wrecked for months. That pressure to serve the customer is what taxpayer-funded relief lacks. Through all of this, hold the line from the first week. Economics tells you what *will* happen when government guarantees losses, more building in flood zones, more bank risk-taking, higher costs. It does not tell you whether that is fair; the "should" is yours to supply.
 
-## Futures Contracts Let People Hand Off a Price Risk
-
-Insurance handles the risk that something bad happens to a thing you own. The other great risk-shifting institution handles a different danger, that the price of something moves against you before you are done with it, and the politician's complaint that speculators just gamble and destabilize prices has the story backward.
-
-A *futures contract* is an agreement made now in which a buyer agrees to pay a seller a set price at a set future date for a set quantity of some good. Settle the vocabulary first. The *futures price* is the price written into the contract today for later delivery; the *future price* is the spot price that will actually form when that later date arrives. A September futures price quoted in May is not a guess about the weather; it is a contractual price you can lock in today for September delivery.
-
-See how it transfers risk. A miller in January promises bakers a fixed price for summer flour, based on wheat costing him, say, ten dollars a bushel. He is not in the business of betting on wheat; he wants to earn his living milling. So he buys a July wheat futures contract at ten dollars. If wheat rises to eleven, he loses on the flour but gains an offsetting amount on the futures contract and comes out whole; if wheat falls to nine, he gains on the flour and lets the futures contract lapse. The contract is a form of insurance: like fire insurance on a building that did not burn, he does not regret it when wheat falls. On the other side stands someone with the opposite exposure, often a grain-elevator operator holding wheat, who loses if the price falls; he sells the July contract, giving up his chance at a price rise for protection against a fall. That two-sided surrender, each party giving up the gains from a favorable move to be shielded from an unfavorable one, is what makes a futures contract a *hedge*, an arrangement that makes an unfortunate event automatically trigger an offsetting favorable one, like betting heads with one person and tails with another on the same coin toss.
-
-The same machinery works on any opposed exposures. An American importer who owes yen for cars and an American apple exporter who will be paid in yen can take opposite sides of a yen futures contract, and without knowing each other the two have swapped their currency risks and both are protected. Two rival parking-lot owners, one near each of two ballclubs that might host the next round, can cross-bet the same way, each buying a share of the other's lot so each collects no matter which team wins, narrowing both their ranges of wealth. For stocks and bonds, the futures idea takes the form of puts and calls.
-
-## Puts and Calls Are Insurance Against a Price Move
-
-Options are easiest to understand as insurance, because that is what they are. A *put* is the right, but not the obligation, to *sell* a stock at a set *strike price* within some period, no matter how far the price falls. A *call* is the right, but not the obligation, to *buy* a stock at the strike price within the period, no matter how high it climbs. You pay an up-front premium for either.
-
-A put is insurance against a fall. If you own a share worth its strike price and buy a put for a small premium, then no matter how far the share sinks you can still force the other party to buy it from you at the strike. The premium works like a deductible: you absorb the first slice of any decline, and the put covers losses beyond it. If the price instead rises, you do not exercise the put and you have lost only the premium, and, as with any insurance, never needing the payout does not mean the protection was wasted.
-
-A call is insurance against a rise, useful to someone who has committed to buy. The break-even logic trips students up, so make it a rule: with a call you do not profit until the price clears the strike plus the premium you paid. Buy a call with a strike of fifty for a premium of six dollars a share, and the stock has to rise past fifty-six before you are ahead. And you never exercise an option that is "out of the money": if a call lets you buy at fifty but the market price is forty-nine, you let it expire and buy cheaper on the market. Run those two rules and the arithmetic of any option problem falls out.
-
-<aside class="econ-callout econ-check">
-<p class="econ-callout__label">Pause and check</p>
-<p>You buy a call with a strike of forty dollars for a three-dollar-a-share premium. Above what market price do you start to make money? If the stock sits at thirty-nine, do you exercise the call or let it expire?</p>
-</aside>
-
-## Speculators Smooth Consumption Between Harvests
-
-So far the people in our story are hedgers, businesses laying off a risk they do not want. Who takes the other side? Often a *speculator*, willing to hold the price risk in hopes of a profit, and far from being a parasite he performs a genuine social service.
-
-No central planner decides how much of this year's harvest to hold back so consumption is smooth until the next one. Yet it gets done, and futures markets are how. Suppose word spreads that frost has damaged next year's coffee crop. Owners of this year's beans now expect higher prices next year, so they hold beans back rather than sell them all now. That withholding raises today's price, even though not a single bean has yet been lost, and the predictable cry goes up that greedy speculators are gouging consumers. The speculator's honest defense is that we did not cause the frost. There will be less coffee next year no matter what; the only question is when the shortfall is felt. Either we keep drinking today as if nothing were wrong and suffer the whole shortage next year, or we trim a little now, carry some over, and spread the scarcity across both years. By bidding up today's price and easing next year's, speculators do the second, and most people prefer a modest squeeze spread over time to a sudden, sharp shortage, so this smoothing is a service, not a swindle.
-
-A few corollaries follow. First, the work is mostly done by profit-seekers, not by farsighted households canning their own preserves; the self-interested speculator accomplishes for the whole economy what individual prudence accomplishes for one family. Second, speculators respond to *news*, not events: the price jumps when the rumor of frost changes everyone's expectations, not on the distant day the beans would have been harvested. So the claim that speculators "push up" prices, evidenced by prices rising before any actual change in supply, gets the causation backward. Third, *storability* governs how big the swing is. A good that stores cheaply can be carried across the harvest, so its price barely dips when the new crop arrives; a perishable good cannot be carried, so its in-season price collapses when fresh supply floods in. The harder a good is to store, the wilder its seasonal price swing.
-
-This also separates commodity speculation from gambling, even though both bet on an unknown future. A casino bet creates a risk for its own sake; nothing is allocated better because the dice rolled. Commodity speculation reallocates a real, scarce, storable good across time toward its higher-valued uses. The gambler manufactures risk; the speculator carries an existing one and, in doing so, improves how a scarce good is spread over time.
-
-## The Futures Price Is the Market's Best Forecast
-
-One more service falls out of all this competition. Because traders profit by buying low and selling high, any gap between the futures price and the price people expect at delivery gets competed away: if the futures price sat below the expected delivery-date price, traders would buy futures until they bid it up; if above, they would sell until they drove it down. What is left is a futures price pinned to the *best available estimate of the future spot price*. Individual futures prices are wrong all the time, but their errors run both ways and average out, so over many contracts they track realized prices closely, and no other forecasting method reliably beats them. Because the forecast is already baked in, there is no sure profit in simply trading futures; the contract's real value is as a hedge and as a public prediction. You can even read a table of futures prices as a forecast: if the contract for one month sits below the others, the market is telling you it expects more supply around then, a good sign the new harvest lands in that month.
-
-Which is why banning a futures market is worse than useless. Speculation about the future is universal; people speculate, hedge, and hoard against bad fortune everywhere, with or without an organized exchange, so prohibiting the exchange does not end speculation, it only strips away the cheap, public version. Outlaw potato futures and you do not stop anyone from betting on potato prices; you remove the hedging that lets farmers and processors offload risk, you degrade the public price forecast, and you leave supplies to lurch around more erratically. And ask who lobbies for such a ban: often a handful of insiders whose private information about crop conditions is worth more to them when there is no open futures market broadcasting it to everyone else. A concentrated few gain; the dispersed many lose. Again, economics tells you what the policy will do, not whether someone's notion of fairness is satisfied.
-
 ## You Cannot Get High Return and Low Risk at Once
 
 The last piece ties insurance and futures back to ordinary investing. The risk of an investment is just the width of the range its value might land in: of two people, one holding only cash and one drilling a wildcat oil well that will either double his money or wipe it out, the driller plainly bears the greater risk, because his range of possible outcomes is far wider. He also has the higher chance at a big gain. The two go together, and no past streak of luck changes the odds of the next independent draw.
@@ -177,6 +136,11 @@ That pairing is a law of competitive markets. You cannot find an investment offe
 A fund helps because of *diversification*, the shipowner's trick again. Spread your money across many holdings whose fortunes do not all rise and fall together, and the ups and downs partly cancel, so the whole portfolio swings less than any single holding while its average return stays put. You have lowered the variance without lowering the mean, the same pooling logic that makes insurance and self-insurance work.
 
 This is just one face of a problem that runs through all of life. The dessert that is to die for is loaded with the calories that shorten your life; the sports car that goes from zero to sixty in five seconds drinks fuel by the gallon; the major you love best may be the one employers want least. The risk-return trade-off is the financial version of the oldest lesson in this course: the things we want come bundled with the things we do not, and no choice escapes the trade-off. There is, as ever, no free lunch.
+
+<aside class="econ-callout econ-check">
+<p class="econ-callout__label">Pause and check</p>
+<p>Two investments have the same expected return, but one is spread across hundreds of unrelated firms while the other holds a single company. Which has the narrower range of outcomes, and why does diversification not require a lower average return?</p>
+</aside>
 
 ## Two Loose Ends: Saving Through Insurance, and Why the Insured Buy Lottery Tickets
 
@@ -194,8 +158,6 @@ Second, a genuine puzzle: the same people who buy insurance, and so look risk-av
 <li><strong>Insurance is positive-sum.</strong> Pooling reduces the risk rather than merely shifting it, so coverage is worth more to the buyer than it costs the insurer.</li>
 <li><strong>Big holders self-insure.</strong> A large, varied pool is already diversified, and diversification narrows outcomes without lowering the average.</li>
 <li><strong>Guarantees can be relief in disguise.</strong> Breaking the five conditions stops pricing risk, breeds moral hazard, and shifts the loss to taxpayers.</li>
-<li><strong>Futures and options hand off a price risk.</strong> A two-sided hedge trades away a favorable move for protection against an unfavorable one; an option pays only past strike plus premium.</li>
-<li><strong>Speculators perform a service.</strong> They smooth consumption over time and make the futures price the best forecast, so a ban only removes the cheap public version.</li>
 <li><strong>No high return at low risk.</strong> Competition prices away any bargain offering both, so a wider spread buys a higher expected return.</li>
 <li><strong>Name the bundled pieces.</strong> Straight life bundles insurance with forced saving, and lottery tickets sell the non-money payoff of a possible dramatic change.</li>
 </ul>

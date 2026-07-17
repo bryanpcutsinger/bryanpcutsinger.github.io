@@ -8,15 +8,15 @@ be_anchors: ["BE 6 (specialization / economies of scale / middleman block)"]
 word_target: "2500-6000"
 status: approved        # Stage-2 sign-off 2026-06-15
 audience: students
-note: "Self-contained — assumes no access to the textbooks. Part B of t06-production-costs-specialization: comparative advantage, the cheaper newcomer, blocking entry, the two meanings of specialization, market size, diseconomies of scale, and middlemen (UE 15 + BE 6). Part A (production & costs) covers UE 14 + UE 17 sunk-cost/quasi-rent/SR-LR + BE 10. Source-of-truth for the Part-B deck; section headers are claims that map to slide titles. Continues the one Adam/Baker worked example begun in Part A; pays off T2's promise/puzzle."
+note: "Self-contained — assumes no access to the textbooks. Part B of T6: comparative advantage, the cheaper newcomer, blocking entry, the two meanings of specialization, market size, diseconomies of scale, and middlemen (UE 15 + BE 6). Part A covers UE 7's marginal toolkit plus UE 14 production/cost and BE 10. UE 17 is owned by T7."
 # brief: ../t06-production-costs-specialization/brief.md
 ---
 
 # Specialization and Exchange
 
-Last session we built the machinery: cost is opportunity cost, the best thing you give up, and marginal cost rises as you produce faster, so a producer makes a good only up to where its worth meets its cost. We also turned up a loose thread. No one is the low-cost producer of everything, because cost in one good is the flip side of cost in the other, which means everyone is the cheaper producer of something. That was the resolution to the puzzle I left you with back when we studied trade: you can be worse at producing everything than the person next to you and still have something worth selling to them.
+Part A built the machinery: cost is opportunity cost, the best thing you give up, and marginal cost rises as you produce faster, so a producer makes a good only up to where its worth meets its cost. It also turned up a loose thread. No one is the low-cost producer of everything, because cost in one good is the flip side of cost in the other, which means everyone is the cheaper producer of something. That resolves the puzzle from the exchange topic: you can be worse at producing everything than the person next to you and still have something worth selling to them.
 
-Today we pull that thread. We take the gap in costs and watch it do its work, letting people and firms specialize, undercut one another, and grow rich together even when one of them is worse at making everything. By the end you will see why specialization makes a society rich, why blocking a cheaper producer hurts almost everyone, and why "cut out the middleman" and "make it at home" are usually bad advice.
+Part B pulls that thread. We take the gap in costs and watch it do its work, letting people and firms specialize, undercut one another, and grow rich together even when one of them is worse at making everything. By the end you will see why specialization makes a society rich, why blocking a cheaper producer hurts almost everyone, and why "cut out the middleman" and "make it at home" are usually bad advice.
 
 <aside class="econ-callout econ-objectives">
 <p class="econ-callout__label">Learning objectives</p>
@@ -34,7 +34,7 @@ Today we pull that thread. We take the gap in costs and watch it do its work, le
 
 ## Specialization by Comparative Advantage Makes Two People Richer Together
 
-Here is the payoff. People differ in what it costs them to make things; watch what that lets them do. Bring back Adam, the cake-maker from last session, and introduce Baker, the less talented of the two: working alone, he makes fewer cakes per day than Adam and fewer of the other goods, the basket whose dollar value we bundled together and called Y, as well. Adam has an *absolute advantage* in both. By the lazy intuition, Baker has nothing to offer.
+Here is the payoff. People differ in what it costs them to make things; watch what that lets them do. Bring back Adam, the cake-maker from Part A, and introduce Baker, the less talented of the two: working alone, he makes fewer cakes per day than Adam and fewer of the other goods, the basket whose dollar value we bundled together and called Y, as well. Adam has an *absolute advantage* in both. By the lazy intuition, Baker has nothing to offer.
 
 He does. Put their cost tables side by side. Recall Adam's first: each row is a production rate in cakes per day, with the cost in Y he gives up and the most Y he would give up to have one more cake.
 
@@ -50,7 +50,7 @@ He does. Put their cost tables side by side. Recall Adam's first: each row is a 
 | 7 | 8.40 | 1.50 | 1.20 | 0.55 |
 | 8 | 10.00 | 1.60 | 1.25 | 0.45 |
 
-*Table A (after UE Table 14.2 / 15.2). Adam's cost of cakes, the same schedule we built last session, now lined up against Baker's below. His marginal cost of a cake rises as he bakes faster, and the worth of each additional cake to him falls.*
+*Table A (after UE Table 14.2 / 15.2). Adam's cost of cakes, the same schedule built in Part A, now lined up against Baker's below. His marginal cost of a cake rises as he bakes faster, and the worth of each additional cake to him falls.*
 
 Now Baker's.
 

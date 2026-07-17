@@ -119,6 +119,13 @@ The same full-pay logic runs in reverse under a wage *ceiling*. When a binding c
 
 The union logic, restrict the supply to raise insiders' pay, reappears in a respectable suit as occupational licensing. A license is a legal requirement to obtain permission before practicing a trade, sold to the public as protection against incompetents. Sometimes that is part of the story. But notice who lobbies for these rules: overwhelmingly the incumbents already in the trade, not the consumers they claim to protect. Licensing laws routinely *grandfather* existing practitioners, exempting them from the new requirements. If the point were truly to guarantee competence, the people already working would be the first ones tested. Exempting them gives the game away. The real effect, often the real aim, is to raise the cost of entering and thin the ranks of competitors, propping up the incomes of those inside. The same logic explains why a bar association's fixed minimum fees for routine legal work help established lawyers far more than a beginner hungry for clients.
 
+The mechanism is the labor-market version of the producer protections studied
+under market power. An import quota keeps foreign sellers out; an occupational
+license keeps would-be workers out. Both close entry, restrict supply, and direct
+the resulting rent toward incumbents. The stated objectives differ, but the
+diagnostic questions are the same: what constraint does the rule create, whose
+competition does it suppress, and who captures the higher price?
+
 <aside class="econ-callout econ-termset">
 <p class="econ-callout__label">Key term</p>
 <dl class="econ-term-list">
@@ -133,7 +140,13 @@ The sharpest illustration is a numerical cap on licenses. New York City has limi
 <p>A New York taxi medallion rose from $10 to past a million dollars while the number of cabs stayed capped. What does that price measure, and who ultimately pays for it?</p>
 </aside>
 
-One thread ran under every case in this part, and a later topic takes it up directly. The people who attended hardest to the market value of a resource were its owners: the boat owner in Part A who beached the boat rather than overpay, the employer here who lost money by indulging prejudice. When a resource is owned, the owner keeps the gains from using it well and bears the losses from using it badly, so he has every reason to steer it toward its highest-value use. In one line: ownership concentrates the incentive to attend to market value, and the absence of ownership dilutes it. That principle organizes a later topic, where we take up property rights, externalities, and the tragedy of the commons head-on.
+One thread ran under every case in this part and connects back to our earlier
+property-rights topic. The people who attend hardest to the market value of a
+resource are its owners: the boat owner in Part A who beached the boat rather
+than overpay, the employer here who loses money by indulging prejudice. When a
+resource is owned, the owner keeps the gains from using it well and bears the
+losses from using it badly, so ownership concentrates the incentive to attend
+to market value while its absence dilutes that incentive.
 
 <div class="econ-review">
 <section class="econ-review__section">

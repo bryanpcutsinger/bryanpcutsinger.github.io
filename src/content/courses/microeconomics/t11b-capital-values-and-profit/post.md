@@ -3,12 +3,12 @@ title: "Capital Values, Profit, and the Political Economy of Time"
 topic: "T11 — Capital, Interest, and Time (Part B)"
 course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 24 (Thu 11/12)"]
-ue_anchors: ["UE 32", "UE 33", "UE 35", "UE 36 (front half — arbitrage/equalization)"]
+ue_anchors: ["UE 32", "UE 33", "UE 36 (front half — interest-rate equalization)"]
 be_anchors: ["BE 13", "BE 14 (partial)", "BE 15"]
 word_target: "3500-6000"
 status: approved        # Stage-2 sign-off 2026-06-15
 audience: students
-note: "Self-contained — assumes no access to the textbooks. Part B of two on Capital, Interest, and Time; Part A (Present Value and the Interest Rate) builds the present-value tool and the determinants of the interest rate. This half points that tool at durable assets, your own earnings, profit, the rate package, asset pricing, and the political economy of time. Opens with a one-paragraph PV recap so it stands alone. Source-of-truth for the Part-B deck; section headers are claims that map to slide titles. UE 33 inflation/real-rate detail kept light (macro-adjacent); UE 35 is [EXPAND]/lecture-deferred but covered here (logged in §7)."
+note: "Self-contained — assumes no access to the textbooks. Part B of T11: durable-asset values, wealth and income, profit, the interest-rate package, and the political economy of time. UE 35 asset pricing, diversification, random walk, and intermediation are owned by T12."
 # brief: ../t11-capital-interest-time/brief.md
 ---
 
@@ -27,7 +27,6 @@ In the first half of this topic we built one tool. *Present value* puts amounts 
 <li>Define profit as unexpected wealth growth, captured the moment an asset's value changes.</li>
 <li>Break the observed interest rate into a pure rate plus its add-ons.</li>
 <li>Explain why a change in the interest rate moves the value of long-lived assets most.</li>
-<li>Explain why competition equalizes returns and asset prices follow a random walk.</li>
 <li>Explain why present value forces markets, but not politicians, to face the future now.</li>
 </ul>
 </aside>
@@ -82,7 +81,7 @@ The rule is clean. Keep holding the asset as long as its value is growing faster
 
 This optimal-timing rule has a sharp condition attached: it only works when someone owns the asset securely. An owner gains by leaving a tree standing while it still outgrows the interest rate, because the future value is his. But an unowned tree, in a forest open to all, gets cut as soon as its lumber is worth anything at all, because whoever waits loses it to whoever does not. The race to grab an unowned resource destroys the patient, value-maximizing strategy that secure ownership makes possible, our first glimpse of a theme that gets its own topic later.
 
-> **Looking ahead to property rights and the commons (T5).** Secure private property is what makes long-horizon investment and optimal timing possible: an owner profits by not harvesting a resource that is still growing faster than the interest rate, while an unowned, common resource gets used up prematurely as everyone races to claim it before someone else does. This premature-use problem is the heart of the "tragedy of the commons," and we will treat externalities, property rights, and public goods in full in a later topic. For now, just notice that the elegant timing rule above tacitly assumes an owner who can capture the future payoff.
+> **Recall property rights and the commons (T5).** Secure private property is what makes long-horizon investment and optimal timing possible: an owner profits by not harvesting a resource that is still growing faster than the interest rate, while an unowned, common resource gets used up prematurely as everyone races to claim it before someone else does. This premature-use problem is the heart of the "tragedy of the commons." The elegant timing rule above tacitly assumes an owner who can capture the future payoff.
 
 ## We Never "Run Out" of a Resource, Because Present Value Caps How Much It Pays to Find
 
@@ -187,23 +186,6 @@ Two consequences are worth drawing out. First, this is the real channel through 
 
 Finally, secure property rights raise investment without raising the pure rate. When a country makes ownership more secure, lenders face a smaller chance of default or expropriation, so the *risk premium* in the package shrinks; the safer environment is a lower-risk class of lending, not a change in the underlying pure rate, which is the same for everyone.
 
-## All Rates of Return Get Pulled Into Line, and Prices Follow a Random Walk
-
-Pull the threads together and a synthesis appears. The productivity of investment, people's time preference, the yield on bonds, the implicit return built into capital-good prices, these are not separate rates. Competition brings them all to a single common interest rate: if any asset offered a higher risk-adjusted return, buyers would pile in until its price rose and its return fell back into line. So when a question asks whether the interest rate is any one of these, the answer is that it is all of them at once, held equal by competition.
-
-That equalization has a striking consequence for asset prices, and it is the part of this topic we will mostly reserve for live discussion rather than the exam. If all known information is already reflected in an asset's price, then today's price is the *unbiased estimator* of tomorrow's: the best single guess of any future price is the current one. Price changes come only from genuine *news*, and news, by definition, is unpredictable; if it were foreseeable it would already be in the price. So successive prices follow a *random walk*, wandering up and down with no exploitable pattern. Flip this around and several puzzles dissolve. After a hundred coin-toss bets, the best prediction of your accumulated winnings is wherever you happen to stand right now, not zero and not the starting point; the past sequence tells you nothing about the next step. If half the brokers say a stock is too high and half say too low, that is exactly what a sensible market price looks like: the price sits right at the dividing line of opinion, and only new information moves it. Knowing that one stock rose 10 percent last month and another fell 10 percent gives you no edge in picking the next winner, because that history is already in both prices.
-
-<figure class="econ-figure" style="margin:1.5em 0;">
-<iframe src="/teaching/microeconomics/t11b-capital-values-and-profit/figures/t11-ue35-1-interactive.html" title="Drag the step scrubber to watch seven random walks fan out from a common start; re-roll for a fresh set." loading="lazy" style="width:100%; max-width:480px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t11b-capital-values-and-profit/figures/t11-ue35-1-interactive.html">Open the interactive figure directly</a>.</p></iframe>
-<figcaption><strong>No path tends back to where it started.</strong> So asset prices already reflect all known information.</figcaption>
-</figure>
-
-Two practical lessons follow. First, you cannot have high returns with no risk; the relative who wants "a high return and no chance of loss" is asking for something the market will not sell, because higher average returns are precisely the payment for bearing more variability. The most reliable advice is to *diversify*, to hold a broad basket so that the ups and downs of individual assets partly cancel, and a broad market-index portfolio is hard for anyone to beat consistently. This mean-versus-variance trade-off is not special to finance; it is the same scarcity-driven trade-off that runs through every choice in this course, you give up some of one good thing (safety) to get more of another (return). Second, proposals to "suspend trading on bad news" mostly backfire: they do not stop the news from being bad, they just trap holders who would like to sell and prevent the price from telling everyone the truth quickly.
-
-> **Looking ahead to risk and uncertainty (T12).** All of this financial-market machinery, the risk premia in the rate package, diversification, the random walk, rests on a distinction we develop next: calculable *risk* (where the odds can be estimated) versus deeper *uncertainty* (where they cannot), and on how markets both transfer risk (through insurance and speculation) and actually reduce it (by pooling many independent chances). The intermediaries who do this work, banks, brokers, mutual funds, insurers, speculators, are the subject of the next topic; here we only flag that they exist and that this is where the story continues.
-
-And those intermediaries are not the parasites they are sometimes accused of being. A bank, a broker, or a mutual fund earns a spread by moving savings from the many who have it to the few who can put it to productive use, reconciling savers who want safety and quick access with borrowers who need long-term commitment. They create wealth by matching capital to talent. Sowell reminds us that great American fortunes often began with almost none of the founder's own money, Hewlett and Packard in a rented garage, and that poor countries stay poor in part because they lack the institutions to gather up scattered savings and channel them to entrepreneurs. The "paper-shuffling" of finance is, done well, the circulatory system of a productive economy.
-
 ## Present Value Disciplines Markets but Not Politicians
 
 I want to close on the political economy of time, because it is where these ideas bite hardest. Present value forces private decision-makers to face the future now. If a private bus company lets its fares drift too low to maintain and replace its buses, its stock price falls today, the moment investors foresee the coming breakdowns, long before a single bus actually wears out. Specialists who price assets for a living do the foreseeing that the general public does not, so the consequences of neglecting the future are pulled into the present, where the owners feel them immediately and have every reason to act.
@@ -227,7 +209,6 @@ This connects back to a point from earlier in the course about permanent losses.
 <li><strong>Profit is wealth growth nobody saw coming.</strong> It rewards deferring consumption and bearing risk.</li>
 <li><strong>The observed interest rate is a package.</strong> A pure rate plus add-ons for cost, default risk, and expected inflation.</li>
 <li><strong>The interest rate is the relative price of long- and short-lived things.</strong> A rate cut raises long-lived values most.</li>
-<li><strong>Competition pulls every return into line.</strong> Prices then follow a random walk, so diversifying beats outguessing the market.</li>
 <li><strong>Present value disciplines markets but not politicians.</strong> Owners feel the future now; politicians do not.</li>
 </ul>
 </section>

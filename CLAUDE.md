@@ -259,9 +259,9 @@ output is byte-unchanged) strips HTML comments at render; (3) a `postbuild` gate
 **Publish gate:** topic pages render/route **only when frontmatter `status: approved`** in
 the PRODUCTION build. `astro dev` also previews drafts (mirrors Starlight's `draft:`
 behavior) with a "Draft preview" badge, so Bryan can read in-progress topics locally
-without publishing them. As of 2026-07-06 the **full 21-topic course is approved
-upstream and imported here** (T1, T2, T3a/b, T4a/b/c, T5, T6a/b, T7a/b, T8a/b, T9,
-T10a/b, T11a/b, T12, T13 — the one-per-lecture split; the legacy un-split folders
+without publishing them. As of 2026-07-16 the **full 21-topic course is approved
+upstream and imported here** (T1, T2, T3a/b, T4a/b, T5a/b, T6a/b, T7a/b, T8a/b, T9,
+T10a/b, T11a/b, T12a/b — the one-per-lecture split; the legacy un-split folders
 t03/t04/t06/t07/t08/t10/t11 upstream have no `post.md` and are not imported), so the
 live topic index renders all 21. To refresh after an upstream edit, re-run
 `npm run import:topic -- <slug> microeconomics` for the changed topics (or loop over

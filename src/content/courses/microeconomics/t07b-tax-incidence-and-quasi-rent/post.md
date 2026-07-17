@@ -3,18 +3,18 @@ title: "Taxes, Time, and the Quasi-Rent: Competition in Motion"
 topic: "T7 — Competitive Markets (Part B)"
 course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 15 (Tue 10/13)"]
-ue_anchors: ["UE 17", "UE 18"]
+ue_anchors: ["UE 11 (fixed-land incidence)", "UE 17", "UE 18"]
 be_anchors: ["BE 5", "BE 9 (partial)"]
 word_target: "2500-6000"
 status: approved        # Stage-2 sign-off 2026-06-15
 audience: students
-note: "Self-contained — assumes no access to the textbooks. Part B of t07-competitive-markets (split at the Exam-2 seam to clear the 6,000-word cap); Part A (t07a-competitive-firm) covers UE 16 (the price-taker firm and market supply). Source-of-truth for the T7b deck; section headers are claims that map to slide titles. Assumes T6 (costs, MC) and Part A (the price-taker, MC=P, the firm's MC-as-supply, shutdown vs stay/exit). UE 18 contributes only the entrepreneur/creative-destruction/survival material; its rate-vs-volume and joint-cost content lives in T6. BE 9 contributes only the reputation-as-discipline slice; its market-vs-government bulk -> T13."
+note: "Self-contained — assumes no access to the textbooks. Part B of T7. Owns UE 17 in full for adjustment, tax incidence, sunk cost/quasi-rent, and entry; integrates UE 11 fixed-land incidence as the zero-supply-elasticity case. UE 18 supplies competition-in-motion and creative destruction. Broader comparative-systems material is optional synthesis."
 # brief: ../t07-competitive-markets/brief.md
 ---
 
 # Taxes, Time, and the Quasi-Rent: Competition in Motion
 
-In Part A we worked out how a single price-taker behaves and how a market of them fits together. Recall the core results, because we lean on all of them today. A *price-taker* is a seller too small to move the market price, so it faces a horizontal own-demand at that price and chooses only a quantity, producing where its marginal cost rises to meet the price. Above its shutdown floor, the firm's marginal-cost curve is its supply curve; add up every firm's and you get an upward-sloping market supply. Competition pushes each firm to the same marginal cost, minimizing the industry's total cost, and it drives profits toward an ordinary return by capitalizing them into the price of whatever earns them.
+In Part A we worked out how a single price-taker behaves and how a market of them fits together. Recall the core results, because this post leans on all of them. A *price-taker* is a seller too small to move the market price, so it faces a horizontal own-demand at that price and chooses only a quantity, producing where its marginal cost rises to meet the price. Above its shutdown floor, the firm's marginal-cost curve is its supply curve; add up every firm's and you get an upward-sloping market supply. Competition pushes each firm to the same marginal cost, minimizing the industry's total cost, and it drives profits toward an ordinary return by capitalizing them into the price of whatever earns them.
 
 All of that described a market sitting still under settled conditions. Now we set it in motion. First we add time and watch how the room to adjust grows. Then we drop a tax onto a competitive market and trace exactly who ends up paying it, the result that surprises almost everyone and is our main Exam 2 target. From there we name the surplus a sunk resource earns, see why underpricing a rival can be efficient rather than predatory, watch prices move before the events that justify them, and finish with the great churn of firms rising and falling, which turns out to be competition doing its job rather than failing at it. By the end you should be able to predict how a tax's burden splits and shifts over time, and explain why the constant turnover of who is on top serves consumers rather than harming them.
 
@@ -24,6 +24,7 @@ All of that described a market sitting still under settled conditions. Now we se
 <ul>
 <li>Explain why both demand and supply grow more elastic the longer the adjustment period, distinguishing the immediate run, the short run, and the long run.</li>
 <li>Explain why the legal side of a tax does not determine who bears it, and use the relative elasticities of demand and supply to predict how the burden splits.</li>
+<li>Apply the same elasticity rule to fixed, immobile land and explain why its owner bears the whole tax through capitalization.</li>
 <li>Explain why a tax on a single price-taker falls entirely on his own specialized resources.</li>
 <li>Trace how a broad tax's burden shifts over time, landing first on immobile resources and later on consumers, and explain why latecomers bear none of it.</li>
 <li>Define a quasi-rent and explain why a resource already in place can be charged down toward its operating cost without being driven out.</li>
@@ -74,6 +75,25 @@ One more cost of the tax escapes the price split, and we treat it verbally. The 
 
 A natural follow-up is to ask who finally gains from all this. We can say with confidence who pays, and that the deadweight loss is a real burden on someone. We cannot say who gains from the tax until we know what the government does with the money it collects. The revenue might fund a bridge, a tax cut elsewhere, or a giveaway to some favored group, and each spends the proceeds on different people. The same caveat is why we cannot pronounce the whole arrangement a net loss to society either: the buyers and the specific-resource owners clearly lose, but whether their loss is outweighed depends entirely on the value of whatever the proceeds buy, which the tax analysis by itself does not tell us. Who pays is an economic question we can answer; who comes out ahead waits on the spending side.
 
+## Fixed Land Is the Limiting Case: Its Owner Bears the Whole Tax
+
+The elasticity rule includes a clean extreme. Land in a particular place cannot shrink or move when it is taxed, so its supply is vertical. If a permanent tax is placed on the economic rent of that land, the rent users are willing to pay and the acres in use do not change. The tax is carved out of the owner's return. This is not a separate exception to tax incidence; it is what the same rule predicts when supply elasticity is zero.
+
+<aside class="econ-callout econ-termset">
+<p class="econ-callout__label">Key terms</p>
+<dl class="econ-term-list">
+<div><dt>Economic Rent</dt><dd>A payment to a resource whose quantity and use do not change when the payment changes.</dd></div>
+<div><dt>Capitalization</dt><dd>The immediate change in an asset's price when a permanent change in its future earnings is gathered into present value.</dd></div>
+</dl>
+</aside>
+
+Because a buyer values land by the future income it will yield, a permanent tax lowers the land's selling price as soon as it is anticipated. Whoever owns the land at that moment bears the loss; a later buyer pays the already-reduced price and earns an ordinary return from there. The acres do not disappear, and the user price does not rise. The burden shows up as a one-time decline in asset value.
+
+<figure class="econ-figure" style="margin:1.5em 0;">
+<iframe src="/teaching/microeconomics/t07b-tax-incidence-and-quasi-rent/figures/t04c-land-incidence-interactive.html" title="Drag the tax handle to see a fixed-land tax reduce the owner's return while user rent and acreage stay fixed." loading="lazy" style="width:100%; max-width:480px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t07b-tax-incidence-and-quasi-rent/figures/t04c-land-incidence-interactive.html">Open the interactive figure directly</a>.</p></iframe>
+<figcaption><strong>A tax on fixed, immobile land falls on the landowner.</strong> Raise the tax and the owner's net rent shrinks while users' rent and the acres in use stay put. The case makes the general rule visible: the side least able to adjust bears the burden.</figcaption>
+</figure>
+
 ## A Tax on a Single Price-Taker Falls Entirely on Him
 
 Change the experiment. Instead of taxing all gasoline, tax exactly one tiny seller, say one peanut farmer out of thousands, a penny a pound on his crop alone. What happens to the market price and quantity? Essentially nothing; his output barely registers in the total, so the market price does not budge. But he cannot raise his own price either, because he is a price-taker, and the market price is set by everyone else. So he sells at the same price as before yet now hands a penny a pound to the government on every pound. The entire burden lands on him, specifically on his specialized land and equipment, whose value drops because they now earn less. It is the mirror image of the broad tax: a tax on everyone splits between buyers and sellers, but a tax on one helpless price-taker is borne wholly by that one seller's specific resources, since he has no price-setting power to share it.
@@ -103,7 +123,7 @@ The peanut story leans on an idea worth naming. A resource already in place, wit
 <aside class="econ-callout econ-def">
 <p class="econ-callout__label">Definition</p>
 <p>A quasi-rent is the temporary surplus a resource already in place earns over its bare operating cost.</p>
-</aside> You can cut that surplus, even cut it hard, without driving the resource out, because its original cost is gone and irrelevant. The only thing that shuts it down is a price so low it fails to cover the cost of operating it, not the cost of having built it. This applies to people too: the gap between what you currently earn and the most you could earn in your next-best job is your quasi-rent, and an employer could trim your pay toward that floor without losing you. The fuller treatment of specialized, hard-to-redeploy resources comes later in the course.
+</aside> You can cut that surplus, even cut it hard, without driving the resource out, because its original cost is gone and irrelevant. The only thing that shuts it down is a price so low it fails to cover the cost of operating it, not the cost of having built it. This applies to people too: the gap between what you currently earn and the most you could earn in your next-best job is your quasi-rent, and an employer could trim your pay toward that floor without losing you. The specialized, hard-to-redeploy examples below develop the point.
 
 ## Cutting Price Below a Rival's Cost Can Be Efficient, Not Predatory
 
@@ -185,6 +205,7 @@ That same discipline runs through one more channel, the only piece of our reputa
 <ul>
 <li><strong>Elasticity grows with time.</strong> Both demand and supply respond more fully the longer the adjustment period, from the immediate run to the short run to the long run.</li>
 <li><strong>The check-writer is not the taxpayer.</strong> Whether the law taxes buyers or sellers, the burden splits the same way, set by which side can more easily walk away from the deal.</li>
+<li><strong>Fixed land reveals the limiting case.</strong> With zero supply elasticity, the owner bears the entire tax through a capitalized fall in the land price.</li>
 <li><strong>A lone price-taker bears his whole tax.</strong> He cannot move the market price, so a tax on him alone lands entirely on his specialized resources.</li>
 <li><strong>A broad tax travels over time.</strong> It falls first on immobile resources and later on consumers, while latecomers who buy in at the taxed price bear none of it.</li>
 <li><strong>A resource in place earns a quasi-rent.</strong> With its original cost sunk, it keeps operating as long as the price covers its operating cost, so its surplus can be trimmed without driving it out.</li>

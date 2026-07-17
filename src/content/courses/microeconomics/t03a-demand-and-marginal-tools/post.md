@@ -1,20 +1,20 @@
 ---
-title: "Demand and the Marginal Toolkit"
-topic: "T3 — Demand and the Marginal Toolkit"
+title: "Demand and Marginal Personal Worth"
+topic: "T3 — Demand and Consumer Behavior (Part A)"
 course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 4 (Thu 9/3)"]
-ue_anchors: ["UE 5", "UE 7"]
+ue_anchors: ["UE 5"]
 be_anchors: ["BE 2 (unmet-needs/demand-vs-need slice)"]
-word_target: "3500-5500"
+word_target: "2500-5000"
 status: approved        # one-per-lecture split; approved 2026-07-01
 audience: students
-note: "Self-contained — assumes no access to the textbooks. Source-of-truth for the session-4 deck; section headers are claims that map to slide titles. Verbal-marginal throughout: no indifference curves, no measured surplus triangles. Covers the laws of demand, marginal personal worth and verbal consumer surplus, and the cross-cutting marginal toolkit (totals/marginals/averages, the marginal-not-average rule, the equimarginal principle) reused in later topics."
+note: "Self-contained — assumes no access to the textbooks. Source-of-truth for session 4. Covers laws of demand, shifts versus movements, marginal personal worth, verbal consumer surplus, demand as a rate, relative price, and demand versus fixed-needs language. UE 7's general total/marginal/average and equimarginal machinery is owned by T6."
 # brief: ../t03-demand-consumer-behavior/brief.md
 ---
 
-# Demand and the Marginal Toolkit
+# Demand and Marginal Personal Worth
 
-Last time we built the case that trade creates wealth by moving goods toward whoever values them most. That argument leaned on a single fact about people: they value things differently, and the value they place on one more unit changes as they get more of it. Here we put that fact under a microscope and describe how the amount people are willing to buy responds to price. Out of that description comes the most reliable principle in all of economics and a way of cutting through one of the slipperiest words in public debate: "need."
+The exchange topic built the case that trade creates wealth by moving goods toward whoever values them most. That argument leaned on a single fact about people: they value things differently, and the value they place on one more unit changes as they get more of it. Here we put that fact under a microscope and describe how the amount people are willing to buy responds to price. Out of that description comes the most reliable principle in all of economics and a way of cutting through one of the slipperiest words in public debate: "need."
 
 Keep one puzzle in mind. Almost everyone agrees that people "need" food, housing, medicine, and clean water. Politicians announce national priorities and unmet needs; reports declare that a city needs more parking or more golf courses. Yet the moment you ask "how much, and at what price?" the language of need falls apart. By the end of this post you should see why there is no such thing as a fixed need, only a quantity people will buy at a given price, and why that is not a cold dismissal of human wants but the only honest way to think about them.
 
@@ -27,8 +27,6 @@ Keep one puzzle in mind. Almost everyone agrees that people "need" food, housing
 <li>Explain why the demand curve slopes downward using marginal personal worth and its diminishing as quantity rises, and read that worth as a rate at which one good trades for another.</li>
 <li>Measure a buyer's gain verbally as consumer surplus, total personal worth minus what is paid, and explain why revenue is not a measure of welfare.</li>
 <li>Explain why demand is a rate of consumption over time, not a fixed pile, and distinguish the rate from the stock you would buy or hold.</li>
-<li>Distinguish total, marginal, and average, and make decisions on the marginal rather than the average.</li>
-<li>Apply the equimarginal principle to spread a scarce input across competing uses so its marginal return is equal everywhere.</li>
 <li>Explain why a price is an exchange rate between goods that can exist without money, so the relative price is what governs a choice.</li>
 <li>Explain why there is no such thing as a fixed need, only a quantity people will buy at a given price.</li>
 </ul>
@@ -113,7 +111,7 @@ The related-goods case deserves a name of its own. Some goods are *substitutes*:
 
 ## The Height of the Demand Curve Is What One More Unit Is Worth to You
 
-Why does the demand curve slope downward in the first place? The answer takes a phrase from last time and gives it a sharper edge.
+Why does the demand curve slope downward in the first place? The answer takes a phrase from the exchange topic and gives it a sharper edge.
 
 Your *marginal personal worth* of a good is the most you would pay for one more unit of it. On the demand schedule, it is exactly the height of the curve at that quantity.
 
@@ -202,134 +200,6 @@ Three related ideas hide in here. The *rate of consumption* is a flow. The *quan
 
 Because demand is a rate, not a weekly delivery slip, you cannot read a year's demand as a fixed weekly quota. If a household's demand for water doubles over a year, from roughly 3,650 to 7,300 gallons, you cannot say how many extra gallons fall in the first week. The rate is what doubles; the week-to-week timing floats around it.
 
-## Decisions Turn on the Marginal, Never the Average
-
-One general-purpose habit of thought underlies not just demand but cost, output, and hiring: keep your eye on the *marginal*. It is worth pulling out of the demand story and setting down on its own, because you will reach for it again and again this term.
-
-Three numbers travel together for any quantity: the *total* is the running sum; the *marginal* is the change in the total when you add one more unit; the *average* is the total divided by the number of units. Confusing them is a reliable way to make a bad decision.
-
-<aside class="econ-callout econ-termset">
-<p class="econ-callout__label">Key terms</p>
-<dl class="econ-term-list">
-<div><dt>Total</dt><dd>The running sum across all the units.</dd></div>
-<div><dt>Marginal</dt><dd>The change in the total when you add one more unit.</dd></div>
-<div><dt>Average</dt><dd>The total divided by the number of units.</dd></div>
-</dl>
-</aside>
-
-The cleanest illustration is test scores.
-
-| Tests taken | Marginal (this test's score) | Total | Average |
-|---|---|---|---|
-| 1 | 80 | 80 | 80 |
-| 2 | 86 | 166 | 83 |
-| 3 | 89 | 255 | 85 |
-
-A test scored above the current average pulls the average up; one scored below pulls it down. The marginal is what moves the average, not the other way around. The same pattern governs costs. A chair maker's costs run like this:
-
-| Chairs made daily | Marginal cost | Total cost | Average cost |
-|---|---|---|---|
-| 1 | $100 | $100 | $100 |
-| 2 | $80 | $180 | $90 |
-| 3 | $105 | $285 | $95 |
-
-And revenues, for a seller who must lower the price to sell more, run like this:
-
-| Chairs sold daily | Price | Total revenue | Marginal revenue | Average revenue |
-|---|---|---|---|---|
-| 1 | $110 | $110 | $110 | $110 |
-| 2 | $100 | $200 | $90 | $100 |
-| 3 | $90 | $270 | $70 | $90 |
-
-That revenue table holds a result we will need badly later, so flag it now. To sell a second chair the seller drops the price to $100, but that lower price applies to both chairs, not just the new one. So total revenue rises from $110 to $200, a marginal revenue of only $90, which is below the $100 price. For any seller who has to cut price across all units to sell one more, marginal revenue is below price. Keep that fact in your pocket; it does heavy lifting when we reach market power.
-
-One more warning, because it is the kind of error that costs real money. The marginal is the change in the total, not the figure recorded against the additional unit by itself. A store with one clerk makes $1,000 in sales; with a second clerk, $1,800.
-
-| Clerks | Total sales | Marginal sales | Average sales |
-|---|---|---|---|
-| 1 | $1,000 | $1,000 | $1,000 |
-| 2 | $1,800 | $800 | $900 |
-
-The second clerk's marginal contribution is $800, the rise in the store's total, even if that clerk personally rang up more than $800, because better service from two clerks lifts everyone's sales. "Who did it?" is the wrong question; "how much did the total change?" is the right one.
-
-Now the decision rule. Choices should be made on the margin, not the average. A hospital bills $15,000 for a five-day stay, which averages $3,000 a day. Should you stay a sixth day to be safe? The average tells you nothing useful. The decision turns on the marginal cost and marginal benefit of that one extra day, which may be far below $3,000, since the bulk of the cost was the surgery on day one, and near zero in benefit if you have already recovered. The average summarizes the past; only the marginal speaks to the next choice. The same logic explains why we add a seatbelt to every car but an airbag only where its marginal safety gain justifies its marginal cost. Averages describe; marginals decide.
-
-<aside class="econ-callout econ-check">
-<p class="econ-callout__label">Pause and check</p>
-<p>A yearlong gym membership costs $600, which works out to $50 a month. A member is deciding whether to keep it for one more month. Why is the $50 average the wrong number to look at, and what should he compare instead?</p>
-</aside>
-
-## To Get the Most from Limited Means, Equalize the Marginal Returns
-
-The marginal tool earns its keep most in a problem that comes up everywhere: you have a limited amount of something and several places to put it, and you want the largest total return. The rule is to allocate so the marginal returns are equal across the uses. Here is the worked example, worth following closely because the rule recurs all term. You have ten tokens and two machines, each with declining marginal returns. Machine A starts high and falls fast; machine B starts lower and falls slowly.
-
-| Tokens in A | Marginal | Total | Average |
-|---|---|---|---|
-| 1 | 20 | 20 | 20 |
-| 2 | 18 | 38 | 19 |
-| 3 | 16 | 54 | 18 |
-| 4 | 14 | 68 | 17 |
-| 5 | 12 | 80 | 16 |
-| 6 | 10 | 90 | 15 |
-| 7 | 8 | 98 | 14 |
-| 8 | 6 | 104 | 13 |
-| 9 | 4 | 108 | 12 |
-| 10 | 2 | 110 | 11 |
-
-| Tokens in B | Marginal | Total | Average |
-|---|---|---|---|
-| 1 | 15 | 15 | 15 |
-| 2 | 14.5 | 29.5 | 14.75 |
-| 3 | 14 | 43.5 | 14.5 |
-| 4 | 13.5 | 57 | 14.25 |
-| 5 | 13 | 70 | 14 |
-| 6 | 12.5 | 82.5 | 13.75 |
-| 7 | 12 | 94.5 | 13.5 |
-| 8 | 11.5 | 106 | 13.25 |
-| 9 | 11 | 117 | 13 |
-| 10 | 10.5 | 127.5 | 12.75 |
-
-Dump all ten into A and you collect $110; all ten into B, $127.50. Since B's total is higher, a tempting but wrong instinct is to "use the better machine." The right move is to place each token wherever its marginal return is highest at that moment, always taking the biggest remaining marginal. The first three go to A (marginals 20, 18, 16, each beating B's best of 15); the fourth goes to B (15 beats A's next, 14), and so on. The optimum is four tokens in A and six in B.
-
-| Token placed | Where it goes | Marginal | Running total |
-|---|---|---|---|
-| 1 | 1st in A | 20 | 20 |
-| 2 | 2nd in A | 18 | 38 |
-| 3 | 3rd in A | 16 | 54 |
-| 4 | 1st in B | 15 | 69 |
-| 5 | 2nd in B | 14.5 | 83.5 |
-| 6 | 3rd in B | 14 | 97.5 |
-| 7 | 4th in A | 14 | 111.5 |
-| 8 | 4th in B | 13.5 | 125 |
-| 9 | 5th in B | 13 | 138 |
-| 10 | 6th in B | 12.5 | 150.5 |
-
-The result, $150.50, beats either machine alone, and you end with the two machines' marginal returns roughly equalized. That is the *equimarginal principle*: to maximize a total, spread a scarce input so the marginal return is the same in every use. Its mirror is just as useful: to produce a given output at the lowest total cost across several plants, equalize the marginal cost in each. This is the logic behind how a firm chooses its output, spreads production across factories, and decides how many workers to hire, and we will meet it again and again.
-
-<aside class="econ-callout econ-termset">
-<p class="econ-callout__label">Key term</p>
-<dl class="econ-term-list">
-<div><dt>Equimarginal Principle</dt><dd>Spreading a scarce input so its marginal return is equal in every use gives the largest total.</dd></div>
-</dl>
-</aside>
-
-<figure class="econ-figure" style="margin:1.5em 0;">
-<iframe src="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-equimarginal-interactive.html" title="Drag the split of ten tokens between two machines to see the total payoff and the two marginal payoffs; the total is largest, and the marginals are as equal as an integer split allows, at four tokens in A and six in B." loading="lazy" style="width:100%; max-width:640px; aspect-ratio:16/10; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-equimarginal-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-equimarginal.svg">view the static figure</a>.</p></iframe>
-<figcaption><strong>Split the resource so the marginal payoffs are as equal as they can be.</strong> Machine A's payoffs start higher but fall faster than B's, so the best use of ten tokens puts four in A and six in B, the split that makes the two marginal payoffs as equal as an integer allocation allows and maximizes the total ($150.50). Drag the split (or use the arrow keys) to send tokens to A or B and watch the total and the equalized-marginal line respond. The same logic governs any scarce resource spread across competing uses. If the frame does not load, <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-equimarginal-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-equimarginal.svg">view the static figure</a>.</figcaption>
-</figure>
-
-<aside class="econ-callout econ-check">
-<p class="econ-callout__label">Pause and check</p>
-<p>You have a fixed number of study hours to split between two courses, and each hour helps less than the one before. One course would earn more total points if you gave it every hour. Why is loading all your hours into that course still the wrong move, and what rule tells you where to stop?</p>
-</aside>
-
-Note one more pattern in the kind of production table behind these machines, because we will need it when we study costs. Feeding more of a variable input into a fixed setup gives *diminishing marginal returns*: the marginal product rises at first, then falls, and total output eventually peaks and even declines. Marginal cuts the average at the average's highest point, and total output stops rising exactly where the marginal product reaches zero. That machinery is the foundation of the cost curves we will build later.
-
-<figure class="econ-figure" style="margin:1.5em 0;">
-<iframe src="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-product-curves-interactive.html" title="Drag the labor handle to sweep total product, marginal product, and average product together, and watch marginal cut average exactly at the average's peak." loading="lazy" style="width:100%; max-width:480px; aspect-ratio:5/7; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-product-curves-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-product-curves.svg">view the static figure</a>.</p></iframe>
-<figcaption><strong>Marginal product cuts average product exactly at the average's peak, and total product peaks exactly where marginal product hits zero.</strong> Total product (top) rises fastest while marginal product (gold) is rising, keeps rising, more slowly, while marginal is falling but still positive, and stops rising the instant marginal reaches zero. Average product (black) climbs as long as marginal is above it and falls once marginal drops below it. Drag the handle (or use the arrow keys) to sweep a labor value through both stacked plots. This marginal-cuts-average shape recurs in the cost curves later in the course. If the frame does not load, <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-product-curves-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-product-curves.svg">view the static figure</a>.</figcaption>
-</figure>
-
 ## A Price Is an Exchange Rate, and It Can Exist Without Money
 
 Underneath every dollar figure is something more basic. A *price* is an exchange rate between goods, how much of one thing you give up to get another. Money is just one good we happen to quote prices in, which means prices can exist with no money at all. Picture a setting with no money in play, children swapping snacks at lunch or a disaster zone where cash has stopped circulating: a bottle of water might trade for three granola bars, and that granola-per-bottle rate is a real price, every bit as binding as a dollar tag. So the price that actually governs your choices is the *relative* price, what a good costs in terms of other goods, not its dollar tag in isolation. We will lean on that idea heavily when we take up elasticity and its applications next.
@@ -360,8 +230,6 @@ A bonus from taking this seriously: the law of demand turns out to be nearly uni
 <li><strong>Diminishing marginal worth tilts the curve down.</strong> The height of the demand curve is what one more unit is worth to you, that worth falls as you get more, and it can be read as a rate at which one good trades for another.</li>
 <li><strong>Buyers gain because they pay less than the goods are worth.</strong> Consumer surplus is total personal worth minus what was paid, a gap you can total without a triangle, and it is why revenue is not a measure of welfare.</li>
 <li><strong>Demand is a rate, not a pile.</strong> It describes a flow of consumption over time, which you have to keep separate from the stock you would buy or already hold.</li>
-<li><strong>Decide on the marginal, never the average.</strong> The total, marginal, and average travel together, the marginal is the change in the total, and only the marginal speaks to the next choice.</li>
-<li><strong>Equalize the marginal returns.</strong> To get the most from a scarce input spread across competing uses, allocate it so the marginal return is the same in every use.</li>
 <li><strong>A price is an exchange rate that can exist without money.</strong> What governs your choice is the relative price, what a good costs in terms of other goods, not its dollar tag in isolation.</li>
 <li><strong>There is no such thing as a fixed need.</strong> The amount of any good a person or society takes depends on its price, always a matter of how much at what price, never all-or-none.</li>
 </ul>
