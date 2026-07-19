@@ -1,10 +1,13 @@
 ---
+import { Image } from 'astro:assets';
 import MarketingLayout from '../layouts/MarketingLayout.astro';
 import PageHead from '../components/marketing/PageHead.astro';
 import Section from '../components/marketing/Section.astro';
 import Button from '../components/marketing/Button.astro';
 import DownloadCard from '../components/marketing/DownloadCard.astro';
 import BookingForm from '../components/marketing/BookingForm.astro';
+
+import speakingCharleston from '../assets/speaking-charleston.jpg';
 
 import topicsData from '../data/topics.json';
 import testimonialsData from '../data/testimonials.json';
@@ -90,12 +93,22 @@ const mailto =
     </p>
   </Section>
 
-  <!-- Video reel slot (graceful until a clip exists) -->
+  <!-- On the stage: real photo now, video reel on request -->
   <Section variant="raised">
     <div class="head"><p class="kicker">On the stage</p><h2>See a talk.</h2></div>
+    <figure class="stage-photo">
+      <Image
+        src={speakingCharleston}
+        alt="Bryan Cutsinger presenting to an audience from the podium at the College of Charleston"
+        widths={[600, 960, 1280]}
+        sizes="(min-width: 960px) 960px, 100vw"
+        loading="lazy"
+      />
+      <figcaption>Presenting at the College of Charleston.</figcaption>
+    </figure>
     <div class="reel">
       <p class="reel__note">
-        A short speaking reel is on the way. In the meantime, I'm glad to share
+        A short video reel is on the way. In the meantime, I'm glad to share
         video, references, and past-talk details on request.
       </p>
       <Button href="#book" variant="secondary">Request video & references</Button>
@@ -192,6 +205,23 @@ const mailto =
   .topic__title { font-size: var(--fs-h3); margin: 0 0 var(--sp-3); }
   .topic__dek { margin: 0; color: var(--muted); }
   .topics-note { margin: var(--sp-12) auto 0; text-align: center; color: var(--muted); max-width: 56ch; }
+
+  /* on-stage photo */
+  .stage-photo { margin: 0 0 var(--sp-8); }
+  .stage-photo img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--rule-strong);
+    box-shadow: var(--shadow-hover);
+  }
+  .stage-photo figcaption {
+    margin-top: var(--sp-3);
+    font-family: var(--font-label);
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
 
   /* reel */
   .reel {

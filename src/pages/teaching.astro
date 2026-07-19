@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import MarketingLayout from '../layouts/MarketingLayout.astro';
 import Hero from '../components/marketing/Hero.astro';
 import Section from '../components/marketing/Section.astro';
@@ -7,6 +8,7 @@ import TopicGrid from '../components/marketing/TopicGrid.astro';
 import CTABand from '../components/marketing/CTABand.astro';
 
 import teachingData from '../data/teaching.json';
+import lecturingCharleston from '../assets/lecturing-charleston.jpg';
 
 const courses = teachingData.courses;
 ---
@@ -19,6 +21,19 @@ const courses = teachingData.courses;
     headline="Economics, taught to be understood."
     subhead="Courses I teach, with the materials I use — syllabi, slides, and problem sets you're welcome to use or adapt. More courses will be added over time."
   />
+
+  <Section variant="sunk">
+    <figure class="teach-photo">
+      <Image
+        src={lecturingCharleston}
+        alt="Bryan Cutsinger lecturing to an audience during Adam Smith Week at the College of Charleston"
+        widths={[600, 960, 1280]}
+        sizes="(min-width: 960px) 960px, 100vw"
+        loading="lazy"
+      />
+      <figcaption>Lecturing at Adam Smith Week, College of Charleston.</figcaption>
+    </figure>
+  </Section>
 
   <Section variant="surface">
     <SectionHeading
@@ -34,3 +49,23 @@ const courses = teachingData.courses;
     cta={{ label: 'Get in touch', href: '/contact/' }}
   />
 </MarketingLayout>
+
+<style>
+  .teach-photo { margin: 0; }
+  .teach-photo img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-lg);
+    /* A firm edge + soft lift so the photo's bright top doesn't bleed into the
+       page background and read as misplaced. */
+    border: 1px solid var(--rule-strong);
+    box-shadow: var(--shadow-hover);
+  }
+  .teach-photo figcaption {
+    margin-top: var(--sp-3);
+    font-family: var(--font-label);
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+</style>
