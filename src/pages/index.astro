@@ -4,57 +4,55 @@ import MarketingLayout from '../layouts/MarketingLayout.astro';
 import Section from '../components/marketing/Section.astro';
 import Button from '../components/marketing/Button.astro';
 import DatedList from '../components/marketing/DatedList.astro';
-import EmailCapture from '../components/marketing/EmailCapture.astro';
 
 import headshot from '../assets/bryan-cutsinger.png';
 import topicsData from '../data/topics.json';
+import writingData from '../data/writing.json';
+import pubData from '../data/publications.json';
 
 // Signature talks — first three real topics, framed for the front door.
 const talks = topicsData.topics.slice(0, 3);
 
-// Featured-in outlets (verified; National Review, The Hill, Washington Examiner,
-// RealClearEducation — WSJ deliberately excluded, it was a letter to the editor).
-const outlets = [
-  'National Review',
-  'The Hill',
-  'The Washington Examiner',
-  'RealClearEducation',
-];
+// Recent work — a single self-updating feed that MERGES two auto-generated
+// sources, so the homepage reflects Bryan's latest across writing AND research:
+//   • columns/op-eds  → src/data/writing.json  (RSS feeds; month-dated)
+//   • publications    → src/data/publications.json  (generated from the CV; year-dated)
+// Undated working papers are NOT date-sortable, so we never invent a date for
+// them — they're surfaced as a count-link to /research/ below the list instead.
+const columns = (writingData.essays ?? []).map((e) => ({
+  sort: e.isoDate,
+  date: e.date,
+  title: e.title,
+  meta: e.outlet ? `${e.outlet}${e.kind ? ` · ${e.kind}` : ''}` : e.kind,
+  href: e.url || undefined,
+  external: !!e.url,
+}));
 
-// Recent — hand-curated literals (no cross-collection foreign keys). PLACEHOLDER
-// dates/titles until Bryan supplies real recent essays/talks; marked as such.
-const recent = [
-  {
-    date: '20XX',
-    title: '[PLACEHOLDER] Recent essay or op-ed title',
-    meta: 'Commentary',
-    placeholder: true,
-  },
-  {
-    date: '20XX',
-    title: '[PLACEHOLDER] Recent talk or appearance',
-    meta: 'Speaking',
-    placeholder: true,
-  },
-  {
-    date: '20XX',
-    title: '[PLACEHOLDER] Recent working paper',
-    meta: 'Research',
-    placeholder: true,
-  },
-];
+const pubRows = [
+  ...(pubData.worksInPress ?? []).map((p) => ({ ...p, kindLabel: 'Book · in press' })),
+  ...(pubData.articles ?? []).map((p) => ({ ...p, kindLabel: `${p.venue} · Article` })),
+  ...(pubData.bookChapters ?? []).map((p) => ({ ...p, kindLabel: 'Book chapter' })),
+]
+  .filter((p) => p.year)
+  .map((p) => ({
+    sort: `${p.year}-06-30`, // year-only → mid-year proxy for ordering only (never shown)
+    date: p.year,
+    title: p.title,
+    meta: p.kindLabel,
+    href: p.url || undefined,
+    external: !!p.url,
+  }));
 
-// Departments router.
-const depts = [
-  { title: 'Speaking', href: '/speaking/', dek: 'Keynotes and lectures on money, inflation, and public policy.' },
-  { title: 'Writing', href: '/writing/', dek: 'Essays and commentary for National Review, The Hill, and beyond.' },
-  { title: 'Research', href: '/research/', dek: 'Monetary theory and economic history, in the journals.' },
-  { title: 'Teaching', href: '/teaching/', dek: 'Micro-economic principles and a price-theory problem bank.' },
-];
+const recent = [...columns, ...pubRows]
+  .sort((a, b) => (a.sort < b.sort ? 1 : a.sort > b.sort ? -1 : 0))
+  .slice(0, 5)
+  .map(({ sort, ...item }) => item);
+
+const workingPaperCount = (pubData.workingPapers ?? []).length;
 ---
 <MarketingLayout
   title="Bryan Cutsinger — Economist, Speaker, Writer"
-  description="Bryan Cutsinger is a monetary economist at Florida Atlantic University who makes the public case for sound money — in National Review and The Hill, and to audiences who want money, inflation, and public policy explained clearly."
+  description="Bryan Cutsinger is an economist at Florida Atlantic University who explains the economics behind the headlines — money, inflation, and public policy — in National Review, The Hill, and The Washington Examiner, and to live audiences."
 >
   <!-- Masthead: the outward front door -->
   <section class="mast">
@@ -62,13 +60,18 @@ const depts = [
       <div class="mast__copy">
         <p class="kicker">Economist · Speaker · Writer</p>
         <h1 class="mast__headline">
-          Making the public case for <em>sound money</em>.
+          Making sense of the economics <em>behind the headlines</em>.
         </h1>
         <p class="mast__sub">
-          I'm Bryan Cutsinger, a monetary economist at Florida Atlantic
-          University. I write for <em>National Review</em> and <em>The Hill</em>,
-          direct the AIER Sound Money Project, and speak to audiences who want the
-          forces behind money, inflation, and public policy explained clearly.
+          I'm Bryan Cutsinger, an economist at Florida Atlantic University, where I
+          direct the graduate program in economics. My research on monetary theory,
+          economic history, and political economy appears in journals like the
+          <em>European Economic Review</em> and <em>Public Choice</em>, where I'm
+          also an associate editor. I'm acting director of AIER's Sound Money
+          Project and write the monthly <em>Price Theory</em> column at Econlib and
+          commentary for <em>National Review</em>, <em>The Hill</em>, and
+          <em>City Journal</em> — connecting the forces behind the headlines to the
+          ideas that explain them.
         </p>
         <div class="mast__cta">
           <Button href="/speaking/" variant="primary">Invite me to speak</Button>
@@ -88,22 +91,8 @@ const depts = [
     </div>
   </section>
 
-  <!-- Proof strip -->
-  <Section variant="raised">
-    <div class="proof">
-      <p class="proof__label label">Featured in</p>
-      <ul class="proof__outlets">
-        {outlets.map((o) => <li>{o}</li>)}
-      </ul>
-      <p class="proof__creds">
-        Interim Director, AIER Sound Money Project &nbsp;·&nbsp; Associate Editor,
-        <em>Public Choice</em> &nbsp;·&nbsp; Florida Atlantic University
-      </p>
-    </div>
-  </Section>
-
   <!-- Signature talks -->
-  <Section variant="surface">
+  <Section variant="sunk">
     <div class="head">
       <p class="kicker">What I speak about</p>
       <h2>Talks your audience can use.</h2>
@@ -165,7 +154,7 @@ const depts = [
   </Section>
 
   <!-- Recent -->
-  <Section variant="surface">
+  <Section variant="sunk">
     <div class="head head--row">
       <div>
         <p class="kicker">Lately</p>
@@ -173,32 +162,14 @@ const depts = [
       </div>
     </div>
     <DatedList items={recent} />
-  </Section>
-
-  <!-- Email capture -->
-  <Section variant="surface">
-    <EmailCapture />
-  </Section>
-
-  <!-- Departments router -->
-  <Section variant="raised">
-    <div class="head">
-      <p class="kicker">Explore</p>
-      <h2>Where to go next.</h2>
-    </div>
-    <ul class="depts">
-      {
-        depts.map((d) => (
-          <li>
-            <a class="dept" href={d.href}>
-              <span class="dept__title">{d.title}</span>
-              <span class="dept__dek">{d.dek}</span>
-              <span class="dept__arrow" aria-hidden="true">→</span>
-            </a>
-          </li>
-        ))
-      }
-    </ul>
+    <p class="recent-more">
+      <a href="/writing/" class="label label--accent">See all writing →</a>
+      {workingPaperCount > 0 && (
+        <a href="/research/" class="label label--accent">
+          {workingPaperCount} working papers in progress →
+        </a>
+      )}
+    </p>
   </Section>
 </MarketingLayout>
 
@@ -250,25 +221,15 @@ const depts = [
   .head h2 { max-width: 20ch; }
   .head .lede { margin-top: var(--sp-3); }
 
-  /* --- proof --- */
-  .proof { text-align: center; }
-  .proof__label { display: block; margin-bottom: var(--sp-4); }
-  .proof__outlets {
-    list-style: none;
-    margin: 0 0 var(--sp-6);
-    padding: 0;
+  /* recent → see-all links */
+  .recent-more {
+    margin: var(--sp-8) 0 0;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--sp-4) var(--sp-8);
+    gap: var(--sp-3) var(--sp-8);
   }
-  .proof__outlets li {
-    font-family: var(--font-display);
-    font-size: clamp(1.1rem, 0.9rem + 0.9vw, 1.5rem);
-    color: var(--ink);
-  }
-  .proof__creds { color: var(--muted); font-size: 0.95rem; max-width: none; margin: 0; }
-  .proof__creds em { font-style: italic; }
+  .recent-more a { text-decoration: none; }
+  .recent-more a:hover { text-decoration: underline; }
 
   /* --- signature talks --- */
   .talks {
@@ -317,35 +278,11 @@ const depts = [
   .guide__dek { color: var(--muted); max-width: 60ch; margin: 0 0 var(--sp-4); }
   .guide__cta { display: inline-block; }
 
-  /* --- departments --- */
-  .depts {
-    list-style: none; margin: 0; padding: 0;
-    border-top: 1px solid var(--hairline);
-  }
-  .depts li { border-bottom: 1px solid var(--hairline); }
-  .dept {
-    display: grid;
-    grid-template-columns: 12rem 1fr auto;
-    align-items: baseline;
-    gap: var(--sp-6);
-    padding: var(--sp-6) 0;
-    text-decoration: none;
-    color: var(--ink);
-  }
-  .dept__title { font-family: var(--font-display); font-size: 1.4rem; }
-  .dept__dek { color: var(--muted); }
-  .dept__arrow { color: var(--muted); font-size: 1.2rem; transition: transform 0.18s ease, color 0.18s ease; }
-  .dept:hover { background: color-mix(in srgb, var(--accent) 4%, transparent); }
-  .dept:hover .dept__title { color: var(--accent); }
-  .dept:hover .dept__arrow { color: var(--accent); transform: translateX(4px); }
-
   /* --- responsive --- */
   @media (max-width: 900px) {
     .mast__inner { grid-template-columns: 1fr; gap: var(--sp-8); }
     .mast__portrait { order: -1; justify-self: start; max-width: 200px; }
     .talks { grid-template-columns: 1fr; gap: var(--sp-6); }
     .invite { grid-template-columns: 1fr; gap: var(--sp-8); }
-    .dept { grid-template-columns: 1fr auto; }
-    .dept__dek { grid-column: 1 / -1; }
   }
 </style>

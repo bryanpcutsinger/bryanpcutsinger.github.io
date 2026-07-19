@@ -2,9 +2,9 @@
 // Vertical-rhythm section wrapper with a background variant + a centered
 // container. Use `width="reading"` for long-form text (680px), default is the
 // wide 1120px container.
-//   variant: 'surface' (bone) | 'ink' (dark) | 'raised' (white)
+//   variant: 'surface' (paper) | 'sunk' (quiet tinted band) | 'ink' (dark) | 'raised' (white)
 interface Props {
-  variant?: 'surface' | 'ink' | 'raised';
+  variant?: 'surface' | 'sunk' | 'ink' | 'raised';
   width?: 'wide' | 'reading';
   id?: string;
   class?: string;
@@ -35,6 +35,10 @@ const {
   }
   .section--raised {
     background: var(--surface-raised);
+    color: var(--text);
+  }
+  .section--sunk {
+    background: var(--paper-sunk);
     color: var(--text);
   }
   .section--ink {
