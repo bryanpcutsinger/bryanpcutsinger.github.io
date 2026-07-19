@@ -42,7 +42,7 @@ function stripCourseComments() {
 // The site is a Starlight docs site themed to the FAU style guide (see
 // src/styles/fau-theme.css). When a custom domain is attached, only `site` changes.
 export default defineConfig({
-  site: 'https://bryanpcutsinger.github.io',
+  site: 'https://bryancutsinger.com',
   // Backstop strip for imported course posts (see stripCourseComments above).
   // The path guard makes it a no-op for every non-course file, so the /ai/
   // Starlight build output is byte-for-byte unchanged.
