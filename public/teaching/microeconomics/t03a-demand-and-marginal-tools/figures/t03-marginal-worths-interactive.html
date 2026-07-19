@@ -223,8 +223,8 @@
          (the takeaway wraps to two lines; the static markup is pre-wrapped so a
          no-JS reader sees it cleanly, and the script re-wraps it on each change) -->
     <line class="sep" x1="44" y1="430" x2="396" y2="430" />
-    <text id="rHint"  class="r-hint"  x="220" y="454" text-anchor="middle">At $0.50 the buyer takes 6 units. Market value = $3.00.</text>
-    <text id="rTrade" class="r-trade" text-anchor="middle"><tspan x="220" y="476">Total worth $4.50 = market value $3.00 +</tspan><tspan x="220" y="494">consumer surplus $1.50 — the buyer gains $1.50.</tspan></text>
+    <text id="rHint"  class="r-hint"  x="220" y="454" text-anchor="middle">At $0.50 the buyer takes 6 units.</text>
+    <text id="rTrade" class="r-trade" text-anchor="middle"><tspan x="220" y="476">Market value = $3.00 · Consumer surplus = $1.50</tspan><tspan x="220" y="494">Total personal worth = $4.50.</tspan></text>
   </svg>
   <noscript>
     <p class="fallback">JavaScript is off, so this frame is a still image: a descending demand staircase with a gray market-value rectangle below the price line, tinted consumer-surplus steps above it, and the two together making up total personal worth. You can also <a href="t03-marginal-worths.svg">open the static figure</a>.</p>
@@ -341,18 +341,12 @@
     qx.setAttribute('x', xr); qx.textContent = String(q);
     qxBg.setAttribute('x', xr - 11);
 
-    // readout grammar (muted state line + accent takeaway line)
+    // readout grammar: report market value and consumer surplus explicitly at
+    // every price so students can compare how both change across all states.
     var unit = (q === 1) ? 'unit' : 'units';
-    var hint = 'At ' + money(P) + ' the buyer takes ' + q + ' ' + unit +
-               '. Market value = ' + money(MV) + '.';
-    var trade;
-    if (q <= 3) {
-      // high-price / small-quantity state
-      trade = 'Fewer units → smaller total worth and smaller surplus.';
-    } else {
-      trade = 'Total worth ' + money(TW) + ' = market value ' + money(MV) +
-              ' + consumer surplus ' + money(CS) + ' — the buyer gains ' + money(CS) + '.';
-    }
+    var hint = 'At ' + money(P) + ' the buyer takes ' + q + ' ' + unit + '.';
+    var trade = 'Market value = ' + money(MV) + ' · Consumer surplus = ' +
+                money(CS) + ' · Total personal worth = ' + money(TW) + '.';
     rHint.textContent = hint;
     layoutTrade(trade);
 

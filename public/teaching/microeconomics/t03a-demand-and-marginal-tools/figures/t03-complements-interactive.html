@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive figure: butter and its complement, dinner rolls</title>
+<style>
+  :root {
+    --surface:#f7f4ef; --ink:#1a1c1e; --text:#16181a; --muted:#5c6066;
+    --hairline:#e3ddd3; --accent:#b07a2c; --font-body:'Inter Variable',Inter,
+    -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; }
+  body { background:var(--surface); color:var(--text); font-family:var(--font-body);
+    display:flex; align-items:center; justify-content:center; padding:8px;
+    -webkit-font-smoothing:antialiased; }
+  .fig { width:100%; max-width:680px; min-width:0; }
+  svg { width:100%; height:auto; display:block; touch-action:pan-y; }
+  .axis { stroke:var(--muted); stroke-width:1.4; }
+  .curve { stroke:var(--ink); stroke-width:2.4; fill:none; stroke-linecap:round; }
+  .curve-original { stroke:var(--muted); stroke-width:1.8; fill:none;
+    stroke-dasharray:6 5; }
+  .curve-shifted { stroke:var(--accent); stroke-width:2.4; fill:none;
+    stroke-linecap:round; }
+  .guide { stroke:var(--hairline); stroke-width:1.6; stroke-dasharray:5 4; }
+  .pt { fill:var(--accent); stroke:var(--surface); stroke-width:2.5;
+    touch-action:none; cursor:grab; }
+  .hit { fill:transparent; stroke:transparent; touch-action:none; cursor:grab; }
+  .hit-curve { fill:none; stroke:transparent; stroke-width:28;
+    touch-action:none; cursor:grab; }
+  .pt-focus:focus-visible { outline:none; }
+  .pt-focus:focus-visible + .pt,.grabbing .pt { stroke:var(--accent); stroke-width:3.5; }
+  .heading { fill:var(--ink); font-size:16px; font-weight:700; }
+  .instruction { fill:var(--muted); font-size:12.5px; }
+  .panelhead { fill:var(--ink); font-size:13px; font-weight:700; }
+  .axtitle { fill:var(--muted); font-size:11.5px; font-weight:600; }
+  .tagbg { fill:var(--surface); }
+  .tag { fill:var(--accent); font-size:11.5px; font-weight:700; }
+  .fixedtag { fill:var(--muted); font-size:10.5px; font-weight:600; }
+  .sep { stroke:var(--hairline); stroke-width:1; }
+  .readout { fill:var(--muted); font-size:12px; }
+  .takeaway { fill:var(--accent); font-size:12.5px; font-weight:600; }
+  .fallback { margin:8px 0 0; color:var(--muted); font-size:13px;
+    line-height:1.35; text-align:center; }
+  .fallback a { color:var(--ink); }
+</style>
+</head>
+<body>
+<div class="fig">
+  <svg id="fig" viewBox="0 0 720 520" role="group"
+       aria-label="Complement goods. In the left panel, drag butter's current-price point through its straight demand curve. In the right panel, dinner-roll demand shifts with butter quantity: a lower butter price shifts dinner-roll demand right, and a higher butter price shifts dinner-roll demand left.">
+    <title>How a change in butter's price affects demand for its complement, dinner rolls</title>
+    <defs>
+      <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+      <clipPath id="clipRelated"><rect x="410" y="78" width="248" height="274" /></clipPath>
+    </defs>
+
+    <text class="heading" x="360" y="24" text-anchor="middle">Complements: butter and dinner rolls</text>
+    <text class="instruction" x="360" y="44" text-anchor="middle">Drag butter's current-price point up or down.</text>
+    <text class="panelhead" x="190" y="68" text-anchor="middle">Butter</text>
+    <text class="panelhead" x="530" y="68" text-anchor="middle">Dinner rolls (complement)</text>
+
+    <line class="axis" x1="70" y1="350" x2="330" y2="350" marker-end="url(#arrow)" />
+    <line class="axis" x1="70" y1="350" x2="70" y2="78" marker-end="url(#arrow)" />
+    <path class="curve" d="M70,100 L294,350" />
+    <path id="hitCurve" class="hit-curve" d="M70,100 L294,350" />
+    <line id="butterPriceGuide" class="guide" x1="70" y1="225" x2="182" y2="225" />
+    <line id="butterQtyGuide" class="guide" x1="182" y1="225" x2="182" y2="350" />
+    <text class="axtitle" x="200" y="390" text-anchor="middle">Weekly Pounds of Butter Demanded</text>
+    <text class="axtitle" x="20" y="220" text-anchor="middle"
+          transform="rotate(-90 20 220)">Price per Pound of Butter</text>
+    <g>
+      <rect id="butterPriceBg" class="tagbg" x="26" y="217.5" width="38" height="15" rx="2" />
+      <text id="butterPriceText" class="tag" x="62" y="225" text-anchor="end"
+            dominant-baseline="middle">$4.00</text>
+    </g>
+    <g>
+      <rect id="butterQtyBg" class="tagbg" x="165" y="357" width="34" height="15" rx="2" />
+      <text id="butterQtyText" class="tag" x="182" y="367" text-anchor="middle">4.0</text>
+    </g>
+    <circle id="butterHit" class="hit" cx="182" cy="225" r="22" />
+    <circle id="butterFocus" class="pt-focus hit" cx="182" cy="225" r="22"
+            tabindex="0" role="slider" aria-label="Current price of butter"
+            aria-valuemin="0.00" aria-valuemax="8.00" aria-valuenow="4.00"
+            aria-valuetext="Butter costs $4.00 per pound; 4.0 pounds are demanded per week. Dinner-roll demand is at its normal position." />
+    <circle id="butterPoint" class="pt" cx="182" cy="225" r="7" />
+
+    <line class="axis" x1="410" y1="350" x2="670" y2="350" marker-end="url(#arrow)" />
+    <line class="axis" x1="410" y1="350" x2="410" y2="78" marker-end="url(#arrow)" />
+    <g clip-path="url(#clipRelated)">
+      <path id="relatedOriginal" class="curve" d="M410,100 L634,350" />
+      <path id="relatedShifted" class="curve-shifted" d="M410,100 L634,350" opacity="0" />
+    </g>
+    <line id="relatedPriceGuide" class="guide" x1="410" y1="225" x2="522" y2="225" />
+    <line id="relatedQtyGuide" class="guide" x1="522" y1="225" x2="522" y2="350" />
+    <circle id="relatedPoint" class="pt" cx="522" cy="225" r="6" />
+    <text class="axtitle" x="540" y="380" text-anchor="middle"><tspan x="540">Dozens of Dinner Rolls Demanded</tspan><tspan x="540" dy="13">per Week</tspan></text>
+    <text class="axtitle" x="360" y="220" text-anchor="middle"
+          transform="rotate(-90 360 220)">Price per Dozen Dinner Rolls</text>
+    <text class="fixedtag" x="402" y="225" text-anchor="end" dominant-baseline="middle">$4.00</text>
+    <g>
+      <rect id="relatedQtyBg" class="tagbg" x="505" y="357" width="34" height="15" rx="2" />
+      <text id="relatedQtyText" class="tag" x="522" y="367" text-anchor="middle">4.0</text>
+    </g>
+
+    <line class="sep" x1="54" y1="420" x2="666" y2="420" />
+    <text id="stateReadout" class="readout" x="360" y="444" text-anchor="middle">Butter: $4.00 per pound; 4.0 pounds demanded per week.</text>
+    <text id="effectReadout" class="takeaway" text-anchor="middle"
+          aria-label="At butter's normal price, dinner-roll demand is unchanged."><tspan x="360" y="468">At butter's normal price, dinner-roll demand is unchanged.</tspan></text>
+  </svg>
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame shows the normal-price state. Butter has a straight demand curve on the left; dinner rolls have a straight demand curve on the right. A lower butter price shifts dinner-roll demand right, while a higher butter price shifts it left. You can also <a href="t03-cross-price.svg">open the source comparison</a>.</p>
+  </noscript>
+</div>
+<script>
+(function () {
+  "use strict";
+  var svg=document.getElementById('fig'), byId=function(id){return document.getElementById(id);};
+  var hitCurve=byId('hitCurve'), butterHit=byId('butterHit'), butterFocus=byId('butterFocus'), butterPoint=byId('butterPoint');
+  var butterPriceGuide=byId('butterPriceGuide'), butterQtyGuide=byId('butterQtyGuide');
+  var butterPriceBg=byId('butterPriceBg'), butterPriceText=byId('butterPriceText');
+  var butterQtyBg=byId('butterQtyBg'), butterQtyText=byId('butterQtyText');
+  var relatedOriginal=byId('relatedOriginal'), relatedShifted=byId('relatedShifted');
+  var relatedPriceGuide=byId('relatedPriceGuide'), relatedQtyGuide=byId('relatedQtyGuide'), relatedPoint=byId('relatedPoint');
+  var relatedQtyBg=byId('relatedQtyBg'), relatedQtyText=byId('relatedQtyText');
+  var stateReadout=byId('stateReadout'), effectReadout=byId('effectReadout');
+  var NS='http://www.w3.org/2000/svg';
+  var XL=70, XR=410, Y0=350, PX=28, PY=31.25, NORMAL=4, STEP=.25;
+  var butterPrice=4;
+  function butterQuantity(p){return 8-p;}
+  function relatedShift(p){return -.35*(p-NORMAL);}
+  function xLeft(q){return XL+q*PX;}
+  function xRight(q){return XR+q*PX;}
+  function yPrice(p){return Y0-p*PY;}
+  function money(v){return '$'+v.toFixed(2);}
+  var spt=svg.createSVGPoint();
+  function toSvg(evt){spt.x=evt.clientX;spt.y=evt.clientY;return spt.matrixTransform(svg.getScreenCTM().inverse());}
+
+  function layoutEffect(str){
+    var maxW=620,x=360,y0=468,lineH=17;
+    effectReadout.setAttribute('aria-label',str);
+    while(effectReadout.firstChild)effectReadout.removeChild(effectReadout.firstChild);
+    var probe=document.createElementNS(NS,'tspan');effectReadout.appendChild(probe);
+    var words=str.split(' '),lines=[],cur=words[0]||'';
+    for(var i=1;i<words.length;i++){probe.textContent=cur+' '+words[i];if(probe.getComputedTextLength()>maxW){lines.push(cur);cur=words[i];}else cur+=' '+words[i];}
+    lines.push(cur);effectReadout.removeChild(probe);
+    var start=lines.length===1?y0+5:y0;
+    for(var j=0;j<lines.length;j++){var t=document.createElementNS(NS,'tspan');t.setAttribute('x',x);t.setAttribute('y',start+j*lineH);t.textContent=lines[j];effectReadout.appendChild(t);}
+  }
+
+  function render(){
+    var bq=butterQuantity(butterPrice), bx=xLeft(bq), by=yPrice(butterPrice);
+    var shift=relatedShift(butterPrice), rq=NORMAL+shift, rx=xRight(rq);
+    butterPoint.setAttribute('cx',bx);butterPoint.setAttribute('cy',by);
+    butterHit.setAttribute('cx',bx);butterHit.setAttribute('cy',by);
+    butterFocus.setAttribute('cx',bx);butterFocus.setAttribute('cy',by);
+    butterPriceGuide.setAttribute('x2',bx);butterPriceGuide.setAttribute('y1',by);butterPriceGuide.setAttribute('y2',by);
+    butterQtyGuide.setAttribute('x1',bx);butterQtyGuide.setAttribute('x2',bx);butterQtyGuide.setAttribute('y1',by);
+    butterPriceGuide.setAttribute('opacity',butterPrice===0?'0':'1');
+    butterQtyGuide.setAttribute('opacity',bq===0?'0':'1');
+    butterPriceText.setAttribute('y',by);butterPriceText.textContent=money(butterPrice);butterPriceBg.setAttribute('y',by-7.5);
+    var atTop=butterPrice===8;
+    butterPriceText.setAttribute('x',atTop?'58':'62');
+    butterPriceBg.setAttribute('x',atTop?'20':'26');
+    butterQtyText.setAttribute('x',bx);butterQtyText.textContent=bq.toFixed(1);butterQtyBg.setAttribute('x',bx-17);
+
+    var shifted=Math.abs(shift)>.001, dx=shift*PX;
+    relatedOriginal.setAttribute('class',shifted?'curve-original':'curve');
+    relatedShifted.setAttribute('transform','translate('+dx.toFixed(2)+' 0)');
+    relatedShifted.setAttribute('opacity',shifted?'1':'0');
+    relatedPriceGuide.setAttribute('x2',rx);
+    relatedQtyGuide.setAttribute('x1',rx);relatedQtyGuide.setAttribute('x2',rx);
+    relatedPoint.setAttribute('cx',rx);
+    relatedQtyText.setAttribute('x',rx);relatedQtyText.textContent=rq.toFixed(1);relatedQtyBg.setAttribute('x',rx-17);
+    stateReadout.textContent='Butter: '+money(butterPrice)+' per pound; '+bq.toFixed(1)+' pounds demanded per week.';
+    var effect;
+    if(!shifted) effect="At butter's normal price, dinner-roll demand is unchanged.";
+    else if(butterPrice<NORMAL) effect='Butter is cheaper, so buyers purchase more butter: dinner-roll demand shifts RIGHT; at $4.00 per dozen, quantity rises from 4.0 to '+rq.toFixed(1)+'.';
+    else effect='Butter is more expensive, so buyers purchase less butter: dinner-roll demand shifts LEFT; at $4.00 per dozen, quantity falls from 4.0 to '+rq.toFixed(1)+'.';
+    layoutEffect(effect);
+    butterFocus.setAttribute('aria-valuenow',butterPrice.toFixed(2));
+    butterFocus.setAttribute('aria-valuetext','Butter costs '+money(butterPrice)+' per pound; '+bq.toFixed(1)+' pounds are demanded per week. '+effect);
+  }
+  function setPrice(v){var p=+v;if(isNaN(p))return;p=Math.round(p/STEP)*STEP;p=Math.max(0,Math.min(8,p));if(p===butterPrice)return;butterPrice=p;render();}
+  function fromPointer(evt){setPrice((Y0-toSvg(evt).y)/PY);}
+  var dragging=false,captured=null,capturedId=null;
+  function move(evt){if(dragging){evt.preventDefault();fromPointer(evt);}}
+  function up(){dragging=false;svg.classList.remove('grabbing');if(captured&&capturedId!==null){try{captured.releasePointerCapture(capturedId);}catch(e){}}captured=null;capturedId=null;window.removeEventListener('pointermove',move);window.removeEventListener('pointerup',up);}
+  function down(evt){evt.preventDefault();dragging=true;svg.classList.add('grabbing');captured=evt.currentTarget;capturedId=evt.pointerId;try{captured.setPointerCapture(capturedId);}catch(e){}fromPointer(evt);window.addEventListener('pointermove',move);window.addEventListener('pointerup',up);}
+  [hitCurve,butterHit,butterFocus,butterPoint].forEach(function(el){el.addEventListener('pointerdown',down);});
+  butterFocus.addEventListener('keydown',function(evt){if(evt.key==='ArrowUp'||evt.key==='ArrowLeft')setPrice(butterPrice+STEP);else if(evt.key==='ArrowDown'||evt.key==='ArrowRight')setPrice(butterPrice-STEP);else return;evt.preventDefault();});
+  window.__fig={set:function(v){setPrice(v&&typeof v.price==='number'?v.price:v);},get:function(){var shift=relatedShift(butterPrice);return{relation:'complements',butterPrice:butterPrice,butterQuantity:butterQuantity(butterPrice),demandShift:shift,relatedQuantity:NORMAL+shift};}};
+  render();
+})();
+</script>
+</body>
+</html>
