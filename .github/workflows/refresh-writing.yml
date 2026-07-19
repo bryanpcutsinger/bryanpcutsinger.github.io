@@ -1,0 +1,47 @@
+name: Refresh writing feed
+
+# Rebuild src/data/writing.json from Bryan's author RSS feeds (EconLog + The Daily
+# Economy) on a weekly schedule. If anything changed, commit it and kick off the
+# Pages deploy — so newly published columns appear on the site with no manual step.
+on:
+  schedule:
+    - cron: '0 12 * * 1' # Mondays 12:00 UTC
+  workflow_dispatch: # allow a manual run from the Actions tab
+
+permissions:
+  contents: write # push the regenerated writing.json
+  actions: write # dispatch the deploy workflow
+
+concurrency:
+  group: refresh-writing
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Regenerate writing.json from feeds
+        # Fails closed: if a feed is unreachable the script exits non-zero and
+        # leaves writing.json untouched, so a feed outage never blanks the list.
+        run: python3 scripts/build_writing.py
+
+      - name: Commit and deploy if the feed changed
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if git diff --quiet -- src/data/writing.json; then
+            echo "No change in writing.json — nothing to publish."
+            exit 0
+          fi
+          git config user.name  "writing-feed[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/data/writing.json
+          git commit -m "writing: refresh feed (EconLog + The Daily Economy)"
+          git push
+          # A GITHUB_TOKEN push won't trigger deploy.yml (on: push), but a
+          # workflow_dispatch is exempt from that recursion guard, so trigger it.
+          gh workflow run deploy.yml --ref main
+          echo "Committed refreshed feed and dispatched the Pages deploy."

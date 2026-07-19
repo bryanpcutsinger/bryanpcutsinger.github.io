@@ -1,47 +1,246 @@
 {
-  "_note": "Bryan's public writing. Two lists: `essays` (op-eds/commentary) and `press` (interviews, podcasts, mentions). Each item: date (display string), title, outlet, url, kind. Set placeholder:true on any row that is not yet real — it renders dimmed with a chip and MUST NOT be presented as a real, verified link. Replace with real, verified URLs before removing placeholder. NEVER invent a title or URL.",
+  "_note": "GENERATED from author RSS feeds by scripts/build_writing.py — do not hand-edit; run `npm run import:writing` (the refresh-writing Action runs it weekly). `essays` is merged from the EconLog and The Daily Economy author feeds, newest first, copied verbatim. `press` is not yet wired to a source (future: CV Selected Media). INTEGRITY: never fabricate a title or URL; the script fails closed if a feed is unreachable.",
   "essays": [
     {
-      "date": "20XX",
-      "title": "[PLACEHOLDER] Essay or op-ed title",
-      "outlet": "National Review",
-      "url": "",
-      "kind": "Commentary",
-      "placeholder": true
+      "date": "Jul 2026",
+      "isoDate": "2026-07-15",
+      "title": "June Inflation Slowed as Energy Prices Fell",
+      "outlet": "The Daily Economy",
+      "url": "https://thedailyeconomy.org/article/june-inflation-slowed-as-energy-prices-fell/",
+      "kind": "Commentary"
     },
     {
-      "date": "20XX",
-      "title": "[PLACEHOLDER] Second essay title",
-      "outlet": "The Hill",
-      "url": "",
-      "kind": "Commentary",
-      "placeholder": true
+      "date": "Jun 2026",
+      "isoDate": "2026-06-23",
+      "title": "Cutsinger’s Solution: Veggies and Noodles",
+      "outlet": "EconLog",
+      "url": "https://www.econlib.org/econlog/cutsingers-solution-veggies-and-noodles",
+      "kind": "Column"
     },
     {
-      "date": "20XX",
-      "title": "[PLACEHOLDER] Third essay title",
-      "outlet": "The Washington Examiner",
-      "url": "",
-      "kind": "Commentary",
-      "placeholder": true
+      "date": "Jun 2026",
+      "isoDate": "2026-06-19",
+      "title": "Warsh Remakes the Fed as Inflation Runs Hot",
+      "outlet": "The Daily Economy",
+      "url": "https://thedailyeconomy.org/article/warsh-remakes-the-fed-as-inflation-runs-hot/",
+      "kind": "Commentary"
+    },
+    {
+      "date": "Jun 2026",
+      "isoDate": "2026-06-11",
+      "title": "May’s Inflation Is More Than an Energy Story",
+      "outlet": "The Daily Economy",
+      "url": "https://thedailyeconomy.org/article/inflation-is-more-than-an-energy-story/",
+      "kind": "Commentary"
+    },
+    {
+      "date": "Jun 2026",
+      "isoDate": "2026-06-02",
+      "title": "EconLog Price Theory: Veggies or Noodles?",
+      "outlet": "EconLog",
+      "url": "https://www.econlib.org/econlog/econlog-price-theory-veggies-or-noodles",
+      "kind": "Column"
+    },
+    {
+      "date": "May 2026",
+      "isoDate": "2026-05-13",
+      "title": "Headline Inflation Cooled in April, but Core Pressures Picked Up",
+      "outlet": "The Daily Economy",
+      "url": "https://thedailyeconomy.org/article/headline-inflation-cooled-in-april-but-core-pressures-picked-up/",
+      "kind": "Commentary"
+    },
+    {
+      "date": "Apr 2026",
+      "isoDate": "2026-04-30",
+      "title": "Powell Exits a Fed Fractured by Inflation Debate",
+      "outlet": "The Daily Economy",
+      "url": "https://thedailyeconomy.org/article/powell-exits-a-fed-fractured-by-inflation-debate/",
+      "kind": "Commentary"
+    },
+    {
+      "date": "Apr 2026",
+      "isoDate": "2026-04-10",
+      "title": "Headline Inflation Surged in March, but Core Remained Muted",
+      "outlet": "The Daily Economy",
+      "url": "https://thedailyeconomy.org/article/headline-inflation-surged-in-march-but-core-remained-muted/",
+      "kind": "Commentary"
+    },
+    {
+      "date": "Mar 2026",
+      "isoDate": "2026-03-30",
+      "title": "Cutsinger’s Solution: Housing Quantity and Price",
+      "outlet": "EconLog",
+      "url": "https://www.econlib.org/econlog/cutsingers-solution-housing-quantity-and-price",
+      "kind": "Column"
+    },
+    {
+      "date": "Mar 2026",
+      "isoDate": "2026-03-23",
+      "title": "The Fed Sees Higher Inflation Coming — and May Cut Rates Anyway",
+      "outlet": "The Daily Economy",
+      "url": "https://thedailyeconomy.org/article/the-fed-sees-higher-inflation-coming-and-may-cut-rates-anyway/",
+      "kind": "Commentary"
+    },
+    {
+      "date": "Mar 2026",
+      "isoDate": "2026-03-11",
+      "title": "Inflation Edged Up in February, But Core Price Pressures Ease",
+      "outlet": "The Daily Economy",
+      "url": "https://thedailyeconomy.org/article/inflation-edged-up-in-february-but-core-price-pressures-ease/",
+      "kind": "Commentary"
+    },
+    {
+      "date": "Mar 2026",
+      "isoDate": "2026-03-06",
+      "title": "EconLog Price Theory: Housing Quantity and Price",
+      "outlet": "EconLog",
+      "url": "https://www.econlib.org/econlog/econlog-price-theory-housing-quantity-and-price",
+      "kind": "Column"
+    },
+    {
+      "date": "Mar 2026",
+      "isoDate": "2026-03-03",
+      "title": "Federal Reserve Revenue: Cutsinger’s Solution",
+      "outlet": "EconLog",
+      "url": "https://www.econlib.org/econlog/federal-reserve-revenue-cutsingers-solution",
+      "kind": "Column"
+    },
+    {
+      "date": "Feb 2026",
+      "isoDate": "2026-02-13",
+      "title": "Inflation Is Cooling: Jan 2026 Increase Below Seasonal Norms",
+      "outlet": "The Daily Economy",
+      "url": "https://thedailyeconomy.org/article/inflation-is-cooling-jan-2026/",
+      "kind": "Commentary"
+    },
+    {
+      "date": "Feb 2026",
+      "isoDate": "2026-02-05",
+      "title": "EconLog Price Theory: Federal Reserve Revenue",
+      "outlet": "EconLog",
+      "url": "https://www.econlib.org/econlog/econlog-price-theory-federal-reserve-revenue",
+      "kind": "Column"
+    },
+    {
+      "date": "Jan 2026",
+      "isoDate": "2026-01-30",
+      "title": "The Fed Takes a Wait-and-See Approach",
+      "outlet": "The Daily Economy",
+      "url": "https://thedailyeconomy.org/article/the-fed-takes-a-wait-and-see-approach/",
+      "kind": "Commentary"
+    },
+    {
+      "date": "Jan 2026",
+      "isoDate": "2026-01-29",
+      "title": "Cutsinger’s Solution: The Price of Education",
+      "outlet": "EconLog",
+      "url": "https://www.econlib.org/econlog/cutsingers-solution-the-price-of-education",
+      "kind": "Column"
+    },
+    {
+      "date": "Jan 2026",
+      "isoDate": "2026-01-09",
+      "title": "EconLog Price Theory: The Price of Education",
+      "outlet": "EconLog",
+      "url": "https://www.econlib.org/econlog/econlog-price-theory-the-price-of-education",
+      "kind": "Column"
+    },
+    {
+      "date": "Dec 2025",
+      "isoDate": "2025-12-30",
+      "title": "Cutsinger’s Solution: Inflation and Healthcare",
+      "outlet": "EconLog",
+      "url": "https://www.econlib.org/econlog/cutsingers-solution-inflation-healthcare",
+      "kind": "Column"
+    },
+    {
+      "date": "Dec 2025",
+      "isoDate": "2025-12-19",
+      "title": "Inflation Retreats from Late-Summer Highs, Nears Fed Target",
+      "outlet": "The Daily Economy",
+      "url": "https://thedailyeconomy.org/article/inflation-retreats-from-late-summer-highs-nears-fed-target/",
+      "kind": "Commentary"
+    },
+    {
+      "date": "Dec 2025",
+      "isoDate": "2025-12-16",
+      "title": "The Fed Cut Rates Again–What Else Is New?",
+      "outlet": "The Daily Economy",
+      "url": "https://thedailyeconomy.org/article/the-fed-cut-rates-again-what-else-is-new/",
+      "kind": "Commentary"
+    },
+    {
+      "date": "Dec 2025",
+      "isoDate": "2025-12-09",
+      "title": "EconLog Price Theory: Inflation and Healthcare",
+      "outlet": "EconLog",
+      "url": "https://www.econlib.org/econlog/price-theory-inflation-and-healthcare/",
+      "kind": "Column"
+    },
+    {
+      "date": "Oct 2025",
+      "isoDate": "2025-10-31",
+      "title": "Fed Cuts Rates for Second Straight Meeting",
+      "outlet": "The Daily Economy",
+      "url": "https://thedailyeconomy.org/article/fed-cuts-rates-for-second-straight-meeting/",
+      "kind": "Commentary"
+    },
+    {
+      "date": "Oct 2025",
+      "isoDate": "2025-10-27",
+      "title": "Slower Inflation But Rising Uncertainty in September",
+      "outlet": "The Daily Economy",
+      "url": "https://thedailyeconomy.org/article/slower-inflation-but-rising-uncertainty-in-september/",
+      "kind": "Commentary"
+    },
+    {
+      "date": "Sep 2025",
+      "isoDate": "2025-09-18",
+      "title": "Miran Follows a Long Tradition of Political Appointees at the Fed",
+      "outlet": "The Daily Economy",
+      "url": "https://thedailyeconomy.org/article/miran-follows-a-long-tradition-of-political-appointees-at-the-fed/",
+      "kind": "Commentary"
+    },
+    {
+      "date": "Sep 2025",
+      "isoDate": "2025-09-12",
+      "title": "Inflation Heats Up in August",
+      "outlet": "The Daily Economy",
+      "url": "https://thedailyeconomy.org/article/inflation-heats-up-in-august/",
+      "kind": "Commentary"
+    },
+    {
+      "date": "Sep 2025",
+      "isoDate": "2025-09-10",
+      "title": "Remaking the Fed: A Look Back at the Banking Act of 1935",
+      "outlet": "The Daily Economy",
+      "url": "https://thedailyeconomy.org/article/remaking-the-fed-a-look-back-at-the-banking-act-of-1935/",
+      "kind": "Commentary"
+    },
+    {
+      "date": "Aug 2025",
+      "isoDate": "2025-08-13",
+      "title": "Rate of Inflation Cools in July, Case for Rate Cuts Builds",
+      "outlet": "The Daily Economy",
+      "url": "https://thedailyeconomy.org/article/rate-of-inflation-cools-in-july-case-for-rate-cuts-builds/",
+      "kind": "Commentary"
+    },
+    {
+      "date": "Aug 2025",
+      "isoDate": "2025-08-05",
+      "title": "Fed Governor’s Labor Market Warning Validated by BLS Revision",
+      "outlet": "The Daily Economy",
+      "url": "https://thedailyeconomy.org/article/fed-governors-labor-market-warning-validated-by-bls-revision/",
+      "kind": "Commentary"
+    },
+    {
+      "date": "Jul 2025",
+      "isoDate": "2025-07-31",
+      "title": "Fed Holds Rates Steady Amid Political Pressure",
+      "outlet": "The Daily Economy",
+      "url": "https://thedailyeconomy.org/article/fed-holds-rates-steady-amid-political-pressure/",
+      "kind": "Commentary"
     }
   ],
-  "press": [
-    {
-      "date": "20XX",
-      "title": "[PLACEHOLDER] Interview or podcast appearance",
-      "outlet": "Outlet / program name",
-      "url": "",
-      "kind": "Interview",
-      "placeholder": true
-    },
-    {
-      "date": "20XX",
-      "title": "[PLACEHOLDER] Media mention or quote",
-      "outlet": "Outlet name",
-      "url": "",
-      "kind": "Mention",
-      "placeholder": true
-    }
-  ]
+  "press": []
 }

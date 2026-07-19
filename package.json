@@ -6,12 +6,13 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "postbuild": "if grep -rl 'INSTRUCTOR NOTES' dist >/dev/null 2>&1; then echo 'SECURITY: INSTRUCTOR NOTES found in build output — failing build' && exit 1; fi",
+    "postbuild": "if grep -rl 'INSTRUCTOR NOTES' dist >/dev/null 2>&1; then echo 'SECURITY: INSTRUCTOR NOTES found in build output \u2014 failing build' && exit 1; fi",
     "preview": "astro preview",
     "import:topic": "bash scripts/import-topic.sh",
     "import:guide": "bash scripts/import-guide.sh",
     "import:problems": "bash scripts/import-problems.sh",
-    "import:cv": "bash scripts/import-cv.sh"
+    "import:cv": "bash scripts/import-cv.sh",
+    "import:writing": "python3 scripts/build_writing.py"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",

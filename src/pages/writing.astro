@@ -32,25 +32,32 @@ const press = toItems(writingData.press ?? []);
     lede="I write for general audiences about money, inflation, and the incentives behind public policy — translating research into the debates people are actually having."
   />
 
-  <!-- Commentary / essays -->
+  <!-- Commentary / essays (auto-updating from author RSS feeds) -->
   <Section variant="surface">
     <div class="head">
       <p class="kicker">Commentary</p>
-      <h2>Essays & op-eds.</h2>
-      <p class="lede">Selected pieces for national outlets.</p>
+      <h2>Essays & columns.</h2>
+      <p class="lede">
+        My recent columns and commentary, newest first — from my Price Theory
+        column at EconLib and my work for AIER's The Daily Economy.
+      </p>
     </div>
     <DatedList items={essays} />
   </Section>
 
-  <!-- Press & appearances -->
-  <Section variant="raised">
-    <div class="head">
-      <p class="kicker">Press & appearances</p>
-      <h2>Interviews & media.</h2>
-      <p class="lede">Interviews, podcasts, and mentions.</p>
-    </div>
-    <DatedList items={press} />
-  </Section>
+  <!-- Press & appearances (rendered only when populated) -->
+  {
+    press.length > 0 && (
+      <Section variant="raised">
+        <div class="head">
+          <p class="kicker">Press & appearances</p>
+          <h2>Interviews & media.</h2>
+          <p class="lede">Interviews, podcasts, and mentions.</p>
+        </div>
+        <DatedList items={press} />
+      </Section>
+    )
+  }
 
   <CloseBand
     kicker="For editors & producers"
