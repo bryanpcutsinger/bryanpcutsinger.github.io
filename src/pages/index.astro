@@ -48,7 +48,12 @@ const recent = [...columns, ...pubRows]
   .slice(0, 5)
   .map(({ sort, ...item }) => item);
 
-const workingPaperCount = (pubData.workingPapers ?? []).length;
+// Only items the CV actually labels "Working paper" — NOT the under-review /
+// R&R manuscripts the CV groups into the same array (those are submitted to
+// journals, a different status, and are shown on the Research page).
+const workingPaperCount = (pubData.workingPapers ?? []).filter(
+  (p) => p.status === 'Working paper'
+).length;
 ---
 <MarketingLayout
   title="Bryan Cutsinger — Economist, Speaker, Writer"
@@ -166,7 +171,7 @@ const workingPaperCount = (pubData.workingPapers ?? []).length;
       <a href="/writing/" class="label label--accent">See all writing →</a>
       {workingPaperCount > 0 && (
         <a href="/research/" class="label label--accent">
-          {workingPaperCount} working papers in progress →
+          {workingPaperCount} working papers →
         </a>
       )}
     </p>
