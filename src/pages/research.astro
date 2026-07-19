@@ -30,7 +30,6 @@ const workingPapers = toEntries(pubs.workingPapers ?? []);
 // data-driven (not hardcoded) so the conditionally-rendered Book chapters / Books
 // sections can be empty as publications.json changes without breaking the rhythm.
 const sectionOrder = [
-  'overview',
   'cv',
   'articles',
   ...(bookChapters.length > 0 ? ['chapters'] : []),
@@ -47,48 +46,12 @@ const variantOf = (key: string) =>
   <PageHead
     kicker="Research"
     headline="Money, institutions, and the incentives behind policy."
-    lede="My research asks how monetary institutions shape economies, and why the rules governing money look the way they do — spanning monetary theory and economic history, read through the lens of public choice."
+    lede="My research sits at the intersection of monetary economics and economic history, with a recurring focus on seigniorage — the revenue governments raise by creating money — and the public-choice incentives that shape monetary institutions. My current work takes up the credibility of redeemable paper money, whether deflation's effects depend on its source, and the political economy of central banking, alongside a book with Alexander Salter on money and fiscal policy under contract for 2027."
   >
     <Fragment slot="headline">
       Money, institutions, and the <em>incentives</em> behind policy.
     </Fragment>
   </PageHead>
-
-  <!-- Overview -->
-  <Section variant={variantOf('overview')}>
-    <div class="head"><p class="kicker">Overview</p><h2>What I work on.</h2></div>
-    <div class="overview">
-      <p>
-        Most of my published research sits at the intersection of monetary economics and
-        economic history. A recurring theme is seigniorage — the revenue governments raise
-        by creating money — and how monetary institutions determine who ultimately bears its
-        cost. I've examined episodes ranging from the hyperinflation of Revolutionary France
-        and paper money in colonial French North America to money and seigniorage in the
-        Confederate South, alongside present-day questions about the Federal Reserve's
-        post-2008 operating regime, interest on reserves, and whether a return to the gold
-        standard is feasible. A second strand brings public choice — the economics of
-        political incentives — to bear on legislation, from the durability of legislative
-        benefits to the insurance of legislative wealth transfers. Running through much of it
-        is a methodological argument, made with Alexander Salter, for putting price theory
-        back at the center of how economists work, and for defending the economic approach to
-        human behavior against calls to replace it.
-      </p>
-      <p>
-        My current work carries these questions forward. In monetary theory and history, a
-        framework developed with Joshua Hendrickson explains how an issuer's credibility in
-        redeeming paper money for gold shapes note discounts, exchange rates, and the price
-        level; a cross-country study with Casey Pender asks whether deflation's consequences
-        depend on its source, using thirteen economies under the classical gold standard to
-        show that supply-driven price declines behave nothing like the demand-driven kind.
-        Other projects, several under review, take up the political economy of monetary and
-        academic institutions — the Federal Reserve's 2025 framework review, how regime type
-        governs the "monetary commons," the competitiveness of antebellum free-banking
-        systems, and structural conflicts of interest in higher education. A book with
-        Alexander Salter, <em>Based Money: A Citizen's Guide to Money Mischief and Fiscal
-        Folly</em>, is under contract with the Independent Institute and expected in 2027.
-      </p>
-    </div>
-  </Section>
 
   <!-- CV (promoted from the bottom of the page) -->
   <Section variant={variantOf('cv')}>
@@ -157,11 +120,4 @@ const variantOf = (key: string) =>
   .head { margin-bottom: var(--sp-8); }
   .head h2 { max-width: 22ch; }
   .head .lede { margin-top: var(--sp-3); }
-  /* Overview — research-statement prose. Paragraphs inherit the base Newsreader
-     reading face, 68ch measure, and line-height from site.css; we only add the
-     hairline top-rule (kept from the old .fields block) and trim the last margin. */
-  .overview {
-    border-top: 1px solid var(--hairline); padding-top: var(--sp-8);
-  }
-  .overview p:last-child { margin-bottom: 0; }
 </style>

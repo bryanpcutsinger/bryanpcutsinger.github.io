@@ -409,13 +409,15 @@ source repo, same source-of-truth → import → commit model as the guide/micro
 
 ## Research overview — self-refreshing prose (built 2026-07-15)
 
-The `/research/` page (`src/pages/research.astro`) opens with a two-paragraph **Overview**
-("What I work on.") that summarizes Bryan's published work (¶1) and current/forthcoming work
-(¶2), written from the **actual content** of the papers, not their titles. Unlike the
-citation lists below it (which render from the auto-generated `publications.json`), the
-overview prose is **hand-authored inline** in `research.astro` and refreshed on demand. It
-replaced the old two-column "Fields" placeholder block. The CV `DownloadCard` was also
-**promoted** from the page bottom to just under the Overview.
+The `/research/` page (`src/pages/research.astro`) opens with the **PageHead** — a headline
+plus a **2-sentence lede** (the `lede` prop) that says what Bryan's research does and what
+he's currently working on, written from the **actual content** of the papers, not their
+titles. Unlike the citation lists below it (which render from the auto-generated
+`publications.json`), this intro prose is **hand-authored inline** in `research.astro` and
+refreshed on demand. (Consolidated 2026-07-19 down from a longer two-paragraph "What I work
+on." Overview block — which had itself replaced a two-column "Fields" placeholder — because
+headline + lede + long overview read as redundant.) The CV `DownloadCard` sits just beneath
+the intro, above the publication lists.
 
 - **Grounding layer: `src/data/research-abstracts.json`** — VERBATIM abstracts of Bryan's own
   papers, keyed by `title` (matching `publications.json` exactly; titles are unique per the CV
@@ -431,7 +433,7 @@ replaced the old two-column "Fields" placeholder block. The CV `DownloadCard` wa
 - **Refresh ritual (when publications change):** the *list* updates itself from the CV
   (`publications.json` — see the CV section). To refresh the *prose*: (1) add/update the
   paper's verbatim abstract in `research-abstracts.json`; (2) ask Claude to **"refresh the
-  research overview"** → it re-drafts the two paragraphs from the abstracts + current
+  research overview"** → it re-drafts the 2-sentence lede from the abstracts + current
   `publications.json`; (3) **Bryan reviews**; (4) `npm run build` → commit. Deliberately **NOT**
   auto-generated in CI (keeps the build hermetic and the public-facing prose reviewed — an
   LLM-in-CI approach was considered and rejected).
