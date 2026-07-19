@@ -142,22 +142,6 @@ const workingPaperCount = (pubData.workingPapers ?? []).filter(
     </div>
   </Section>
 
-  <!-- Claude Code guide hook -->
-  <Section variant="surface">
-    <a class="guide" href="/ai/">
-      <div class="guide__body">
-        <p class="kicker">For economists</p>
-        <h2 class="guide__title">A beginner's guide to Claude Code, for economists.</h2>
-        <p class="guide__dek">
-          A plain-language, Mac-friendly guide to getting started with AI coding
-          tools — written for academic economists new to the command line, with
-          examples from teaching and research.
-        </p>
-        <span class="guide__cta label label--accent">Read the guide →</span>
-      </div>
-    </a>
-  </Section>
-
   <!-- Recent -->
   <Section variant="sunk">
     <div class="head head--row">
@@ -262,26 +246,6 @@ const workingPaperCount = (pubData.workingPapers ?? []).filter(
   .invite__aside { display: flex; flex-direction: column; gap: var(--sp-6); align-items: flex-start; }
   .invite__fee { color: var(--on-ink-muted); margin: 0; font-size: 0.95rem; }
   .invite__fee .label { display: block; color: var(--accent-on-ink); margin-bottom: var(--sp-2); }
-
-  /* --- guide hook --- */
-  .guide {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-    border: 1px solid var(--rule-strong);
-    border-radius: var(--radius-lg);
-    padding: clamp(var(--sp-8), 4vw, var(--sp-16));
-    background: var(--paper-raised);
-    transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
-  }
-  .guide:hover {
-    box-shadow: var(--shadow-hover);
-    transform: translateY(-2px);
-    border-color: var(--accent);
-  }
-  .guide__title { max-width: 22ch; margin: 0 0 var(--sp-3); }
-  .guide__dek { color: var(--muted); max-width: 60ch; margin: 0 0 var(--sp-4); }
-  .guide__cta { display: inline-block; }
 
   /* --- responsive --- */
   @media (max-width: 900px) {
