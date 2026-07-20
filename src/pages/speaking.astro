@@ -30,10 +30,6 @@ const audiences = [
   'Policy organizations & think tanks',
   'Corporate & executive audiences',
 ];
-
-const mailto =
-  'mailto:bcutsinger@fau.edu?subject=' +
-  encodeURIComponent('Speaking inquiry');
 ---
 <MarketingLayout
   title="Speaking — Bryan Cutsinger"
@@ -55,7 +51,6 @@ const mailto =
     <div class="book-lead">
       <div class="book-lead__cta">
         <Button href="#book" variant="primary">Check availability</Button>
-        <a class="book-lead__mail" href={mailto}>or email me directly ↗</a>
       </div>
       <p class="book-lead__fee">
         <span class="label label--accent">Fees</span>
@@ -169,8 +164,7 @@ const mailto =
     <div class="head"><p class="kicker">Get in touch</p><h2>Invite Bryan to speak.</h2>
       <p class="lede book-lede">
         Tell me about your event and I'll get back to you personally. The more
-        detail you can share, the faster I can say yes. Prefer email? Reach me at
-        <a href={mailto}>bcutsinger@fau.edu</a>.
+        detail you can share, the faster I can respond.
       </p>
     </div>
     <BookingForm />
@@ -181,7 +175,6 @@ const mailto =
   .head { margin-bottom: var(--sp-8); }
   .head h2 { max-width: 22ch; }
   .head .lede { margin-top: var(--sp-3); }
-  :global(.section--ink) .book-lede a { color: var(--accent-on-ink); }
 
   /* booking lead */
   .book-lead {
@@ -191,7 +184,6 @@ const mailto =
     align-items: center;
   }
   .book-lead__cta { display: flex; align-items: center; gap: var(--sp-4); flex-wrap: wrap; }
-  .book-lead__mail { font-family: var(--font-label); font-size: 0.9rem; }
   .book-lead__fee { margin: 0; color: var(--muted); max-width: 60ch; }
   .book-lead__fee .label { display: block; margin-bottom: var(--sp-2); }
 
