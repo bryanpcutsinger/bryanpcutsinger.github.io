@@ -57,6 +57,18 @@ export default defineConfig({
       // colleague (deploy-ready, not a public announcement). Delete this `head` block
       // to allow search engines to index the site at full public launch.
       head: [
+        {
+          tag: 'script',
+          attrs: {
+            async: true,
+            src: 'https://plausible.io/js/pa-pY8jegLqRzIo6igzZB1uM.js',
+          },
+        },
+        {
+          tag: 'script',
+          content:
+            'window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()',
+        },
         { tag: 'meta', attrs: { name: 'robots', content: 'noindex, nofollow' } },
       ],
       description:
