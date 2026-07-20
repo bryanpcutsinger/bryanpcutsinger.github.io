@@ -2,41 +2,18 @@
 // "Invite me to speak" inquiry form. If a Web3Forms key is configured, the form
 // submits directly. Without a key, it drafts a complete email from the entered
 // fields so the page remains useful on a static host.
-const ACCESS_KEY = '';
+const ACCESS_KEY = import.meta.env.PUBLIC_WEB3FORMS_ACCESS_KEY ?? '';
 
 interface Props {
   email?: string;
 }
-const { email = 'bcutsinger@fau.edu' } = Astro.props;
+const { email = 'bryanpcutsinger@gmail.com' } = Astro.props;
 const hasWeb3Forms = ACCESS_KEY.length > 0;
 const formAction = hasWeb3Forms
   ? 'https://api.web3forms.com/submit'
   : `mailto:${email}?subject=Speaking%20inquiry`;
 const submitLabel = hasWeb3Forms ? 'Send inquiry' : 'Draft email';
 
-const audienceOptions = [
-  'University / academic',
-  'Conference',
-  'Policy / think tank',
-  'Student organization',
-  'Corporate / professional',
-  'Other',
-];
-const formatOptions = [
-  'Keynote',
-  'Lecture',
-  'Panel',
-  'Workshop',
-  'Virtual',
-  'Not sure yet',
-];
-const budgetOptions = [
-  'Prefer not to say',
-  'Under $2,500',
-  '$2,500–$5,000',
-  '$5,000–$10,000',
-  '$10,000+',
-];
 ---
 <form
   class="booking-form"
@@ -50,7 +27,7 @@ const budgetOptions = [
   <input type="hidden" name="subject" value="Speaking inquiry - bryancutsinger.com" />
   <input type="hidden" name="from_name" value="Speaking inquiry" />
   <!-- honeypot: bots fill this; humans never see it -->
-  <input type="checkbox" name="botcheck" class="visually-hidden" tabindex="-1" autocomplete="off" />
+  <input type="checkbox" name="botcheck" class="visually-hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />
 
   <div class="booking-form__grid">
     <label class="field">
@@ -66,45 +43,12 @@ const budgetOptions = [
       <input type="text" name="organization" required />
     </label>
     <label class="field">
-      <span>Your role / title</span>
-      <input type="text" name="role" />
-    </label>
-    <label class="field">
-      <span>Event name</span>
-      <input type="text" name="event_name" />
-    </label>
-    <label class="field">
       <span>Event date(s)</span>
       <input type="text" name="event_dates" placeholder="e.g. Oct 2026, or flexible" />
     </label>
     <label class="field">
       <span>Location</span>
       <input type="text" name="location" placeholder="City, or virtual" />
-    </label>
-    <label class="field">
-      <span>Audience type</span>
-      <select name="audience_type">
-        <option value="">Select…</option>
-        {audienceOptions.map((o) => <option value={o}>{o}</option>)}
-      </select>
-    </label>
-    <label class="field">
-      <span>Estimated audience size</span>
-      <input type="text" name="audience_size" />
-    </label>
-    <label class="field">
-      <span>Format</span>
-      <select name="format">
-        <option value="">Select…</option>
-        {formatOptions.map((o) => <option value={o}>{o}</option>)}
-      </select>
-    </label>
-    <label class="field field--full">
-      <span>Budget range</span>
-      <select name="budget">
-        <option value="">Select…</option>
-        {budgetOptions.map((o) => <option value={o}>{o}</option>)}
-      </select>
     </label>
     <label class="field field--full">
       <span>Tell me about the event and what you're hoping for <em>*</em></span>
@@ -114,9 +58,6 @@ const budgetOptions = [
 
   <div class="booking-form__actions">
     <button type="submit" class="booking-form__submit">{submitLabel}</button>
-    <p class="booking-form__alt">
-      Prefer email? <a href={`mailto:${email}?subject=Speaking%20inquiry`}>{email}</a>
-    </p>
   </div>
 
   <p class="booking-form__status" data-form-status role="status" aria-live="polite" hidden></p>
@@ -136,14 +77,8 @@ const budgetOptions = [
         ['name', 'Name'],
         ['email', 'Email'],
         ['organization', 'Organization / institution'],
-        ['role', 'Role / title'],
-        ['event_name', 'Event name'],
         ['event_dates', 'Event date(s)'],
         ['location', 'Location'],
-        ['audience_type', 'Audience type'],
-        ['audience_size', 'Estimated audience size'],
-        ['format', 'Format'],
-        ['budget', 'Budget range'],
         ['message', 'Message'],
       ];
       const body = labels

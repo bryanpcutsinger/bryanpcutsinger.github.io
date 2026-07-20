@@ -4,7 +4,8 @@ import PageHead from '../components/marketing/PageHead.astro';
 import Section from '../components/marketing/Section.astro';
 import BookingForm from '../components/marketing/BookingForm.astro';
 
-const email = 'bcutsinger@fau.edu';
+const generalEmail = 'bcutsinger@fau.edu';
+const bookingEmail = 'bryanpcutsinger@gmail.com';
 ---
 <MarketingLayout
   title="Contact — Bryan Cutsinger"
@@ -26,7 +27,7 @@ const email = 'bcutsinger@fau.edu';
         Tell me about your event below — the more detail, the faster I can respond.
       </p>
     </div>
-    <BookingForm email={email} />
+    <BookingForm email={bookingEmail} />
   </Section>
 
   <!-- General / media -->
@@ -40,7 +41,7 @@ const email = 'bcutsinger@fau.edu';
       that isn't a speaking inquiry, email me directly:
     </p>
     <p class="contact-email">
-      <a href={`mailto:${email}`}>{email}</a>
+      <a href={`mailto:${generalEmail}`}>{generalEmail}</a>
     </p>
     <p class="contact-note">
       For time-sensitive media requests, include your deadline and topic in the
