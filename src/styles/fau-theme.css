@@ -37,9 +37,9 @@
   --sl-font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas,
     monospace;
 
-  /* Match the marketing header's height (site.css --header-h: 78px) so the ink
+  /* Match the marketing header's height (site.css --header-h: 76px) so the ink
      bar reads as the SAME bar when moving between the two systems. */
-  --sl-nav-height: 4.875rem;
+  --sl-nav-height: 4.75rem;
 }
 
 /* Force a single light appearance so the brand neutrals read consistently, and
@@ -127,6 +127,19 @@ h1.content-title,
 .header {
   background-color: var(--fau-blue) !important;
   border-bottom: 1px solid rgba(243, 239, 232, 0.1);
+}
+/* Constrain the header CONTENTS to the marketing container (site.css
+   --container: 1080px incl. 1.5rem side padding) so the wordmark and nav sit
+   exactly where the marketing header puts them, instead of Starlight's default
+   grid that spreads them to the viewport edges (it aligns title-over-sidebar,
+   a docs-app look). The ink bar itself stays full-bleed. */
+@media (min-width: 50rem) {
+  header.header > div.header {
+    display: flex;
+    justify-content: space-between;
+    max-width: calc(1080px - 3rem);
+    margin-inline: auto;
+  }
 }
 /* Search button, social, icons -> readable on the ink bar */
 .header a,
