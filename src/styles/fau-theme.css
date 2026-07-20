@@ -36,6 +36,10 @@
     'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   --sl-font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas,
     monospace;
+
+  /* Match the marketing header's height (site.css --header-h: 78px) so the ink
+     bar reads as the SAME bar when moving between the two systems. */
+  --sl-nav-height: 4.875rem;
 }
 
 /* Force a single light appearance so the brand neutrals read consistently, and
@@ -66,7 +70,7 @@
   --sl-color-text-accent: #22453b;
   --sl-color-bg: #fbfaf7;         /* page background -> bright archival paper */
   --sl-color-bg-nav: #1a1917;     /* top header bar -> ink */
-  --sl-color-bg-sidebar: #ffffff;
+  --sl-color-bg-sidebar: #fbfaf7; /* same paper as the page — one surface, not a panel */
   --sl-color-hairline: #e4e1da;
   --sl-color-hairline-light: #eae7e0;
   --sl-color-hairline-shade: #e4e1da;
@@ -81,7 +85,10 @@ starlight-theme-select {
    Typography: Fraunces (display) headings in ink; Newsreader reading prose;
    Inter UI/nav (via --sl-font); IBM Plex Mono code.
    -------------------------------------------------------------------- */
+/* h1#_top is Starlight's page-title <h1> (id from PAGE_TITLE_ID) — it lives
+   OUTSIDE .sl-markdown-content, so without this selector it rendered in Inter. */
 .sl-markdown-content :is(h1, h2, h3, h4, h5, h6),
+h1#_top,
 h1.content-title,
 .hero h1 {
   font-family: 'Fraunces Variable', Georgia, 'Times New Roman', serif !important;
@@ -138,6 +145,11 @@ starlight-menu-button button {
   color: #ffffff;
   background-color: rgba(255, 255, 255, 0.12);
 }
+/* Starlight draws a vertical divider after the social-icons slot (between it
+   and the hidden theme/language selects) — a stray bar on our ink header. */
+.header .social-icons::after {
+  display: none;
+}
 
 /* --------------------------------------------------------------------
    Left sidebar nav: ink links, brass current page, soft warm hover
@@ -172,6 +184,26 @@ starlight-menu-button button {
 .right-sidebar a[aria-current='true'] {
   color: var(--fau-red);
   border-inline-start-color: var(--fau-red);
+}
+/* "On this page" -> the marketing kicker voice: mono, uppercase, short rule */
+.right-sidebar h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-family: var(--sl-font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fau-red);
+}
+.right-sidebar h2::before {
+  content: '';
+  inline-size: 1.75rem;
+  block-size: 1px;
+  background: currentColor;
+  flex: none;
+  opacity: 0.85;
 }
 
 /* --------------------------------------------------------------------
@@ -251,6 +283,45 @@ starlight-menu-button button {
 }
 
 /* --------------------------------------------------------------------
+   Prev/next pager: same card language as LinkCards — hairline, 4px corners,
+   lift on hover; "Previous / Next" labels in the mono kicker voice and the
+   destination title in Fraunces (Starlight's default is a sans card with a
+   drop shadow, which reads as another design system).
+   -------------------------------------------------------------------- */
+.pagination-links a {
+  border-radius: 4px;
+  border: 1px solid var(--fau-gray);
+  box-shadow: none;
+  background: #ffffff;
+  transition: transform 0.18s ease, border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+.pagination-links a:hover {
+  transform: translateY(-2px);
+  border-color: var(--fau-red);
+  box-shadow: 0 8px 30px rgba(26, 28, 30, 0.08);
+}
+.pagination-links a > span {
+  font-family: var(--sl-font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fau-stone);
+}
+.pagination-links .link-title {
+  font-family: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
+  font-weight: 460;
+  font-size: 1.35rem;
+  letter-spacing: -0.014em;
+  text-transform: none;
+  color: var(--fau-blue);
+}
+.pagination-links svg {
+  color: var(--fau-red);
+}
+
+/* --------------------------------------------------------------------
    Softened 4px corners everywhere (matches the marketing brand's --radius).
    -------------------------------------------------------------------- */
 .sl-markdown-content :is(pre, code, img, blockquote),
@@ -268,10 +339,24 @@ details {
   color: var(--fau-dark-gray);
 }
 
-/* Hero (splash) call-to-action buttons -> brand 4px, not uppercase */
+/* Hero (splash) tagline -> Newsreader lead paragraph, like the marketing heroes
+   (Starlight sets it in the UI sans, which is the loudest "different site" tell
+   on the /ai/ landing page). */
+.hero .tagline {
+  font-family: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
+  font-size: 1.25rem;
+  line-height: 1.55;
+  color: var(--fau-dark-gray);
+}
+
+/* Hero (splash) call-to-action buttons -> brand 4px, not uppercase; type
+   matches the marketing Button.astro (Newsreader 550 at 0.9375rem). */
 .hero .sl-link-button {
   border-radius: 4px;
-  font-weight: 600;
+  font-family: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
+  font-weight: 550;
+  font-size: 0.9375rem;
+  letter-spacing: 0.005em;
 }
 .hero .sl-link-button.primary {
   background-color: var(--fau-link);

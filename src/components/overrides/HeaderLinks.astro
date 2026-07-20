@@ -1,40 +1,87 @@
 ---
 // Overrides Starlight's `SocialIcons` slot (empty — no socials configured) to
-// add minimal nav links from the /ai/ guides BACK to the marketing site, so the
-// two systems stay navigable in both directions. Styled white-on-ink to match the
-// header bar (the wordmark/SiteTitle already links to `/`). Order mirrors the
-// marketing SiteHeader.
+// reproduce the marketing SiteHeader's nav inside the /ai/ guides: same links
+// (including "AI", shown active since this chrome only renders under /ai/),
+// same Newsreader nav type, and the green "Invite me to speak" CTA. Values
+// mirror site.css tokens (--on-ink #f6f4ee, --accent #22453b, --accent-on-ink
+// #b8d0c6) — Starlight pages don't load site.css, so they're inlined here.
 const links = [
   { label: 'Speaking', href: '/speaking/' },
   { label: 'Writing', href: '/writing/' },
   { label: 'Research', href: '/research/' },
   { label: 'Teaching', href: '/teaching/' },
+  { label: 'AI', href: '/ai/', active: true },
   { label: 'About', href: '/about/' },
   { label: 'Contact', href: '/contact/' },
 ];
 ---
 <nav class="header-links" aria-label="Site">
-  {links.map((l) => <a href={l.href}>{l.label}</a>)}
+  {
+    links.map((l) => (
+      <a
+        href={l.href}
+        class:list={['nav-link', { 'is-active': l.active }]}
+        aria-current={l.active ? 'page' : undefined}
+      >
+        {l.label}
+      </a>
+    ))
+  }
+  <a href="/speaking/" class="nav-cta">Invite me to speak</a>
 </nav>
 
 <style>
   .header-links {
     display: flex;
     align-items: center;
-    gap: 1.25rem;
+    gap: 1.5rem;
   }
-  .header-links a {
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 0.9rem;
+  .nav-link {
+    font-family: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
+    font-size: 0.95rem;
     font-weight: 500;
+    color: #f6f4ee;
+    text-decoration: none;
     white-space: nowrap;
+    padding-bottom: 2px;
+    border-bottom: 2px solid transparent;
   }
-  .header-links a:hover {
-    text-decoration: underline;
-    text-underline-offset: 3px;
+  .nav-link:hover {
+    color: #ffffff;
+    border-bottom-color: rgba(243, 239, 232, 0.4);
+  }
+  .nav-link.is-active {
+    border-bottom-color: #b8d0c6;
+  }
+  /* the marketing Button.astro btn--primary, inlined */
+  .nav-cta {
+    display: inline-block;
+    font-family: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
+    font-weight: 550;
+    font-size: 0.9375rem;
+    letter-spacing: 0.005em;
+    line-height: 1;
+    padding: 15px 28px;
+    border-radius: 4px;
+    text-decoration: none;
+    white-space: nowrap;
+    background: #22453b;
+    color: #f6f4ee;
+    border: 1px solid #22453b;
+    transition: background-color 0.18s ease, color 0.18s ease,
+      border-color 0.18s ease;
+  }
+  .nav-cta:hover {
+    background: #163029;
+    border-color: #163029;
+    color: #ffffff;
   }
   /* hide on narrow screens; Starlight's mobile menu covers navigation there */
+  @media (max-width: 68rem) {
+    .nav-cta {
+      display: none;
+    }
+  }
   @media (max-width: 50rem) {
     .header-links {
       display: none;
