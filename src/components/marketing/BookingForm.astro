@@ -1,31 +1,27 @@
 ---
-// "Invite me to speak" inquiry form. If a Web3Forms key is configured, the form
-// submits directly. Without a key, it drafts a complete email from the entered
-// fields so the page remains useful on a static host.
+// Direct inquiry form. The recipient is configured in Web3Forms, so no email
+// address is emitted in the page HTML or stored in this public repository.
 const ACCESS_KEY = import.meta.env.PUBLIC_WEB3FORMS_ACCESS_KEY ?? '';
 
 interface Props {
-  email?: string;
+  subject?: string;
 }
-const { email = 'bryanpcutsinger@gmail.com' } = Astro.props;
+const { subject = 'Speaking inquiry - bryancutsinger.com' } = Astro.props;
 const hasWeb3Forms = ACCESS_KEY.length > 0;
-const formAction = hasWeb3Forms
-  ? 'https://api.web3forms.com/submit'
-  : `mailto:${email}?subject=Speaking%20inquiry`;
-const submitLabel = hasWeb3Forms ? 'Send inquiry' : 'Draft email';
+const formAction = hasWeb3Forms ? 'https://api.web3forms.com/submit' : undefined;
+const submitLabel = hasWeb3Forms ? 'Send inquiry' : 'Form temporarily unavailable';
 
 ---
 <form
   class="booking-form"
   action={formAction}
   method="POST"
-  data-form-mode={hasWeb3Forms ? 'web3forms' : 'mailto'}
-  data-email={email}
+  data-form-mode={hasWeb3Forms ? 'web3forms' : 'unavailable'}
   data-booking-form
 >
   {hasWeb3Forms && <input type="hidden" name="access_key" value={ACCESS_KEY} />}
-  <input type="hidden" name="subject" value="Speaking inquiry - bryancutsinger.com" />
-  <input type="hidden" name="from_name" value="Speaking inquiry" />
+  <input type="hidden" name="subject" value={subject} />
+  <input type="hidden" name="from_name" value="Website inquiry" />
   <!-- honeypot: bots fill this; humans never see it -->
   <input type="checkbox" name="botcheck" class="visually-hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />
 
@@ -57,7 +53,7 @@ const submitLabel = hasWeb3Forms ? 'Send inquiry' : 'Draft email';
   </div>
 
   <div class="booking-form__actions">
-    <button type="submit" class="booking-form__submit">{submitLabel}</button>
+    <button type="submit" class="booking-form__submit" disabled={!hasWeb3Forms}>{submitLabel}</button>
   </div>
 
   <p class="booking-form__status" data-form-status role="status" aria-live="polite" hidden></p>
@@ -70,30 +66,12 @@ const submitLabel = hasWeb3Forms ? 'Send inquiry' : 'Draft email';
   form?.addEventListener('submit', async (e) => {
     const mode = form.dataset.formMode;
 
-    if (mode === 'mailto') {
+    if (mode !== 'web3forms') {
       e.preventDefault();
-      const data = new FormData(form);
-      const labels = [
-        ['name', 'Name'],
-        ['email', 'Email'],
-        ['organization', 'Organization / institution'],
-        ['event_dates', 'Event date(s)'],
-        ['location', 'Location'],
-        ['message', 'Message'],
-      ];
-      const body = labels
-        .map(([key, label]) => {
-          const value = String(data.get(key) || '').trim();
-          return value ? `${label}: ${value}` : '';
-        })
-        .filter(Boolean)
-        .join('\n\n');
-      const to = form.dataset.email || '';
-      window.location.href = `mailto:${encodeURIComponent(to)}?subject=Speaking%20inquiry&body=${encodeURIComponent(body)}`;
       if (status) {
         status.hidden = false;
-        status.textContent = 'Your email app should open with the inquiry details.';
-        status.className = 'booking-form__status is-success';
+        status.textContent = 'The inquiry form is temporarily unavailable. Please try again later.';
+        status.className = 'booking-form__status is-error';
       }
       return;
     }
@@ -127,7 +105,7 @@ const submitLabel = hasWeb3Forms ? 'Send inquiry' : 'Draft email';
     } catch (err) {
       if (status) {
         status.textContent =
-          'Something went wrong. Please email me directly and I’ll respond right away.';
+          'Something went wrong. Please try again later.';
         status.className = 'booking-form__status is-error';
       }
     }

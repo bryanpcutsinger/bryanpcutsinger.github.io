@@ -1,34 +1,26 @@
 ---
-// EmailCapture — a quiet essays/updates signup. The conversion/funnel piece the
-// site otherwise lacked. GRACEFUL + honest: until a real provider endpoint exists
-// it degrades to a mailto so it's never a dead form. Pass `action` (a Web3Forms /
-// Buttondown / ConvertKit POST URL) to make it live.
-//
-// [PLACEHOLDER] Bryan still owes a real list provider + endpoint. Until then this
-// posts nowhere; the mailto fallback below keeps it functional.
+// EmailCapture — reserved for a future newsletter. It renders only after a real
+// provider endpoint exists; there is no public email or mailto fallback.
 interface Props {
   heading?: string;
   blurb?: string;
-  action?: string; // real form endpoint; when absent, uses the mailto fallback
-  mailto?: string;
+  action?: string;
 }
 const {
   heading = 'Get new essays by email',
   blurb = 'Occasional notes on money, inflation, and the political economy of policy. No spam; unsubscribe anytime.',
   action,
-  mailto = 'bcutsinger@fau.edu',
 } = Astro.props;
 const live = !!action;
 ---
-<div class="capture">
-  <div class="capture__copy">
-    <p class="kicker">Stay in touch</p>
-    <h2 class="capture__heading">{heading}</h2>
-    <p class="capture__blurb">{blurb}</p>
-  </div>
-
-  {
-    live ? (
+{
+  live && (
+    <div class="capture">
+      <div class="capture__copy">
+        <p class="kicker">Stay in touch</p>
+        <h2 class="capture__heading">{heading}</h2>
+        <p class="capture__blurb">{blurb}</p>
+      </div>
       <form class="capture__form" action={action} method="POST">
         <label class="visually-hidden" for="capture-email">
           Email address
@@ -44,18 +36,9 @@ const live = !!action;
         />
         <button class="capture__btn" type="submit">Subscribe</button>
       </form>
-    ) : (
-      <p class="capture__fallback">
-        <a
-          href={`mailto:${mailto}?subject=${encodeURIComponent('Add me to your essays list')}`}
-        >
-          Email me to be added to the list ↗
-        </a>
-        <span class="capture__soon label">Signup form coming soon</span>
-      </p>
-    )
-  }
-</div>
+    </div>
+  )
+}
 
 <style>
   .capture {
@@ -110,15 +93,6 @@ const live = !!action;
     transition: background-color 0.18s ease;
   }
   .capture__btn:hover { background: var(--accent-hover); }
-
-  .capture__fallback {
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--sp-2);
-    align-items: flex-start;
-  }
-  .capture__soon { color: var(--muted); }
 
   @media (max-width: 720px) {
     .capture {
