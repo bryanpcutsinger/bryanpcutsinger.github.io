@@ -1,0 +1,386 @@
+<!doctype html>
+<!--
+  t07a-ep10-7-longrun-process-interactive.html
+  Interactive version of the T7a long-run-as-a-process figure (REDRAW of E&P
+  Fig 10-7, p.210; course-adapted numbers per the brief Section C invariants).
+  Family F2 (before/after shift; cause = a demand increase): ONE demand curve is
+  dragged rightward over a market with TWO supplies of different response speed
+  that share a common initial equilibrium. Both supply equilibria track live so
+  the short-run overshoot and the long-run settle are always both on screen.
+    D:    P = a - Q          (a = the demand intercept the slider sweeps, 40..54)
+    S_SR (STEEP, short run, incumbents only):        P = Q
+    S_LR (FLAT,  long run, with entry):              P = 15 + 0.25Q
+  EQUILIBRIA recomputed from the line equations at EVERY slider value (never
+  keyframed): S_SR n D solves Q = a - Q -> Q = a/2, P = a/2;
+              S_LR n D solves 15 + 0.25Q = a - Q -> Q = (a-15)/1.25, P = a - Q.
+  At a = 40 BOTH equal exactly E0 = (20, $20). At a = 50 (the +10 shift, snap):
+  S_SR -> (25, $25) [short-run price up $5]; S_LR -> (28, $22) [long-run up $2].
+  The STEEP short-run supply overshoots the price; the FLAT long-run supply (with
+  entry) settles it back down -- $25 > $22 > $20 while quantity rises 20 -> 25 -> 28.
+  TIE-BREAKS / CONVENTIONS:
+  - Range a in [40, 54], step 1, SNAP at a = 50 (the D2 state). a = 40 is the base
+    (both supplies meet demand at E0); a > 50 is "beyond D2".
+  - The pre-shift demand D1 (a = 40) stays drawn as a MUTED DASHED GHOST; the
+    draggable active demand rides on top of it at the base state.
+  - S_SR is the horizontal sum of incumbent firms' MC the sibling t07a-market-supply
+    figure builds; this figure does NOT redraw that three-firm construction.
+  - Verbal-marginal course: NO surplus/welfare shading. The only emphasis marks are
+    the two outcome dots + their droplines and the rightward demand-shift arrow.
+  Static-base architecture: the initial markup below is the a = 50 (post-shift)
+  state -- the same picture as the slide-track SVG -- so the no-JS DOM shows the
+  complete base figure; the script only re-attaches drag/keyboard/readout.
+  The static SVG t07a-ep10-7-longrun-process.svg is the <noscript> fallback.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The long run as a process - drag the demand curve to overshoot, then settle</title>
+<style>
+  :root{
+    --font-body: Georgia, 'Times New Roman', serif;
+    --paper:   #f7f4ef;   /* card background              */
+    --surface: #fdfcf9;   /* plot backing                */
+    --ink:     #1a1c1e;   /* supply curves + headings     */
+    --muted:   #6b6459;   /* axes, ticks, ghost demand    */
+    --accent:  #b3402a;   /* outcomes, shift arrow, jumps */
+    --accent2: #b07a2c;   /* the draggable demand + focus (house warm gold) */
+    --grid:    #e3ddd3;
+  }
+  html,body{margin:0;padding:0;background:var(--paper);font-family:var(--font-body);}
+  .wrap{max-width:560px;margin:0 auto;padding:10px 8px 6px;}
+  svg{display:block;width:100%;height:auto;background:var(--surface);
+      border:1px solid var(--grid);border-radius:4px;}
+  .hint{color:var(--muted);font-size:13px;margin:6px 2px 2px;text-align:center;}
+  .fallback{color:var(--muted);font-size:14px;padding:8px;}
+  .fallback a{color:var(--ink);}
+  text{font-family:var(--font-body);}
+  .axis{stroke:var(--muted);stroke-width:1.4;}
+  .tick{fill:var(--muted);font-size:11px;}
+  .axlbl{fill:var(--muted);font-size:12px;}
+  .curve{stroke:var(--ink);stroke-width:2.6;fill:none;stroke-linecap:round;}
+  .curvelbl{fill:var(--ink);font-size:11.5px;font-style:italic;}
+  .ghost{stroke:var(--muted);stroke-width:2;stroke-dasharray:7 5;opacity:.55;fill:none;}
+  .ghostlbl{fill:var(--muted);font-size:11.5px;font-style:italic;opacity:.8;}
+  .demand{stroke:var(--accent2);stroke-width:3;fill:none;stroke-linecap:round;}
+  .demandhit{stroke:transparent;stroke-width:24;cursor:ew-resize;fill:none;}
+  .demandlbl{fill:var(--accent2);font-size:12px;font-weight:bold;}
+  .drop{stroke:var(--muted);stroke-width:1;stroke-dasharray:3 4;opacity:.8;}
+  .dot{fill:var(--ink);}
+  .outdot{fill:var(--accent);}
+  .pxlbl{fill:var(--accent);font-size:10.5px;font-weight:bold;}
+  .p0lbl{fill:var(--muted);font-size:10.5px;}
+  .shift{stroke:var(--accent);stroke-width:2;}
+  .state{fill:var(--muted);font-size:12px;}
+  .takeaway{fill:var(--accent);font-size:12.5px;font-weight:bold;}
+  .sep{stroke:var(--grid);stroke-width:1;}
+  #demFocus:focus{outline:none;}
+  #demFocus:focus + .focusring{opacity:1;}
+  .focusring{opacity:0;stroke:var(--accent2);stroke-width:1.5;fill:none;
+             stroke-dasharray:3 3;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <svg id="fig" viewBox="0 0 520 486" role="group"
+       aria-label="A market with one demand curve and two supply curves that share a common starting equilibrium at a price of 20 dollars and a quantity of 20. One supply is steep (the short run, in which only the firms already in the market can respond); the other is flatter (the long run, in which new firms and equipment enter). Drag the demand curve to the right to increase demand: the price first overshoots up the steep short-run supply, then settles back down the flatter long-run supply as entry comes on. The long run is a process, not an instant.">
+
+    <defs>
+      <marker id="ep107ah" viewBox="0 0 10 10" refX="8" refY="5"
+              markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M0,0 L10,5 L0,10 z" fill="#b3402a"/>
+      </marker>
+    </defs>
+
+    <!-- ====================== static base (a = 50 state) ======================
+         Geometry: X(q) = 58 + 10.4q  (q 0..40 -> 58..474)
+                   Y(p) = 366 - 8.9p  (p 0..36 -> 366..45.6)
+         E0 (20,20)=(266,188); S_SR outcome (25,25)=(318,143.5);
+         S_LR outcome (28,22)=(349.2,170.2).                                   -->
+
+    <!-- axes -->
+    <line class="axis" x1="58" y1="40"  x2="58"  y2="366" marker-end="url(#ep107ah)"/>
+    <line class="axis" x1="58" y1="366" x2="486" y2="366" marker-end="url(#ep107ah)"/>
+
+    <!-- droplines (under the curves): E0 + two outcomes -->
+    <line class="drop" x1="266" y1="188"   x2="58"  y2="188"/>
+    <line class="drop" x1="266" y1="188"   x2="266" y2="366"/>
+    <line id="dropHsr" class="drop" x1="318"   y1="143.5" x2="58"    y2="143.5"/>
+    <line id="dropVsr" class="drop" x1="318"   y1="143.5" x2="318"   y2="366"/>
+    <line id="dropHlr" class="drop" x1="349.2" y1="170.2" x2="58"    y2="170.2"/>
+    <line id="dropVlr" class="drop" x1="349.2" y1="170.2" x2="349.2" y2="366"/>
+
+    <!-- ghost pre-shift demand D1 (a = 40): (4,36)->(40,0) = (99.6,45.6)->(474,366) -->
+    <line class="ghost" x1="99.6" y1="45.6" x2="474" y2="366"/>
+    <text class="ghostlbl" x="478" y="368">D&#8321;</text>
+
+    <!-- rightward demand-shift arrow (at price 13: ghost Q=27 -> active Q=a-13);
+         it lives in the open band between the ghost and the active demand, so no
+         text label rides with it -- the gold draggable line, hint, and readout
+         carry "demand increase" instead -->
+    <line id="shiftArr" class="shift" x1="340" y1="250.3" x2="441" y2="250.3" marker-end="url(#ep107ah)"/>
+
+    <!-- supplies (fixed) -->
+    <line class="curve" x1="58" y1="366" x2="349.2" y2="116.8"/>  <!-- S_SR steep -->
+    <line class="curve" x1="58" y1="232.5" x2="474" y2="143.5"/>  <!-- S_LR flat  -->
+    <!-- short-run / long-run idiom, placed in line-free bands the demand never
+         sweeps (full "incumbents only / with entry" idiom lives in readout + aria) -->
+    <text class="curvelbl" x="300" y="104" text-anchor="middle">Short-run supply</text>
+    <text class="curvelbl" x="470" y="134" text-anchor="end">Long-run supply</text>
+
+    <!-- active (draggable) demand D, initial a = 50: (14,36)->(40,10) -->
+    <line id="demand"    class="demand"    x1="203.6" y1="45.6" x2="474" y2="277"/>
+    <line id="demandHit" class="demandhit" x1="203.6" y1="45.6" x2="474" y2="277"/>
+    <text id="demandLbl" class="demandlbl" x="478" y="281">D&#8322;</text>
+
+    <!-- equilibrium dots: E0 (fixed reference) + two moving outcomes -->
+    <circle class="dot" cx="266" cy="188" r="3.6"/>
+    <circle id="outDotSr" class="outdot" cx="318"   cy="143.5" r="4"/>
+    <circle id="outDotLr" class="outdot" cx="349.2" cy="170.2" r="4"/>
+
+    <!-- price-axis marks: P0 (fixed) + two live outcome prices -->
+    <text class="p0lbl" x="54" y="191" text-anchor="end">$20.00</text>
+    <text id="pxLblSr" class="pxlbl" x="54" y="147" text-anchor="end">$25.00</text>
+    <text id="pxLblLr" class="pxlbl" x="54" y="173" text-anchor="end">$22.00</text>
+
+    <!-- axis titles + a few quantity ticks -->
+    <text class="tick" x="266"   y="380" text-anchor="middle">20</text>
+    <text class="tick" x="318"   y="380" text-anchor="middle">25</text>
+    <text class="tick" x="349.2" y="380" text-anchor="middle">28</text>
+    <text class="axlbl" x="290" y="398" text-anchor="middle">Market quantity</text>
+    <text class="axlbl" transform="rotate(-90 20 205)" x="20" y="205"
+          text-anchor="middle">Price (dollars)</text>
+
+    <!-- keyboard proxy for the demand line -->
+    <rect id="demFocus" x="150" y="120" width="200" height="120" fill="transparent"
+          tabindex="0" role="slider"
+          aria-label="Demand level. Drag right to increase demand from the base through the plus-10 shift and beyond."
+          aria-valuemin="40" aria-valuemax="54" aria-valuenow="50"
+          aria-valuetext="Demand up by 10: short-run price $25 (up $5), long-run price $22 (up $2)."/>
+    <rect id="focusRing" class="focusring" x="146" y="116" width="208" height="128" rx="4"/>
+
+    <!-- readout band: muted state (2 rows) + accent takeaway (2 rows) -->
+    <line class="sep" x1="16" y1="410" x2="504" y2="410"/>
+    <text class="state" text-anchor="middle">
+      <tspan id="state1" x="260" y="428">Demand up by 10: short-run price $25 (up $5),</tspan>
+      <tspan id="state2" x="260" y="443">long-run price $22 (up $2).</tspan>
+    </text>
+    <text class="takeaway" text-anchor="middle">
+      <tspan id="take1" x="260" y="465">The price overshoots to $25 while only incumbents can</tspan>
+      <tspan id="take2" x="260" y="480">respond, then settles to $22 as entry flattens supply.</tspan>
+    </text>
+  </svg>
+
+  <p class="hint">Drag the gold demand curve to the right (or focus it and use the
+    arrow keys). Watch the price overshoot on the steep short-run supply, then
+    settle on the flat long-run supply.</p>
+
+  <noscript>
+    <p class="fallback">Interactive view needs JavaScript. See the
+      <a href="t07a-ep10-7-longrun-process.svg">static version of this figure</a>
+      (it shows the short-run overshoot and the long-run settle at the plus-10
+      demand shift).</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  // ---- geometry (must mirror the base markup) ----
+  var X0 = 58, SX = 10.4;               // x px origin; px per unit quantity
+  var YAX = 366, SY = 8.9;              // x-axis foot; px per dollar
+  function X (q) { return X0 + q * SX; }
+  function Y (p) { return YAX - p * SY; }
+
+  // ---- economics (brief Section C invariants) ----
+  // D: P = a - Q  (a = intercept the slider sweeps).
+  // S_SR steep (short run): P = Q.
+  // S_LR flat  (long run, with entry): P = 15 + 0.25Q.
+  // Equilibria recomputed live at EVERY a (never keyframed):
+  //   S_SR n D: Q = a - Q          -> Qsr = a/2,        Psr = a/2
+  //   S_LR n D: 15 + 0.25Q = a - Q -> Qlr = (a-15)/1.25, Plr = a - Qlr
+  // a = 40 -> both at E0 (20,20); a = 50 -> (25,25) & (28,22).
+  var AMIN = 40, AMAX = 54, STEP = 1, ASNAP = 50, P0 = 20;
+  var a = 50;
+
+  var svg = document.getElementById('fig');
+  var $ = function (id) { return document.getElementById(id); };
+
+  function eqSR (aa) { var q = aa / 2;            return { q: q, p: q }; }
+  function eqLR (aa) { var q = (aa - 15) / 1.25;  return { q: q, p: aa - q }; }
+  function money (v) { return '$' + v.toFixed(2); }
+  // active-demand segment, clipped to the plot box [0,40] x [0,36]:
+  // top end at P=36 (q = a-36, always > 0 for a >= 40), bottom end at Q=40.
+  function demandSeg (aa) {
+    return { x1: X(aa - 36), y1: Y(36), x2: X(40), y2: Y(aa - 40) };
+  }
+
+  // ---- readout strings: the three pinned states are verbatim; 40<a<50 gets a
+  //      live transitional line that never contradicts the pinned states. ----
+  function strings (aa) {
+    var esr = eqSR(aa), elr = eqLR(aa), out = {};
+    if (Math.abs(aa - AMIN) < 1e-9) {                 // base (D1)
+      out.state = 'Both supplies meet demand at $20 and 20 units.';
+      out.take  = 'Start here: one equilibrium, a steep short-run and a flat ' +
+                  'long-run supply waiting to be tested.';
+    } else if (Math.abs(aa - ASNAP) < 1e-9) {         // the +10 shift (D2), snap
+      out.state = 'Demand up by 10: short-run price $25 (up $5), ' +
+                  'long-run price $22 (up $2).';
+      out.take  = 'The price overshoots to $25 while only incumbents can ' +
+                  'respond, then settles to $22 as entry flattens supply.';
+    } else if (aa > ASNAP + 1e-9) {                   // beyond D2
+      out.state = 'A larger demand increase widens the gap between the ' +
+                  'short-run and long-run prices.';
+      out.take  = 'The more demand jumps, the bigger the short-run overshoot ' +
+                  'that entry later competes back down.';
+    } else {                                          // transitional 40<a<50
+      out.state = 'Demand up by ' + (aa - AMIN).toFixed(0) +
+                  ': short-run price ' + money(esr.p) + ' (up ' +
+                  money(esr.p - P0) + '); long-run price ' + money(elr.p) +
+                  ' (up ' + money(elr.p - P0) + ').';
+      out.take  = 'The short run absorbs the jump in price; the long run ' +
+                  'competes part of it back down as firms enter.';
+    }
+    return out;
+  }
+
+  // ---- word-wrap into up to N rows ----
+  function wrapN (s, max, rows) {
+    var words = s.split(' '), lines = [], cur = '';
+    for (var i = 0; i < words.length; i++) {
+      var trial = cur ? cur + ' ' + words[i] : words[i];
+      if (trial.length > max && cur && lines.length < rows - 1) {
+        lines.push(cur); cur = words[i];
+      } else { cur = trial; }
+    }
+    if (cur) lines.push(cur);
+    while (lines.length < rows) lines.push('');
+    return lines;
+  }
+
+  function render () {
+    var esr = eqSR(a), elr = eqLR(a), seg = demandSeg(a);
+    var atBase = Math.abs(a - AMIN) < 1e-9;
+
+    // active demand line + hit zone + label
+    ['demand', 'demandHit'].forEach(function (id) {
+      $(id).setAttribute('x1', seg.x1); $(id).setAttribute('y1', seg.y1);
+      $(id).setAttribute('x2', seg.x2); $(id).setAttribute('y2', seg.y2);
+    });
+    $('demandLbl').setAttribute('x', X(40) + 4);
+    $('demandLbl').setAttribute('y', Y(a - 40) + 4);
+
+    // outcome dots + droplines (recomputed, never keyframed)
+    $('outDotSr').setAttribute('cx', X(esr.q)); $('outDotSr').setAttribute('cy', Y(esr.p));
+    $('outDotLr').setAttribute('cx', X(elr.q)); $('outDotLr').setAttribute('cy', Y(elr.p));
+    $('dropHsr').setAttribute('x1', X(esr.q)); $('dropHsr').setAttribute('y1', Y(esr.p));
+    $('dropHsr').setAttribute('y2', Y(esr.p));
+    $('dropVsr').setAttribute('x1', X(esr.q)); $('dropVsr').setAttribute('x2', X(esr.q));
+    $('dropVsr').setAttribute('y1', Y(esr.p));
+    $('dropHlr').setAttribute('x1', X(elr.q)); $('dropHlr').setAttribute('y1', Y(elr.p));
+    $('dropHlr').setAttribute('y2', Y(elr.p));
+    $('dropVlr').setAttribute('x1', X(elr.q)); $('dropVlr').setAttribute('x2', X(elr.q));
+    $('dropVlr').setAttribute('y1', Y(elr.p));
+
+    // live outcome price labels; hidden at the base (they equal P0 = $20.00)
+    $('pxLblSr').textContent = money(esr.p); $('pxLblSr').setAttribute('y', Y(esr.p) + 3.5);
+    $('pxLblLr').textContent = money(elr.p); $('pxLblLr').setAttribute('y', Y(elr.p) + 3.5);
+    $('pxLblSr').setAttribute('opacity', atBase ? 0 : 1);
+    $('pxLblLr').setAttribute('opacity', atBase ? 0 : 1);
+
+    // rightward demand-shift arrow at price 13: ghost Q=27 -> active Q=(a-13);
+    // hide at base
+    var ay = Y(13), gx = X(27), dx = X(a - 13);
+    var showArr = (a - AMIN) > 1e-9;
+    $('shiftArr').setAttribute('opacity', showArr ? 1 : 0);
+    if (showArr) {
+      $('shiftArr').setAttribute('x1', gx + 2); $('shiftArr').setAttribute('x2', dx - 2);
+      $('shiftArr').setAttribute('y1', ay);     $('shiftArr').setAttribute('y2', ay);
+    }
+
+    // readout + aria
+    var str = strings(a);
+    var sRows = wrapN(str.state, 52, 2);
+    $('state1').textContent = sRows[0]; $('state2').textContent = sRows[1];
+    var tRows = wrapN(str.take, 56, 2);
+    $('take1').textContent = tRows[0];
+    $('take2').textContent = tRows[1];
+    var f = $('demFocus');
+    f.setAttribute('aria-valuenow', String(a));
+    f.setAttribute('aria-valuetext', str.state);
+  }
+
+  function clampSnap (v) {
+    v = Math.max(AMIN, Math.min(AMAX, v));
+    v = Math.round(v / STEP) * STEP;
+    if (Math.abs(v - ASNAP) < STEP / 2) v = ASNAP;   // firm snap at the +10 shift
+    return v;
+  }
+
+  // ---- pointer drag: grab the demand line; a = P + Q at the pointer, so the
+  //      line follows the cursor as a parallel rightward shift. ----
+  function svgPoint (evt) {
+    var pt = svg.createSVGPoint();
+    pt.x = evt.clientX; pt.y = evt.clientY;
+    return pt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+  var dragging = false;
+  function onDown (evt) {
+    dragging = true;
+    if (evt.pointerId !== undefined && evt.target.setPointerCapture) {
+      try { evt.target.setPointerCapture(evt.pointerId); } catch (e) {}
+    }
+    evt.preventDefault();
+  }
+  function onMove (evt) {
+    if (!dragging) return;
+    var pt = svgPoint(evt);
+    var q = (pt.x - X0) / SX, p = (YAX - pt.y) / SY;
+    var snapped = clampSnap(p + q);                  // intercept a = P + Q
+    if (Math.abs(snapped - a) > 1e-9) { a = snapped; render(); }
+  }
+  function onUp (evt) {
+    dragging = false;
+    if (evt.pointerId !== undefined && evt.target.releasePointerCapture) {
+      try { evt.target.releasePointerCapture(evt.pointerId); } catch (e) {}
+    }
+  }
+  ['demandHit', 'demFocus'].forEach(function (id) {
+    $(id).addEventListener('pointerdown', onDown);
+  });
+  svg.addEventListener('pointermove', onMove);
+  svg.addEventListener('pointerup', onUp);
+  svg.addEventListener('pointercancel', onUp);
+
+  // ---- keyboard ----
+  $('demFocus').addEventListener('keydown', function (evt) {
+    var delta = 0;
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') delta = STEP;
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') delta = -STEP;
+    else if (evt.key === 'Home') { a = AMIN; render(); evt.preventDefault(); return; }
+    else if (evt.key === 'End') { a = AMAX; render(); evt.preventDefault(); return; }
+    else return;
+    evt.preventDefault();
+    a = clampSnap(a + delta);
+    render();
+  });
+
+  // ---- debug hook (widget standard) ----
+  window.__fig = {
+    set: function (v) { a = clampSnap(Number(v)); render(); return a; },
+    get: function () {
+      var esr = eqSR(a), elr = eqLR(a);
+      return {
+        intercept: a,
+        shortrun: { q: +esr.q.toFixed(4), p: +esr.p.toFixed(4), jump: +(esr.p - P0).toFixed(4) },
+        longrun:  { q: +elr.q.toFixed(4), p: +elr.p.toFixed(4), jump: +(elr.p - P0).toFixed(4) },
+        gap: +(esr.p - elr.p).toFixed(4)
+      };
+    }
+  };
+
+  render();
+})();
+</script>
+</body>
+</html>

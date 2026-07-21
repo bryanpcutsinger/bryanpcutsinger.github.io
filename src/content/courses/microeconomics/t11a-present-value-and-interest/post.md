@@ -5,8 +5,9 @@ course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 23 (Tue 11/10)"]
 ue_anchors: ["UE 30", "UE 31", "UE 36 (front half)"]
 be_anchors: ["BE 13 (PV/intermediation — partial)"]
+ep_anchors: ["E&P ch. 6 (Capital Values and Interest) — usury as an ambiguous pejorative for interest; early Christian dogma, the Koran, and Communist doctrine each condemned it yet readmitted it under euphemism (Church 'discount', Communist 'efficiency index', Treasury 'discount')", "E&P ch. 16 (Wealth, Saving, and Investing) — Aristotle's 'sterile money'; interest paid before and after each condemnation because the demand for savings exceeded supply at a zero price; the Papacy charged interest as 'fees'/'gratuities'; Christians borrowed from Jews"]
 word_target: "3500-6000"
-status: approved        # Stage-2 sign-off 2026-06-15
+status: approved        # M8 done gate 2026-07-20 (§10 A+B PASS); prior Stage-2 2026-06-15
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Part A of two on Capital, Interest, and Time; Part B (Capital Values, Profit, and the Political Economy of Time) covers durable assets, wealth, profit, the rate package, and the political economy of time. This half builds the present-value tool and the determinants of the interest rate. Source-of-truth for the Part-A deck; section headers are claims that map to slide titles. UE 36 front half only (loan market); the money-supply/central-bank half is macro and out of scope. The consumer-finance applications are [EXPAND]/lecture-deferred but covered here (logged in §7)."
 # brief: ../t11-capital-interest-time/brief.md
@@ -135,6 +136,10 @@ In that market, the words run backward from ordinary usage. A *lender* is buying
 It does not matter whether the current income is wanted for consumption or for investment; both wants press on the same market and help set the same rate. And though we often say that saving equals investment by definition, the economy still has to coordinate the people who save with the people who invest, because they are usually different people acting for different reasons. The saver setting aside money for retirement and the entrepreneur building a plant never meet, yet the interest rate brings their plans into line, rationing current income to its most valued uses, exactly as any price coordinates strangers.
 
 One warning about what interest is not: it is not "the price of money." Printing more money does not push the interest rate down for long; mostly it raises the price level. The interest rate is the price of current versus future income, a real thing, and we are deliberately leaving the money-supply machinery to a later course.
+
+That last point has a long history. Interest has for centuries been condemned as *usury*, a slippery word for either a rate judged too high or any interest at all. Early Christian teaching called it sin, a strict reading of the Koran forbids it outright, Aristotle called money sterile, and Communist doctrine branded it exploitation. Yet the people who condemned interest kept collecting it under another name: medieval Christians let Jewish lenders charge it and then borrowed from them, the Church booked it as a fee or a discount, and Communist planners revived it as an "efficiency index." The reason is the one we just gave: at a zero rate far more people want present goods than will supply them, so a positive price reasserts itself whatever a statute forbids.
+
+Early New England shows the pattern. Its first legal code, the <a href="https://oll.libertyfund.org/pages/1641-massachusetts-body-of-liberties">Massachusetts Body of Liberties of 1641</a>, capped interest at "eight pounds in the hundred for one yeare" while warning that even this must not become "a coulour or countenance to allow any usurie amongst us contrarie to the law of god." Such caps have never held for long. When the Supreme Court ruled in 1978 that a national bank could charge out-of-state customers the rate allowed in its <a href="https://www.law.cornell.edu/supremecourt/text/439/299">own home state</a>, South Dakota abolished its usury ceiling in 1980 to attract the credit-card business, and the ceilings other states kept on their books became a dead letter.
 
 ## An Annuity Is a Stream, and a Perpetuity Lasts Forever
 

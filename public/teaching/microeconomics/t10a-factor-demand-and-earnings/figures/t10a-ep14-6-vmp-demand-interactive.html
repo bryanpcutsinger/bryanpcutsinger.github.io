@@ -1,0 +1,308 @@
+<!doctype html>
+<!--
+  t10a-ep14-6-vmp-demand-interactive.html
+  Interactive version of the T10a labor-demand figure (after E&P Fig 14-6,
+  p.301; course-adapted numbers per brief Section C — the source curve is
+  generic/unnumbered).
+  Family F1 (trace-the-curve): drag a point along the demand curve for labor
+  services, W = 36/Q over Q in [2, 12]; wage on y ($/hour, 0-20), quantity of
+  labor services on x (thousands of hours per week, 0-13). Snap-highlight at
+  the three teaching points (3, 12), (6, 6), (9, 4). The W*Q = 36 geometry is
+  a build-checkability convenience ONLY: no readout, label, or caption
+  mentions elasticity or the wage bill (brief prohibition).
+  TIE-BREAK convention (readout wording): at any point on D the wage equals
+  the marginal hour's value exactly, and the break-even hour IS hired (hire
+  through, not up to, the last hour whose value covers the wage) — the same
+  convention as crew 5 in t10a-ep8-1.
+  Static-base architecture: the initial (6, 6) state is real markup below; the
+  script only re-attaches drag/keyboard/readout behavior. The static SVG
+  t10a-ep14-6-vmp-demand.svg is the slide asset and the <noscript> fallback.
+  GEOMETRY (mirrors the JS constants): viewBox 460x420 (aspect 23/21),
+  x(Q) = 56 + 28*Q ; y(W) = 310 - 13.5*W.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Demand for labor services - drag the point along D</title>
+<style>
+  :root{
+    --font-body: Georgia, 'Times New Roman', serif;
+    --paper:   #f7f4ef;   /* card background                 */
+    --surface: #fdfcf9;   /* plot backing                    */
+    --ink:     #1a1c1e;   /* demand curve + headings         */
+    --muted:   #6b6459;   /* axes, ticks, state line         */
+    --accent:  #b3402a;   /* takeaway line                   */
+    --accent2: #b07a2c;   /* draggable point (house warm gold)*/
+    --grid:    #e3ddd3;   /* hairlines, droplines            */
+  }
+  html,body{margin:0;padding:0;background:var(--paper);font-family:var(--font-body);}
+  .wrap{max-width:480px;margin:0 auto;padding:10px 8px 6px;}
+  svg{display:block;width:100%;height:auto;background:var(--surface);
+      border:1px solid var(--grid);border-radius:4px;touch-action:pan-y;}
+  .hint{color:var(--muted);font-size:13px;margin:6px 2px 2px;text-align:center;}
+  .fallback{color:var(--muted);font-size:14px;padding:8px;}
+  .fallback a{color:var(--ink);}
+  text{font-family:var(--font-body);}
+  .axis{stroke:var(--muted);stroke-width:1.4;}
+  .tick{fill:var(--muted);font-size:11px;}
+  .axlbl{fill:var(--muted);font-size:12.5px;}
+  .curve{stroke:var(--ink);stroke-width:2.6;fill:none;stroke-linecap:round;}
+  .curvelbl{fill:var(--ink);font-size:13px;font-style:italic;}
+  .drop{stroke:var(--muted);stroke-width:1;stroke-dasharray:3 4;opacity:.8;}
+  .dot{fill:var(--accent2);stroke:var(--surface);stroke-width:2;cursor:grab;}
+  .hitcurve{fill:none;stroke:transparent;stroke-width:26;touch-action:none;
+            cursor:grab;}
+  .hitdot{fill:transparent;touch-action:none;cursor:grab;}
+  .snapring{fill:none;stroke:var(--accent2);stroke-width:1.6;
+            stroke-dasharray:3 3;opacity:0;}
+  .snapring.on{opacity:1;}
+  .tagbg{fill:var(--surface);}
+  .tagtxt{fill:var(--accent2);font-size:11.5px;font-weight:bold;}
+  .state{fill:var(--muted);font-size:12.5px;}
+  .takeaway{fill:var(--accent);font-size:12.5px;font-weight:bold;}
+  .sep{stroke:var(--grid);stroke-width:1;}
+  #ptFocus:focus{outline:none;}
+  #ptFocus:focus ~ .focusring{opacity:1;}
+  .focusring{opacity:0;stroke:var(--accent2);stroke-width:1.5;fill:none;
+             stroke-dasharray:3 3;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <svg id="fig" viewBox="0 0 460 420" role="group"
+       aria-label="Demand curve for labor services. Wage rate in dollars per hour on the vertical axis; quantity of labor services in thousands of hours per week on the horizontal axis. One smooth downward-sloping curve labeled D. Drag the point along D to read, at each wage, how many hours of labor services employers demand: the height of the curve is the value of what the marginal hour adds.">
+
+    <!-- ====================== static base markup ====================== -->
+    <!-- frame: x(Q) = 56 + 28Q  (Q 0..13 -> 56..420, axis to 440);
+         y(W) = 310 - 13.5W     (W 0..20 -> 310..40, axis to 30)          -->
+    <defs>
+      <marker id="arr" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#6b6459"/>
+      </marker>
+    </defs>
+
+    <!-- axes -->
+    <line class="axis" x1="56" y1="310" x2="56"  y2="34"  marker-end="url(#arr)"/>
+    <line class="axis" x1="56" y1="310" x2="436" y2="310" marker-end="url(#arr)"/>
+
+    <!-- y ticks -->
+    <g class="tick" text-anchor="end">
+      <text x="50" y="260">4</text><text x="50" y="206">8</text>
+      <text x="50" y="152">12</text><text x="50" y="98">16</text>
+      <text x="50" y="44">20</text>
+    </g>
+    <text class="axlbl" transform="rotate(-90 18 172)" x="18" y="172"
+          text-anchor="middle">Wage rate ($ per hour)</text>
+
+    <!-- x ticks -->
+    <g class="tick" text-anchor="middle">
+      <text x="112" y="326">2</text><text x="168" y="326">4</text>
+      <text x="224" y="326">6</text><text x="280" y="326">8</text>
+      <text x="336" y="326">10</text><text x="392" y="326">12</text>
+    </g>
+    <text class="axlbl" x="246" y="344" text-anchor="middle">Quantity of labor services (thousands of hours per week)</text>
+
+    <!-- droplines from the point to both axes (JS updates) -->
+    <line id="dropX" class="drop" x1="224" y1="229" x2="224" y2="310"/>
+    <line id="dropY" class="drop" x1="224" y1="229" x2="56"  y2="229"/>
+
+    <!-- the demand curve for labor services: W = 36/Q, Q in [2,12] -->
+    <path class="curve" d="M112.0,67.0 L119.0,94.0 L126.0,115.6 L133.0,133.3 L140.0,148.0 L147.0,160.5 L154.0,171.1 L161.0,180.4 L168.0,188.5 L175.0,195.6 L182.0,202.0 L189.0,207.7 L196.0,212.8 L203.0,217.4 L210.0,221.6 L217.0,225.5 L224.0,229.0 L231.0,232.2 L238.0,235.2 L245.0,238.0 L252.0,240.6 L259.0,243.0 L266.0,245.2 L273.0,247.3 L280.0,249.2 L287.0,251.1 L294.0,252.8 L301.0,254.5 L308.0,256.0 L315.0,257.5 L322.0,258.8 L329.0,260.2 L336.0,261.4 L343.0,262.6 L350.0,263.7 L357.0,264.8 L364.0,265.8 L371.0,266.8 L378.0,267.7 L385.0,268.6 L392.0,269.5"/>
+    <text class="curvelbl" x="400" y="274">D</text>
+
+    <!-- wide invisible hit zone along the curve (tap-to-jump + drag) -->
+    <path id="hitCurve" class="hitcurve" d="M112.0,67.0 L119.0,94.0 L126.0,115.6 L133.0,133.3 L140.0,148.0 L147.0,160.5 L154.0,171.1 L161.0,180.4 L168.0,188.5 L175.0,195.6 L182.0,202.0 L189.0,207.7 L196.0,212.8 L203.0,217.4 L210.0,221.6 L217.0,225.5 L224.0,229.0 L231.0,232.2 L238.0,235.2 L245.0,238.0 L252.0,240.6 L259.0,243.0 L266.0,245.2 L273.0,247.3 L280.0,249.2 L287.0,251.1 L294.0,252.8 L301.0,254.5 L308.0,256.0 L315.0,257.5 L322.0,258.8 L329.0,260.2 L336.0,261.4 L343.0,262.6 L350.0,263.7 L357.0,264.8 L364.0,265.8 L371.0,266.8 L378.0,267.7 L385.0,268.6 L392.0,269.5"/>
+
+    <!-- live number tags at the dropline feet (JS updates; base = (6,6)) -->
+    <!-- wage tag sits INSIDE the plot just right of the y-axis (a tag left of
+         the axis collides with the rotated axis title) -->
+    <g id="tagYG">
+      <rect id="tagYbg" class="tagbg" x="59" y="220" width="36" height="16"/>
+      <text id="tagY" class="tagtxt" x="61" y="233" text-anchor="start">$6.00</text>
+    </g>
+    <g id="tagXG">
+      <rect id="tagXbg" class="tagbg" x="207" y="314" width="34" height="16"/>
+      <text id="tagX" class="tagtxt" x="224" y="326" text-anchor="middle">6</text>
+    </g>
+
+    <!-- snap-highlight ring + draggable point + keyboard proxy -->
+    <circle id="snapRing" class="snapring on" cx="224" cy="229" r="10"/>
+    <circle id="pt" class="dot" cx="224" cy="229" r="6"/>
+    <circle id="hitPt" class="hitdot" cx="224" cy="229" r="18"
+            tabindex="0" role="slider"
+            aria-label="Point on the demand curve for labor services. Arrow keys move it along the curve."
+            aria-valuemin="2" aria-valuemax="12" aria-valuenow="6"
+            aria-valuetext="Wage $6.00: employers demand 6,000 hours of labor services a week."/>
+    <circle id="focusRing" class="focusring" cx="224" cy="229" r="13"/>
+
+    <!-- readout band -->
+    <line class="sep" x1="16" y1="356" x2="444" y2="356"/>
+    <text id="stateLine" class="state" x="230" y="374" text-anchor="middle">Wage $6.00: employers demand 6,000 hours of labor services a week.</text>
+    <text id="takeLine" class="takeaway" x="230" y="392" text-anchor="middle"><tspan id="take1" x="230" dy="0">The height of D is the value of what the marginal hour adds &#8212;</tspan><tspan id="take2" x="230" dy="16">hire while that value covers the wage.</tspan></text>
+  </svg>
+
+  <p class="hint">Drag the point along D (or focus it and use the arrow keys;
+    Home/End jump to the ends). It pauses at three marked wages.</p>
+
+  <noscript>
+    <p class="fallback">Interactive view needs JavaScript. See the
+      <a href="t10a-ep14-6-vmp-demand.svg">static version of this figure</a>.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  // ---- geometry (must mirror the base markup) ----
+  var X0 = 56, PXQ = 28;                 // x(Q) = X0 + PXQ*Q
+  var YAX = 310, PXW = 13.5;             // y(W) = YAX - PXW*W
+  function X (q) { return X0 + PXQ * q; }
+  function Y (w) { return YAX - PXW * w; }
+
+  // ---- economics (brief Section C invariants) ----
+  var QMIN = 2, QMAX = 12, STEP = 0.25, MAGNET = 0.3;
+  var TEACH = [3, 6, 9];                 // (3,12), (6,6), (9,4): W*Q = 36
+  function W (q) { return 36 / q; }
+
+  var svg = document.getElementById('fig');
+  var $ = function (id) { return document.getElementById(id); };
+  var q = 6;
+
+  function fmtW (w) { return '$' + w.toFixed(2); }
+  function fmtQ (v) {
+    return (Math.round(v * 100) / 100).toString();
+  }
+  function fmtHours (v) {                // thousands of hours -> "6,250"
+    var h = Math.round(v * 1000);
+    return h.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+  function teachingPoint (v) {
+    for (var i = 0; i < TEACH.length; i++) {
+      if (Math.abs(v - TEACH[i]) < 1e-9) return TEACH[i];
+    }
+    return null;
+  }
+
+  // Exact teaching-point strings (spec); generic grammar elsewhere.
+  function readout (v) {
+    var w = W(v), tp = teachingPoint(v);
+    var muted, t1, t2 = '';
+    if (tp === 3) {
+      muted = 'Wage $12.00: employers demand 3,000 hours a week.';
+      t1 = 'At a higher wage only the higher-valued uses of labor survive.';
+    } else if (tp === 9) {
+      muted = 'Wage $4.00: employers demand 9,000 hours a week.';
+      t1 = 'At a lower wage, lower-valued uses of labor become worth hiring for.';
+    } else {
+      muted = 'Wage ' + fmtW(w) + ': employers demand ' + fmtHours(v) +
+              ' hours of labor services a week.';
+      t1 = 'The height of D is the value of what the marginal hour adds —';
+      t2 = 'hire while that value covers the wage.';
+    }
+    return { muted: muted, t1: t1, t2: t2, snapped: tp !== null };
+  }
+
+  function render () {
+    var w = W(q), x = X(q), y = Y(w), r = readout(q);
+
+    ['pt', 'hitPt', 'focusRing', 'snapRing'].forEach(function (id) {
+      $(id).setAttribute('cx', x); $(id).setAttribute('cy', y);
+    });
+    $('snapRing').setAttribute('class', 'snapring' + (r.snapped ? ' on' : ''));
+
+    $('dropX').setAttribute('x1', x); $('dropX').setAttribute('x2', x);
+    $('dropX').setAttribute('y1', y);
+    $('dropY').setAttribute('x1', x); $('dropY').setAttribute('y1', y);
+    $('dropY').setAttribute('y2', y);
+
+    $('tagY').setAttribute('y', y + 4);
+    $('tagY').textContent = fmtW(w);
+    $('tagYbg').setAttribute('y', y - 9);
+    $('tagX').setAttribute('x', x);
+    $('tagX').textContent = fmtQ(q);
+    $('tagXbg').setAttribute('x', x - 17);
+
+    $('stateLine').textContent = r.muted;
+    $('take1').textContent = r.t1;
+    $('take2').textContent = r.t2;
+
+    var hp = $('hitPt');
+    hp.setAttribute('aria-valuenow', fmtQ(q));
+    hp.setAttribute('aria-valuetext', r.muted);
+  }
+
+  // Drag magnet: pause at the teaching points; otherwise quarter-unit steps.
+  function clampSnap (v) {
+    v = Math.max(QMIN, Math.min(QMAX, v));
+    for (var i = 0; i < TEACH.length; i++) {
+      if (Math.abs(v - TEACH[i]) < MAGNET) return TEACH[i];
+    }
+    return Math.round(v / STEP) * STEP;
+  }
+
+  // ---- pointer drag (pointer capture; fast drags stay attached) ----
+  function svgPoint (evt) {
+    var pt = svg.createSVGPoint();
+    pt.x = evt.clientX; pt.y = evt.clientY;
+    return pt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+  var dragging = false;
+  function applyPointer (evt) {
+    var v = clampSnap((svgPoint(evt).x - X0) / PXQ);
+    if (Math.abs(v - q) > 1e-9) { q = v; render(); }
+  }
+  function onDown (evt) {
+    dragging = true;
+    if (evt.pointerId !== undefined && evt.target.setPointerCapture) {
+      try { evt.target.setPointerCapture(evt.pointerId); } catch (e) {}
+    }
+    applyPointer(evt);
+    evt.preventDefault();
+  }
+  function onMove (evt) { if (dragging) applyPointer(evt); }
+  function onUp (evt) {
+    dragging = false;
+    if (evt.pointerId !== undefined && evt.target.releasePointerCapture) {
+      try { evt.target.releasePointerCapture(evt.pointerId); } catch (e) {}
+    }
+  }
+  ['hitCurve', 'hitPt'].forEach(function (id) {
+    $(id).addEventListener('pointerdown', onDown);
+  });
+  svg.addEventListener('pointermove', onMove);
+  svg.addEventListener('pointerup', onUp);
+  svg.addEventListener('pointercancel', onUp);
+
+  // ---- keyboard (Right/Down = along the curve toward more hours;
+  //      Left/Up = back toward higher wages; Home/End = curve ends) ----
+  $('hitPt').addEventListener('keydown', function (evt) {
+    var delta = 0;
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowDown') delta = STEP;
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowUp') delta = -STEP;
+    else if (evt.key === 'Home') { q = QMIN; render(); evt.preventDefault(); return; }
+    else if (evt.key === 'End') { q = QMAX; render(); evt.preventDefault(); return; }
+    else return;
+    evt.preventDefault();
+    // step off a magnet point cleanly (0.25 past it, not re-captured)
+    var v = Math.max(QMIN, Math.min(QMAX, q + delta));
+    q = Math.round(v / STEP) * STEP;
+    render();
+  });
+
+  // ---- debug hook (widget standard) ----
+  window.__fig = {
+    set: function (v) { q = clampSnap(Number(v)); render(); return q; },
+    get: function () {
+      return { q: q, wage: +W(q).toFixed(2),
+               hours: Math.round(q * 1000),
+               atTeachingPoint: teachingPoint(q) !== null };
+    }
+  };
+
+  render();
+})();
+</script>
+</body>
+</html>

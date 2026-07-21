@@ -5,8 +5,9 @@ course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 13 (Tue 10/6)"]
 ue_anchors: ["UE 15 (Specialization and Exchange)"]
 be_anchors: ["BE 6 (specialization / economies of scale / middleman block)"]
+ep_anchors: ["E&P Fig 7-9 (ch. 7, p. 148) — gains from specialized production and exchange at a common market price"]
 word_target: "2500-6000"
-status: approved        # Stage-2 sign-off 2026-06-15
+status: approved        # E&P integration M7 done-gate 2026-07-20; prior approval 2026-06-15
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Part B of T6: comparative advantage, the cheaper newcomer, blocking entry, the two meanings of specialization, market size, diseconomies of scale, and middlemen (UE 15 + BE 6). Part A covers UE 7's marginal toolkit plus UE 14 production/cost and BE 10. UE 17 is owned by T7."
 # brief: ../t06-production-costs-specialization/brief.md
@@ -107,6 +108,11 @@ A frontier diagram makes the same point in a different register.
 ![Two production-possibility frontiers, Ana's and Ben's, with trade lines that let each consume at a point beyond his or her own frontier.](/teaching/microeconomics/t06b-specialization-and-exchange/figures/t02-comparative-advantage.svg)
 
 *Trade lets each person consume beyond his own production frontier. Ana is better at making both goods, yet Ben, who is worse at everything, still gains: by specializing in what he gives up least to make and trading for the rest, each ends up at a consumption point outside the boundary he could reach alone.*
+
+<figure class="econ-figure" style="margin:1.5em 0;">
+<iframe src="/teaching/microeconomics/t06b-specialization-and-exchange/figures/t06b-ep7-9-specialization-gains-interactive.html" title="Interactive specialization figure: toggle between two producers each self-sufficient and both trading at one common market price. The price pulls each producer's marginal cost into line with it, the low-cost producer sells to the other, and both capture a gain from specialization." loading="lazy" style="width:100%; max-width:720px; aspect-ratio:30/19; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t06b-specialization-and-exchange/figures/t06b-ep7-9-specialization-gains-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t06b-specialization-and-exchange/figures/t06b-ep7-9-specialization-gains.svg">view the static figure</a>.</p></iframe>
+<figcaption><strong>A single market price does the coordinating.</strong> The earlier gains figure showed the two parties splitting the gain from one trade; this one shows how a market price organizes the whole arrangement. Each producer bakes up to where his rising marginal cost meets the price and buys up to where his falling worth meets it, so the low-cost producer produces a surplus and sells it while the other buys the difference. Both capture a gain from specialization, and because every producer's marginal cost is pulled into line with the same price, all producers' marginal costs end up equal: the efficient result that the 1970s refinery allocation rules in the previous post could not reach. Toggle between each producer on his own and both trading at the common price to watch the gains appear. If the frame does not load, <a href="/teaching/microeconomics/t06b-specialization-and-exchange/figures/t06b-ep7-9-specialization-gains-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t06b-specialization-and-exchange/figures/t06b-ep7-9-specialization-gains.svg">view the static figure</a>.</figcaption>
+</figure>
 
 ## A Cheaper Newcomer Spreads Gains Across the Whole Economy
 

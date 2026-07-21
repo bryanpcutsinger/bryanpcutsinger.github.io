@@ -4,6 +4,7 @@ topic: "T10 — Factor Markets and Labor (Part A)"
 course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 21 (Tue 11/3)"]
 ue_anchors: ["UE 29", "UE 39", "UE 22 (Codlandia)"]
+ep_anchors: ["E&P Fig 8-1 — team marginal products", "E&P Fig 14-6 — demand for labor services"]
 be_anchors: ["BE 10"]
 word_target: "2500-6000"
 status: approved        # Stage-2 sign-off 2026-06-15
@@ -123,7 +124,19 @@ Now the punch line, the hiring rule: **hire each worker up to the point where th
 <p>Shore fishing pays a wage of 8 fish. Using the VMP table, how many workers does the boat owner hire, and how does that change if the going wage rises to 12? State the hiring rule you used.</p>
 </aside>
 
+<figure class="econ-figure" style="margin:1.5em 0;">
+<iframe src="/teaching/microeconomics/t10a-factor-demand-and-earnings/figures/t10a-ep8-1-team-mp-interactive.html" title="Interactive team-production figure: step through crew sizes and compare each member's marginal product on the boat with the product he could add on shore. Hiring stops where the two meet." loading="lazy" style="width:100%; max-width:480px; aspect-ratio:5/6; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t10a-factor-demand-and-earnings/figures/t10a-ep8-1-team-mp-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t10a-factor-demand-and-earnings/figures/t10a-ep8-1-team-mp.svg">view the static version</a>.</p></iframe>
+<figcaption><strong>The boat hires while a member adds more aboard than ashore.</strong> Each bar is what one more crew member adds to the catch; the red line is what that person could produce on shore. The gap above the line is the gain from bringing him aboard; the gap below is the loss. The rule stops the crew at five, where the last member adds exactly what he gives up.</figcaption>
+</figure>
+
+
 Two results follow. First, VMP sets both how many to hire and what the input earns: in a competitive market a worker tends to be paid the value an added worker contributes, because paying less lets a rival bid him away and paying more loses the firm money. Second, the value left after the wage bill, the catch minus what the workers are paid, goes to the owner who supplied the boat and bore the risk. That residual is not a leftover slice of the workers' product; it is the return to the boat and to the person who shouldered the chance the venture might fail. If the wage rose so high that paying it left the owner worse off than fishing on shore himself, he would beach the boat. Total factor payments cannot exceed the value produced, because any employer who tried would go broke, and competition steadily pushes payments toward the value each input adds.
+
+<figure class="econ-figure" style="margin:1.5em 0;">
+<iframe src="/teaching/microeconomics/t10a-factor-demand-and-earnings/figures/t10a-ep14-6-vmp-demand-interactive.html" title="Interactive labor-demand curve: drag a point along the curve to read, at each wage, how many hours of labor services employers hire." loading="lazy" style="width:100%; max-width:480px; aspect-ratio:9/10; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t10a-factor-demand-and-earnings/figures/t10a-ep14-6-vmp-demand-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t10a-factor-demand-and-earnings/figures/t10a-ep14-6-vmp-demand.svg">view the static version</a>.</p></iframe>
+<figcaption><strong>Smooth the hiring rule across many employers and you get a demand curve for labor.</strong> The height of the curve at any quantity is the value one more hour of labor services adds; at a lower wage, hours that did not pay before now do. This is the same picture as the boat, drawn for a whole market.</figcaption>
+</figure>
+
 
 That is the engine. The rest of the topic applies it to real arguments.
 

@@ -5,8 +5,9 @@ course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 16 (Thu 10/15)"]
 ue_anchors: ["UE 19", "UE 20 (Q1–Q6, Q8)", "UE 21", "UE 26 (Q2/Q5/Q6 cartels+stadium)"]
 be_anchors: ["BE 6", "BE 7 (Monopolies & Cartels)"]
+ep_anchors: ["E&P Fig 13-1 (p. 282) — monopoly rent / Ricardian rent / social loss", "E&P Fig 11-4 (p. 239) — lost consumer value"]
 word_target: "3500-6000"
-status: approved        # one-per-lecture split; approved 2026-07-01
+status: approved        # one-per-lecture split; approved 2026-07-01 (M3 E&P figure embeds 2026-07-19)
 audience: students
 note: "Self-contained — assumes no access to the textbooks. First of two market-power posts (session 16); session 17 covers antitrust and regulation."
 # brief: ../t08-market-power/brief.md
@@ -135,6 +136,11 @@ Now the part that worries people about market power. Because a price-searcher st
 
 Picture it concretely. Suppose marginal revenue equals marginal cost at five units, and to sell those five the firm charges sixteen dollars. A sixth unit would cost only about twelve dollars to make, and some buyer values it near the sixteen-dollar price. That sixth unit does not get made; resources that could have produced something worth sixteen dollars go off to produce something worth less. That forgone gain is what economists mean by the *distortion* of market power. I am describing it in words on purpose: we are not measuring a deadweight-loss triangle, only noting that valuable units go unproduced.
 
+<figure class="econ-figure" style="margin:1.5em 0;">
+<iframe src="/teaching/microeconomics/t08a-price-searchers/figures/t08a-ep11-4-lost-consumer-value-interactive.html" title="Drag the output handle to widen or shrink the band of consumer value lost when price sits above marginal cost" loading="lazy" style="width:100%; max-width:480px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t08a-price-searchers/figures/t08a-ep11-4-lost-consumer-value-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t08a-price-searchers/figures/t08a-ep11-4-lost-consumer-value.svg">view the static figure</a>.</p></iframe>
+<figcaption><strong>The picture shows the loss the words describe, without measuring it.</strong> The shaded band is the gap between what buyers would pay along demand, up near $16, and what each unit costs along marginal cost, rising from about $11, over the output the seller leaves unmade. A sixth unit worth about $15 to a buyer costs only about $12 to make, yet goes unproduced. Economists call this triangle the deadweight loss; here we only point to where it lives. The band vanishes at the price-taking benchmark, where price falls to meet marginal cost. Drag the output handle to widen or shrink it. If the frame does not load, <a href="/teaching/microeconomics/t08a-price-searchers/figures/t08a-ep11-4-lost-consumer-value-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t08a-price-searchers/figures/t08a-ep11-4-lost-consumer-value.svg">view the static figure</a>.</figcaption>
+</figure>
+
 Two cautions keep this honest. The benchmark we compare against is the competitive, price-taking outcome, where the seller has no power to mark up and output is pushed until cost rises to meet the price; that competitive standard is the heart of our competition-and-efficiency material. And do not oversell the harm: some of what looks like restricted output is really the cost of variety, a hundred slightly different products made in smaller batches, what buyers paid for in differentiation. The distortion is real but milder than it first looks, and it tends to erode on its own.
 
 ## What Matters Is Whether the Market Is Open or Closed, Not the Number of Sellers
@@ -160,6 +166,11 @@ When a closed market does pay the protected seller above what it costs to do the
 <div><dt>Monopoly Rent</dt><dd>The surplus a protected seller collects because entry into its market is artificially restricted.</dd></div>
 </dl>
 </aside>
+
+<figure class="econ-figure" style="margin:1.5em 0;">
+<iframe src="/teaching/microeconomics/t08a-price-searchers/figures/t08a-ep13-1-rents-and-loss-interactive.html" title="Drag the licensed-output line to restrict an industry of price-takers and split the receipts into monopoly rent, Ricardian rent, and social loss" loading="lazy" style="width:100%; max-width:480px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t08a-price-searchers/figures/t08a-ep13-1-rents-and-loss-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t08a-price-searchers/figures/t08a-ep13-1-rents-and-loss.svg">view the static figure</a>.</p></iframe>
+<figcaption><strong>A closed gate on an industry of price-takers splits the receipts three ways.</strong> This is the refinement above made visible: restricted wheat or tobacco growers stay price-takers, yet a licensed-output gate on the whole industry still lifts the price. Drag the licensed-output line left of the open-market 6,000 units and the price read off demand rises. The suppliers' extra receipts divide into a monopoly rent, the rectangle the restriction manufactures, and a Ricardian rent, the higher return better or better-located land earns in any open market because its services are worth more, not because entry is blocked. The social-loss triangle beyond them is value nobody collects, from units worth more to buyers than they cost to make that now go unmade. If the frame does not load, <a href="/teaching/microeconomics/t08a-price-searchers/figures/t08a-ep13-1-rents-and-loss-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t08a-price-searchers/figures/t08a-ep13-1-rents-and-loss.svg">view the static figure</a>.</figcaption>
+</figure>
 
 ## Long-Run Entry Drives a Price-Searcher's Profit Toward Zero
 

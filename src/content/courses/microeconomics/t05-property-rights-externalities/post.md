@@ -5,8 +5,9 @@ course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 8 (Thu 9/17)"]
 ue_anchors: ["UE 13", "UE 3 (externalities section)", "UE 17 (negative-externality section)"]
 be_anchors: []
+ep_anchors: ["E&P Fig 5-1 (ch. 5) — optimal tradeoff between steel and clean water (nonzero optimal pollution)"]
 word_target: "3000-6000"
-status: approved        # Stage-2 sign-off 2026-06-15
+status: approved        # M10 done gate 2026-07-20 (tie-in PASS); prior Stage-2 2026-06-15
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Part A of T5: property rights, externalities, environmental trade-offs, Coasean bargaining, and tradable permits. Part B covers public goods, clubs, commons, and institutional choice."
 ---
@@ -85,6 +86,11 @@ People talk as if there were a war between the economy and the environment, with
 Consider the activist who fumed that a man fined for relieving himself in a river is punished while the factory polluting the same river is not, that we jail muggers but let "smoggers" walk free. The complaint has a moral ring, but it overlooks something basic. The factory's pollution is the unwanted byproduct of producing things people value; the mugger produces nothing for anyone. Cars and planes carry exhaust, steelmaking gives up quiet and rest, oil wells smell, and all of it is part of the cost of a life that is more than Spartan. To condemn the activities with the largest costs is to forget they may also yield the largest benefits. The smogger, unlike the mugger, hands society real output along with the smoke.
 
 So what should the activist have demanded? Not prohibition, and not the silence of the status quo, but a price. The constructive complaint is that we have not made polluters pay for the right to pollute and so bear the full cost of what they do. Put a price on polluting and people pollute less wherever the gain from the activity is worth less than the harm. Notice the two failure modes this avoids. A price of zero, the rule we mostly live under, lets people pollute as if the air were free, because for them it is. A price of infinity, an outright ban, pretends the activity has no value worth keeping. Both are almost always wrong. The useful path runs between them, exposing the trade-off and pricing it, and economics takes no side on how clean we should ultimately want the world; it only insists the choice is real and must be made.
+
+<figure class="econ-figure" style="margin:1.5em 0;">
+<iframe src="/teaching/microeconomics/t05-property-rights-externalities/figures/t05-ep5-1-optimal-pollution-interactive.html" title="Drag the quantity marker along the steel axis to compare the marginal value of more steel with the marginal value of the clean water forsaken; the two balance at the optimal allocation X." loading="lazy" style="width:100%; max-width:600px; aspect-ratio:14/11; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t05-property-rights-externalities/figures/t05-ep5-1-optimal-pollution-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t05-property-rights-externalities/figures/t05-ep5-1-optimal-pollution.svg">view the static figure</a>.</p></iframe>
+<figcaption><strong>The wealth-maximizing amount of pollution is X, a positive amount, not zero.</strong> DD is the falling marginal value of steel as more water is used up in steelmaking; WW is the rising marginal value of the clean water thereby forsaken. They cross at X, the allocation that maximizes the combined value of steel plus clean water. Left of X, another unit of steel is worth more than the water it costs; right of X, the water is worth more than the steel. That is the false-issue argument in one picture. Drag the marker (or use the arrow keys) to compare the two margins at any allocation. If the frame does not load, <a href="/teaching/microeconomics/t05-property-rights-externalities/figures/t05-ep5-1-optimal-pollution-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t05-property-rights-externalities/figures/t05-ep5-1-optimal-pollution.svg">view the static figure</a>.</figcaption>
+</figure>
 
 ## Coase: With Clear, Salable Rights, the Efficient Use Does Not Depend on Who Holds the Right
 

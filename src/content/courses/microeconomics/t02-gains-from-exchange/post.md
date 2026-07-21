@@ -5,8 +5,9 @@ course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 3 (Tue 9/1)"]
 ue_anchors: ["UE 4"]
 be_anchors: []
+ep_anchors: ["E&P 3 — Fig 3-1 Gains From Exchange", "E&P 4 — Pareto-Optimal Allocations"]
 word_target: "2000-6000"
-status: approved        # Stage-2 sign-off 2026-06-15
+status: approved        # E&P integration M1 sign-off 2026-07-19 (prior: Stage-2 2026-06-15)
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Source-of-truth for the T2 deck; section headers are claims that map to slide titles. UE 4 only (pure reallocation); specialization/comparative advantage move to T6."
 ---
@@ -24,6 +25,7 @@ The short answer is that wealth is not the same as stuff. What you own is worth 
 <li>Explain how voluntary exchange creates wealth by moving goods to whoever values them most, even when no new goods are made and the traders end up holding fewer total goods.</li>
 <li>Distinguish the positive-sum decision of whether to trade from the zero-sum bargaining over the terms of the trade.</li>
 <li>Use personal worth to explain why a trade happens only when the buyer values the good above the price and the seller values it below.</li>
+<li>Define a Pareto-optimal allocation in plain language, explain why free exchange pushes toward one, and say why the label is not a moral endorsement.</li>
 <li>Explain why forbidding a trade does not erase the value at stake but pushes the competition for it into nonmonetary forms.</li>
 <li>Explain why middlemen lower the cost of trading, what caps the cut they can take, and how competition and reputation discipline them.</li>
 </ul>
@@ -82,12 +84,26 @@ Let me put a name to the engine behind all of this. Your *personal worth* of a g
 
 When they do differ, a mutually agreeable trade exists, and the direction is set by who values the good more. Whoever places the higher worth on water buys it; whoever places the lower worth sells. Put the buyer and the seller in one picture and a clean rule appears: a trade happens only when the buyer's personal worth of the good sits above the price and the seller's sits below it. The price lands somewhere between the two worths, and that gap is the gain the trade creates. The buyer pays less than the good is worth to him; the seller collects more than it was worth to her. Each side passes its own test, which is exactly why both come out ahead.
 
+<figure class="econ-figure" style="margin:1.5em 0;">
+<iframe src="/teaching/microeconomics/t02-gains-from-exchange/figures/t02-ep3-1-gains-from-exchange-interactive.html" title="Interactive gains-from-exchange figure: two panels share one draggable price line. Sam buys bottles of water while his personal worth of one more bottle exceeds the price; Joe sells while the price exceeds his. Their offers match only at one price." loading="lazy" style="width:100%; max-width:720px; aspect-ratio:10/7; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t02-gains-from-exchange/figures/t02-ep3-1-gains-from-exchange-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t02-gains-from-exchange/figures/t02-ep3-1-gains-from-exchange.svg">view the static version</a>.</p></iframe>
+<figcaption><strong>Both sides gain, and the price does the sorting.</strong> Sam keeps buying while a bottle is worth more to him than the price; Joe keeps selling while a bottle is worth less to him than the price. Each shaded bar is one bottle's gain. Drag the price line to see why 0.75 granola bars per bottle is the one price at which their offers match. (In the demand topic, this personal-worth line will get a name.)</figcaption>
+</figure>
+
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
 <p>Suppose you would pay up to $40 for a used jacket and the seller would let it go for as little as $25. If it sells for $32, how much does each side gain, and why must the two worths straddle the price for a trade to happen?</p>
 </aside>
 
 As the trade proceeds, the gap narrows on its own. Recall an earlier point: the more of something you already have, the less you would give up for one more unit of it. So as Sam accumulates water, his worth of the next bottle falls, and as Joe runs low, his worth of each remaining bottle rises. Trading slides both people toward the point where their valuations meet, and there it stops, because no further swap would help either one. The gain to each is simply the gap between what the good was worth to them and what they paid. The demand topic gives that gain a fuller treatment. For now, hold on to the plain version: you gain whenever you value what you get more than what you give up.
+
+The stopping point has a name. When Sam and Joe quit trading, every reallocation that could help one of them without hurting the other has already happened. Economists call such an allocation *Pareto-optimal*, after Vilfredo Pareto, the Italian economist who first put the idea to work. Free exchange pushes toward Pareto-optimal allocations on its own, because any allocation that is not yet Pareto-optimal still contains a trade both sides would say yes to. Be careful with the label, though. Calling an allocation Pareto-optimal is not a moral endorsement. The criterion takes each person as the judge of what is best for himself, and that assumption is not accepted everywhere: we do not let children make every choice for themselves, and some goods with willing buyers and willing sellers are banned outright even for adults. Pareto-optimality tells you that no further mutual gain is left on the table. Whether the result is fair is a different question, and it stays yours to answer.
+
+<aside class="econ-callout econ-termset">
+<p class="econ-callout__label">Key term</p>
+<dl class="econ-term-list">
+<div><dt>Pareto-Optimal Allocation</dt><dd>An allocation where any change that helps one person must hurt another; no mutually beneficial trade remains. A statement about exhausted gains from trade, not about fairness.</dd></div>
+</dl>
+</aside>
 
 ## When Trade Is Forbidden, the Gains Do Not Vanish
 
@@ -144,6 +160,7 @@ We also kept using one idea without unpacking it, that a good is worth less to y
 <li><strong>Trade creates wealth without new goods.</strong> Moving each good to whoever values it most makes both sides better off, even when the total quantity of goods falls.</li>
 <li><strong>The trade is positive-sum; the haggling is zero-sum.</strong> Both sides gain from trading at all, but every granola bar one side wins on the price the other loses.</li>
 <li><strong>Trade turns on differing personal worths.</strong> A deal happens only when the buyer's worth sits above the price and the seller's sits below it, and that gap is the gain.</li>
+<li><strong>Trade stops at Pareto-optimality.</strong> When no further swap can help one trader without hurting the other, the gains from trade are exhausted; that is a claim about exhausted gains, not about fairness.</li>
 <li><strong>Blocking a trade hides the value, it does not erase it.</strong> When an authority that cannot charge a price controls a scarce thing, the competition for it moves into favors, waiting, and goodwill.</li>
 <li><strong>Middlemen earn their keep.</strong> They lower the real cost of trading; a lone middleman can take at most the whole gain, and competition and reputation keep his cut far below that.</li>
 </ul>

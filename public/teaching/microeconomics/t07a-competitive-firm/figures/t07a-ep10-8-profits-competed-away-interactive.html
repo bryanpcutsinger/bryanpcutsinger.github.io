@@ -1,0 +1,395 @@
+<!doctype html>
+<!--
+  t07a-ep10-8-profits-competed-away-interactive.html
+  Interactive version of the T7a "profits competed away" figure (after E&P Fig
+  10-8, p.211; course-adapted numbers per the brief Section C invariants).
+  Family F2 (before/after; cause = rivals bidding up the responsible input):
+  two price-takers face the same $10 market price. Firm B is the marginal firm
+  (breaks even); Firm A profits only because a superior input is still
+  underpriced. Drag Firm A's average-cost curve UP (or use the arrow keys) to bid
+  that input up: A's average cost climbs until the $20 profit is competed away.
+
+  ECONOMICS (recomputed live from the equations, never keyframed):
+    Price P = $10 (flat demand = MR), drawn across both firms.
+    Firm A  MC_A = 2 + q  (FIXED: the input revaluation is a lump-sum fixed cost,
+            so marginal cost and the profit-max output q = 8 never move).
+            AC_A(q) = F/q + 2 + 0.5q, fixed cost F swept 12 -> 32 by the drag.
+            F = 12 (input underpriced): AC_A(8) = 7.50, profit = (10-7.50)x8 = $20.
+            F = 32 (input bid up): the added fixed cost = the prior profit ($20),
+            so AC_A rises by 20/q = exactly $2.50 at q = 8 -> AC_A(8) = 10 = P,
+            profit $0; AC_A' is then tangent to the price line at q = 8. A parallel
+            +$2.50 shift would also raise MC and is therefore NOT used.
+            profit at 8 = 32 - F ; AC_A(8) = F/8 + 6.
+    Firm B  MC_B = 4 + q, AC_B = 18/q + 4 + 0.5q, min $10 at q = 6, MC_B(6) = 10
+            -> produces 6, breaks even. UNCHANGED throughout.
+  The only shaded mark is Firm A's FIRM PROFIT BOX (AC_A(8) -> price over 0->8);
+  it is a firm profit rectangle, NOT a welfare/surplus area, and it collapses to
+  zero as the input is bid up. No surplus/DWL shading anywhere.
+
+  Static-base architecture: the markup below is the "before" state (F = 12, profit
+  box drawn) -- the no-JS DOM shows a complete base figure; the script re-attaches
+  drag/keyboard/readout and redraws the climbing AC curve. The static SVG
+  t07a-ep10-8-profits-competed-away.svg (both states + shift arrow) is the
+  <noscript> fallback.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Profits competed away - bid the input up</title>
+<style>
+  :root{
+    --font-body: Georgia, 'Times New Roman', serif;
+    --paper:   #f7f4ef;   /* card background            */
+    --surface: #fdfcf9;   /* plot backing               */
+    --ink:     #1a1c1e;   /* MC curves + headings       */
+    --muted:   #6b6459;   /* axes, ticks, ghost AC      */
+    --accent:  #b3402a;   /* price line, profit box, shift arrow */
+    --accent2: #b07a2c;   /* draggable AC + focus (house warm gold) */
+    --grid:    #e3ddd3;
+  }
+  html,body{margin:0;padding:0;background:var(--paper);font-family:var(--font-body);}
+  .wrap{max-width:640px;margin:0 auto;padding:10px 8px 6px;}
+  svg{display:block;width:100%;height:auto;background:var(--surface);
+      border:1px solid var(--grid);border-radius:4px;}
+  .hint{color:var(--muted);font-size:13px;margin:6px 2px 2px;text-align:center;}
+  .fallback{color:var(--muted);font-size:14px;padding:8px;}
+  .fallback a{color:var(--ink);}
+  text{font-family:var(--font-body);}
+  .axis{stroke:var(--muted);stroke-width:1.4;}
+  .tick{fill:var(--muted);font-size:11px;}
+  .axlbl{fill:var(--muted);font-size:12px;}
+  .title{fill:var(--ink);font-size:13px;font-weight:bold;}
+  .mc{stroke:var(--ink);stroke-width:2.6;fill:none;stroke-linecap:round;}
+  .mclbl{fill:var(--ink);font-size:11.5px;font-style:italic;}
+  .acghost{stroke:var(--muted);stroke-width:2;stroke-dasharray:7 5;opacity:.5;fill:none;}
+  .acB{stroke:var(--accent2);stroke-width:2.6;fill:none;stroke-linecap:round;opacity:.9;}
+  .ac{stroke:var(--accent2);stroke-width:3;fill:none;stroke-linecap:round;}
+  .achit{stroke:transparent;stroke-width:24;cursor:ns-resize;fill:none;}
+  .aclbl{fill:var(--accent2);font-size:11.5px;font-style:italic;}
+  .price{stroke:var(--accent);stroke-width:2.2;stroke-dasharray:6 4;}
+  .pricelbl{fill:var(--accent);font-size:11px;font-weight:bold;}
+  .box{fill:var(--accent);opacity:.13;}
+  .boxline{stroke:var(--accent);stroke-width:1;opacity:.4;}
+  .boxlbl{fill:var(--accent);font-size:11.5px;font-weight:bold;}
+  .drop{stroke:var(--muted);stroke-width:1;stroke-dasharray:3 4;opacity:.8;}
+  .dot{fill:var(--ink);}
+  .acdot{fill:var(--accent2);}
+  .shift{stroke:var(--accent);stroke-width:2;}
+  .shiftlbl{fill:var(--accent);font-size:11px;}
+  .evenlbl{fill:var(--muted);font-size:11px;}
+  .state{fill:var(--muted);font-size:12px;}
+  .takeaway{fill:var(--accent);font-size:12.5px;font-weight:bold;}
+  .sep{stroke:var(--grid);stroke-width:1;}
+  #acFocus:focus{outline:none;}
+  #acFocus:focus + .focusring{opacity:1;}
+  .focusring{opacity:0;stroke:var(--accent2);stroke-width:1.5;fill:none;
+             stroke-dasharray:3 3;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <svg id="fig" viewBox="0 0 640 460" role="group"
+       aria-label="Two price-taking firms face the same market price of 10 dollars. Firm B, the marginal firm, has a lowest average cost of exactly 10 dollars at 6 units, so it just breaks even. Firm A makes 8 units where its marginal cost meets the 10-dollar price; its average cost there is only 7.50, so it earns a 20-dollar profit -- but only because a superior input is still underpriced. Drag Firm A's average-cost curve up to bid that input up: A's average cost climbs to 10 dollars at 8 units and the profit vanishes, competed away by being capitalized into the price of the resource responsible for it. Firm B is unchanged throughout.">
+
+    <defs>
+      <marker id="ep108ah" viewBox="0 0 10 10" refX="8" refY="5"
+              markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M0,0 L10,5 L0,10 z" fill="#b3402a"/>
+      </marker>
+    </defs>
+
+    <!-- ===================== static base: "before" state (F = 12) =====================
+         Firm A geometry: XA(q)=70+18.5q, Y(p)=320-17p.  q8=218, P=$10 at y150,
+         AC_A(8)=7.50 at y192.5.  Firm B: XB(q)=372+18.5q, q6=483.  -->
+
+    <!-- panel titles -->
+    <text class="title" x="70"  y="34">Firm A</text>
+    <text class="title" x="372" y="34">Firm B (marginal firm)</text>
+
+    <!-- axes: Firm A -->
+    <line class="axis" x1="70"  y1="44"  x2="70"  y2="320" marker-end="url(#ep108ah)"/>
+    <line class="axis" x1="70"  y1="320" x2="300" y2="320" marker-end="url(#ep108ah)"/>
+    <!-- axes: Firm B -->
+    <line class="axis" x1="372" y1="44"  x2="372" y2="320" marker-end="url(#ep108ah)"/>
+    <line class="axis" x1="372" y1="320" x2="584" y2="320" marker-end="url(#ep108ah)"/>
+
+    <!-- FIRM PROFIT BOX (before): (0,7.50)-(8,10). JS reshapes its top edge. -->
+    <rect id="box" class="box" x="70" y="150" width="148" height="42.5"/>
+    <line id="boxTop" class="boxline" x1="70" y1="192.5" x2="218" y2="192.5"/>
+    <text id="boxLbl" class="boxlbl" x="120" y="176" text-anchor="middle">Profit = $20</text>
+
+    <!-- price line P = $10 across both firms -->
+    <line class="price" x1="70"  y1="150" x2="300" y2="150"/>
+    <line class="price" x1="372" y1="150" x2="584" y2="150"/>
+    <text class="pricelbl" x="72" y="145">Price = $10</text>
+    <text class="pricelbl" x="374" y="145">Price = $10</text>
+
+    <!-- ghost AC_A (before) -- shown only while dragging; JS toggles opacity -->
+    <polyline id="acGhost" class="acghost" opacity="0" points=""/>
+
+    <!-- Firm A: MC (fixed) + active AC (climbs) -->
+    <polyline class="mc" points="114.4,245.2 230.9,138.1"/>
+    <text class="mclbl" x="234" y="136">MC</text>
+    <polyline id="acA"    class="ac"    points="104.2,160.0 107.3,167.6 110.3,173.8 113.3,178.9 116.3,183.3 119.4,186.9 122.4,189.9 125.4,192.4 128.4,194.6 131.5,196.4 134.5,197.8 137.5,199.1 140.5,200.1 143.6,200.9 146.6,201.5 149.6,202.0 152.6,202.4 155.7,202.6 158.7,202.7 161.7,202.7 164.7,202.6 167.8,202.5 170.8,202.2 173.8,201.9 176.8,201.6 179.9,201.2 182.9,200.7 185.9,200.2 188.9,199.6 192.0,199.0 195.0,198.4 198.0,197.7 201.0,197.0 204.1,196.3 207.1,195.5 210.1,194.7 213.1,193.9 216.2,193.0 219.2,192.2 222.2,191.3 225.2,190.4 228.3,189.4 231.3,188.5 234.3,187.5 237.3,186.6 240.4,185.6 243.4,184.6 246.4,183.5 249.4,182.5"/>
+    <polyline id="acAHit" class="achit" points="104.2,160.0 249.4,182.5"/>
+    <text id="acLbl" class="aclbl" x="252" y="184">AC</text>
+
+    <!-- Firm A: shift arrow (shown while dragging), q = 9.4 -->
+    <line id="shiftArr" class="shift" x1="243.9" y1="184" x2="243.9" y2="152"
+          marker-end="url(#ep108ah)" opacity="0"/>
+    <text id="shiftLbl" class="shiftlbl" opacity="0" text-anchor="middle">
+      <tspan id="shiftL1" x="222" y="70">input bid up</tspan>
+      <tspan id="shiftL2" x="222" y="83">(profit imputed to it)</tspan>
+    </text>
+
+    <!-- Firm A: droplines + dots (profit-max at q=8; AC dot climbs) -->
+    <line class="drop" x1="218" y1="150" x2="218" y2="320"/>
+    <circle class="dot"   cx="218" cy="150" r="3.6"/>
+    <circle id="acDot" class="acdot" cx="218" cy="192.5" r="3.6"/>
+    <text class="tick" x="218" y="334" text-anchor="middle">8</text>
+
+    <!-- Firm B: MC + AC (fixed), break-even dot at q=6 -->
+    <polyline class="mc"  points="416.4,211.2 531.1,105.8"/>
+    <text class="mclbl" x="534" y="104">MC</text>
+    <polyline class="acB" points="410.9,88.4 413.7,97.0 416.5,104.3 419.3,110.6 422.1,116.0 424.9,120.7 427.7,124.8 430.5,128.4 433.4,131.5 436.2,134.3 439.0,136.7 441.8,138.8 444.6,140.7 447.4,142.3 450.2,143.7 453.1,144.9 455.9,146.0 458.7,146.9 461.5,147.6 464.3,148.3 467.1,148.8 469.9,149.2 472.7,149.5 475.6,149.8 478.4,149.9 481.2,150.0 484.0,150.0 486.8,149.9 489.6,149.8 492.4,149.7 495.3,149.4 498.1,149.2 500.9,148.9 503.7,148.5 506.5,148.1 509.3,147.7 512.1,147.2 515.0,146.7 517.8,146.2 520.6,145.6 523.4,145.0 526.2,144.4 529.0,143.8 531.8,143.1 534.6,142.5 537.5,141.8 540.3,141.0 543.1,140.3 545.9,139.5"/>
+    <text class="aclbl" x="548" y="141">AC</text>
+    <line class="drop" x1="483" y1="150" x2="483" y2="320"/>
+    <circle class="dot" cx="483" cy="150" r="3.6"/>
+    <text class="tick" x="483" y="334" text-anchor="middle">6</text>
+    <text class="evenlbl" x="483" y="228" text-anchor="middle">breaks even</text>
+
+    <!-- axis titles -->
+    <text class="axlbl" x="185" y="352" text-anchor="middle">Output (units)</text>
+    <text class="axlbl" x="478" y="352" text-anchor="middle">Output (units)</text>
+    <text class="axlbl" transform="rotate(-90 18 184)" x="18" y="184"
+          text-anchor="middle">Cost / price (dollars)</text>
+
+    <!-- keyboard proxy for the AC drag (percent of the input revaluation) -->
+    <rect id="acFocus" x="104" y="150" width="150" height="46" fill="transparent"
+          tabindex="0" role="slider"
+          aria-label="Price of Firm A's superior input, from underpriced to fully bid up. Increase to raise Firm A's average cost and compete its profit away."
+          aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"
+          aria-valuetext="Firm A: makes 8 at $10, average cost $7.50 - profit $20. Firm B: makes 6, average cost $10 - breaks even."/>
+    <rect id="focusRing" class="focusring" x="100" y="146" width="158" height="54" rx="4"/>
+
+    <!-- readout band: muted state (2 rows) + accent takeaway (2 rows) -->
+    <line class="sep" x1="16" y1="372" x2="624" y2="372"/>
+    <text class="state" text-anchor="middle">
+      <tspan id="state1" x="320" y="390">Firm A: makes 8 at $10, average cost $7.50 - profit $20.</tspan>
+      <tspan id="state2" x="320" y="405">Firm B: makes 6, average cost $10 - breaks even.</tspan>
+    </text>
+    <text class="takeaway" text-anchor="middle">
+      <tspan id="take1" x="320" y="427">A profits only because its superior input is still cheap;</tspan>
+      <tspan id="take2" x="320" y="443">B, the marginal firm, just covers its costs.</tspan>
+    </text>
+  </svg>
+
+  <p class="hint">Drag Firm A's gold average-cost curve upward (or focus it and use
+    the arrow keys) to bid its superior input up and watch the profit vanish.</p>
+
+  <noscript>
+    <p class="fallback">Interactive view needs JavaScript. See the
+      <a href="t07a-ep10-8-profits-competed-away.svg">static version of this figure</a>
+      (it shows the profit box, the shifted average-cost curve, and the input being
+      bid up).</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  // ---- geometry (mirrors the base markup) ----
+  var X0A = 70, X0B = 372, SX = 18.5;   // panel x-origins; px per unit output
+  var YAX = 320, SY = 17;               // x-axis foot; px per dollar
+  function XA (q) { return X0A + q * SX; }
+  function XB (q) { return X0B + q * SX; }
+  function Y  (p) { return YAX - p * SY; }
+
+  // ---- economics (brief Section C invariants; recomputed live, never keyframed) ----
+  // Firm A: MC_A = 2 + q (FIXED); AC_A(q) = F/q + 2 + 0.5q, F swept 12..32.
+  //   The revalued input is a fixed/specialized asset -> lump-sum fixed cost:
+  //   raises AC only, MC and the profit-max output q = 8 stay put. Adding a fixed
+  //   cost = the prior profit ($20) makes AC_A(8) rise by 20/q = $2.50 to $10 = P.
+  //   profit(8) = 32 - F ; AC_A(8) = F/8 + 6.
+  // Firm B: unchanged (breaks even at 6). t = (F-12)/20 in [0,1] is the drag state.
+  var FMIN = 12, FMAX = 32, P0 = 10, QA = 8;
+  var F = FMIN;                          // current fixed cost (drag state)
+  function acA (q, f) { return f / q + 2 + 0.5 * q; }
+  function acAbefore (q) { return 12 / q + 2 + 0.5 * q; }
+  function money (v) { return '$' + v.toFixed(2); }
+
+  var svg = document.getElementById('fig');
+  var $ = function (id) { return document.getElementById(id); };
+
+  // build an SVG points string for AC_A(., f) over [q0,q1]
+  function acPoints (f, q0, q1, n) {
+    var s = [], i, q;
+    for (i = 0; i <= n; i++) { q = q0 + (q1 - q0) * i / n; s.push(XA(q).toFixed(1) + ',' + Y(acA(q, f)).toFixed(1)); }
+    return s.join(' ');
+  }
+
+  // ---- readout strings: the two pinned snap states are verbatim; 12<F<32 gets a
+  //      live transitional line that never contradicts the pinned states. ----
+  function strings (f) {
+    var prof = 32 - f, ac8 = f / 8 + 6, out = {};
+    if (Math.abs(f - FMIN) < 1e-9) {                 // before (input underpriced)
+      out.state = 'Firm A: makes 8 at $10, average cost $7.50 - profit $20. ' +
+                  'Firm B: makes 6, average cost $10 - breaks even.';
+      out.take  = 'A profits only because its superior input is still cheap; ' +
+                  'B, the marginal firm, just covers its costs.';
+    } else if (Math.abs(f - FMAX) < 1e-9) {          // after (input bid up)
+      out.state = "Rivals bid A's input up: A's average cost rises to $10 at 8 " +
+                  'units - profit $0. Firm B still breaks even.';
+      out.take  = "The profit is competed away by being capitalized into the " +
+                  "input's price; now both firms earn a normal return.";
+    } else {                                         // transitional 12<F<32
+      out.state = "Rivals bidding A's input up: A's average cost at 8 units is " +
+                  money(ac8) + ' - profit ' + money(prof) + '. Firm B still breaks even.';
+      out.take  = "As the input's price rises, A's profit is competed away toward " +
+                  'zero; B, the marginal firm, is unaffected.';
+    }
+    return out;
+  }
+
+  // ---- word-wrap into up to N rows ----
+  function wrapN (s, max, rows) {
+    var words = s.split(' '), lines = [], cur = '', i, trial;
+    for (i = 0; i < words.length; i++) {
+      trial = cur ? cur + ' ' + words[i] : words[i];
+      if (trial.length > max && cur && lines.length < rows - 1) { lines.push(cur); cur = words[i]; }
+      else { cur = trial; }
+    }
+    if (cur) lines.push(cur);
+    while (lines.length < rows) lines.push('');
+    return lines;
+  }
+
+  function render () {
+    var atBefore = Math.abs(F - FMIN) < 1e-9;
+    var ac8 = acA(QA, F), prof = 32 - F;
+
+    // active AC_A curve + fat hit path
+    var pts = acPoints(F, 1.85, 9.7, 48);
+    $('acA').setAttribute('points', pts);
+    $('acAHit').setAttribute('points', pts);
+    // label rides the right end of the curve
+    var xr = XA(9.7), yr = Y(acA(9.7, F));
+    $('acLbl').setAttribute('x', xr + 3); $('acLbl').setAttribute('y', yr + 2);
+
+    // ghost "before" AC (shown once the input is being bid up)
+    $('acGhost').setAttribute('points', acPoints(12, 1.85, 9.7, 48));
+    $('acGhost').setAttribute('opacity', atBefore ? 0 : 1);
+
+    // profit box: (0, ac8) -> (8, 10); collapses as ac8 -> 10
+    var yTop = Y(P0), yBot = Y(ac8), h = Math.max(0, yBot - yTop);
+    $('box').setAttribute('y', yTop); $('box').setAttribute('height', h);
+    $('boxTop').setAttribute('y1', yBot); $('boxTop').setAttribute('y2', yBot);
+    $('acDot').setAttribute('cy', yBot);
+    // box label: only when the box is tall enough to hold it
+    var bl = $('boxLbl');
+    if (h >= 22) {
+      bl.setAttribute('opacity', 1);
+      bl.textContent = 'Profit = $' + prof.toFixed(0);
+      bl.setAttribute('y', (yTop + yBot) / 2 + 4);
+    } else { bl.setAttribute('opacity', 0); }
+
+    // shift arrow at q = 9.4 (ghost level -> current level) + its label
+    var sx = XA(9.4), yb = Y(acAbefore(9.4)), yn = Y(acA(9.4, F));
+    var sa = $('shiftArr');
+    if (!atBefore && (yb - yn) > 10) {
+      sa.setAttribute('opacity', 1);
+      sa.setAttribute('x1', sx); sa.setAttribute('x2', sx);
+      sa.setAttribute('y1', yb - 3); sa.setAttribute('y2', yn + 4);
+      $('shiftLbl').setAttribute('opacity', 1);
+    } else { sa.setAttribute('opacity', 0); $('shiftLbl').setAttribute('opacity', 0); }
+
+    // readout + aria
+    var str = strings(F);
+    var sRows = wrapN(str.state, 60, 2);
+    $('state1').textContent = sRows[0]; $('state2').textContent = sRows[1];
+    var tRows = wrapN(str.take, 58, 2);
+    $('take1').textContent = tRows[0]; $('take2').textContent = tRows[1];
+    var f = $('acFocus');
+    f.setAttribute('aria-valuenow', String(Math.round((F - FMIN) / (FMAX - FMIN) * 100)));
+    f.setAttribute('aria-valuetext', str.state);
+  }
+
+  // clamp F to [12,32] and snap firmly to either end
+  function clampSnap (f) {
+    f = Math.max(FMIN, Math.min(FMAX, f));
+    if (f - FMIN < 1.0) f = FMIN;
+    if (FMAX - f < 1.0) f = FMAX;
+    return f;
+  }
+
+  // ---- pointer drag: grab Firm A's AC curve, pull up. The pointer's dollar
+  //      height sets the DESIRED average cost at q = 8; F = 8*(ac8 - 6). ----
+  function svgPoint (evt) {
+    var pt = svg.createSVGPoint();
+    pt.x = evt.clientX; pt.y = evt.clientY;
+    return pt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+  var dragging = false;
+  function onDown (evt) {
+    dragging = true;
+    if (evt.pointerId !== undefined && evt.target.setPointerCapture) {
+      try { evt.target.setPointerCapture(evt.pointerId); } catch (e) {}
+    }
+    evt.preventDefault();
+  }
+  function onMove (evt) {
+    if (!dragging) return;
+    var p = (YAX - svgPoint(evt).y) / SY;          // dollars at the pointer
+    var ac8 = Math.max(7.5, Math.min(10, p));       // desired AC_A(8) in [7.5,10]
+    var f = clampSnap(8 * (ac8 - 6));               // invert AC_A(8) = F/8 + 6
+    if (Math.abs(f - F) > 1e-9) { F = f; render(); }
+  }
+  function onUp (evt) {
+    dragging = false;
+    if (evt.pointerId !== undefined && evt.target.releasePointerCapture) {
+      try { evt.target.releasePointerCapture(evt.pointerId); } catch (e) {}
+    }
+  }
+  ['acAHit', 'acFocus'].forEach(function (id) {
+    $(id).addEventListener('pointerdown', onDown);
+  });
+  svg.addEventListener('pointermove', onMove);
+  svg.addEventListener('pointerup', onUp);
+  svg.addEventListener('pointercancel', onUp);
+
+  // ---- keyboard: arrows step the input's price by 10% of the 12->32 range ----
+  var KSTEP = (FMAX - FMIN) / 10;
+  $('acFocus').addEventListener('keydown', function (evt) {
+    var delta = 0;
+    if (evt.key === 'ArrowUp' || evt.key === 'ArrowRight') delta = KSTEP;
+    else if (evt.key === 'ArrowDown' || evt.key === 'ArrowLeft') delta = -KSTEP;
+    else if (evt.key === 'Home') { F = FMIN; render(); evt.preventDefault(); return; }
+    else if (evt.key === 'End') { F = FMAX; render(); evt.preventDefault(); return; }
+    else return;
+    evt.preventDefault();
+    F = clampSnap(F + delta);
+    render();
+  });
+
+  // ---- debug hook (widget standard) ----
+  window.__fig = {
+    set: function (pct) {                            // pct 0..100 of the revaluation
+      F = clampSnap(FMIN + Number(pct) / 100 * (FMAX - FMIN)); render();
+      return { F: F, profitA: 32 - F, acA8: F / 8 + 6 };
+    },
+    get: function () {
+      return {
+        F: +F.toFixed(4),
+        firmA: { output: QA, mc8: 2 + QA, acA8: +(F / 8 + 6).toFixed(4), profit: +(32 - F).toFixed(4) },
+        firmB: { output: 6, acB6: 18 / 6 + 4 + 3, profit: 0 },
+        state: F <= FMIN + 1e-9 ? 'input underpriced' : (F >= FMAX - 1e-9 ? 'input bid up' : 'bidding up')
+      };
+    }
+  };
+
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,391 @@
+<!doctype html>
+<!--
+  t10b-ep14-7-wage-bounds-interactive.html
+  Interactive version of the T10b wage-bounds figure (after E&P Fig 14-7,
+  course-adapted numbers per the brief Section C invariants).
+  Family F3 (policy line / wedge): ONE horizontal wage line is draggable
+  vertically over a labor market with D: W = 16 - Q and S: W = 2 + Q
+  (Q in thousands of workers), equilibrium (L0, W0) = (7, $9.00).
+  Range $5.00-$13.00 in $0.50 steps. The line READS AS its binding role only:
+  above W0 it narrates as a wage FLOOR (surplus band, dotted fill); below W0
+  as a wage CEILING (shortage band, hatched fill). A floor below W0 or a
+  ceiling above W0 would not bind, so the widget does not depict non-binding
+  bounds. At exactly W = $9.00 the market clears: no band, gap = 0.
+  TIE-BREAKS / CONVENTIONS:
+  - Employment = the SHORT side, min(Qd, Qs), at every W. The muted readout's
+    phrasing names the short side: "employers hire ..." under a floor (demand
+    is short), "only ... will work" under a ceiling (supply is short).
+  - Qd = 16 - W, Qs = W - 2 (thousands; half-values occur at half-dollar
+    steps, formatted with a comma: 4.5 -> "4,500").
+  - Symmetry check: at $12 and $6 (each $3 from W0) the gap is the same
+    6,000 (= 2 x 3, both slopes +-1) - matching the source's symmetric
+    construction.
+  Static-base architecture: the initial floor state at W = $12.00 is real
+  markup below; the script only re-attaches drag/keyboard/readout behavior.
+  The static SVG t10b-ep14-7-wage-bounds.svg (which shows BOTH fixed bounds
+  at once, per the slide track) is the <noscript> fallback.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wage floor and ceiling - drag the wage line</title>
+<style>
+  :root{
+    --font-body: Georgia, 'Times New Roman', serif;
+    --paper:   #f7f4ef;   /* card background            */
+    --surface: #fdfcf9;   /* plot backing               */
+    --ink:     #1a1c1e;   /* curves + headings          */
+    --muted:   #6b6459;   /* axes, ticks, state line    */
+    --accent:  #b3402a;   /* wage line, bands, takeaway */
+    --accent2: #b07a2c;   /* focus ring (house warm gold) */
+    --grid:    #e3ddd3;
+  }
+  html,body{margin:0;padding:0;background:var(--paper);font-family:var(--font-body);}
+  .wrap{max-width:480px;margin:0 auto;padding:10px 8px 6px;}
+  svg{display:block;width:100%;height:auto;background:var(--surface);
+      border:1px solid var(--grid);border-radius:4px;}
+  .hint{color:var(--muted);font-size:13px;margin:6px 2px 2px;text-align:center;}
+  .fallback{color:var(--muted);font-size:14px;padding:8px;}
+  .fallback a{color:var(--ink);}
+  text{font-family:var(--font-body);}
+  .axis{stroke:var(--muted);stroke-width:1.4;}
+  .tick{fill:var(--muted);font-size:11px;}
+  .axlbl{fill:var(--muted);font-size:12.5px;}
+  .curve{stroke:var(--ink);stroke-width:2.6;fill:none;stroke-linecap:round;}
+  .curvelbl{fill:var(--ink);font-size:13px;font-style:italic;}
+  .drop{stroke:var(--muted);stroke-width:1;stroke-dasharray:3 4;opacity:.8;}
+  .dot{fill:var(--ink);}
+  .xdot{fill:var(--accent);}
+  .wage{stroke:var(--accent);stroke-width:2.4;}
+  .wagehit{stroke:transparent;stroke-width:22;cursor:ns-resize;}
+  .wagetick{fill:var(--accent);font-size:11.5px;font-weight:bold;}
+  .gaplbl{fill:var(--accent);font-size:12px;}
+  .gaparrow{stroke:var(--accent);stroke-width:1.6;}
+  .patink{fill:var(--accent);opacity:.5;}
+  .pathatch{stroke:var(--accent);stroke-width:1.1;opacity:.55;}
+  .state{fill:var(--muted);font-size:12.5px;}
+  .takeaway{fill:var(--accent);font-size:13px;font-weight:bold;}
+  .sep{stroke:var(--grid);stroke-width:1;}
+  #wageFocus:focus{outline:none;}
+  #wageFocus:focus + .focusring{opacity:1;}
+  .focusring{opacity:0;stroke:var(--accent2);stroke-width:1.5;fill:none;
+             stroke-dasharray:3 3;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <svg id="fig" viewBox="0 0 460 462" role="group"
+       aria-label="A labor market. The demand for labor slopes down from a wage of 16 dollars, the supply of labor slopes up, and they cross at the market-clearing wage of 9 dollars with 7,000 workers hired. Drag the horizontal wage line up or down: held above 9 dollars it is a wage floor and opens a surplus of workers who want jobs that employers will not fill; held below 9 dollars it is a wage ceiling and opens a shortage of workers that employers want but cannot hire. Either way employment is the short side of the market.">
+
+    <defs>
+      <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5"
+              markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M0,0 L10,5 L0,10 z" fill="#b3402a"/>
+      </marker>
+      <pattern id="patDots" width="7" height="7" patternUnits="userSpaceOnUse">
+        <circle class="patink" cx="2.2" cy="2.2" r="1.2"/>
+      </pattern>
+      <pattern id="patHatch" width="7" height="7" patternUnits="userSpaceOnUse">
+        <path class="pathatch" d="M0 7 L7 0"/>
+      </pattern>
+    </defs>
+
+    <!-- ====================== static base ======================
+         Geometry: X(q) = 64 + 24q  (q in thousands, 0..14)
+                   Y(w) = 330 - 16w (w in $/hour, 0..18)
+         Initial state = wage FLOOR at W = $12.00: Qd 4 -> x 160,
+         Qs 10 -> x 304, line y 138, equilibrium (232,186).      -->
+
+    <!-- axes -->
+    <line class="axis" x1="64" y1="36"  x2="64"  y2="330"/>
+    <line class="axis" x1="64" y1="330" x2="410" y2="330"/>
+
+    <!-- gap band between S and D at the line height (JS reshapes/repatterns) -->
+    <polygon id="band" points="160,138 304,138 232,186" fill="url(#patDots)"/>
+
+    <!-- equilibrium droplines + dot. The vertical dropline is TWO segments so
+         JS can open a gap behind the "Shortage of labor" label (which sits
+         below the wage line, centered on x = 232, in the ceiling regime). -->
+    <line id="dropV1" class="drop" x1="232" y1="186" x2="232" y2="330"/>
+    <line id="dropV2" class="drop" x1="232" y1="330" x2="232" y2="330" opacity="0"/>
+    <line class="drop" x1="64"  y1="186" x2="232" y2="186"/>
+
+    <!-- labor demand and supply -->
+    <line class="curve" x1="88" y1="90"  x2="376" y2="282"/>  <!-- D: (1,15)..(13,3) -->
+    <line class="curve" x1="88" y1="282" x2="376" y2="90"/>   <!-- S: (1,3)..(13,15) -->
+    <text class="curvelbl" x="382" y="287">D</text>
+    <text class="curvelbl" x="382" y="97">S</text>
+
+    <circle class="dot" cx="232" cy="186" r="4"/>
+
+    <!-- ticks: W0 and L0 fixed; the wage tick moves with the line -->
+    <text id="w0Tick" class="tick" x="58" y="190" text-anchor="end">W<tspan dy="3" font-size="8.5">0</tspan></text>
+    <text class="tick" x="232" y="344" text-anchor="middle">L<tspan dy="3" font-size="8.5">0</tspan></text>
+    <text id="wTick" class="wagetick" x="58" y="142" text-anchor="end">$12.00</text>
+
+    <!-- axis titles -->
+    <text class="axlbl" x="237" y="366" text-anchor="middle">Quantity of labor (thousands of workers)</text>
+    <text class="axlbl" transform="rotate(-90 14 183)" x="14" y="183"
+          text-anchor="middle">Wage rate ($ per hour)</text>
+
+    <!-- crossing dots on D and S at the line height (JS moves) -->
+    <circle id="xdotL" class="xdot" cx="160" cy="138" r="3.5"/>
+    <circle id="xdotR" class="xdot" cx="304" cy="138" r="3.5"/>
+
+    <!-- inward gap arrows along the line (offset toward equilibrium) -->
+    <line id="arrL" class="gaparrow" x1="163" y1="145" x2="218" y2="145" marker-end="url(#ah)"/>
+    <line id="arrR" class="gaparrow" x1="301" y1="145" x2="246" y2="145" marker-end="url(#ah)"/>
+
+    <!-- gap label off the line (two rows; JS retexts/moves/hides) -->
+    <text id="gapLbl" class="gaplbl" x="232" text-anchor="middle">
+      <tspan id="gapLbl1" x="232" y="112">Surplus of labor</tspan>
+      <tspan id="gapLbl2" x="232" y="126">(unemployment)</tspan>
+    </text>
+
+    <!-- draggable wage line + wide hit zone + drag glyph -->
+    <g id="wageG">
+      <line id="wage" class="wage" x1="64" y1="138" x2="404" y2="138"/>
+      <text id="wageGlyph" class="wagetick" x="409" y="142">&#8597;</text>
+      <line id="wageHit" class="wagehit" x1="64" y1="138" x2="404" y2="138"/>
+    </g>
+
+    <!-- keyboard proxy for the wage line -->
+    <rect id="wageFocus" x="64" y="130" width="340" height="16" fill="transparent"
+          tabindex="0" role="slider"
+          aria-label="Fixed wage line, dollars per hour. Above 9 dollars it is a wage floor; below, a wage ceiling."
+          aria-valuemin="5" aria-valuemax="13" aria-valuenow="12"
+          aria-valuetext="Wage fixed at $12.00: employers hire 4,000 workers, but 10,000 want work at that wage."/>
+    <rect id="focusRing" class="focusring" x="60" y="126" width="352" height="24" rx="4"/>
+
+    <!-- readout band: muted state + accent takeaway (each wraps to 2 rows) -->
+    <line class="sep" x1="16" y1="382" x2="444" y2="382"/>
+    <text class="state" text-anchor="middle">
+      <tspan id="state1" x="230" y="400">Wage fixed at $12.00: employers hire 4,000 workers,</tspan>
+      <tspan id="state2" x="230" y="415">but 10,000 want work at that wage.</tspan>
+    </text>
+    <text class="takeaway" text-anchor="middle">
+      <tspan id="take1" x="230" y="434">Surplus of 6,000 &#8212; unemployment created by holding</tspan>
+      <tspan id="take2" x="230" y="450">the wage above market-clearing.</tspan>
+    </text>
+  </svg>
+
+  <p class="hint">Drag the wage line up or down (or focus it and use the arrow
+    keys). Above $9.00 it is a floor; below, a ceiling.</p>
+
+  <noscript>
+    <p class="fallback">Interactive view needs JavaScript. See the
+      <a href="t10b-ep14-7-wage-bounds.svg">static version of this figure</a>
+      (it shows the floor and the ceiling at the same time).</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  // ---- geometry (must mirror the base markup) ----
+  var X0 = 64, SX = 24;                 // x px origin; px per thousand workers
+  var YAX = 330, SY = 16;               // x-axis foot; px per $/hour
+  var EQX = 232, EQY = 186;             // equilibrium (7, $9)
+  function X (q) { return X0 + q * SX; }
+  function Y (w) { return YAX - w * SY; }
+
+  // ---- economics (brief Section C invariants) ----
+  // D: W = 16 - Q ; S: W = 2 + Q  =>  Qd = 16 - W, Qs = W - 2 (thousands).
+  // Employment = the SHORT side, min(Qd, Qs), at every W (tie-break rule).
+  // Regime = the BINDING interpretation only: floor above $9, ceiling below.
+  var WMIN = 5, WMAX = 13, STEP = 0.5, W0 = 9;
+  var wage = 12;
+
+  var svg = document.getElementById('fig');
+  var $ = function (id) { return document.getElementById(id); };
+
+  function qd (w) { return 16 - w; }
+  function qs (w) { return w - 2; }
+  function fmtW (w) { return '$' + w.toFixed(2); }
+  function fmtQ (q) { // thousands with comma: 4.5 -> "4,500"
+    return String(Math.round(q * 1000)).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+  function wrap2 (s, max) { // split into <= 2 rows at a word break
+    if (s.length <= max) return [s, ''];
+    var cut = s.lastIndexOf(' ', max);
+    if (cut < 1) cut = max;
+    return [s.slice(0, cut), s.slice(cut + 1)];
+  }
+  function setRows (id1, id2, s, max) {
+    var rows = wrap2(s, max);
+    $(id1).textContent = rows[0];
+    $(id2).textContent = rows[1];
+  }
+
+  function strings (w) {
+    var d = qd(w), s = qs(w), gap = Math.abs(s - d), out = {};
+    if (w > W0) {          // floor regime: demand is the short side
+      out.state = 'Wage fixed at ' + fmtW(w) + ': employers hire ' + fmtQ(d) +
+        ' workers, but ' + fmtQ(s) + ' want work at that wage.';
+      out.take = 'Surplus of ' + fmtQ(gap) +
+        ' — unemployment created by holding the wage above market-clearing.';
+    } else if (w < W0) {   // ceiling regime: supply is the short side
+      out.state = 'Wage fixed at ' + fmtW(w) + ': employers want ' + fmtQ(d) +
+        ' workers, but only ' + fmtQ(s) + ' will work for that.';
+      out.take = 'Shortage of ' + fmtQ(gap) +
+        ' — unfilled jobs from holding the wage below market-clearing.';
+    } else {               // W = $9.00 exactly: the market clears
+      out.state = 'Wage ' + fmtW(w) + ': ' + fmtQ(7) + ' hired and ' + fmtQ(7) +
+        ' seeking work.';
+      out.take = 'The market clears — neither a floor nor a ceiling binds here.';
+    }
+    return out;
+  }
+
+  function render () {
+    var w = wage, y = Y(w), d = qd(w), s = qs(w);
+    var xl = X(Math.min(d, s)), xr = X(Math.max(d, s));
+    var atEq = Math.abs(w - W0) < 1e-9;
+
+    // wage line + hit zone + glyph + focus targets
+    ['wage', 'wageHit'].forEach(function (id) {
+      $(id).setAttribute('y1', y); $(id).setAttribute('y2', y);
+    });
+    $('wageGlyph').setAttribute('y', y + 4);
+    $('wageFocus').setAttribute('y', y - 8);
+    $('focusRing').setAttribute('y', y - 12);
+
+    // moving wage tick; hide the W0 tick when the line is within $1 of it
+    $('wTick').textContent = fmtW(w);
+    $('wTick').setAttribute('y', y + 4);
+    $('w0Tick').setAttribute('opacity', Math.abs(w - W0) < 1 ? 0 : 1);
+
+    // gap band: dotted surplus above W0, hatched shortage below, none at W0
+    var band = $('band');
+    if (atEq) {
+      band.setAttribute('opacity', 0);
+    } else {
+      band.setAttribute('opacity', 1);
+      band.setAttribute('points',
+        xl + ',' + y + ' ' + xr + ',' + y + ' ' + EQX + ',' + EQY);
+      band.setAttribute('fill', w > W0 ? 'url(#patDots)' : 'url(#patHatch)');
+    }
+
+    // crossing dots on D and S
+    ['xdotL', 'xdotR'].forEach(function (id, i) {
+      var el = $(id);
+      el.setAttribute('opacity', atEq ? 0 : 1);
+      el.setAttribute('cx', i === 0 ? xl : xr);
+      el.setAttribute('cy', y);
+    });
+
+    // inward arrows along the line, offset 7px toward the equilibrium side;
+    // shown only when the gap is wide enough to draw them (>= 3 thousand)
+    var showArr = Math.abs(w - W0) >= 1.5;
+    var ay = w > W0 ? y + 7 : y - 7;
+    var arrL = $('arrL'), arrR = $('arrR');
+    arrL.setAttribute('opacity', showArr ? 1 : 0);
+    arrR.setAttribute('opacity', showArr ? 1 : 0);
+    if (showArr) {
+      arrL.setAttribute('x1', xl + 3); arrL.setAttribute('x2', EQX - 14);
+      arrL.setAttribute('y1', ay); arrL.setAttribute('y2', ay);
+      arrR.setAttribute('x1', xr - 3); arrR.setAttribute('x2', EQX + 14);
+      arrR.setAttribute('y1', ay); arrR.setAttribute('y2', ay);
+    }
+
+    // gap label off the line: only when there is clear space (|W - 9| >= 2).
+    // In the ceiling regime the label sits below the line on x = 232, so the
+    // vertical equilibrium dropline opens a gap behind it (no text over lines).
+    var l1 = $('gapLbl1'), l2 = $('gapLbl2');
+    var dv1 = $('dropV1'), dv2 = $('dropV2');
+    dv1.setAttribute('y2', 330); dv2.setAttribute('opacity', 0);
+    if (w >= W0 + 2) {
+      $('gapLbl').setAttribute('opacity', 1);
+      l1.textContent = 'Surplus of labor'; l1.setAttribute('y', y - 26);
+      l2.textContent = '(unemployment)';   l2.setAttribute('y', y - 12);
+    } else if (w <= W0 - 2) {
+      $('gapLbl').setAttribute('opacity', 1);
+      l1.textContent = 'Shortage of labor'; l1.setAttribute('y', y + 20);
+      l2.textContent = '';
+      dv1.setAttribute('y2', y + 6);                    // stop above the label
+      dv2.setAttribute('y1', y + 28); dv2.setAttribute('y2', 330);
+      dv2.setAttribute('opacity', 1);                   // resume below it
+    } else {
+      $('gapLbl').setAttribute('opacity', 0);
+    }
+
+    // readout + aria
+    var str = strings(w);
+    setRows('state1', 'state2', str.state, 58);
+    setRows('take1', 'take2', str.take, 52);
+    var wf = $('wageFocus');
+    wf.setAttribute('aria-valuenow', String(w));
+    wf.setAttribute('aria-valuetext', str.state);
+  }
+
+  function clampSnap (w) {
+    w = Math.max(WMIN, Math.min(WMAX, w));
+    return Math.round(w / STEP) * STEP;
+  }
+
+  // ---- pointer drag (pointer capture; fast drags stay attached) ----
+  function svgPoint (evt) {
+    var pt = svg.createSVGPoint();
+    pt.x = evt.clientX; pt.y = evt.clientY;
+    return pt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+  var dragging = false;
+  function onDown (evt) {
+    dragging = true;
+    if (evt.pointerId !== undefined && evt.target.setPointerCapture) {
+      try { evt.target.setPointerCapture(evt.pointerId); } catch (e) {}
+    }
+    evt.preventDefault();
+  }
+  function onMove (evt) {
+    if (!dragging) return;
+    var w = (YAX - svgPoint(evt).y) / SY;
+    var snapped = clampSnap(w);
+    if (Math.abs(snapped - wage) > 1e-9) { wage = snapped; render(); }
+  }
+  function onUp (evt) {
+    dragging = false;
+    if (evt.pointerId !== undefined && evt.target.releasePointerCapture) {
+      try { evt.target.releasePointerCapture(evt.pointerId); } catch (e) {}
+    }
+  }
+  ['wageHit', 'wageFocus'].forEach(function (id) {
+    $(id).addEventListener('pointerdown', onDown);
+  });
+  svg.addEventListener('pointermove', onMove);
+  svg.addEventListener('pointerup', onUp);
+  svg.addEventListener('pointercancel', onUp);
+
+  // ---- keyboard ----
+  $('wageFocus').addEventListener('keydown', function (evt) {
+    var delta = 0;
+    if (evt.key === 'ArrowUp' || evt.key === 'ArrowRight') delta = STEP;
+    else if (evt.key === 'ArrowDown' || evt.key === 'ArrowLeft') delta = -STEP;
+    else if (evt.key === 'Home') { wage = WMIN; render(); evt.preventDefault(); return; }
+    else if (evt.key === 'End') { wage = WMAX; render(); evt.preventDefault(); return; }
+    else return;
+    evt.preventDefault();
+    wage = clampSnap(wage + delta);
+    render();
+  });
+
+  // ---- debug hook (widget standard) ----
+  window.__fig = {
+    set: function (w) { wage = clampSnap(Number(w)); render(); return wage; },
+    get: function () {
+      var d = qd(wage), s = qs(wage);
+      return {
+        wage: wage, qd: d, qs: s,
+        employment: Math.min(d, s),            // the short side rules
+        gap: Math.abs(s - d),
+        regime: wage > W0 ? 'floor' : (wage < W0 ? 'ceiling' : 'clearing')
+      };
+    }
+  };
+
+  render();
+})();
+</script>
+</body>
+</html>

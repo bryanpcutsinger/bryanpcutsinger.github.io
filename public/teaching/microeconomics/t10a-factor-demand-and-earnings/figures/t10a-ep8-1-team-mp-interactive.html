@@ -1,0 +1,351 @@
+<!doctype html>
+<!--
+  t10a-ep8-1-team-mp-interactive.html
+  Interactive version of the T10a team-production figure (after E&P Fig 8-1,
+  course-adapted to the post's own pinned Codlandia series; brief Section C
+  invariants). Family F1 (trace-the-schedule) with F5 bar-highlight elements:
+  drag the crew-size handle along the rail (or use the arrow keys). Bars 1..n
+  render active, bars > n muted; gain/loss shading vs the shore line
+  accumulates through n; the readout compares this member's product on the
+  boat vs on shore plus the running total-vs-shore comparison.
+  Numbers: crew member k = 1..8 adds 12, 18, 16, 12, 8, 4, 2, -8 fish aboard;
+  the shore alternative is 8 fish per member (horizontal line). TIE-BREAK: at
+  n = 5 the marginal catch aboard equals the shore catch exactly; the
+  convention is that the BREAK-EVEN MEMBER BOARDS (use the larger crew),
+  matching the post's hiring rule ("The fifth adds exactly 8, so the owner
+  hires five and stops"). Check identity: on-board gains 4+10+8+4+0 = 26
+  = total catch 66 - 5*8 forgone ashore.
+  Static-base architecture: the full figure (all bars, all gain/loss shading,
+  the optimum dot + annotation) is real markup below; the script only mutes
+  bars beyond the current crew and re-attaches drag/keyboard/readout behavior
+  (initial state n = 5, the optimum). The static SVG t10a-ep8-1-team-mp.svg is
+  the slide asset and the <noscript> fallback.
+  Vocabulary guard: no VMP / demand / wage words in this figure - the shore
+  line is opportunity cost; the wage link comes later in the post.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Team production - step through the crew size</title>
+<style>
+  :root{
+    --font-body: Georgia, 'Times New Roman', serif;
+    --paper:   #f7f4ef;   /* card background                 */
+    --surface: #fdfcf9;   /* plot backing                    */
+    --ink:     #1a1c1e;   /* bars, headings                  */
+    --muted:   #6b6459;   /* axes, ticks, state line         */
+    --accent:  #b3402a;   /* shore line, losses, takeaway    */
+    --accent2: #b07a2c;   /* gains + handle (house warm gold)*/
+    --grid:    #e3ddd3;
+  }
+  html,body{margin:0;padding:0;background:var(--paper);font-family:var(--font-body);}
+  .wrap{max-width:480px;margin:0 auto;padding:10px 8px 6px;}
+  svg{display:block;width:100%;height:auto;background:var(--surface);
+      border:1px solid var(--grid);border-radius:4px;}
+  .hint{color:var(--muted);font-size:13px;margin:6px 2px 2px;text-align:center;}
+  .fallback{color:var(--muted);font-size:14px;padding:8px;}
+  .fallback a{color:var(--ink);}
+  text{font-family:var(--font-body);}
+  .axis{stroke:var(--muted);stroke-width:1.4;}
+  .tick{fill:var(--muted);font-size:11px;}
+  .axlbl{fill:var(--muted);font-size:12px;}
+  .total{fill:var(--muted);font-size:12px;}
+  .bar{stroke:var(--ink);stroke-width:2;fill:none;}
+  .bar.dim{stroke:var(--grid);stroke-width:1.6;}
+  .gain{fill:var(--accent2);fill-opacity:.30;stroke:var(--accent2);
+        stroke-opacity:.7;stroke-width:1;}
+  .loss{fill:var(--accent);fill-opacity:.20;stroke:var(--accent);
+        stroke-opacity:.55;stroke-width:1;}
+  .shore{stroke:var(--accent);stroke-width:2.2;}
+  .shorelbl{fill:var(--accent);font-size:12px;font-style:italic;}
+  .boatlbl{fill:var(--ink);font-size:12px;font-style:italic;}
+  .ptr{stroke:var(--ink);stroke-width:1;opacity:.7;}
+  .ptr2{stroke:var(--muted);stroke-width:1;opacity:.8;}
+  .optlbl{fill:var(--muted);font-size:11.5px;}
+  .drop{stroke:var(--muted);stroke-width:1;stroke-dasharray:3 4;opacity:.8;}
+  .dot{fill:var(--ink);}
+  .rail{stroke:var(--grid);stroke-width:3;stroke-linecap:round;}
+  .railtick{stroke:var(--muted);stroke-width:1;}
+  .handle{fill:var(--accent2);stroke:var(--surface);stroke-width:2;cursor:ew-resize;}
+  .hit{fill:transparent;cursor:ew-resize;}
+  .state{fill:var(--muted);font-size:11.5px;}
+  .takeaway{fill:var(--accent);font-size:12.5px;font-weight:bold;}
+  .sep{stroke:var(--grid);stroke-width:1;}
+  #crewFocus:focus{outline:none;}
+  #crewFocus:focus + .focusring{opacity:1;}
+  .focusring{opacity:0;stroke:var(--accent2);stroke-width:1.5;fill:none;
+             stroke-dasharray:3 3;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <svg id="fig" viewBox="0 0 460 480" role="group"
+       aria-label="Team production on a fishing boat. Step bars show the marginal product of each crew member, 12, 18, 16, 12, 8, 4, 2, and minus 8 fish per day, against a horizontal line at 8 fish, the marginal product on shore. Drag the crew-size handle from 1 to 8 to see each member's catch aboard versus the 8 forgone on shore, gains up to a crew of five and losses beyond it. The fifth member adds exactly 8, so the optimal crew is five: the break-even member boards.">
+
+    <!-- ============ static base: full figure (no-JS shows everything) ======
+         Geometry: x(crew c) = 42 + 44c ; y(fish f) = 238 - 9.5f
+         Bars k=1..8 at 12,18,16,12,8,4,2,-8; shore line y(8)=162.        -->
+
+    <!-- running total-vs-shore line (JS updates) -->
+    <text id="totalLine" class="total" x="230" y="24" text-anchor="middle">
+      Running total &#8212; crew of 5: 66 fish aboard vs 40 on shore (net +26 fish)</text>
+
+    <!-- gain shading: bar top down to the shore line, crews 1-4 (gaps 4,10,8,4) -->
+    <g id="gains">
+      <rect class="gain" data-k="1" x="64"  y="124" width="44" height="38"/>
+      <rect class="gain" data-k="2" x="108" y="67"  width="44" height="95"/>
+      <rect class="gain" data-k="3" x="152" y="86"  width="44" height="76"/>
+      <rect class="gain" data-k="4" x="196" y="124" width="44" height="38"/>
+    </g>
+    <!-- loss shading: shore line down to the bar top, crews 6-8 (gaps 4,6,16;
+         crew 8's region runs from 8 all the way down to -8) -->
+    <g id="losses">
+      <rect class="loss" data-k="6" x="284" y="162" width="44" height="38"/>
+      <rect class="loss" data-k="7" x="328" y="162" width="44" height="57"/>
+      <rect class="loss" data-k="8" x="372" y="162" width="44" height="152"/>
+    </g>
+
+    <!-- step bars: marginal product on the boat, crew member k -->
+    <g id="bars">
+      <rect class="bar" data-k="1" x="64"  y="124" width="44" height="114"/>
+      <rect class="bar" data-k="2" x="108" y="67"  width="44" height="171"/>
+      <rect class="bar" data-k="3" x="152" y="86"  width="44" height="152"/>
+      <rect class="bar" data-k="4" x="196" y="124" width="44" height="114"/>
+      <rect class="bar" data-k="5" x="240" y="162" width="44" height="76"/>
+      <rect class="bar" data-k="6" x="284" y="200" width="44" height="38"/>
+      <rect class="bar" data-k="7" x="328" y="219" width="44" height="19"/>
+      <rect class="bar" data-k="8" x="372" y="238" width="44" height="76"/>
+    </g>
+
+    <!-- shore opportunity-cost line at 8 fish -->
+    <line class="shore" x1="42" y1="162" x2="446" y2="162"/>
+
+    <!-- axes (x-axis drawn after bar 8 so the zero line stays unbroken) -->
+    <line class="axis" x1="42" y1="28"  x2="42"  y2="338"/>
+    <line class="axis" x1="42" y1="238" x2="446" y2="238"/>
+
+    <!-- y ticks -->
+    <g class="tick" text-anchor="end">
+      <text x="36" y="52">20</text><text x="36" y="99">15</text>
+      <text x="36" y="147">10</text><text x="36" y="166">8</text>
+      <text x="36" y="194">5</text><text x="36" y="242">0</text>
+      <text x="36" y="289">&#8722;5</text><text x="36" y="337">&#8722;10</text>
+    </g>
+    <text class="axlbl" transform="rotate(-90 14 183)" x="14" y="183"
+          text-anchor="middle">Fish per day</text>
+
+    <!-- optimum: dropline, dot, annotation -->
+    <line class="drop" x1="262" y1="162" x2="262" y2="238"/>
+    <circle class="dot" cx="262" cy="162" r="4.5"/>
+    <text class="optlbl" x="440" y="96"  text-anchor="end">Optimal crew: 5 &#8212; the 5th adds exactly 8;</text>
+    <text class="optlbl" x="440" y="110" text-anchor="end">the break-even member boards</text>
+    <line class="ptr2" x1="330" y1="116" x2="267" y2="155"/>
+
+    <!-- curve labels -->
+    <text class="boatlbl" x="66" y="40">Marginal product on the boat</text>
+    <line class="ptr" x1="130" y1="46" x2="130" y2="61"/>
+    <text class="shorelbl" x="440" y="150" text-anchor="end">Marginal product on shore</text>
+
+    <!-- crew rail (slider) -->
+    <line class="rail" x1="86" y1="352" x2="394" y2="352"/>
+    <g class="railtick">
+      <line x1="86"  y1="348" x2="86"  y2="356"/><line x1="130" y1="348" x2="130" y2="356"/>
+      <line x1="174" y1="348" x2="174" y2="356"/><line x1="218" y1="348" x2="218" y2="356"/>
+      <line x1="262" y1="348" x2="262" y2="356"/><line x1="306" y1="348" x2="306" y2="356"/>
+      <line x1="350" y1="348" x2="350" y2="356"/><line x1="394" y1="348" x2="394" y2="356"/>
+    </g>
+    <g class="tick" text-anchor="middle">
+      <text x="86"  y="372">1</text><text x="130" y="372">2</text>
+      <text x="174" y="372">3</text><text x="218" y="372">4</text>
+      <text x="262" y="372">5</text><text x="306" y="372">6</text>
+      <text x="350" y="372">7</text><text x="394" y="372">8</text>
+    </g>
+    <text class="axlbl" x="230" y="388" text-anchor="middle">Crew size</text>
+    <circle id="handle" class="handle" cx="262" cy="352" r="9"/>
+
+    <!-- pointer hit zone (plot + rail) -->
+    <rect id="hitZone" class="hit" x="42" y="28" width="404" height="352"/>
+
+    <!-- keyboard proxy for the crew handle -->
+    <rect id="crewFocus" x="248" y="338" width="28" height="28" fill="transparent"
+          tabindex="0" role="slider"
+          aria-label="Crew size aboard the boat, 1 to 8"
+          aria-valuemin="1" aria-valuemax="8" aria-valuenow="5"
+          aria-valuetext="Crew of 5: the 5th adds exactly 8 fish, the same as on shore."/>
+    <rect id="focusRing" class="focusring" x="244" y="334" width="36" height="36" rx="6"/>
+
+    <!-- readout band -->
+    <line class="sep" x1="16" y1="400" x2="444" y2="400"/>
+    <text id="stateLine" class="state" x="230" y="417" text-anchor="middle">
+      <tspan id="state1" x="230" dy="0">Crew of 5: the 5th adds exactly 8 fish, the same as on shore.</tspan>
+      <tspan id="state2" x="230" dy="14"></tspan></text>
+    <text id="takeLine" class="takeaway" x="230" y="449" text-anchor="middle">
+      <tspan id="take1" x="230" dy="0">Marginal catch aboard equals marginal catch on shore &#8212; the</tspan>
+      <tspan id="take2" x="230" dy="15">optimal crew. The break-even member boards.</tspan></text>
+  </svg>
+
+  <p class="hint">Drag the gold crew-size handle (or focus it and use the arrow
+    keys). Watch where the boat stops beating the shore.</p>
+
+  <noscript>
+    <p class="fallback">Interactive view needs JavaScript. See the
+      <a href="t10a-ep8-1-team-mp.svg">static version of this figure</a>.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  // ---- geometry (must mirror the base markup) ----
+  var X0 = 42, DX = 44;                 // x(crew c) = X0 + DX*c
+  function XC (c) { return X0 + DX * c; }
+
+  // ---- economics (brief Section C invariants; post's Codlandia series) ----
+  var MP   = [0, 12, 18, 16, 12, 8, 4, 2, -8];   // marginal catch aboard
+  var CUM  = [0, 12, 30, 46, 58, 66, 70, 72, 64]; // total catch aboard
+  var SHORE = 8;                                  // marginal catch on shore
+  var ORD  = ['', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th'];
+  var NMIN = 1, NMAX = 8;
+  // TIE-BREAK: at n = 5 the marginal catch aboard equals the shore catch
+  // exactly (8 = 8); the convention is that the BREAK-EVEN MEMBER BOARDS
+  // (use the larger crew), matching the post's hiring rule.
+
+  var svg = document.getElementById('fig');
+  var $ = function (id) { return document.getElementById(id); };
+  var crew = 5;
+
+  // ---- readout grammar (exact strings per figures/interactive-specs.md) ----
+  function strings (n) {
+    var m, a;
+    if (n <= 4) {
+      m = 'Crew of ' + n + ': the ' + ORD[n] + ' member adds ' + MP[n] +
+          ' fish aboard vs 8 forgone on shore.';
+      a = 'Aboard beats shore by ' + (MP[n] - SHORE) +
+          ' — society gains from a bigger crew.';
+    } else if (n === 5) {
+      m = 'Crew of 5: the 5th adds exactly 8 fish, the same as on shore.';
+      a = 'Marginal catch aboard equals marginal catch on shore — the ' +
+          'optimal crew. The break-even member boards.';
+    } else if (n <= 7) {
+      m = 'Crew of ' + n + ': the ' + ORD[n] + ' adds only ' + MP[n] +
+          ' aboard but gives up 8 on shore.';
+      a = 'Society loses ' + (SHORE - MP[n]) +
+          ' fish — the boat is crowded past the optimum.';
+    } else {
+      m = 'Crew of 8: the 8th destroys 8 fish aboard and gives up 8 on shore.';
+      a = 'A 16-fish loss — marginal product has turned negative.';
+    }
+    return { muted: m, accent: a };
+  }
+
+  // crude word-wrap into at most two tspans
+  function wrap (text, maxChars, id1, id2) {
+    var line1 = text, line2 = '';
+    if (text.length > maxChars) {
+      var cut = text.lastIndexOf(' ', maxChars);
+      if (cut < 1) cut = maxChars;
+      line1 = text.slice(0, cut); line2 = text.slice(cut + 1);
+    }
+    $(id1).textContent = line1; $(id2).textContent = line2;
+  }
+
+  function render () {
+    var s = strings(crew);
+
+    // bars: 1..crew active, the rest muted
+    var bars = document.querySelectorAll('#bars .bar');
+    Array.prototype.forEach.call(bars, function (b) {
+      var k = +b.getAttribute('data-k');
+      b.setAttribute('class', k <= crew ? 'bar' : 'bar dim');
+    });
+    // gain/loss shading accumulates through crew
+    Array.prototype.forEach.call(
+      document.querySelectorAll('#gains .gain, #losses .loss'),
+      function (r) {
+        var k = +r.getAttribute('data-k');
+        r.style.display = (k <= crew) ? '' : 'none';
+      });
+
+    // handle + focus proxy
+    $('handle').setAttribute('cx', XC(crew));
+    $('crewFocus').setAttribute('x', XC(crew) - 14);
+    $('focusRing').setAttribute('x', XC(crew) - 18);
+
+    // readout band + running total-vs-shore comparison
+    wrap(s.muted, 72, 'state1', 'state2');
+    wrap(s.accent, 62, 'take1', 'take2');
+    var net = CUM[crew] - SHORE * crew;
+    $('totalLine').textContent = 'Running total — crew of ' + crew + ': ' +
+      CUM[crew] + ' fish aboard vs ' + (SHORE * crew) + ' on shore (net ' +
+      (net > 0 ? '+' : '') + net + ' fish)';
+
+    var cf = $('crewFocus');
+    cf.setAttribute('aria-valuenow', crew);
+    cf.setAttribute('aria-valuetext', s.muted);
+  }
+
+  function clamp (n) {
+    return Math.max(NMIN, Math.min(NMAX, Math.round(n)));
+  }
+
+  // ---- pointer drag (pointer capture; fast drags stay attached) ----
+  function svgPoint (evt) {
+    var pt = svg.createSVGPoint();
+    pt.x = evt.clientX; pt.y = evt.clientY;
+    return pt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+  function setFromEvent (evt) {
+    var n = clamp((svgPoint(evt).x - X0) / DX);
+    if (n !== crew) { crew = n; render(); }
+  }
+  var dragging = false;
+  function onDown (evt) {
+    dragging = true;
+    if (evt.pointerId !== undefined && evt.target.setPointerCapture) {
+      try { evt.target.setPointerCapture(evt.pointerId); } catch (e) {}
+    }
+    setFromEvent(evt);
+    evt.preventDefault();
+  }
+  function onMove (evt) { if (dragging) setFromEvent(evt); }
+  function onUp (evt) {
+    dragging = false;
+    if (evt.pointerId !== undefined && evt.target.releasePointerCapture) {
+      try { evt.target.releasePointerCapture(evt.pointerId); } catch (e) {}
+    }
+  }
+  ['hitZone', 'handle', 'crewFocus'].forEach(function (id) {
+    $(id).addEventListener('pointerdown', onDown);
+  });
+  svg.addEventListener('pointermove', onMove);
+  svg.addEventListener('pointerup', onUp);
+  svg.addEventListener('pointercancel', onUp);
+
+  // ---- keyboard ----
+  $('crewFocus').addEventListener('keydown', function (evt) {
+    var next = crew;
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') next = clamp(crew + 1);
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') next = clamp(crew - 1);
+    else if (evt.key === 'Home') next = NMIN;
+    else if (evt.key === 'End') next = NMAX;
+    else return;
+    evt.preventDefault();
+    if (next !== crew) { crew = next; render(); }
+  });
+
+  // ---- debug hook (widget standard) ----
+  window.__fig = {
+    set: function (n) { crew = clamp(Number(n)); render(); return crew; },
+    get: function () {
+      return { crew: crew, addsAboard: MP[crew], shore: SHORE,
+               totalAboard: CUM[crew], totalShore: SHORE * crew,
+               netGain: CUM[crew] - SHORE * crew };
+    }
+  };
+
+  render();
+})();
+</script>
+</body>
+</html>

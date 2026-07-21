@@ -5,8 +5,9 @@ course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 12 (Thu 10/1)"]
 ue_anchors: ["UE 7 (totals, marginals, averages, equimarginal allocation)", "UE 14 (Productivity and Costs)"]
 be_anchors: ["BE 10 (complementary inputs + capital-labor / 'what is efficiency' sections only)"]
+ep_anchors: ["E&P Figs 7-1 & 7-3 (ch. 7) — producer production-possibility frontiers; marginal cost as the frontier's slope", "E&P ch. 7 'Inefficiency by Authority?' — 1974–1981 crude-oil entitlements program / small-refiner bias vs price coordination (equimarginal), via card EP-EX-07"]
 word_target: "2500-6000"
-status: approved        # Stage-2 sign-off 2026-06-15
+status: approved        # E&P integration M7 done-gate 2026-07-20; prior approval 2026-07-01
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Part A of T6: UE 7's general marginal toolkit followed by UE 14 production and cost. Part B covers specialization and exchange. UE 17 is owned by T7 and is not pre-taught here."
 # brief: ../t06-production-costs-specialization/brief.md
@@ -77,6 +78,8 @@ In the worked schedule, the best split assigns four hours to A and six to B. Tha
 </figure>
 
 This principle is not an extra rule laid on top of production. It is the logic connecting a production schedule to a decision. The same scarce hour cannot be in both factories, so its opportunity cost in one use is the marginal return forgone in the other. Efficient allocation keeps moving units until no such move can raise the total.
+
+The mirror rule for costs has a policy history worth knowing. During the 1970s energy crisis, federal rules allocated crude oil across refiners by administrative formula rather than by price. The Emergency Petroleum Allocation Act, signed in November 1973, led to a Crude Oil Entitlements Program in November 1974 that equalized refiners' crude costs through monetary transfers between them. The Energy Policy and Conservation Act of 1975 then added a small-refiner bias, granting extra entitlements to refineries of 175,000 barrels a day or less, with the largest bonus reserved for those processing 10,000 barrels a day or less. Because the subsidy flowed toward the smallest, highest-cost "tea kettle" plants, it pulled production toward refiners a common price would have shut out. Federal auditors found that 64 refineries began operating between 1974 and 1980, all but two below 50,000 barrels a day, and many closed once price decontrol in January 1981 ended the subsidy. Equalizing marginal cost across producers is exactly what a common price does on its own; an administrative rule that props up high-cost capacity does the opposite, and makes the same output at more than its least possible total cost.
 
 ## The Cost of Producing Something Is the Best Thing You Give Up to Make It
 
@@ -160,6 +163,11 @@ Two cost ideas need separating. The *average cost* of cakes is total cost divide
 </figure>
 
 Look at the marginal-cost column. The first cake costs Adam 0.90 of Y; the second costs 1.00; the sixth costs 1.40. Marginal cost rises as he produces faster. Two relationships are baked into this table. First, the marginal costs add up to the total: the total cost of six cakes (6.90Y) is exactly the sum of the marginal cost of each of the first six. Second, marginal cost pulls average cost along with it. When the next unit costs more than the current average, it drags the average up; when it costs less, it pulls the average down; when it equals the average, the average holds still.
+
+<figure class="econ-figure" style="margin:1.5em 0;">
+<iframe src="/teaching/microeconomics/t06a-production-and-costs/figures/t06a-ep7-1-7-3-producer-ppf-interactive.html" title="Interactive producer-frontier figure: step a marker along a concave production-possibility frontier to read each cake's marginal cost off the slope, then toggle between two producers with different marginal costs." loading="lazy" style="width:100%; max-width:520px; aspect-ratio:1/1; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t06a-production-and-costs/figures/t06a-ep7-1-7-3-producer-ppf-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t06a-production-and-costs/figures/t06a-ep7-1-7-3-producer-ppf.svg">view the static figure</a>.</p></iframe>
+<figcaption><strong>The drop in other goods for the next cake is its marginal cost.</strong> A producer's frontier shows the other goods he could still make at each rate of baking, and the height he gives up for one more cake is that cake's marginal cost. Because the frontier bows outward, each cake costs a little more of other goods than the last, so marginal cost rises as he bakes faster. Step the marker along Producer A's frontier to read the marginal cost of each cake straight off the slope, then toggle to Producer B, a second illustrative producer, to see different marginal costs obey the same rule. If the frame does not load, <a href="/teaching/microeconomics/t06a-production-and-costs/figures/t06a-ep7-1-7-3-producer-ppf-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t06a-production-and-costs/figures/t06a-ep7-1-7-3-producer-ppf.svg">view the static figure</a>.</figcaption>
+</figure>
 
 A running back illustration makes that stick. He averages five yards a carry coming into the game, breaks off a six-yard run, and his average ticks up, though not all the way to six. Then he gets stuffed for two yards and his average slips back down. The most recent carry, the marginal one, tugs the average in its own direction. Cost works the same way, which is why a rising marginal cost eventually drags average cost up behind it.
 

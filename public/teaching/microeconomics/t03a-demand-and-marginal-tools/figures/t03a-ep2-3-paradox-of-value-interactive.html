@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive figure: the paradox of value (diamonds and water)</title>
+<!--
+  REDRAW of E&P Fig 2-3, "Total Personal Use Value and Total Market Value"
+  (p. 21), the diamond-water paradox of value. Course-adapted: both goods sit
+  on the IDENTICAL demand curve P = 10 - Q, read at different quantities.
+  Family F4 (area accounting). Self-contained vanilla SVG/JS; no network or
+  libraries. The static FAU slide figure (t03a-ep2-3-paradox-of-value.svg)
+  remains untouched and is the no-JS fallback.
+
+  MODEL (both panels, same curve P = 10 - Q, Q integer in [1, 9]):
+    marginal worth = price = height = 10 - Q.
+    total worth   = area under the curve from 0 to Q
+                  = 1/2 (10 + (10 - Q)) Q = 10Q - Q^2/2  (recomputed, never hard-coded).
+    Panel A "Diamonds" default Q = 1 -> price $9, total worth $9.50 (tall, thin).
+    Panel B "Water"    default Q = 8 -> price $2, total worth $48   (broad, low).
+  The paradox: water's total worth ($48) far exceeds diamonds' ($9.50) while
+  water's marginal worth/price ($2) is far below diamonds' ($9) -- total and
+  marginal move oppositely. The ONLY shaded mark is the total-worth area; there
+  is no money-paid rectangle and no surplus decomposition. Vocabulary stays in
+  the course's verbal idiom: "total worth" (area) and "marginal worth / price"
+  (height) -- no "consumer surplus"/"market value"/deadweight terms.
+-->
+<style>
+  :root {
+    --surface:#f7f4ef;
+    --ink:#1a1c1e;
+    --text:#16181a;
+    --muted:#5c6066;
+    --hairline:#e3ddd3;
+    --accent:#b07a2c;
+    --accent-tint:#efe4d2;
+    --font-body:'Inter Variable',Inter,-apple-system,BlinkMacSystemFont,
+      'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; }
+  body {
+    background:var(--surface);
+    color:var(--text);
+    font-family:var(--font-body);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:8px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .fig { width:100%; max-width:640px; min-width:0; }
+  .fig-head { text-align:center; margin:2px 0 6px; }
+  .fig-title { font-size:15px; font-weight:700; color:var(--ink); margin:0; }
+  .fig-sub { font-size:12.5px; color:var(--muted); margin:3px 0 0; }
+  svg { width:100%; height:auto; display:block; touch-action:pan-y; aspect-ratio:32/19; }
+  .axis { stroke:var(--muted); stroke-width:1.4; }
+  .curve { stroke:var(--ink); stroke-width:2.4; fill:none; stroke-linecap:round; }
+  .region-total { fill:var(--accent-tint); stroke:none; }
+  .guide { stroke:var(--hairline); stroke-width:1.6; stroke-dasharray:5 4; }
+  .pt { fill:var(--accent); stroke:var(--surface); stroke-width:2.5;
+        touch-action:none; cursor:grab; }
+  .hit { fill:transparent; stroke:transparent; touch-action:none; cursor:grab; }
+  .hit-curve { fill:none; stroke:transparent; stroke-width:28; touch-action:none; cursor:grab; }
+  .pt-focus:focus-visible { outline:none; }
+  .pt-focus:focus-visible + .pt,
+  .grabbing .pt { stroke:var(--accent); stroke-width:3.5; }
+  .ptitle { fill:var(--ink); font-size:13px; font-weight:700; }
+  .axtitle { fill:var(--muted); font-size:11.5px; font-weight:600; }
+  .reglabel { fill:var(--muted); font-size:11.5px; font-weight:600; }
+  .tagbg { fill:var(--surface); }
+  .tagtxt { fill:var(--accent); font-size:12px; font-weight:700; }
+  .readout {
+    margin:8px auto 0;
+    max-width:600px;
+    background:var(--surface);
+    border:1px solid var(--hairline);
+    border-radius:8px;
+    padding:9px 12px;
+    text-align:center;
+  }
+  .readout p { margin:0; line-height:1.35; }
+  .r-muted { color:var(--muted); font-size:12.5px; }
+  .r-accent { color:var(--accent); font-size:13px; font-weight:600; margin-top:3px; }
+  .fallback {
+    margin:8px 0 0;
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.35;
+    text-align:center;
+  }
+  .fallback a { color:var(--ink); }
+</style>
+</head>
+<body>
+<div class="fig">
+  <div class="fig-head">
+    <p class="fig-title">The paradox of value</p>
+    <p class="fig-sub">Same demand curve, two goods. Drag either quantity handle: total worth is the shaded area, price is the height.</p>
+  </div>
+
+  <svg id="fig" viewBox="0 0 640 380" role="group"
+       aria-label="Two panels sharing the identical demand curve, price equals ten minus quantity. Left panel, diamonds, held at a small quantity: a tall thin total-worth area and a high price. Right panel, water, held at a large quantity: a broad low total-worth area and a low price. Drag either quantity handle to change the quantity held; the shaded total-worth area and the marginal-worth height update.">
+    <title>The paradox of value: total worth as area, price as height</title>
+    <defs>
+      <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+    </defs>
+
+    <!-- ===================== PANEL A — DIAMONDS ===================== -->
+    <text class="ptitle" x="164" y="46" text-anchor="middle">Diamonds &#8212; held in tiny amounts</text>
+
+    <path id="regionA" class="region-total" d="M54,300 L54,64 L76,87.6 L76,300 Z" />
+    <line id="hGuideA" class="guide" x1="54" y1="87.6" x2="76" y2="87.6" />
+    <line id="vGuideA" class="guide" x1="76" y1="87.6" x2="76" y2="300" />
+    <line class="curve" x1="54" y1="64" x2="274" y2="300" />
+
+    <line class="axis" x1="54" y1="300" x2="292" y2="300" marker-end="url(#arrow)" />
+    <line class="axis" x1="54" y1="300" x2="54" y2="52" marker-end="url(#arrow)" />
+
+    <text class="reglabel" x="90" y="262">total worth</text>
+    <text class="axtitle" x="164" y="338" text-anchor="middle">Quantity</text>
+    <text class="axtitle" x="16" y="182" text-anchor="middle"
+          transform="rotate(-90 16 182)">Marginal worth / price ($)</text>
+
+    <g id="priceTagA">
+      <rect id="priceBgA" class="tagbg" x="30" y="80.1" width="22" height="15" rx="2" />
+      <text id="priceTextA" class="tagtxt" x="50" y="87.6" text-anchor="end"
+            dominant-baseline="middle">$9</text>
+    </g>
+    <g id="qtyTagA">
+      <rect id="qtyBgA" class="tagbg" x="68" y="305" width="16" height="15" rx="2" />
+      <text id="qtyTextA" class="tagtxt" x="76" y="313" text-anchor="middle"
+            dominant-baseline="middle">1</text>
+    </g>
+
+    <path id="hitCurveA" class="hit-curve" d="M54,64 L274,300" />
+    <circle id="hitA" class="hit" cx="76" cy="87.6" r="22" />
+    <circle id="ptFocusA" class="pt-focus hit" cx="76" cy="87.6" r="22"
+            tabindex="0" role="slider" aria-label="Quantity of diamonds held"
+            aria-valuemin="1" aria-valuemax="9" aria-valuenow="1"
+            aria-valuetext="Diamonds, quantity 1: marginal worth (price) $9, total worth about $9.50." />
+    <circle id="ptA" class="pt" cx="76" cy="87.6" r="6.5" />
+
+    <!-- ===================== PANEL B — WATER ===================== -->
+    <text class="ptitle" x="474" y="46" text-anchor="middle">Water &#8212; held in huge amounts</text>
+
+    <path id="regionB" class="region-total" d="M364,300 L364,64 L540,252.8 L540,300 Z" />
+    <line id="hGuideB" class="guide" x1="364" y1="252.8" x2="540" y2="252.8" />
+    <line id="vGuideB" class="guide" x1="540" y1="252.8" x2="540" y2="300" />
+    <line class="curve" x1="364" y1="64" x2="584" y2="300" />
+
+    <line class="axis" x1="364" y1="300" x2="602" y2="300" marker-end="url(#arrow)" />
+    <line class="axis" x1="364" y1="300" x2="364" y2="52" marker-end="url(#arrow)" />
+
+    <text class="reglabel" x="400" y="215">total worth</text>
+    <text class="axtitle" x="474" y="338" text-anchor="middle">Quantity</text>
+    <text class="axtitle" x="326" y="182" text-anchor="middle"
+          transform="rotate(-90 326 182)">Marginal worth / price ($)</text>
+
+    <g id="priceTagB">
+      <rect id="priceBgB" class="tagbg" x="340" y="245.3" width="22" height="15" rx="2" />
+      <text id="priceTextB" class="tagtxt" x="360" y="252.8" text-anchor="end"
+            dominant-baseline="middle">$2</text>
+    </g>
+    <g id="qtyTagB">
+      <rect id="qtyBgB" class="tagbg" x="532" y="305" width="16" height="15" rx="2" />
+      <text id="qtyTextB" class="tagtxt" x="540" y="313" text-anchor="middle"
+            dominant-baseline="middle">8</text>
+    </g>
+
+    <path id="hitCurveB" class="hit-curve" d="M364,64 L584,300" />
+    <circle id="hitB" class="hit" cx="540" cy="252.8" r="22" />
+    <circle id="ptFocusB" class="pt-focus hit" cx="540" cy="252.8" r="22"
+            tabindex="0" role="slider" aria-label="Quantity of water held"
+            aria-valuemin="1" aria-valuemax="9" aria-valuenow="8"
+            aria-valuetext="Water, quantity 8: marginal worth (price) $2, total worth $48." />
+    <circle id="ptB" class="pt" cx="540" cy="252.8" r="6.5" />
+  </svg>
+
+  <div class="readout" aria-live="polite">
+    <p class="r-muted" id="rMuted">Water, quantity 8: marginal worth (price) $2, total worth $48.</p>
+    <p class="r-accent" id="rAccent">Abundant: a low price at the margin, yet a vast total worth &#8212; the paradox of value.</p>
+  </div>
+
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame shows the starting case: diamonds held at quantity 1 (a tall, thin total-worth area with a high price) beside water held at quantity 8 (a broad, low total-worth area with a low price). You can also <a href="t03a-ep2-3-paradox-of-value.svg">open the source-faithful static figure</a>.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var svg = document.getElementById('fig');
+  var byId = function (id) { return document.getElementById(id); };
+  var NS = 'http://www.w3.org/2000/svg';
+
+  // Shared plot geometry (both panels use the SAME data->svg scale).
+  var baseY = 300, top = 64, SX = 22, SY = 23.6;
+  var QLO = 1, QHI = 9;
+
+  function priceAt(q) { return 10 - q; }              // marginal worth = height
+  function totalWorth(q) { return 10 * q - q * q / 2; } // area under P = 10 - Q, recomputed
+  function twMoney(q) {
+    var v = totalWorth(q);
+    return '$' + (v % 1 === 0 ? v.toFixed(0) : v.toFixed(2));
+  }
+
+  // Per-panel binding: ox = y-axis x-position; q = current quantity held.
+  var panels = {
+    diamonds: {
+      ox: 54, q: 1, good: 'Diamonds',
+      region: byId('regionA'), hGuide: byId('hGuideA'), vGuide: byId('vGuideA'),
+      hit: byId('hitA'), hitCurve: byId('hitCurveA'), focus: byId('ptFocusA'), pt: byId('ptA'),
+      priceText: byId('priceTextA'), priceBg: byId('priceBgA'),
+      qtyText: byId('qtyTextA'), qtyBg: byId('qtyBgA')
+    },
+    water: {
+      ox: 364, q: 8, good: 'Water',
+      region: byId('regionB'), hGuide: byId('hGuideB'), vGuide: byId('vGuideB'),
+      hit: byId('hitB'), hitCurve: byId('hitCurveB'), focus: byId('ptFocusB'), pt: byId('ptB'),
+      priceText: byId('priceTextB'), priceBg: byId('priceBgB'),
+      qtyText: byId('qtyTextB'), qtyBg: byId('qtyBgB')
+    }
+  };
+  var active = 'water';  // load state shows the water/paradox readout line
+
+  var rMuted = byId('rMuted'), rAccent = byId('rAccent');
+
+  function xQ(P, v) { return P.ox + v * SX; }
+  function yP(v) { return baseY - v * SY; }
+
+  var spt = svg.createSVGPoint();
+  function toSvg(evt) {
+    spt.x = evt.clientX; spt.y = evt.clientY;
+    return spt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+
+  function mutedFor(name) {
+    var P = panels[name], q = P.q, p = priceAt(q);
+    if (name === 'diamonds' && q === 1)
+      return 'Diamonds, quantity 1: marginal worth (price) $9, total worth about $9.50.';
+    if (name === 'water' && q === 8)
+      return 'Water, quantity 8: marginal worth (price) $2, total worth $48.';
+    return P.good + ', quantity ' + q + ': marginal worth (price) $' + p +
+           ', total worth ' + twMoney(q) + '.';
+  }
+  function accentFor(name) {
+    var P = panels[name], q = P.q;
+    if (name === 'diamonds' && q === 1)
+      return 'Scarce: a high price at the margin, but a tiny total worth.';
+    if (name === 'water' && q === 8)
+      return 'Abundant: a low price at the margin, yet a vast total worth — the paradox of value.';
+    return 'As the quantity grows the total-worth area climbs while the marginal worth at the last unit falls.';
+  }
+
+  function renderPanel(name) {
+    var P = panels[name], q = P.q, p = priceAt(q);
+    var x = xQ(P, q), y = yP(p);
+    // total-worth area: (ox,baseY) -> (ox,top[P=10]) -> (x,y) -> (x,baseY)
+    P.region.setAttribute('d',
+      'M' + P.ox + ',' + baseY + ' L' + P.ox + ',' + top +
+      ' L' + x.toFixed(2) + ',' + y.toFixed(2) +
+      ' L' + x.toFixed(2) + ',' + baseY + ' Z');
+    P.hGuide.setAttribute('x2', x); P.hGuide.setAttribute('y1', y); P.hGuide.setAttribute('y2', y);
+    P.vGuide.setAttribute('x1', x); P.vGuide.setAttribute('x2', x); P.vGuide.setAttribute('y1', y);
+    P.hit.setAttribute('cx', x); P.hit.setAttribute('cy', y);
+    P.focus.setAttribute('cx', x); P.focus.setAttribute('cy', y);
+    P.pt.setAttribute('cx', x); P.pt.setAttribute('cy', y);
+    P.priceText.setAttribute('y', y); P.priceText.textContent = '$' + p;
+    P.priceBg.setAttribute('y', y - 7.5);
+    P.qtyText.setAttribute('x', x); P.qtyText.textContent = String(q);
+    P.qtyBg.setAttribute('x', x - 8);
+    P.focus.setAttribute('aria-valuenow', q);
+    P.focus.setAttribute('aria-valuetext', mutedFor(name));
+  }
+
+  function renderReadout() {
+    rMuted.textContent = mutedFor(active);
+    rAccent.textContent = accentFor(active);
+  }
+
+  function render() {
+    renderPanel('diamonds'); renderPanel('water'); renderReadout();
+  }
+
+  function setQ(name, v) {
+    var next = Math.round(+v);
+    if (isNaN(next)) return;
+    next = Math.max(QLO, Math.min(QHI, next));
+    active = name;
+    if (next === panels[name].q) { renderReadout(); return; }
+    panels[name].q = next; render();
+  }
+  function setFromPointer(name, evt) {
+    var P = panels[name];
+    var pt = toSvg(evt);
+    // map the pointer's height to a price, then to a quantity (q = 10 - price)
+    var price = (baseY - pt.y) / SY;
+    setQ(name, 10 - price);
+  }
+
+  var dragging = null, capturedEl = null, capturedId = null;
+  function onMove(evt) {
+    if (dragging) { evt.preventDefault(); setFromPointer(dragging, evt); }
+  }
+  function onUp() {
+    dragging = null; svg.classList.remove('grabbing');
+    if (capturedEl && capturedId !== null) {
+      try { capturedEl.releasePointerCapture(capturedId); } catch (e) {}
+    }
+    capturedEl = null; capturedId = null;
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+  }
+  function makeDown(name) {
+    return function (evt) {
+      evt.preventDefault(); dragging = name; svg.classList.add('grabbing');
+      capturedEl = evt.currentTarget; capturedId = evt.pointerId;
+      try { capturedEl.setPointerCapture(capturedId); } catch (e) {}
+      setFromPointer(name, evt);
+      window.addEventListener('pointermove', onMove);
+      window.addEventListener('pointerup', onUp);
+    };
+  }
+
+  Object.keys(panels).forEach(function (name) {
+    var P = panels[name], down = makeDown(name);
+    P.hit.addEventListener('pointerdown', down);
+    P.hitCurve.addEventListener('pointerdown', down);
+    P.focus.addEventListener('pointerdown', down);
+    P.pt.addEventListener('pointerdown', down);
+    P.focus.addEventListener('keydown', function (evt) {
+      if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') setQ(name, P.q + 1);
+      else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') setQ(name, P.q - 1);
+      else return;
+      evt.preventDefault();
+    });
+    P.focus.addEventListener('focus', function () { active = name; renderReadout(); });
+  });
+
+  window.__fig = {
+    set: function (v) {
+      if (typeof v === 'number') { setQ(active, v); }
+      else if (v) {
+        var name = v.panel || v.good || active;
+        if (name === 'Diamonds') name = 'diamonds';
+        if (name === 'Water') name = 'water';
+        if (!panels[name]) name = active;
+        if (typeof v.q === 'number') setQ(name, v.q);
+        else { active = name; renderReadout(); }
+      }
+    },
+    get: function () {
+      return {
+        active: active,
+        diamonds: { q: panels.diamonds.q, price: priceAt(panels.diamonds.q), totalWorth: totalWorth(panels.diamonds.q) },
+        water: { q: panels.water.q, price: priceAt(panels.water.q), totalWorth: totalWorth(panels.water.q) }
+      };
+    }
+  };
+
+  render();
+})();
+</script>
+</body>
+</html>

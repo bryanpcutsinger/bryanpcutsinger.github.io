@@ -5,8 +5,9 @@ course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 22 (Thu 11/5)"]
 ue_anchors: ["UE 40", "UE 41", "UE 39 (gender-earnings sections)"]
 be_anchors: ["BE 11", "BE 12 (partial)"]
+ep_anchors: ["E&P 15 — closed monopsony (interns; NCAA)", "E&P 13 — rent dissipation via qualifying", "E&P 17 — job search (micro sections only)", "E&P Fig 14-7 — wage floor and ceiling"]
 word_target: "2500-6000"
-status: approved        # Stage-2 sign-off 2026-06-15
+status: approved        # E&P integration M2 sign-off 2026-07-19 (prior: Stage-2 2026-06-15)
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Part B of the two-part T10 (unions, the minimum wage, discrimination, and licensing); Part A (topics/t10a-factor-demand-and-earnings) builds the VMP engine and covers earnings. Source-of-truth for the deck; section headers are claims that map to slide titles."
 # brief: ../t10-factor-markets-labor/brief.md
@@ -27,6 +28,7 @@ Now we turn that same engine on the most heated arguments in all of economics. W
 <li>Explain why competition makes discrimination costly to the discriminator, while a wage floor can make discrimination cheap.</li>
 <li>Trace who ultimately bears the cost of a mandated benefit, using the idea that a worker's full pay is money wages plus every nonmoney term of the job.</li>
 <li>Explain how occupational licensing restricts entry to protect incumbents rather than consumers, and read a license's price as the value of being let in.</li>
+<li>Explain an unemployment spell as productive search, state the reservation-wage rule, and predict how policies that lower the cost of searching lengthen spells.</li>
 </ul>
 </aside>
 
@@ -66,6 +68,12 @@ Second, the mirror image of a union, a single dominant buyer of labor, is *monop
 </dl>
 </aside>
 
+The draft was a monopsony run by the government. Private employers have tried the same trick by agreement. A lone hospital cannot hold intern pay far below what an intern adds, because a rival hospital would bid the intern away. So hospitals did not act alone: their association capped intern salaries, and the cap held because a hospital that broke it risked its top-grade accreditation, the seal it needs to attract students and funding. Notice who keeps the savings. Cheap interns do not lower the price of hospital care by some automatic mechanism; the margin shows up as higher incomes for the people already inside.
+
+College sports ran the same play for over a century, on a bigger stage. The NCAA's member colleges are employers buying athletic labor, and their amateurism rules were a collective agreement not to pay for it, enforced the same way as the intern cap: a college that paid players risked its athletes' eligibility and its own standing. With money offers banned, the competition for stars resurfaced in the forms the rules allowed, scholarships, facilities, and no small number of covert payments; rivalry changes form, it does not die. The agreement finally cracked in court. Justice Kavanaugh wrote that the NCAA's business model <a href="https://www.law.cornell.edu/supremecourt/text/20-512">"would be flatly illegal in almost any other industry in America,"</a> and once athletes could earn from their <a href="https://www.cbssports.com/college-football/news/ncaa-approves-interim-name-image-and-likeness-policy-removing-restrictions-for-college-athletes-to-earn-money/">name, image, and likeness</a> in 2021 and colleges could pay them directly under the 2025 <a href="https://www.espn.com/college-sports/story/_/id/45467505/judge-grants-final-approval-house-v-ncaa-settlement">House settlement</a> (up to roughly $20.5 million per school, with nearly $2.8 billion in back pay), the suppressed wages appeared almost overnight; <a href="https://frontofficesports.com/the-year-schools-paid-their-players/">310 schools opted in</a> the first year. Recall the cartel lesson from the market-power topic: a cartel survives only where cheating is cheap to detect and punish. An accreditation body that doubles as the cartel's enforcement arm is exactly that machinery.
+
+The pattern of who still unionizes says the same thing from another angle. Union membership hovered near a third of the American workforce in the 1950s and has fallen to little more than a tenth, but the fall is almost entirely on the private side: government workers now unionize at close to 40 percent, against under 7 percent in private business. The reason is not sentiment. A private employer who pays above-market wages must cover them out of sales revenue while competing against firms that do not, and such employers shrink or disappear. A government agency pays out of taxes, and taxpayers are a more dispersed and patient source of above-market wages than customers ever are.
+
 ## The Minimum Wage Prices Out the Workers Whose Value Is Below the Floor
 
 Now apply the hiring rule to the most debated labor policy of all. A minimum wage is a legal floor on the wage an employer may pay.
@@ -79,7 +87,15 @@ Now apply the hiring rule to the most debated labor policy of all. A minimum wag
 
 On the boat in Part A, the owner hired a worker only if the value he added was at least the wage. Set a floor above some workers' VMP and those workers can no longer be hired at a wage that makes sense for the employer. They are not paid more; they are not paid at all in covered jobs. The higher the floor, the more workers it prices out, which is why "the higher the minimum wage, the greater the unemployment among the least-skilled" is sound.
 
+<figure class="econ-figure" style="margin:1.5em 0;">
+<iframe src="/teaching/microeconomics/t10b-labor-coalitions-and-constraints/figures/t10b-ep14-7-wage-bounds-interactive.html" title="Interactive wage floor and ceiling: drag the wage line above the market wage to create a surplus of labor (unemployment), or below it to create a shortage. Employment is always the short side." loading="lazy" style="width:100%; max-width:480px; aspect-ratio:5/6; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t10b-labor-coalitions-and-constraints/figures/t10b-ep14-7-wage-bounds-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t10b-labor-coalitions-and-constraints/figures/t10b-ep14-7-wage-bounds.svg">view the static version</a>.</p></iframe>
+<figcaption><strong>One diagram, both mistakes.</strong> Fix the wage above the market rate and more people want jobs than employers will hire: a surplus of labor, which is unemployment. Fix it below and employers want more hours than anyone will offer: a shortage. The ceiling half returns later in this post: a shortage of labor makes discrimination costly for an employer to indulge, and wartime wage ceilings pushed pay into fringe benefits instead of money wages.</figcaption>
+</figure>
+
+
 Who are those workers? Disproportionately the young, the inexperienced, and the least-skilled, the very people the policy is meant to help, because their value to an employer has not yet risen above the floor. The damage shows up across countries: where minimum wages are high, youth unemployment runs far above the general rate, sometimes above 20 or even 40 percent against a general rate near 10. In the United States, black labor-force participation was slightly higher than whites' before the federal minimum-wage laws of the 1930s; black youth unemployment climbed in the era that followed.
+
+Notice, too, who campaigns for a higher floor. Workers already earning far above the minimum, and firms running the latest labor-saving equipment, are among its most reliable advocates. Raising the minimum raises the costs of their labor-intensive rivals, and customers then drift toward the capital-intensive firm and its high-wage workforce. The unionized garment industry pressed hard for minimum-wage enforcement against small immigrant-staffed shops for exactly this reason. The language is concern for the low-paid; the arithmetic is a rival's costs. It is the licensing story again, wearing a kinder face.
 
 The escape routes confirm the mechanism. Where a floor binds, work shifts toward margins it cannot reach. The share of owner-driven cabs rises relative to employee-driven ones, because a person working for himself pays himself no legal minimum; push a taxi-driver minimum to an absurd level and you would see almost nothing but owner-operators. Self-employment and uncovered sectors absorb the workers the covered sector can no longer afford.
 
@@ -140,6 +156,26 @@ The sharpest illustration is a numerical cap on licenses. New York City has limi
 <p>A New York taxi medallion rose from $10 to past a million dollars while the number of cabs stayed capped. What does that price measure, and who ultimately pays for it?</p>
 </aside>
 
+The medallion price shows what happens when a privileged position can be bought: the rent is capitalized into the entry price, and the buyer earns only an ordinary return. When the position must be qualified for instead, the same rent gets eaten in the qualifying. <a href="https://obamawhitehouse.archives.gov/sites/default/files/docs/licensing_report_final_nonembargo.pdf">About a quarter of American workers</a> now need a government license to do their jobs, up from under five percent in the early 1950s, and medicine shows where the toll goes. The typical indebted medical graduate leaves school <a href="https://students-residents.aamc.org/media/12846/download">owing about $205,000</a>, then works several more years of residency at a first-year stipend near $65,000, having first beaten out most of the <a href="https://www.aamc.org/news/us-medical-schools-enroll-record-number-students-2025">54,699 applicants who competed for 23,440 medical-school seats</a>. Stack up the tuition, the debt, and the years of forgone earnings, and the license's apparent monopoly rent mostly disappears: the entrant nets roughly a normal return on the whole undertaking. The windfall was collected once, by whoever already held a license when the gate closed. That is why incumbents defend these restrictions so fiercely; repeal would not merely trim their income, it would hand them a capital loss.
+
+
+## Much Unemployment Is Productive Search, and Lowering Its Cost Lengthens It
+
+One more labor-market fact deserves a place here, because it shapes how everything in this part gets measured: the unemployment spell itself. Wage offers for the same worker are not identical across employers, because finding out who pays what is costly. A worker whose job ends and who grabs the first offer he stumbles into may throw away years of higher pay to save a few weeks of looking. Time spent finding and comparing offers produces something real, information about the best job available, and that makes a search spell an investment, not idleness.
+
+How long should the search run? By the same marginal rule that has governed everything else in this course: keep searching while the expected gain from one more inquiry, a better offer weighted by the chance of finding it, exceeds the cost, chiefly the wages given up by not working. When the expected gain slips below that cost, stop and take the best offer in hand. The lowest offer worth taking now rather than searching on is your reservation wage.
+
+<aside class="econ-callout econ-termset">
+<p class="econ-callout__label">Key term</p>
+<dl class="econ-term-list">
+<div><dt>Reservation Wage</dt><dd>The lowest wage offer worth accepting now rather than continuing to search. It rises when searching gets cheaper and falls when searching gets dearer.</dd></div>
+</dl>
+</aside>
+
+Change the cost of searching and you change how long people search, for ordinary marginal reasons. Unemployment insurance and welfare payments replace part of the income lost while looking, so covered workers rationally hold out longer for better matches. That is not an accusation of laziness; it is the same marginal rule operating at a lower price of continued search. The rule also says who can afford to be choosy: a worker in a household with a second earner can run a longer search than one whose rent is due on Friday.
+
+Once you see search, the measured unemployment rate stops being one thing. It lumps together workers producing information between jobs, workers priced out by the wage floor we met earlier in this post, would-be electricians and bricklayers standing outside the licensing and apprenticeship gates who report themselves as unemployed, and seasonal workers who take jobs only at peak wages. Four different situations, four different remedies, one number. When someone quotes "the" unemployment rate, it is worth asking which of the four they have in mind.
+
 One thread ran under every case in this part and connects back to our earlier
 property-rights topic. The people who attend hardest to the market value of a
 resource are its owners: the boat owner in Part A who beached the boat rather
@@ -157,6 +193,7 @@ to market value while its absence dilutes that incentive.
 <li><strong>Competition makes discrimination costly.</strong> An employer who refuses productive workers he dislikes forgoes profit a rival will take, and a wage floor removes the low-pay weapon and can make prejudice cheap again.</li>
 <li><strong>Workers bear mandated benefits.</strong> A worker's full pay is money wages plus every nonmoney term, so a mandated benefit shows up over time as lower money wages.</li>
 <li><strong>Licensing protects incumbents, not consumers.</strong> Restricting entry and grandfathering those already in props up insiders' incomes, and a license's price measures the value of being allowed in.</li>
+<li><strong>Much unemployment is productive search.</strong> A spell spent comparing offers produces information; the reservation-wage rule sets its length, so lowering the cost of search lengthens spells, and the measured rate lumps searchers with the priced-out and the gated-out.</li>
 </ul>
 </section>
 </div>

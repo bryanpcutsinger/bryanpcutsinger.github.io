@@ -5,8 +5,9 @@ course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 4 (Thu 9/3)"]
 ue_anchors: ["UE 5"]
 be_anchors: ["BE 2 (unmet-needs/demand-vs-need slice)"]
+ep_anchors: ["E&P Fig 2-3 (ch. 2, p. 21) — paradox of value: total worth as area vs marginal worth as height (diamond–water)"]
 word_target: "2500-5000"
-status: approved        # one-per-lecture split; approved 2026-07-01
+status: approved        # E&P integration M6 done-gate 2026-07-20; prior approval 2026-07-01
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Source-of-truth for session 4. Covers laws of demand, shifts versus movements, marginal personal worth, verbal consumer surplus, demand as a rate, relative price, and demand versus fixed-needs language. UE 7's general total/marginal/average and equimarginal machinery is owned by T6."
 # brief: ../t03-demand-consumer-behavior/brief.md
@@ -146,6 +147,11 @@ The dollar sign is a convenience, not the substance. Marginal worth is fundament
 Because worth is revealed by what people will give up, behavior can tell us when two options are worth exactly the same. If someone is willing to let a stranger pick between two bundles on their behalf, with no objection either way, they have shown they are indifferent between them: a person who cared which one they got would not hand the choice to an unknown party. Their willingness to delegate is the evidence that the two are equally valuable, just as a purchase is the evidence that a good is worth at least its price.
 
 Now the reason for the downward slope. The more of a good you already have, the less you will give up for one more unit. Economists call this *diminishing marginal personal worth*, and you can read it straight down the marginal column above: each additional quart is worth less than the one before, from a precious first quart to a tenth barely worth a dime. Because marginal worth falls as quantity rises, the curve that plots worth against quantity slopes down. That is the engine under the first law. A schedule with a *constant* trade-off, where the eleventh unit was worth as much as the first, would violate this principle, and we essentially never see it.
+
+<figure class="econ-figure" style="margin:1.5em 0;">
+<iframe src="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03a-ep2-3-paradox-of-value-interactive.html" title="Interactive paradox-of-value figure: two goods on the same demand curve. Drag the quantity handle in either panel to watch the total-worth area grow while the marginal worth at the last unit falls." loading="lazy" style="width:100%; max-width:640px; aspect-ratio:32/19; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03a-ep2-3-paradox-of-value-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03a-ep2-3-paradox-of-value.svg">view the static figure</a>.</p></iframe>
+<figcaption><strong>Water is worth more in total; diamonds are worth more at the margin.</strong> Two goods sit on the very same demand curve, but at different quantities. Diamonds are held in tiny amounts near the top of the curve, so a diamond's marginal worth, and therefore its price, is high, yet the total worth (the shaded area under the curve) is a thin sliver. Water is held in huge amounts far to the right, so its marginal worth and price are low, yet its total worth is a broad, enormous area. That is the paradox of value: water is worth far more in total but far less at the margin, which is what its price reflects. Drag the quantity handle in either panel to watch the total-worth area grow while the marginal worth at the last unit falls. If the frame does not load, <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03a-ep2-3-paradox-of-value-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03a-ep2-3-paradox-of-value.svg">view the static figure</a>.</figcaption>
+</figure>
 
 ## Buyers Gain Because They Pay Less Than the Goods Are Worth to Them
 

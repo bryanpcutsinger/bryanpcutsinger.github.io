@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive endowment effect: a price rise on a good you own a lot of shifts your whole demand curve</title>
+<!--
+  Interactive endowment-effect figure for the t03b (elasticity & applications)
+  blog post. REDRAW of E&P Fig 2-11 (p.35): the endowment (wealth) effect drawn
+  as a DEMAND-SCHEDULE SHIFT, NOT a preference-map diagram. A dairy farmer owns a
+  great deal of the good, so a price rise does two things at once:
+    - SUBSTITUTION effect: move UP along the UNCHANGED demand curve D1 (buy less,
+      the ordinary law of demand): at $6 on D1 = 8 - Q she would consume 2.
+    - ENDOWMENT effect: the higher price makes her richer, shifting the WHOLE curve
+      right to D2 = 12 - Q; at $6 on D2 she consumes 6.
+  Net: 6 > 4 -- she consumes MORE at the higher price. It looks like an exception,
+  but both D1 and D2 slope DOWN: this is a shift of demand, not an upward-sloping
+  curve. ABSOLUTE LOCK: no preference-map apparatus, no budget line, no surplus
+  shading -- only the two demand curves, the two effect arrows, dots, droplines.
+
+  Website-styled (warm-editorial palette), NOT the FAU slide palette.
+
+  ARCHITECTURE: the whole figure is REAL SVG markup -- a no-JS reader sees the
+  base "before" state (demand curve D1, the starting point at $4 / 4 units, and
+  the axes), and the <noscript> note links the full before/after static .svg. The
+  script only ATTACHES the F2 before/after toggle: choosing "After the price rise"
+  fades D1 to a muted dashed ghost, draws D2 and the substitution + endowment
+  arrows, and swaps the readout. Two segmented buttons plus a focusable
+  role="slider" proxy (arrow keys) drive the same state.
+
+  GEOMETRY (F2, single-panel, viewBox 480x480, aspect 1/1):
+    Data space: Quantity 0..12 on x, Price 0..12 on y.
+    Pixel frame: origin (60,372); 26 px per unit both axes; axes extend past the
+    data max so the curves do not crowd the arrowheads.
+      px(Q) = 60 + 26*Q      py(P) = 372 - 26*P
+    D1: P = 8 - Q  from (0,8)=(60,164) to (8,0)=(268,372).
+    D2: P = 12 - Q from (0,12)=(60,60) to (12,0)=(372,372).
+    Start (4,4)=(164,268); substitution (2,6)=(112,216); final (6,6)=(216,216).
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;    /* warm bone background            */
+    --ink:     #1a1c1e;     /* primary (active) curve          */
+    --text:    #16181a;     /* body text                       */
+    --muted:   #5c6066;     /* axes / captions / ghost curve   */
+    --hairline:#e3ddd3;     /* droplines / price lines         */
+    --accent:  #b07a2c;     /* brass -- effect arrows + points */
+    --accent-tint: #efe4d2; /* unused (no shading -- lock)     */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    /* grid centering (not flex) -- a percentage-width viewBox-only <svg> can fail
+       to shrink below its intrinsic width under a flex parent in some Chrome
+       builds; grid centering avoids it and looks identical. */
+    display: grid;
+    place-items: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .fig { width: 100%; max-width: 480px; min-width: 0; }
+
+  /* segmented toggle */
+  .modebar { display: flex; align-items: center; gap: 8px;
+             margin: 0 0 8px; flex-wrap: wrap; }
+  .modelabel { color: var(--muted); font-size: 13px; font-weight: 600; }
+  .seg { font-family: inherit; font-size: 13px; font-weight: 600;
+         color: var(--ink); background: var(--surface);
+         border: 1.5px solid var(--hairline); border-radius: 6px;
+         padding: 7px 14px; cursor: pointer; min-height: 22px; }
+  .seg + .seg { margin-left: -1px; }
+  .seg.on { background: var(--accent); color: var(--surface);
+            border-color: var(--accent); }
+  .seg:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+
+  /* structural strokes */
+  .axis   { stroke: var(--muted); stroke-width: 1.4; }
+  .curve  { stroke: var(--ink); stroke-width: 2.6; fill: none;
+            stroke-linecap: round; }
+  /* D1 toggles between active (before) and ghost (after) */
+  .curve1.ghost { stroke: var(--muted); stroke-width: 2;
+                  stroke-dasharray: 6 5; opacity: 0.7; }
+  .drop   { stroke: var(--hairline); stroke-width: 1.6; stroke-dasharray: 5 4; }
+  .pline  { stroke: var(--muted); stroke-width: 1.2; stroke-dasharray: 2 3; }
+
+  /* effect arrows (accent) */
+  .effect { stroke: var(--accent); stroke-width: 2.6; fill: none;
+            stroke-linecap: round; }
+
+  /* points */
+  .pt   { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5; }
+  .pt-start { fill: var(--ink); stroke: var(--surface); stroke-width: 2; }
+  .pt-mut   { fill: var(--muted); stroke: var(--surface); stroke-width: 1.5; }
+
+  /* focusable slider proxy */
+  .sliderproxy { fill: transparent; stroke: transparent; cursor: pointer;
+                 touch-action: none; }
+  .sliderproxy:focus-visible { outline: 2px solid var(--accent);
+                 outline-offset: 2px; }
+
+  /* toggled groups */
+  .hidden { display: none; }
+
+  /* text */
+  .axlabel  { fill: var(--muted); font-size: 13px; font-weight: 600; }
+  .ptlabel  { fill: var(--muted); font-size: 12px; font-weight: 600; }
+  .tick     { fill: var(--muted); font-size: 12px; font-weight: 700; }
+  .tick-acc { fill: var(--accent); font-size: 12px; font-weight: 700; }
+  .curvetag { fill: var(--ink); font-size: 12.5px; font-weight: 700; }
+  .curvetag-mut { fill: var(--muted); font-size: 12px; font-weight: 600; }
+  .efftag   { fill: var(--accent); font-size: 12px; font-weight: 700; }
+  .note     { fill: var(--muted); font-size: 11.5px; font-style: italic; }
+  .sep      { stroke: var(--hairline); stroke-width: 1; }
+  .r-hint   { fill: var(--muted); font-size: 12.5px; }
+  .r-trade  { fill: var(--accent); font-size: 13px; font-weight: 600; }
+  .fallback { margin: 8px 0 0; color: var(--muted); font-size: 13px;
+              line-height: 1.35; text-align: center; }
+  .fallback a { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="fig">
+  <div class="modebar" role="group" aria-label="Show the price before or after it rises">
+    <span class="modelabel">The price of the good she owns:</span>
+    <button id="btnBefore" class="seg on" type="button" aria-pressed="true">Before the price rise</button>
+    <button id="btnAfter"  class="seg"    type="button" aria-pressed="false">After the price rise</button>
+  </div>
+
+  <!-- Everything below is REAL base SVG: a no-JS reader sees the "before" state
+       (D1, the starting point, both axes). The <noscript> note links the full
+       before/after still image. The script only ATTACHES the toggle. -->
+  <svg id="fig" viewBox="0 0 480 480" role="group"
+       aria-label="A demand curve for a good the owner holds in large quantity, sloping down. Before the price rises she is at a price of 4 dollars consuming 4 units. Choose 'After the price rise' to see a higher price of 6 dollars split into two effects: the substitution effect moves her up the same curve toward 2 units, while the endowment effect shifts her whole demand curve right to a new curve on which she consumes 6 units — more than before, yet both curves still slope down.">
+    <defs>
+      <marker id="accArw" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#b07a2c" />
+      </marker>
+      <marker id="axArw" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+    </defs>
+
+    <!-- axes (drawn before the curves); extended past the data max -->
+    <line class="axis" x1="60" y1="372" x2="400" y2="372" marker-end="url(#axArw)" />
+    <line class="axis" x1="60" y1="372" x2="60"  y2="48"  marker-end="url(#axArw)" />
+    <text class="axlabel" x="30" y="44" text-anchor="start">Price ($)</text>
+    <text class="axlabel" x="440" y="392" text-anchor="end">Quantity the owner consumes</text>
+
+    <!-- ===================== AFTER-only group (hidden until toggled) ===================== -->
+    <g id="gAfter" class="hidden">
+      <!-- D2: the shifted (richer) curve -->
+      <path class="curve" d="M60,60 L372,372" />
+      <!-- $6 price line + droplines for the substitution and final points -->
+      <line class="pline" x1="60"  y1="216" x2="216" y2="216" />
+      <line class="drop"  x1="112" y1="216" x2="112" y2="372" />
+      <line class="drop"  x1="216" y1="216" x2="216" y2="372" />
+      <!-- substitution arrow: up along D1 from (4,4) to (2,6) -->
+      <path class="effect" d="M158,275 L118,223" marker-end="url(#accArw)" />
+      <!-- endowment arrow: the whole curve shifts right (horizontal, at P=3) -->
+      <path class="effect" d="M195,294 L284,294" marker-end="url(#accArw)" />
+      <!-- substitution-only intermediate dot (2,6) and final dot (6,6) -->
+      <circle class="pt-mut" cx="112" cy="216" r="4.5" />
+      <circle class="pt"     cx="216" cy="216" r="6" />
+      <!-- ticks + tags -->
+      <text class="tick-acc" x="53" y="220" text-anchor="end">$6</text>
+      <text class="tick"     x="112" y="390" text-anchor="middle">2</text>
+      <text class="tick-acc" x="216" y="390" text-anchor="middle">6</text>
+      <text class="efftag" x="145" y="197" text-anchor="middle">Substitution</text>
+      <text class="efftag" x="150" y="213" text-anchor="middle">effect</text>
+      <text class="efftag" x="219" y="266" text-anchor="middle">Endowment</text>
+      <text class="efftag" x="219" y="282" text-anchor="middle">effect</text>
+      <text class="curvetag" x="306" y="196" text-anchor="start">D2 — after</text>
+      <text class="curvetag-mut" x="306" y="212" text-anchor="start">(richer)</text>
+      <text class="note" x="360" y="96" text-anchor="middle">Consumes MORE</text>
+      <text class="note" x="360" y="112" text-anchor="middle">at the higher price</text>
+    </g>
+
+    <!-- ===================== D1 (shared; ghost class added in the after state) ===================== -->
+    <path id="d1" class="curve curve1" d="M60,164 L268,372" />
+
+    <!-- ===================== BEFORE-only group ===================== -->
+    <g id="gBefore">
+      <!-- $4 price line + start droplines -->
+      <line class="pline" x1="60"  y1="268" x2="164" y2="268" />
+      <line class="drop"  x1="164" y1="268" x2="164" y2="372" />
+      <text class="tick" x="53"  y="272" text-anchor="end">$4</text>
+      <text class="tick" x="164" y="390" text-anchor="middle">4</text>
+      <text class="curvetag" x="250" y="352" text-anchor="start">D1 — before</text>
+    </g>
+
+    <!-- start point (4,4): shared, visible in both states -->
+    <circle class="pt-start" cx="164" cy="268" r="5.5" />
+
+    <!-- focusable slider proxy: before(0) / after(1) -->
+    <rect id="sliderProxy" class="sliderproxy" x="60" y="48" width="340" height="324"
+          tabindex="0" role="slider" aria-label="Price before or after it rises"
+          aria-valuemin="0" aria-valuemax="1" aria-valuenow="0"
+          aria-valuetext="Price $4: on demand curve D1 the owner consumes 4 units. Press the right arrow to raise the price." />
+
+    <!-- readout band: hairline separator, muted STATE line, accent TAKEAWAY line -->
+    <line class="sep" x1="44" y1="404" x2="436" y2="404" />
+    <text id="rHint" class="r-hint" text-anchor="middle">
+      <tspan x="240" y="424">Price $4: on demand curve D1 the owner consumes 4 units.</tspan>
+    </text>
+    <text id="rTrade" class="r-trade" text-anchor="middle">
+      <tspan x="240" y="450">The starting point, before the price of the good</tspan>
+      <tspan x="240" y="466">she owns a lot of rises.</tspan>
+    </text>
+  </svg>
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame shows the "before" state
+      only: the demand curve for a good the owner holds in quantity, with the
+      starting point at a price of $4 and 4 units. For the full before-and-after
+      figure — the substitution move up the curve and the endowment shift of the
+      whole curve — see the static image
+      <a href="t03b-ep2-11-endowment-effect.svg">t03b-ep2-11-endowment-effect.svg</a>.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var svg     = document.getElementById('fig');
+  var d1      = document.getElementById('d1');
+  var gBefore = document.getElementById('gBefore');
+  var gAfter  = document.getElementById('gAfter');
+  var proxy   = document.getElementById('sliderProxy');
+  var btnB    = document.getElementById('btnBefore');
+  var btnA    = document.getElementById('btnAfter');
+  var rHint   = document.getElementById('rHint');
+  var rTrade  = document.getElementById('rTrade');
+  var NS = 'http://www.w3.org/2000/svg';
+
+  // Two states of the F2 before/after toggle. Readout strings are the spec's
+  // exact copy (interactive-specs.md, t03b-ep2-11 block).
+  var STATE = {
+    before: {
+      now: 0,
+      hint: ['Price $4: on demand curve D1 the owner consumes 4 units.'],
+      trade: ['The starting point, before the price of the good',
+              'she owns a lot of rises.'],
+      valuetext: 'Price $4: on demand curve D1 the owner consumes 4 units. ' +
+                 'Press the right arrow to raise the price.'
+    },
+    after: {
+      now: 1,
+      hint: ['Price $6: substitution alone would cut her to 2 units,',
+             'but the endowment shift to D2 raises her to 6.'],
+      trade: ['Richer from the higher price, she consumes more at the higher',
+              'price — a shift of demand, not an upward-sloping curve.'],
+      valuetext: 'Price $6: substitution alone would cut her to 2 units, but ' +
+                 'the endowment shift to demand curve D2 raises her to 6. Richer ' +
+                 'from the higher price, she consumes more at the higher price — ' +
+                 'a shift of demand, not an upward-sloping curve.'
+    }
+  };
+
+  var isAfter = false; // default = before (per spec)
+
+  function setLines(el, lines, y0, dy) {
+    while (el.firstChild) el.removeChild(el.firstChild);
+    for (var i = 0; i < lines.length; i++) {
+      var t = document.createElementNS(NS, 'tspan');
+      t.setAttribute('x', 240);
+      t.setAttribute('y', y0 + i * dy);
+      t.textContent = lines[i];
+      el.appendChild(t);
+    }
+  }
+
+  function render() {
+    var s = isAfter ? STATE.after : STATE.before;
+
+    gAfter.classList.toggle('hidden', !isAfter);
+    gBefore.classList.toggle('hidden', isAfter);
+    d1.classList.toggle('ghost', isAfter);
+
+    btnA.classList.toggle('on', isAfter);
+    btnB.classList.toggle('on', !isAfter);
+    btnA.setAttribute('aria-pressed', isAfter ? 'true' : 'false');
+    btnB.setAttribute('aria-pressed', isAfter ? 'false' : 'true');
+
+    setLines(rHint, s.hint, 424, 16);
+    setLines(rTrade, s.trade, 450, 16);
+
+    proxy.setAttribute('aria-valuenow', s.now);
+    proxy.setAttribute('aria-valuetext', s.valuetext);
+  }
+
+  function setState(after) {
+    isAfter = !!after;
+    render();
+  }
+
+  btnB.addEventListener('click', function () { setState(false); proxy.focus(); });
+  btnA.addEventListener('click', function () { setState(true);  proxy.focus(); });
+
+  // slider proxy: click flips, arrow keys move between before(0) and after(1)
+  proxy.addEventListener('click', function () { setState(!isAfter); });
+  proxy.addEventListener('keydown', function (evt) {
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp')      { setState(true); }
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') { setState(false); }
+    else if (evt.key === 'Home')  { setState(false); }
+    else if (evt.key === 'End')   { setState(true); }
+    else return;
+    evt.preventDefault();
+  });
+
+  // Debug hook: lets a reviewer screenshot either state via scripting.
+  // Accepts 0/1, false/true, or "before"/"after".
+  window.__fig = {
+    set: function (v) {
+      if (v === 'before' || v === 0 || v === false || v === '0') setState(false);
+      else setState(true);
+    },
+    get: function () {
+      return {
+        state: isAfter ? 'after' : 'before',
+        price: isAfter ? 6 : 4,
+        quantity: isAfter ? 6 : 4,
+        substitutionQuantity: 2,   // D1 at $6 = 8 - 6
+        endowmentQuantity: 6       // D2 at $6 = 12 - 6
+      };
+    }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

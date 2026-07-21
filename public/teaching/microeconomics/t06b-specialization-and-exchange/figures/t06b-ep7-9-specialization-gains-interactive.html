@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive figure: one market price coordinates two producers</title>
+<!--
+  Interactive recreation of E&P Fig 7-9 (p.148) for the T6b blog post
+  (website-styled warm palette, not FAU). Self-contained: no libraries, no
+  network. The static FAU figure (t06b-ep7-9-specialization-gains.{tex,svg}) is
+  the SLIDE version and is untouched; it is also this widget's <noscript>
+  fallback.
+
+  DISTINCT STORY (vs t06b-gains-exchange, UE 15.4): 15.4 shows two parties
+  gaining from one bilateral trade. THIS figure shows a single COMMON MARKET
+  PRICE doing the coordinating — each producer bakes to where his rising
+  marginal cost meets the price and buys to where his falling worth meets it,
+  so every producer's marginal cost is pulled into line with the same price
+  (MC_A = MC_B = P0), the efficient result no equal-quota order could reach.
+
+  ARCHITECTURE (family F4 area-accounting + F8 A/B market composition): the base
+  figure is REAL SVG markup showing the TRADE state (STATE 2) — both panels,
+  the common price line, both gain triangles, produced/consumed droplines, and
+  the x-axis trade brackets — so a no-JS reader sees the full still. The script
+  only ATTACHES a toggle that switches STATE 1 "each baker on his own"
+  (self-sufficient crossings, no price line, no gains) <-> STATE 2 "trading at
+  the common price". Every produced/consumed quantity is RECOMPUTED from the
+  line equations at P0 (never hard-coded); the MC_A = MC_B = P0 identity and the
+  market-clearing (A buys = B sells) are the teaching point and are asserted in
+  window.__fig.get().
+
+  MODEL (course-adapted clean linear curves, brief Section C invariants):
+    Panel A (buyer / high-cost):  MC_A: P = 1 + Q ; D_A: P = 10 - Q
+      self-sufficient MC_A=D_A at (4.5, 5.5); at P0=4 produces 3, consumes 6.
+    Panel B (seller / low-cost):  MC_B: P = 1 + 0.5Q ; D_B: P = 7 - Q
+      self-sufficient MC_B=D_B at (4, 3); at P0=4 produces 6, consumes 3.
+    Common price P0 = 4 -> MC_A = MC_B = 4 (efficient); A buys 3 = B sells 3 (clears).
+
+  GEOMETRY: wide two-panel, viewBox 900 x 570, max-width 720px.
+    Left panel  X0_L = 70 ; Right panel X0_R = 490 ; PER_X = 36 px/cake.
+    Y0 = 400 (value 0) ; PER_Y = 30 px/value.  xL(q)=70+36q ; xR(q)=490+36q ; y(v)=400-30v.
+    Shading is NAMED, never measured (verbal-marginal scope lock): no area value
+    in any label, caption, or readout; no indifference curves.
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;    /* warm bone background            */
+    --ink:     #1a1c1e;     /* MC / demand curves              */
+    --text:    #16181a;     /* body text                      */
+    --muted:   #5c6066;     /* axes / secondary labels        */
+    --hairline:#e3ddd3;     /* droplines / muting             */
+    --accent:  #b07a2c;     /* brass — price line / dots / gains */
+    --accent-tint: #efe4d2; /* gain-triangle wash             */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .fig { width: 100%; max-width: 720px; min-width: 0; }
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+
+  /* structural strokes */
+  .axis    { stroke: var(--muted); stroke-width: 1.4; }
+  .curve   { stroke: var(--ink); stroke-width: 2.4; fill: none; stroke-linecap: round; }
+  .gain    { fill: var(--accent-tint); stroke: var(--accent); stroke-width: 1.2;
+             opacity: 0.85; }
+  .priceline { stroke: var(--accent); stroke-width: 1.8; stroke-dasharray: 8 5; }
+  .drop    { stroke: var(--hairline); stroke-width: 1.6; stroke-dasharray: 5 4; }
+  .bracket { stroke: var(--muted); stroke-width: 1.2; fill: none; }
+
+  /* points */
+  .pt      { fill: var(--accent); stroke: var(--surface); stroke-width: 2.2; }
+  .ptSelf  { fill: var(--surface); stroke: var(--accent); stroke-width: 2.6; }
+
+  /* toggle segmented control */
+  .segbox   { fill: none; stroke: var(--muted); stroke-width: 1.3; }
+  .seg      { fill: transparent; cursor: pointer; }
+  .seg.on   { fill: var(--accent); }
+  .segtext  { font-size: 12.5px; font-weight: 600; pointer-events: none; }
+  .segtext.on  { fill: var(--surface); }
+  .segtext.off { fill: var(--muted); }
+  .seggroup:focus-visible { outline: none; }
+  .seggroup:focus-visible .segbox { stroke: var(--accent); stroke-width: 2.2; }
+
+  /* text */
+  .axlabel   { fill: var(--muted); font-size: 12px; font-weight: 600; }
+  .curvelabel{ fill: var(--ink); font-size: 11.5px; font-weight: 600; }
+  .gainlabel { fill: var(--accent); font-size: 10.5px; font-weight: 700; }
+  .bracklabel{ fill: var(--muted); font-size: 9.5px; font-weight: 600; }
+  .pricelabel{ fill: var(--accent); font-size: 11px; font-weight: 700; }
+  .paneltitle{ fill: var(--muted); font-size: 12.5px; font-weight: 700; }
+  .title     { fill: var(--text); font-size: 14px; font-weight: 700; }
+  .ytick     { fill: var(--muted); font-size: 10.5px; }
+  .sep       { stroke: var(--hairline); stroke-width: 1; }
+  .r-hint    { fill: var(--muted); font-size: 13px; }
+  .r-take    { fill: var(--accent); font-size: 13.5px; font-weight: 600; }
+  .hidden    { display: none; }
+  .fallback  { margin: 8px 0 0; color: var(--muted); font-size: 13px;
+               line-height: 1.35; text-align: center; }
+  .fallback a { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="fig">
+  <svg id="fig" viewBox="0 0 900 570" role="group"
+       aria-label="Two side-by-side charts of cakes per day against price. Producer A (high cost) and Producer B (low cost) each face the same market price of 4. At that price A bakes 3 cakes, where his rising marginal cost meets the price, and buys 3 more up to where his falling demand meets it; B bakes 6 and sells 3 of them. Both marginal costs equal the price, so the two are pulled into line and each captures a shaded gain from specialization. Toggle between each baker producing on his own and both trading at the common price.">
+    <defs>
+      <marker id="ax-arrow2" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+    </defs>
+
+    <!-- title -->
+    <text class="title" x="450" y="24" text-anchor="middle">One market price coordinates both producers</text>
+
+    <!-- ===================== toggle (segmented control) ===================== -->
+    <g id="segGroup" class="seggroup" tabindex="0" role="radiogroup"
+       aria-label="Choose whether the two bakers each produce on their own, or both trade at the common market price"
+       aria-valuetext="Trading at the common price: A makes 3 and buys 3 more, B makes 6 and sells 3; both marginal costs equal the price.">
+      <rect class="segbox" x="285" y="38" width="330" height="28" rx="14" />
+      <rect id="segSelfBg"  class="seg"    x="286" y="39" width="164" height="26" rx="13" role="radio" aria-checked="false" aria-label="Each baker on his own" />
+      <rect id="segTradeBg" class="seg on" x="450" y="39" width="164" height="26" rx="13" role="radio" aria-checked="true"  aria-label="Trading at the common price" />
+      <text id="segSelfTx"  class="segtext off" x="368" y="55" text-anchor="middle">Each on his own</text>
+      <text id="segTradeTx" class="segtext on"  x="532" y="55" text-anchor="middle">Trading at the price</text>
+    </g>
+
+    <!-- ============================================================= -->
+    <!-- ======================= PANEL A ============================= -->
+    <!-- ============================================================= -->
+    <text class="paneltitle" x="70" y="92" text-anchor="start">Producer A &#8212; the buyer (high cost)</text>
+
+    <!-- axes -->
+    <line class="axis" x1="70" y1="400" x2="412" y2="400" marker-end="url(#ax-arrow2)" />
+    <line class="axis" x1="70" y1="400" x2="70"  y2="100" marker-end="url(#ax-arrow2)" />
+    <!-- y tick at P0 = 4 -->
+    <line class="axis" x1="66" y1="280" x2="70" y2="280" />
+    <text class="ytick" x="62" y="284" text-anchor="end">4</text>
+    <text class="axlabel" x="18" y="250" text-anchor="middle" transform="rotate(-90 18 250)">Price / value (in Y)</text>
+
+    <!-- STATE 2 (trade) group: price line, gains, produced/consumed marks, brackets -->
+    <g id="stateTradeA">
+      <!-- gain triangle A: (3,4)-(6,4)-(4.5,5.5) -->
+      <polygon id="gainA" class="gain" points="178,280 286,280 232,235" />
+      <!-- produced/consumed droplines -->
+      <line id="dropA1" class="drop" x1="178" y1="400" x2="178" y2="280" />
+      <line id="dropA2" class="drop" x1="286" y1="400" x2="286" y2="280" />
+    </g>
+
+    <!-- curves (both states) -->
+    <path class="curve" d="M70,370 L376,115" />
+    <path class="curve" d="M70,100 L394,370" />
+    <text class="curvelabel" x="300" y="128" text-anchor="start">A&#8217;s marginal cost</text>
+    <text class="curvelabel" x="330" y="352" text-anchor="start">A&#8217;s demand</text>
+
+    <g id="stateTradeA2">
+      <!-- produced/consumed dots on the price line -->
+      <circle id="dotAprod" class="pt" cx="178" cy="280" r="4.5" />
+      <circle id="dotAcons" class="pt" cx="286" cy="280" r="4.5" />
+      <text id="gainAlabel" class="gainlabel" x="232" y="266" text-anchor="middle">A&#8217;s gain</text>
+      <!-- x-axis brackets: top partition (produced | purchased); bottom total (consumed) -->
+      <path id="brA_prod" class="bracket" d="M70,410 L70,415 L178,415 L178,410" />
+      <path id="brA_purch" class="bracket" d="M178,410 L178,415 L286,415 L286,410" />
+      <path id="brA_cons" class="bracket" d="M70,428 L70,433 L286,433 L286,428" />
+      <text id="brA_prodTx"  class="bracklabel" x="124" y="425" text-anchor="middle">Produced by A</text>
+      <text id="brA_purchTx" class="bracklabel" x="232" y="425" text-anchor="middle">Purchased from B</text>
+      <text id="brA_consTx"  class="bracklabel" x="178" y="443" text-anchor="middle">Consumed by A</text>
+    </g>
+
+    <!-- STATE 1 (self-sufficient) group: crossing point + dropline -->
+    <g id="stateSelfA" class="hidden">
+      <line id="dropAself" class="drop" x1="232" y1="400" x2="232" y2="235" />
+      <circle id="dotAself" class="ptSelf" cx="232" cy="235" r="5" />
+      <text class="bracklabel" x="232" y="255" text-anchor="middle">A alone: about 4.5</text>
+    </g>
+
+    <!-- ============================================================= -->
+    <!-- ======================= PANEL B ============================= -->
+    <!-- ============================================================= -->
+    <text class="paneltitle" x="490" y="92" text-anchor="start">Producer B &#8212; the seller (low cost)</text>
+
+    <!-- axes -->
+    <line class="axis" x1="490" y1="400" x2="832" y2="400" marker-end="url(#ax-arrow2)" />
+    <line class="axis" x1="490" y1="400" x2="490" y2="100" marker-end="url(#ax-arrow2)" />
+    <line class="axis" x1="486" y1="280" x2="490" y2="280" />
+    <text class="ytick" x="482" y="284" text-anchor="end">4</text>
+
+    <g id="stateTradeB">
+      <!-- gain triangle B: (3,4)-(6,4)-(4,3) -->
+      <polygon id="gainB" class="gain" points="598,280 706,280 634,310" />
+      <line id="dropB1" class="drop" x1="598" y1="400" x2="598" y2="280" />
+      <line id="dropB2" class="drop" x1="706" y1="400" x2="706" y2="280" />
+    </g>
+
+    <path class="curve" d="M490,370 L814,235" />
+    <path class="curve" d="M490,190 L742,400" />
+    <text class="curvelabel" x="748" y="228" text-anchor="start">B&#8217;s marginal cost</text>
+    <text class="curvelabel" x="700" y="360" text-anchor="start">B&#8217;s demand</text>
+
+    <g id="stateTradeB2">
+      <circle id="dotBcons" class="pt" cx="598" cy="280" r="4.5" />
+      <circle id="dotBprod" class="pt" cx="706" cy="280" r="4.5" />
+      <text id="gainBlabel" class="gainlabel" x="648" y="300" text-anchor="middle">B&#8217;s gain</text>
+      <path id="brB_prod" class="bracket" d="M490,410 L490,415 L706,415 L706,410" />
+      <path id="brB_cons" class="bracket" d="M490,428 L490,433 L598,433 L598,428" />
+      <path id="brB_sold" class="bracket" d="M598,428 L598,433 L706,433 L706,428" />
+      <text id="brB_prodTx" class="bracklabel" x="598" y="425" text-anchor="middle">Produced by B</text>
+      <text id="brB_consTx" class="bracklabel" x="544" y="443" text-anchor="middle">Consumed by B</text>
+      <text id="brB_soldTx" class="bracklabel" x="652" y="443" text-anchor="middle">Sold to A</text>
+    </g>
+
+    <g id="stateSelfB" class="hidden">
+      <line id="dropBself" class="drop" x1="634" y1="400" x2="634" y2="310" />
+      <circle id="dotBself" class="ptSelf" cx="634" cy="310" r="5" />
+      <text class="bracklabel" x="634" y="330" text-anchor="middle">B alone: about 4</text>
+    </g>
+
+    <!-- ===================== common price line (STATE 2, spans BOTH panels) ===================== -->
+    <g id="priceLineGroup">
+      <line class="priceline" x1="64" y1="280" x2="822" y2="280" />
+      <text class="pricelabel" x="828" y="284" text-anchor="start">P&#8320; = 4</text>
+    </g>
+
+    <!-- ===================== shared x label ===================== -->
+    <text class="axlabel" x="228" y="462" text-anchor="middle">Cakes per day (X)</text>
+    <text class="axlabel" x="620" y="462" text-anchor="middle">Cakes per day (X)</text>
+
+    <!-- ===================== readout band ===================== -->
+    <line class="sep" x1="70" y1="486" x2="830" y2="486" />
+    <text id="rHint" class="r-hint" x="450" y="510" text-anchor="middle"></text>
+    <text id="rTake" class="r-take" text-anchor="middle"></text>
+  </svg>
+
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame is a still image of the
+      trade: two producers facing one common price of 4, each baking up to where
+      his marginal cost meets the price and buying up to where his demand meets
+      it, so A bakes 3 and buys 3 while B bakes 6 and sells 3, both marginal costs
+      equal, each with a shaded gain from specialization. You can also
+      <a href="t06b-ep7-9-specialization-gains.svg">open the static figure</a>.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var svg = document.getElementById('fig');
+  var byId = function (id) { return document.getElementById(id); };
+  var NS = 'http://www.w3.org/2000/svg';
+
+  // --- pixel frame + scale (mirrors the markup above) ---
+  var X0_L = 70, X0_R = 490, PER_X = 36, Y0 = 400, PER_Y = 30;
+  function xL(q) { return X0_L + q * PER_X; }
+  function xR(q) { return X0_R + q * PER_X; }
+  function yAt(v) { return Y0 - v * PER_Y; }
+
+  // --- the model (course-adapted clean linear curves) ---
+  var P0 = 4;
+  function mcA(q) { return 1 + q; }        // Producer A marginal cost
+  function dA(q)  { return 10 - q; }       // Producer A demand (worth)
+  function mcB(q) { return 1 + 0.5 * q; }  // Producer B marginal cost
+  function dB(q)  { return 7 - q; }        // Producer B demand (worth)
+
+  // Quantities RECOMPUTED live from the equations at the common price P0 —
+  // never hard-coded. produced = where MC = P0 ; consumed = where D = P0.
+  function prodA() { return P0 - 1; }         // solve 1 + q = P0  -> q = 3
+  function consA() { return 10 - P0; }        // solve 10 - q = P0 -> q = 6
+  function prodB() { return 2 * (P0 - 1); }   // solve 1 + 0.5q = P0 -> q = 6
+  function consB() { return 7 - P0; }         // solve 7 - q = P0  -> q = 3
+  // Self-sufficient crossings MC = D (also recomputed):
+  function selfA() { var q = (10 - 1) / 2; return { q: q, v: mcA(q) }; }  // (4.5, 5.5)
+  function selfB() { var q = (7 - 1) / 1.5; return { q: q, v: mcB(q) }; } // (4, 3)
+
+  var state = 2; // 1 = each on his own ; 2 = trading at the common price (default)
+
+  // --- element refs ---
+  var stateTradeGroups = ['stateTradeA','stateTradeA2','stateTradeB','stateTradeB2','priceLineGroup'].map(byId);
+  var stateSelfGroups  = ['stateSelfA','stateSelfB'].map(byId);
+  var segSelfBg = byId('segSelfBg'), segTradeBg = byId('segTradeBg');
+  var segSelfTx = byId('segSelfTx'), segTradeTx = byId('segTradeTx');
+  var segGroup = byId('segGroup');
+  var rHint = byId('rHint'), rTake = byId('rTake');
+
+  // trade-state dynamic elements (repositioned from computed q on every render)
+  var gainA = byId('gainA'), dropA1 = byId('dropA1'), dropA2 = byId('dropA2');
+  var dotAprod = byId('dotAprod'), dotAcons = byId('dotAcons');
+  var gainB = byId('gainB'), dropB1 = byId('dropB1'), dropB2 = byId('dropB2');
+  var dotBcons = byId('dotBcons'), dotBprod = byId('dotBprod');
+  var dropAself = byId('dropAself'), dotAself = byId('dotAself');
+  var dropBself = byId('dropBself'), dotBself = byId('dotBself');
+
+  function setBracket(id, x0, x1, yTop, yBot) {
+    byId(id).setAttribute('d',
+      'M' + x0 + ',' + yTop + ' L' + x0 + ',' + yBot +
+      ' L' + x1 + ',' + yBot + ' L' + x1 + ',' + yTop);
+  }
+
+  function positionTrade() {
+    // Recompute every produced/consumed position from the equations at P0.
+    var pA = prodA(), cA = consA(), pB = prodB(), cB = consB();
+    var yP = yAt(P0), sA = selfA(), sB = selfB();
+
+    // Panel A gain triangle: (prodA, P0)-(consA, P0)-(self crossing)
+    gainA.setAttribute('points',
+      xL(pA) + ',' + yP + ' ' + xL(cA) + ',' + yP + ' ' + xL(sA.q) + ',' + yAt(sA.v));
+    dropA1.setAttribute('x1', xL(pA)); dropA1.setAttribute('x2', xL(pA));
+    dropA1.setAttribute('y1', Y0);     dropA1.setAttribute('y2', yP);
+    dropA2.setAttribute('x1', xL(cA)); dropA2.setAttribute('x2', xL(cA));
+    dropA2.setAttribute('y1', Y0);     dropA2.setAttribute('y2', yP);
+    dotAprod.setAttribute('cx', xL(pA)); dotAprod.setAttribute('cy', yP);
+    dotAcons.setAttribute('cx', xL(cA)); dotAcons.setAttribute('cy', yP);
+    // A brackets: produced 0..pA, purchased pA..cA, consumed 0..cA
+    setBracket('brA_prod',  xL(0),  xL(pA), 410, 415);
+    setBracket('brA_purch', xL(pA), xL(cA), 410, 415);
+    setBracket('brA_cons',  xL(0),  xL(cA), 428, 433);
+    byId('brA_prodTx').setAttribute('x', (xL(0) + xL(pA)) / 2);
+    byId('brA_purchTx').setAttribute('x', (xL(pA) + xL(cA)) / 2);
+    byId('brA_consTx').setAttribute('x', (xL(0) + xL(cA)) / 2);
+    byId('gainAlabel').setAttribute('x', xL(sA.q));
+
+    // Panel B gain triangle: (consB, P0)-(prodB, P0)-(self crossing)
+    gainB.setAttribute('points',
+      xR(cB) + ',' + yP + ' ' + xR(pB) + ',' + yP + ' ' + xR(sB.q) + ',' + yAt(sB.v));
+    dropB1.setAttribute('x1', xR(cB)); dropB1.setAttribute('x2', xR(cB));
+    dropB1.setAttribute('y1', Y0);     dropB1.setAttribute('y2', yP);
+    dropB2.setAttribute('x1', xR(pB)); dropB2.setAttribute('x2', xR(pB));
+    dropB2.setAttribute('y1', Y0);     dropB2.setAttribute('y2', yP);
+    dotBcons.setAttribute('cx', xR(cB)); dotBcons.setAttribute('cy', yP);
+    dotBprod.setAttribute('cx', xR(pB)); dotBprod.setAttribute('cy', yP);
+    // B brackets: produced 0..pB, consumed 0..cB, sold cB..pB
+    setBracket('brB_prod', xR(0),  xR(pB), 410, 415);
+    setBracket('brB_cons', xR(0),  xR(cB), 428, 433);
+    setBracket('brB_sold', xR(cB), xR(pB), 428, 433);
+    byId('brB_prodTx').setAttribute('x', (xR(0) + xR(pB)) / 2);
+    byId('brB_consTx').setAttribute('x', (xR(0) + xR(cB)) / 2);
+    byId('brB_soldTx').setAttribute('x', (xR(cB) + xR(pB)) / 2);
+    byId('gainBlabel').setAttribute('x', xR(sB.q));
+
+    // Self-sufficient crossings (STATE 1)
+    dropAself.setAttribute('x1', xL(sA.q)); dropAself.setAttribute('x2', xL(sA.q));
+    dropAself.setAttribute('y2', yAt(sA.v));
+    dotAself.setAttribute('cx', xL(sA.q));  dotAself.setAttribute('cy', yAt(sA.v));
+    dropBself.setAttribute('x1', xR(sB.q)); dropBself.setAttribute('x2', xR(sB.q));
+    dropBself.setAttribute('y2', yAt(sB.v));
+    dotBself.setAttribute('cx', xR(sB.q));  dotBself.setAttribute('cy', yAt(sB.v));
+  }
+
+  // greedy word-wrap for the accent takeaway line
+  function layoutTake(str) {
+    var maxW = 748, x = 450, y0 = 532, lineH = 18;
+    while (rTake.firstChild) rTake.removeChild(rTake.firstChild);
+    var probe = document.createElementNS(NS, 'tspan');
+    rTake.appendChild(probe);
+    var words = str.split(' '), lines = [], cur = words[0] || '';
+    for (var i = 1; i < words.length; i++) {
+      probe.textContent = cur + ' ' + words[i];
+      if (probe.getComputedTextLength() > maxW) { lines.push(cur); cur = words[i]; }
+      else { cur = cur + ' ' + words[i]; }
+    }
+    lines.push(cur);
+    rTake.removeChild(probe);
+    var startY = (lines.length === 1) ? y0 + 4 : y0;
+    for (var j = 0; j < lines.length; j++) {
+      var t = document.createElementNS(NS, 'tspan');
+      t.setAttribute('x', x);
+      t.setAttribute('y', startY + j * lineH);
+      t.textContent = lines[j];
+      rTake.appendChild(t);
+    }
+  }
+
+  function readout() {
+    // Build the STATE-2 numbers from the recomputed quantities (not literals).
+    var pA = prodA(), cA = consA(), pB = prodB(), cB = consB();
+    var aBuys = cA - pA, bSells = pB - cB;
+    if (state === 2) {
+      return {
+        m: 'At the common price, A makes ' + pA + ' and buys ' + aBuys +
+           ' more; B makes ' + pB + ' and sells ' + bSells +
+           '. Both marginal costs equal the price.',
+        a: 'One price lines up both producers’ marginal costs and hands each a ' +
+           'gain from specialization — the efficient result no quota order reached.'
+      };
+    }
+    var sA = selfA(), sB = selfB();
+    return {
+      m: 'On his own, each baker stops where his own cost meets his own worth: A at ' +
+         'about ' + (+sA.q.toFixed(1)) + ', B at about ' + (+sB.q.toFixed(1)) + '.',
+      a: 'Alone, their marginal costs are unequal, so more of the good could be made ' +
+         'for the same total cost.'
+    };
+  }
+
+  function render() {
+    positionTrade();
+    var showTrade = (state === 2);
+    stateTradeGroups.forEach(function (g) { g.classList.toggle('hidden', !showTrade); });
+    stateSelfGroups.forEach(function (g)  { g.classList.toggle('hidden',  showTrade); });
+
+    // segmented control appearance + ARIA
+    segSelfBg.setAttribute('class',  'seg' + (showTrade ? '' : ' on'));
+    segTradeBg.setAttribute('class', 'seg' + (showTrade ? ' on' : ''));
+    segSelfTx.setAttribute('class',  'segtext ' + (showTrade ? 'off' : 'on'));
+    segTradeTx.setAttribute('class', 'segtext ' + (showTrade ? 'on' : 'off'));
+    segSelfBg.setAttribute('aria-checked',  showTrade ? 'false' : 'true');
+    segTradeBg.setAttribute('aria-checked', showTrade ? 'true' : 'false');
+
+    var t = readout();
+    rHint.textContent = t.m;
+    layoutTake(t.a);
+    segGroup.setAttribute('aria-valuetext', t.m + ' ' + t.a);
+  }
+
+  function setState(s) {
+    var ns = (s === 1) ? 1 : 2;
+    if (ns === state) return;
+    state = ns;
+    render();
+  }
+
+  // --- interaction: click a segment; keyboard toggles when the group is focused ---
+  segSelfBg.addEventListener('pointerdown', function (e) { e.preventDefault(); segGroup.focus(); setState(1); });
+  segTradeBg.addEventListener('pointerdown', function (e) { e.preventDefault(); segGroup.focus(); setState(2); });
+  byId('segSelfTx').addEventListener('pointerdown', function (e) { e.preventDefault(); segGroup.focus(); setState(1); });
+  byId('segTradeTx').addEventListener('pointerdown', function (e) { e.preventDefault(); segGroup.focus(); setState(2); });
+
+  segGroup.addEventListener('keydown', function (evt) {
+    if (evt.key === 'ArrowLeft'  || evt.key === 'ArrowUp')   { setState(1); }
+    else if (evt.key === 'ArrowRight' || evt.key === 'ArrowDown') { setState(2); }
+    else if (evt.key === ' ' || evt.key === 'Enter')        { setState(state === 2 ? 1 : 2); }
+    else return;
+    evt.preventDefault();
+  });
+
+  // --- debug hook (inert for students): exposes the efficiency + clearing invariants ---
+  window.__fig = {
+    set: function (v) {
+      var s = (v && typeof v.state === 'number') ? v.state : v;
+      setState(+s);
+    },
+    get: function () {
+      var pA = prodA(), cA = consA(), pB = prodB(), cB = consB();
+      return {
+        state: state, P0: P0,
+        A: { produced: pA, consumed: cA, buys: cA - pA, mcAtProduced: mcA(pA) },
+        B: { produced: pB, consumed: cB, sells: pB - cB, mcAtProduced: mcB(pB) },
+        clears: (cA - pA) === (pB - cB),
+        mcEqualPrice: (mcA(pA) === P0) && (mcB(pB) === P0)
+      };
+    }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

@@ -5,8 +5,9 @@ course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 5 (Tue 9/8)"]
 ue_anchors: ["UE 8", "UE 9"]
 be_anchors: []
+ep_anchors: ["E&P Fig 2-4 (ch. 2, p. 23) — marginal revenue as gain minus loss on inframarginal units", "E&P Fig 2-11 (ch. 2, p. 35) — endowment vs substitution effect (relocated from t03a)"]
 word_target: "2800-3800"
-status: approved        # one-per-lecture split; approved 2026-07-01
+status: approved        # E&P integration M6 done-gate 2026-07-20; prior approval 2026-07-01
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Source-of-truth for the session-5 deck; section headers are claims that map to slide titles. Verbal-marginal throughout: no indifference curves, no measured surplus triangles, no elasticity algebra in the body. Follows the session-4 demand post; a short foundational intro re-establishes the downward-sloping demand curve and marginal worth so this post stands on its own."
 # brief: ../t03-demand-consumer-behavior/brief.md
@@ -139,6 +140,11 @@ We have to keep three demands straight, because they answer different questions.
 
 The last is subtle, and a bridge to a later topic, so I will preview it now. When such a seller wants to sell one more unit, it usually has to lower its price, and that lower price applies to all the units it sells, not just the extra one. So the extra revenue from that unit, its marginal revenue, is less than the price received. Later, when we study firms with some power over their price, this seller-facing demand is what the firm chooses a point on, weighing that gap between marginal revenue and price. File the idea away; it will do heavy lifting when we reach market power.
 
+<figure class="econ-figure" style="margin:1.5em 0;">
+<iframe src="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ep2-4-marginal-revenue-interactive.html" title="Interactive marginal-revenue figure: drag the quantity handle to sell one more unit and watch the gain rectangle (the new unit at the new price) fight the loss rectangle (the price cut on every earlier unit)." loading="lazy" style="width:100%; max-width:480px; aspect-ratio:1/1; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ep2-4-marginal-revenue-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ep2-4-marginal-revenue.svg">view the static figure</a>.</p></iframe>
+<figcaption><strong>Selling one more unit brings in its price but gives up revenue on every unit already sold.</strong> When a seller must lower its price to sell one more unit, the lower price applies to every unit, not just the extra one. So the marginal revenue from that unit is the price it fetches (the gain rectangle) minus the revenue given up on the units already being sold (the loss rectangle). Selling the second unit at $9 brings in $9 but costs $1 of revenue on the first unit, so marginal revenue is $8, below the $9 price. Drag the handle to sell one more unit and watch the two rectangles, and see marginal revenue fall further, and eventually turn negative, as the price cut spreads over more and more units. If the frame does not load, <a href="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ep2-4-marginal-revenue-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ep2-4-marginal-revenue.svg">view the static figure</a>.</figcaption>
+</figure>
+
 ## A Higher Price Pushes You Away, but If You Own a Lot It Also Makes You Richer
 
 When a good's price changes, two distinct forces act on how much you buy, worth separating in words even though we will not draw the apparatus some textbooks use to split them.
@@ -154,6 +160,11 @@ The first is the *substitution effect*. When a good gets more expensive relative
 </aside>
 
 The classic puzzle: you own a dairy farm and the price of milk rises. Do you drink more milk or less? Substitution says less, because milk is now dear relative to other drinks. But you are a big milk owner, so the higher price has made you wealthier, which pulls toward more. The net effect is genuinely ambiguous. For ordinary buyers, who do not own large stocks of the good, the substitution effect dominates and the wealth effect is too small to overturn the law, which is why demand curves reliably slope downward.
+
+<figure class="econ-figure" style="margin:1.5em 0;">
+<iframe src="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ep2-11-endowment-effect-interactive.html" title="Interactive endowment-effect figure: toggle between before and after a price rise on a good the consumer owns. The substitution effect moves her up the original demand curve; the endowment effect shifts the whole curve right, and here she ends up consuming more." loading="lazy" style="width:100%; max-width:480px; aspect-ratio:1/1; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ep2-11-endowment-effect-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ep2-11-endowment-effect.svg">view the static figure</a>.</p></iframe>
+<figcaption><strong>A price rise can leave the owner consuming more, yet demand still slopes down.</strong> A dairy farmer owns a great deal of milk, so a rise in the milk price does two things at once. The substitution effect nudges her up the original demand curve toward less milk, the ordinary law-of-demand response. But the higher price also makes her richer, the wealth effect from the section above, and because she owns so much of the good, that shifts her whole demand curve up and to the right; this owner's version of the wealth effect is called the endowment effect. Here the endowment effect wins, so at the higher price she actually consumes more, four units up to six. It looks like an exception to the law of demand, but notice both curves still slope down: this is a shift of demand, not a curve that slopes the wrong way. Toggle between before and after the price rise to see the substitution move and the endowment shift in turn. If the frame does not load, <a href="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ep2-11-endowment-effect-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ep2-11-endowment-effect.svg">view the static figure</a>.</figcaption>
+</figure>
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>

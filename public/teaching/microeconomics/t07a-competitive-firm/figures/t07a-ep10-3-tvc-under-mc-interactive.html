@@ -1,0 +1,458 @@
+<!doctype html>
+<!--
+  t07a-ep10-3-tvc-under-mc-interactive.html
+  Interactive version of the T7a "total variable cost = area under marginal
+  cost" figure (after E&P Fig 10-3, p. 205; course redraw — numbers are the
+  t07a post's OWN cost table, so the figure IS the section's table drawn as an
+  area, zero drift with the prose).
+  Family F4 (area accounting; TWO handles).
+    Marginal cost of the qth unit (a STEP curve, MC[1..8]):
+      1->$9  2->$8  3->$6  4->$5  5->$7  6->$13  7->$22  8->$30
+    Total variable cost of Q units = area under MC to Q = sum MC(1..Q) = AVC(Q)*Q.
+    AVC = TVC/Q bottoms at $7 (Q = 4 and 5); min AVC = $7 = shutdown floor.
+    Profit-max output = largest unit whose rising MC still clears the price:
+      P>=30 -> 8 ; [22,30) -> 7 ; [13,22) -> 6 ; [7,13) -> 5 ; P<7 -> 5 (margin).
+  INTERACTION (F4, two handles):
+    (1) OUTPUT handle on the x-axis: integer 0..8 (the drawn MC domain; the axis
+        extends to 12 for headroom). Drag / ArrowLeft-Right in 1-unit steps;
+        magnet-snaps at the profit-max output. The shaded TVC area grows unit by
+        unit as the running sum of MC.
+    (2) PRICE line (draggable vertically): $3..$30, integer steps, snaps at $25
+        and at the shutdown price $7. Moving the price relocates the profit-max
+        output; at/below $7 the revenue rectangle (P*Q) is compared to the TVC
+        area under MC.
+  TIE-BREAKS / CONVENTIONS (interactive-specs.md, brief Section C):
+    - TVC(Q) = sum MC(1..Q) = AVC(Q)*Q, recomputed from the MC steps; never
+      hard-coded. TVC(7) = $70 (= AVC $10.0 x 7); TVC(5) = $35 (= AVC $7.0 x 5).
+    - The $70 / $35 are COST totals (permitted cost arithmetic), NOT welfare
+      numbers; the shaded region is a cost area under MC, distinct from the
+      profit rectangle in the sibling t07a-firm-cost figure. No welfare-loss
+      vocabulary appears anywhere (no welfare/surplus shading).
+    - Dragging the PRICE auto-relocates the output to the profit-max; dragging
+      the OUTPUT sweeps the area independently (price unchanged).
+  Static-base architecture: the initial P = $25, Q = 7 state is real markup
+  below; the script only re-attaches drag/keyboard/readout behavior. The static
+  SVG t07a-ep10-3-tvc-under-mc.svg is the slide asset and <noscript> fallback.
+  GEOMETRY (mirrors the JS constants): viewBox 520x462; x(Q) = 58 + 30*Q ;
+  y(P) = 360 - 11*P.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Total variable cost as the area under marginal cost - drag the output and the price</title>
+<style>
+  :root{
+    --font-body: Georgia, 'Times New Roman', serif;
+    --paper:   #f7f4ef;   /* card background                     */
+    --surface: #fdfcf9;   /* plot backing                        */
+    --ink:     #1a1c1e;   /* marginal-cost staircase + headings  */
+    --muted:   #6b6459;   /* axes, AVC curve, state line         */
+    --accent:  #b3402a;   /* price line + takeaway line          */
+    --accent2: #b07a2c;   /* draggable handles (house warm gold) */
+    --grid:    #e3ddd3;   /* hairlines, fixed droplines          */
+    --cost:    #dcd1c0;   /* TVC cost-area shade (warm neutral)   */
+  }
+  html,body{margin:0;padding:0;background:var(--paper);font-family:var(--font-body);}
+  .wrap{max-width:560px;margin:0 auto;padding:10px 8px 6px;}
+  svg{display:block;width:100%;height:auto;background:var(--surface);
+      border:1px solid var(--grid);border-radius:4px;touch-action:pan-y;}
+  .hint{color:var(--muted);font-size:13px;margin:6px 2px 2px;text-align:center;}
+  .fallback{color:var(--muted);font-size:14px;padding:8px;}
+  .fallback a{color:var(--ink);}
+  text{font-family:var(--font-body);}
+  .axis{stroke:var(--muted);stroke-width:1.4;}
+  .tick{fill:var(--muted);font-size:11px;}
+  .axlbl{fill:var(--muted);font-size:12.5px;}
+  .mc{stroke:var(--ink);stroke-width:2.8;fill:none;stroke-linejoin:round;stroke-linecap:round;}
+  .avc{stroke:var(--muted);stroke-width:1.8;fill:none;stroke-linecap:round;}
+  .price{stroke:var(--accent);stroke-width:2.6;stroke-linecap:round;}
+  .tvc{fill:var(--cost);opacity:0.85;stroke:none;}
+  .rev{fill:none;stroke:var(--accent2);stroke-width:1.8;stroke-dasharray:5 4;}
+  .mclbl{fill:var(--ink);font-size:13px;font-style:italic;}
+  .avclbl{fill:var(--muted);font-size:12px;font-style:italic;}
+  .tvclbl{fill:var(--muted);font-size:12px;}
+  .drop{stroke:var(--muted);stroke-width:1;stroke-dasharray:3 4;opacity:.8;}
+  .dotopt{fill:var(--accent);stroke:var(--surface);stroke-width:1.6;}
+  .dotavc{fill:var(--ink);stroke:var(--surface);stroke-width:1.6;}
+  .handle{fill:var(--accent2);stroke:var(--surface);stroke-width:2;cursor:grab;}
+  .hitz{fill:transparent;cursor:grab;touch-action:none;}
+  .snapring{fill:none;stroke:var(--accent2);stroke-width:1.6;
+            stroke-dasharray:3 3;opacity:0;}
+  .snapring.on{opacity:1;}
+  .tagbg{fill:var(--surface);}
+  .tagtxt{fill:var(--accent2);font-size:11.5px;font-weight:bold;}
+  .state{fill:var(--muted);font-size:12px;}
+  .takeaway{fill:var(--accent);font-size:12px;font-weight:bold;}
+  .sep{stroke:var(--grid);stroke-width:1;}
+  .slider:focus{outline:none;}
+  .focusring{opacity:0;stroke:var(--accent2);stroke-width:1.5;fill:none;
+             stroke-dasharray:3 3;}
+  #hitOut:focus ~ #focusOut, #hitPrice:focus ~ #focusPrice{opacity:1;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <svg id="fig" viewBox="0 0 520 462" role="group"
+       aria-label="Firm cost diagram. Cost and price in dollars on the vertical axis; the daily rate of production on the horizontal axis. A rising step-shaped marginal-cost curve, a U-shaped average-variable-cost curve bottoming at seven dollars, and a horizontal price line at twenty-five dollars. The shaded area under the marginal-cost steps up to the chosen output is the total variable cost. Drag the output handle along the horizontal axis to grow that area unit by unit, and drag the price line down to the seven-dollar shutdown floor.">
+
+    <!-- ===================== static base markup (P = $25, Q = 7) ===================== -->
+    <!-- frame: x(Q) = 58 + 30Q (Q 0..12 -> 58..418, axis to 434);
+         y(P) = 360 - 11P      (P 0..30 -> 360..30,  axis to 20)                -->
+    <defs>
+      <marker id="arr" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#6b6459"/>
+      </marker>
+    </defs>
+
+    <!-- TVC shaded area under the MC steps from 0 to Q (base Q = 7) -->
+    <polygon id="tvc" class="tvc"
+      points="58,360 58,261 88,261 88,272 118,272 118,294 148,294 148,305 178,305 178,283 208,283 208,217 238,217 238,118 268,118 268,360"/>
+
+    <!-- revenue rectangle P*Q (shown only at/below the $7 shutdown price) -->
+    <rect id="rev" class="rev" x="58" y="85" width="210" height="275"
+          display="none"/>
+
+    <!-- axes -->
+    <line class="axis" x1="58" y1="360" x2="58"  y2="20"  marker-end="url(#arr)"/>
+    <line class="axis" x1="58" y1="360" x2="434" y2="360" marker-end="url(#arr)"/>
+
+    <!-- y ticks (labeled values only: $7 shutdown floor, $25 price) -->
+    <g class="tick" text-anchor="end">
+      <text x="52" y="287">$7</text>
+      <text x="52" y="89">$25</text>
+    </g>
+    <text class="axlbl" transform="rotate(-90 18 200)" x="18" y="200"
+          text-anchor="middle">Cost / price (dollars)</text>
+
+    <!-- x ticks (labeled values only) -->
+    <g class="tick" text-anchor="middle">
+      <text x="208" y="376">5</text><text x="268" y="376">7</text>
+    </g>
+    <text class="axlbl" x="238" y="391" text-anchor="middle">Daily rate of production</text>
+
+    <!-- live output dropline (x = X(Q), up to the price line at P >= 7) -->
+    <line id="dropOut" class="drop" x1="268" y1="360" x2="268" y2="85"/>
+
+    <!-- AVC curve (muted): AVC = TVC/Q, U-shaped, min $7 at Q = 4-5 -->
+    <polyline class="avc"
+      points="88,261 118,266.5 148,275.7 178,283 208,283 238,272 268,250 298,222.5"/>
+
+    <!-- MC step-curve (primary, ink) through Q = 8; higher units off-panel -->
+    <path class="mc" d="M58,261 L88,261 L88,272 L118,272 L118,294 L148,294 L148,305 L178,305 L178,283 L208,283 L208,217 L238,217 L238,118 L268,118 L268,30 L298,30"/>
+
+    <!-- price line (draggable) -->
+    <line id="priceLine" class="price" x1="58" y1="85" x2="418" y2="85"/>
+
+    <!-- curve + area labels (off the lines) -->
+    <text class="mclbl"  x="304" y="44">Marginal cost</text>
+    <text class="avclbl" x="304" y="228">Average variable cost</text>
+    <g class="tvclbl" text-anchor="start">
+      <text x="63" y="336">Total variable cost</text>
+      <text x="63" y="351">= area under MC</text>
+    </g>
+
+    <!-- profit-max dot (MC meets price) + fixed min-AVC dot -->
+    <circle id="dotOpt" class="dotopt" cx="268" cy="85"  r="5"/>
+    <circle id="dotAvc" class="dotavc" cx="208" cy="283" r="4.5"/>
+
+    <!-- live price tag at the price line's left end -->
+    <g id="tagPG">
+      <rect id="tagPbg" class="tagbg" x="61" y="76" width="40" height="16"/>
+      <text id="tagP" class="tagtxt" x="63" y="89" text-anchor="start">$25</text>
+    </g>
+
+    <!-- price handle (right end of the line) + hit zones + focus ring -->
+    <rect id="hitPriceBand" class="hitz" x="58" y="75" width="360" height="20"/>
+    <circle id="pricePt" class="handle" cx="408" cy="85" r="6.5"/>
+    <circle id="hitPrice" class="hitz slider" cx="408" cy="85" r="22"
+            tabindex="0" role="slider"
+            aria-label="Price line. Arrow keys move it between 3 and 30 dollars; it snaps at 25 and at the 7-dollar shutdown floor."
+            aria-valuemin="3" aria-valuemax="30" aria-valuenow="25"
+            aria-valuetext="Price $25: marginal cost meets price at 7 units; variable cost is the $70 area under marginal cost."/>
+    <circle id="focusPrice" class="focusring" cx="408" cy="85" r="13"/>
+
+    <!-- output handle on the x-axis + snap/focus rings + hit zones -->
+    <rect id="hitAxis" class="hitz" x="72" y="346" width="256" height="28"/>
+    <circle id="snapRing" class="snapring on" cx="268" cy="360" r="11"/>
+    <g id="tagXG">
+      <rect id="tagXbg" class="tagbg" x="259" y="329" width="18" height="15"/>
+      <text id="tagX" class="tagtxt" x="268" y="341" text-anchor="middle">7</text>
+    </g>
+    <circle id="outPt" class="handle" cx="268" cy="360" r="6.5"/>
+    <circle id="hitOut" class="hitz slider" cx="268" cy="360" r="20"
+            tabindex="0" role="slider"
+            aria-label="Output handle on the horizontal axis. Arrow keys move it between 0 and 8 units."
+            aria-valuemin="0" aria-valuemax="8" aria-valuenow="7"
+            aria-valuetext="Output 7: variable cost is the $70 area under marginal cost."/>
+    <circle id="focusOut" class="focusring" cx="268" cy="360" r="14"/>
+
+    <!-- readout band -->
+    <line class="sep" x1="16" y1="404" x2="504" y2="404"/>
+    <text id="stateLine" class="state" x="260" y="422" text-anchor="middle">At $25, marginal cost meets price at 7 units; variable cost = area under MC = $70.</text>
+    <text id="takeLine" class="takeaway" x="260" y="440" text-anchor="middle"><tspan id="take1" x="260" dy="0">The seventh unit's $22 marginal cost still clears the $25 price;</tspan><tspan id="take2" x="260" dy="15">the eighth's $30 would not.</tspan></text>
+  </svg>
+
+  <p class="hint">Drag the output handle along the axis, or the price line up and
+    down (or focus either and use the arrow keys). The output snaps at the
+    profit-max unit; the price snaps at $25 and the $7 shutdown floor.</p>
+
+  <noscript>
+    <p class="fallback">Interactive view needs JavaScript. See the
+      <a href="t07a-ep10-3-tvc-under-mc.svg">static version of this figure</a>.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  // ---- geometry (must mirror the base markup) ----
+  var X0 = 58, PXQ = 30;                 // x(Q) = X0 + PXQ*Q
+  var YAX = 360, PXP = 11;               // y(P) = YAX - PXP*P
+  var PRICE_KNOB_X = 408;
+  function X (q) { return X0 + PXQ * q; }
+  function Y (p) { return YAX - PXP * p; }
+
+  // ---- economics (brief Section C / E&P Fig 10-3 invariants; t07a cost table) ----
+  // MC[i] = marginal cost of the i-th unit (a step curve). Units drawn 1..8.
+  var MC = [0, 9, 8, 6, 5, 7, 13, 22, 30];
+  var QMAX_OUT = 8;                      // drawn MC domain (axis extends to 12)
+  var PMIN = 3, PMAX = 30;
+  var PSNAP = [25, 7];                   // the default price and the shutdown floor
+  var MAGP = 0.9, MAGQ = 0.45;           // drag magnets (dollars / units)
+
+  // TVC(Q) = running sum of MC(1..Q); never hard-coded.
+  function tvc (Q) { var s = 0; for (var i = 1; i <= Q; i++) s += MC[i]; return s; }
+  // Profit-max output: largest unit whose rising MC still clears the price.
+  function optOut (P) {
+    if (P >= 30) return 8;
+    if (P >= 22) return 7;
+    if (P >= 13) return 6;
+    return 5;                            // [7,13) -> 5, and P < 7 -> 5 (the margin)
+  }
+
+  var svg = document.getElementById('fig');
+  var $ = function (id) { return document.getElementById(id); };
+
+  // ---- state: price P (economic driver) + output Q (sweeps the area) ----
+  var P = 25, Q = 7;
+
+  function fmt$ (v) { return '$' + v; }
+
+  // Exact spec strings at the pinned states; honest generic grammar elsewhere.
+  // No readout ever states a welfare-loss number; $70 / $35 are cost totals.
+  function readout () {
+    var opt = optOut(P), T = tvc(Q), muted, t;
+    if (P === 25 && Q === 7) {
+      muted = 'At $25, marginal cost meets price at 7 units; variable cost = area under MC = $70.';
+      t = ["The seventh unit's $22 marginal cost still clears the $25 price;",
+           "the eighth's $30 would not."];
+    } else if (P === 7 && Q === 5) {
+      muted = 'At $7 the revenue rectangle ($7 × 5 = $35) exactly equals the variable-cost area ($35).';
+      t = ['This is the shutdown price: below $7 the price cannot cover even',
+           'the running cost, so the firm stops.'];
+    } else if (P < 7 && Q === 5) {
+      muted = 'Revenue rectangle now smaller than the variable-cost area under MC.';
+      t = ['Every unit loses money on running cost alone — shut down.'];
+    } else if (Q === 0) {
+      muted = 'At zero output there is no variable cost to cover (price ' + fmt$(P) + ').';
+      t = ['Slide the output out to watch the variable-cost area build up',
+           'one unit of marginal cost at a time.'];
+    } else if (Q === opt && P >= 7) {
+      muted = 'At ' + fmt$(P) + ', marginal cost meets price at ' + Q +
+              ' units; variable cost = area under MC = ' + fmt$(T) + '.';
+      t = ['Produce up to where rising marginal cost meets the price; the',
+           'shaded area under it is the total variable cost.'];
+    } else {
+      muted = 'At ' + Q + ' units, variable cost = area under MC = ' + fmt$(T) +
+              ' (price ' + fmt$(P) + ').';
+      t = ['Total variable cost is the running sum of every unit’s',
+           'marginal cost — the shaded area under it.'];
+    }
+    var snapped = (PSNAP.indexOf(P) !== -1) || (Q === opt);
+    return { muted: muted, t: t, snapped: snapped, opt: opt };
+  }
+
+  // ---- shaded TVC polygon: staircase under MC from 0 to Q ----
+  function tvcPoints (Qi) {
+    if (Qi <= 0) return X(0) + ',' + YAX + ' ' + X(0) + ',' + YAX;
+    var pts = [X(0) + ',' + YAX, X(0) + ',' + Y(MC[1])];
+    for (var i = 1; i <= Qi; i++) {
+      pts.push(X(i) + ',' + Y(MC[i]));
+      if (i < Qi) pts.push(X(i) + ',' + Y(MC[i + 1]));
+    }
+    pts.push(X(Qi) + ',' + YAX);
+    return pts.join(' ');
+  }
+
+  function render () {
+    var r = readout(), opt = r.opt;
+    var xQ = X(Q), yP = Y(P), xOpt = X(opt);
+
+    // TVC shaded area
+    $('tvc').setAttribute('points', tvcPoints(Q));
+
+    // price line + its handle/tag
+    $('priceLine').setAttribute('y1', yP);
+    $('priceLine').setAttribute('y2', yP);
+    $('pricePt').setAttribute('cy', yP);
+    ['hitPrice', 'focusPrice'].forEach(function (id) { $(id).setAttribute('cy', yP); });
+    $('hitPriceBand').setAttribute('y', yP - 10);
+    $('tagP').setAttribute('y', yP + 4);
+    $('tagP').textContent = fmt$(P);
+    $('tagPbg').setAttribute('y', yP - 9);
+
+    // output handle + its rings/tag
+    ['outPt', 'hitOut', 'focusOut', 'snapRing'].forEach(function (id) {
+      $(id).setAttribute('cx', xQ);
+    });
+    $('snapRing').setAttribute('class', 'snapring' + (Q === opt ? ' on' : ''));
+    $('tagX').setAttribute('x', xQ);
+    $('tagX').textContent = '' + Q;
+    $('tagXbg').setAttribute('x', xQ - 9);
+
+    // output dropline: up to the price line (P >= 7) else to the top of the shade
+    var dropTop = (P >= 7) ? yP : Y(MC[Math.max(1, Math.min(8, Q))]);
+    $('dropOut').setAttribute('x1', xQ);
+    $('dropOut').setAttribute('x2', xQ);
+    $('dropOut').setAttribute('y2', Q > 0 ? dropTop : YAX);
+    $('dropOut').setAttribute('display', Q > 0 ? '' : 'none');
+
+    // profit-max dot: where the price line crosses the rising MC (only P >= 7)
+    if (P >= 7) {
+      $('dotOpt').setAttribute('display', '');
+      $('dotOpt').setAttribute('cx', xOpt);
+      $('dotOpt').setAttribute('cy', yP);
+    } else {
+      $('dotOpt').setAttribute('display', 'none');
+    }
+
+    // revenue rectangle P*Q: only at/below the shutdown price
+    if (P <= 7 && Q > 0) {
+      $('rev').setAttribute('display', '');
+      $('rev').setAttribute('x', X(0));
+      $('rev').setAttribute('y', yP);
+      $('rev').setAttribute('width', xQ - X(0));
+      $('rev').setAttribute('height', YAX - yP);
+    } else {
+      $('rev').setAttribute('display', 'none');
+    }
+
+    // readout
+    $('stateLine').textContent = r.muted;
+    ['take1', 'take2'].forEach(function (id, i) { $(id).textContent = r.t[i] || ''; });
+    $('take2').setAttribute('dy', r.t[1] ? 15 : 0);
+
+    // aria
+    var hp = $('hitPrice');
+    hp.setAttribute('aria-valuenow', P);
+    hp.setAttribute('aria-valuetext', r.muted);
+    var ho = $('hitOut');
+    ho.setAttribute('aria-valuenow', Q);
+    ho.setAttribute('aria-valuetext', 'Output ' + Q + ': ' + r.muted);
+  }
+
+  // ---- snapping ----
+  function snapP (v) {
+    v = Math.max(PMIN, Math.min(PMAX, v));
+    for (var i = 0; i < PSNAP.length; i++) {
+      if (Math.abs(v - PSNAP[i]) < MAGP) return PSNAP[i];
+    }
+    return Math.round(v);
+  }
+  function snapQ (v) {
+    v = Math.max(0, Math.min(QMAX_OUT, v));
+    var opt = optOut(P);
+    if (Math.abs(v - opt) < MAGQ) return opt;
+    return Math.round(v);
+  }
+
+  // Setting the price relocates output to the profit-max; setting output leaves
+  // price alone (the independent area sweep).
+  function setPrice (v) { P = snapP(v); Q = optOut(P); render(); }
+  function setOutput (v) { Q = snapQ(v); render(); }
+
+  // ---- pointer drag (pointer capture; fast drags stay attached) ----
+  function svgPoint (evt) {
+    var pt = svg.createSVGPoint();
+    pt.x = evt.clientX; pt.y = evt.clientY;
+    return pt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+  var mode = null;
+  function onMove (evt) {
+    if (!mode) return;
+    var p = svgPoint(evt);
+    if (mode === 'price') setPrice((YAX - p.y) / PXP);
+    else setOutput((p.x - X0) / PXQ);
+  }
+  function onDown (which, evt) {
+    mode = which;
+    if (evt.pointerId !== undefined && evt.target.setPointerCapture) {
+      try { evt.target.setPointerCapture(evt.pointerId); } catch (e) {}
+    }
+    onMove(evt);
+    evt.preventDefault();
+  }
+  function onUp (evt) {
+    mode = null;
+    if (evt.pointerId !== undefined && evt.target.releasePointerCapture) {
+      try { evt.target.releasePointerCapture(evt.pointerId); } catch (e) {}
+    }
+  }
+  ['hitPrice', 'hitPriceBand', 'pricePt'].forEach(function (id) {
+    $(id).addEventListener('pointerdown', function (e) { onDown('price', e); });
+  });
+  ['hitOut', 'hitAxis', 'outPt'].forEach(function (id) {
+    $(id).addEventListener('pointerdown', function (e) { onDown('output', e); });
+  });
+  svg.addEventListener('pointermove', onMove);
+  svg.addEventListener('pointerup', onUp);
+  svg.addEventListener('pointercancel', onUp);
+
+  // ---- keyboard: price slider ($1 steps, Home/End to the range ends) ----
+  $('hitPrice').addEventListener('keydown', function (evt) {
+    var d = 0;
+    if (evt.key === 'ArrowUp' || evt.key === 'ArrowRight') d = 1;
+    else if (evt.key === 'ArrowDown' || evt.key === 'ArrowLeft') d = -1;
+    else if (evt.key === 'Home') { setPrice(PMIN); evt.preventDefault(); return; }
+    else if (evt.key === 'End') { setPrice(PMAX); evt.preventDefault(); return; }
+    else return;
+    evt.preventDefault();
+    P = Math.max(PMIN, Math.min(PMAX, P + d)); Q = optOut(P); render();
+  });
+  // ---- keyboard: output slider (1-unit steps) ----
+  $('hitOut').addEventListener('keydown', function (evt) {
+    var d = 0;
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') d = 1;
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') d = -1;
+    else if (evt.key === 'Home') { Q = 0; render(); evt.preventDefault(); return; }
+    else if (evt.key === 'End') { Q = QMAX_OUT; render(); evt.preventDefault(); return; }
+    else return;
+    evt.preventDefault();
+    Q = Math.max(0, Math.min(QMAX_OUT, Q + d)); render();
+  });
+
+  // ---- debug hook (widget standard §2.9). tvc / revenue are COST totals,
+  //      exposed for the reviewer check only; never a welfare number. ----
+  window.__fig = {
+    set: function (v) {
+      if (v && typeof v === 'object') {
+        if (v.p !== undefined) { P = snapP(Number(v.p)); Q = optOut(P); }
+        if (v.q !== undefined) { Q = snapQ(Number(v.q)); }
+      } else { P = snapP(Number(v)); Q = optOut(P); }
+      render();
+      return { p: P, q: Q };
+    },
+    get: function () {
+      return { p: P, q: Q, tvc: tvc(Q), revenue: P * Q, opt: optOut(P),
+               avc: Q > 0 ? +(tvc(Q) / Q).toFixed(2) : null,
+               atSnap: (PSNAP.indexOf(P) !== -1) || (Q === optOut(P)) };
+    }
+  };
+
+  render();
+})();
+</script>
+</body>
+</html>

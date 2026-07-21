@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>A producer's frontier: reading marginal cost off the slope</title>
+<!--
+  Interactive figure for the t06a-production-and-costs blog post, after E&P Figs
+  7-1 (p.137) and 7-3 (p.139). Website-styled warm palette (NOT the FAU slide
+  palette). Self-contained: vanilla SVG + JS, no libraries, no network, no build.
+  The static FAU figure (t06a-ep7-1-7-3-producer-ppf.{tex,svg}) is the SLIDE
+  version and the <noscript> fallback.
+
+  ONE trace-the-curve figure with a producer A/B TOGGLE (family F1 + toggle):
+    - A producer's production-possibility frontier between cakes (X) and other
+      goods (Y). The vertical DROP in Y for one more cake IS that cake's MARGINAL
+      COST, read straight off the frontier's slope. The frontier bows outward
+      (concave), so each successive drop is larger: marginal cost RISES as you
+      bake faster. Toggle to a second, differently-curved producer to see the same
+      rule give different marginal costs.
+
+  ECONOMICS (course-adapted integers; MC recomputed live, never hard-coded):
+    Producer A = Adam's Table 2 "other goods Y still producible" column (zero drift)
+      YA[q] = 13.50 12.60 11.60 10.50 9.30 8.00 6.60 5.10 3.50 1.80 0.00 (q = 0..10)
+      MC of the kth cake = YA[k-1] - YA[k] = 0.90 1.00 1.10 1.20 1.30 1.40 1.50 1.60 1.70 1.80
+    Producer B = a NEUTRAL illustrative producer (NOT Baker), smaller frontier
+      YB[q] = 6.00 5.50 4.80 3.90 2.80 1.50 0.00 (q = 0..6)
+      MC of the kth cake = YB[k-1] - YB[k] = 0.50 0.70 0.90 1.10 1.30 1.50
+    Both frontiers concave (each successive drop strictly larger). B's drops differ
+    from Baker's Table-5 schedule (0.40/0.60/0.80/...) so it cannot be read as Baker.
+
+  SCOPE LOCK (verbal-marginal course): MC is read off the slope in WORDS, never as a
+  derivative. NO surplus-area shading, NO welfare vocabulary, NO indifference curves.
+  The only marks are the frontier, its integer dots, the moving marker, and the
+  red marginal-cost drop bracket.
+
+  DATA SPACE: x = cakes 0..10, y = other goods 0..14.
+  PIXEL FRAME: X(q) = 64 + q*38 ; Y(v) = 356 - v*21. Axes extend past the data max
+  (x to 466, y to 50) so lines never crowd the arrowheads.
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;    /* warm bone background          */
+    --ink:     #1a1c1e;    /* frontier + headings           */
+    --ink2:    #6b5a45;    /* second producer (warm slate)  */
+    --text:    #16181a;    /* body text                     */
+    --muted:   #5c6066;    /* axes / secondary labels       */
+    --hairline:#e3ddd3;    /* axis muting / guides          */
+    --accent:  #b07a2c;    /* brass — marker, MC bracket    */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .fig { width: 100%; max-width: 520px; min-width: 0; }
+  svg { width: 100%; max-width: 100%; height: auto; display: block;
+        touch-action: pan-y; }
+
+  /* structural strokes */
+  .axis  { stroke: var(--muted); stroke-width: 1.4; }
+  .frontA{ stroke: var(--ink); stroke-width: 2.6; fill: none;
+           stroke-linecap: round; stroke-linejoin: round; }
+  .frontB{ stroke: var(--ink2); stroke-width: 2.6; fill: none;
+           stroke-linecap: round; stroke-linejoin: round; }
+  .guide { stroke: var(--hairline); stroke-width: 1.6; stroke-dasharray: 5 4; }
+
+  /* marginal-cost drop bracket (accent) */
+  .bracket { stroke: var(--accent); stroke-width: 2.4; fill: none; }
+
+  /* integer dots on the frontier */
+  .dotA { fill: var(--ink); }
+  .dotB { fill: var(--ink2); }
+
+  /* moving marker + focus knob */
+  .marker { fill: var(--accent); stroke: var(--surface); stroke-width: 2; }
+  .pt-focus:focus-visible { outline: none; }
+  .pt-focus:focus-visible + .marker,
+  .grabbing .marker { stroke: var(--ink); stroke-width: 3; }
+
+  /* hit target along the frontier */
+  .hit-line { fill: none; stroke: transparent; stroke-width: 30;
+              touch-action: none; cursor: ew-resize; }
+
+  /* text */
+  .lab    { font-size: 13px; font-weight: 700; }
+  .labA   { fill: var(--ink); }
+  .labB   { fill: var(--ink2); }
+  .axlab  { fill: var(--muted); font-size: 13.5px; font-weight: 600; }
+  .plab   { fill: var(--muted); font-size: 12px; font-weight: 600; }
+  .qlab   { fill: var(--muted); font-size: 12px; font-weight: 600; }
+  .sep    { stroke: var(--hairline); stroke-width: 1; }
+  .readout{ font-family: var(--font-body); text-align: center; }
+  .r-hint { color: var(--muted); font-size: 12.5px; line-height: 1.3;
+            margin-bottom: 5px; }
+  .r-take { color: var(--accent); font-size: 13.5px; font-weight: 600;
+            line-height: 1.32; }
+
+  /* HTML controls below the figure */
+  .controls { margin: 10px 2px 0; display: flex; flex-direction: column;
+              gap: 9px; align-items: center; }
+  .toggle { display: inline-flex; border: 1px solid var(--hairline);
+            border-radius: 8px; overflow: hidden; background: #fff; }
+  .seg { appearance: none; border: 0; background: transparent; cursor: pointer;
+         font-family: var(--font-body); font-size: 13.5px; font-weight: 600;
+         color: var(--muted); padding: 8px 16px; min-height: 40px; }
+  .seg + .seg { border-left: 1px solid var(--hairline); }
+  .seg.active { background: var(--accent); color: #fff; }
+  .seg:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
+  .fallback { margin: 8px 0 0; color: var(--muted); font-size: 13px;
+              line-height: 1.35; text-align: center; }
+  .fallback a { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="fig">
+  <svg id="fig" viewBox="0 0 500 500" role="group"
+       aria-label="A producer's production-possibility frontier between cakes and other goods. The vertical drop in other goods for one more cake is that cake's marginal cost, read off the frontier's slope. Because the frontier bows outward, each cake costs a little more than the last, so marginal cost rises. A toggle switches to a second producer with a differently curved frontier and different marginal costs.">
+    <defs>
+      <marker id="ah" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+      <marker id="ahRed" markerWidth="8" markerHeight="8" refX="4" refY="6.5"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L4,6 L8,0 Z" fill="#b07a2c" />
+      </marker>
+    </defs>
+
+    <!-- ===== axes (extended past the data max) ===== -->
+    <line class="axis" x1="64" y1="356" x2="466" y2="356" marker-end="url(#ah)" />
+    <line class="axis" x1="64" y1="356" x2="64"  y2="50"  marker-end="url(#ah)" />
+
+    <!-- ===== marginal-cost drop bracket (top/bottom guides + double arrow) ===== -->
+    <line id="guideTop" class="guide" x1="64" y1="0" x2="64" y2="0" />
+    <line id="guideBot" class="guide" x1="64" y1="0" x2="64" y2="0" />
+    <line id="bracket" class="bracket" x1="64" y1="0" x2="64" y2="0"
+          marker-start="url(#ahRed)" marker-end="url(#ahRed)" />
+
+    <!-- ===== frontier (polyline; JS sets points + class by producer) ===== -->
+    <polyline id="frontier" class="frontA" points="" />
+    <!-- integer dots (JS rebuilds by producer) -->
+    <g id="dots"></g>
+
+    <!-- ===== moving marker + focus proxy ===== -->
+    <circle id="marker" class="marker" cx="64" cy="356" r="6.5" />
+    <circle id="ptFocus" class="pt-focus" cx="64" cy="356" r="22"
+            tabindex="0" role="slider" aria-label="Cakes per day"
+            aria-valuemin="1" aria-valuemax="10" aria-valuenow="3"
+            aria-valuetext="Producer A at 3 cakes: the 3rd cake gives up 1.10 of other goods."
+            fill="transparent" />
+    <!-- transparent hit target along the frontier -->
+    <polyline id="hit" class="hit-line" points="" />
+
+    <!-- ===== axis titles ===== -->
+    <text class="axlab" x="255" y="396" text-anchor="middle">Cakes per day</text>
+    <text class="axlab" x="18" y="205" text-anchor="middle"
+          transform="rotate(-90 18 205)">Other goods still producible (in Y)</text>
+
+    <!-- ===== y tick labels ===== -->
+    <text class="plab" x="56" y="298" text-anchor="end">2</text>
+    <text class="plab" x="56" y="256" text-anchor="end">4</text>
+    <text class="plab" x="56" y="214" text-anchor="end">6</text>
+    <text class="plab" x="56" y="172" text-anchor="end">8</text>
+    <text class="plab" x="56" y="130" text-anchor="end">10</text>
+    <text class="plab" x="56" y="88"  text-anchor="end">12</text>
+    <text class="plab" x="56" y="66"  text-anchor="end">14</text>
+
+    <!-- ===== x tick labels (JS shows 1..max) ===== -->
+    <g id="xticks"></g>
+
+    <!-- ===== producer label ===== -->
+    <text id="prodLab" class="lab labA" x="90" y="72" text-anchor="start">Producer A</text>
+
+    <!-- ===== readout band: hairline separator, muted state, accent takeaway ===== -->
+    <line class="sep" x1="24" y1="408" x2="476" y2="408" />
+    <foreignObject x="16" y="412" width="468" height="86">
+      <div xmlns="http://www.w3.org/1999/xhtml" class="readout">
+        <div id="rHint" class="r-hint">Producer A at 3 cakes: the 3rd cake gives up 1.10 of other goods.</div>
+        <div id="rTake" class="r-take">That drop is the marginal cost of the 3rd cake; each further cake gives up more, so marginal cost rises.</div>
+      </div>
+    </foreignObject>
+  </svg>
+
+  <div class="controls">
+    <div class="toggle" role="radiogroup" aria-label="Choose the producer">
+      <button id="btnA" class="seg active" type="button" role="radio" aria-checked="true">Producer A</button>
+      <button id="btnB" class="seg" type="button" role="radio" aria-checked="false">Producer B</button>
+    </div>
+  </div>
+
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame is a still image of two
+      producers' frontiers: the drop in other goods for one more cake is that cake's
+      marginal cost, and because each frontier bows outward, marginal cost rises as
+      you bake faster. You can also
+      <a href="t06a-ep7-1-7-3-producer-ppf.svg">open the static figure</a>.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  var svg = $('fig');
+
+  // ---- pixel frame (mirrors the base markup) ----
+  var X0 = 64, SX = 38, Y0 = 356, SY = 21;
+  function X (q) { return X0 + q * SX; }
+  function Y (v) { return Y0 - v * SY; }
+
+  // ---- economics (course-adapted; MC recomputed live from the frontier) ----
+  // Producer A = Adam's Table 2 "other goods Y still producible" column (zero drift).
+  var YA = [13.50, 12.60, 11.60, 10.50, 9.30, 8.00, 6.60, 5.10, 3.50, 1.80, 0.00];
+  // Producer B = a neutral illustrative producer (NOT Baker).
+  var YB = [6.00, 5.50, 4.80, 3.90, 2.80, 1.50, 0.00];
+  function frontierY (P) { return P === 'A' ? YA : YB; }
+  function maxK (P) { return frontierY(P).length - 1; }   // A: 10, B: 6
+  // marginal cost of the kth cake = Y(k-1) - Y(k), never hard-coded independently
+  function mc (P, k) { var yy = frontierY(P); return yy[k - 1] - yy[k]; }
+
+  // ---- state ----
+  var producer = 'A';   // 'A' | 'B'
+  var k = 3;            // current cake (integer, 1..maxK)
+
+  // ---- helpers ----
+  var ORD = ['', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th'];
+  function fmt2 (v) { return v.toFixed(2); }
+  function vis (el, on) { el.setAttribute('visibility', on ? 'visible' : 'hidden'); }
+
+  // ---- element handles ----
+  var frontier = $('frontier'), hit = $('hit'), dots = $('dots'), xticks = $('xticks');
+  var marker = $('marker'), ptFocus = $('ptFocus');
+  var guideTop = $('guideTop'), guideBot = $('guideBot'), bracket = $('bracket');
+  var prodLab = $('prodLab'), rHint = $('rHint'), rTake = $('rTake');
+  var btnA = $('btnA'), btnB = $('btnB');
+
+  // ---- readout strings (verbatim per interactive-specs.md) ----
+  function muted (P, kk) {
+    return 'Producer ' + P + ' at ' + kk + ' cake' + (kk === 1 ? '' : 's') +
+           ': the ' + ORD[kk] + ' cake gives up ' + fmt2(mc(P, kk)) + ' of other goods.';
+  }
+  function take (P, kk) {
+    if (kk === 1) {
+      return 'The frontier starts nearly flat: the first cake is the cheapest one to make.';
+    }
+    if (P === 'A') {
+      if (kk >= 8) {
+        return 'Far out along the frontier the slope is steep: baking faster keeps costing more.';
+      }
+      return 'That drop is the marginal cost of the ' + ORD[kk] +
+             ' cake; each further cake gives up more, so marginal cost rises.';
+    }
+    return 'A different producer, a differently-curved frontier — but the same rule: ' +
+           'the slope is his marginal cost, and it rises.';
+  }
+
+  // ---- build frontier polyline + dots + hit line + x ticks for a producer ----
+  function buildFrontier (P) {
+    var yy = frontierY(P), pts = [], i;
+    for (i = 0; i < yy.length; i++) { pts.push(X(i) + ',' + Y(yy[i])); }
+    var pstr = pts.join(' ');
+    frontier.setAttribute('points', pstr);
+    frontier.setAttribute('class', P === 'A' ? 'frontA' : 'frontB');
+    hit.setAttribute('points', pstr);
+
+    // integer dots
+    while (dots.firstChild) { dots.removeChild(dots.firstChild); }
+    for (i = 0; i <= maxK(P); i++) {
+      var c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      c.setAttribute('cx', X(i)); c.setAttribute('cy', Y(yy[i]));
+      c.setAttribute('r', '3.4');
+      c.setAttribute('class', P === 'A' ? 'dotA' : 'dotB');
+      dots.appendChild(c);
+    }
+
+    // x tick labels 1..maxK
+    while (xticks.firstChild) { xticks.removeChild(xticks.firstChild); }
+    for (i = 1; i <= maxK(P); i++) {
+      var t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      t.setAttribute('x', X(i)); t.setAttribute('y', 376);
+      t.setAttribute('text-anchor', 'middle'); t.setAttribute('class', 'qlab');
+      t.textContent = String(i);
+      xticks.appendChild(t);
+    }
+  }
+
+  // ---- render current (producer, k) ----
+  function render () {
+    var yy = frontierY(producer);
+    // marker on the frontier vertex
+    marker.setAttribute('cx', X(k)); marker.setAttribute('cy', Y(yy[k]));
+    ptFocus.setAttribute('cx', X(k)); ptFocus.setAttribute('cy', Y(yy[k]));
+
+    // marginal-cost drop bracket for the kth cake (k >= 1 always):
+    //   from the (k-1) level down to the k level, at x just right of the vertex.
+    var bx = X(k) + 6;
+    var yPrev = Y(yy[k - 1]), yCur = Y(yy[k]);
+    guideTop.setAttribute('x1', X(k - 1)); guideTop.setAttribute('y1', yPrev);
+    guideTop.setAttribute('x2', bx);       guideTop.setAttribute('y2', yPrev);
+    guideBot.setAttribute('x1', X(k));     guideBot.setAttribute('y1', yCur);
+    guideBot.setAttribute('x2', bx);       guideBot.setAttribute('y2', yCur);
+    bracket.setAttribute('x1', bx); bracket.setAttribute('y1', yPrev);
+    bracket.setAttribute('x2', bx); bracket.setAttribute('y2', yCur);
+
+    // producer label near the frontier
+    if (producer === 'A') {
+      prodLab.setAttribute('class', 'lab labA');
+      prodLab.setAttribute('x', 90); prodLab.setAttribute('y', 72);
+      prodLab.textContent = 'Producer A';
+    } else {
+      prodLab.setAttribute('class', 'lab labB');
+      prodLab.setAttribute('x', X(2.4)); prodLab.setAttribute('y', Y(5.4));
+      prodLab.textContent = 'Producer B';
+    }
+
+    // readout + accessibility
+    var m = muted(producer, k);
+    rHint.textContent = m;
+    rTake.textContent = take(producer, k);
+    ptFocus.setAttribute('aria-valuemin', '1');
+    ptFocus.setAttribute('aria-valuemax', String(maxK(producer)));
+    ptFocus.setAttribute('aria-valuenow', String(k));
+    ptFocus.setAttribute('aria-valuetext', m);
+
+    // toggle button state
+    btnA.classList.toggle('active', producer === 'A');
+    btnB.classList.toggle('active', producer === 'B');
+    btnA.setAttribute('aria-checked', String(producer === 'A'));
+    btnB.setAttribute('aria-checked', String(producer === 'B'));
+  }
+
+  // ---- switch producer (rebuild geometry, clamp k) ----
+  function setProducer (P) {
+    if (P !== 'A' && P !== 'B') return;
+    producer = P;
+    if (k > maxK(P)) { k = maxK(P); }
+    if (k < 1) { k = 1; }
+    buildFrontier(P);
+    render();
+  }
+  btnA.addEventListener('click', function () { setProducer('A'); });
+  btnB.addEventListener('click', function () { setProducer('B'); });
+
+  // ---- marker drag (pointer capture) : pointer x -> nearest integer cake ----
+  var spt = svg.createSVGPoint();
+  function toSvg (evt) {
+    spt.x = evt.clientX; spt.y = evt.clientY;
+    return spt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+  function setKFromPointer (evt) {
+    var px = toSvg(evt).x;
+    var kk = Math.round((px - X0) / SX);
+    kk = Math.max(1, Math.min(maxK(producer), kk));
+    if (kk !== k) { k = kk; render(); }
+  }
+  var dragging = false, capEl = null, capId = null;
+  function onMove (evt) { if (dragging) { evt.preventDefault(); setKFromPointer(evt); } }
+  function onUp () {
+    dragging = false; svg.classList.remove('grabbing');
+    if (capEl && capId !== null) { try { capEl.releasePointerCapture(capId); } catch (e) {} }
+    capEl = null; capId = null;
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+  }
+  function onDown (evt) {
+    evt.preventDefault();
+    dragging = true; svg.classList.add('grabbing');
+    capEl = evt.currentTarget; capId = evt.pointerId;
+    try { capEl.setPointerCapture(capId); } catch (e) {}
+    setKFromPointer(evt);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }
+  hit.addEventListener('pointerdown', onDown);
+  ptFocus.addEventListener('pointerdown', onDown);
+
+  // ---- keyboard (arrow keys step whole cakes) ----
+  ptFocus.addEventListener('keydown', function (evt) {
+    var d = 0;
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') d = 1;
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') d = -1;
+    else if (evt.key === 'Home') { k = 1; render(); evt.preventDefault(); return; }
+    else if (evt.key === 'End') { k = maxK(producer); render(); evt.preventDefault(); return; }
+    else return;
+    evt.preventDefault();
+    k = Math.max(1, Math.min(maxK(producer), k + d));
+    render();
+  });
+
+  // ---- debug hook (inert for students) ----
+  window.__fig = {
+    set: function (o) {
+      if (o == null) return;
+      if (typeof o === 'string') { setProducer(o === 'B' ? 'B' : 'A'); return; }
+      if (o.producer) { setProducer(o.producer === 'B' ? 'B' : 'A'); }
+      if (o.k != null) {
+        k = Math.max(1, Math.min(maxK(producer), Math.round(+o.k)));
+        render();
+      }
+    },
+    get: function () {
+      return { producer: producer, k: k, mc: mc(producer, k), maxK: maxK(producer) };
+    }
+  };
+
+  // ---- init ----
+  buildFrontier('A');
+  render();
+})();
+</script>
+</body>
+</html>

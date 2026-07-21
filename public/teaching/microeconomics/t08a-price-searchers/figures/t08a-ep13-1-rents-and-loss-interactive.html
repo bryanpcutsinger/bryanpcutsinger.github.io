@@ -1,0 +1,422 @@
+<!doctype html>
+<!--
+  t08a-ep13-1-rents-and-loss-interactive.html
+  Interactive version of the T8a rents-and-loss figure (after E&P Fig 13-1,
+  p. 282; course-adapted numbers per the brief Section C invariants).
+  Family F4 (area accounting): ONE vertical licensed-output (restriction) line
+  is draggable horizontally over a market with S: P = 2 + Q and D: P = 14 - Q
+  (Q in thousands of units), open-market equilibrium (X_O, P_O) = (6, $8).
+  Range 2.0-6.0 thousand in 0.5 steps. At each X_M the price is read UP to D:
+  P_M = 14 - X_M, and three regions re-shade live:
+    Monopoly rent  = rectangle (0..X_M) x ($8..P_M), dotted fill
+    Ricardian rent = between the P_O line and S over 0..X_M, NE-hatched
+    Social loss    = triangle between D and S over X_M..6, NW (counter) hatched
+  TIE-BREAKS / CONVENTIONS:
+  - Output = X_M always (suppliers are willing at any price >= S(X_M); the
+    gate, not the supply curve, sets quantity); price is read UP to D at X_M.
+  - The decomposition benchmark is the open-market point (6, $8), never
+    recomputed; the Ricardian region is pinned under the P_O = $8 line over
+    0..X_M at every drag position (per-unit identity:
+    P_M - S(q) = (P_M - P_O) + (P_O - S(q))).
+  - Monopoly-rent arithmetic MAY appear in readouts (a $ transfer); the social
+    loss region is NEVER quantified in any label or readout (verbal-idiom
+    lock). Reviewer-only checks: unit slopes => loss = (6 - X_M)^2; base-state
+    areas rent 8 / Ricardian 16 / loss 4; suppliers' gain 24 vs 18 open-market.
+  - DWL RELAXATION (2026-07-19, instructor): the loss region is labeled
+    "Social loss (deadweight loss)" - the term is allowed; the no-numeric-area
+    rule for the loss region still stands.
+  - At X_M = 6.0 exactly: no rent rectangle, no loss triangle, no P_M tick or
+    dropline (P_M = P_O); market-clearing readout strings.
+  - The "Monopoly rent" pointer arrow stops short of D (it cannot cross the
+    demand curve to reach the rectangle); the dotted fill + the accent readout
+    sentence ("the dotted rectangle is monopoly rent") carry the tie.
+  - The restriction line is split into two segments when X_M <= 2.5 so it
+    opens a gap behind the "Ricardian rent" label (no text over lines).
+  Static-base architecture: the initial state at X_M = 4.0 is real markup
+  below; the script only re-attaches drag/keyboard/readout behavior. The
+  static SVG t08a-ep13-1-rents-and-loss.svg (same X_M = 4 state, slide track)
+  is the <noscript> fallback.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Monopoly rent from restricting output - drag the licensed output</title>
+<style>
+  :root{
+    --font-body: Georgia, 'Times New Roman', serif;
+    --paper:   #f7f4ef;   /* card background                 */
+    --surface: #fdfcf9;   /* plot backing                    */
+    --ink:     #1a1c1e;   /* curves + loss hatch + headings  */
+    --muted:   #6b6459;   /* axes, ticks, state line         */
+    --accent:  #b3402a;   /* restriction line, rent dots     */
+    --accent2: #b07a2c;   /* Ricardian hatch + focus ring (house warm gold) */
+    --grid:    #e3ddd3;
+  }
+  html,body{margin:0;padding:0;background:var(--paper);font-family:var(--font-body);}
+  .wrap{max-width:480px;margin:0 auto;padding:10px 8px 6px;}
+  svg{display:block;width:100%;height:auto;background:var(--surface);
+      border:1px solid var(--grid);border-radius:4px;}
+  .hint{color:var(--muted);font-size:13px;margin:6px 2px 2px;text-align:center;}
+  .fallback{color:var(--muted);font-size:14px;padding:8px;}
+  .fallback a{color:var(--ink);}
+  text{font-family:var(--font-body);}
+  .axis{stroke:var(--muted);stroke-width:1.4;}
+  .tick{fill:var(--muted);font-size:11px;}
+  .axlbl{fill:var(--muted);font-size:12.5px;}
+  .curve{stroke:var(--ink);stroke-width:2.6;fill:none;stroke-linecap:round;}
+  .curvelbl{fill:var(--ink);font-size:13px;font-style:italic;}
+  .drop{stroke:var(--muted);stroke-width:1;stroke-dasharray:3 4;opacity:.8;}
+  .pmdrop{stroke:var(--accent);stroke-width:1;stroke-dasharray:3 4;opacity:.75;}
+  .dot{fill:var(--ink);}
+  .pmdot{fill:var(--accent);}
+  .restrict{stroke:var(--accent);stroke-width:2.6;}
+  .restricthit{stroke:transparent;stroke-width:24;cursor:ew-resize;}
+  .movetick{fill:var(--accent);font-size:11.5px;font-weight:bold;}
+  .patdot{fill:var(--accent);opacity:.5;}
+  .pathatch{stroke:var(--accent2);stroke-width:1.2;opacity:.65;}
+  .patloss{stroke:var(--ink);stroke-width:1.1;opacity:.45;}
+  .reglbl{font-size:12px;}
+  .rentlbl{fill:var(--accent);}
+  .riclbl{fill:var(--accent2);}
+  .losslbl{fill:var(--ink);}
+  .ptr{stroke-width:1.4;fill:none;}
+  .state{fill:var(--muted);font-size:12.5px;}
+  .takeaway{fill:var(--accent);font-size:12.5px;font-weight:bold;}
+  .sep{stroke:var(--grid);stroke-width:1;}
+  #lineFocus:focus{outline:none;}
+  #lineFocus:focus ~ .focusring{opacity:1;}
+  .focusring{opacity:0;stroke:var(--accent2);stroke-width:1.5;fill:none;
+             stroke-dasharray:3 3;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <svg id="fig" viewBox="0 0 440 540" role="group"
+       aria-label="A market with an upward-sloping supply curve and a downward-sloping demand curve that cross at the open-market output of 6,000 units and price of 8 dollars. A vertical line marks the licensed output, and you can drag it between 2,000 and 6,000 units. Restricting output raises the price read off the demand curve and splits the suppliers' receipts into a dotted monopoly-rent rectangle, a hatched Ricardian-rent area that any open market would also pay, and a counter-hatched social-loss triangle of units worth more to buyers than their cost that go unmade.">
+
+    <defs>
+      <marker id="ahR" viewBox="0 0 10 10" refX="8" refY="5"
+              markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M0,0 L10,5 L0,10 z" fill="#b3402a"/>
+      </marker>
+      <marker id="ahG" viewBox="0 0 10 10" refX="8" refY="5"
+              markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M0,0 L10,5 L0,10 z" fill="#b07a2c"/>
+      </marker>
+      <marker id="ahK" viewBox="0 0 10 10" refX="8" refY="5"
+              markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M0,0 L10,5 L0,10 z" fill="#1a1c1e"/>
+      </marker>
+      <pattern id="patDots" width="7" height="7" patternUnits="userSpaceOnUse">
+        <circle class="patdot" cx="2.2" cy="2.2" r="1.2"/>
+      </pattern>
+      <pattern id="patHatch" width="7" height="7" patternUnits="userSpaceOnUse">
+        <path class="pathatch" d="M0 7 L7 0"/>
+      </pattern>
+      <pattern id="patLoss" width="7" height="7" patternUnits="userSpaceOnUse">
+        <path class="patloss" d="M0 0 L7 7"/>
+      </pattern>
+    </defs>
+
+    <!-- ====================== static base ======================
+         Geometry: X(q) = 64 + 33q   (q in thousands, 0..10)
+                   Y(p) = 364 - 19.5p (p in $/unit, 0..16)
+         S: (0,2)..(10,12) -> (64,325)..(394,130)
+         D: (0,14)..(10,4) -> (64,91)..(394,286)
+         Open market (6,$8) -> (262,208).
+         Initial state X_M = 4: x 196, P_M = $10 -> y 169.          -->
+
+    <!-- axes -->
+    <line class="axis" x1="64" y1="48"  x2="64"  y2="364"/>
+    <line class="axis" x1="64" y1="364" x2="406" y2="364"/>
+
+    <!-- the three regions (JS reshapes; rent + loss hidden at X_M = 6) -->
+    <polygon id="rentPoly" points="64,208 196,208 196,169 64,169" fill="url(#patDots)"/>
+    <polygon id="ricPoly"  points="64,325 196,247 196,208 64,208" fill="url(#patHatch)"/>
+    <polygon id="lossPoly" points="196,169 262,208 196,247" fill="url(#patLoss)"/>
+
+    <!-- open-market benchmark droplines (always drawn) -->
+    <line class="drop" x1="64"  y1="208" x2="262" y2="208"/>
+    <line class="drop" x1="262" y1="208" x2="262" y2="364"/>
+
+    <!-- P_M read: dashed dropline to the y-axis (hidden at X_M = 6) -->
+    <line id="pmDrop" class="pmdrop" x1="64" y1="169" x2="196" y2="169"/>
+
+    <!-- restriction line: two segments so JS can open a gap behind the
+         "Ricardian rent" label when the line sits over it (X_M <= 2.5) -->
+    <g id="restrictG">
+      <line id="redA" class="restrict" x1="196" y1="169" x2="196" y2="364"/>
+      <line id="redB" class="restrict" x1="196" y1="352" x2="196" y2="364" opacity="0"/>
+      <text id="dragGlyph" class="movetick" x="205" y="302">&#8596;</text>
+      <line id="redHit" class="restricthit" x1="196" y1="100" x2="196" y2="364"/>
+    </g>
+
+    <!-- supply and demand -->
+    <line class="curve" x1="64" y1="325" x2="394" y2="130"/> <!-- S: P = 2 + Q  -->
+    <line class="curve" x1="64" y1="91"  x2="394" y2="286"/> <!-- D: P = 14 - Q -->
+    <text class="curvelbl" x="400" y="134">S</text>
+    <text class="curvelbl" x="400" y="290">D</text>
+
+    <!-- dots: open-market benchmark (fixed) + restricted-price read (moves) -->
+    <circle class="dot" cx="262" cy="208" r="4"/>
+    <circle id="pmDot" class="pmdot" cx="196" cy="169" r="4"/>
+
+    <!-- ticks: fixed benchmark (muted) + moving licensed output / price (accent) -->
+    <text id="p0Tick" class="tick" x="58" y="212" text-anchor="end">$8.00</text>
+    <text id="x0Tick" class="tick" x="262" y="380" text-anchor="middle">6,000</text>
+    <text id="pmTick" class="movetick" x="58" y="173" text-anchor="end">$10.00</text>
+    <text id="xmTick" class="movetick" x="196" y="380" text-anchor="middle">4,000</text>
+
+    <!-- axis titles -->
+    <text class="axlbl" x="230" y="398" text-anchor="middle">Output (thousands of units)</text>
+    <text class="axlbl" transform="rotate(-90 14 206)" x="14" y="206"
+          text-anchor="middle">Price ($ per unit)</text>
+
+    <!-- region labels, off their regions; pointer arrows stop short of lines -->
+    <text id="rentLbl" class="reglbl rentlbl" x="70" y="72">Monopoly rent</text>
+    <line id="rentArrow" class="ptr" x1="110" y1="78" x2="110" y2="108"
+          stroke="#b3402a" marker-end="url(#ahR)"/>
+    <text class="reglbl riclbl" x="70" y="348">Ricardian rent</text>
+    <line class="ptr" x1="112" y1="333" x2="128" y2="298"
+          stroke="#b07a2c" marker-end="url(#ahG)"/>
+    <text id="lossLbl" class="reglbl losslbl" text-anchor="middle">
+      <tspan x="310" y="106">Social loss</tspan>
+      <tspan x="310" y="121">(deadweight loss)</tspan>
+    </text>
+    <line id="lossArrow" class="ptr" x1="298" y1="132" x2="248" y2="190"
+          stroke="#1a1c1e" marker-end="url(#ahK)"/>
+
+    <!-- keyboard proxy for the restriction line -->
+    <rect id="lineFocus" x="188" y="91" width="16" height="273" fill="transparent"
+          tabindex="0" role="slider"
+          aria-label="Licensed output, thousands of units. Drag between 2,000 and 6,000; at 6,000 the market is open."
+          aria-valuemin="2" aria-valuemax="6" aria-valuenow="4"
+          aria-valuetext="Licensed output 4,000 units: price rises to $10.00; the open market would supply 6,000 at $8.00."/>
+    <rect id="focusRing" class="focusring" x="192" y="87" width="24" height="281" rx="4"/>
+
+    <!-- readout band: muted state + accent takeaway -->
+    <line class="sep" x1="16" y1="412" x2="424" y2="412"/>
+    <text class="state" text-anchor="middle">
+      <tspan id="state1" x="220" y="430">Licensed output 4,000 units: price rises to $10.00; the</tspan>
+      <tspan id="state2" x="220" y="446">open market would supply 6,000 at $8.00.</tspan>
+    </text>
+    <text class="takeaway" text-anchor="middle">
+      <tspan id="take1" x="220" y="466">The dotted rectangle is monopoly rent: $2 &#215; 4,000 units,</tspan>
+      <tspan id="take2" x="220" y="482">transferred from buyers by the locked gate. The loss</tspan>
+      <tspan id="take3" x="220" y="498">triangle is different &#8212; units 4,000 to 6,000 were worth</tspan>
+      <tspan id="take4" x="220" y="514">more to buyers than their suppliers' cost, and they</tspan>
+      <tspan id="take5" x="220" y="530">simply go unmade.</tspan>
+    </text>
+  </svg>
+
+  <p class="hint">Drag the red licensed-output line left or right (or focus it
+    and use the arrow keys). At 6,000 the restriction stops binding.</p>
+
+  <noscript>
+    <p class="fallback">Interactive view needs JavaScript. See the
+      <a href="t08a-ep13-1-rents-and-loss.svg">static version of this figure</a>
+      (it shows the same decomposition at a licensed output of 4,000 units).</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  // ---- geometry (must mirror the base markup) ----
+  var X0 = 64, SX = 33;                 // x px origin; px per thousand units
+  var YAX = 364, SY = 19.5;             // x-axis foot; px per $/unit
+  var EQX = 262, EQY = 208;             // open-market benchmark (6, $8)
+  function X (q) { return X0 + q * SX; }
+  function Y (p) { return YAX - p * SY; }
+
+  // ---- economics (brief Section C invariants) ----
+  // S: P = 2 + Q ; D: P = 14 - Q ; open market (6, $8) fixed benchmark.
+  // Output = X_M always (the gate sets quantity); price read UP to D:
+  // P_M = 14 - X_M. Ricardian region pinned under the P_O = $8 line over
+  // 0..X_M (per-unit identity: P_M - S(q) = (P_M - P_O) + (P_O - S(q))).
+  // Rent arithmetic may be printed; the social loss is NEVER quantified in
+  // any label or readout (reviewer-only: loss = (6 - X_M)^2).
+  var XMIN = 2, XMAX = 6, STEP = 0.5, XO = 6, PO = 8;
+  var xm = 4;
+
+  var svg = document.getElementById('fig');
+  var $ = function (id) { return document.getElementById(id); };
+
+  function pmOf (x) { return 14 - x; }        // price read up to D
+  function sOf  (x) { return 2 + x; }         // supply height at X_M
+  function fmtW (p) { return '$' + p.toFixed(2); }
+  function fmtQ (q) { // thousands with comma: 4.5 -> "4,500"
+    return String(Math.round(q * 1000)).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+  function fmtD (v) { // per-unit $ markup: 2 -> "$2", 2.5 -> "$2.50"
+    return Math.abs(v - Math.round(v)) < 1e-9 ? '$' + Math.round(v)
+                                              : '$' + v.toFixed(2);
+  }
+  function wrapN (s, max, n) { // greedy split into <= n rows at word breaks
+    var rows = [], rest = s;
+    while (rows.length < n - 1 && rest.length > max) {
+      var cut = rest.lastIndexOf(' ', max);
+      if (cut < 1) cut = max;
+      rows.push(rest.slice(0, cut));
+      rest = rest.slice(cut + 1);
+    }
+    rows.push(rest);
+    while (rows.length < n) rows.push('');
+    return rows;
+  }
+  function setRows (ids, s, max) {
+    var rows = wrapN(s, max, ids.length);
+    ids.forEach(function (id, i) { $(id).textContent = rows[i]; });
+  }
+
+  function strings (x) {
+    var out = {}, pm = pmOf(x);
+    if (x === XO) {            // market-clearing snap (spec-exact strings)
+      out.state = 'Licensed output 6,000 = the open-market output: price $8.00.';
+      out.take = 'No binding restriction: monopoly rent and social loss both ' +
+        'vanish. The hatched area that remains is Ricardian rent — what ' +
+        'lower-cost suppliers earn in any open market.';
+    } else if (x === XMIN) {   // tightest gate (spec-exact strings)
+      out.state = 'Licensed output 2,000 units: price rises to $12.00.';
+      out.take = 'A tighter gate collects more rent per unit on fewer units, ' +
+        'and the band of forgone mutually beneficial trades widens.';
+    } else {                   // base grammar (spec-exact at X_M = 4.0)
+      out.state = 'Licensed output ' + fmtQ(x) + ' units: price rises to ' +
+        fmtW(pm) + '; the open market would supply 6,000 at $8.00.';
+      out.take = 'The dotted rectangle is monopoly rent: ' + fmtD(pm - PO) +
+        ' × ' + fmtQ(x) + ' units, transferred from buyers by the ' +
+        'locked gate. The loss triangle is different — units ' + fmtQ(x) +
+        ' to 6,000 were worth more to buyers than their suppliers\' ' +
+        'cost, and they simply go unmade.';
+    }
+    return out;
+  }
+
+  function render () {
+    var x = X(xm), pm = pmOf(xm), yPM = Y(pm), yS = Y(sOf(xm));
+    var atOpen = Math.abs(xm - XO) < 1e-9;
+
+    // regions (Ricardian always; rent + loss vanish at the open market)
+    $('rentPoly').setAttribute('opacity', atOpen ? 0 : 1);
+    $('rentPoly').setAttribute('points',
+      X0 + ',' + EQY + ' ' + x + ',' + EQY + ' ' + x + ',' + yPM + ' ' + X0 + ',' + yPM);
+    $('ricPoly').setAttribute('points',
+      X0 + ',' + Y(2) + ' ' + x + ',' + yS + ' ' + x + ',' + EQY + ' ' + X0 + ',' + EQY);
+    $('lossPoly').setAttribute('opacity', atOpen ? 0 : 1);
+    $('lossPoly').setAttribute('points',
+      x + ',' + yPM + ' ' + EQX + ',' + EQY + ' ' + x + ',' + yS);
+
+    // restriction line: gap behind the "Ricardian rent" label when over it
+    var redA = $('redA'), redB = $('redB'), gap = x < 162;
+    ['redA', 'redB', 'redHit'].forEach(function (id) {
+      $(id).setAttribute('x1', x); $(id).setAttribute('x2', x);
+    });
+    redA.setAttribute('y1', yPM);
+    redA.setAttribute('y2', gap ? 333 : YAX);
+    redB.setAttribute('opacity', gap ? 1 : 0);
+    $('dragGlyph').setAttribute('x', x + 9);
+
+    // P_M read: dropline + dot + moving tick (all hidden at the open market)
+    $('pmDrop').setAttribute('opacity', atOpen ? 0 : 1);
+    $('pmDrop').setAttribute('x2', x);
+    $('pmDrop').setAttribute('y1', yPM); $('pmDrop').setAttribute('y2', yPM);
+    $('pmDot').setAttribute('opacity', atOpen ? 0 : 1);
+    $('pmDot').setAttribute('cx', x); $('pmDot').setAttribute('cy', yPM);
+    $('pmTick').setAttribute('opacity', atOpen ? 0 : 1);
+    $('pmTick').textContent = fmtW(pm);
+    $('pmTick').setAttribute('y', yPM + 4);
+
+    // fixed benchmark ticks: hide when the moving tick would sit on them
+    $('p0Tick').setAttribute('opacity', !atOpen && (EQY - yPM) < 16 ? 0 : 1);
+    $('x0Tick').setAttribute('opacity', (EQX - x) < 42 ? 0 : 1);
+    $('xmTick').textContent = fmtQ(xm);
+    $('xmTick').setAttribute('x', x);
+
+    // region labels: rent + loss only exist away from the open market
+    ['rentLbl', 'rentArrow', 'lossLbl', 'lossArrow'].forEach(function (id) {
+      $(id).setAttribute('opacity', atOpen ? 0 : 1);
+    });
+
+    // readout + aria
+    var str = strings(xm);
+    setRows(['state1', 'state2'], str.state, 58);
+    setRows(['take1', 'take2', 'take3', 'take4', 'take5'], str.take, 56);
+    var lf = $('lineFocus');
+    lf.setAttribute('x', x - 8);
+    $('focusRing').setAttribute('x', x - 12);
+    lf.setAttribute('aria-valuenow', String(xm));
+    lf.setAttribute('aria-valuetext', str.state);
+  }
+
+  function clampSnap (v) {
+    v = Math.max(XMIN, Math.min(XMAX, v));
+    return Math.round(v / STEP) * STEP;
+  }
+
+  // ---- pointer drag (pointer capture; fast drags stay attached) ----
+  function svgPoint (evt) {
+    var pt = svg.createSVGPoint();
+    pt.x = evt.clientX; pt.y = evt.clientY;
+    return pt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+  var dragging = false;
+  function onDown (evt) {
+    dragging = true;
+    if (evt.pointerId !== undefined && evt.target.setPointerCapture) {
+      try { evt.target.setPointerCapture(evt.pointerId); } catch (e) {}
+    }
+    evt.preventDefault();
+  }
+  function onMove (evt) {
+    if (!dragging) return;
+    var q = (svgPoint(evt).x - X0) / SX;
+    var snapped = clampSnap(q);
+    if (Math.abs(snapped - xm) > 1e-9) { xm = snapped; render(); }
+  }
+  function onUp (evt) {
+    dragging = false;
+    if (evt.pointerId !== undefined && evt.target.releasePointerCapture) {
+      try { evt.target.releasePointerCapture(evt.pointerId); } catch (e) {}
+    }
+  }
+  ['redHit', 'lineFocus'].forEach(function (id) {
+    $(id).addEventListener('pointerdown', onDown);
+  });
+  svg.addEventListener('pointermove', onMove);
+  svg.addEventListener('pointerup', onUp);
+  svg.addEventListener('pointercancel', onUp);
+
+  // ---- keyboard ----
+  $('lineFocus').addEventListener('keydown', function (evt) {
+    var delta = 0;
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') delta = STEP;
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') delta = -STEP;
+    else if (evt.key === 'Home') { xm = XMIN; render(); evt.preventDefault(); return; }
+    else if (evt.key === 'End') { xm = XMAX; render(); evt.preventDefault(); return; }
+    else return;
+    evt.preventDefault();
+    xm = clampSnap(xm + delta);
+    render();
+  });
+
+  // ---- debug hook (widget standard) ----
+  window.__fig = {
+    set: function (v) { xm = clampSnap(Number(v)); render(); return xm; },
+    get: function () {
+      var pm = pmOf(xm);
+      return {
+        xm: xm, pm: pm,
+        rent: (pm - PO) * xm,                  // rectangle, $-thousands
+        ricardian: 6 * xm - xm * xm / 2,       // under $8 line, above S
+        loss: (XO - xm) * (XO - xm),           // reviewer-only; never displayed
+        regime: xm < XO ? 'restricted' : 'open'
+      };
+    }
+  };
+
+  render();
+})();
+</script>
+</body>
+</html>

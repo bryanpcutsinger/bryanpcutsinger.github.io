@@ -1,0 +1,327 @@
+<!doctype html>
+<!--
+  t05-ep5-1-optimal-pollution-interactive.html
+  Interactive version of the T5 optimal-pollution figure (after E&P Fig 5-1,
+  p. 94 — course-adapted numbers, redraw from concept, never a trace).
+  Family F8 (allocation / two-agent margins): a vertical quantity marker is
+  draggable along x in [0,10]. The two "agents" are steel-value and clean-water-
+  value; the marker reads off both marginal values and the accent line flags
+  whether they are equalized (at the optimum X) or which one dominates.
+    DD (marginal value of steel produced)        = 10 - 0.8*x   (falls left->right)
+    WW (marginal value of clean water forsaken)  =  2 + 0.8*x   (rises left->right)
+    Crossing X = (5, 6) exact (DD = WW): the wealth-maximizing amount of
+    pollution, a POSITIVE amount, not zero — the "false issue" point in one picture.
+  SCOPE LOCK (verbal-marginal course): NO surplus/deadweight shading. E&P's
+  original shades two "Excess of Total Value" regions; the redraw OMITS them.
+  The only marks are the two curve labels, the fixed crossing dot X + its dropline,
+  the axis-extreme labels, and the movable marker with its readouts.
+  TIE-BREAKS / CONVENTIONS:
+  - $ values recomputed from DD(x)/WW(x) at every marker position; the readouts are
+    never hard-coded independently of the two line equations.
+  - Whole dollars print without decimals ($6), half-values with two ($8.40, $3.60).
+  - The marker snaps to x = 5 within a 0.3 magnetic band; arrow keys step by 0.5.
+  Static-base architecture: the initial state at x = 5 (the optimum) is real markup
+  below; the script only re-attaches drag/keyboard/readout behavior. The static SVG
+  t05-ep5-1-optimal-pollution.svg is the <noscript> fallback.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Optimal pollution - drag the quantity marker</title>
+<style>
+  :root{
+    --font-body: Georgia, 'Times New Roman', serif;
+    --paper:   #f7f4ef;   /* card background            */
+    --surface: #fdfcf9;   /* plot backing               */
+    --ink:     #1a1c1e;   /* curves + headings          */
+    --muted:   #6b6459;   /* axes, ticks, state line    */
+    --accent:  #b3402a;   /* marker, crossing dot, takeaway */
+    --accent2: #b07a2c;   /* moving dots, focus ring (house warm gold) */
+    --grid:    #e3ddd3;
+  }
+  html,body{margin:0;padding:0;background:var(--paper);font-family:var(--font-body);}
+  .wrap{max-width:600px;margin:0 auto;padding:10px 8px 6px;}
+  svg{display:block;width:100%;height:auto;background:var(--surface);
+      border:1px solid var(--grid);border-radius:4px;aspect-ratio:14/11;}
+  .hint{color:var(--muted);font-size:13px;margin:6px 2px 2px;text-align:center;}
+  .fallback{color:var(--muted);font-size:14px;padding:8px;}
+  .fallback a{color:var(--ink);}
+  text{font-family:var(--font-body);}
+  .axis{stroke:var(--muted);stroke-width:1.4;}
+  .tick{fill:var(--muted);font-size:11px;}
+  .axlbl{fill:var(--muted);font-size:12.5px;}
+  .extreme{fill:var(--muted);font-size:11.5px;}
+  .curve{stroke:var(--ink);stroke-width:2.6;fill:none;stroke-linecap:round;}
+  .curveWW{stroke-dasharray:8 5;}
+  .curvelbl{fill:var(--ink);font-size:12.5px;font-style:italic;}
+  .conn{stroke:var(--ink);stroke-width:1;opacity:.7;}
+  .drop{stroke:var(--muted);stroke-width:1;stroke-dasharray:3 4;opacity:.85;}
+  .xdot{fill:var(--accent);}
+  .optlbl{fill:var(--accent);font-size:11.5px;font-weight:bold;}
+  .marker{stroke:var(--accent);stroke-width:2.4;}
+  .markerhit{stroke:transparent;stroke-width:22;cursor:ew-resize;}
+  .movedot{fill:var(--accent2);stroke:var(--surface);stroke-width:1;}
+  .footdot{fill:var(--accent2);}
+  .state{fill:var(--muted);font-size:12px;}
+  .takeaway{fill:var(--accent);font-size:12.5px;font-weight:bold;}
+  .sep{stroke:var(--grid);stroke-width:1;}
+  #mFocus:focus{outline:none;}
+  #mFocus:focus + .focusring{opacity:1;}
+  .focusring{opacity:0;stroke:var(--accent2);stroke-width:1.5;fill:none;
+             stroke-dasharray:3 3;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <svg id="fig" viewBox="0 0 560 440" role="group"
+       aria-label="A single graph. The marginal value of steel production falls from left to right as more of a stream's clean water is used up in steelmaking; the marginal value of the clean water thereby forsaken rises from left to right. The two lines cross at point X, where each is worth six dollars. Left of X an extra unit of steel is worth more than the clean water it costs, so more steel raises total value; right of X the water sacrificed is worth more than the extra steel. Drag the vertical marker: the wealth-maximizing amount of pollution is X, a positive amount, not zero.">
+
+    <!-- ====================== static base ======================
+         Geometry: X(x) = 56 + 45.2*x  (x in steel units 0..10)
+                   Y(v) = 296 - 27.0*v  (v in $ 0..10)
+         DD = 10 - 0.8x : (0,10)->(56,26)  (10,2)->(508,242)
+         WW =  2 + 0.8x : (0,2)->(56,242)  (10,10)->(508,26)
+         Crossing X = (5,6) -> (282,134). Initial marker at x = 5. -->
+
+    <!-- axes -->
+    <line class="axis" x1="56" y1="26"  x2="56"  y2="296"/>
+    <line class="axis" x1="56" y1="296" x2="520" y2="296"/>
+
+    <!-- fixed crossing dropline to the x-axis at X -->
+    <line class="drop" x1="282" y1="134" x2="282" y2="296"/>
+
+    <!-- DD and WW marginal-value schedules -->
+    <line class="curve" x1="56" y1="26" x2="508" y2="242"/>            <!-- DD falls -->
+    <line class="curve curveWW" x1="56" y1="242" x2="508" y2="26"/>    <!-- WW rises -->
+
+    <!-- curve labels off the lines + short connectors -->
+    <text class="curvelbl" x="66" y="96">Marginal value</text>
+    <text class="curvelbl" x="66" y="112">of steel (DD)</text>
+    <line class="conn" x1="150" y1="92" x2="176" y2="72"/>
+
+    <text class="curvelbl" x="500" y="112" text-anchor="end">Marginal value of clean</text>
+    <text class="curvelbl" x="500" y="128" text-anchor="end">water forsaken (WW)</text>
+    <line class="conn" x1="410" y1="108" x2="386" y2="86"/>
+
+    <!-- fixed crossing dot X -->
+    <circle class="xdot" cx="282" cy="134" r="4"/>
+
+    <!-- y-axis value tick at the crossing height -->
+    <text class="tick" x="50" y="138" text-anchor="end">$6</text>
+
+    <!-- x-axis optimal tick + label -->
+    <line class="axis" x1="282" y1="296" x2="282" y2="301"/>
+    <text class="optlbl" x="282" y="314" text-anchor="middle">Optimal (X)</text>
+
+    <!-- x-axis extreme labels (E&P's endpoints, our words) -->
+    <text class="extreme" x="56"  y="314" text-anchor="start">Unpolluted water</text>
+    <text class="extreme" x="520" y="314" text-anchor="end">Very polluted water</text>
+
+    <!-- x-axis title -->
+    <text class="axlbl" x="288" y="333" text-anchor="middle">Steel produced (clean water used up &#8594;)</text>
+    <text class="axlbl" transform="rotate(-90 16 161)" x="16" y="161"
+          text-anchor="middle">Marginal value ($)</text>
+
+    <!-- movable quantity marker: dots on DD and WW + foot dot + vertical line.
+         Initial x = 5 (the optimum): both moving dots sit on the crossing X. -->
+    <line class="drop" id="dropDD" x1="56" y1="134" x2="282" y2="134" opacity="0"/>
+    <g id="markerG">
+      <line id="marker" class="marker" x1="282" y1="26" x2="282" y2="296"/>
+      <line id="markerHit" class="markerhit" x1="282" y1="26" x2="282" y2="296"/>
+    </g>
+    <circle id="dotDD" class="movedot" cx="282" cy="134" r="3.4"/>
+    <circle id="dotWW" class="movedot" cx="282" cy="134" r="3.4"/>
+    <circle id="dotFoot" class="footdot" cx="282" cy="296" r="3"/>
+
+    <!-- keyboard proxy for the marker -->
+    <rect id="mFocus" x="274" y="26" width="16" height="270" fill="transparent"
+          tabindex="0" role="slider"
+          aria-label="Amount of steel produced, from 0 (unpolluted water) to 10 (very polluted water). The optimum X is at 5."
+          aria-valuemin="0" aria-valuemax="10" aria-valuenow="5"
+          aria-valuetext="At X: marginal value of steel = $6, marginal value of the clean water it costs = $6."/>
+    <rect id="focusRing" class="focusring" x="270" y="22" width="24" height="278" rx="4"/>
+
+    <!-- readout band: muted state + accent takeaway (each wraps to 2 rows) -->
+    <line class="sep" x1="16" y1="348" x2="544" y2="348"/>
+    <text class="state" text-anchor="middle">
+      <tspan id="state1" x="280" y="366">At X: marginal value of steel = $6, marginal value</tspan>
+      <tspan id="state2" x="280" y="381">of the clean water it costs = $6.</tspan>
+    </text>
+    <text class="takeaway" text-anchor="middle">
+      <tspan id="take1" x="280" y="404">The two marginal values are equal. This is the</tspan>
+      <tspan id="take2" x="280" y="420">wealth-maximizing amount of pollution, and it is not zero.</tspan>
+    </text>
+  </svg>
+
+  <p class="hint">Drag the vertical marker left or right (or focus it and use the
+    arrow keys). It snaps to the optimum X.</p>
+
+  <noscript>
+    <p class="fallback">Interactive view needs JavaScript. See the
+      <a href="t05-ep5-1-optimal-pollution.svg">static version of this figure</a>.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  // ---- geometry (must mirror the base markup) ----
+  var X0 = 56, SX = 45.2;               // x px origin; px per steel unit
+  var YAX = 296, SY = 27.0;             // x-axis foot; px per $
+  var TOP = 26;                         // plot top (marker head)
+  function X (x) { return X0 + x * SX; }
+  function Y (v) { return YAX - v * SY; }
+
+  // ---- economics (spec invariants) ----
+  // DD = 10 - 0.8x ; WW = 2 + 0.8x ; cross at x = 5, value = 6.
+  var XMIN = 0, XMAX = 10, STEP = 0.5, XOPT = 5, SNAP = 0.3;
+  var q = 5;
+
+  var svg = document.getElementById('fig');
+  var $ = function (id) { return document.getElementById(id); };
+
+  function dd (x) { return 10 - 0.8 * x; }
+  function ww (x) { return 2 + 0.8 * x; }
+  function fmt (v) {                       // whole -> "$6"; else -> "$8.40"
+    return '$' + (Math.abs(v - Math.round(v)) < 1e-9
+      ? String(Math.round(v)) : v.toFixed(2));
+  }
+  function wrap2 (s, max) {                // split into <= 2 rows at a word break
+    if (s.length <= max) return [s, ''];
+    var cut = s.lastIndexOf(' ', max);
+    if (cut < 1) cut = max;
+    return [s.slice(0, cut), s.slice(cut + 1)];
+  }
+  function setRows (id1, id2, s, max) {
+    var rows = wrap2(s, max);
+    $(id1).textContent = rows[0];
+    $(id2).textContent = rows[1];
+  }
+
+  function strings (x) {
+    var D = dd(x), W = ww(x), atOpt = Math.abs(x - XOPT) < 1e-9, out = {};
+    out.state = (atOpt ? 'At X: ' : 'Here: ') +
+      'marginal value of steel = ' + fmt(D) +
+      ', marginal value of the clean water it costs = ' + fmt(W) + '.';
+    if (atOpt) {
+      out.take = 'The two marginal values are equal. This is the ' +
+        'wealth-maximizing amount of pollution, and it is not zero.';
+    } else if (x < XOPT) {                 // DD > WW: still worth more as steel
+      out.take = 'Steel is still worth more at the margin than the water it ' +
+        'sacrifices, so producing more steel raises total value.';
+    } else {                               // WW > DD: too much pollution
+      out.take = 'The clean water sacrificed is now worth more than the extra ' +
+        'steel: this is too much pollution.';
+    }
+    return out;
+  }
+
+  function render () {
+    var x = q, px = X(x), yDD = Y(dd(x)), yWW = Y(ww(x));
+
+    // marker line + hit zone + keyboard/focus targets
+    ['marker', 'markerHit'].forEach(function (id) {
+      $(id).setAttribute('x1', px); $(id).setAttribute('x2', px);
+    });
+    $('mFocus').setAttribute('x', px - 8);
+    $('focusRing').setAttribute('x', px - 12);
+
+    // moving dots on DD and WW + foot dot
+    $('dotDD').setAttribute('cx', px); $('dotDD').setAttribute('cy', yDD);
+    $('dotWW').setAttribute('cx', px); $('dotWW').setAttribute('cy', yWW);
+    $('dotFoot').setAttribute('cx', px);
+
+    // horizontal dropline reading DD off the y-axis (hidden near the optimum,
+    // where it would collide with the fixed $6 tick and crossing dropline)
+    var dropDD = $('dropDD');
+    if (Math.abs(x - XOPT) < 0.75) {
+      dropDD.setAttribute('opacity', 0);
+    } else {
+      dropDD.setAttribute('opacity', 1);
+      dropDD.setAttribute('x2', px);
+      dropDD.setAttribute('y1', yDD); dropDD.setAttribute('y2', yDD);
+    }
+
+    // readout + aria
+    var str = strings(x);
+    setRows('state1', 'state2', str.state, 54);
+    setRows('take1', 'take2', str.take, 58);
+    var f = $('mFocus');
+    f.setAttribute('aria-valuenow', String(x));
+    f.setAttribute('aria-valuetext', str.state);
+  }
+
+  function clampSnap (x) {
+    x = Math.max(XMIN, Math.min(XMAX, x));
+    x = Math.round(x / STEP) * STEP;
+    if (Math.abs(x - XOPT) <= SNAP) x = XOPT;   // magnetic snap to the optimum
+    return x;
+  }
+
+  // ---- pointer drag (pointer capture; fast drags stay attached) ----
+  function svgPoint (evt) {
+    var pt = svg.createSVGPoint();
+    pt.x = evt.clientX; pt.y = evt.clientY;
+    return pt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+  var dragging = false;
+  function onDown (evt) {
+    dragging = true;
+    if (evt.pointerId !== undefined && evt.target.setPointerCapture) {
+      try { evt.target.setPointerCapture(evt.pointerId); } catch (e) {}
+    }
+    evt.preventDefault();
+  }
+  function onMove (evt) {
+    if (!dragging) return;
+    var x = (svgPoint(evt).x - X0) / SX;
+    var snapped = clampSnap(x);
+    if (Math.abs(snapped - q) > 1e-9) { q = snapped; render(); }
+  }
+  function onUp (evt) {
+    dragging = false;
+    if (evt.pointerId !== undefined && evt.target.releasePointerCapture) {
+      try { evt.target.releasePointerCapture(evt.pointerId); } catch (e) {}
+    }
+  }
+  ['markerHit', 'mFocus'].forEach(function (id) {
+    $(id).addEventListener('pointerdown', onDown);
+  });
+  svg.addEventListener('pointermove', onMove);
+  svg.addEventListener('pointerup', onUp);
+  svg.addEventListener('pointercancel', onUp);
+
+  // ---- keyboard ----
+  $('mFocus').addEventListener('keydown', function (evt) {
+    var delta = 0;
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') delta = STEP;
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') delta = -STEP;
+    else if (evt.key === 'Home') { q = XMIN; render(); evt.preventDefault(); return; }
+    else if (evt.key === 'End') { q = XMAX; render(); evt.preventDefault(); return; }
+    else return;
+    evt.preventDefault();
+    // step off the magnetic snap cleanly, then re-clamp
+    q = clampSnap(q + delta);
+    render();
+  });
+
+  // ---- debug hook (widget standard) ----
+  window.__fig = {
+    set: function (x) { q = clampSnap(Number(x)); render(); return q; },
+    get: function () {
+      var D = dd(q), W = ww(q);
+      return {
+        x: q, mvSteel: D, mvWater: W,
+        atOptimum: Math.abs(q - XOPT) < 1e-9,
+        regime: q < XOPT ? 'steel-worth-more'
+              : (q > XOPT ? 'water-worth-more' : 'balanced')
+      };
+    }
+  };
+
+  render();
+})();
+</script>
+</body>
+</html>

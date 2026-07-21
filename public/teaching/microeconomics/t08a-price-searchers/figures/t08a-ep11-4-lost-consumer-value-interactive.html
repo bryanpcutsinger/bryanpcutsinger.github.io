@@ -1,0 +1,385 @@
+<!doctype html>
+<!--
+  t08a-ep11-4-lost-consumer-value-interactive.html
+  Interactive version of the T8a lost-consumer-value figure (after E&P Fig
+  11-4, p.239; course redraw — numbers are the E&P source's own construction).
+  Family F4 (area accounting; drag the output): D: P = 21 - Q; MR: P = 21 - 2Q
+  (drawn dashed/secondary — its only job is locating Q = 5); MC: P = 6 + Q.
+  Drag an output handle q along the x-axis over [3, 7.5] (0.5 steps; magnet
+  snaps at 5.0 and 7.5). The droplines/dots track D(q) and MC(q); the hatched
+  band re-shades between D and MC over [q, 7.5] (empty at q = 7.5).
+  TIE-BREAKS / CONVENTIONS (interactive-specs.md, brief Section C):
+  - Band = D-to-MC over [q, 7.5]; empty for q >= 7.5. Band area = (7.5 - q)^2
+    (6.25 at q = 5) is a REVIEWER CHECK ONLY — it appears in NO label, caption,
+    or readout (exposed via window.__fig.get for checking).
+  - Price is always read UP to D at q; MC read at q; MR gets no readout line
+    except the q = 5 flag "MR = MC" beside the optimum dot.
+  - Heights consistency (reviewer): D(5) = 16, MC(6) = 12, MR(5) = MC(5) = 11,
+    D∩MC = (7.5, 13.50) — matches the §4 prose and the sibling figure.
+  - DWL RELAXATION (2026-07-19, instructor): the q = 5 readout INTRODUCES the
+    modern name — E&P's descriptive idiom first, then "economists call this
+    triangle the deadweight loss." The band itself is still never measured.
+  Non-duplication: the sibling t08-price-searcher owns the optimum-choice job
+  (AC, profit per unit); THIS widget owns the welfare-benchmark job — no AC,
+  no profit rectangle.
+  Static-base architecture: the initial q = 5 state is real markup below; the
+  script only re-attaches drag/keyboard/readout behavior. The static SVG
+  t08a-ep11-4-lost-consumer-value.svg is the slide asset and <noscript> fallback.
+  GEOMETRY (mirrors the JS constants): viewBox 440x540 (aspect 4/5 with the
+  readout band), x(Q) = 48 + 30*Q ; y(P) = 400 - 17*P.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lost consumer value - drag the output between 5 and the price-taker benchmark</title>
+<style>
+  :root{
+    --font-body: Georgia, 'Times New Roman', serif;
+    --paper:   #f7f4ef;   /* card background                 */
+    --surface: #fdfcf9;   /* plot backing                    */
+    --ink:     #1a1c1e;   /* demand curve + headings         */
+    --muted:   #6b6459;   /* axes, ticks, state line         */
+    --accent:  #b3402a;   /* MC curve, band, takeaway line   */
+    --accent2: #b07a2c;   /* draggable handle (house warm gold)*/
+    --grid:    #e3ddd3;   /* hairlines, fixed droplines      */
+  }
+  html,body{margin:0;padding:0;background:var(--paper);font-family:var(--font-body);}
+  .wrap{max-width:480px;margin:0 auto;padding:10px 8px 6px;}
+  svg{display:block;width:100%;height:auto;background:var(--surface);
+      border:1px solid var(--grid);border-radius:4px;touch-action:pan-y;}
+  .hint{color:var(--muted);font-size:13px;margin:6px 2px 2px;text-align:center;}
+  .fallback{color:var(--muted);font-size:14px;padding:8px;}
+  .fallback a{color:var(--ink);}
+  text{font-family:var(--font-body);}
+  .axis{stroke:var(--muted);stroke-width:1.4;}
+  .tick{fill:var(--muted);font-size:11px;}
+  .axlbl{fill:var(--muted);font-size:12.5px;}
+  .curve{stroke:var(--ink);stroke-width:2.6;fill:none;stroke-linecap:round;}
+  .curvemc{stroke:var(--accent);stroke-width:2.6;fill:none;stroke-linecap:round;}
+  .curvemr{stroke:var(--muted);stroke-width:1.8;fill:none;stroke-linecap:round;
+           stroke-dasharray:6 5;}
+  .curvelbl{fill:var(--ink);font-size:13px;font-style:italic;}
+  .curvelblmc{fill:var(--accent);font-size:12.5px;font-style:italic;}
+  .curvelblmr{fill:var(--muted);font-size:11.5px;font-style:italic;}
+  .bandlbl{fill:var(--accent);font-size:12px;}
+  .drop{stroke:var(--muted);stroke-width:1;stroke-dasharray:3 4;opacity:.8;}
+  .dropfix{stroke:var(--grid);stroke-width:1.2;stroke-dasharray:3 4;}
+  .dot{fill:var(--ink);stroke:var(--surface);stroke-width:1.6;}
+  .dotbench{fill:var(--accent);stroke:var(--surface);stroke-width:1.6;}
+  .handle{fill:var(--accent2);stroke:var(--surface);stroke-width:2;cursor:grab;}
+  .hitzone{fill:transparent;touch-action:none;cursor:grab;}
+  .hitdot{fill:transparent;touch-action:none;cursor:grab;}
+  .snapring{fill:none;stroke:var(--accent2);stroke-width:1.6;
+            stroke-dasharray:3 3;opacity:0;}
+  .snapring.on{opacity:1;}
+  .mrmc{fill:var(--muted);font-size:10.5px;font-style:italic;}
+  .tagbg{fill:var(--surface);}
+  .tagtxt{fill:var(--accent2);font-size:11.5px;font-weight:bold;}
+  .state{fill:var(--muted);font-size:12px;}
+  .takeaway{fill:var(--accent);font-size:12px;font-weight:bold;}
+  .sep{stroke:var(--grid);stroke-width:1;}
+  #hitPt:focus{outline:none;}
+  .focusring{opacity:0;stroke:var(--accent2);stroke-width:1.5;fill:none;
+             stroke-dasharray:3 3;}
+  #hitPt:focus ~ .focusring{opacity:1;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <svg id="fig" viewBox="0 0 440 540" role="group"
+       aria-label="Price-searcher welfare-benchmark diagram. Price in dollars on the vertical axis; output on the horizontal axis. A downward-sloping demand curve D, a dashed marginal-revenue line below it, and a rising marginal-cost curve. A hatched band between demand and marginal cost from the chosen output out to seven and a half units marks consumer value lost through the excess of price over marginal cost. Drag the output handle along the horizontal axis to widen or shrink the band.">
+
+    <!-- ====================== static base markup (q = 5) ====================== -->
+    <!-- frame: x(Q) = 48 + 30Q (Q 0..12 -> 48..408, axis to 424);
+         y(P) = 400 - 17P      (P 0..22 -> 400..26,  axis to 28)               -->
+    <defs>
+      <marker id="arr" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#6b6459"/>
+      </marker>
+      <marker id="arrAcc" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#b3402a"/>
+      </marker>
+      <pattern id="hatch" patternUnits="userSpaceOnUse" width="6" height="6"
+               patternTransform="rotate(45)">
+        <line x1="0" y1="0" x2="0" y2="6" stroke="#b3402a" stroke-width="1.1"
+              opacity="0.55"/>
+      </pattern>
+    </defs>
+
+    <!-- lost-consumer-value band: D-to-MC over [q, 7.5] (base q = 5) -->
+    <polygon id="band" points="198,128 273,170.5 198,213" fill="url(#hatch)"/>
+
+    <!-- fixed benchmark droplines: D meets MC at (7.5, $13.50) -->
+    <line class="dropfix" x1="273" y1="400" x2="273" y2="170.5"/>
+    <line class="dropfix" x1="48"  y1="170.5" x2="273" y2="170.5"/>
+
+    <!-- axes -->
+    <line class="axis" x1="48" y1="400" x2="48"  y2="28"  marker-end="url(#arr)"/>
+    <line class="axis" x1="48" y1="400" x2="424" y2="400" marker-end="url(#arr)"/>
+
+    <!-- y ticks -->
+    <g class="tick" text-anchor="end">
+      <text x="42" y="132">$16</text>
+      <text x="42" y="174.5">$13.50</text>
+      <text x="42" y="217">$11</text>
+    </g>
+    <!-- title centered at y=300, BELOW the $11 tick, so it clears the wide
+         $13.50 / $16 tick labels -->
+    <text class="axlbl" transform="rotate(-90 16 300)" x="16" y="300"
+          text-anchor="middle">Price (dollars)</text>
+
+    <!-- x ticks -->
+    <g class="tick" text-anchor="middle">
+      <text x="198" y="416">5</text><text x="228" y="416">6</text>
+      <text x="273" y="416">7&#189;</text>
+    </g>
+    <text class="axlbl" x="236" y="433" text-anchor="middle">Output</text>
+
+    <!-- live droplines: vertical guide at q; horizontals to D(q) and MC(q) -->
+    <line id="guide"  class="drop" x1="198" y1="400" x2="198" y2="128"/>
+    <line id="dropD"  class="drop" x1="48"  y1="128" x2="198" y2="128"/>
+    <line id="dropMC" class="drop" x1="48"  y1="213" x2="198" y2="213"/>
+
+    <!-- curves: D and MC primary; MR dashed + muted (it only locates Q = 5) -->
+    <path class="curvemr" d="M48,43 L378,417"/>
+    <path class="curve"   d="M48,43 L408,247"/>
+    <path class="curvemc" d="M48,298 L408,94"/>
+    <text class="curvelbl"   x="414" y="251">D</text>
+    <text class="curvelblmc" x="400" y="86" text-anchor="end">Marginal Cost</text>
+    <text class="curvelblmr" x="290" y="305">Marginal Revenue</text>
+
+    <!-- band label (E&P's own idiom) + pointer arrow stopping short of D -->
+    <g class="bandlbl" text-anchor="middle">
+      <text x="245" y="60">Lost consumer value through</text>
+      <text x="245" y="75">excess of price over</text>
+      <text x="245" y="90">marginal cost</text>
+    </g>
+    <line x1="248" y1="98" x2="252" y2="150" stroke="#b3402a" stroke-width="1"
+          marker-end="url(#arrAcc)"/>
+
+    <!-- benchmark dot (fixed) + tracked dots on D and MC -->
+    <circle class="dotbench" cx="273" cy="170.5" r="5"/>
+    <circle id="dotD"  class="dot" cx="198" cy="128" r="5"/>
+    <circle id="dotMC" class="dot" cx="198" cy="213" r="4.5"/>
+    <text id="mrmc" class="mrmc" x="215" y="228">MR = MC</text>
+
+    <!-- live price tag inside the plot at the D-dropline foot -->
+    <g id="tagYG">
+      <rect id="tagYbg" class="tagbg" x="51" y="119" width="46" height="16"/>
+      <text id="tagY" class="tagtxt" x="53" y="132" text-anchor="start">$16.00</text>
+    </g>
+    <!-- draggable output handle on the axis + snap/focus rings + hit zones -->
+    <rect id="hitAxis" class="hitzone" x="118" y="372" width="175" height="56"/>
+    <circle id="snapRing" class="snapring on" cx="198" cy="400" r="11"/>
+    <!-- live output tag at the handle (after the snap ring so its backing
+         masks the ring's lower arc instead of the ring striking the label) -->
+    <g id="tagXG">
+      <rect id="tagXbg" class="tagbg" x="179" y="404" width="38" height="15"/>
+      <text id="tagX" class="tagtxt" x="198" y="416" text-anchor="middle">5</text>
+    </g>
+    <circle id="pt" class="handle" cx="198" cy="400" r="6.5"/>
+    <circle id="hitPt" class="hitdot" cx="198" cy="400" r="20"
+            tabindex="0" role="slider"
+            aria-label="Output handle on the horizontal axis. Arrow keys move it between 3 and 7 and a half units."
+            aria-valuemin="3" aria-valuemax="7.5" aria-valuenow="5"
+            aria-valuetext="Output 5: price $16.00, marginal cost $11.00."/>
+    <circle id="focusRing" class="focusring" cx="198" cy="400" r="14"/>
+
+    <!-- readout band -->
+    <line class="sep" x1="16" y1="444" x2="424" y2="444"/>
+    <text id="stateLine" class="state" x="220" y="462" text-anchor="middle">Output 5: price $16.00, marginal cost $11.00.</text>
+    <text id="takeLine" class="takeaway" x="220" y="480" text-anchor="middle"><tspan id="take1" x="220" dy="0">Every unit from 5 to 7&#189; is worth more to buyers than it</tspan><tspan id="take2" x="220" dy="15">costs to make; the hatched band is consumer value lost</tspan><tspan id="take3" x="220" dy="15">through the excess of price over marginal cost. Economists</tspan><tspan id="take4" x="220" dy="15">call this triangle the deadweight loss.</tspan></text>
+  </svg>
+
+  <p class="hint">Drag the output handle along the axis (or focus it and use
+    the arrow keys; Home/End jump to the ends). It snaps at 5 and 7&#189;.</p>
+
+  <noscript>
+    <p class="fallback">Interactive view needs JavaScript. See the
+      <a href="t08a-ep11-4-lost-consumer-value.svg">static version of this figure</a>.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  // ---- geometry (must mirror the base markup) ----
+  var X0 = 48, PXQ = 30;                 // x(Q) = X0 + PXQ*Q
+  var YAX = 400, PXP = 17;               // y(P) = YAX - PXP*P
+  var QB = 7.5, XB = X0 + PXQ * QB;      // benchmark (7.5, $13.50)
+  var YB = YAX - PXP * 13.5;
+  function X (q) { return X0 + PXQ * q; }
+  function Y (p) { return YAX - PXP * p; }
+
+  // ---- economics (brief Section C / E&P Fig 11-4 invariants) ----
+  var QMIN = 3, QMAX = 7.5, STEP = 0.5, MAGNET = 0.3;
+  var SNAPS = [5, 7.5];                  // the choice and the benchmark
+  function D  (q) { return 21 - q; }     // demand (price read UP to D)
+  function MC (q) { return 6 + q; }      // marginal cost
+  // MR = 21 - 2q is drawn but gets no readout (it only locates Q = 5).
+
+  var svg = document.getElementById('fig');
+  var $ = function (id) { return document.getElementById(id); };
+  var q = 5;
+
+  function fmt$ (v) { return '$' + v.toFixed(2); }
+  function fmtQ (v) {
+    if (Math.abs(v - 7.5) < 1e-9) return '7½';
+    return (Math.round(v * 100) / 100).toString();
+  }
+  function snapPoint (v) {
+    for (var i = 0; i < SNAPS.length; i++) {
+      if (Math.abs(v - SNAPS[i]) < 1e-9) return SNAPS[i];
+    }
+    return null;
+  }
+
+  // Exact spec strings at q = 3, 5, 6, 7.5; generic grammar elsewhere.
+  // The band is never measured: no readout states an area.
+  function readout (v) {
+    var muted, t = [];
+    if (Math.abs(v - 5) < 1e-9) {
+      muted = 'Output 5: price $16.00, marginal cost $11.00.';
+      t = ['Every unit from 5 to 7½ is worth more to buyers than it',
+           'costs to make; the hatched band is consumer value lost',
+           'through the excess of price over marginal cost. Economists',
+           'call this triangle the deadweight loss.'];
+    } else if (Math.abs(v - 7.5) < 1e-9) {
+      muted = 'Output 7½: price falls to marginal cost, $13.50.';
+      t = ['The price-taker benchmark: no unit worth more than its cost',
+           'is left unmade, and the lost-value band disappears.'];
+    } else if (Math.abs(v - 6) < 1e-9) {
+      muted = 'Output 6: buyers value the unit near $15.00; it costs about $12.00.';
+      t = ['Producing past 5 narrows the band — but a seller heeding',
+           'marginal revenue, not price, stops at 5 on its own.'];
+    } else if (Math.abs(v - 3) < 1e-9) {
+      muted = 'Output 3: price $18.00, marginal cost $9.00.';
+      t = ['Restricting harder widens the band: still more units',
+           'worth more than their cost go unmade.'];
+    } else {
+      muted = 'Output ' + fmtQ(v) + ': price ' + fmt$(D(v)) +
+              ', marginal cost ' + fmt$(MC(v)) + '.';
+      t = ['Units from ' + fmtQ(v) + ' to 7½ are worth more to buyers than',
+           'they cost to make — the hatched band is that forgone value.'];
+    }
+    return { muted: muted, t: t, snapped: snapPoint(v) !== null };
+  }
+
+  function render () {
+    var x = X(q), yD = Y(D(q)), yMC = Y(MC(q)), r = readout(q);
+
+    ['pt', 'hitPt', 'focusRing', 'snapRing'].forEach(function (id) {
+      $(id).setAttribute('cx', x);
+    });
+    $('snapRing').setAttribute('class', 'snapring' + (r.snapped ? ' on' : ''));
+
+    $('guide').setAttribute('x1', x);  $('guide').setAttribute('x2', x);
+    $('guide').setAttribute('y2', yD);
+    $('dotD').setAttribute('cx', x);   $('dotD').setAttribute('cy', yD);
+    $('dotMC').setAttribute('cx', x);  $('dotMC').setAttribute('cy', yMC);
+    $('dropD').setAttribute('x2', x);
+    $('dropD').setAttribute('y1', yD); $('dropD').setAttribute('y2', yD);
+    $('dropMC').setAttribute('x2', x);
+    $('dropMC').setAttribute('y1', yMC); $('dropMC').setAttribute('y2', yMC);
+
+    // band = D-to-MC over [q, 7.5]; degenerate (invisible) at q = 7.5
+    $('band').setAttribute('points',
+      x + ',' + yD + ' ' + XB + ',' + YB + ' ' + x + ',' + yMC);
+
+    // MR = MC flag only at the price-searcher's own choice
+    $('mrmc').setAttribute('display', Math.abs(q - 5) < 1e-9 ? '' : 'none');
+
+    $('tagY').setAttribute('y', yD + 4);
+    $('tagY').textContent = fmt$(D(q));
+    $('tagYbg').setAttribute('y', yD - 9);
+    $('tagX').setAttribute('x', x);
+    $('tagX').textContent = fmtQ(q);
+    $('tagXbg').setAttribute('x', x - 19);
+
+    $('stateLine').textContent = r.muted;
+    ['take1', 'take2', 'take3', 'take4'].forEach(function (id, i) {
+      $(id).textContent = r.t[i] || '';
+    });
+
+    var hp = $('hitPt');
+    hp.setAttribute('aria-valuenow', q);
+    hp.setAttribute('aria-valuetext', r.muted);
+  }
+
+  // Drag magnet: pause at the choice (5) and the benchmark (7.5);
+  // otherwise half-unit steps.
+  function clampSnap (v) {
+    v = Math.max(QMIN, Math.min(QMAX, v));
+    for (var i = 0; i < SNAPS.length; i++) {
+      if (Math.abs(v - SNAPS[i]) < MAGNET) return SNAPS[i];
+    }
+    return Math.round(v / STEP) * STEP;
+  }
+
+  // ---- pointer drag (pointer capture; fast drags stay attached) ----
+  function svgPoint (evt) {
+    var pt = svg.createSVGPoint();
+    pt.x = evt.clientX; pt.y = evt.clientY;
+    return pt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+  var dragging = false;
+  function applyPointer (evt) {
+    var v = clampSnap((svgPoint(evt).x - X0) / PXQ);
+    if (Math.abs(v - q) > 1e-9) { q = v; render(); }
+  }
+  function onDown (evt) {
+    dragging = true;
+    if (evt.pointerId !== undefined && evt.target.setPointerCapture) {
+      try { evt.target.setPointerCapture(evt.pointerId); } catch (e) {}
+    }
+    applyPointer(evt);
+    evt.preventDefault();
+  }
+  function onMove (evt) { if (dragging) applyPointer(evt); }
+  function onUp (evt) {
+    dragging = false;
+    if (evt.pointerId !== undefined && evt.target.releasePointerCapture) {
+      try { evt.target.releasePointerCapture(evt.pointerId); } catch (e) {}
+    }
+  }
+  ['hitAxis', 'hitPt'].forEach(function (id) {
+    $(id).addEventListener('pointerdown', onDown);
+  });
+  svg.addEventListener('pointermove', onMove);
+  svg.addEventListener('pointerup', onUp);
+  svg.addEventListener('pointercancel', onUp);
+
+  // ---- keyboard (Left/Right = along the axis; Home/End = range ends) ----
+  $('hitPt').addEventListener('keydown', function (evt) {
+    var delta = 0;
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') delta = STEP;
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') delta = -STEP;
+    else if (evt.key === 'Home') { q = QMIN; render(); evt.preventDefault(); return; }
+    else if (evt.key === 'End') { q = QMAX; render(); evt.preventDefault(); return; }
+    else return;
+    evt.preventDefault();
+    // step off a magnet point cleanly (half-unit grid, not re-captured)
+    var v = Math.max(QMIN, Math.min(QMAX, q + delta));
+    q = Math.round(v / STEP) * STEP;
+    render();
+  });
+
+  // ---- debug hook (widget standard). bandArea = (7.5 - q)^2 is exposed
+  //      HERE ONLY, as the reviewer check (6.25 at q = 5) — never displayed.
+  window.__fig = {
+    set: function (v) { q = clampSnap(Number(v)); render(); return q; },
+    get: function () {
+      return { q: q, price: +D(q).toFixed(2), mc: +MC(q).toFixed(2),
+               bandArea: +((QB - q) * (QB - q)).toFixed(4),
+               atSnap: snapPoint(q) !== null };
+    }
+  };
+
+  render();
+})();
+</script>
+</body>
+</html>
