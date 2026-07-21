@@ -8,8 +8,7 @@ import BookingForm from '../components/marketing/BookingForm.astro';
 
 import speakingCharleston from '../assets/speaking-charleston.jpg';
 import salveLecture from '../assets/salve-regina-lecture.jpg';
-import salveGesturing from '../assets/salve-regina-gesturing.jpg';
-import salveAudience from '../assets/salve-regina-audience.jpg';
+import fauResearchPark from '../assets/on-stage-gesturing.jpg';
 import utepLecture from '../assets/utep-lecture.jpg';
 
 import topicsData from '../data/topics.json';
@@ -129,37 +128,27 @@ const venues = [
           src={utepLecture}
           alt="Bryan Cutsinger gesturing toward a chart of inflation survey data during a talk at the University of Texas at El Paso"
           widths={[480, 800, 1200]}
-          sizes="(min-width: 820px) 50vw, 100vw"
+          sizes="(min-width: 820px) 33vw, 100vw"
           loading="lazy"
         />
         <figcaption>Speaking at the University of Texas at El Paso.</figcaption>
       </figure>
       <figure class="stage-photo">
         <Image
-          src={salveGesturing}
-          alt="Bryan Cutsinger addressing the audience during a lecture at Salve Regina University"
+          src={fauResearchPark}
+          alt="Bryan Cutsinger briefing a business audience on South Florida economic data at the FAU Research Park presentation"
           widths={[480, 800, 1200]}
-          sizes="(min-width: 820px) 50vw, 100vw"
+          sizes="(min-width: 820px) 33vw, 100vw"
           loading="lazy"
         />
-        <figcaption>Taking questions at Salve Regina.</figcaption>
-      </figure>
-      <figure class="stage-photo">
-        <Image
-          src={salveAudience}
-          alt="A full lecture hall of students listening to Bryan Cutsinger speak at Salve Regina University"
-          widths={[480, 800, 1200]}
-          sizes="(min-width: 820px) 50vw, 100vw"
-          loading="lazy"
-        />
-        <figcaption>The room at Salve Regina.</figcaption>
+        <figcaption>This year's FAU Research Park presentation.</figcaption>
       </figure>
       <figure class="stage-photo">
         <Image
           src={speakingCharleston}
           alt="Bryan Cutsinger presenting to an audience from the podium at the College of Charleston"
           widths={[480, 800, 1200]}
-          sizes="(min-width: 820px) 50vw, 100vw"
+          sizes="(min-width: 820px) 33vw, 100vw"
           loading="lazy"
         />
         <figcaption>Presenting at the College of Charleston.</figcaption>
@@ -278,7 +267,7 @@ const venues = [
   }
   .stage-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: var(--sp-8);
   }
   .stage-grid .stage-photo { margin-bottom: 0; }

@@ -7,7 +7,7 @@ import Button from '../components/marketing/Button.astro';
 import CloseBand from '../components/marketing/CloseBand.astro';
 
 import headshot from '../assets/bryan-cutsinger.png';
-import onStageGesturing from '../assets/on-stage-gesturing.jpg';
+import speakingHero from '../assets/speaking-hero.jpg';
 
 const glance = [
   { label: 'Position', value: 'Economics professor, Florida Atlantic University' },
@@ -113,8 +113,8 @@ const speakChips = [
       </div>
       <figure class="about-speak__media">
         <Image
-          src={onStageGesturing}
-          alt="Bryan Cutsinger speaking to an executive-education audience"
+          src={speakingHero}
+          alt="Bryan Cutsinger presenting at FAU Executive Education"
           width={640}
           densities={[1, 2]}
         />
@@ -171,7 +171,12 @@ const speakChips = [
     align-items: center;
   }
   .about-speak__media { margin: 0; }
-  .about-speak__media img { border-radius: var(--radius-lg); }
+  .about-speak__media img {
+    border-radius: var(--radius-lg);
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: center 22%;
+  }
   .chips { list-style: none; margin: 0 0 var(--sp-8); padding: 0; display: flex; flex-wrap: wrap; gap: var(--sp-3); }
   .chips li {
     border: 1px solid var(--hairline);
