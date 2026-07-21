@@ -2,28 +2,24 @@
   "_note": "Signature talk topics shown on the homepage and Speaking page. Structure: title, description, audience, format.",
   "topics": [
     {
-      "title": "Money, Rules, and Political Pressure",
-      "description": "How central banks, elected officials, and public expectations shape monetary policy. A historically grounded talk on inflation, institutional credibility, and the limits of discretion.",
-      "audience": "General audiences, policy forums, donor events",
-      "format": "Keynote"
+      "title": "The U.S. Economic Outlook",
+      "description": "A data-driven briefing on growth, inflation, employment, interest rates, and the policy risks shaping the year ahead — with the signal separated from the daily economic noise.",
+      "audience": "Business, policy, and civic audiences",
+      "format": "Keynote · Briefing"
     },
     {
-      "title": "Sound Money and Monetary Rules",
-      "description": "What economic history reveals about discretionary monetary policy, and why predictable rules can discipline institutions better than good intentions alone.",
-      "audience": "University audiences, professional groups",
-      "format": "Lecture"
+      "title": "The South Florida Economic Outlook",
+      "description": "What my quarterly FAU report reveals about output, jobs, wages, and business formation across Palm Beach, Broward, and Miami-Dade counties — and what those trends mean for the region.",
+      "audience": "Regional business and community leaders",
+      "format": "Keynote · Briefing",
+      "href": "https://business.fau.edu/south-florida-economic-report/",
+      "linkLabel": "Explore the FAU report"
     },
     {
-      "title": "Public Choice and Political Incentives",
-      "description": "A practical introduction to public-choice economics: how incentives shape the behavior of voters, elected officials, agencies, and interest groups.",
-      "audience": "Students, civic organizations",
-      "format": "Lecture"
-    },
-    {
-      "title": "How to Read an Economy in the News",
-      "description": "A working economist's guide to inflation, interest rates, labor markets, and fiscal policy, with an emphasis on separating useful signals from daily noise.",
-      "audience": "Corporate and professional audiences",
-      "format": "Keynote"
+      "title": "Monetary Policy",
+      "description": "How Federal Reserve decisions move through inflation, interest rates, financial markets, and the broader economy — and how history helps us judge the tradeoffs facing policymakers today.",
+      "audience": "Business, academic, and policy audiences",
+      "format": "Keynote · Lecture"
     }
   ]
 }

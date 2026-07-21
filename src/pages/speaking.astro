@@ -4,10 +4,13 @@ import MarketingLayout from '../layouts/MarketingLayout.astro';
 import PageHead from '../components/marketing/PageHead.astro';
 import Section from '../components/marketing/Section.astro';
 import Button from '../components/marketing/Button.astro';
-import DownloadCard from '../components/marketing/DownloadCard.astro';
 import BookingForm from '../components/marketing/BookingForm.astro';
 
 import speakingCharleston from '../assets/speaking-charleston.jpg';
+import salveLecture from '../assets/salve-regina-lecture.jpg';
+import salveGesturing from '../assets/salve-regina-gesturing.jpg';
+import salveAudience from '../assets/salve-regina-audience.jpg';
+import utepLecture from '../assets/utep-lecture.jpg';
 
 import topicsData from '../data/topics.json';
 import testimonialsData from '../data/testimonials.json';
@@ -17,8 +20,9 @@ const testimonials = testimonialsData.items ?? [];
 
 const formats = [
   { name: 'Keynotes', note: 'A signature talk shaped to your theme and audience.' },
+  { name: 'Economic briefings', note: 'A current, data-driven outlook followed by audience questions.' },
   { name: 'Lectures & campus visits', note: 'For universities, honors programs, and student groups.' },
-  { name: 'Panels & moderated conversations', note: 'On monetary policy, inflation, and political economy.' },
+  { name: 'Panels & moderated conversations', note: 'On the economic outlook, monetary policy, and regional conditions.' },
   { name: 'Workshops & seminars', note: 'Smaller, participatory sessions for professional groups.' },
   { name: 'Virtual talks & webinars', note: 'Remote keynotes and Q&A for distributed audiences.' },
 ];
@@ -26,20 +30,34 @@ const formats = [
 const audiences = [
   'Universities & academic events',
   'Conferences & summits',
-  'Associations & professional groups',
+  'Chambers of commerce & civic organizations',
+  'Banks, financial firms & business associations',
   'Policy organizations & think tanks',
+  'Donor & membership organizations',
   'Corporate & executive audiences',
+];
+
+const venues = [
+  'FAU Research Park',
+  'Chamber of Commerce of the Palm Beaches',
+  'Greater Boca Raton Chamber of Commerce',
+  'Creighton University',
+  'University of Texas at El Paso',
+  'Wabash College',
+  'College of Charleston',
+  'Salve Regina University',
+  'Florida Southern College',
 ];
 ---
 <MarketingLayout
   title="Speaking — Bryan Cutsinger"
-  description="Invite Bryan Cutsinger to speak on money, inflation, sound monetary rules, and public choice — serious economics in plain language for universities, conferences, associations, and corporate audiences."
+  description="Invite economist Bryan Cutsinger to speak on the U.S. economic outlook, South Florida's regional economy, or monetary policy for business, civic, academic, and policy audiences."
 >
   <PageHead
     kicker="Speaking"
     edition="Booking open"
     headline="Economic ideas your audience can use."
-    lede="I connect monetary policy, economic history, and public choice to the questions facing students, professionals, and civic audiences — serious economics in plain language, shaped to your event."
+    lede="I turn current data, monetary economics, and economic history into clear briefings on the U.S. outlook, South Florida's regional economy, and monetary policy — shaped to your audience and event."
   >
     <Fragment slot="headline">
       Economic ideas your audience can <em>use</em>.
@@ -52,11 +70,10 @@ const audiences = [
       <div class="book-lead__cta">
         <Button href="#book" variant="primary">Check availability</Button>
       </div>
-      <p class="book-lead__fee">
-        <span class="label label--accent">Fees</span>
-        Fee range and availability on request. Honorarium and workshop rates vary
-        by format, audience, and travel — <a href="#book">tell me about your
-        event</a> and I'll send details.
+      <p class="book-lead__details">
+        <span class="label label--accent">Availability</span>
+        Local, national, and virtual engagements are available. Travel expenses
+        are handled separately for in-person events outside South Florida.
       </p>
     </div>
   </Section>
@@ -78,6 +95,11 @@ const audiences = [
             <p class="topic__meta label label--accent">{t.format} · {t.audience}</p>
             <h3 class="topic__title">{t.title}</h3>
             <p class="topic__dek">{t.description}</p>
+            {t.href && (
+              <p class="topic__source">
+                <a href={t.href} rel="noopener">{t.linkLabel} ↗</a>
+              </p>
+            )}
           </li>
         ))
       }
@@ -88,25 +110,60 @@ const audiences = [
     </p>
   </Section>
 
-  <!-- On the stage: real photo now, video reel on request -->
+  <!-- On the stage -->
   <Section variant="raised">
     <div class="head"><p class="kicker">On the stage</p><h2>See a talk.</h2></div>
     <figure class="stage-photo">
       <Image
-        src={speakingCharleston}
-        alt="Bryan Cutsinger presenting to an audience from the podium at the College of Charleston"
+        src={salveLecture}
+        alt="Bryan Cutsinger pointing to a slide while lecturing on inflation to a full lecture hall at Salve Regina University"
         widths={[600, 960, 1280]}
         sizes="(min-width: 960px) 960px, 100vw"
         loading="lazy"
       />
-      <figcaption>Presenting at the College of Charleston.</figcaption>
+      <figcaption>Guest lecture on inflation and Fed policy at Salve Regina University.</figcaption>
     </figure>
-    <div class="reel">
-      <p class="reel__note">
-        A short video reel is on the way. In the meantime, I'm glad to share
-        video, references, and past-talk details on request.
-      </p>
-      <Button href="#book" variant="secondary">Request video & references</Button>
+    <div class="stage-grid">
+      <figure class="stage-photo">
+        <Image
+          src={utepLecture}
+          alt="Bryan Cutsinger gesturing toward a chart of inflation survey data during a talk at the University of Texas at El Paso"
+          widths={[480, 800, 1200]}
+          sizes="(min-width: 820px) 50vw, 100vw"
+          loading="lazy"
+        />
+        <figcaption>Speaking at the University of Texas at El Paso.</figcaption>
+      </figure>
+      <figure class="stage-photo">
+        <Image
+          src={salveGesturing}
+          alt="Bryan Cutsinger addressing the audience during a lecture at Salve Regina University"
+          widths={[480, 800, 1200]}
+          sizes="(min-width: 820px) 50vw, 100vw"
+          loading="lazy"
+        />
+        <figcaption>Taking questions at Salve Regina.</figcaption>
+      </figure>
+      <figure class="stage-photo">
+        <Image
+          src={salveAudience}
+          alt="A full lecture hall of students listening to Bryan Cutsinger speak at Salve Regina University"
+          widths={[480, 800, 1200]}
+          sizes="(min-width: 820px) 50vw, 100vw"
+          loading="lazy"
+        />
+        <figcaption>The room at Salve Regina.</figcaption>
+      </figure>
+      <figure class="stage-photo">
+        <Image
+          src={speakingCharleston}
+          alt="Bryan Cutsinger presenting to an audience from the podium at the College of Charleston"
+          widths={[480, 800, 1200]}
+          sizes="(min-width: 820px) 50vw, 100vw"
+          loading="lazy"
+        />
+        <figcaption>Presenting at the College of Charleston.</figcaption>
+      </figure>
     </div>
   </Section>
 
@@ -133,6 +190,20 @@ const audiences = [
     </div>
   </Section>
 
+  <Section variant="raised">
+    <div class="head">
+      <p class="kicker">Selected hosts</p>
+      <h2>Where I've spoken.</h2>
+      <p class="lede">
+        Selected universities, chambers, and professional audiences from past
+        engagements.
+      </p>
+    </div>
+    <ul class="venues">
+      {venues.map((venue) => <li>{venue}</li>)}
+    </ul>
+  </Section>
+
   {
     testimonials.length > 0 && (
       <Section variant="raised">
@@ -148,16 +219,6 @@ const audiences = [
       </Section>
     )
   }
-
-  <!-- One-sheet -->
-  <Section variant="surface">
-    <DownloadCard
-      title="Speaker one-sheet"
-      description="Bio, signature topics, formats, and booking details on a single page — handy for sharing with your committee."
-      requestHref="#book"
-      requestLabel="Request the one-sheet"
-    />
-  </Section>
 
   <!-- Booking -->
   <Section variant="ink" id="book">
@@ -184,8 +245,8 @@ const audiences = [
     align-items: center;
   }
   .book-lead__cta { display: flex; align-items: center; gap: var(--sp-4); flex-wrap: wrap; }
-  .book-lead__fee { margin: 0; color: var(--muted); max-width: 60ch; }
-  .book-lead__fee .label { display: block; margin-bottom: var(--sp-2); }
+  .book-lead__details { margin: 0; color: var(--muted); max-width: 60ch; }
+  .book-lead__details .label { display: block; margin-bottom: var(--sp-2); }
 
   /* topics */
   .topics {
@@ -196,6 +257,7 @@ const audiences = [
   .topic__meta { display: block; margin-bottom: var(--sp-3); }
   .topic__title { font-size: var(--fs-h3); margin: 0 0 var(--sp-3); }
   .topic__dek { margin: 0; color: var(--muted); }
+  .topic__source { margin: var(--sp-3) 0 0; font-family: var(--font-label); font-size: 0.85rem; }
   .topics-note { margin: var(--sp-12) auto 0; text-align: center; color: var(--muted); max-width: 56ch; }
 
   /* on-stage photo */
@@ -214,17 +276,13 @@ const audiences = [
     font-size: 0.85rem;
     color: var(--muted);
   }
-
-  /* reel */
-  .reel {
-    border: 1px dashed var(--rule-strong);
-    border-radius: var(--radius-lg);
-    padding: clamp(var(--sp-8), 4vw, var(--sp-16));
-    display: flex; flex-direction: column; gap: var(--sp-6);
-    align-items: flex-start;
-    background: var(--paper);
+  .stage-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--sp-8);
   }
-  .reel__note { margin: 0; color: var(--muted); max-width: 54ch; }
+  .stage-grid .stage-photo { margin-bottom: 0; }
+  .stage-grid .stage-photo img { aspect-ratio: 3 / 2; object-fit: cover; }
 
   /* two-col formats/audiences */
   .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-16); align-items: start; }
@@ -238,6 +296,18 @@ const audiences = [
     padding: var(--sp-3) 0; border-bottom: 1px solid var(--hairline);
   }
 
+  .venues {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--hairline);
+  }
+  .venues li {
+    padding: var(--sp-4) var(--sp-6) var(--sp-4) 0;
+    border-bottom: 1px solid var(--hairline);
+    font-family: var(--font-display);
+    font-size: 1.08rem;
+  }
+
   /* quotes */
   .quotes { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-8); }
   .quote blockquote { font-family: var(--font-display); font-size: 1.35rem; line-height: 1.35; margin: 0 0 var(--sp-3); color: var(--ink); }
@@ -247,5 +317,7 @@ const audiences = [
     .book-lead { grid-template-columns: 1fr; gap: var(--sp-6); }
     .topics { grid-template-columns: 1fr; gap: var(--sp-8); }
     .two-col { grid-template-columns: 1fr; gap: var(--sp-12); }
+    .venues { grid-template-columns: 1fr; }
+    .stage-grid { grid-template-columns: 1fr; }
   }
 </style>
