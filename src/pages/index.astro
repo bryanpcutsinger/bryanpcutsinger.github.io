@@ -57,7 +57,7 @@ const workingPaperCount = (pubData.workingPapers ?? []).filter(
 ---
 <MarketingLayout
   title="Bryan Cutsinger — Economist, Speaker, Writer"
-  description="Bryan Cutsinger is an economist at Florida Atlantic University who explains the economics behind the headlines — money, inflation, and public policy — in National Review, The Hill, and The Washington Examiner, and to live audiences."
+  description="Bryan Cutsinger is a Florida Atlantic University economist and speaker on the U.S. economic outlook, South Florida's regional economy, and monetary policy."
 >
   <!-- Masthead: the outward front door -->
   <section class="mast">
@@ -69,14 +69,13 @@ const workingPaperCount = (pubData.workingPapers ?? []).filter(
         </h1>
         <p class="mast__sub">
           I'm Bryan Cutsinger, an economist at Florida Atlantic University, where I
-          direct the graduate program in economics. My research on monetary theory,
-          economic history, and political economy appears in journals like the
-          <em>European Economic Review</em> and <em>Public Choice</em>, where I'm
-          also an associate editor. I'm acting director of AIER's Sound Money
-          Project and write the monthly <em>Price Theory</em> column at Econlib and
-          commentary for <em>National Review</em>, <em>The Hill</em>, and
-          <em>City Journal</em> — connecting the forces behind the headlines to the
-          ideas that explain them.
+          direct the graduate program in economics. My research on monetary
+          economics, economic history, and political economy has appeared in
+          journals including the <em>European Economic Review</em>,
+          <em>Explorations in Economic History</em>, and <em>Public Choice</em>, where
+          I also serve as an associate editor. I'm also acting director of the Sound
+          Money Project at the American Institute for Economic Research, where I
+          write about money, inflation, and monetary policy.
         </p>
         <div class="mast__cta">
           <Button href="/speaking/" variant="primary">Invite me to speak</Button>
@@ -113,13 +112,18 @@ const workingPaperCount = (pubData.workingPapers ?? []).filter(
             <p class="talk__meta label label--accent">{t.format} · {t.audience}</p>
             <h3 class="talk__title">{t.title}</h3>
             <p class="talk__dek">{t.description}</p>
+            {t.href && (
+              <p class="talk__source">
+                <a href={t.href} rel="noopener">{t.linkLabel} ↗</a>
+              </p>
+            )}
           </li>
         ))
       }
     </ol>
   </Section>
 
-  <!-- Invite band (outward speaker push + fee signal) -->
+  <!-- Invite band -->
   <Section variant="ink">
     <div class="invite">
       <div class="invite__copy">
@@ -132,10 +136,10 @@ const workingPaperCount = (pubData.workingPapers ?? []).filter(
         </p>
       </div>
       <div class="invite__aside">
-        <p class="invite__fee">
-          <span class="label">Fees</span>
-          Fee range and availability on request — honorarium and workshop rates on
-          inquiry.
+        <p class="invite__details">
+          <span class="label">Engagements</span>
+          Available for local, national, and virtual keynotes, briefings, panels,
+          workshops, and university visits.
         </p>
         <Button href="/speaking/" variant="on-ink">Check availability</Button>
       </div>
@@ -234,6 +238,7 @@ const workingPaperCount = (pubData.workingPapers ?? []).filter(
   .talk__meta { display: block; margin-bottom: var(--sp-3); }
   .talk__title { font-size: var(--fs-h3); margin: 0 0 var(--sp-3); }
   .talk__dek { margin: 0; color: var(--muted); font-size: 0.98rem; }
+  .talk__source { margin: var(--sp-3) 0 0; font-family: var(--font-label); font-size: 0.85rem; }
 
   /* --- invite band --- */
   .invite {
@@ -244,13 +249,13 @@ const workingPaperCount = (pubData.workingPapers ?? []).filter(
   }
   .invite__sub { color: var(--on-ink-muted); font-size: var(--fs-lead); line-height: 1.5; margin: 0; max-width: 48ch; }
   .invite__aside { display: flex; flex-direction: column; gap: var(--sp-6); align-items: flex-start; }
-  .invite__fee { color: var(--on-ink-muted); margin: 0; font-size: 0.95rem; }
-  .invite__fee .label { display: block; color: var(--accent-on-ink); margin-bottom: var(--sp-2); }
+  .invite__details { color: var(--on-ink-muted); margin: 0; font-size: 0.95rem; }
+  .invite__details .label { display: block; color: var(--accent-on-ink); margin-bottom: var(--sp-2); }
 
   /* --- responsive --- */
   @media (max-width: 900px) {
     .mast__inner { grid-template-columns: 1fr; gap: var(--sp-8); }
-    .mast__portrait { order: -1; justify-self: start; max-width: 200px; }
+    .mast__portrait { justify-self: start; max-width: 200px; }
     .talks { grid-template-columns: 1fr; gap: var(--sp-6); }
     .invite { grid-template-columns: 1fr; gap: var(--sp-8); }
   }
