@@ -3,9 +3,9 @@ title: "Taxes, Time, and the Quasi-Rent: Competition in Motion"
 topic: "T7 — Competitive Markets (Part B)"
 course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 15 (Tue 10/13)"]
-ue_anchors: ["UE 11 (fixed-land incidence)", "UE 17", "UE 18"]
+ue_anchors: ["UE 11 (fixed-land incidence and amenity capitalization)", "UE 17", "UE 18", "UE 27 (corporate-tax incidence across time)"]
 be_anchors: ["BE 5", "BE 9 (partial)"]
-ep_anchors: ["E&P Fig 4-6 (ch. 4, p. 66) — a tax on fixed land: consumer price unchanged, owner bears all, legal side irrelevant", "E&P ch. 4 & ch. 11 — tax political economy: immobile bases taxed, mobile bases escape"]
+ep_anchors: ["E&P Fig 4-6 (ch. 4, p. 66) — a tax on fixed land: consumer price unchanged, owner bears all, legal side irrelevant", "E&P ch. 4 & ch. 11 — tax political economy: immobile bases taxed, mobile bases escape", "E&P ch. 18 pp. 394–398 — graduated-income-tax rationales, implicit housing rent, and federal revenue sharing"]
 word_target: "2500-6000"
 status: approved        # E&P integration M5 done-gate 2026-07-20; prior approval 2026-07-01
 audience: students
@@ -26,6 +26,7 @@ All of that described a market sitting still under settled conditions. Now we se
 <li>Explain why both demand and supply grow more elastic the longer the adjustment period, distinguishing the immediate run, the short run, and the long run.</li>
 <li>Explain why the legal side of a tax does not determine who bears it, and use the relative elasticities of demand and supply to predict how the burden splits.</li>
 <li>Apply the same elasticity rule to fixed, immobile land and explain why its owner bears the whole tax through capitalization.</li>
+<li>Apply capitalization and mobility to amenity gains, corporate taxes, graduated income taxes, and federal revenue sharing.</li>
 <li>Explain why a tax on a single price-taker falls entirely on his own specialized resources.</li>
 <li>Trace how a broad tax's burden shifts over time, landing first on immobile resources and later on consumers, and explain why latecomers bear none of it.</li>
 <li>Define a quasi-rent and explain why a resource already in place can be charged down toward its operating cost without being driven out.</li>
@@ -90,6 +91,8 @@ The elasticity rule includes a clean extreme. Land in a particular place cannot 
 
 Because a buyer values land by the future income it will yield, a permanent tax lowers the land's selling price as soon as it is anticipated. Whoever owns the land at that moment bears the loss; a later buyer pays the already-reduced price and earns an ordinary return from there. The acres do not disappear, and the user price does not rise. The burden shows up as a one-time decline in asset value.
 
+Capitalization works upward as well as downward. A new park, safer street, or better local service can raise the stream of advantages attached to nearby land, and buyers bid that gain into land prices and rents. The owner present when the improvement becomes expected captures the windfall; a later buyer pays for it in the purchase price, and a renter or newcomer pays through the higher rent. Only land improved *relative to alternatives* gains: if every neighborhood receives the same improvement, no one location necessarily acquires a special premium. Calling the benefit "public" does not tell us who finally captures it.
+
 <figure class="econ-figure" style="margin:1.5em 0;">
 <iframe src="/teaching/microeconomics/t07b-tax-incidence-and-quasi-rent/figures/t04c-land-incidence-interactive.html" title="Drag the tax handle to see a fixed-land tax reduce the owner's return while user rent and acreage stay fixed." loading="lazy" style="width:100%; max-width:480px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t07b-tax-incidence-and-quasi-rent/figures/t04c-land-incidence-interactive.html">Open the interactive figure directly</a>.</p></iframe>
 <figcaption><strong>A tax on fixed, immobile land falls on the landowner.</strong> Raise the tax and the owner's net rent shrinks while users' rent and the acres in use stay put. The case makes the general rule visible: the side least able to adjust bears the burden.</figcaption>
@@ -98,6 +101,10 @@ Because a buyer values land by the future income it will yield, a permanent tax 
 The fixed-land result is the sharp edge of a general rule: a tax settles on whatever cannot get out of its way. Land is the extreme case, since it cannot move or shrink, so its owner absorbs the whole tax through a capitalized fall in value, and it makes no difference whether the law names the renter or the owner as the taxpayer. That is exactly why governments gravitate toward taxing immobile, place-bound bases like land and existing specialized capital, and why proposals to tax land values keep resurfacing, from the nineteenth-century land-tax reformer Henry George and his "single tax" to later arguments for nationalizing land outright. Land cannot flee the tax, so the tax can lean on it.
 
 The converse is the political economy of the whole subject. A base that can move answers a tax increase by leaving, and how much it actually leaves depends on how mobile it is, which varies enormously from one base to the next. The most footloose high earners respond strongly: tracking <a href="https://www.aeaweb.org/articles?id=10.1257/aer.20150508">star scientists through their patents</a>, Moretti and Wilson (2017) found that a state letting these scientists keep 1 percent more of their income drew about 1.8 percent more of them over the long run. The average millionaire, by contrast, stays put. When <a href="https://ideas.repec.org/a/ntj/journl/v64y2011i2p255-83.html">New Jersey raised its top rate</a> by 2.6 points to 8.97 percent in 2004, the wealthy as a whole barely budged and the tax still raised roughly a billion dollars a year (Young and Varner 2011), with only the mobile slices, retirees and people living on investment income, tending to leave. When a base can exit, the taxing government cannot load the full burden onto it, and the burden slides toward whatever stays put. So jurisdictions compete for the mobile bases, and the taxes that stick are the ones on what cannot leave. Land, which cannot move at all, is the base that stays put no matter what.
+
+That mobility helps explain the politics of a graduated income tax. Several rationales point in the same direction: higher-income taxpayers may be said to have greater ability to pay, to receive more protection for property, or to owe a larger contribution because extra dollars have lower marginal worth to them. There is also a coalition rationale: many voters can impose higher rates on a smaller group. Whatever the justification, rising rates encourage shifts into untaxed nonmarket activity and favored forms of income. Owner-occupied housing makes the point: the homeowner receives an implicit rental service from the house but usually reports no taxable rent, so two households with the same economic income can face different tax bills depending on whether the return arrives in cash or housing services.
+
+Federal revenue sharing is the mirror image of taxpayers escaping a jurisdiction. If a local government bears the political cost of taxing its own mobile residents while neighboring jurisdictions share the benefit of the service, local officials ask a higher level of government to collect the tax and send funds back. The federal grant weakens the taxpayer's ability to escape by crossing a city or state line. Revenue sharing is therefore not free outside money; it relocates the taxing decision to a jurisdiction from which exit is harder and makes the link between the local service and its local cost less visible.
 
 Before leaving the land case, one more figure closes the loop on who writes the check, this time at the smaller scale of a square foot of rented space. It draws two demand schedules, the renters' demand and the net-of-tax demand the owner actually faces, and lets you send the tax bill to either side: the same 40 cents comes out of the owner's rent no matter whose name the law puts on it.
 
@@ -122,6 +129,8 @@ Over the long run, things loosen. Marginal farmers, barely breaking even, give u
 </figure>
 
 That carries a sharp corollary about latecomers. Suppose years after the tax, demand for peanuts grows, the surviving farms turn profitable, and a fresh investor buys in. How much of the tax does he bear? None of it. The price he pays for land and equipment already has the tax baked in, because their value already reflects the lower after-tax earnings; he earns a normal return on what he paid and carries no part of the burden. The tax was borne once and for all by whoever owned the specific resources when it was imposed. This also disposes of a popular bit of bad public finance, that it is fairer and gentler to "tax businesses, not households." Taxing the seller and taxing the buyer give the identical result: same quantity, same buyer price, same seller net. Routing a tax through firms rather than people changes who signs the check, not who carries the load.
+
+A new corporate tax follows the same time pattern. At the surprise announcement, the expected after-tax earnings of existing corporations fall and share prices capitalize the loss onto incumbent shareholders. Anyone who buys the shares afterward pays the reduced price and expects an ordinary return; the corporation has not absorbed the burden as if it were a person. Over the longer run, investment can leave the taxed corporate form or move toward less-taxed uses, shifting part of the burden again. The economic question is always which people and resources can adjust, not which legal entity writes the check.
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
@@ -218,6 +227,7 @@ That same discipline runs through one more channel, the only piece of our reputa
 <li><strong>Elasticity grows with time.</strong> Both demand and supply respond more fully the longer the adjustment period, from the immediate run to the short run to the long run.</li>
 <li><strong>The check-writer is not the taxpayer.</strong> Whether the law taxes buyers or sellers, the burden splits the same way, set by which side can more easily walk away from the deal.</li>
 <li><strong>Fixed land reveals the limiting case.</strong> With zero supply elasticity, the owner bears the entire tax through a capitalized fall in the land price.</li>
+<li><strong>Capitalization and mobility govern broader policy incidence.</strong> Amenity gains, corporate taxes, graduated rates, and revenue sharing shift wealth according to who owns early and who can exit later.</li>
 <li><strong>A lone price-taker bears his whole tax.</strong> He cannot move the market price, so a tax on him alone lands entirely on his specialized resources.</li>
 <li><strong>A broad tax travels over time.</strong> It falls first on immobile resources and later on consumers, while latecomers who buy in at the taxed price bear none of it.</li>
 <li><strong>A resource in place earns a quasi-rent.</strong> With its original cost sunk, it keeps operating as long as the price covers its operating cost, so its surplus can be trimmed without driving it out.</li>

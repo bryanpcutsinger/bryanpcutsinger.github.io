@@ -3,9 +3,9 @@ title: "Markets and Coordination"
 topic: "T4 — Markets, Prices, and Coordination"
 course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 6 (Thu 9/10)"]
-ue_anchors: ["UE 6", "UE 10", "UE 11 (Q9 universal-allocation only)"]
+ue_anchors: ["UE 6", "UE 10", "UE 11 (marketing arrangements and Q9 universal allocation)", "UE 25 (predictable prices, voluntary queues, preferred customers, and blind blocks)"]
 be_anchors: ["BE 2", "BE 4 (incremental-vs-categorical; shortage≠scarcity)"]
-ep_anchors: ["E&P Fig 4-1 (ch. 4) — market demand as horizontal sum of individual demands", "E&P Fig 4-4 (ch. 4) — supply elasticity and input generality"]
+ep_anchors: ["E&P Fig 4-1 (ch. 4) — market demand as horizontal sum of individual demands", "E&P Fig 4-4 (ch. 4) — supply elasticity and input generality", "E&P ch. 5 pp. 88–90 — inventories, reserve capacity, stable prices, and queues as information-cost economizers"]
 word_target: "3000-6000"
 status: approved        # E&P integration M4 done-gate 2026-07-20; prior approval 2026-07-01
 audience: students
@@ -28,6 +28,7 @@ That puzzle is the subject of this post. A modern economy coordinates the work o
 <li>Explain why closing a market transfers wealth to protected insiders without creating any, and tell freedom of competition apart from freedom from competition.</li>
 <li>Explain how prices coordinate an economy no one is running by transmitting information, motivating action, and rationing scarce goods, and why every allocation system must ration by some criterion.</li>
 <li>Explain how summing individual demands yields a market-clearing price, why a rise in demand raises that price, and why the final allocation does not depend on who held the goods first.</li>
+<li>Explain why sellers use inventories, reserve capacity, stable posted prices, voluntary queues, and customer relationships to economize on information and adjustment costs.</li>
 <li>Explain why a higher price still rations a good whose supply cannot grow, and why an anti-gouging law rations that supply by luck and hoarding instead.</li>
 <li>Distinguish scarcity from a shortage and a surplus, and explain why shortages and surpluses are creatures of price control rather than facts of nature.</li>
 </ul>
@@ -157,6 +158,8 @@ To see where it comes from, build *market demand*, which is just the sum of ever
 
 Two lessons fall out of this table. First, the price settles where the quantity demanded equals the quantity available: with seven cars, the clearing price is seven thousand dollars, the row where the market demand column reads seven. If demand rose, so that more people wanted cars at every price, the clearing price would rise too, because the fixed seven cars would now have to be rationed among hungrier buyers. Second, and subtler, it does not matter who starts with the cars. Whether A begins with all seven or they are scattered around, voluntary trading shuffles them to the same final owners, because each person keeps buying as long as a car is worth more to him than its price and keeps selling whenever it is worth less. The *initial allocation* does not determine the *final allocation*; the cars end up with whoever values them most regardless of who held them first.
 
+At this stage, supply is a market-level description of willingness to sell from the existing stock, including what current owners require before giving up a unit. T7 will make the production side exact by deriving each price-taking firm's supply from marginal cost and adding the firms together. For now, read supply as what is available for sale at each price; later we derive why producers offer those amounts.
+
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
 <p>The seven cars clear at $7,000. If more people wanted a car at every price, which way would the clearing price move, and why do the cars end up with the same final owners no matter who held them first?</p>
@@ -165,6 +168,14 @@ Two lessons fall out of this table. First, the price settles where the quantity 
 Two smaller points sharpen this. When we report "the price" of a car, we mean the price actually agreed to in real transactions, not the sticker on the windshield or the optimistic figure in an ad. And the law that people buy more of a thing at a lower price than at a higher one is more dependable than any particular market outcome. A government can suspend a market by freezing its price, but it cannot repeal the fact that people respond to prices. Keep the two ideas separate: the law of demand always holds, while the tidy market-clearing result can be blocked by a law that forbids the price from moving.
 
 That distinction dissolves a popular scare story. Every so often a chart appears projecting that demand for oil or water will "outstrip supply" by some future date, opening an alarming gap. The charts are fallacious, because they assume the price will sit still. In a free market the price would rise as the resource tightened, nudging buyers to use less and sellers to find more, and the supposed gap would never open. There is no fixed "need" and no fixed supply waiting to collide; the price keeps the two in step. The honest first question whenever a price changes is never "is this gouging?" but "did demand shift, or did supply?"
+
+## Inventories, Reserve Capacity, and Stable Prices Economize on Information
+
+A market does not have to change its posted price every minute to be coordinating. Sellers often carry *inventories* and keep some *reserve capacity* precisely because demand is uncertain. A grocer stocks more cans than today's average sales require, and a utility keeps generating capacity that will sit idle most hours, because a buffer lets each serve an unexpected rush without making customers search elsewhere. Holding the buffer costs something, but so does turning buyers away or constantly renegotiating prices. The seller chooses the mix that is cheaper.
+
+Stable posted prices can be another buffer. Reprinting menus, informing customers, comparing unfamiliar offers, and haggling over every small demand change all consume resources. A seller may therefore keep the money price steady through a temporary surge and let inventory shrink, a brief queue form, or an appointment book fill. Those signs do not by themselves prove that a legal ceiling has created a shortage. A control-imposed shortage persists because the price is forbidden to adjust; a voluntary queue can be the least-cost way to handle a temporary peak when changing the price would cost more than the wait. The price, the inventory, and the waiting time are all parts of the full terms of trade.
+
+Relationships can do the same work. A seller short of stock may serve dependable repeat customers first because preserving a long stream of business is worth more than today's highest one-time bid. De Beers historically sold diamonds in preselected packets that buyers could accept or reject as a whole, rather than letting each buyer pick only the most attractive stones. Such *blind blocks* made the assortment and the seller's reputation part of the bargain. Preferred-customer rules and packaged assortments can be ways to make quality and future access predictable, not proof that competition has stopped.
 
 ## A Higher Price Rations Even a Supply That Cannot Grow
 
@@ -224,6 +235,7 @@ Surpluses are the mirror image. A *surplus* is the gap that opens when a price i
 <li><strong>Closing a market moves wealth, it does not make it.</strong> Protection hands insiders a gain smaller than the loss it imposes on everyone else, which is the difference between freedom of competition and freedom from competition.</li>
 <li><strong>Prices coordinate an economy no one is running.</strong> They transmit information, motivate action, and ration scarce goods, and because something always has to do the rationing, every system rations by some criterion.</li>
 <li><strong>A market-clearing price balances buyers and goods.</strong> Summing individual demands gives market demand, a rise in demand raises the clearing price, and voluntary trade sends goods to whoever values them most regardless of who held them first.</li>
+<li><strong>Buffers can coordinate without constant price changes.</strong> Inventories, reserve capacity, stable posted prices, voluntary queues, and preferred-customer rules can economize on information and adjustment costs.</li>
 <li><strong>A higher price rations even a fixed supply.</strong> When no extra unit can be made, the price steers the existing stock to its most urgent uses, so an anti-gouging law only swaps rationing by price for rationing by luck and hoarding.</li>
 <li><strong>A shortage is not scarcity.</strong> Scarcity is a permanent fact of nature, while shortages and surpluses open only when a price is pinned below or above its clearing level.</li>
 </ul>

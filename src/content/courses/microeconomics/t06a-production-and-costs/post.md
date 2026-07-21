@@ -3,7 +3,7 @@ title: "Marginal Analysis, Production, and Costs"
 topic: "T6 — Production, Costs, and Specialization (Part A)"
 course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 12 (Thu 10/1)"]
-ue_anchors: ["UE 7 (totals, marginals, averages, equimarginal allocation)", "UE 14 (Productivity and Costs)"]
+ue_anchors: ["UE 7 (totals, marginals, averages, equimarginal allocation)", "UE 14 (Productivity and Costs)", "UE 18 (rate versus volume, learning curves, common costs of joint products)"]
 be_anchors: ["BE 10 (complementary inputs + capital-labor / 'what is efficiency' sections only)"]
 ep_anchors: ["E&P Figs 7-1 & 7-3 (ch. 7) — producer production-possibility frontiers; marginal cost as the frontier's slope", "E&P ch. 7 'Inefficiency by Authority?' — 1974–1981 crude-oil entitlements program / small-refiner bias vs price coordination (equimarginal), via card EP-EX-07"]
 word_target: "2500-6000"
@@ -225,6 +225,10 @@ A second distinction hides in the word "more," and it trips people constantly. P
 </aside>
 
 The travel analogy fixes it. The cost of a trip depends on your speed and on the distance, and you would never confuse the two. Driving faster burns more gas per mile, just as producing at a faster rate raises marginal cost, for the diminishing-returns reason we just saw. But covering a greater total distance, or producing a greater total volume, is different: a larger volume invites cheaper methods. When Ford builds a few cars, hand tools make sense; when it commits to millions, mass-production machinery that would be absurd for a handful becomes the cheapest way, and the cost per car falls. A hand hammer beats a power hammer for a few nails and loses badly for a few thousand. So faster generally means costlier per unit, while bigger total volume means cheaper per unit. When someone says production went "up," ask: faster, or more in total?
+
+Volume can lower cost even when the equipment stays the same, because people learn by doing. Repetition reveals better component designs, sequences, and production methods, so the marginal cost of later units falls as cumulative output grows. This *learning curve* helps explain the familiar path of a new product: early versions sell at high prices to buyers with high marginal worths; experience, larger volume, and entry then lower costs and prices, bringing the product within reach of more buyers. A falling real price can therefore be evidence of learning and competition, not proof that the early price was exploitative or that the later one is predatory.
+
+Joint production adds one more cost lesson. A steer produces beef and hide together; an aircraft carries passengers and freight with many of the same inputs. There is no uniquely correct way to divide the common cost between the joint products, and managers do not need one. The actionable question is how much *total* cost changes when one more passenger, pound of freight, or increment of feed is added. Allocate shared overhead however an accountant must, but base the production decision on the change in total cost caused by the choice.
 
 ## A Producer Stops Where the Next Unit's Worth Falls to Its Cost
 

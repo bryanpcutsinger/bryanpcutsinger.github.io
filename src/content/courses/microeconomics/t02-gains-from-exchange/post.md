@@ -6,6 +6,7 @@ sessions: ["Fall 2026 — content session 3 (Tue 9/1)"]
 ue_anchors: ["UE 4"]
 be_anchors: []
 ep_anchors: ["E&P 3 — Fig 3-1 Gains From Exchange", "E&P 4 — Pareto-Optimal Allocations"]
+univecon_anchors: ["University Economics (1994) ch. 4 pp. 41–43 — refugee-camp licensing cartel and franchise-fee capitalization"]
 word_target: "2000-6000"
 status: approved        # E&P integration M1 sign-off 2026-07-19 (prior: Stage-2 2026-06-15)
 audience: students
@@ -137,6 +138,8 @@ Notice that in the relief camp, none of the good trades happened until the newco
 How large can that cut get? There is a ceiling, and it is set by the very gap that makes the trade worthwhile. A lone middleman who faces no rival can take as much as the whole gain from the trade: he can pay Joe just barely enough to coax the water loose and charge Sam just short of what the water is worth to him, pocketing everything in between. In the camp that ceiling is the four granola bars of value the exchange creates; the newcomer who keeps only two is already leaving half of it on the table for Sam and Joe. What he cannot do is take more than the whole gain, because then one side would rather walk away. So the most a middleman can ever extract is the entire gain the trade makes possible, and no more.
 
 What keeps a middleman's cut well below that ceiling is competition from other middlemen. Back in the camp, once a second trader shows up offering Sam a slightly better price and paying Joe slightly more, the first trader's fat margin starts to shrink. Each new entrant trims the spread between the buying and selling price a little further, until it barely covers the cost of doing the job. Intermediaries do not compete against their customers or their suppliers. They compete against each other, and that rivalry is what passes the savings to both sides. The numbers show the squeeze: once a second dealer enters, Sam pays a little less and Joe receives a little more, each gaining the equivalent of another half granola bar.
+
+The camp story has a political sequel. The two traders can try to preserve their margin by persuading the camp manager to admit only licensed, "approved" middlemen, with the existing traders deciding who is properly trained and ethical. Consumer protection is the public argument; blocking new rivals is the economic effect. Once the licenses create a protected stream of earnings, the manager discovers that he can charge a franchise fee for them. The fee absorbs the present value of the protected profit, transferring the cartel's gain to the authority that controls entry. A restriction can therefore enrich the first license holders, attract political control, and leave later licensees earning only an ordinary return after paying for the privilege.
 
 | After competition among dealers | Water | Granola |
 |---|---|---|

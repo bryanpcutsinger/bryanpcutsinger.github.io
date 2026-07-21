@@ -7,7 +7,7 @@ ue_anchors: ["UE 22", "UE 23", "UE 24", "UE 25", "UE 27", "UE 28"]
 be_anchors: ["BE 7 (partial)"]
 ep_anchors: ["E&P ch. 9 (Business Firms: Ownership, Control, Profits) — the regression fallacy: a single result is part skill, part luck, and good luck regresses to normal (100-identical-salespersons); treating one lucky result as durable ability is the regression fallacy, but 'the market does not commit regression fallacies' — bidders who overpay for a lucky year lose wealth to those who can tell luck from ability, and superior ability, once revealed, is bid into higher prices/rents/wages"]
 word_target: "3000-6000"
-word_cap_waiver: "ep-integration-2026"
+word_cap_waiver: "review-pass-2026-08"
 status: approved        # M11 done gate 2026-07-20 (§10 A+B PASS); prior Stage-2 2026-06-15
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Source-of-truth for the T9 deck; section headers are claims that map to slide titles. T9 = why firms exist (team production, non-separability, moral hazard), the residual claimant as owner-monitor, protecting specific investments against hold-up, the corporate form + market for corporate control, and the contract-grounded shareholder-vs-stakeholder application."
@@ -93,6 +93,8 @@ This is no accident; it solves the monitoring problem. The residual claimant kee
 
 Bearing the residual means bearing risk, so it is worth pausing on risk itself. We cannot outlaw risk. Misfortune happens, careful behavior only lowers the odds, and the consequences always land on someone. The open question is who. A society can let losses fall on whoever they strike, the homeowner whose roof a storm tears off; it can let people *pool* their risks through *insurance*, each paying a small predictable premium so that the unlucky few are made whole from the common fund; and it can have government cushion the weakest against the worst blows. Our law sorts these cases with a rough but useful line between losses caused by someone's *negligence*, which we charge to the careless party, and "acts of God" no one could prevent, which we treat as nobody's fault. The firm's owner is one answer: by accepting the residual claim, he volunteers to absorb a bundle of business risk for the profit that comes with it. And this risk can be shifted by rewriting the contract. A boat owner who hires fishermen for a fixed wage keeps the residual and bears the risk of a thin catch himself; but if instead he rents the boat out for a fixed daily fee, he has taken the fixed claim, and now the renters bear that day's risk, because they owe the rent whether the fish bite or not. Whoever holds the fixed claim has pushed the residual onto the other side.
 
+T12 will formalize the three risk tools previewed here: pooling independent losses, adverse selection over who joins a pool, and moral hazard when protection changes behavior.
+
 Notice what this does to "the boss." We think the boss commands because he can order people around. Not really. The boss directs the team because he pays it; the employee, in turn, can "fire the boss" by quitting and taking his labor elsewhere. The relationship is a knot of voluntary contracts, not a chain of command.
 
 The residual claim explains a great deal once you look for it. Consider a charter school versus an ordinary public school. People debate whether charters are "better," but the structural difference is plain: a charter must compete for students it can lose, and someone bears the cost when it falls short, whereas a traditional public school faces neither real competition nor an owner who loses personally when quality slips. The discipline of losable value, not superior virtue, drives quality where it exists. The same logic exposes the "firm" with no real owner: in not-for-profits, government enterprises, and cooperatives, no one holds a tradable residual claim, so no one captures the gains from running the place better. The slack shows up in more than laziness. A manager who pays no personal price for a worse-run organization can also indulge his own tastes in hiring, screening applicants by race or religion rather than by who would do the job best, because the profit he sacrifices by passing over the better worker is not coming out of his pocket. A for-profit owner bears that cost directly and so has a money reason to hire the best person regardless of his prejudices; strip out the residual claim and you should expect more discrimination, not less.
@@ -101,7 +103,7 @@ Our property-rights and public-goods topic takes these ownerless organizations u
 
 The history of socialist experiments demonstrates this. In the former Yugoslavia, factories were nominally "employee-owned," and the result was predictable: workers neglected maintenance and skimped on new equipment, because, unable to sell their ownership share, they could never capture the future earnings good upkeep would produce. Ownership you cannot transfer is barely ownership, a point the Soviet leadership missed when, in the dying days of the USSR, they boasted of the world's highest rate of "home ownership" while still forbidding anyone to buy or sell a home. Real ownership means exclusive use *plus* the right to transfer that use to someone else; strip out the right to sell and the certificate means little.
 
-That points to the political-economy lesson. Under private property, the owner bears the swings in value directly and can adjust what he holds, selling out of a venture he sours on and into one he believes in. Under state or collective control, profits and losses are borne indirectly, through political office and the power to tax, by people who cannot pocket the gains or sell their stake. That severed link between who decides and who bears the consequences blunts the incentive to husband resources well. We will see it again with the commons, where a resource no one owns gets overused and degraded because each user reaps the gain from taking more while the cost of depletion falls on everyone (the "tragedy of the commons," coming in T5), and again with public choice.
+That points to the political-economy lesson. Under private property, the owner bears the swings in value directly and can adjust what he holds, selling out of a venture he sours on and into one he believes in. Under state or collective control, profits and losses are borne indirectly, through political office and the power to tax, by people who cannot pocket the gains or sell their stake. That severed link between who decides and who bears the consequences blunts the incentive to husband resources well. We saw it in the property-rights topic's tragedy of the commons, where a resource no one owns gets overused and degraded because each user reaps the gain from taking more while the cost of depletion falls on everyone, and it appears again in public choice.
 
 ## Monitoring Devices Align Incentives Where Watching Is Costly
 
@@ -145,6 +147,8 @@ Now look at the legal form that lets firms grow enormous. There are three basic 
 The second feature, *transferable shares*, lets an owner sell his stake to anyone, at any time, without disrupting the firm. Here corporations differ from teams of employees. A worker cannot sell his job, because team members' obligations are interlocked and changing the roster requires the boss's power to hire and fire. Stockholders are not an interlocked team; one shareholder selling to another changes no one else's rights or duties, so shares change hands freely. That salability also gives the corporation a kind of immortality: shares pass to heirs or buyers without anyone's permission, so the firm survives the death of any owner, unlike older partnership forms (the classical Islamic partnership) that dissolved when a partner died.
 
 Put the two features together and you see why the corporation became the dominant form for assembling large pools of capital. A railroad or an airline costs more than any handful of rich investors would risk on a single throw. But spread that cost across thousands or millions of small savers, each shielded by limited liability so none risks more than a modest stake, each able to sell out whenever he likes, and the money can be raised. About half the American population now owns corporate stock, much of it indirectly through pension funds. The corporation is, at bottom, an efficient machine for letting strangers share the risks and rewards of an investment too large for any one of them. (It need not even be a business: the first American one was the Harvard Corporation, formed in the seventeenth century to govern a college.)
+
+The corporate form does not bear a corporate tax as though it were a person. T7 traced the burden to incumbent shareholders at announcement and, over time, to whichever people and resources cannot shift away from the taxed form.
 
 The rise of large firms prompts a common complaint worth answering: "decades ago there were dozens of small producers, now a few giants dominate, so consumers have fewer places to buy." It sounds plausible and gets the result backwards. The number of *firms* is not the number of *choices* a buyer has. Picture an old world of a thousand isolated towns, each with five local sellers nobody outside could reach. That is five thousand firms, yet any one shopper can buy from only the five in his own town. Now let cheap, fast transportation and communication knock down the walls between towns. The total number of firms may collapse, but each shopper can now reach sellers in town after town, so the number of suppliers actually competing for his business goes up. Fewer, larger firms have meant more sources of supply, not fewer, because the reach of every buyer widened. (Why firms settle at the sizes they do, we take up later under costs and market power.)
 
@@ -367,7 +371,8 @@ UE Ch24 (6 Qs): 1+ 2X 3+ 4+ 5+ 6X
      cash in while still hot is enormous" + "A doctor or engineer earns a good living
      spread evenly across decades ... so the temptation to blow up a contract for a
      one-time gain is far weaker". Capital value kept verbal per soft-PV.
-  2X free-riding on retailer presale services (RPM) -> T8.
+  2X free-riding on retailer presale services (RPM) -> T8b, DELIVERED in the 2026-07-20
+     course-review pass.
   3+ reputation = future-reliability indicator; legal monopolies survive bad rep. ANCHOR:
      "a legally protected postal monopoly or a department of motor vehicles is not undone
      by complaints"
@@ -385,7 +390,8 @@ UE Ch25 (5 Qs): 1+ 2+ 3+ 4X 5+
      is mutual dependence, not tribute paid to a useless headquarters"
   3+ young performer signed 5 yrs becomes star, exploited? ANCHOR: "the rare winner is
      \"overpaid\" at first and \"underpaid\" later"
-  4X price stability vs flexibility / sticky prices / queue rationing -> T4.
+  4X price stability vs flexibility / sticky prices / queue rationing -> T4a, DELIVERED
+     in the 2026-07-20 course-review pass.
   5+ do ethics/Good-Samaritan observations belong in economics? ANCHOR: "ethics and shame
      still restrain people from reneging, which lowers the cost of relying on others"
 
@@ -457,13 +463,12 @@ DELIBERATE OMISSIONS / SCOPE (the brief's surgical cuts + destinations)
 - UE22 commons Episodes 6-7 (nationalization, tragedy of the commons, congestion) + Q7,
   Q8 -> T5. UE22 "National Development" + Episode 8 (profit dissipation) -> T6/T7.
 - UE24 RPM/vertical-restraint tail (max retail price, RPM/free-riding, Coors mechanics,
-  exclusive territories) + natural-monopoly/public-utility sections + Q2, Q6 -> T8. The
-  one-line RPM forward hook is present ("a manufacturer setting the minimum price ... full
-  analysis ... belongs with our treatment of market power").
+  exclusive territories) -> T8b and DELIVERED 2026-07-20; natural-monopoly/public-utility
+  sections + Q6 were already delivered in T8b. The one-line RPM forward hook remains here.
 - UE25 sticky/predictable-price, queue-rationing, preferred-customers, blind-blocks,
-  De Beers, anti-gouging + Q4 -> T4. Kept only brand/goodwill-hostage/franchising/
+  De Beers, anti-gouging + Q4 -> T4a and DELIVERED 2026-07-20. Kept here only brand/goodwill-hostage/franchising/
   reputation/advertising-as-search-cost/ethics & shame/professional-codes.
-- UE27 corporate-tax-incidence sections -> T4. Size-economics ("large vs small firms,"
+- UE27 corporate-tax-incidence sections -> T7b and DELIVERED 2026-07-20. Size-economics ("large vs small firms,"
   "why very large firms") -> T6/T8 (UE27 Q1 core delivered, detail logged). Financial-
   statements APPENDIX incl. Tables 27.1 & 27.2 -> DROPPED entirely per brief.
 - BE7 "Monopolies and Cartels" half (apple-juice monopoly, Indian licensing, railroad/

@@ -5,9 +5,9 @@ course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 2 (Thu 8/27)"]
 ue_anchors: ["UE 1", "UE 2", "UE 3"]
 be_anchors: ["BE 1", "BE 25"]
-ep_anchors: ["E&P ch. 1 (Scarcity, Competition, and Social Control) — mercantilism as the third system between capitalism and socialism: resources nominally private property but the state grants a politically favored group protected market access ('government-aided monopolization'); a noticeable share of real economies, no society purely one system", "E&P ch. 1 — every rationing criterion is a form of competition that selects the society's traits over time: reward cheap time and patience, charm and rhetoric (as in politics), or productivity, and the society grows more of that trait; even a 'fair' random draw is a criterion no one wants deciding their surgeon"]
+ep_anchors: ["E&P ch. 1 (Scarcity, Competition, and Social Control) — mercantilism as the third system between capitalism and socialism: resources nominally private property but the state grants a politically favored group protected market access ('government-aided monopolization'); a noticeable share of real economies, no society purely one system", "E&P ch. 1 — every rationing criterion is a form of competition that selects the society's traits over time: reward cheap time and patience, charm and rhetoric (as in politics), or productivity, and the society grows more of that trait; even a 'fair' random draw is a criterion no one wants deciding their surgeon", "E&P ch. 3 §Freedom: As You Like It — democracy allocates political power but does not determine whether the resulting uses of power preserve open choice"]
 word_target: "2000-6000"
-word_cap_waiver: "ep-integration-2026"
+word_cap_waiver: "review-pass-2026-08"
 status: approved        # M9 done gate 2026-07-20 (§10 A+B PASS); prior Stage-2 2026-06-15
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Source-of-truth for the T1 deck; section headers are claims that map to slide titles."
@@ -249,6 +249,8 @@ This is also where you should be most on guard against economists themselves, my
 Only individuals choose, and that fact underlies almost everything we will do this term. Our analysis rests on individuals making choices: as consumers, voters, business owners, workers, and managers. "The government," "the firm," and "the market" have no minds or goals of their own. The people inside them do. A government is made up of officials, voters, and interest groups, each responding to their own incentives. A firm is made up of owners, managers, and employees. A market is people buying and selling.
 
 That is why we will keep pushing explanations down to individuals. If we want to understand why "the government" or "a business" does something, we do not ask what "it" wants; we ask what the human beings inside it are rewarded and punished for doing. This is the same lesson we drew about policies earlier: to understand an outcome, follow the incentives facing the people involved, whether they are acting in a market, in a political office, or in any other setting. Doing that makes a lot of otherwise baffling behavior click into place. This is the hinge between economics and politics, and we will lean on it all term.
+
+Democracy does not change that method. It is a rule for allocating political power, not a test of whether the power is used wisely, fairly, or economically. A majority can preserve open exchange or close a market to outsiders; a dictator can do either too. Calling a choice democratic tells us how political authority was assigned. To judge what the choice does, we still have to trace the incentives and consequences facing the individuals who use that authority.
 
 ## Economics Clarifies Your Trade-offs; It Doesn't Supply Your Values
 

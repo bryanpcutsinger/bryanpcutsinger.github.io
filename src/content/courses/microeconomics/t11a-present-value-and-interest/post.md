@@ -6,6 +6,7 @@ sessions: ["Fall 2026 — content session 23 (Tue 11/10)"]
 ue_anchors: ["UE 30", "UE 31", "UE 36 (front half)"]
 be_anchors: ["BE 13 (PV/intermediation — partial)"]
 ep_anchors: ["E&P ch. 6 (Capital Values and Interest) — usury as an ambiguous pejorative for interest; early Christian dogma, the Koran, and Communist doctrine each condemned it yet readmitted it under euphemism (Church 'discount', Communist 'efficiency index', Treasury 'discount')", "E&P ch. 16 (Wealth, Saving, and Investing) — Aristotle's 'sterile money'; interest paid before and after each condemnation because the demand for savings exceeded supply at a zero price; the Papacy charged interest as 'fees'/'gratuities'; Christians borrowed from Jews"]
+univecon_anchors: ["University Economics (1994) ch. 11 p. 187 — Feather River project's low-discount-rate political-economy example"]
 word_target: "3500-6000"
 status: approved        # M8 done gate 2026-07-20 (§10 A+B PASS); prior Stage-2 2026-06-15
 audience: students
@@ -17,7 +18,7 @@ note: "Self-contained — assumes no access to the textbooks. Part A of two on C
 
 Almost every decision worth making spans time. You spend money now to earn a degree that pays off for decades. A firm builds a factory this year to sell goods for years. A government borrows today and taxes tomorrow. In all of these, costs and benefits land at different dates, which raises a problem we have so far ignored: how do you compare a dollar today with a dollar next year, or thirty years from now? You cannot just add them up. A thousand dollars promised long ago and a thousand dollars in your pocket today are not the same thing, and treating them as equal is one of the most common and expensive mistakes people make.
 
-This topic gives you the tool that solves it. It is called *present value*, and it puts amounts arriving at different times onto a single ruler so they can be compared. Out of that one idea comes a surprising amount: what interest really is and where it comes from, how to price a loan, why a future payment is worth less than a present one, and why the interest rate you pick can swing the answer to a public debate. We build the arithmetic first in this post, then point it at durable assets, your own earnings, profit, and politics in the next. Everything here is one tool used over and over; state it clearly now and the rest of the topic falls out of it.
+This topic gives you the tool that solves it. It is called *present value*, and it puts amounts arriving at different times onto a single ruler so they can be compared. This is the capitalization tool the course has been promising since T7, when future profit first got baked into today's asset price. Out of that one idea comes a surprising amount: what interest really is and where it comes from, how to price a loan, why a future payment is worth less than a present one, and why the interest rate you pick can swing the answer to a public debate. We build the arithmetic first in this post, then point it at durable assets, your own earnings, profit, and politics in the next. Everything here is one tool used over and over; state it clearly now and the rest of the topic falls out of it.
 
 <aside class="econ-callout econ-objectives">
 <p class="econ-callout__label">Learning objectives</p>
@@ -199,6 +200,8 @@ Streams need not be level. When the yearly amounts vary, you discount each separ
 | **Total** | | | **$9,219** |
 
 This little table also delivers a deeper lesson, the one this topic keeps returning to: a present value changes the instant expectations about the future change, not when the future arrives. Suppose news today doubles the expected receipts in years five and six to $4,000 and $2,000. The present value jumps immediately from $9,219 to $11,211. Nothing has actually happened yet in years five or six; only the anticipation changed. The same is true of an anticipated future tax cut or any other foreseen change: today's value moves the moment the expectation forms. We will come back to this in Part B, when we talk about politics and about profit.
+
+That arithmetic makes the chosen discount rate a political lever. Advocates of California's Feather River water project could make the long-lived project look worthwhile by discounting its future benefits at about 2 percent. At a higher market rate, the same resources were worth more in other uses for the time being, so postponing the project could dominate building it immediately. The public debate largely skipped the choice of rate even though that choice could reverse the verdict. Whenever a public project "pays for itself," ask which discount rate made the statement true and what alternative return was set aside.
 
 Now stretch the stream out forever. An annuity that pays a constant amount in every future year, without end, is a *perpetuity*, and it has a beautifully simple value:
 

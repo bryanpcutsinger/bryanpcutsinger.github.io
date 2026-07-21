@@ -5,6 +5,7 @@ course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 26 (Thu 11/19)"]
 ue_anchors: ["UE 35 (arbitrage, random walk, intermediation)", "UE 37 (futures, options, uncertainty)"]
 be_anchors: ["BE 13 (speculation and inventories)", "BE 15 (uncertainty)"]
+ep_anchors: ["E&P ch. 16 pp. 358–360 — protective credit controls, margin requirements, fungibility, and the paternalism tradeoff"]
 word_target: "2500-5500"
 status: approved
 audience: students
@@ -80,6 +81,8 @@ This also separates commodity speculation from gambling, even though both bet on
 One more service falls out of all this competition. Because traders profit by buying low and selling high, any gap between the futures price and the price people expect at delivery gets competed away: if the futures price sat below the expected delivery-date price, traders would buy futures until they bid it up; if above, they would sell until they drove it down. What is left is a futures price pinned to the *best available estimate of the future spot price*. Individual futures prices are wrong all the time, but their errors run both ways and average out, so over many contracts they track realized prices closely, and no other forecasting method reliably beats them. Because the forecast is already baked in, there is no sure profit in simply trading futures; the contract's real value is as a hedge and as a public prediction. You can even read a table of futures prices as a forecast: if the contract for one month sits below the others, the market is telling you it expects more supply around then, a good sign the new harvest lands in that month.
 
 Which is why banning a futures market is worse than useless. Speculation about the future is universal; people speculate, hedge, and hoard against bad fortune everywhere, with or without an organized exchange, so prohibiting the exchange does not end speculation, it only strips away the cheap, public version. Outlaw potato futures and you do not stop anyone from betting on potato prices; you remove the hedging that lets farmers and processors offload risk, you degrade the public price forecast, and you leave supplies to lurch around more erratically. And ask who lobbies for such a ban: often a handful of insiders whose private information about crop conditions is worth more to them when there is no open futures market broadcasting it to everyone else. A concentrated few gain; the dispersed many lose. Again, economics tells you what the policy will do, not whether someone's notion of fairness is satisfied.
+
+Credit controls repeat the same mistake in a protective key. A ceiling on high-risk loan rates does not make risky borrowers cheap to serve; it pushes them toward costlier arrangements or excludes them. A margin rule that limits how much an investor may borrow against securities does not reliably set stock prices at their "proper" level, and it is easy to route around because money is fungible: borrow against another asset or expense and use the freed cash to buy the stock. Such rules may express a judgment that people should be restrained from risky choices, but that is a paternalistic value judgment, not evidence that the underlying risk or demand for credit has disappeared.
 
 
 ## All Rates of Return Get Pulled Into Line, and Prices Follow a Random Walk

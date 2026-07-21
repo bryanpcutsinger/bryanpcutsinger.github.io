@@ -3,9 +3,10 @@ title: "Factor Markets and Labor, Part B: Coalitions and Constraints"
 topic: "T10 — Factor Markets and Labor (Part B)"
 course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 22 (Thu 11/5)"]
-ue_anchors: ["UE 40", "UE 41", "UE 39 (gender-earnings sections)"]
+ue_anchors: ["UE 20 (analytic monopsony mechanism)", "UE 40", "UE 41", "UE 39 (gender-earnings sections)"]
 be_anchors: ["BE 11", "BE 12 (partial)"]
-ep_anchors: ["E&P 15 — closed monopsony (interns; NCAA)", "E&P 13 — rent dissipation via qualifying", "E&P 17 — job search (micro sections only)", "E&P Fig 14-7 — wage floor and ceiling"]
+ep_anchors: ["E&P 15 — closed monopsony (interns; NCAA) and featherbedding", "E&P 13 — rent dissipation via qualifying", "E&P 17 pp. 369–380 — job search, disguised unemployment, and layoffs versus wage cuts", "E&P Fig 14-7 — wage floor and ceiling"]
+univecon_anchors: ["University Economics (1994) ch. 21 pp. 416–417 — specific versus general on-the-job training and who pays"]
 word_target: "2500-6000"
 status: approved        # E&P integration M2 sign-off 2026-07-19 (prior: Stage-2 2026-06-15)
 audience: students
@@ -24,11 +25,13 @@ Now we turn that same engine on the most heated arguments in all of economics. W
 <p>By the end of this post you should be able to:</p>
 <ul>
 <li>Explain how a labor union raises its members' wages by restricting the supply of workers who can compete for the jobs, and identify who is kept out.</li>
+<li>Explain featherbedding as insider-rent extraction, derive the analytic monopsony hiring rule, and distinguish who pays for specific versus general training.</li>
 <li>Use the hiring rule to explain why a minimum wage set above a worker's value prices him out of covered jobs, and identify who is hit hardest.</li>
 <li>Explain why competition makes discrimination costly to the discriminator, while a wage floor can make discrimination cheap.</li>
 <li>Trace who ultimately bears the cost of a mandated benefit, using the idea that a worker's full pay is money wages plus every nonmoney term of the job.</li>
 <li>Explain how occupational licensing restricts entry to protect incumbents rather than consumers, and read a license's price as the value of being let in.</li>
 <li>Explain an unemployment spell as productive search, state the reservation-wage rule, and predict how policies that lower the cost of searching lengthen spells.</li>
+<li>Explain disguised unemployment and why imperfect information can make layoffs more acceptable than immediate across-the-board wage cuts.</li>
 </ul>
 </aside>
 
@@ -57,6 +60,8 @@ This lens explains a string of puzzling stances. Organized labor has historicall
 
 A union also serves, secondarily, to police an employer's promises, since a single worker has trouble holding a firm to commitments made over a long career. That monitoring role is real, but it is not the main story for wages and does not change the supply-restriction logic.
 
+Work rules can extract the same insider gain without raising the posted wage. *Featherbedding* requires an employer to hire workers or preserve tasks that production no longer needs, such as retaining a manual handling crew after premixed materials remove the job or requiring standby performers who will not perform. The rule converts part of the firm's quasi-rent into insider income while raising the cost of output and excluding outsiders who might use the resources elsewhere. Calling the requirement a safety or craft standard does not settle its effect; ask whether the mandated work adds value at the margin.
+
 Two points round this out. First, a contrived wage gain is not a stream of easy money forever. Once a privileged position can be passed on or sold, its advantage gets capitalized into the price of getting in, so later holders pay up front and earn only an ordinary return on what they paid. We lack the tool to make this precise, but the verbal version suffices: **the gain is already priced into the value of the position today.** Present value will make it exact, and that is one of the threads the next topic picks up.
 
 Second, the mirror image of a union, a single dominant buyer of labor, is *monopsony*. The cleanest example is the military draft. People defended conscription as "cheap" because the budget cost of paying draftees was low, but that figure hid the real cost: the value of what conscripts gave up, forced into service at below-market pay, plus the waste of assigning people poorly. A volunteer force paid by wages reveals the true cost in the budget and tends to lower it, because wages sort people toward the jobs they fit best. And the claim that a lone worker is "helpless," so a union is essential for fairness, is mostly empty wherever many employers compete. An employer who lowballs a productive worker loses him to a rival who offers more. Competition among employers, not a coalition, is what ordinarily protects the individual worker.
@@ -68,9 +73,13 @@ Second, the mirror image of a union, a single dominant buyer of labor, is *monop
 </dl>
 </aside>
 
+The buyer-side mechanism mirrors the price-searcher seller. Suppose a monopsonist faces an upward-sloping labor supply, so attracting one more worker requires a higher wage. If that higher wage must also be paid to the workers already employed, the cost of the next hire exceeds that worker's wage: the *marginal wage cost* includes both the new worker's pay and the raises for incumbents. The monopsonist hires only until the next worker's value of marginal product equals this higher marginal wage cost, not merely the posted wage. Compared with competing employers, it therefore employs fewer workers and pays a lower wage. The result needs both ingredients, market power on the buying side and an upward-sloping supply; a lone employer facing perfectly mobile workers cannot create it.
+
 The draft was a monopsony run by the government. Private employers have tried the same trick by agreement. A lone hospital cannot hold intern pay far below what an intern adds, because a rival hospital would bid the intern away. So hospitals did not act alone: their association capped intern salaries, and the cap held because a hospital that broke it risked its top-grade accreditation, the seal it needs to attract students and funding. Notice who keeps the savings. Cheap interns do not lower the price of hospital care by some automatic mechanism; the margin shows up as higher incomes for the people already inside.
 
 College sports ran the same play for over a century, on a bigger stage. The NCAA's member colleges are employers buying athletic labor, and their amateurism rules were a collective agreement not to pay for it, enforced the same way as the intern cap: a college that paid players risked its athletes' eligibility and its own standing. With money offers banned, the competition for stars resurfaced in the forms the rules allowed, scholarships, facilities, and no small number of covert payments; rivalry changes form, it does not die. The agreement finally cracked in court. Justice Kavanaugh wrote that the NCAA's business model <a href="https://www.law.cornell.edu/supremecourt/text/20-512">"would be flatly illegal in almost any other industry in America,"</a> and once athletes could earn from their <a href="https://www.cbssports.com/college-football/news/ncaa-approves-interim-name-image-and-likeness-policy-removing-restrictions-for-college-athletes-to-earn-money/">name, image, and likeness</a> in 2021 and colleges could pay them directly under the 2025 <a href="https://www.espn.com/college-sports/story/_/id/45467505/judge-grants-final-approval-house-v-ncaa-settlement">House settlement</a> (up to roughly $20.5 million per school, with nearly $2.8 billion in back pay), the suppressed wages appeared almost overnight; <a href="https://frontofficesports.com/the-year-schools-paid-their-players/">310 schools opted in</a> the first year. Recall the cartel lesson from the market-power topic: a cartel survives only where cheating is cheap to detect and punish. An accreditation body that doubles as the cartel's enforcement arm is exactly that machinery.
+
+Training costs also depend on who can capture the return. Skills useful only at the current employer are *specific training*: the worker cannot sell them elsewhere, so the employer pays because it captures much of the productivity gain and has reason to retain the trained worker. Portable skills are *general training*. Because the worker can take them to a rival, the worker pays, often by accepting a lower wage while learning, and later receives the higher market wage the skill supports. Specific training therefore predicts lower turnover and fewer layoffs than general training, because both parties would lose part of a relationship-specific investment if the match ended.
 
 The pattern of who still unionizes says the same thing from another angle. Union membership hovered near a third of the American workforce in the 1950s and has fallen to little more than a tenth, but the fall is almost entirely on the private side: government workers now unionize at close to 40 percent, against under 7 percent in private business. The reason is not sentiment. A private employer who pays above-market wages must cover them out of sales revenue while competing against firms that do not, and such employers shrink or disappear. A government agency pays out of taxes, and taxpayers are a more dispersed and patient source of above-market wages than customers ever are.
 
@@ -163,6 +172,8 @@ The medallion price shows what happens when a privileged position can be bought:
 
 One more labor-market fact deserves a place here, because it shapes how everything in this part gets measured: the unemployment spell itself. Wage offers for the same worker are not identical across employers, because finding out who pays what is costly. A worker whose job ends and who grabs the first offer he stumbles into may throw away years of higher pay to save a few weeks of looking. Time spent finding and comparing offers produces something real, information about the best job available, and that makes a search spell an investment, not idleness.
 
+An economy can hide this search by assigning everyone a post. A military or centrally directed workplace may report that everyone has a job while keeping people in tasks whose output is worth less than what they could produce elsewhere. The unemployment is *disguised* as low-productivity employment. Open unemployment makes the search visible and gives workers freedom to compare assignments; a zero measured rate can therefore coexist with worse matching and more wasted labor.
+
 How long should the search run? By the same marginal rule that has governed everything else in this course: keep searching while the expected gain from one more inquiry, a better offer weighted by the chance of finding it, exceeds the cost, chiefly the wages given up by not working. When the expected gain slips below that cost, stop and take the best offer in hand. The lowest offer worth taking now rather than searching on is your reservation wage.
 
 <aside class="econ-callout econ-termset">
@@ -173,6 +184,8 @@ How long should the search run? By the same marginal rule that has governed ever
 </aside>
 
 Change the cost of searching and you change how long people search, for ordinary marginal reasons. Unemployment insurance and welfare payments replace part of the income lost while looking, so covered workers rationally hold out longer for better matches. That is not an accusation of laziness; it is the same marginal rule operating at a lower price of continued search. The rule also says who can afford to be choosy: a worker in a household with a second earner can run a longer search than one whose rent is due on Friday.
+
+Information also helps explain why firms often lay workers off instead of cutting everyone's wage immediately when demand falls. Workers cannot instantly tell whether the decline is temporary or permanent, general to their occupation or peculiar to one employer. A wage cut might signal that the worker's best outside wage has fallen, or it might be an employer trying to exploit workers who have made firm-specific investments. Resisting the cut while accepting a layoff can therefore be rational while people learn which story is true. Unemployment becomes "involuntary" in the strong sense only when the worker's belief about available wages proves mistaken; until the search resolves the uncertainty, the observed refusal does not show that the worker knowingly rejected an equally good job.
 
 Once you see search, the measured unemployment rate stops being one thing. It lumps together workers producing information between jobs, workers priced out by the wage floor we met earlier in this post, would-be electricians and bricklayers standing outside the licensing and apprenticeship gates who report themselves as unemployed, and seasonal workers who take jobs only at peak wages. Four different situations, four different remedies, one number. When someone quotes "the" unemployment rate, it is worth asking which of the four they have in mind.
 
@@ -189,11 +202,13 @@ to market value while its absence dilutes that incentive.
 <h3>Key takeaways</h3>
 <ul>
 <li><strong>Unions raise insiders' pay by restricting supply.</strong> A union backed by labor law is a closed monopoly; it lifts members' wages by limiting the outsiders who could compete for the jobs, usually the young and less-advantaged.</li>
+<li><strong>Labor institutions change margins beyond posted wages.</strong> Featherbedding extracts quasi-rent, monopsony makes marginal wage cost exceed the wage, and training incidence follows who can capture the return.</li>
 <li><strong>A minimum wage prices out below-floor workers.</strong> Set the floor above a worker's value and he is not paid more, he is not hired at all, and the least-skilled are hit hardest.</li>
 <li><strong>Competition makes discrimination costly.</strong> An employer who refuses productive workers he dislikes forgoes profit a rival will take, and a wage floor removes the low-pay weapon and can make prejudice cheap again.</li>
 <li><strong>Workers bear mandated benefits.</strong> A worker's full pay is money wages plus every nonmoney term, so a mandated benefit shows up over time as lower money wages.</li>
 <li><strong>Licensing protects incumbents, not consumers.</strong> Restricting entry and grandfathering those already in props up insiders' incomes, and a license's price measures the value of being allowed in.</li>
 <li><strong>Much unemployment is productive search.</strong> A spell spent comparing offers produces information; the reservation-wage rule sets its length, so lowering the cost of search lengthens spells, and the measured rate lumps searchers with the priced-out and the gated-out.</li>
+<li><strong>Measured employment can hide assignment and information problems.</strong> Disguised unemployment assigns people to low-value work, while uncertain outside options help explain layoffs and resistance to wage cuts.</li>
 </ul>
 </section>
 </div>
