@@ -2,7 +2,7 @@
 title: "Gains from Exchange"
 topic: "T2 — Gains from Exchange (Pure Reallocation)"
 course: "Principles of Microeconomics (FAU)"
-sessions: ["Fall 2026 — content session 3 (Tue 9/1)"]
+sessions: ["Fall 2026 — content session 5 (Tue 9/8)"]
 ue_anchors: ["UE 4"]
 be_anchors: []
 ep_anchors: ["E&P 3 — Fig 3-1 Gains From Exchange", "E&P 4 — Pareto-Optimal Allocations"]
@@ -72,7 +72,7 @@ Keep the two separate and a common error dissolves. You will sometimes read that
 
 ## A Trade Happens When Two People Value the Same Thing Differently
 
-Let me put a name to the engine behind all of this. Your *personal worth* of a good is the most of other things you would give up to get one more unit of it, or the least you would accept to part with one you already hold. It is not a feeling or a wish. Talk is cheap, and saying you would "do anything" for something proves nothing. Personal worth shows up only in what you are actually willing and able to pay. Two people can want a good for completely different reasons, or even think each other foolish for wanting it, and none of that matters to whether they can trade. What matters is only that their personal worths differ.
+Let me bring back the engine under the demand curve and add its missing half: the seller. Your *personal worth* of a good is the most of other things you would give up to get one more unit of it, or the least you would accept to part with one you already hold. For a buyer, this is the marginal personal worth you used to read the height of a demand curve. For a seller, it is the worth of the unit they would have to surrender. It is not a feeling or a wish. Talk is cheap, and saying you would "do anything" for something proves nothing. Personal worth shows up only in what you are actually willing and able to pay. Two people can want a good for completely different reasons, or even think each other foolish for wanting it, and none of that matters to whether they can trade. What matters is only that their personal worths differ.
 
 <aside class="econ-callout econ-termset">
 <p class="econ-callout__label">Key term</p>
@@ -85,7 +85,7 @@ When they do differ, a mutually agreeable trade exists, and the direction is set
 
 <figure class="econ-figure" style="margin:1.5em 0;">
 <iframe src="/teaching/microeconomics/t02-gains-from-exchange/figures/t02-ep3-1-gains-from-exchange-interactive.html" title="Interactive gains-from-exchange figure: two panels share one draggable price line. Sam buys bottles of water while his personal worth of one more bottle exceeds the price; Joe sells while the price exceeds his. Their offers match only at one price." loading="lazy" style="width:100%; max-width:720px; aspect-ratio:10/7; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t02-gains-from-exchange/figures/t02-ep3-1-gains-from-exchange-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t02-gains-from-exchange/figures/t02-ep3-1-gains-from-exchange.svg">view the static version</a>.</p></iframe>
-<figcaption><strong>Both sides gain, and the price does the sorting.</strong> Sam keeps buying while a bottle is worth more to him than the price; Joe keeps selling while a bottle is worth less to him than the price. Each shaded bar is one bottle's gain. Drag the price line to see why 0.75 granola bars per bottle is the one price at which their offers match. (In the demand topic, this personal-worth line will get a name.)</figcaption>
+<figcaption><strong>Both sides gain, and the price does the sorting.</strong> Sam keeps buying while a bottle is worth more to him than the price; Joe keeps selling while a bottle is worth less to him than the price. Each shaded bar is one bottle's gain. The blue personal-worth line in each panel is the same object you met as a demand curve: it shows the marginal personal worth of holding one more bottle. Sam moves right as he buys bottles, while Joe moves left as he sells them. Drag the price line to see why 0.75 granola bars per bottle is the one price at which their offers match.</figcaption>
 </figure>
 
 <aside class="econ-callout econ-check">
@@ -93,7 +93,7 @@ When they do differ, a mutually agreeable trade exists, and the direction is set
 <p>Suppose you would pay up to $40 for a used jacket and the seller would let it go for as little as $25. If it sells for $32, how much does each side gain, and why must the two worths straddle the price for a trade to happen?</p>
 </aside>
 
-As the trade proceeds, the gap narrows on its own. Recall an earlier point: the more of something you already have, the less you would give up for one more unit of it. So as Sam accumulates water, his worth of the next bottle falls, and as Joe runs low, his worth of each remaining bottle rises. Trading slides both people toward the point where their valuations meet, and there it stops, because no further swap would help either one. The gain to each is simply the gap between what the good was worth to them and what they paid. The demand topic gives that gain a fuller treatment. For now, hold on to the plain version: you gain whenever you value what you get more than what you give up.
+As the trade proceeds, the gap narrows on its own. Recall diminishing marginal personal worth from the demand topic: the more of something you already have, the less you would give up for one more unit of it. So as Sam accumulates water, he moves down his demand curve and his worth of the next bottle falls; as Joe runs low, he moves up his curve and his worth of each remaining bottle rises. Trading slides both people toward the point where their valuations meet, and there it stops, because no further swap would help either one. The buyer's gain is the consumer surplus you already know, the gap between what the good was worth to him and what he paid. The seller's gain is the mirror image, the gap between the price received and what the bottle was worth to him. Put the two together and you get the plain result: both sides gain whenever each values what they get more than what they give up.
 
 The stopping point has a name. When Sam and Joe quit trading, every reallocation that could help one of them without hurting the other has already happened. Economists call such an allocation *Pareto-optimal*, after Vilfredo Pareto, the Italian economist who first put the idea to work. Free exchange pushes toward Pareto-optimal allocations on its own, because any allocation that is not yet Pareto-optimal still contains a trade both sides would say yes to. Be careful with the label, though. Calling an allocation Pareto-optimal is not a moral endorsement. The criterion takes each person as the judge of what is best for himself, and that assumption is not accepted everywhere: we do not let children make every choice for themselves, and some goods with willing buyers and willing sellers are banned outright even for adults. Pareto-optimality tells you that no further mutual gain is left on the table. Whether the result is fair is a different question, and it stays yours to answer.
 
@@ -152,7 +152,7 @@ You might expect a middleman to grab the goods and never return, or to water dow
 
 We leaned the whole time on one source of gains: people differ in how much they *value* things. There is a deeper source we have not touched. People also differ in what it *costs* them to make things, and those cost differences let people specialize and produce more together than they ever could apart. We will work that out when we get to production and costs, and it turns out to be the most surprising result in the course: you can be worse at making everything and still have something worth selling.
 
-We also kept using one idea without unpacking it, that a good is worth less to you the more of it you already have, and that this is what brings trading to a stop. The demand topic puts that idea to work directly by building the law of demand, explaining why demand curves slope downward, and separating a change in price from a change in demand. Bring the same skepticism. The most quoted claims about what people "need" rarely survive it.
+One question remains. Sam and Joe could haggle face to face, and a single newcomer was middleman enough for a camp. Feeding a city takes millions of trades among strangers who never meet, arranged by more middlemen than anyone could count, with no one in charge of the whole. What coordinates them is the same instrument that did the sorting between Sam and Joe: a price. Next we scale the story up and watch market prices carry information, prod people to act, and ration scarce goods across an economy nobody runs.
 
 <div class="econ-review">
 <section class="econ-review__section">

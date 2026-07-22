@@ -2,7 +2,8 @@
 title: "Demand and Marginal Personal Worth"
 topic: "T3 — Demand and Consumer Behavior (Part A)"
 course: "Principles of Microeconomics (FAU)"
-sessions: ["Fall 2026 — content session 4 (Thu 9/3)"]
+sessions: ["Fall 2026 — content session 3 (Tue 9/1)"]
+order: 150   # display/pager sort override: t01 (100) < t03a < t03b (160) < t02 (200) — reorder 2026-07-22
 ue_anchors: ["UE 5"]
 be_anchors: ["BE 2 (unmet-needs/demand-vs-need slice)"]
 ep_anchors: ["E&P Fig 2-3 (ch. 2, p. 21) — paradox of value: total worth as area vs marginal worth as height (diamond–water)"]
@@ -10,13 +11,13 @@ word_target: "3200-3600"
 word_budget: 3600
 status: approved        # E&P integration M6 done-gate 2026-07-20; prior approval 2026-07-01
 audience: students
-note: "Self-contained — assumes no access to the textbooks. Source-of-truth for session 4. Covers laws of demand, shifts versus movements, marginal personal worth, verbal consumer surplus, demand as a rate, relative price, and demand versus fixed-needs language. UE 7's general total/marginal/average and equimarginal machinery is owned by T6."
+note: "Self-contained — assumes no access to the textbooks. Source-of-truth for session 3. Covers laws of demand, shifts versus movements, marginal personal worth, verbal consumer surplus, demand as a rate, relative price, and demand versus fixed-needs language. UE 7's general total/marginal/average and equimarginal machinery is owned by T6."
 # brief: ../t03-demand-consumer-behavior/brief.md
 ---
 
 # Demand and Marginal Personal Worth
 
-The exchange topic built the case that trade creates wealth by moving goods toward whoever values them most. That argument leaned on a single fact about people: they value things differently, and the value they place on one more unit changes as they get more of it. Here we put that fact under a microscope and describe how the amount people are willing to buy responds to price. Out of that description comes the most reliable principle in all of economics and a way of cutting through one of the slipperiest words in public debate: "need."
+The opening topic ended with the idea where our work on demand begins: the more of something you already have, the less you will give up to get one more unit of it. Underneath it is a plain fact: people value things differently, and the value they place on one more unit changes as they get more of it. Here we put that fact under a microscope and describe how the amount people are willing to buy responds to price. Out of that description comes the most reliable principle in all of economics and a way of cutting through one of the slipperiest words in public debate: "need."
 
 Keep one puzzle in mind. Almost everyone agrees that people "need" food, housing, medicine, and clean water. Politicians announce national priorities and unmet needs; reports declare that a city needs more parking or more golf courses. Yet the moment you ask "how much, and at what price?" the language of need falls apart. By the end of this post you should see why there is no such thing as a fixed need, only a quantity people will buy at a given price, and why that is not a cold dismissal of human wants but the only honest way to think about them.
 
@@ -111,7 +112,7 @@ The related-goods case deserves a name of its own. Some goods are *substitutes*:
 
 ## The Height of the Demand Curve Is What One More Unit Is Worth to You
 
-Why does the demand curve slope downward in the first place? The answer takes a phrase from the exchange topic and gives it a sharper edge.
+Why does the demand curve slope downward in the first place? The answer needs a name for what one more unit is worth to you.
 
 Your *marginal personal worth* of a good is the most you would pay for one more unit of it. On the demand schedule, it is exactly the height of the curve at that quantity.
 

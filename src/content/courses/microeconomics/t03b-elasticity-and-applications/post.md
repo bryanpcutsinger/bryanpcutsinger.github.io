@@ -2,7 +2,8 @@
 title: "Elasticity and the Applications of Demand"
 topic: "T3 — Demand and Consumer Behavior (Part B)"
 course: "Principles of Microeconomics (FAU)"
-sessions: ["Fall 2026 — content session 5 (Tue 9/8)"]
+sessions: ["Fall 2026 — content session 4 (Thu 9/3)"]
+order: 160   # slug-derived 302 would sort AFTER t02 (200); keeps t03b before t02 — reorder 2026-07-22
 ue_anchors: ["UE 8", "UE 9"]
 be_anchors: []
 ep_anchors: ["E&P Fig 2-4 (ch. 2, p. 23) — marginal revenue as gain minus loss on inframarginal units", "E&P Fig 2-11 (ch. 2, p. 35) — endowment vs substitution effect (relocated from t03a)"]
@@ -10,7 +11,7 @@ word_target: "2800-3600"
 word_budget: 3600
 status: approved        # scope-reduction R4 2026-07-21 (word_budget applied); E&P integration M6 done-gate 2026-07-20; prior approval 2026-07-01
 audience: students
-note: "Self-contained — assumes no access to the textbooks. Source-of-truth for the session-5 deck; section headers are claims that map to slide titles. Verbal-marginal throughout: no indifference curves, no measured surplus triangles, no elasticity algebra in the body. Follows the session-4 demand post; a short foundational intro re-establishes the downward-sloping demand curve and marginal worth so this post stands on its own."
+note: "Self-contained — assumes no access to the textbooks. Source-of-truth for the session-4 deck; section headers are claims that map to slide titles. Verbal-marginal throughout: no indifference curves, no measured surplus triangles, no elasticity algebra in the body. Follows the session-3 demand post and precedes gains from exchange in session 5; a short foundational intro re-establishes the downward-sloping demand curve and marginal worth so this post stands on its own."
 # brief: ../t03-demand-consumer-behavior/brief.md
 ---
 
@@ -205,6 +206,8 @@ Look at the relative prices. In California, a pound of choice costs two pounds o
 </aside>
 
 The mechanism is general: adding a constant amount to a high price and a low price shrinks the ratio between them. High and low meat at $10 and $5 stand in a 2-to-1 ratio; add $10 to each, making $20 and $15, and the ratio falls to 1.33-to-1, so the high grade becomes relatively cheaper. The same arithmetic explains why a couple with infants is more likely to splurge on expensive theater than a childless couple: both face a fixed babysitter cost on top of the ticket, and that common charge shrinks the price ratio between the dear theater and the cheap movie. Whenever a fixed charge rides on top of two options of different quality, it tilts choices toward the higher-quality one.
+
+With the demand tools now in hand, we turn next to exchange: why buyers and sellers can both gain from trading the same good.
 
 <div class="econ-review">
 <section class="econ-review__section">
