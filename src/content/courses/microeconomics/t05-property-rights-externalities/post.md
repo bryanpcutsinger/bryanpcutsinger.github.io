@@ -6,7 +6,8 @@ sessions: ["Fall 2026 — content session 8 (Thu 9/17)"]
 ue_anchors: ["UE 13", "UE 3 (externalities section)", "UE 17 (negative-externality section)"]
 be_anchors: []
 ep_anchors: ["E&P Fig 5-1 (ch. 5) — optimal tradeoff between steel and clean water (nonzero optimal pollution)"]
-word_target: "3000-6000"
+word_target: "3300-3700"
+word_budget: 3700
 status: approved        # M10 done gate 2026-07-20 (tie-in PASS); prior Stage-2 2026-06-15
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Part A of T5: property rights, externalities, environmental trade-offs, Coasean bargaining, and tradable permits. Part B covers public goods, clubs, commons, and institutional choice."
@@ -21,12 +22,9 @@ I want to convince you the label points at the wrong culprit. None of those prob
 <aside class="econ-callout econ-objectives">
 <p class="econ-callout__label">Learning objectives</p>
 <ul>
-<li>Explain what makes a property right salable.</li>
-<li>Explain why a suppressed price only changes the rationing.</li>
-<li>Define an externality and apply the compensation test.</li>
-<li>Explain why economy versus environment is a trade-off.</li>
-<li>Apply the Coase result to a two-party dispute.</li>
-<li>Explain how trading pollution rights applies the gains from exchange.</li>
+<li>Explain what makes a property right salable, and why suppressing its price only changes how the scarce thing gets rationed.</li>
+<li>Define an externality and apply the compensation test, and explain why economy versus environment is a trade-off.</li>
+<li>Apply the Coase result to a two-party dispute, and explain how trading pollution rights applies the gains from exchange.</li>
 </ul>
 </aside>
 
@@ -48,16 +46,10 @@ You see the same thing when a college blocks two students from swapping a parkin
 
 Campsites in state and national parks are priced so low that, at busy times, far more people want space than the parks can hold. Why does the fee sit below the level that would match the crowd to the campsites? The sites are not privately owned, so no one can pocket a market-clearing price, the price stays low, and the gap shows up as a line of cars at dawn. Two golf courses sit side by side, one private and one public, both open to all. The private course charges more and needs less reservation, since its owner keeps the proceeds and prices to clear; he also watches land values, and when the land is worth more as houses than fairways, he is the one who can cash out, so the private course converts first. The public course, run by officials who cannot personally pocket the gain, lags on both counts. The same logic explains why a beachfront state campground has cars queued for hours each morning while the luxurious motel next door rarely fills its rooms. That is not Californians revealing a love of dusty tents over pools and room service. It is a public facility priced below clearing beside a private one that uses the law of demand to match its guests to its rooms.
 
-Churches, being nonprofit, often hand out their best seats first-come-first-served rather than selling them, though a large donor is sometimes granted a favored pew. Your not-for-profit college almost certainly rations its library, athletic facilities, course seats, and admissions below what they would fetch, and the power to choose who gets in is itself a prize: administrators cannot bank a profit, but they can bank prestige, donations, and the goodwill of the right families. Athletic conferences and the Masters chronically have far more ticket-seekers than tickets, since the people running them gain community stature, not bigger paychecks, by pricing below clearing. Immigration quotas go out at a price of zero rather than sold to the highest acceptable bidder, because the salaried officials who allocate them collect no money from the sale and so pursue other goals. In every case the same thing holds: a valuable right priced below clearing produces chronic excess demand, and the value nobody may charge for gets paid out in queues, favors, and discretion.
-
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
 <p>A free public campground overflows while the private motel next door has vacancies. Why does the public site fill up first?</p>
 </aside>
-
-This also dissolves a famous complaint. A well-known book once argued that we live amid private abundance and public squalor: shiny private cars rolling over shabby public streets, a "shortage" of public services proving we provide too few of them. Look at the hint buried in the word shortage. Government services are handed out at prices far below clearing, often free, so of course demand outruns supply and the parks feel starved. That appearance of shortage is what underpricing always produces. It is not evidence that too little is provided, any more than a dawn line of campers proves we need more campgrounds. It proves the price is set too low, exactly as in the commons.
-
-It is worth pausing to see how far this engine reaches, because people sometimes assume economic reasoning is a feature of capitalism, a thing that only describes a society organized around private property and market prices. That is backwards. Economics is the study of how any society resolves the conflicts that scarcity forces, whatever its institutions, and the analysis we just ran is the proof. Setting a price below the clearing level and watching the scarce thing get rationed by queues, favors, and official discretion is precisely what happens under socialism, where free-market prices are suppressed on purpose. The Soviet system still used money and let households choose among consumer goods, but it fixed many prices below clearing, and the predictable result was lines and nonmonetary rationing of the same kind we have been tracing. The laws of demand and of scarcity do not switch off when the legal system changes. They hold in every society we know of; only the institutions through which they operate differ.
 
 ## An Externality Is an Effect on Others for Which No Agreeable Compensation Is Made
 
@@ -111,7 +103,7 @@ Watch what that market does, since you have seen it before. Picture two firms, a
 
 It is the gains-from-exchange logic from earlier in the course, where two people each end up better off by swapping until their valuations meet, with one change of label: there it was personal worths of a good, here the marginal market values of output. Trading rights to pollute is exchange applied to the right to emit. And the Coasean punchline holds here too: as long as the rights are salable, the final allocation comes out the same no matter which firm got the allowances at the start. A frequent objection is that richer firms will simply buy up the rights, which is unfair. But wealth has nothing to do with how much a pollution right is worth to a firm at the margin; a deep pocket does not make a foolish purchase wise, and both the buyer and the seller of a right come out ahead, or they would not trade.
 
-A tax can do related work. A levy on gasoline makes drivers bear part of the pollution their driving creates, nudging consumption down toward the point where the worth of the last gallon burned matches its full cost, cleaner air included. The honest difficulty is that no one knows the right level for such a tax: nobody can say whether the next reduction in pollution is worth what it would cost in pricier travel, so we cannot be sure any particular tax is too high or too low. Keep in view what even an imperfect tax is doing: putting a price on the use of a resource, the air, that would otherwise be used as if it were free. That is the same move as the permit market, reached by a blunter instrument.
+A tax can do related work. A levy on gasoline makes drivers bear part of the pollution their driving creates, nudging consumption down toward the point where the worth of the last gallon burned matches its full cost, cleaner air included. Keep in view what even an imperfect tax is doing: putting a price on the use of a resource, the air, that would otherwise be used as if it were free. That is the same move as the permit market, reached by a blunter instrument.
 
 We are reasoning verbally here, the way we have all term, not drawing supply-and-demand machinery for the tax or measuring its welfare loss as a shaded triangle. The intuition is what you owe: a price on an external harm, permit or tax, makes the actor bear the cost he was escaping and lets the right end up where it is worth most.
 
@@ -126,12 +118,9 @@ This first half has stayed with harms and benefits that can be tied to identifia
 <section class="econ-review__section">
 <h3>Key takeaways</h3>
 <ul>
-<li><strong>Property rights must be salable.</strong> Control and specification make them so.</li>
-<li><strong>Suppressing a price does not erase value.</strong> It resurfaces as queues and favors.</li>
-<li><strong>An externality is an uncompensated spillover.</strong> The test is agreeable compensation.</li>
-<li><strong>Economy versus environment is a trade-off.</strong> Cleaner air uses resources that could produce other goods.</li>
-<li><strong>Clear rights enable bargaining.</strong> Assignment changes who gains; low-cost exchange directs the right toward the higher-valued use.</li>
-<li><strong>Tradable pollution rights apply gains from exchange.</strong> The right flows toward the firm that values it most at a fixed aggregate cap.</li>
+<li><strong>Property rights must be salable, and suppressing a price does not erase value.</strong> Control and specification make a right salable; suppress the price and the value resurfaces as queues and favors.</li>
+<li><strong>An externality is an uncompensated spillover, and economy versus environment is a trade-off.</strong> The test is agreeable compensation; cleaner air uses resources that could produce other goods.</li>
+<li><strong>Clear rights and tradable permits both apply gains from exchange.</strong> Assignment changes who gains, not which use wins; the right flows toward the firm that values it most at a fixed cap.</li>
 </ul>
 </section>
 </div>

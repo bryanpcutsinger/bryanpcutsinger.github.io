@@ -24,10 +24,10 @@
        from y=395 up to y=50 so the arrowhead clears the 20% gridline).
     The bottom (year) axis frame line sits at y=395, below the -15% gridline,
     with decade tick marks/labels 1930..2020.
-    DATA holds one illustrative value per year, 1920-2015 (built from the
-    source PNG's qualitative shape + the spec's INTERACTION examples, which
-    pin 1946=-8, 1982=+9, 2011=0 exactly). The draggable marker snaps to the
-    nearest year in DATA; arrow keys step one year at a time. Two shaded
+    DATA holds drawing coordinates sampled from the source's qualitative
+    shape. They position the curve and marker; they are not annual observations
+    and are never exposed as point estimates. The draggable marker snaps to the
+    nearest year; arrow keys step one year at a time. Two shaded
     accent bands mark the below-zero episodes the source flags: 1938-1951
     (wartime/postwar inflation) and 1978-1982 (the 1980 oil-supply shock).
 -->
@@ -111,8 +111,8 @@
      script only ATTACHES drag / keyboard / live updates. -->
 <div class="fig">
   <svg id="fig" viewBox="0 0 440 540" role="group"
-       aria-label="Realized real interest rates in the United States, 1920 to 2015, illustrative redraw after Alchian and Allen's Figure 33.1. Year runs along the horizontal axis and the realized real rate along the vertical axis; shaded bands mark years when the rate fell below zero, in the 1940s and around 1980. Drag or use the arrow keys to move the marker along the years and read the rate at each one.">
-    <title>Realized real interest rates, 1920–2015 (interactive)</title>
+       aria-label="Qualitative redraw of realized real interest rates in the United States, 1920 to 2015, after Alchian and Allen's Figure 33.1. Year runs along the horizontal axis and the realized real rate along the vertical axis; shaded bands mark periods when the rate fell below zero, in the 1940s and around 1980. Drag or use the arrow keys to compare broad positive, negative, and near-zero episodes. The curve is not a table of annual observations.">
+    <title>Realized real interest rates, 1920–2015 (qualitative interactive redraw)</title>
     <defs>
       <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
               orient="auto" markerUnits="userSpaceOnUse">
@@ -188,19 +188,19 @@
 
     <!-- muted note: the shaded-band legend (base-SVG content, no JS needed) -->
     <text class="note" text-anchor="middle">
-      <tspan x="220" y="440">Shaded years mark realized real rates below zero &#8212;</tspan>
+      <tspan x="220" y="440">Qualitative redraw, not annual data. Shading marks rates below zero:</tspan>
       <tspan x="220" y="453">1940s wartime inflation and the 1980 oil-supply shock.</tspan>
     </text>
 
-    <!-- droplines from the marker to both axes (initial: year 1946, &#8722;8%) -->
+    <!-- droplines from the marker to both axes (initial: a below-zero 1946 point) -->
     <line id="dropV" class="drop" x1="149.8" y1="395" x2="149.8" y2="322" />
     <line id="dropH" class="drop" x1="64"   y1="322" x2="149.8" y2="322" />
 
     <!-- live axis readouts riding the dropline feet -->
     <g id="qyTag">
-      <rect id="qyBg" class="tagbg" x="16" y="314.5" width="44" height="15" rx="2" />
+      <rect id="qyBg" class="tagbg" x="8" y="314.5" width="52" height="15" rx="2" />
       <text id="qy" class="tagtxt" x="38" y="322" text-anchor="middle"
-            dominant-baseline="middle">&#8722;8%</text>
+            dominant-baseline="middle">below 0</text>
     </g>
     <g id="qxTag">
       <rect id="qxBg" class="tagbg" x="129.8" y="369.5" width="40" height="15" rx="2" />
@@ -219,15 +219,15 @@
     <circle id="ptFocus" class="pt-focus hit" cx="149.8" cy="322" r="22"
             tabindex="0" role="slider" aria-label="Marker on the realized-real-rate series (year)"
             aria-valuemin="1920" aria-valuemax="2015" aria-valuenow="1946"
-            aria-valuetext="1946: realized real rate approximately negative 8 percent. Unexpected wartime inflation repaid lenders in cheaper dollars -- a negative real return they never priced in." />
+            aria-valuetext="1946: realized real return is below zero in this qualitative redraw. Unexpected wartime inflation repaid lenders in cheaper dollars -- a negative real return they never priced in." />
 
     <!-- readout band: hairline separator, muted STATE line, accent TAKEAWAY line -->
     <line class="sep" x1="44" y1="466" x2="396" y2="466" />
-    <text id="rHint" class="r-hint" x="220" y="488" text-anchor="middle">1946: realized real rate &#8776; &#8722;8%.</text>
+    <text id="rHint" class="r-hint" x="220" y="488" text-anchor="middle">1946: realized real return is below zero.</text>
     <text id="rTrade" class="r-trade" text-anchor="middle"><tspan x="220" y="508">Unexpected wartime inflation repaid lenders in cheaper</tspan><tspan x="220" y="526">dollars &#8212; a negative real return they never priced in.</tspan></text>
   </svg>
   <noscript>
-    <p class="fallback">JavaScript is off, so this frame is a still image: the full 1920&#8211;2015 realized-real-rate series is already drawn above, with the below-zero episodes (1940s wartime inflation, the 1980 oil-supply shock) shaded. No further detail is hidden.</p>
+    <p class="fallback">JavaScript is off, so this frame is a still image: the qualitative 1920&#8211;2015 curve is already drawn above, with the below-zero episodes (1940s wartime inflation, the 1980 oil-supply shock) shaded. The redraw is not a table of annual observations.</p>
   </noscript>
 </div>
 
@@ -250,8 +250,8 @@
   var rTrade   = document.getElementById('rTrade');
   var NS = 'http://www.w3.org/2000/svg';
 
-  // Illustrative annual realized real-rate series, 1920-2015 (a redraw of the
-  // source's shape -- not verified historical data; see the header note).
+  // Drawing coordinates for a qualitative redraw of the source's shape.
+  // These values are not verified annual observations and are not displayed.
   var DATA = {1920:15,1921:9,1922:4,1923:3,1924:5,1925:6.5,1926:5,1927:4,1928:5,1929:6,1930:9,1931:15,1932:9,1933:2,1934:1,1935:3,1936:5.5,1937:6,1938:2,1939:-5,1940:-8,1941:-4,1942:0,1943:-4,1944:-9,1945:-11.5,1946:-8,1947:-4,1948:-1,1949:2,1950:-9,1951:-3,1952:1,1953:3,1954:2.5,1955:3,1956:2,1957:3.5,1958:2,1959:3,1960:2.5,1961:1.5,1962:3,1963:2,1964:1,1965:3,1966:2,1967:1.5,1968:2.5,1969:1,1970:2,1971:3,1972:4,1973:3.5,1974:2,1975:1,1976:2.5,1977:3,1978:2,1979:0,1980:-1.5,1981:3,1982:9,1983:7,1984:6,1985:5.5,1986:5,1987:4.5,1988:5,1989:4.5,1990:5,1991:4,1992:3.5,1993:4,1994:4.5,1995:4,1996:3.5,1997:4,1998:4.5,1999:4,2000:3.5,2001:3,2002:2.5,2003:2,2004:1.5,2005:2,2006:2.5,2007:2,2008:1,2009:0.5,2010:2,2011:0,2012:-0.5,2013:0,2014:0.5,2015:0};
 
   var YLO = 1920, YHI = 2015;
@@ -273,12 +273,9 @@
     return spt.matrixTransform(svg.getScreenCTM().inverse());
   }
 
-  function fmtPct(v) {
-    if (v === 0) return '0%';
-    var sign = v < 0 ? '−' : '+';
-    var av = Math.abs(v);
-    var numStr = (Math.round(av * 10) / 10 === Math.round(av)) ? String(Math.round(av)) : av.toFixed(1);
-    return sign + numStr + '%';
+  function categoryFor(v) {
+    if (Math.abs(v) < 1) return 'near zero';
+    return v < 0 ? 'below zero' : 'above zero';
   }
 
   // Greedily word-wrap `str` into <tspan> lines inside the accent readout so it
@@ -345,12 +342,12 @@
     dropH.setAttribute('x1', X0); dropH.setAttribute('x2', cx);
 
     // live tags ride the dropline feet
-    qy.setAttribute('y', cy); qy.textContent = fmtPct(v);
+    qy.setAttribute('y', cy); qy.textContent = categoryFor(v).replace('zero', '0');
     qyBg.setAttribute('y', cy - 7.5);
     qx.setAttribute('x', cx); qx.textContent = String(year);
     qxBg.setAttribute('x', cx - 20);
 
-    var hint = year + ': realized real rate ≈ ' + fmtPct(v) + '.';
+    var hint = year + ': realized real return is ' + categoryFor(v) + ' in this qualitative redraw.';
     var trade = takeawayFor(year, v);
     rHint.textContent = hint;
     layoutTrade(trade);

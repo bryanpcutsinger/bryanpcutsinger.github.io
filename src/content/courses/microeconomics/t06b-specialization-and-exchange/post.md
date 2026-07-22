@@ -6,10 +6,11 @@ sessions: ["Fall 2026 — content session 13 (Tue 10/6)"]
 ue_anchors: ["UE 15 (Specialization and Exchange)"]
 be_anchors: ["BE 6 (specialization / economies of scale / middleman block)"]
 ep_anchors: ["E&P Fig 7-9 (ch. 7, p. 148) — gains from specialized production and exchange at a common market price"]
-word_target: "2500-6000"
-status: approved        # E&P integration M7 done-gate 2026-07-20; prior approval 2026-06-15
+word_target: "2900-3600"
+word_budget: 3600
+status: approved        # scope-reduction R4 pass 2026-07-21; E&P integration M7 done-gate 2026-07-20; prior approval 2026-06-15
 audience: students
-note: "Self-contained — assumes no access to the textbooks. Part B of T6: comparative advantage, the cheaper newcomer, blocking entry, the two meanings of specialization, market size, diseconomies of scale, and middlemen (UE 15 + BE 6). Part A covers UE 7's marginal toolkit plus UE 14 production/cost and BE 10. UE 17 is owned by T7."
+note: "Self-contained — assumes no access to the textbooks. Part B of T6 core: comparative advantage, the cheaper newcomer, blocking entry via occupational licensing, and the two meanings of specialization plus market size (UE 15 + BE 6). Diseconomies of scale and the firms-specialize/middleman material are lecture-only content in this topic's extensions.md. Part A covers UE 7's marginal toolkit plus UE 14 production/cost and BE 10. UE 17 is owned by T7."
 # brief: ../t06-production-costs-specialization/brief.md
 ---
 
@@ -17,21 +18,19 @@ note: "Self-contained — assumes no access to the textbooks. Part B of T6: comp
 
 Part A built the machinery: cost is opportunity cost, the best thing you give up, and marginal cost rises as you produce faster, so a producer makes a good only up to where its worth meets its cost. It also turned up a loose thread. No one is the low-cost producer of everything, because cost in one good is the flip side of cost in the other, which means everyone is the cheaper producer of something. That resolves the puzzle from the exchange topic: you can be worse at producing everything than the person next to you and still have something worth selling to them.
 
-Part B pulls that thread. We take the gap in costs and watch it do its work, letting people and firms specialize, undercut one another, and grow rich together even when one of them is worse at making everything. By the end you will see why specialization makes a society rich, why blocking a cheaper producer hurts almost everyone, and why "cut out the middleman" and "make it at home" are usually bad advice.
+Part B pulls that thread. We take the gap in costs and watch it do its work, letting people specialize, undercut one another, and grow rich together even when one of them is worse at making everything. By the end you will see why specialization makes a society rich, and why blocking a cheaper producer hurts almost everyone even as it helps the few who lobby for it.
 
 <aside class="econ-callout econ-objectives">
 <p class="econ-callout__label">Learning objectives</p>
 <p>By the end of this post you should be able to:</p>
 <ul>
 <li>Explain why two people can both grow richer by specializing and trading even when one is worse at producing everything, and use the gap in their marginal costs to say who should make each additional unit.</li>
-<li>Trace who gains and who loses when a cheaper producer enters, and explain why the displaced incumbent's loss is partly a transfer while the net effect is new wealth.</li>
-<li>Explain why blocking a cheaper producer, as occupational licensing does, protects a few incumbents at the expense of buyers and the broader economy.</li>
-<li>Distinguish the two meanings of specialization, sorting work to the lower-cost producer and growing more productive by learning through doing, and explain why self-sufficiency makes a person or a nation poorer.</li>
-<li>Explain why a bigger market allows finer specialization and cheaper production, so shrinking the market raises costs on both counts.</li>
-<li>Explain why cost per unit eventually rises with size once monitoring and coordination break down, and why the cheapest size differs from one business to the next.</li>
-<li>Explain why firms specialize across the stages of production, so that eliminating the middleman does not remove his work but dumps it back on you.</li>
+<li>Trace who gains and who loses when a cheaper producer enters, and explain why blocking a cheaper producer, as occupational licensing does, protects a few incumbents at the expense of buyers and the broader economy.</li>
+<li>Distinguish the two meanings of specialization, sorting work to the lower-cost producer and growing more productive by learning through doing, and explain why a bigger market allows finer specialization and cheaper production.</li>
 </ul>
 </aside>
+
+**Figure focus.** Required: comparative costs and the Ana/Ben PPF. Others are references unless assigned.
 
 ## Specialization by Comparative Advantage Makes Two People Richer Together
 
@@ -51,7 +50,7 @@ He does. Put their cost tables side by side. Recall Adam's first: each row is a 
 | 7 | 8.40 | 1.50 | 1.20 | 0.55 |
 | 8 | 10.00 | 1.60 | 1.25 | 0.45 |
 
-*Table A (after UE Table 14.2 / 15.2). Adam's cost of cakes, the same schedule built in Part A, now lined up against Baker's below. His marginal cost of a cake rises as he bakes faster, and the worth of each additional cake to him falls.*
+*Table A. Adam's cost of cakes, the same schedule built in Part A, now lined up against Baker's below. His marginal cost of a cake rises as he bakes faster, and the worth of each additional cake to him falls.*
 
 Now Baker's.
 
@@ -67,14 +66,14 @@ Now Baker's.
 | 7 | 7.00 | 1.60 | 1.00 | 0.30 |
 | 8 | 8.80 | 1.80 | 1.10 | 0.20 |
 
-*Table 5 (after UE Table 15.1). Baker is absolutely worse than Adam, yet over the first five cakes his marginal cost of a cake is lower than Adam's. He is the cheaper maker of the early cakes; Adam, whose marginal cost rises more slowly at higher rates, becomes the cheaper maker only past six cakes a day.*
+*Table 5. Baker is absolutely worse than Adam, yet over the first five cakes his marginal cost of a cake is lower than Adam's. He is the cheaper maker of the early cakes; Adam, whose marginal cost rises more slowly at higher rates, becomes the cheaper maker only past six cakes a day.*
 
 <figure class="econ-figure" style="margin:1.5em 0;">
 <iframe src="/teaching/microeconomics/t06b-specialization-and-exchange/figures/t06b-baker-costs-interactive.html" title="Drag the handle along the x-axis (or use the arrow keys) to see Baker's marginal cost and marginal worth at each whole cake, and find where he stops baking for himself." loading="lazy" style="width:100%; max-width:520px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t06b-specialization-and-exchange/figures/t06b-baker-costs-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t06b-specialization-and-exchange/figures/t06b-baker-costs.svg">view the static figure</a>.</p></iframe>
 <figcaption><strong>Baker stops baking for himself at 2 cakes a day.</strong> Baker's marginal cost of baking rises with each cake, while his marginal worth for another cake (his own demand) falls. The two cross near 2.7 cakes, but Baker can only bake whole cakes, so a self-sufficient Baker stops at 2 -- the last cake whose worth to him still meets or beats its cost; the 3rd cake would cost him 0.80Y but is worth only 0.70Y. Drag the handle (or use the arrow keys) to check the cost and worth at each whole cake from 1 to 8. If the frame does not load, <a href="/teaching/microeconomics/t06b-specialization-and-exchange/figures/t06b-baker-costs-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t06b-specialization-and-exchange/figures/t06b-baker-costs.svg">view the static figure</a>.</figcaption>
 </figure>
 
-Compare the marginal-cost columns. For the first cake, Baker gives up 0.40Y while Adam gives up 0.90Y. Baker is the cheaper cake-maker over the early units, even though he is worse at everything. His marginal cost climbs faster than Adam's, and the two cross at six cakes a day; beyond that, Adam is cheaper. But in the range where the early cakes get made, Baker is the low-cost producer. There it is again: worse at everything, yet the cheaper maker of something.
+Compare the marginal-cost columns. For the first cake, Baker gives up 0.40Y while Adam gives up 0.90Y. Baker is the cheaper cake-maker over the early units, even though he is worse at everything. His marginal cost climbs faster than Adam's, and the two cross at six cakes a day; beyond that, Adam is cheaper. But in the range where the early cakes get made, Baker is the low-cost producer. There it is again: worse at everything, yet the cheaper maker of something. Do not read that as Baker out-producing Adam: being the cheaper maker of a cake and being able to make more cakes are separate questions. Cost per unit tells you what a producer gives up for the next unit, not how many units he can turn out, and Baker's own daily totals stay lower than Adam's throughout.
 
 <figure class="econ-figure" style="margin:1.5em 0;">
 <iframe src="/teaching/microeconomics/t06b-specialization-and-exchange/figures/t06b-comparative-cost-interactive.html" title="Drag the quantity of cakes per day to compare Baker's and Adam's marginal costs — below six cakes Baker is cheaper, above six Adam is, and they are exactly equal at six." loading="lazy" style="width:100%; max-width:560px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t06b-specialization-and-exchange/figures/t06b-comparative-cost-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t06b-specialization-and-exchange/figures/t06b-comparative-cost.svg">view the static figure</a>.</p></iframe>
@@ -111,7 +110,7 @@ A frontier diagram makes the same point in a different register.
 
 <figure class="econ-figure" style="margin:1.5em 0;">
 <iframe src="/teaching/microeconomics/t06b-specialization-and-exchange/figures/t06b-ep7-9-specialization-gains-interactive.html" title="Interactive specialization figure: toggle between two producers each self-sufficient and both trading at one common market price. The price pulls each producer's marginal cost into line with it, the low-cost producer sells to the other, and both capture a gain from specialization." loading="lazy" style="width:100%; max-width:720px; aspect-ratio:30/19; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t06b-specialization-and-exchange/figures/t06b-ep7-9-specialization-gains-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t06b-specialization-and-exchange/figures/t06b-ep7-9-specialization-gains.svg">view the static figure</a>.</p></iframe>
-<figcaption><strong>A single market price does the coordinating.</strong> The earlier gains figure showed the two parties splitting the gain from one trade; this one shows how a market price organizes the whole arrangement. Each producer bakes up to where his rising marginal cost meets the price and buys up to where his falling worth meets it, so the low-cost producer produces a surplus and sells it while the other buys the difference. Both capture a gain from specialization, and because every producer's marginal cost is pulled into line with the same price, all producers' marginal costs end up equal: the efficient result that the 1970s refinery allocation rules in the previous post could not reach. Toggle between each producer on his own and both trading at the common price to watch the gains appear. If the frame does not load, <a href="/teaching/microeconomics/t06b-specialization-and-exchange/figures/t06b-ep7-9-specialization-gains-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t06b-specialization-and-exchange/figures/t06b-ep7-9-specialization-gains.svg">view the static figure</a>.</figcaption>
+<figcaption><strong>A single market price does the coordinating.</strong> The earlier gains figure showed the two parties splitting the gain from one trade; this one shows how a market price organizes the whole arrangement. Each producer bakes up to where his rising marginal cost meets the price and buys up to where his falling worth meets it, so the low-cost producer produces a surplus and sells it while the other buys the difference. Both capture a gain from specialization, and because every producer's marginal cost is pulled into line with the same price, all producers' marginal costs end up equal: the efficient result predicted by the equimarginal rule in the previous post. Toggle between each producer on his own and both trading at the common price to watch the gains appear. If the frame does not load, <a href="/teaching/microeconomics/t06b-specialization-and-exchange/figures/t06b-ep7-9-specialization-gains-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t06b-specialization-and-exchange/figures/t06b-ep7-9-specialization-gains.svg">view the static figure</a>.</figcaption>
 </figure>
 
 ## A Cheaper Newcomer Spreads Gains Across the Whole Economy
@@ -127,7 +126,7 @@ So far it is two people. Real economies have millions, and the same logic scales
 | 4 | 2.00 | 0.80 | 0.50 | 0.20 |
 | 5 | 3.00 | 1.00 | 0.60 | 0.10 |
 
-*Table 6 (after UE Table 15.3). Carter can make the early cakes more cheaply than Baker, so when he is allowed in, he undercuts Baker on the cake sold to Adam.*
+*Table 6. Carter can make the early cakes more cheaply than Baker, so when he is allowed in, he undercuts Baker on the cake sold to Adam.*
 
 <figure class="econ-figure" style="margin:1.5em 0;">
 <iframe src="/teaching/microeconomics/t06b-specialization-and-exchange/figures/t06b-carter-costs-interactive.html" title="Drag the output handle to see Carter's marginal cost and marginal worth of cakes" loading="lazy" style="width:100%; max-width:480px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t06b-specialization-and-exchange/figures/t06b-carter-costs-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t06b-specialization-and-exchange/figures/t06b-carter-costs.svg">view the static figure</a>.</p></iframe>
@@ -138,7 +137,7 @@ Trace who wins and who loses, because this is where economics earns its reputati
 
 The people who get hurt are always the existing producers, the competitors of the newcomer, and their loss is real. If Baker's freed-up resources are people, they have to find new work, perhaps at lower pay for a while. That is why the next idea is the seed of nearly everything we will say about policy.
 
-And before we get there, notice what happens to the newcomer's profit. The gains do not stay with Carter. He may pocket a profit at first, but as others copy his cheaper method, competition among them drives the price down toward cost, and the savings pass to consumers as lower prices. How long Carter keeps his profit depends on how fast others can imitate him. The same drama plays out constantly: rival chip-makers pour their profits into cheaper, better processors, and competing grocery chains shave their margins against each other so that shoppers, not the stores, capture most of the gain. Profit is the prize for finding a cheaper way; competition is what hands that prize, eventually, to everyone else. This also disposes of a famous error, the idea that producing for profit is somehow different from producing what people value. It is not. The way you earn a profit is by finding a cheaper way to give people what they want; the profit is the signal that you did, and a loss is the signal that someone else can do it cheaper.
+And before we get there, notice what happens to the newcomer's profit. It will not stay with Carter for long: as others copy his cheaper method, competition among them pulls the price back down toward cost, and the savings pass on to buyers. Exactly how competition does that, and what it says about producing for profit, is a story this course takes up in full when we turn to the competitive firm.
 
 ## Blocking a Cheaper Producer Protects the Few at the Expense of the Many
 
@@ -179,43 +178,13 @@ Market size drives cost down through scale as well, because a large volume unloc
 <p>Suppose a law forbids selling cars across state lines. Give the two separate reasons the price of cars would rise, and connect each reason to a source of low cost that the larger market had provided.</p>
 </aside>
 
-## Past Some Size, Coordination Breaks Down: Diseconomies of Scale
-
-Bigger is cheaper, but only up to a point. Push an enterprise past the size where people can be watched and coordinated, and cost per unit starts rising again. These are *diseconomies of scale*, and they are the reason the world is not one giant firm.
-
-<aside class="econ-callout econ-termset">
-<p class="econ-callout__label">Key term</p>
-<dl class="econ-term-list">
-<div><dt>Diseconomies of Scale</dt><dd>The rise in cost per unit that sets in once an enterprise grows too large to monitor and coordinate.</dd></div>
-</dl>
-</aside>
-
-The clearest illustration comes from Soviet collective farms, many times the size of a typical American farm. Tractor drivers, paid whether or not they did good work and impossible to monitor across such vast fields, plowed deep, careful furrows near the road where inspectors could see them and shallow, useless furrows out in the middle where no one would ever check. An owner-farmer plowing his own land has no such problem, because the person who bears the cost of a bad job is the same one doing it. The contrast also answers a famous question. When Soviet officials touring American farms asked who tells the farmers how much of each crop to grow, the answer baffled them: no one directs the farmers. Each one owns his land and watches the market prices of the crops he could plant, and those prices tell him what is worth growing. The coordination is real, but no planner produces it; we will see exactly how prices pull this off when we study how markets work. Monitoring is itself a cost, and past some size it overwhelms the savings from being big. It is why restaurants are small and steel mills are large: a restaurant needs an owner on-site watching the details, while a steel mill's processes can be standardized and supervised at scale. Cost per unit falls with size, then rises; somewhere in between sits the size that is actually cheapest, and it differs from one business to the next.
-
-Capacity utilization works the same way, which is why prices sometimes look upside down. Filling an off-season cruise cabin or an empty airline seat costs the operator almost nothing extra, so it pays to discount deeply to flexible travelers, which is how retirees get cut-rate fares. By the same logic, a luxury hotel with vacancies can end up charging less for a night than a budget hotel that has filled up first. What drives the day's price is how full you are, not the stars on the sign.
-
-## Firms Specialize Too, Which Is Why "Eliminate the Middleman" Fails
-
-Everything we have said about people specializing applies to firms. A company does only the few stages of production it does most cheaply and buys the rest from others who are cheaper at their stages. General Motors builds millions of cars without making a single tire, because Goodyear and Michelin make tires more cheaply than GM could. This is specialization across firms, and it is everywhere.
-
-It also reframes the perennial cry to "eliminate the middleman." The wholesaler, the trucker, the distributor, and the retailer are all specialists in a stage of getting goods from maker to user, and they survive because they do that stage more cheaply than you could, not because they are parasites. In some markets the chain is long: a trader in West Africa gathers groundnuts from many small farmers into a single truckload, and petty sellers break bulk back down, selling ten matches or half a cigarette to customers who cannot afford a whole pack. Each link does its job cheaper than the next person in line could. Cut out the middleman and you do not eliminate his work; you dump it back on yourself. We met this with trade already; now we see why it holds, because middlemen are specialists, cheaper at their stage by the same logic as everyone else. When suppliers cannot be relied on, a firm is forced to do everything itself, and that is costly. Soviet enterprises, unable to count on deliveries, made their own components at several times the specialists' cost and sometimes even made their own bricks. A firm that can trust its suppliers holds almost no inventory; Toyota famously kept only a few hours' worth of parts on hand, while Soviet industry stockpiled nearly a year's worth, idle inventory held only because a stoppage for want of a part was worse. Reliable specialization lets you carry little; unreliable supply forces you to hoard.
-
-<aside class="econ-callout econ-check">
-<p class="econ-callout__label">Pause and check</p>
-<p>A friend says you can save money by cutting out the wholesaler and the trucker and buying straight from the factory. Explain why removing the middleman usually does not lower your cost, and what happens to the work he was doing.</p>
-</aside>
-
 <div class="econ-review">
 <section class="econ-review__section">
 <h3>Key takeaways</h3>
 <ul>
 <li><strong>Comparative advantage makes both sides richer.</strong> Because everyone is the cheaper maker of something, letting the lower-cost producer make each additional unit lets two people enjoy more together than they could apart, even when one is worse at everything.</li>
-<li><strong>A cheaper newcomer creates net new wealth.</strong> His entry lowers the price for buyers and frees resources for other goods; the incumbent he displaces truly loses, but part of that loss is a transfer and the rest is wealth that did not exist before.</li>
-<li><strong>Blocking a cheaper producer protects the few.</strong> Licensing and other entry barriers keep newcomers out and prop up incumbents' prices, helping no one on net at the expense of buyers and the broader economy.</li>
-<li><strong>Specialization sorts talent and grows it.</strong> It lets the lower-cost producer make a good and makes people more productive through learning by doing, so cutting yourself off in the name of independence only makes you poorer.</li>
-<li><strong>Bigger markets lower costs.</strong> A larger market supports finer specialization and the volume that makes mass production cheap, so shrinking the market gives up both engines of low cost at once.</li>
-<li><strong>Past some size, coordination breaks down.</strong> When people can no longer be watched and coordinated, cost per unit rises again, which is why the cheapest size differs from one business to the next and the world is not one giant firm.</li>
-<li><strong>Firms specialize too.</strong> Each does only the stages it performs most cheaply and buys the rest, so eliminating the middleman does not remove his work; it dumps it back on you.</li>
+<li><strong>A cheaper newcomer creates new wealth, and blocking him protects only the few.</strong> His entry lowers the price for buyers and frees resources for other goods; part of the incumbent's loss is a transfer and the rest is wealth that did not exist before. Licensing and other entry barriers keep newcomers out and prop up incumbents' prices, helping no one on net at buyers' expense.</li>
+<li><strong>Specialization sorts talent, grows it through practice, and pays off more in a bigger market.</strong> Letting the lower-cost producer make a good, and becoming more productive at a task by repeating it, both make a society richer; a larger market supports finer specialization and the volume that makes mass production cheap, so shrinking the market gives up both engines of low cost at once.</li>
 </ul>
 </section>
 </div>

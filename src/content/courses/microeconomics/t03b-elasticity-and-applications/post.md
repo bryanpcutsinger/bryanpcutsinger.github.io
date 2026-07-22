@@ -6,8 +6,9 @@ sessions: ["Fall 2026 — content session 5 (Tue 9/8)"]
 ue_anchors: ["UE 8", "UE 9"]
 be_anchors: []
 ep_anchors: ["E&P Fig 2-4 (ch. 2, p. 23) — marginal revenue as gain minus loss on inframarginal units", "E&P Fig 2-11 (ch. 2, p. 35) — endowment vs substitution effect (relocated from t03a)"]
-word_target: "2800-3800"
-status: approved        # E&P integration M6 done-gate 2026-07-20; prior approval 2026-07-01
+word_target: "2800-3600"
+word_budget: 3600
+status: approved        # scope-reduction R4 2026-07-21 (word_budget applied); E&P integration M6 done-gate 2026-07-20; prior approval 2026-07-01
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Source-of-truth for the session-5 deck; section headers are claims that map to slide titles. Verbal-marginal throughout: no indifference curves, no measured surplus triangles, no elasticity algebra in the body. Follows the session-4 demand post; a short foundational intro re-establishes the downward-sloping demand curve and marginal worth so this post stands on its own."
 # brief: ../t03-demand-consumer-behavior/brief.md
@@ -23,16 +24,13 @@ None of this assumes buyers carry a numerical schedule in their heads or do arit
 <p class="econ-callout__label">Learning objectives</p>
 <p>By the end of this post you should be able to:</p>
 <ul>
-<li>Define elasticity as the percentage change in quantity divided by the percentage change in price, tell elastic from inelastic demand, and explain why elasticity varies along a curve and is not its slope.</li>
-<li>Use the elasticity at a point on the demand curve to predict what a price change does to a seller's total revenue.</li>
+<li>Define elasticity as the percentage change in quantity demanded divided by the percentage change in price, tell elastic from inelastic demand, explain why elasticity varies along a curve rather than equaling its slope, and use it to predict what a price change does to a seller's total revenue.</li>
 <li>State the second law of demand and use the fan of demand curves to explain why demand grows more elastic the longer people have to adjust.</li>
-<li>Distinguish individual, market, and seller-facing demand, and explain why a single seller's marginal revenue falls short of the price it charges.</li>
-<li>Separate the substitution effect from the wealth effect, and explain why the usual candidates for exceptions to the law of demand are not real exceptions.</li>
-<li>Explain why a good's real price is its price relative to other goods, so its dollar price can rise while its relative price falls.</li>
-<li>Explain why calling a good a basic need or priceless does not exempt it from the how much at what price question.</li>
-<li>Apply the Alchian and Allen theorem that adding the same charge to two grades makes the higher grade relatively cheaper wherever it lands.</li>
+<li>Explain why a good's real price is its price relative to other goods, so its dollar price can rise while its relative price falls, and apply the Alchian and Allen theorem that adding the same charge to two grades makes the higher grade relatively cheaper wherever it lands.</li>
 </ul>
 </aside>
+
+**Figure focus.** Required: elasticity along a line; supply shift versus demand shift. Others are references unless assigned.
 
 ## Elasticity Measures How Sharply Quantity Responds to Price
 
@@ -53,7 +51,7 @@ If a 1 percent rise in price brings a 3 percent drop in quantity, elasticity is 
 </dl>
 </aside>
 
-Two wording traps are worth disarming now. First, elasticity is a ratio of *percentages*, not an absolute amount. "The percentage change in quantity for a one-cent change in price" is wrong twice over: it should be a one-*percent* change in price, and a ratio of two percentage changes, never a per-penny figure. Second, elasticity measures movement along a curve. So "a 3 percent decrease in demand" is sloppy; it should be a 3 percent decrease in *quantity demanded*. Elasticity says nothing about a shift of the whole curve, only about sliding along one, so it pays to be exact.
+Two wording traps are worth disarming now. First, elasticity is a ratio of *percentages*, not an absolute amount: "the percentage change in quantity for a one-cent change in price" is wrong twice over, since it should be a one-*percent* change in price, and a ratio of two percentages, never a per-penny figure. Second, elasticity measures movement along a curve, so "a 3 percent decrease in demand" is sloppy; it should be a 3 percent decrease in *quantity demanded*, not a shift of the whole curve.
 
 Here is a demand schedule with the elasticity between successive points worked out, plus the market value (price times quantity) at each.
 
@@ -77,7 +75,7 @@ Two features jump out. First, elasticity changes as you move along a straight-li
 <figcaption><strong>Same line, different responsiveness at every price.</strong> On a single straight demand curve, elasticity is not constant: it is large near the top (a price cut raises revenue), passes through one near the middle, and is small near the bottom, which is why you must always say "elastic at what price." Drag the point (or tap and use the arrow keys) to trace the line and watch the companion point, the readout, and the revenue verdict change together. If the frame does not load, <a href="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ue8-1-interactive.html">open the interactive figure directly</a>.</figcaption>
 </figure>
 
-Second, and this is the most common student error, elasticity is not the slope. Two curves can have the very same slope yet different elasticities, and two curves with different slopes can share an elasticity at some price, so a flat-looking curve is not automatically the more elastic one. ("Inelastic," by the way, does not mean quantity fails to respond at all; that extreme is zero or perfect inelasticity. Inelastic just means the response is less than proportional.)
+Second, and this is the most common student error, elasticity is not the slope: two curves can share the very same slope yet differ in elasticity, and two curves with different slopes can share an elasticity at some price, so a flat-looking curve is not automatically the more elastic one. ("Inelastic" does not mean quantity fails to respond at all; that extreme is zero elasticity. It just means the response is less than proportional.)
 
 <figure class="econ-figure" style="margin:1.5em 0;">
 <iframe src="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ue8-2-interactive.html" title="Three demand curves compared — drag or tab to the toggle to see why elasticity is not slope" loading="lazy" style="width:100%; max-width:480px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ue8-2-interactive.html">Open the interactive figure directly</a>.</p></iframe>
@@ -88,7 +86,7 @@ Second, and this is the most common student error, elasticity is not the slope. 
 
 Elasticity matters because it decides what happens to a seller's *total revenue* when the price changes. You can read the rule straight off the market-value column above.
 
-When demand is elastic (greater than one), quantity responds more than proportionally, so a price cut raises total revenue and a price rise lowers it. The quantity effect wins. When demand is inelastic (less than one), quantity barely responds, so a price cut lowers total revenue and a price rise raises it. The price effect wins. At unit elasticity (equal to one), revenue is unchanged either way; it sits at its peak, the flat $30 stretch around the middle of the table.
+When demand is elastic (greater than one), quantity responds more than proportionally, so a price cut raises total revenue and a price rise lowers it. When demand is inelastic (less than one), quantity barely responds, so a price cut lowers total revenue and a price rise raises it. At unit elasticity (equal to one), revenue is unchanged either way; it sits at its peak, the flat $30 stretch around the middle of the table.
 
 <figure class="econ-figure" style="margin:1.5em 0;">
 <iframe src="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ue8-3-interactive.html" title="Drag the point along the rectangular-hyperbola demand curve and watch the market-value rectangle keep the same area at every position." loading="lazy" style="width:100%; max-width:480px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ue8-3-interactive.html">Open the interactive figure directly</a>.</p></iframe>
@@ -102,14 +100,14 @@ The whole thing fits in a small grid.
 | **Price rises** | Total revenue falls | Unchanged | Total revenue rises |
 | **Price falls** | Total revenue rises | Unchanged | Total revenue falls |
 
-This is why you can never say in the abstract whether a seller should raise or lower price to make more money. It depends entirely on where the seller is on the demand curve, which is to say on the elasticity there. It also lands on a point worth carrying forward: a seller raising revenue by exploiting inelastic demand is not the same as buyers being better off.
+This is why you can never say in the abstract whether a seller should raise or lower price to make more money; it depends entirely on where the seller sits on the demand curve. It also lands on a point worth carrying forward: a seller raising revenue by exploiting inelastic demand is not the same as buyers being better off.
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
 <p>A transit agency finds that riders barely change their trips when the fare moves, so its demand is inelastic. To collect more revenue, should it raise the fare or cut it? Walk through the revenue rule to justify your answer.</p>
 </aside>
 
-One caution to carry forward. Elasticity describes movement along an unchanged demand curve, the kind of price change driven by a shift in supply. If instead the price moved because the demand curve itself shifted, the elasticity of the old curve does not describe what happened. Always ask first whether you are sliding along a curve or watching one move.
+One caution to carry forward: elasticity describes movement along an unchanged demand curve, the kind of price change driven by a shift in supply. If the price instead moved because the demand curve itself shifted, the old curve's elasticity does not describe what happened. Always ask first whether you are sliding along a curve or watching one move.
 
 <figure class="econ-figure" style="margin:1.5em 0;">
 <iframe src="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03-elasticity-shifts-interactive.html" title="Toggle Supply or Demand, then drag: watch a price slide along one fixed demand curve when supply shifts, versus the whole demand curve moving when demand shifts." loading="lazy" style="width:100%; max-width:640px; aspect-ratio:16/10; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03-elasticity-shifts-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03-elasticity-shifts.svg">view the static figure</a>.</p></iframe>
@@ -136,9 +134,9 @@ The neat way to picture this: any single demand curve is one member of a *fan* o
 
 ## Three Different Demands, and Why the Difference Matters
 
-We have to keep three demands straight, because they answer different questions. There is the *individual's demand*, one buyer's schedule, like the price-quantity schedule we started with. There is the *market demand*, the sum of all individual demands at each price, which determines a good's overall price. And there is the *demand facing a single seller*, the schedule of how much that one seller can sell at each price it might charge.
+We have to keep three demands straight, because they answer different questions. There is the *individual's demand*, one buyer's schedule, like the price-quantity schedule we started with. There is the *market demand*, the sum of individual demands at each price. And there is the *demand facing a single seller*, how much that seller can sell at each price it might charge.
 
-The last is subtle, and a bridge to a later topic, so I will preview it now. When such a seller wants to sell one more unit, it usually has to lower its price, and that lower price applies to all the units it sells, not just the extra one. So the extra revenue from that unit, its marginal revenue, is less than the price received. Later, when we study firms with some power over their price, this seller-facing demand is what the firm chooses a point on, weighing that gap between marginal revenue and price. File the idea away; it will do heavy lifting when we reach market power.
+The last is the subtlest, and it bridges to a later topic. When such a seller wants to sell one more unit, it usually has to lower its price, and that lower price applies to all the units it sells, not just the extra one. So the extra revenue from that unit, its marginal revenue, is less than the price received. Later, when we study firms with real power over their price, this seller-facing demand is the curve the firm chooses a point on, weighing that gap between marginal revenue and price.
 
 <figure class="econ-figure" style="margin:1.5em 0;">
 <iframe src="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ep2-4-marginal-revenue-interactive.html" title="Interactive marginal-revenue figure: drag the quantity handle to sell one more unit and watch the gain rectangle (the new unit at the new price) fight the loss rectangle (the price cut on every earlier unit)." loading="lazy" style="width:100%; max-width:480px; aspect-ratio:1/1; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ep2-4-marginal-revenue-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ep2-4-marginal-revenue.svg">view the static figure</a>.</p></iframe>
@@ -171,22 +169,11 @@ The classic puzzle: you own a dairy farm and the price of milk rises. Do you dri
 <p>You own a large vineyard and the price of grapes jumps. Which way does the substitution effect push your own grape buying, and which way does the wealth effect push it? Why is the net direction unclear for you but not for an ordinary shopper?</p>
 </aside>
 
-This wealth effect, when someone holds a large stock of the good whose price changes, is the nearest thing to a genuine exception to the law of demand, and even it is a shift of the curve, not an upward-sloping one. The supposed exceptions people more often raise turn out not to be exceptions at all. Consider prestige goods, the champagne and designer bags and luxury cars the well-off compete over. People sometimes claim the high price is itself the draw, so demand slopes upward. It does not. Wanting prestige raises the demand for the good, shifting its whole curve up and pushing the price higher, which is a higher demand curve leading to a higher price, not a curve that slopes the wrong way. Raise the price high enough and people still buy less; otherwise nothing would stop its price from climbing forever. A related case is a buyer who hesitates at a suspiciously low price, suspecting the item is fake or defective because cheapness signals poor quality. That is sensible, since price often does track quality, a genuine Rolex outsells a sidewalk knockoff. But it is not a violation: hold the buyer's belief about quality fixed, and a lower price still draws more purchases. The low price changed their estimate of quality, not their willingness to buy a good of given quality more cheaply.
-
-This is also the place to define how income itself shifts demand. For a *normal good*, higher income shifts the whole demand curve right; you buy more as you get richer (a *superior good* is the strong case, where demand rises more than in proportion to income). For an *inferior good*, higher income shifts demand left; you buy less as you get richer, switching to better alternatives. So a rise in your income raises your demand for gasoline if gasoline is a normal good for you, shifting that curve outward. Notice this is a shift, driven by income, not a slide driven by the gas price.
-
-<aside class="econ-callout econ-termset">
-<p class="econ-callout__label">Key terms</p>
-<dl class="econ-term-list">
-<div><dt>Normal Good</dt><dd>A good you buy more of as your income rises.</dd></div>
-<div><dt>Superior Good</dt><dd>A normal good whose demand rises more than in proportion to income.</dd></div>
-<div><dt>Inferior Good</dt><dd>A good you buy less of as your income rises, switching to better alternatives.</dd></div>
-</dl>
-</aside>
+This wealth effect, when someone holds a large stock of the good whose price changes, is the nearest thing to a genuine exception to the law of demand, and even it is a shift of the curve, not an upward-sloping one.
 
 ## The Real Price Is the Relative Price
 
-A good's dollar tag is not the price that governs your choice. What matters is its *relative price*: how much of other goods you give up to get it, not its figure in isolation. That distinction has a sharp consequence.
+A good's dollar tag is not the price that governs your choice. What matters is its *relative price*: how much of other goods you give up to get it. That distinction has a sharp consequence.
 
 <aside class="econ-callout econ-termset">
 <p class="econ-callout__label">Key term</p>
@@ -195,21 +182,13 @@ A good's dollar tag is not the price that governs your choice. What matters is i
 </dl>
 </aside>
 
-A good's price can fall relative to others even when its dollar price rises. Suppose candy goes from $4 to $5 while ice cream goes from $2 to $3. In dollars, candy got more expensive. But ice cream rose by a larger *percentage*, so candy is now relatively cheaper than it was: in terms of ice cream forgone, a candy bar costs less than before. When you hear "the price of X went up," always ask "relative to what?" A rising dollar price can hide a falling real one.
+A good's price can fall relative to others even when its dollar price rises. Suppose candy goes from $4 to $5 while ice cream goes from $2 to $3. In dollars, candy got more expensive. But ice cream rose by a larger *percentage*, so candy is now relatively cheaper than it was: in terms of ice cream forgone, a candy bar costs less than before. When you hear "the price of X went up," always ask "relative to what?"
 
 The same lens dissolves a seeming paradox. Why do people wait in line for small, run-down apartments while bigger, better ones sit available with no waiting list? Not because anyone prefers cramped to spacious. The better apartments are *priced* higher, which reduces the quantity demanded for them and clears the line, while the cheap ones are priced low enough to draw a crowd. The preference for more and better is intact; the price did the work.
 
-## "Basic Needs" and "Priceless" Things Are Not Real Exceptions
+This relative-price idea does real work in a striking, memorably named application: the "shipping the good apples out" theorem, due to Alchian and Allen.
 
-One last set of supposed exceptions comes dressed in the language of urgency. People label some goods "basic needs" or call others "invaluable," as if the law of demand stopped at the door. It does not, and the language hides the choices actually being made.
-
-When a city report says it "needs more golf courses because people don't play as often as they'd like," it has simply ignored price; at a price, the quantity people will use is finite, and golf courses are no different in kind from filet mignon or champagne in this respect. When officials announce that defense, schools, education, or energy are "basic needs," they are skipping the only real question, how much of each, given what must be given up to get it. Labeling a good essential does not exempt it from the trade-off; it only puts the trade-off out of sight.
-
-The same incoherence infects "invaluable" and "priceless." If those words mean infinite value, they are empty, because everything in fact trades at a finite price and people make finite trade-offs every day. A student who calls a textbook "priceless" usually means only that it is hard to replace, not that they would surrender everything they own for it. Value is real but always finite, and always personal: you buy a newspaper only because the paper is worth more to you than the dollar, while the seller parts with it only because the dollar is worth more to him. If value were a fixed, objective property of the thing, nobody would ever trade, since no exchange could make both sides better off. The whole engine of the previous topic depended on value being subjective and differing across people.
-
-## Adding the Same Charge to Two Goods Sends the Better One Away
-
-I want to close with a striking application that shows the relative-price idea doing real work and has a memorable name: the "shipping the good apples out" theorem, due to Alchian and Allen.
+### Adding the Same Charge to Two Goods Sends the Better One Away
 
 Here is the puzzle. Why do the regions that grow the best produce so often ship their finest grade away and keep the ordinary stuff, so that you find better Maine lobster in Chicago than in Maine? The answer is pure relative price. Suppose California grows choice grapes that sell there for $1.00 a pound and standard grapes for $0.50 a pound. Now ship both to New York at the same transport cost of $0.50 a pound, regardless of quality.
 
@@ -225,20 +204,15 @@ Look at the relative prices. In California, a pound of choice costs two pounds o
 <p>A $6 steak and a $3 burger each get the same flat $3 shipping charge added. Work out the two new prices and the new ratio between them. Which cut becomes relatively cheaper at the destination, and why does the fixed charge do that?</p>
 </aside>
 
-The mechanism is general: adding a constant amount to a high price and a low price shrinks the ratio between them. High and low meat at $10 and $5 stand in a 2-to-1 ratio; add $10 to each, making $20 and $15, and the ratio falls to 1.33-to-1, so the high grade becomes relatively cheaper. The same arithmetic explains a homier puzzle. Why is a couple with infants more likely to splurge on expensive theater than a childless couple? Because both face a fixed babysitter cost on top of the ticket, and that common charge shrinks the price ratio between the dear theater and the cheap movie, lowering the relative price of the expensive night out. Whenever a fixed charge rides on top of two options of different quality, it tilts choices toward the higher-quality one.
+The mechanism is general: adding a constant amount to a high price and a low price shrinks the ratio between them. High and low meat at $10 and $5 stand in a 2-to-1 ratio; add $10 to each, making $20 and $15, and the ratio falls to 1.33-to-1, so the high grade becomes relatively cheaper. The same arithmetic explains why a couple with infants is more likely to splurge on expensive theater than a childless couple: both face a fixed babysitter cost on top of the ticket, and that common charge shrinks the price ratio between the dear theater and the cheap movie. Whenever a fixed charge rides on top of two options of different quality, it tilts choices toward the higher-quality one.
 
 <div class="econ-review">
 <section class="econ-review__section">
 <h3>Key takeaways</h3>
 <ul>
-<li><strong>Elasticity measures responsiveness.</strong> It is the percentage change in quantity demanded divided by the percentage change in price; above one demand is elastic, below one inelastic, and it varies along a curve rather than equaling the slope.</li>
-<li><strong>A price cut helps only where demand is elastic.</strong> The elasticity at the seller's point decides whether cutting price raises or lowers total revenue, and revenue peaks at unit elasticity.</li>
-<li><strong>Demand gets more elastic with time.</strong> The second law says the full response builds as people find substitutes and replace equipment, which shows up as the fan of curves flattening from short run to long run.</li>
-<li><strong>Three demands answer different questions.</strong> Individual, market, and seller-facing demand are distinct, and a single seller's marginal revenue is less than its price because selling one more unit means cutting price on every unit.</li>
-<li><strong>Substitution and wealth effects pull separately.</strong> Substitution always pushes away from a dearer good, the wealth effect's direction depends on how much you own, and the familiar exceptions to the law of demand turn out not to be exceptions.</li>
-<li><strong>The real price is the relative price.</strong> What you give up in other goods governs your choice, so a good's dollar price can rise while its relative price falls.</li>
-<li><strong>Labeling a good a need does not suspend the law.</strong> Basic needs and priceless hide the real question of how much at what price, and value is always finite and personal.</li>
-<li><strong>A fixed charge ships the good apples out.</strong> Adding the same amount to two grades shrinks the price ratio and makes the higher grade relatively cheaper where it lands, so the finest produce travels.</li>
+<li><strong>Elasticity decides how a price change affects revenue.</strong> It is the percentage change in quantity demanded divided by the percentage change in price, it varies along a curve rather than equaling the slope, and where demand is elastic a price cut raises total revenue while where it is inelastic a price cut lowers it, with revenue peaking at unit elasticity.</li>
+<li><strong>Demand grows more elastic the longer people have to adjust.</strong> The second law says the full response builds as people find substitutes and replace equipment, shown by the fan of curves flattening from short run to long run.</li>
+<li><strong>The real price is the relative price.</strong> What you give up in other goods, not the dollar figure, governs your choice, so a good's dollar price can rise while its relative price falls, and adding the same fixed charge to two grades of a good shrinks the ratio between them, making the finer grade relatively cheaper wherever it lands.</li>
 </ul>
 </section>
 </div>

@@ -6,8 +6,9 @@ sessions: ["Fall 2026 — content session 7 (Tue 9/15)"]
 ue_anchors: ["UE 12", "UE 11 (input-price controls Q7/Q8)"]
 be_anchors: ["BE 3", "BE 4 (systemic versus intentional causation)"]
 ep_anchors: ["E&P Figs 4-7 & 4-8 (ch. 4) — rent reallocation of a fixed stock, incumbent-tenant sublease value, and rent-control shortage"]
-word_target: "2500-6000"
-status: approved        # E&P integration M4 done-gate 2026-07-20; prior approval 2026-07-01
+word_target: "3200-3600"
+word_budget: 3600
+status: approved        # scope-reduction R4 done-gate 2026-07-21; prior approval 2026-07-01
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Source-of-truth for T4 session 7 and the second of two T4 posts. Combines price controls, systemic causation, and the political economy of concentrated benefits and dispersed costs. Tax incidence is consolidated in T7."
 # brief: ../t04-markets-prices-coordination/brief.md
@@ -19,19 +20,19 @@ A price does a job. At the *market-clearing price*, the amount people want to bu
 
 That story turns on one distinction. *Scarcity*, the permanent fact that our wants outrun what exists, never goes away and is the reason economics exists at all. A *shortage* is something else: it is the gap that opens when a price is pinned below where trade would otherwise clear, so the amount people want to buy exceeds the amount offered. A *surplus* is its mirror, the gap that opens when a price is pinned above clearing. Both are creatures of law, not of physical lack or plenty.
 
-If a shortage is what happens when a price is forbidden to rise, and a surplus is what happens when it is forbidden to fall, what exactly do the laws that do the forbidding accomplish? This post follows the consequences. We look at price ceilings, at the popular trick of attacking high prices by capping the inputs that go into a product, and at price floors, tracing in each case where the rationing goes once money is barred from doing it.
+If a shortage is what happens when a price is forbidden to rise, and a surplus is what happens when it is forbidden to fall, what exactly do the laws that do the forbidding accomplish? This post follows the consequences for price ceilings, input caps, and price floors.
 
 <aside class="econ-callout econ-objectives">
 <p class="econ-callout__label">Learning objectives</p>
 <p>By the end of this post you should be able to:</p>
 <ul>
-<li>Explain why a price ceiling set below the clearing price creates a shortage and pushes competition into wasteful nonmoney forms that destroy value instead of transferring it.</li>
+<li>Explain why a binding price ceiling creates a shortage and a binding price floor creates a surplus, and why both push competition into nonmoney forms that destroy value rather than merely transfer it.</li>
 <li>Explain why capping the price of an input cannot lower the price of the finished good, and why costs reflect prices more than they set them.</li>
-<li>Explain why a price floor set above the clearing price creates a surplus, and how sellers compete it away when they cannot cut the money price.</li>
-<li>Explain bad prices and failed policies through systemic incentives rather than greed, stupidity, or malice.</li>
-<li>Explain why controls persist when their benefits are concentrated and their costs are dispersed.</li>
+<li>Explain bad prices and failed policies through systemic incentives rather than greed, stupidity, or malice, and explain why price controls persist when their benefits are concentrated and their costs are dispersed.</li>
 </ul>
 </aside>
+
+**Figure focus.** Required: rent ceiling and price floor. Others are references unless assigned.
 
 ## A Price Ceiling Creates a Shortage and Shifts Competition to Other Forms
 
@@ -67,13 +68,11 @@ These other forms of competition do more than redirect the full price; they dest
 <p>Under a rent ceiling the money rent is capped, but the apartment still goes to someone. Name one nonmoney form the competition takes. Why are the hours a tenant burns waiting in line a pure loss rather than a payment the landlord collects?</p>
 </aside>
 
-Worse, those other appeals reward traits that have nothing to do with willingness to pay. With money competition suppressed, a landlord choosing among a crowd of eager applicants can indulge any preference at no cost to himself, since the rent is the same whomever he picks. He can favor the applicant with the right looks, the right connections, the right ethnicity, the agreeable lifestyle, no children, no pets. Now, every choice is in some sense an act of discrimination; choosing a television by its features rather than its price is still discriminating among options, and there is nothing sinister in the word itself. The point is which criterion gets to do the discriminating. A money price discriminates by willingness to pay; a ceiling hands that power to whichever nonmoney traits the seller favors, and the applicants richer in those traits get the housing while others are shut out. A law sold as helping the vulnerable can end up sorting against them.
+Worse, those other appeals reward traits that have nothing to do with willingness to pay. With money competition suppressed, a landlord choosing among a crowd of eager applicants can indulge any preference at no cost to himself, since the rent is the same whomever he picks. He can favor the applicant with the right looks, the right connections, no children, no pets. Every choice is in some sense an act of discrimination; choosing a television by its features rather than its price is still discriminating among options, and there is nothing sinister in the word itself. The point is which criterion gets to do the discriminating. A money price discriminates by willingness to pay; a ceiling hands that power to whichever nonmoney traits the seller favors, and the applicants richer in those traits get the housing while others are shut out. A law sold as helping the vulnerable can end up sorting against them.
 
-The damage does not stop at who gets in. Because the controlled price no longer rewards keeping the property up, quality slides: landlords skimp on maintenance, defer repairs, and let buildings age, since fresh paint earns nothing when the rent is capped and tenants line up regardless. Over time the controlled stock deteriorates and ages relative to uncontrolled housing; studies of long-controlled cities find the bulk of the rent-controlled stock is decades old and visibly run down. The artificially low rent also weakens self-rationing of demand. People hold on to apartments larger than they need and stay put for decades rather than move, so turnover collapses. Famous holders of cheap controlled units have included movie stars and politicians who hardly needed the help, while ordinary newcomers could not find a vacancy at any legal price. The same logic explains where the building goes: with controlled rentals unprofitable, the same bricks, pipes, and labor flow to luxury or commercial buildings exempt from control, so a policy sold "for the poor" ends up adding only housing the affluent can afford.
+The damage does not stop at who gets in. Because the controlled price no longer rewards keeping the property up, quality slides: landlords skimp on maintenance, defer repairs, and let buildings age, since fresh paint earns nothing when the rent is capped and tenants line up regardless. Over time the controlled stock deteriorates and ages relative to uncontrolled housing; studies of long-controlled cities find the bulk of the rent-controlled stock is decades old and visibly run down. The artificially low rent also weakens self-rationing of demand. People hold on to apartments larger than they need and stay put for decades rather than move, so turnover collapses, and newcomers cannot find a vacancy at any legal price. The same logic explains where the building goes: with controlled rentals unprofitable, the same bricks, pipes, and labor flow to luxury or commercial buildings exempt from control, so a policy sold "for the poor" ends up adding only housing the affluent can afford.
 
 A ceiling tends to produce all of these at once: the quantity demanded rises, the quantity supplied falls, quality deteriorates, black markets and side deals spring up, hoarding appears, the little services that used to come with the good get stripped away, and the good is misallocated to lower-valued uses. Hoarding explains why some shortages bite harder than others. A ceiling on gasoline produces a far worse shortage than a ceiling on strawberries, because gasoline can be hoarded and strawberries cannot. In the 1970s, drivers facing capped gas prices and the fear of running dry topped off half-full tanks at every chance, so an enormous quantity of gasoline effectively "disappeared" into millions of car tanks and the pumps ran empty. Strawberries rot in a week, so no one hoards them; the shortage of a perishable is always milder.
-
-Two cleaner applications make the mechanism vivid. A military draft is a price ceiling on soldiers' wages: the government refuses to pay the wage that would attract enough volunteers, the resulting "shortage" of personnel is filled by compulsion, and the draftees pay the difference as a hidden, in-kind tax. The budget looks cheap precisely because much of the real cost has been shoved onto the conscripts. Or take a country that, after a poor rice harvest, bans rice at lunch to stretch the supply. The harvest is a genuine reduction in supply, and no edict can undo it. A free price would have rationed the smaller crop voluntarily, with each family economizing a bit; the control does not cure it; it only changes how the smaller supply gets divided.
 
 There is one honest way to ration a fixed supply at a below-market money price without all this chaos, and it proves the point. Issue *tradable ration coupons*: each buyer needs both money and a coupon, and the coupons may be bought and sold. The coupon acquires a market price of its own, and the money price plus the coupon price adds up to exactly what the free-market price would have been. Rationing by coupons does not lower the full price; it splits it into two slips of paper. The full price reflects real scarcity, and no legal trick changes it; the law can only change the form in which it is paid.
 
@@ -90,7 +89,7 @@ Capping the price of an input does nothing to increase the supply of the finishe
 
 Underneath this is a principle that overturns how most people think about prices and costs. We imagine costs come first and determine prices: a thing costs a lot to make, so it sells for a lot. The causation mostly runs the other way. The value of an input is *derived* from the value of the final product it helps make. Land that grows wine grapes commands a high rent because the wine sells for a high price, not the reverse; if the wine became worthless tomorrow, the land's rent would collapse however "expensive" the land had been. So costs reflect prices more than they determine them. When you ask who is responsible for a higher price, the honest answer is often to look in the mirror: it is consumers' own willingness to pay more that bids up the inputs, which then shows up to sellers as higher "costs." Inventories along the chain delay and disguise this, so by the time the higher cost appears, the demand that caused it is several steps and several months removed, and the seller sincerely blames his costs.
 
-That delay is the inventory-buffer mechanism from Part A at work. Inventories can absorb a temporary demand change while posted prices stay stable; once the buffer is depleted, the price and replacement cost reveal the change. A chosen buffer or brief voluntary queue is therefore not the same thing as the persistent shortage created when law prevents the price from adjusting.
+That delay is an inventory buffer at work. Inventories can absorb a temporary demand change while posted prices stay stable; once the buffer is depleted, the price and replacement cost reveal the change. A chosen buffer or brief voluntary queue is therefore not the same thing as the persistent shortage created when law prevents the price from adjusting.
 
 <aside class="econ-callout econ-termset">
 <p class="econ-callout__label">Key term</p>
@@ -133,29 +132,29 @@ A floor leaves sellers unable to clear the market by cutting the money price, so
 
 It is tempting to explain high prices and failed policies by pointing at villains: greedy sellers, corrupt officials, stupid bureaucrats. Economics pushes you toward a less satisfying but more accurate habit, looking for *systemic* causes rather than *intentional* ones, for the incentives that make ordinary people produce an outcome whether they intend it or not.
 
-Take the charge of greed. When prices rise after a shock, the cause is the collision of supply and demand, not a sudden outbreak of avarice that conveniently coincides with the shock. Prices in low-income neighborhoods are a sharper test. Groceries, loans, and check-cashing often cost more there, which looks like exploitation. But the per-dollar cost of doing business is genuinely higher: an armored car costs the same to serve a small check-casher as a big bank, theft and default run higher, and volume is lower, so each transaction carries more overhead. The higher price reflects higher cost, not greater greed. When lawmakers respond by capping prices or interest rates, legitimate lenders and stores withdraw, leaving residents to loan sharks and long bus rides, worse than what the cap was meant to fix.
+Take the charge of greed. When prices rise after a shock, the cause is the collision of supply and demand, not a sudden outbreak of avarice that conveniently coincides with the shock.
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
-<p>Groceries, loans, and check-cashing often cost more in a low-income neighborhood, which looks like exploitation. Give the systemic reason the prices are higher, and predict what happens to residents if a law caps those prices.</p>
+<p>A shock cuts a good's supply and its price rises sharply. Explain why the systemic cause fits the facts better than an accusation of sudden greed.</p>
 </aside>
 
-The same lens applies to government failure. When a program backfires, the cause is rarely that officials are idiots; far more often they are rational people responding sensibly to the incentives they face, which do not line up with the public good. A planner rewarded for meeting a quota measured in tons will make heavy, useless goods. Subsidies and taxes feed the same machine by distorting the prices that are supposed to tell the truth about scarcity. When water is sold to favored users far below its value, they treat it as nearly free and waste it, growing thirsty crops in deserts while others pay many times as much for the same water. The waste is not a moral failing of the farmers; it is the rational response to a price rigged to lie about how scarce the water really is.
+The same lens applies to government failure. When a program backfires, the cause is rarely that officials are idiots; far more often they are rational people responding sensibly to the incentives they face, which do not line up with the public good. A planner rewarded for meeting a quota measured in tons will make heavy, useless goods. Subsidies and taxes feed the same machine by distorting the prices that are supposed to tell the truth about scarcity.
 
 ## Price Controls Persist Because Their Costs Are Hidden and Their Beneficiaries Are Organized
 
 If price controls do such damage, why are they so durable? The answer is political economy, and it ties this topic together.
 
-First, controls are popular at the start. The morning a price is capped, buyers see a low price and cheer; the shortages, lines, and deterioration come later, and few connect them back to the cap. When one government ordered prices slashed in half, the immediate effect was an ecstatic shopping spree, followed within weeks by bare shelves and an economy at a standstill. The wider the gap a control forces between the legal price and the market price, the more severe the eventual damage, but that damage is delayed and diffuse while the benefit is instant and visible.
+First, controls are popular at the start. The morning a price is capped, buyers see a low price and cheer; the shortages, lines, and deterioration come later, and few connect them back to the cap. The wider the gap a control forces between the legal price and the market price, the more severe the eventual damage, but that damage is delayed and diffuse while the benefit is instant and visible.
 
-Second, the gains are concentrated and the losses dispersed. A control hands a clear, sizable benefit to an organized group, sitting tenants under rent control, established farmers under a price support, who know exactly what they are getting and will fight to keep it. The costs fall on a scattered mass, would-be tenants who never find an apartment, taxpayers who fund the surplus, consumers who pay a bit more, each losing too little to mount a campaign. The organized beneficiaries outlast the diffuse victims, the very concentrated-winners-against-dispersed-losers asymmetry behind the rent-seeking we named at the outset.
+Second, the gains are concentrated and the losses dispersed. A control hands a clear, sizable benefit to an organized group, sitting tenants under rent control, established farmers under a price support, who know exactly what they are getting and will fight to keep it. The costs fall on a scattered mass, would-be tenants who never find an apartment, taxpayers who fund the surplus, consumers who pay a bit more, each losing too little to mount a campaign. The organized beneficiaries simply outlast the diffuse victims.
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
 <p>A city council proposes repealing rent control. Which group is most likely to pack the meeting to defend it, and why do the people who would gain from repeal barely show up?</p>
 </aside>
 
-Third, controls hand politicians something valuable. The power to set and enforce a price is the power to decide who gets the scarce good, a form of authority worth a great deal, and it lets officials claim credit for low prices while blaming the resulting shortages on hoarders, speculators, or greedy sellers. The damage is real but deniable; the credit is immediate and personal.
+Third, controls hand politicians something valuable: the power to decide who gets the scarce good, letting officials claim credit for low prices while blaming the resulting shortages on hoarders, speculators, or greedy sellers. The damage is real but deniable; the credit is immediate and personal.
 
 Through all of it, keep the economist's discipline in view: this is positive analysis, not a verdict. Scarcity always forces some form of competition. If competition by money price is suppressed, competition by force, by waiting, by connections, by political pull takes its place; the competition never stops, only its form changes. Economics can tell you what each form of competition will do, who will gain and who will bear the cost. It cannot tell you which scarce goods *ought* to be rationed by markets and which by some other rule. That choice rests on values you bring to it. What economics offers is the cause and effect, so that whatever you decide, you decide it with your eyes open.
 
@@ -163,11 +162,9 @@ Through all of it, keep the economist's discipline in view: this is positive ana
 <section class="econ-review__section">
 <h3>Key takeaways</h3>
 <ul>
-<li><strong>A price ceiling creates a shortage.</strong> Capping the money price below clearing does not abolish the full price; it shifts competition into queues, favoritism, and side deals that destroy value rather than transfer it.</li>
+<li><strong>A binding ceiling creates a shortage; a binding floor creates a surplus.</strong> Neither abolishes the full price; each shifts competition into queues, favoritism, side deals, or quality competition that destroy value rather than transfer it.</li>
 <li><strong>Capping an input price cannot lower the output price.</strong> A cap on crude or cattle yields no more of the finished good and only widens the processor's margin, because costs reflect prices more than they set them.</li>
-<li><strong>A price floor creates a surplus.</strong> Propping the price above clearing leaves sellers unable to clear the market by cutting price, so they compete on quality while someone must buy, store, or destroy the excess.</li>
-<li><strong>Look for the system, not the villain.</strong> Outcomes usually reflect ordinary people responding to incentives, so changing motives without changing constraints will not fix them.</li>
-<li><strong>Controls have asymmetric politics.</strong> Organized beneficiaries defend visible gains while dispersed victims each have little reason to organize against hidden costs.</li>
+<li><strong>Look for the system, and expect controls to persist.</strong> Bad outcomes usually reflect ordinary incentives rather than villainy, and controls survive because their benefits are concentrated and organized while their costs are dispersed and hidden.</li>
 </ul>
 </section>
 </div>

@@ -8,6 +8,7 @@ be_anchors: []
 ep_anchors: ["E&P 3 — Fig 3-1 Gains From Exchange", "E&P 4 — Pareto-Optimal Allocations"]
 univecon_anchors: ["University Economics (1994) ch. 4 pp. 41–43 — refugee-camp licensing cartel and franchise-fee capitalization"]
 word_target: "2000-6000"
+word_budget: 3307
 status: approved        # E&P integration M1 sign-off 2026-07-19 (prior: Stage-2 2026-06-15)
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Source-of-truth for the T2 deck; section headers are claims that map to slide titles. UE 4 only (pure reallocation); specialization/comparative advantage move to T6."
@@ -23,12 +24,9 @@ The short answer is that wealth is not the same as stuff. What you own is worth 
 <p class="econ-callout__label">Learning objectives</p>
 <p>By the end of this post you should be able to:</p>
 <ul>
-<li>Explain how voluntary exchange creates wealth by moving goods to whoever values them most, even when no new goods are made and the traders end up holding fewer total goods.</li>
-<li>Distinguish the positive-sum decision of whether to trade from the zero-sum bargaining over the terms of the trade.</li>
-<li>Use personal worth to explain why a trade happens only when the buyer values the good above the price and the seller values it below.</li>
-<li>Define a Pareto-optimal allocation in plain language, explain why free exchange pushes toward one, and say why the label is not a moral endorsement.</li>
-<li>Explain why forbidding a trade does not erase the value at stake but pushes the competition for it into nonmonetary forms.</li>
-<li>Explain why middlemen lower the cost of trading, what caps the cut they can take, and how competition and reputation discipline them.</li>
+<li>Explain how voluntary exchange creates wealth without creating new goods, distinguish the positive-sum trade from zero-sum haggling, and use personal worth to state when a deal is possible.</li>
+<li>Explain why free exchange pushes toward Pareto-optimality, and distinguish exhausted gains from a moral endorsement of the resulting allocation.</li>
+<li>Explain why middlemen lower the real cost of trading, what caps their cut, and how competition and reputation discipline them.</li>
 </ul>
 </aside>
 
@@ -160,12 +158,9 @@ We also kept using one idea without unpacking it, that a good is worth less to y
 <section class="econ-review__section">
 <h3>Key takeaways</h3>
 <ul>
-<li><strong>Trade creates wealth without new goods.</strong> Moving each good to whoever values it most makes both sides better off, even when the total quantity of goods falls.</li>
-<li><strong>The trade is positive-sum; the haggling is zero-sum.</strong> Both sides gain from trading at all, but every granola bar one side wins on the price the other loses.</li>
-<li><strong>Trade turns on differing personal worths.</strong> A deal happens only when the buyer's worth sits above the price and the seller's sits below it, and that gap is the gain.</li>
-<li><strong>Trade stops at Pareto-optimality.</strong> When no further swap can help one trader without hurting the other, the gains from trade are exhausted; that is a claim about exhausted gains, not about fairness.</li>
-<li><strong>Blocking a trade hides the value, it does not erase it.</strong> When an authority that cannot charge a price controls a scarce thing, the competition for it moves into favors, waiting, and goodwill.</li>
-<li><strong>Middlemen earn their keep.</strong> They lower the real cost of trading; a lone middleman can take at most the whole gain, and competition and reputation keep his cut far below that.</li>
+<li><strong>Trade creates wealth from differing personal worths.</strong> A deal is possible when the buyer's worth exceeds the price and the seller's falls below it; both gain from trading even though bargaining over the terms is zero-sum.</li>
+<li><strong>Trade stops at Pareto-optimality.</strong> When no further swap can help one trader without hurting the other, the gains from trade are exhausted; that says nothing by itself about fairness.</li>
+<li><strong>Middlemen earn their keep.</strong> They lower the real cost of trading; a lone middleman can take at most the whole gain, and competition and reputation keep the cut far below that ceiling.</li>
 </ul>
 </section>
 </div>
