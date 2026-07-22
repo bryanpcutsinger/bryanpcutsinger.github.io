@@ -1,6 +1,6 @@
 ---
 title: "Price Controls"
-topic: "T4 — Markets, Prices, and Coordination"
+topic: "T4 — Markets, Prices, and Coordination (Part B)"
 course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 7 (Tue 9/15)"]
 ue_anchors: ["UE 12", "UE 11 (input-price controls Q7/Q8)"]

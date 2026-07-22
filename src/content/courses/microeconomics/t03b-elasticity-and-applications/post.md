@@ -1,6 +1,6 @@
 ---
 title: "Elasticity and the Applications of Demand"
-topic: "T3 — Elasticity and the Applications of Demand"
+topic: "T3 — Demand and Consumer Behavior (Part B)"
 course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 5 (Tue 9/8)"]
 ue_anchors: ["UE 8", "UE 9"]

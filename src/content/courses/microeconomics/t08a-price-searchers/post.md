@@ -1,6 +1,6 @@
 ---
 title: "Market Power I: Price-Searchers and How They Price"
-topic: "T8 — Market Power (Price-Searchers & Pricing)"
+topic: "T8 — Market Power (Part A)"
 course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 16 (Thu 10/15)"]
 ue_anchors: ["UE 19", "UE 20 (Q1–Q6, Q8)", "UE 21", "UE 26 (Q2/Q5/Q6 cartels+stadium)"]

@@ -1,6 +1,6 @@
 ---
 title: "Market Power II: Antitrust and Regulation"
-topic: "T8 — Market Power (Antitrust & Regulation)"
+topic: "T8 — Market Power (Part B)"
 course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 17 (Tue 10/20)"]
 ue_anchors: ["UE 20 (Q7 predatory)", "UE 21 (oligopoly, networks, and switching costs)", "UE 24 (vertical restraints)", "UE 26 (Q1/Q3/Q4/Q7)"]

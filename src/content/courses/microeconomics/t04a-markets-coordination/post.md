@@ -1,6 +1,6 @@
 ---
 title: "Markets and Coordination"
-topic: "T4 — Markets, Prices, and Coordination"
+topic: "T4 — Markets, Prices, and Coordination (Part A)"
 course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 6 (Thu 9/10)"]
 ue_anchors: ["UE 6", "UE 10", "UE 11 (marketing arrangements and Q9 universal allocation)", "UE 25 (predictable prices, voluntary queues, preferred customers, and blind blocks)"]
