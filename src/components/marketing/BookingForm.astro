@@ -174,20 +174,22 @@ const submitLabel = hasWeb3Forms ? 'Send inquiry' : 'Form temporarily unavailabl
     margin-top: var(--sp-8);
   }
   .booking-form__submit {
-    font-family: var(--font-body);
-    font-weight: 600;
-    font-size: 1rem;
-    padding: 14px 28px;
+    font-family: var(--font-label);
+    font-weight: 650;
+    font-size: 0.84rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.85rem 1.5rem;
     border-radius: var(--radius);
-    background: var(--accent);
-    color: var(--on-ink);
-    border: 1px solid var(--accent);
+    background: var(--action);
+    color: var(--on-action);
+    border: 1px solid var(--action);
     cursor: pointer;
     transition: background-color 0.18s ease;
   }
   .booking-form__submit:hover {
-    background: var(--accent-hover);
-    color: var(--on-ink);
+    background: var(--action-hover);
+    color: var(--on-action);
   }
   .booking-form__alt {
     margin: 0;
@@ -201,12 +203,12 @@ const submitLabel = hasWeb3Forms ? 'Send inquiry' : 'Form temporarily unavailabl
     font-size: 0.95rem;
   }
   .booking-form__status.is-success {
-    background: var(--accent-tint);
-    color: var(--ink);
+    background: var(--action-tint);
+    color: var(--text);
   }
   .booking-form__status.is-error {
-    background: #fbe6e0;
-    color: #7a2e1a;
+    background: color-mix(in srgb, var(--action) 14%, var(--card));
+    color: var(--action-hover);
   }
 
   @media (max-width: 560px) {

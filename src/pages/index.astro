@@ -59,27 +59,44 @@ const workingPaperCount = (pubData.workingPapers ?? []).filter(
   title="Bryan Cutsinger — Economist, Speaker, Writer"
   description="Bryan Cutsinger is a Florida Atlantic University economist and speaker on the U.S. economic outlook, South Florida's regional economy, and monetary policy."
 >
-  <!-- Masthead: the outward front door -->
+  <!-- Masthead: the briefing opener on the navy field. The sticky header sits
+       on the same field, so the two read as one block. One dominant action;
+       credentials set as labeled proof rows (facts verbatim — never extend
+       without verification). -->
   <section class="mast">
     <div class="mast__inner">
       <div class="mast__copy">
-        <p class="kicker">Economist · Speaker · Writer</p>
         <h1 class="mast__headline">
           Making sense of the economics <em>behind the headlines</em>.
         </h1>
         <p class="mast__sub">
-          I'm Bryan Cutsinger, an economist at Florida Atlantic University, where I
-          direct the graduate program in economics. My research on monetary
-          economics, economic history, and political economy has appeared in
-          journals including the <em>European Economic Review</em>,
-          <em>Explorations in Economic History</em>, and <em>Public Choice</em>, where
-          I also serve as an associate editor. I'm also acting director of the Sound
-          Money Project at the American Institute for Economic Research, where I
-          write about money, inflation, and monetary policy.
+          I'm an economist at Florida Atlantic University, where I direct the
+          graduate program in economics. I speak and write about money,
+          inflation, and the economic outlook for business, policy, and
+          university audiences.
         </p>
         <div class="mast__cta">
-          <Button href="/speaking/" variant="primary">Invite me to speak</Button>
-          <Button href="/writing/" variant="secondary">Read my writing</Button>
+          <Button href="/speaking/" variant="action-inverse">Invite me to speak</Button>
+          <a href="/writing/" class="mast__quiet">Read my writing →</a>
+        </div>
+        <div class="proof">
+          <p class="proof__roles">
+            Associate editor, <em>Public Choice</em> · Acting director, AIER
+            Sound Money Project
+          </p>
+          <dl class="proof__rows">
+            <div class="proof__row">
+              <dt>Research</dt>
+              <dd>
+                <em>European Economic Review</em> ·
+                <em>Explorations in Economic History</em> · <em>Public Choice</em>
+              </dd>
+            </div>
+            <div class="proof__row">
+              <dt>Press</dt>
+              <dd>National Review · The Hill · The Washington Examiner</dd>
+            </div>
+          </dl>
         </div>
       </div>
       <figure class="mast__portrait">
@@ -96,9 +113,8 @@ const workingPaperCount = (pubData.workingPapers ?? []).filter(
   </section>
 
   <!-- Signature talks -->
-  <Section variant="sunk">
+  <Section variant="surface">
     <div class="head">
-      <p class="kicker">What I speak about</p>
       <h2>Talks your audience can use.</h2>
       <p class="lede">
         Research-backed keynotes and lectures, shaped to the host and occasion.
@@ -109,7 +125,7 @@ const workingPaperCount = (pubData.workingPapers ?? []).filter(
       {
         talks.map((t) => (
           <li class="talk">
-            <p class="talk__meta label label--accent">{t.format} · {t.audience}</p>
+            <p class="talk__meta label">{t.format}</p>
             <h3 class="talk__title">{t.title}</h3>
             <p class="talk__dek">{t.description}</p>
             {t.href && (
@@ -123,11 +139,10 @@ const workingPaperCount = (pubData.workingPapers ?? []).filter(
     </ol>
   </Section>
 
-  <!-- Invite band -->
+  <!-- Booking band -->
   <Section variant="ink">
     <div class="invite">
       <div class="invite__copy">
-        <p class="kicker">Booking</p>
         <h2>Bring serious economics to your audience.</h2>
         <p class="invite__sub">
           Keynotes, lectures, and panels for universities, conferences,
@@ -135,94 +150,158 @@ const workingPaperCount = (pubData.workingPapers ?? []).filter(
           I'll get back to you personally.
         </p>
       </div>
-      <div class="invite__aside">
+      <div class="invite__card">
+        <p class="label">Engagements</p>
         <p class="invite__details">
-          <span class="label">Engagements</span>
-          Available for local, national, and virtual keynotes, briefings, panels,
-          workshops, and university visits.
+          Available for local, national, and virtual keynotes, briefings,
+          panels, workshops, and university visits.
         </p>
-        <Button href="/speaking/" variant="on-ink">Check availability</Button>
+        <Button href="/speaking/" variant="action">Check availability</Button>
       </div>
     </div>
   </Section>
 
-  <!-- Recent -->
+  <!-- Recent: the ruled dated record -->
   <Section variant="sunk">
-    <div class="head head--row">
-      <div>
-        <p class="kicker">Lately</p>
-        <h2>Recent work.</h2>
-      </div>
+    <div class="head head--flush">
+      <h2>Recent work.</h2>
     </div>
     <DatedList items={recent} />
     <p class="recent-more">
-      <a href="/writing/" class="label label--accent">See all writing →</a>
+      <a href="/writing/">See all writing →</a>
       {workingPaperCount > 0 && (
-        <a href="/research/" class="label label--accent">
-          {workingPaperCount} working papers →
-        </a>
+        <a href="/research/">{workingPaperCount} working papers →</a>
       )}
     </p>
   </Section>
 </MarketingLayout>
 
 <style>
-  /* --- masthead --- */
+  /* --- masthead: the navy field --- */
   .mast {
-    padding-top: calc(var(--header-h) + var(--sp-16));
+    background: var(--field);
+    color: var(--on-field);
+    padding-top: var(--sp-16);
     padding-bottom: var(--section-y);
-    background: var(--paper);
+    border-bottom: 4px solid var(--field-edge);
   }
   .mast__inner {
     max-width: var(--container);
     margin-inline: auto;
     padding-inline: var(--sp-6);
     display: grid;
-    grid-template-columns: 1.5fr 0.9fr;
+    grid-template-columns: 1.3fr 1fr;
     gap: var(--sp-16);
     align-items: center;
   }
   .mast__headline {
     font-size: var(--fs-mast);
-    line-height: 1.02;
-    letter-spacing: -0.02em;
-    margin: 0 0 var(--sp-6);
-    max-width: 15ch;
+    font-weight: 600;
+    line-height: 1.06;
+    letter-spacing: -0.015em;
+    margin: 0 0 var(--sp-4);
+    max-width: 17ch;
+    color: var(--on-field);
   }
-  .mast__headline em { font-style: italic; color: var(--accent); }
+  .mast__headline em { font-style: italic; font-weight: 500; }
   .mast__sub {
     font-size: var(--fs-lead);
-    line-height: 1.5;
-    color: var(--muted);
-    max-width: 52ch;
-    margin: 0 0 var(--sp-8);
+    line-height: 1.55;
+    color: var(--on-field-muted);
+    max-width: 46ch;
+    margin: 0 0 var(--sp-6);
   }
-  .mast__sub em { font-style: italic; color: var(--ink); }
-  .mast__cta { display: flex; gap: var(--sp-3); flex-wrap: wrap; }
+  .mast__cta {
+    display: flex;
+    gap: var(--sp-6);
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: var(--sp-8);
+  }
+  .mast__quiet {
+    font-family: var(--font-label);
+    font-size: 0.84rem;
+    font-weight: 650;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--on-field-muted);
+  }
+  .mast__quiet:hover { color: var(--on-field); }
+
+  /* the proof block: factual apparatus, set as labeled data rows */
+  .proof {
+    border-top: 1px solid rgba(236, 233, 226, 0.22);
+    padding-top: var(--sp-4);
+    max-width: 56ch;
+  }
+  .proof__roles {
+    font-family: var(--font-label);
+    font-size: 0.8rem;
+    font-weight: 650;
+    letter-spacing: 0.02em;
+    color: var(--on-field);
+    margin: 0 0 var(--sp-2);
+    max-width: none;
+  }
+  .proof__rows { margin: 0; }
+  .proof__row {
+    display: grid;
+    grid-template-columns: 5.25rem 1fr;
+    gap: 0.9rem;
+    padding-block: 0.22rem;
+  }
+  .proof__row dt {
+    font-family: var(--font-label);
+    font-size: 0.68rem;
+    font-weight: 650;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--data-inverse);
+    padding-top: 0.15em;
+  }
+  .proof__row dd {
+    margin: 0;
+    font-family: var(--font-label);
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    line-height: 1.7;
+    color: var(--on-field-muted);
+  }
+
   .mast__portrait {
     margin: 0;
     justify-self: end;
-    max-width: 320px;
+    width: min(100%, 400px);
   }
   .mast__portrait img {
-    border-radius: var(--radius-lg);
-    filter: grayscale(0.15);
+    border-radius: var(--radius);
+    border: 1px solid rgba(236, 233, 226, 0.3);
+    padding: 6px;
+    background: var(--card);
   }
 
-  /* --- section head --- */
-  .head { margin-bottom: var(--sp-8); }
-  .head h2 { max-width: 20ch; }
-  .head .lede { margin-top: var(--sp-3); }
-
-  /* recent → see-all links */
-  .recent-more {
-    margin: var(--sp-8) 0 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--sp-3) var(--sp-8);
+  /* the one orchestrated moment: a quiet rise on page load (hero only) */
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: none; }
   }
-  .recent-more a { text-decoration: none; }
-  .recent-more a:hover { text-decoration: underline; }
+  .mast__headline { animation: rise 0.55s cubic-bezier(0.2, 0.7, 0.3, 1) 0.05s backwards; }
+  .mast__sub { animation: rise 0.55s cubic-bezier(0.2, 0.7, 0.3, 1) 0.13s backwards; }
+  .mast__cta { animation: rise 0.55s cubic-bezier(0.2, 0.7, 0.3, 1) 0.21s backwards; }
+  .proof { animation: rise 0.55s cubic-bezier(0.2, 0.7, 0.3, 1) 0.29s backwards; }
+  .mast__portrait { animation: rise 0.65s cubic-bezier(0.2, 0.7, 0.3, 1) 0.16s backwards; }
+
+  /* --- section heads: a double structural rule, no eyebrow --- */
+  .head {
+    border-top: 3px double var(--structure);
+    padding-top: var(--sp-6);
+    margin-bottom: var(--sp-8);
+  }
+  .head--flush { border-top: 0; padding-top: 0; }
+  .head h2 { max-width: 26ch; margin-bottom: var(--sp-2); }
+  .head .lede { margin: 0; }
 
   /* --- signature talks --- */
   .talks {
@@ -231,32 +310,72 @@ const workingPaperCount = (pubData.workingPapers ?? []).filter(
     padding: 0;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--sp-8);
-    border-top: 1px solid var(--hairline);
-    padding-top: var(--sp-8);
+    gap: 0 var(--sp-8);
+  }
+  .talk + .talk {
+    border-left: 1px solid var(--structure);
+    padding-left: var(--sp-8);
   }
   .talk__meta { display: block; margin-bottom: var(--sp-3); }
   .talk__title { font-size: var(--fs-h3); margin: 0 0 var(--sp-3); }
-  .talk__dek { margin: 0; color: var(--muted); font-size: 0.98rem; }
-  .talk__source { margin: var(--sp-3) 0 0; font-family: var(--font-label); font-size: 0.85rem; }
+  .talk__dek { margin: 0; color: var(--text-muted); font-size: 0.97rem; }
+  .talk__source { margin: var(--sp-3) 0 0; font-family: var(--font-label); font-size: 0.82rem; }
 
-  /* --- invite band --- */
+  /* --- booking band --- */
   .invite {
     display: grid;
-    grid-template-columns: 1.4fr 0.8fr;
+    grid-template-columns: 1.45fr 0.85fr;
     gap: var(--sp-12);
     align-items: center;
   }
-  .invite__sub { color: var(--on-ink-muted); font-size: var(--fs-lead); line-height: 1.5; margin: 0; max-width: 48ch; }
-  .invite__aside { display: flex; flex-direction: column; gap: var(--sp-6); align-items: flex-start; }
-  .invite__details { color: var(--on-ink-muted); margin: 0; font-size: 0.95rem; }
-  .invite__details .label { display: block; color: var(--accent-on-ink); margin-bottom: var(--sp-2); }
+  .invite__sub {
+    color: var(--on-field-muted);
+    font-size: var(--fs-lead);
+    line-height: 1.5;
+    margin: 0;
+    max-width: 46ch;
+  }
+  .invite__card {
+    background: var(--card);
+    color: var(--text);
+    border-radius: var(--radius);
+    padding: var(--sp-6) var(--sp-6) var(--sp-8);
+  }
+  .invite__card .label { display: block; margin-bottom: var(--sp-2); }
+  .invite__details {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-bottom: var(--sp-6);
+  }
+
+  /* --- recent → see-all links --- */
+  .recent-more {
+    margin: var(--sp-8) 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-3) var(--sp-8);
+  }
+  .recent-more a {
+    font-family: var(--font-label);
+    font-size: 0.8rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .recent-more a:hover { text-decoration: underline; }
 
   /* --- responsive --- */
   @media (max-width: 900px) {
     .mast__inner { grid-template-columns: 1fr; gap: var(--sp-8); }
-    .mast__portrait { justify-self: start; max-width: 200px; }
+    .mast__portrait { justify-self: start; width: min(100%, 300px); }
     .talks { grid-template-columns: 1fr; gap: var(--sp-6); }
+    .talk + .talk {
+      border-left: 0;
+      padding-left: 0;
+      border-top: 1px solid var(--structure);
+      padding-top: var(--sp-6);
+    }
     .invite { grid-template-columns: 1fr; gap: var(--sp-8); }
   }
 </style>
