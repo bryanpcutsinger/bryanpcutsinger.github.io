@@ -10,6 +10,7 @@ import speakingCharleston from '../assets/speaking-charleston.jpg';
 import salveLecture from '../assets/salve-regina-lecture.jpg';
 import fauResearchPark from '../assets/on-stage-gesturing.jpg';
 import utepLecture from '../assets/utep-lecture.jpg';
+import fedPolicyUnderPressure from '../assets/on-stage-podium.jpg';
 
 import topicsData from '../data/topics.json';
 import testimonialsData from '../data/testimonials.json';
@@ -112,21 +113,31 @@ const venues = [
     <div class="head"><h2>See a talk.</h2></div>
     <figure class="stage-photo">
       <Image
-        src={utepLecture}
-        alt="Bryan Cutsinger gesturing toward a chart of inflation survey data during a talk at the University of Texas at El Paso"
+        src={fedPolicyUnderPressure}
+        alt="Bryan Cutsinger gesturing while discussing Nixon-era pressure on the Federal Reserve at the AIER Fed Policy Under Pressure conference at FAU"
         widths={[600, 960, 1280]}
         sizes="(min-width: 960px) 960px, 100vw"
         loading="lazy"
       />
-      <figcaption>Speaking at the University of Texas at El Paso.</figcaption>
+      <figcaption>Speaking on central bank independence at AIER's "Fed Policy Under Pressure" conference, FAU.</figcaption>
     </figure>
     <div class="stage-grid">
+      <figure class="stage-photo">
+        <Image
+          src={utepLecture}
+          alt="Bryan Cutsinger gesturing toward a chart of inflation survey data during a talk at the University of Texas at El Paso"
+          widths={[480, 800, 1200]}
+          sizes="(min-width: 820px) 25vw, 50vw"
+          loading="lazy"
+        />
+        <figcaption>Speaking at the University of Texas at El Paso.</figcaption>
+      </figure>
       <figure class="stage-photo">
         <Image
           src={salveLecture}
           alt="Bryan Cutsinger pointing to a slide while lecturing on inflation to a full lecture hall at Salve Regina University"
           widths={[480, 800, 1200]}
-          sizes="(min-width: 820px) 33vw, 100vw"
+          sizes="(min-width: 820px) 25vw, 50vw"
           loading="lazy"
         />
         <figcaption>Guest lecture on inflation and Fed policy at Salve Regina University.</figcaption>
@@ -136,7 +147,7 @@ const venues = [
           src={fauResearchPark}
           alt="Bryan Cutsinger briefing a business audience on South Florida economic data at the FAU Research Park presentation"
           widths={[480, 800, 1200]}
-          sizes="(min-width: 820px) 33vw, 100vw"
+          sizes="(min-width: 820px) 25vw, 50vw"
           loading="lazy"
         />
         <figcaption>This year's FAU Research Park presentation.</figcaption>
@@ -146,7 +157,7 @@ const venues = [
           src={speakingCharleston}
           alt="Bryan Cutsinger presenting to an audience from the podium at the College of Charleston"
           widths={[480, 800, 1200]}
-          sizes="(min-width: 820px) 33vw, 100vw"
+          sizes="(min-width: 820px) 25vw, 50vw"
           loading="lazy"
         />
         <figcaption>Presenting at the College of Charleston.</figcaption>
@@ -269,7 +280,7 @@ const venues = [
   }
   .stage-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: var(--sp-8);
   }
   .stage-grid .stage-photo { margin-bottom: 0; }
@@ -303,6 +314,10 @@ const venues = [
   .quotes { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-8); }
   .quote blockquote { font-family: var(--font-display); font-size: 1.35rem; line-height: 1.35; margin: 0 0 var(--sp-3); color: var(--ink); }
   .quote__by { color: var(--muted); }
+
+  @media (max-width: 1100px) {
+    .stage-grid { grid-template-columns: repeat(2, 1fr); }
+  }
 
   @media (max-width: 820px) {
     .book-lead { grid-template-columns: 1fr; gap: var(--sp-6); }
