@@ -13,7 +13,7 @@ const { heading, subtext, cta } = Astro.props;
   <div class="cta-band__inner">
     <h2 class="cta-band__heading">{heading}</h2>
     {subtext && <p class="cta-band__subtext">{subtext}</p>}
-    <Button href={cta.href} variant="primary">{cta.label}</Button>
+    <Button href={cta.href} variant="action-inverse">{cta.label}</Button>
   </div>
 </section>
 

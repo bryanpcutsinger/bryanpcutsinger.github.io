@@ -7,31 +7,13 @@
 //   'secondary'      — restrained 1px outline (downloads, secondary actions)
 //   'ghost-ink'      — outline on dark fields
 //   'quiet'          — uppercase text link, no box
-// Legacy names accepted during migration (retire in cleanup):
-//   'primary'→action · 'on-ink'/'on-claret'→action-inverse · 'ghost-claret'→ghost-ink
 interface Props {
   href: string;
-  variant?:
-    | 'action'
-    | 'action-inverse'
-    | 'secondary'
-    | 'ghost-ink'
-    | 'quiet'
-    | 'primary'
-    | 'on-ink'
-    | 'on-claret'
-    | 'ghost-claret';
+  variant?: 'action' | 'action-inverse' | 'secondary' | 'ghost-ink' | 'quiet';
   class?: string;
 }
 const { href, variant = 'action', class: className = '' } = Astro.props;
-const resolved =
-  variant === 'primary'
-    ? 'action'
-    : variant === 'on-ink' || variant === 'on-claret'
-      ? 'action-inverse'
-      : variant === 'ghost-claret'
-        ? 'ghost-ink'
-        : variant;
+const resolved = variant;
 ---
 <a href={href} class:list={['btn', `btn--${resolved}`, className]}>
   <slot />

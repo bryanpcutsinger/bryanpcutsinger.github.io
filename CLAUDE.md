@@ -34,16 +34,20 @@ economist + **paid speaker**, built as **custom Astro pages in `src/pages/`**
 (`index`, `about`, `speaking`, `contact`, **`writing`, `research`**, plus `teaching/*`),
 completely separate from Starlight (which still owns `/ai/`).
 
-> **⚠️ REDESIGNED 2026-07-01 → the "public economist" system (LIVE, commit `369cf5f`).**
-> The brass/bone and Fraunces+Inter descriptions in this section — and a since-superseded
-> interim *claret* "public essay" system — are **HISTORY**. The live look is now
-> **outward-first**: bright paper + deep ink + **one ledger-green accent**, a two-face
-> pairing (**Fraunces** display + **Newsreader** reading + **Inter** labels). See the
-> **"Public economist redesign"** bullet below and the top **Current status** entry.
-> Earlier history: `~/.claude/plans/i-want-to-rebuilt-ancient-zephyr.md` (Rev 1–5) and
-> `~/.claude/plans/let-s-try-another-approach-async-knuth.md` (the 2026-07-01 rebuild).
+> **⚠️ REDESIGNED AGAIN 2026-07-22 → the "ledger v5" system (branch `redesign/ledger-v5`).**
+> The "public economist" (paper/ink/ledger-green, Fraunces+Inter) descriptions below are
+> **HISTORY** — superseded by **ledger v5**, a portrait-derived system: navy **field**
+> `#242932` (suit) for Home cover/booking/footer chrome; warm stone **ground** `#EAE6DF`
+> (studio backdrop) with deeper `#DFDAD1` bands; **structure/data green** `#B7C0B6`/`#35594B`
+> (tie stripe) for rules + metadata labels; **action red** `#A33B2A` (tie stripe) for
+> links/buttons/years. Type: **Besley** (Clarendon display) + **Newsreader** (prose) +
+> **Libre Franklin** (labels/UI). Devices: the ruled dated record (DatedList), double-rule
+> section heads (NO eyebrow kickers — uppercase labels are data apparatus only), light
+> interior openings (navy = Home cover only), one hero rise animation. Plan + spec:
+> `~/.claude/plans/ledger-v5-migration.md`. Earlier history: the plans named below.
 
-- **Brand — "the public economist" (2026-07-01, current):** bright archival **paper
+- **Brand — "ledger v5" (2026-07-22, current; portrait-derived — see the banner above).
+  The bullet below describes the SUPERSEDED public-economist system:** bright archival **paper
   `#FBFAF7`** + warm **ink `#1A1917`** + one **ledger-green accent `#22453B`** (on-ink
   variant `#B8D0C6`; hard rule — never green on the ink header/footer, 1.66:1). Type is a
   **two-face pairing**: **Fraunces** (display voice) + **Newsreader** (reading prose) +
@@ -107,17 +111,18 @@ credentials = interim director of the **AIER Sound Money Project**, Associate Ed
   pager, and search.
   - Starlight is **pinned to the 0.36 line on purpose**: 0.38+ requires Astro 6 and
     we're staying on Astro 5 for now (see TODO). Don't bump it without bumping Astro.
-- **Theming = the "public economist" brand (retuned 2026-07-01; was FAU→brass→claret).**
+- **Theming = the "ledger v5" brand (retuned 2026-07-22; was FAU→brass→claret→public-economist).**
   `src/styles/fau-theme.css` (registered via Starlight `customCss`) carries the **full
-  marketing brand** onto Starlight — palette/type (paper `#FBFAF7` + ink `#1A1917` + one
-  **ledger-green `#22453B`** accent; **Fraunces** headings, **Newsreader** prose, **Inter**
-  UI, IBM Plex Mono code) **and** its patterns: sentence case throughout, minimal hairline
-  tables, lift-on-hover cards, green underlined links, green note-callouts. The filename
-  and its `--fau-*` variable names are **historical** — they hold the current brand colors,
-  not FAU's (and not the interim brass/claret). **Marketing tokens: `src/styles/site.css`**
-  (the current system); `src/styles/brand.css` is the superseded claret system, still
-  loaded first so not-yet-migrated pages keep working — retire it once Teaching is migrated.
-  Redesign plan: `~/.claude/plans/let-s-try-another-approach-async-knuth.md`.
+  marketing brand** onto Starlight — palette/type (stone ground `#EAE6DF` + navy field
+  `#242932` chrome + **action-red `#A33B2A`** links + data-green labels; **Besley**
+  headings, **Newsreader** prose, **Libre Franklin** UI, IBM Plex Mono code) and its
+  patterns: sentence case, minimal hairline tables (neutral rules), lift-on-hover cards,
+  red underlined links, data-green note-callouts, 2px radii. The filename and its
+  `--fau-*` variable names are **historical** — they hold the current brand colors.
+  **Marketing tokens: `src/styles/site.css`** (semantic: ground/field/structure/data/
+  action + a legacy alias block — --paper/--ink/--accent etc. still resolve for
+  older scoped CSS; shrink opportunistically). **`brand.css` is DELETED** (2026-07-22,
+  with 10 dead claret components). Migration plan: `~/.claude/plans/ledger-v5-migration.md`.
 - **Content lives in `src/content/docs/`** (Starlight's `docs` collection, defined
   in `src/content.config.ts` via `docsLoader()` + `docsSchema()`):
   - `docs/index.mdx` → `/` (splash landing)
@@ -444,9 +449,24 @@ the intro, above the publication lists.
   computed `variantOf()` helper (robust to the conditionally-rendered chapters/books sections),
   not hardcoded variants.
 
-## Current status (as of 2026-07-15)
+## Current status (as of 2026-07-22)
 
-**Latest (2026-07-15) — publications now auto-publish from the CV:** the Research
+**Latest (2026-07-22) — FULL "ledger v5" REDESIGN built on branch `redesign/ledger-v5`
+(NOT yet merged to main — merge only on Bryan's final sign-off; deploy = push to main):**
+Complete visual migration from the "public economist" system to **ledger v5** (see the
+Marketing-site banner + `~/.claude/plans/ledger-v5-migration.md` for the full spec; the
+design went through v1→v5 mockups, a Codex design review, and a blind two-leg migration
+plan per house rules). Commit chain: fonts `5e76b3f` → tokens `795c4e7` → chrome
+`8834311` → Home+Speaking pilot `2b52d8c` (Bryan-approved) + band fix `1b3b4e6` →
+remaining marketing pages `248e612` → Teaching + brand.css/10-dead-components deleted
+`e2e4084` → Starlight remap `356d4f6` → cleanup (Fraunces/Inter/Plex-Sans uninstalled,
+legacy Button names retired, this doc). Build green (63 pages) at every commit. Also
+fixed en route: skip-link ink-on-green contrast, mobile-menu hover, Starlight gray-4 AA,
+and the /ai/ mobile nav disappearing below 50rem (now renders in Starlight's drawer).
+Decisions of record: light interior openings (navy = Home cover only); no header CTA;
+outline secondary kept; downward band alternation (ground → ground-deep) sitewide.
+
+**Prior (2026-07-15) — publications now auto-publish from the CV:** the Research
 page's `publications.json` is GENERATED from `cutsinger_CV.tex` by a fail-closed
 parser in the `cv` repo; the Publish CV Action now syncs PDF + JSON to this repo in
 ONE commit, and a missing/failed sync fails the run red (was warning-only). First
