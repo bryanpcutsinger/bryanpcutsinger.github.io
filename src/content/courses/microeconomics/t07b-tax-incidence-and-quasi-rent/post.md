@@ -7,7 +7,8 @@ ue_anchors: ["UE 11 (fixed-land incidence and amenity capitalization)", "UE 17",
 be_anchors: ["BE 5", "BE 9 (partial)"]
 ep_anchors: ["E&P Fig 4-6 (ch. 4, p. 66) — a tax on fixed land: consumer price unchanged, owner bears all, legal side irrelevant", "E&P ch. 4 & ch. 11 — tax political economy: immobile bases taxed, mobile bases escape", "E&P ch. 18 pp. 394–398 — graduated-income-tax rationales, implicit housing rent, and federal revenue sharing"]
 word_target: "2900-3400"
-word_budget: 3400
+word_budget: 3482
+  # word_budget 3400 -> 3482 (+82): For Further Reading section added 2026-07-22
 status: approved        # E&P integration M5 done-gate 2026-07-20; prior approval 2026-07-01
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Part B of T7, rebuilt (F2) into a focused tax-incidence lecture. Owns UE 17 general two-sided tax incidence, sunk cost/quasi-rent; integrates UE 11 fixed-land incidence as the zero-supply-elasticity case. Deeper policy applications and the UE-18/BE competition-in-motion tail live in extensions.md (lecture channel)."
@@ -124,6 +125,13 @@ The peanut story leans on an idea worth naming. A resource already in place, wit
 </aside>
 
 You can cut that surplus, even cut it hard, without driving the resource out, because its original cost is gone and irrelevant. The only thing that shuts it down is a price so low it fails to cover the cost of operating it, not the cost of having built it. This applies to people too: the gap between what you currently earn and the most you could earn in your next-best job is your quasi-rent, and an employer could trim your pay toward that floor without losing you. A resource already in place is thus far harder to dislodge than its long-run cost alone would suggest, which is why a tax, or a rival's lower price, lands on it as a shrunken quasi-rent rather than driving it out of use.
+
+## For Further Reading
+
+Want to explore the source material? This lecture draws on the following chapters from two books by Armen A. Alchian and William R. Allen:
+
+- *Universal Economics* (Liberty Fund, 2018): Ch. 11, “Illustrative Applications of Demand Principles”; Ch. 17, “Timing of Adjustments”; Ch. 18, “Facts of Life”; Ch. 27, “The Corporate Firm”.
+- *Exchange and Production*, 3rd ed. (Wadsworth, 1983): Ch. 4, “Market Prices as Social Coordinators”; Ch. 11, “Price Searchers”; Ch. 18, “The Domestic and Political Economies”.
 
 <div class="econ-review">
 <section class="econ-review__section">

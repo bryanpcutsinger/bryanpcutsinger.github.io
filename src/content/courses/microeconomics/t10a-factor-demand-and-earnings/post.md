@@ -7,7 +7,8 @@ ue_anchors: ["UE 29", "UE 39", "UE 22 (Codlandia)"]
 ep_anchors: ["E&P Fig 8-1 — team marginal products", "E&P Fig 14-6 — demand for labor services"]
 be_anchors: ["BE 10"]
 word_target: "2500-3600"
-word_budget: 3600
+word_budget: 3672
+  # word_budget 3600 -> 3672 (+72): For Further Reading section added 2026-07-22
 status: approved        # Stage-2 sign-off 2026-06-15
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Part A of the two-part T10 (factor demand, VMP, earnings); Part B (topics/t10b-labor-coalitions-and-constraints) covers unions, the minimum wage, discrimination, and licensing. Source-of-truth for the deck; section headers are claims that map to slide titles."
@@ -178,6 +179,13 @@ It helps to think of skills as a form of wealth. Economists call it *human capit
 </aside>
 
 That same insight ties human capital to discrimination, a thread Part B picks up directly.
+
+## For Further Reading
+
+Want to explore the source material? This lecture draws on the following chapters from two books by Armen A. Alchian and William R. Allen:
+
+- *Universal Economics* (Liberty Fund, 2018): Ch. 22, “Teamwork and Firms”; Ch. 29, “The Demand for Productive Resources”; Ch. 39, “Your Earnings: How and When”.
+- *Exchange and Production*, 3rd ed. (Wadsworth, 1983): Ch. 8, “Production by Firms”; Ch. 14, “Income from Personal Services”.
 
 <div class="econ-review">
 <section class="econ-review__section">

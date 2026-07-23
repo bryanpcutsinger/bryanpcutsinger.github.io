@@ -7,7 +7,8 @@ ue_anchors: ["UE 16"]
 be_anchors: []
 ep_anchors: ["E&P Fig 10-8 (ch. 10, p. 211) — profits competed away by bidding up the responsible input", "E&P Fig 10-3 (ch. 10, p. 205) — total variable cost as the area under marginal cost", "E&P Fig 10-7 (ch. 10, p. 210) — adjustment of supply to a demand shift: short-run overshoot, long-run settle via entry", "E&P ch. 10 (p. 216) — 'sick industries': persistent losses are not market failure"]
 word_target: "3400-3800"
-word_budget: 3800
+word_budget: 3861
+  # word_budget 3800 -> 3861 (+61): For Further Reading section added 2026-07-22
 status: approved        # scope-reduction R4 done-gate 2026-07-21; E&P integration M5 done-gate 2026-07-20; prior approval 2026-07-01
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Part A of t07-competitive-markets (split at the Exam-2 seam to clear the 6,000-word cap); Part B (t07b-tax-incidence-and-quasi-rent) covers UE 17/18 + BE. Source-of-truth for the T7a deck; section headers are claims that map to slide titles. Assumes T6 (costs, marginal cost, the firm's cost curves) is already taught and does NOT re-derive cost curves."
@@ -200,6 +201,13 @@ When rivals bid up the price of a profit-earning asset, what they pay for is its
 Competition pushes each firm to produce where price equals marginal cost, and economists have long argued this outcome is, in a specific sense, a good one, and the argument can be made entirely in words.
 
 At the competitive output, the last unit produced is worth at least its price to the buyer who takes it, since he was willing to pay that price, and the price equals marginal cost, the worth of the other things society gave up to make that unit. So the last unit is worth as much to the person who gets it as the resources sacrificed to produce it. Push output lower and you skip units buyers value more than they cost; push it higher and you make units that cost more than they are worth to anyone. Producing right where price meets marginal cost is the point where the total personal worth created, across everyone, is as large as it can be — the sense in which the competitive result is efficient.
+
+## For Further Reading
+
+Want to explore the source material? This lecture draws on the following chapters from two books by Armen A. Alchian and William R. Allen:
+
+- *Universal Economics* (Liberty Fund, 2018): Ch. 16, “Market Supply and Price with Price-Takers”.
+- *Exchange and Production*, 3rd ed. (Wadsworth, 1983): Ch. 10, “Price Takers’ Supply and Price Response to Consumer Demand”.
 
 <div class="econ-review">
 <section class="econ-review__section">

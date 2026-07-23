@@ -7,7 +7,8 @@ ue_anchors: ["UE 22", "UE 23", "UE 24", "UE 25", "UE 27", "UE 28"]
 be_anchors: ["BE 7 (partial)"]
 ep_anchors: ["E&P ch. 9 (Business Firms: Ownership, Control, Profits) — the regression fallacy: a single result is part skill, part luck, and good luck regresses to normal (100-identical-salespersons); treating one lucky result as durable ability is the regression fallacy, but 'the market does not commit regression fallacies' — bidders who overpay for a lucky year lose wealth to those who can tell luck from ability, and superior ability, once revealed, is bid into higher prices/rents/wages"]
 word_target: "3000-3700"
-word_budget: 3700
+word_budget: 3790
+  # word_budget 3700 -> 3790 (+90): For Further Reading section added 2026-07-22
 status: approved        # M11 done gate 2026-07-20 (§10 A+B PASS); prior Stage-2 2026-06-15
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Source-of-truth for the T9 deck; section headers are claims that map to slide titles. T9 = why firms exist (team production, non-separability, moral hazard), the residual claimant as owner-monitor, protecting specific investments against hold-up, the corporate form + market for corporate control, and the contract-grounded shareholder-vs-stakeholder application."
@@ -142,6 +143,13 @@ The difference is not a quibble. Management cannot put a non-contractual stakeho
 The evidence humbles anyone sure more shareholder "democracy" always helps: the United Kingdom gives shareholders unusually strong rights, yet its firms are underrepresented among the world's largest, and CEOs of firms owned by big financial institutions risking their own money earn the highest salaries of all, because owners with real money at stake know a bad chief executive costs far more than the salary. That also answers why a firm pays a failed CEO millions to leave: keeping him can cost billions in bad decisions, so the "golden parachute" is the price of ending a costly relationship fast. Which is worth stating plainly: *a cost is not the same as a waste*. So are the jobs lost when a merger eliminates duplicate positions; those losses fall hard on identifiable people, but a change that makes the combined enterprise more productive raises total wealth even as it imposes that concentrated pain. That asymmetry, concentrated costs against dispersed benefits, is why efficiency-raising changes are so often resisted politically.
 
 After all the talk of shareholders, managers, and raiders, the firm's ultimate controller is none of them; it is the consumer. Corporate control disciplines managers from above, but consumer demand disciplines the firm from below: a firm whose product no one will buy dies, unless it secures a subsidy or a law banning purchases elsewhere. The buy-or-walk-away decision is the one discipline no boardroom maneuver can repeal.
+
+## For Further Reading
+
+Want to explore the source material? This lecture draws on the following chapters from two books by Armen A. Alchian and William R. Allen:
+
+- *Universal Economics* (Liberty Fund, 2018): Ch. 22, “Teamwork and Firms”; Ch. 23, “The Firm’s Control and Reward Structure”; Ch. 24, “Protecting Your Dependencies”; Ch. 25, “Dependency Assurance by Reputation and Predictable Price”; Ch. 27, “The Corporate Firm”; Ch. 28, “Competition for Control of the Corporation”.
+- *Exchange and Production*, 3rd ed. (Wadsworth, 1983): Ch. 9, “Business Firms: Ownership, Control, and Profits”.
 
 <div class="econ-review">
 <section class="econ-review__section">

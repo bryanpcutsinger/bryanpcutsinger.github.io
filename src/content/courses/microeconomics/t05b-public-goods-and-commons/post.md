@@ -7,7 +7,8 @@ ue_anchors: ["UE 13 (public goods, clubs, commons, institutional remedies)"]
 be_anchors: []
 ep_anchors: ["E&P ch. 5 & 18 — vertical summation of public-good values; public-goods rhetoric as subsidy cover; nonprofit/government incentive distortions", "E&P ch. 18 pp. 397–398 — redistribution need not run rich-to-poor: below-cost state tuition, tariffs, and state-created monopoly revenue"]
 word_target: "1800-4500"
-word_budget: 3147
+word_budget: 3210
+  # word_budget 3147 -> 3210 (+63): For Further Reading section added 2026-07-22
 status: approved        # M10 done gate 2026-07-20 (§10 A+B PASS); prior Stage-2 2026-06-15
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Part B of T5: public goods, free riding, clubs and tie-ins, common-pool resources, and the political choice among institutional remedies. Closes the Exam-1 block."
@@ -98,6 +99,13 @@ And zoning is not the only fix. A lighter one leaves the rights where they are a
 The economic diagnosis narrows the choices without pretending to make a value judgment for us. Ask who can control the resource, who can be excluded, whose use subtracts from another's, and who captures the future value of restraint. Then ask the political question: who has the incentive and ability to choose the rule? Those two layers—resource characteristics and institutional incentives—are the durable lesson of this topic.
 
 T9 will take the residual-claimant mechanism used here and develop it into a full theory of firms, monitoring, and organizational governance.
+
+## For Further Reading
+
+Want to explore the source material? This lecture draws on the following chapters from two books by Armen A. Alchian and William R. Allen:
+
+- *Universal Economics* (Liberty Fund, 2018): Ch. 13, “Markets and Property Rights”.
+- *Exchange and Production*, 3rd ed. (Wadsworth, 1983): Ch. 5, “Information Costs and Achievement of Exchanges”; Ch. 18, “The Domestic and Political Economies”.
 
 <div class="econ-review">
 <section class="econ-review__section">

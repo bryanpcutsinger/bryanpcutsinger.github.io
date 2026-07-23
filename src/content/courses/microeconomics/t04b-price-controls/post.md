@@ -7,7 +7,8 @@ ue_anchors: ["UE 12", "UE 11 (input-price controls Q7/Q8)"]
 be_anchors: ["BE 3", "BE 4 (systemic versus intentional causation)"]
 ep_anchors: ["E&P Figs 4-7 & 4-8 (ch. 4) — rent reallocation of a fixed stock, incumbent-tenant sublease value, and rent-control shortage"]
 word_target: "3200-3600"
-word_budget: 3600
+word_budget: 3662
+  # word_budget 3600 -> 3662 (+62): For Further Reading section added 2026-07-22
 status: approved        # scope-reduction R4 done-gate 2026-07-21; prior approval 2026-07-01
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Source-of-truth for T4 session 7 and the second of two T4 posts. Combines price controls, systemic causation, and the political economy of concentrated benefits and dispersed costs. Tax incidence is consolidated in T7."
@@ -157,6 +158,13 @@ Second, the gains are concentrated and the losses dispersed. A control hands a c
 Third, controls hand politicians something valuable: the power to decide who gets the scarce good, letting officials claim credit for low prices while blaming the resulting shortages on hoarders, speculators, or greedy sellers. The damage is real but deniable; the credit is immediate and personal.
 
 Through all of it, keep the economist's discipline in view: this is positive analysis, not a verdict. Scarcity always forces some form of competition. If competition by money price is suppressed, competition by force, by waiting, by connections, by political pull takes its place; the competition never stops, only its form changes. Economics can tell you what each form of competition will do, who will gain and who will bear the cost. It cannot tell you which scarce goods *ought* to be rationed by markets and which by some other rule. That choice rests on values you bring to it. What economics offers is the cause and effect, so that whatever you decide, you decide it with your eyes open.
+
+## For Further Reading
+
+Want to explore the source material? This lecture draws on the following chapters from two books by Armen A. Alchian and William R. Allen:
+
+- *Universal Economics* (Liberty Fund, 2018): Ch. 11, “Illustrative Applications of Demand Principles”; Ch. 12, “Shortages, Surpluses, and Prices”.
+- *Exchange and Production*, 3rd ed. (Wadsworth, 1983): Ch. 4, “Market Prices as Social Coordinators”.
 
 <div class="econ-review">
 <section class="econ-review__section">

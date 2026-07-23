@@ -7,7 +7,8 @@ ue_anchors: ["UE 1", "UE 2", "UE 3"]
 be_anchors: ["BE 1", "BE 25"]
 ep_anchors: ["E&P ch. 1 (Scarcity, Competition, and Social Control) — mercantilism as the third system between capitalism and socialism: resources nominally private property but the state grants a politically favored group protected market access ('government-aided monopolization'); a noticeable share of real economies, no society purely one system", "E&P ch. 1 — every rationing criterion is a form of competition that selects the society's traits over time: reward cheap time and patience, charm and rhetoric (as in politics), or productivity, and the society grows more of that trait; even a 'fair' random draw is a criterion no one wants deciding their surgeon", "E&P ch. 3 §Freedom: As You Like It — democracy allocates political power but does not determine whether the resulting uses of power preserve open choice"]
 word_target: "3600-4000"
-word_budget: 4000
+word_budget: 4067
+  # word_budget 4000 -> 4067 (+67): For Further Reading section added 2026-07-22
 status: approved        # M9 done gate 2026-07-20 (§10 A+B PASS); prior Stage-2 2026-06-15
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Source-of-truth for the T1 deck; section headers are claims that map to slide titles."
@@ -226,6 +227,13 @@ Real economies sit between those poles, and no system is free of compulsion; the
 
 One slogan deserves an answer: "human rights must take priority over property rights." Property has no rights, only people do; property rights are a person's right to use a scarce resource. If a city orders a landlord to rent only to tenants it selects, in the name of housing as a human right, that pits the tenant's claim against the owner's, and both are people; "human rights win" just hides which person loses.
 
+
+## For Further Reading
+
+Want to explore the source material? This lecture draws on the following chapters from two books by Armen A. Alchian and William R. Allen:
+
+- *Universal Economics* (Liberty Fund, 2018): Ch. 1, “Welcome to Economics”; Ch. 2, “Your Economic Society”; Ch. 3, “Choice and Cost”.
+- *Exchange and Production*, 3rd ed. (Wadsworth, 1983): Ch. 1, “Scarcity, Competition, and Social Control”; Ch. 3, “Exchange”.
 
 <div class="econ-review">
 <section class="econ-review__section">

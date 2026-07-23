@@ -7,7 +7,8 @@ ue_anchors: ["UE 35 (arbitrage, random walk, intermediation)", "UE 37 (futures, 
 be_anchors: ["BE 13 (speculation and inventories)", "BE 15 (uncertainty)"]
 ep_anchors: ["E&P ch. 16 pp. 358–360 — protective credit controls, margin requirements, fungibility, and the paternalism tradeoff"]
 word_target: "2500-5500"
-word_budget: 3131
+word_budget: 3194
+  # word_budget 3131 -> 3194 (+63): For Further Reading section added 2026-07-22
 status: approved
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Part B of T12: speculation and inventories, futures and options, arbitrage, information in asset prices, financial intermediation, and the boundary between measurable risk and uncertainty. Final content session."
@@ -111,6 +112,13 @@ And those intermediaries are not the parasites they are sometimes accused of bei
 A futures price or current asset price is not a promise that the future will match it. It is the price that survives after people willing to buy on higher estimates and sell on lower estimates have acted on what they know. Errors remain because the next relevant fact is news, and genuine news cannot already be known. That is uncertainty: not a measurable lottery with a stable distribution, but a future whose important possibilities may not yet be imaginable.
 
 This distinction explains why market forecasts can be both useful and frequently wrong. Competition can remove predictable bias and expose private information through trades; it cannot manufacture knowledge that does not exist. Suppressing a market because its price moved before an event, or because its forecast missed, discards the public signal while leaving the underlying uncertainty untouched.
+
+## For Further Reading
+
+Want to explore the source material? This lecture draws on the following chapters from two books by Armen A. Alchian and William R. Allen:
+
+- *Universal Economics* (Liberty Fund, 2018): Ch. 35, “The Full Equilibrium: Equalized Rates of Return with Intermediaries”; Ch. 37, “Futures Markets”.
+- *Exchange and Production*, 3rd ed. (Wadsworth, 1983): Ch. 16, “Wealth: Saving and Investing”.
 
 <div class="econ-review">
 <section class="econ-review__section">

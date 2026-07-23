@@ -7,7 +7,8 @@ ue_anchors: ["UE 13", "UE 3 (externalities section)", "UE 17 (negative-externali
 be_anchors: []
 ep_anchors: ["E&P Fig 5-1 (ch. 5) — optimal tradeoff between steel and clean water (nonzero optimal pollution)"]
 word_target: "3300-3700"
-word_budget: 3700
+word_budget: 3766
+  # word_budget 3700 -> 3766 (+66): For Further Reading section added 2026-07-22
 status: approved        # M10 done gate 2026-07-20 (tie-in PASS); prior Stage-2 2026-06-15
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Part A of T5: property rights, externalities, environmental trade-offs, Coasean bargaining, and tradable permits. Part B covers public goods, clubs, commons, and institutional choice."
@@ -113,6 +114,13 @@ We are reasoning verbally here, the way we have all term, not drawing supply-and
 </figure>
 
 This first half has stayed with harms and benefits that can be tied to identifiable users. Part B asks what changes when use is shared, exclusion is difficult, or the resource is open to everyone.
+
+## For Further Reading
+
+Want to explore the source material? This lecture draws on the following chapters from two books by Armen A. Alchian and William R. Allen:
+
+- *Universal Economics* (Liberty Fund, 2018): Ch. 3, “Choice and Cost”; Ch. 13, “Markets and Property Rights”; Ch. 17, “Timing of Adjustments”.
+- *Exchange and Production*, 3rd ed. (Wadsworth, 1983): Ch. 5, “Information Costs and Achievement of Exchanges”.
 
 <div class="econ-review">
 <section class="econ-review__section">

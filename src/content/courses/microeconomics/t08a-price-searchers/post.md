@@ -7,7 +7,8 @@ ue_anchors: ["UE 19", "UE 20 (Q1–Q6, Q8)", "UE 21", "UE 26 (Q2/Q5/Q6 cartels+s
 be_anchors: ["BE 6", "BE 7 (Monopolies & Cartels)"]
 ep_anchors: ["E&P Fig 13-1 (p. 282) — monopoly rent / Ricardian rent / social loss", "E&P Fig 11-4 (p. 239) — lost consumer value", "E&P ch. 11 pp. 256–257 — Denver versus San Francisco rail rates as demand-based pricing constrained by water competition"]
 word_target: "3200-3800"
-word_budget: 3800
+word_budget: 3870
+  # word_budget 3800 -> 3870 (+70): For Further Reading section added 2026-07-22
 status: approved        # one-per-lecture split; approved 2026-07-01 (M3 E&P figure embeds 2026-07-19; R4 scope-reduction pass 2026-07-21)
 audience: students
 note: "Self-contained — assumes no access to the textbooks. First of two market-power posts (session 16); session 17 covers antitrust and regulation."
@@ -232,6 +233,13 @@ Read as marginal-revenue equalization, a long list of everyday pricing is all th
 
 One condition makes all of this possible: the low-price buyers must not be able to resell to the high-price buyers, or they would buy cheap, undercut the seller, and collapse the two prices into one. That is why discrimination thrives where resale is hard: on services, on personalized deals, on tickets tied to an ID.
 
+
+## For Further Reading
+
+Want to explore the source material? This lecture draws on the following chapters from two books by Armen A. Alchian and William R. Allen:
+
+- *Universal Economics* (Liberty Fund, 2018): Ch. 19, “Price-Searchers”; Ch. 20, “Price-Searcher Pricing”; Ch. 21, “Pricing and Marketing Tactics”; Ch. 26, “Prohibited Marketing Tactics”.
+- *Exchange and Production*, 3rd ed. (Wadsworth, 1983): Ch. 11, “Price Searchers”; Ch. 13, “Restricted Access to Markets”.
 
 <div class="econ-review">
 <section class="econ-review__section">

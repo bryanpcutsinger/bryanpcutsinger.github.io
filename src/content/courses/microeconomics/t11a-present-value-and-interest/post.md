@@ -8,7 +8,8 @@ be_anchors: ["BE 13 (PV/intermediation — partial)"]
 ep_anchors: ["E&P ch. 6 (Capital Values and Interest) — usury as an ambiguous pejorative for interest; early Christian dogma, the Koran, and Communist doctrine each condemned it yet readmitted it under euphemism (Church 'discount', Communist 'efficiency index', Treasury 'discount')", "E&P ch. 16 (Wealth, Saving, and Investing) — Aristotle's 'sterile money'; interest paid before and after each condemnation because the demand for savings exceeded supply at a zero price; the Papacy charged interest as 'fees'/'gratuities'; Christians borrowed from Jews"]
 univecon_anchors: ["University Economics (1994) ch. 11 p. 187 — Feather River project's low-discount-rate political-economy example"]
 word_target: "3300-3700"
-word_budget: 3700
+word_budget: 3777
+  # word_budget 3700 -> 3777 (+77): For Further Reading section added 2026-07-22
 status: approved        # scope-reduction R4 2026-07-21 (word_budget applied); M8 done gate 2026-07-20 (§10 A+B PASS); prior Stage-2 2026-06-15
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Part A of two on Capital, Interest, and Time; Part B (Capital Values, Profit, and the Political Economy of Time) covers durable assets, wealth, profit, the rate package, and the political economy of time. This half builds the present-value tool and the determinants of the interest rate. Source-of-truth for the Part-A deck; section headers are claims that map to slide titles. UE 36 front half only (loan market); the money-supply/central-bank half is macro and out of scope. The consumer-finance applications are [EXPAND]/lecture-deferred but covered here (logged in §7)."
@@ -249,6 +250,13 @@ No money was borrowed in either case, yet the interest rate decides whether the 
 <p class="econ-callout__label">Pause and check</p>
 <p>The venture spends only its own cash and borrows nothing, yet at a 15 percent interest rate it runs a loss. If no loan was ever taken out, where does the interest cost come from?</p>
 </aside>
+
+## For Further Reading
+
+Want to explore the source material? This lecture draws on the following chapters from two books by Armen A. Alchian and William R. Allen:
+
+- *Universal Economics* (Liberty Fund, 2018): Ch. 30, “Arithmetic of Capital Values”; Ch. 31, “Series of Future Values and Annuities”; Ch. 36, “Determinants of the Interest Rate”.
+- *Exchange and Production*, 3rd ed. (Wadsworth, 1983): Ch. 6, “Capital Values, Future Yields, and Interest”; Ch. 16, “Wealth: Saving and Investing”.
 
 <div class="econ-review">
 <section class="econ-review__section">

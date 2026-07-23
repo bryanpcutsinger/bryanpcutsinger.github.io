@@ -7,7 +7,8 @@ ue_anchors: ["UE 15 (Specialization and Exchange)"]
 be_anchors: ["BE 6 (specialization / economies of scale / middleman block)"]
 ep_anchors: ["E&P Fig 7-9 (ch. 7, p. 148) — gains from specialized production and exchange at a common market price"]
 word_target: "2900-3600"
-word_budget: 3600
+word_budget: 3652
+  # word_budget 3600 -> 3652 (+52): For Further Reading section added 2026-07-22
 status: approved        # scope-reduction R4 pass 2026-07-21; E&P integration M7 done-gate 2026-07-20; prior approval 2026-06-15
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Part B of T6 core: comparative advantage, the cheaper newcomer, blocking entry via occupational licensing, and the two meanings of specialization plus market size (UE 15 + BE 6). Diseconomies of scale and the firms-specialize/middleman material are lecture-only content in this topic's extensions.md. Part A covers UE 7's marginal toolkit plus UE 14 production/cost and BE 10. UE 17 is owned by T7."
@@ -177,6 +178,13 @@ Market size drives cost down through scale as well, because a large volume unloc
 <p class="econ-callout__label">Pause and check</p>
 <p>Suppose a law forbids selling cars across state lines. Give the two separate reasons the price of cars would rise, and connect each reason to a source of low cost that the larger market had provided.</p>
 </aside>
+
+## For Further Reading
+
+Want to explore the source material? This lecture draws on the following chapters from two books by Armen A. Alchian and William R. Allen:
+
+- *Universal Economics* (Liberty Fund, 2018): Ch. 15, “Specialization and Exchange”.
+- *Exchange and Production*, 3rd ed. (Wadsworth, 1983): Ch. 7, “Production with Specialization”.
 
 <div class="econ-review">
 <section class="econ-review__section">

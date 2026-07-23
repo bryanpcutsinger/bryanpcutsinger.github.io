@@ -6,7 +6,8 @@ sessions: ["Fall 2026 — content session 25 (Tue 11/17)"]
 ue_anchors: ["UE 34", "UE 35 (risk, return, and diversification)"]
 be_anchors: ["BE 14 (partial)"]
 word_target: "2800-3900"
-word_budget: 3900
+word_budget: 3948
+  # word_budget 3900 -> 3948 (+48): For Further Reading section added 2026-07-22
 status: approved        # Stage-2 sign-off 2026-06-15
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Part A of T12: risk versus uncertainty, risk-return, diversification, private insurance, and the political economy of government guarantees. Part B covers speculation, futures/options, asset-price information, and intermediation."
@@ -119,6 +120,13 @@ Start with bank deposits. During the Depression's bank failures, a frightened de
 
 The mechanism generalizes to any guarantee against loss. A government guarantee lowers the risk premium built into a loan, so borrowing gets cheaper than it would be at a risk-adjusted rate. Below-risk pricing weakens lenders' incentive to vet borrowers and finances projects that would not clear that rate. Economists call the result *mal-investment*: resources sunk into ventures that lose money, leaving the shortfall to the insurance fund or taxpayers. Run that logic forward and you can predict the consequences of guaranteeing loans to an industry, or of a developing country offering foreign lenders a full guarantee: a debt-financed boom in projects that would not otherwise be financed, followed by losses when some projects fail and the guarantor must make good. Economics does not supply the value judgment; it traces the incentive and incidence.
 
+
+## For Further Reading
+
+Want to explore the source material? This lecture draws on the following chapters from Armen A. Alchian and William R. Allen’s *Universal Economics* (Liberty Fund, 2018):
+
+- Ch. 34, “Risk and Insurance”
+- Ch. 35, “The Full Equilibrium: Equalized Rates of Return with Intermediaries”
 
 <div class="econ-review">
 <section class="econ-review__section">

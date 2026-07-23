@@ -6,7 +6,8 @@ sessions: ["Fall 2026 — content session 6 (Thu 9/10)"]
 ue_anchors: ["UE 6", "UE 10", "UE 11 (marketing arrangements and Q9 universal allocation)", "UE 25 (predictable prices, voluntary queues, preferred customers, and blind blocks)"]
 be_anchors: ["BE 2", "BE 4 (incremental-vs-categorical; shortage≠scarcity)"]
 ep_anchors: ["E&P Fig 4-1 (ch. 4) — market demand as horizontal sum of individual demands", "E&P Fig 4-4 (ch. 4) — supply elasticity and input generality", "E&P ch. 5 pp. 88–90 — inventories, reserve capacity, stable prices, and queues as information-cost economizers"]
-word_budget: 3600
+word_budget: 3687
+  # word_budget 3600 -> 3687 (+87): For Further Reading section added 2026-07-22
 word_target: "3400-3600"
 status: approved        # E&P integration M4 done-gate 2026-07-20; prior approval 2026-07-01
 audience: students
@@ -207,6 +208,13 @@ Surpluses are the mirror image: a *surplus* is the gap that opens when a price i
 <div><dt>Surplus</dt><dd>The gap that opens when a price is held above the clearing level, so more is offered than anyone will buy.</dd></div>
 </dl>
 </aside>
+
+## For Further Reading
+
+Want to explore the source material? This lecture draws on the following chapters from two books by Armen A. Alchian and William R. Allen:
+
+- *Universal Economics* (Liberty Fund, 2018): Ch. 6, “The Extent of Exchange”; Ch. 10, “Markets and Prices as Social Coordinators”; Ch. 11, “Illustrative Applications of Demand Principles”; Ch. 25, “Dependency Assurance by Reputation and Predictable Price”.
+- *Exchange and Production*, 3rd ed. (Wadsworth, 1983): Ch. 4, “Market Prices as Social Coordinators”; Ch. 5, “Information Costs and Achievement of Exchanges”.
 
 <div class="econ-review">
 <section class="econ-review__section">

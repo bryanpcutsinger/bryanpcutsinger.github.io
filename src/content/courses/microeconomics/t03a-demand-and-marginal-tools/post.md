@@ -8,7 +8,8 @@ ue_anchors: ["UE 5"]
 be_anchors: ["BE 2 (unmet-needs/demand-vs-need slice)"]
 ep_anchors: ["E&P Fig 2-3 (ch. 2, p. 21) — paradox of value: total worth as area vs marginal worth as height (diamond–water)"]
 word_target: "3200-3600"
-word_budget: 3600
+word_budget: 3654
+  # word_budget 3600 -> 3654 (+54): For Further Reading section added 2026-07-22
 status: approved        # E&P integration M6 done-gate 2026-07-20; prior approval 2026-07-01
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Source-of-truth for session 3. Covers laws of demand, shifts versus movements, marginal personal worth, verbal consumer surplus, demand as a rate, relative price, and demand versus fixed-needs language. UE 7's general total/marginal/average and equimarginal machinery is owned by T6."
@@ -215,6 +216,13 @@ The cleanest demonstration comes from an Israeli kibbutz that provided electrici
 Because there is no fixed need, the political language built on it tends to mislead. The very idea of a "national priorities" list, or a roster of "unmet needs" government should fill, hides the trade-off at its heart. If economics is the study of scarce resources with alternative uses, there will always be unmet needs, by definition. You can meet one desire 100 percent, a parking space for every car everywhere at all times, but only by leaving other desires, hospitals, police, schools, even more starved than before. Calling something a need does not lift the constraint; it only disguises which other things you have decided to do without.
 
 A bonus from taking this seriously: the law of demand turns out to be nearly universal. The number of children people choose to have, the number of immigrants who seek entry, the demand for pianos, for winning sports teams, even for medical procedures, all respond to the price, broadly understood, of getting them. Wherever a desire confronts a cost, the law of demand is at work.
+
+## For Further Reading
+
+Want to explore the source material? This lecture draws on the following chapters from two books by Armen A. Alchian and William R. Allen:
+
+- *Universal Economics* (Liberty Fund, 2018): Ch. 5, “Demands and the Laws of Demand”.
+- *Exchange and Production*, 3rd ed. (Wadsworth, 1983): Ch. 2, “Consumer Demand”.
 
 <div class="econ-review">
 <section class="econ-review__section">

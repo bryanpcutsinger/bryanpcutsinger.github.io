@@ -8,7 +8,8 @@ be_anchors: []
 ep_anchors: ["E&P 3 — Fig 3-1 Gains From Exchange", "E&P 4 — Pareto-Optimal Allocations"]
 univecon_anchors: ["University Economics (1994) ch. 4 pp. 41–43 — refugee-camp licensing cartel and franchise-fee capitalization"]
 word_target: "2000-6000"
-word_budget: 3307
+word_budget: 3364
+  # word_budget 3307 -> 3364 (+57): For Further Reading section added 2026-07-22
 status: approved        # E&P integration M1 sign-off 2026-07-19 (prior: Stage-2 2026-06-15)
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Source-of-truth for the T2 deck; section headers are claims that map to slide titles. UE 4 only (pure reallocation); specialization/comparative advantage move to T6."
@@ -153,6 +154,13 @@ You might expect a middleman to grab the goods and never return, or to water dow
 We leaned the whole time on one source of gains: people differ in how much they *value* things. There is a deeper source we have not touched. People also differ in what it *costs* them to make things, and those cost differences let people specialize and produce more together than they ever could apart. We will work that out when we get to production and costs, and it turns out to be the most surprising result in the course: you can be worse at making everything and still have something worth selling.
 
 One question remains. Sam and Joe could haggle face to face, and a single newcomer was middleman enough for a camp. Feeding a city takes millions of trades among strangers who never meet, arranged by more middlemen than anyone could count, with no one in charge of the whole. What coordinates them is the same instrument that did the sorting between Sam and Joe: a price. Next we scale the story up and watch market prices carry information, prod people to act, and ration scarce goods across an economy nobody runs.
+
+## For Further Reading
+
+Want to explore the source material? This lecture draws on the following chapters from two books by Armen A. Alchian and William R. Allen:
+
+- *Universal Economics* (Liberty Fund, 2018): Ch. 4, “Gains from Exchange”.
+- *Exchange and Production*, 3rd ed. (Wadsworth, 1983): Ch. 3, “Exchange”; Ch. 4, “Market Prices as Social Coordinators”.
 
 <div class="econ-review">
 <section class="econ-review__section">

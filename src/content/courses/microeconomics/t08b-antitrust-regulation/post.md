@@ -8,7 +8,8 @@ be_anchors: ["BE 8", "BE Part II (Q6, Q14)"]
 ep_anchors: ["E&P ch. 12 — OPEC: cartel / dominant firm / property-rights readings and rival-stock-price merger test", "E&P ch. 9 — Barriers to Entry or Filters?", "E&P ch. 14 — Technological Progress and Jobs and Wages", "E&P ch. 10 — basing-point pricing + surgeon Ricardian rent", "E&P ch. 13 — consumer-protection tradeoffs, offsetting behavior, agricultural cartels, cotton allotments, irrigation politics, and rent dissipation", "E&P ch. 18 — regulation as off-budget taxation"]
 univecon_anchors: ["University Economics (1994) ch. 19 pp. 364–367 — consumer-protection rules as incumbent protection"]
 word_target: "3100-3900"
-word_budget: 3900
+word_budget: 4006
+  # word_budget 3900 -> 4006 (+106): For Further Reading section added 2026-07-22
 status: approved        # scope-reduction R4 done-gate 2026-07-21; E&P integration M3 sign-off 2026-07-20 (prior: Stage-2 2026-06-15, split 2026-07-01)
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Second of two market-power posts. Focused lecture on antitrust's consumer-worth test, regulatory capture, durable government-enforced cartels and producer protections, and a compact dominant-firm treatment. Vertical restraints, the merger rival-stock test, oligopoly/network effects, technological displacement, and the barriers-as-filters cluster live in extensions.md (lecture channel)."
@@ -162,6 +163,13 @@ The doors that genuinely matter are the ones locked by law, the open-versus-clos
 ## Economics Explains These Practices Without Pronouncing on Them
 
 One last reminder, the same one we have returned to all term. Everything in this topic is *positive* analysis. It explains why a firm colludes or lobbies for a license, and it predicts the effects: this practice raises output, that one transfers a rent, this regulation protects an incumbent. It does not declare any of them fair or unfair. "Predatory" and "monopoly" carry a sting in ordinary speech that the analysis itself does not supply. When you decide a practice is good or bad, that verdict comes from your values, laid on top of the economics, not out of it. The job here is to see clearly what each practice does; what you think ought to be done is yours to add.
+
+## For Further Reading
+
+Want to explore the source material? This lecture draws on the following chapters from two books by Armen A. Alchian and William R. Allen:
+
+- *Universal Economics* (Liberty Fund, 2018): Ch. 20, “Price-Searcher Pricing”; Ch. 21, “Pricing and Marketing Tactics”; Ch. 24, “Protecting Your Dependencies”; Ch. 26, “Prohibited Marketing Tactics”.
+- *Exchange and Production*, 3rd ed. (Wadsworth, 1983): Ch. 9, “Business Firms: Ownership, Control, and Profits”; Ch. 10, “Price Takers’ Supply and Price Response to Consumer Demand”; Ch. 12, “Competition Among the Few”; Ch. 13, “Restricted Access to Markets”; Ch. 14, “Income from Personal Services”; Ch. 18, “The Domestic and Political Economies”.
 
 <div class="econ-review">
 <section class="econ-review__section">

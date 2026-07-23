@@ -7,7 +7,8 @@ ue_anchors: ["UE 32", "UE 33", "UE 36 (front half — interest-rate equalization
 be_anchors: ["BE 13", "BE 14 (partial)", "BE 15"]
 ep_anchors: ["E&P ch. 13 (Restricted Access to Markets) — tobacco-quota monopoly rent capitalized: a licensed acre nets $400/yr ≈ $4,000 at 10% vs $100/yr ≈ $1,000 unlicensed; the $3,000 difference is the capitalized rent; the windfall accrues once to the holder at announcement, later buyers earn only a normal return", "E&P ch. 6 §8 (Arab Oil Policy) — a rise in oil's expected future value pulls its present price up, rationing oil away from low-value current uses toward higher-valued future ones (the conservation reading); whoever out-forecasts the market gets rich", "E&P ch. 9 pp. 194–195 — profit-rhetoric fallacies: markup versus profit, profits-before-taxes, return on sales versus return on capital, and 'excessive' as a pejorative"]
 word_target: "2800-3800"
-word_budget: 3800
+word_budget: 3886
+  # word_budget 3800 -> 3886 (+86): For Further Reading section added 2026-07-22
 status: approved        # R4 scope-reduction rebuild 2026-07-21 (plan §7.1/§7.2/§7.4); prior M8 done gate 2026-07-20 (§10 A+B PASS); Stage-2 2026-06-15
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Part B of T11, held to three assessed objectives: durable-good/bond valuation and harvest timing, wealth and standard income, and profit as unexpected wealth growth (the capitalization payoff). The interest-rate package remains Core but is not an additional assessed objective. Known-reserves/conservation, the relative-price/valuation-channel material, and the political economy of time are lecture-only content in extensions.md. UE 35 asset pricing, diversification, random walk, and intermediation are owned by T12."
@@ -158,6 +159,13 @@ American tobacco was this asset. A federal quota to market a pound of tobacco wa
 This is also the place to clear up a loaded label. Returns that arrive without current labor, interest on a loan, dividends on a share, the gain when an asset's price rises, are sometimes called *unearned income*, on the theory that the recipient did nothing this year to deserve them. The term is a misnomer. These returns are earned, just not in the period they arrive. They are the payoff to two genuine services rendered earlier: deferring consumption (handing over resources now so someone else can use them) and bearing risk (committing those resources to an uncertain future before anyone knew how it would turn out). The factory that finally pays dividends was financed years before, when the outcome was in doubt and the money could have been spent or lent elsewhere. That the contribution is invisible by the time the reward shows up does not make it absent, and a great deal of bad policy, from condemnations of money-lenders to laws that make debts hard to collect, has grown out of mistaking deferred earnings for unearned income.
 
 > **Looking ahead to risk and entrepreneurship (T12).** This profit-as-surprise idea is the bridge to our next topic. If profit is unexpected wealth growth, then the people who earn it are the ones who *bear risk and exercise foresight that others would not*, committing resources to an uncertain future before anyone knows how it turns out. That is why even "lucky" profits are not undeserved windfalls: they are the reward for a genuine service, bearing a risk that others declined to bear. The full treatment of risk, uncertainty, insurance, and speculation, including how markets transfer existing risks and narrow each holder's exposure through pooling, is the heart of the next topic; here we only establish what profit is and that risk-bearing is its source.
+
+## For Further Reading
+
+Want to explore the source material? This lecture draws on the following chapters from two books by Armen A. Alchian and William R. Allen:
+
+- *Universal Economics* (Liberty Fund, 2018): Ch. 32, “Wealth, Income, and Interest”; Ch. 33, “A Package Called the Rate of Interest”; Ch. 36, “Determinants of the Interest Rate”.
+- *Exchange and Production*, 3rd ed. (Wadsworth, 1983): Ch. 6, “Capital Values, Future Yields, and Interest”; Ch. 9, “Business Firms: Ownership, Control, and Profits”; Ch. 13, “Restricted Access to Markets”.
 
 <div class="econ-review">
 <section class="econ-review__section">

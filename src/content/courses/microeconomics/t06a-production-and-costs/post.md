@@ -7,7 +7,8 @@ ue_anchors: ["UE 7 (totals, marginals, averages, equimarginal allocation)", "UE 
 be_anchors: ["BE 10 (complementary inputs + capital-labor / 'what is efficiency' sections only)"]
 ep_anchors: ["E&P Figs 7-1 & 7-3 (ch. 7) — producer production-possibility frontiers; marginal cost as the frontier's slope", "E&P ch. 7 'Inefficiency by Authority?' — 1974–1981 crude-oil entitlements program / small-refiner bias vs price coordination (equimarginal), via card EP-EX-07"]
 word_target: "2400-3700"
-word_budget: 3700
+word_budget: 3767
+  # word_budget 3700 -> 3767 (+67): For Further Reading section added 2026-07-22
 status: approved        # E&P integration M7 done-gate 2026-07-20; prior approval 2026-07-01
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Part A of T6: UE 7's general marginal toolkit followed by UE 14 production and cost. Part B covers specialization and exchange. UE 17 is owned by T7 and is not pre-taught here."
@@ -191,6 +192,13 @@ Because tools and workers together make output, a firm can often produce the sam
 That brings us to a word people throw around as if it were obvious: *efficiency*. Efficient at what? A method that looks wasteful measured against one resource can look admirable measured against another, depending on which one is actually scarce. There is no efficiency in the abstract, only efficiency relative to a goal, the same lesson we drew on the first day when we called efficiency a no-waste test that cannot, by itself, tell you which point to aim for. Name the goal first; only then does "efficient" mean anything.
 
 Once a goal is named, we can say precisely what efficient production means, and there are two ways to say the same thing. One: production is efficient when the output of one good is as large as it can be for whatever amounts of the other goods you have chosen to make. Two: production is efficient when you cannot make more of one good without making less of another. The two phrasings are equivalent. Each says that nothing is being wasted, that you have squeezed everything possible out of the resources, so the only way to get more of one thing is to give up some of another. Notice that this definition does not assume anyone has perfect knowledge. Efficient production uses the knowledge that actually exists and lets it be tested against results; knowledge is itself a costly resource, so being ignorant of something is not always wasteful or irrational, since gathering the information would have had its own cost.
+
+## For Further Reading
+
+Want to explore the source material? This lecture draws on the following chapters from two books by Armen A. Alchian and William R. Allen:
+
+- *Universal Economics* (Liberty Fund, 2018): Ch. 7, “Keep Your Eye on the Marginals”; Ch. 14, “Productivity and Costs of Production”; Ch. 18, “Facts of Life”.
+- *Exchange and Production*, 3rd ed. (Wadsworth, 1983): Ch. 7, “Production with Specialization”.
 
 <div class="econ-review">
 <section class="econ-review__section">

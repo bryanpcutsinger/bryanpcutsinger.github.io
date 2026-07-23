@@ -8,7 +8,8 @@ be_anchors: ["BE 11", "BE 12 (partial)"]
 ep_anchors: ["E&P 15 — closed monopsony (interns; NCAA) and featherbedding", "E&P 13 — rent dissipation via qualifying", "E&P 17 pp. 369–380 — job search, disguised unemployment, and layoffs versus wage cuts", "E&P Fig 14-7 — wage floor and ceiling"]
 univecon_anchors: ["University Economics (1994) ch. 21 pp. 416–417 — specific versus general on-the-job training and who pays"]
 word_target: "2500-3900"
-word_budget: 3900
+word_budget: 3983
+  # word_budget 3900 -> 3983 (+83): For Further Reading section added 2026-07-22
 status: approved        # E&P integration M2 sign-off 2026-07-19 (prior: Stage-2 2026-06-15)
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Part B of the two-part T10 (unions, the minimum wage, discrimination, and licensing); Part A (topics/t10a-factor-demand-and-earnings) builds the VMP engine and covers earnings. Source-of-truth for the deck; section headers are claims that map to slide titles."
@@ -156,6 +157,13 @@ than overpay, the employer here who loses money by indulging prejudice. When a
 resource is owned, the owner keeps the gains from using it well and bears the
 losses from using it badly, so ownership concentrates the incentive to attend
 to market value while its absence dilutes that incentive.
+
+## For Further Reading
+
+Want to explore the source material? This lecture draws on the following chapters from two books by Armen A. Alchian and William R. Allen:
+
+- *Universal Economics* (Liberty Fund, 2018): Ch. 20, “Price-Searcher Pricing”; Ch. 39, “Your Earnings: How and When”; Ch. 40, “Labor-Market Coalitions”; Ch. 41, “Labor-Market Constraints”.
+- *Exchange and Production*, 3rd ed. (Wadsworth, 1983): Ch. 13, “Restricted Access to Markets”; Ch. 14, “Income from Personal Services”; Ch. 15, “Labor-Market Institutions”; Ch. 17, “Unemployment and Idle Resources”.
 
 <div class="econ-review">
 <section class="econ-review__section">
