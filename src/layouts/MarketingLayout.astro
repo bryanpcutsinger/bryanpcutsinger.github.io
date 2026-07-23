@@ -8,10 +8,11 @@
 // layout emits its own robots meta via the `noindex` prop (default true).
 // AT PUBLIC LAUNCH: flip the default below to false AND delete the matching
 // `head` noindex block in astro.config.mjs — lift them together.
-import '@fontsource-variable/fraunces';
+import '@fontsource-variable/besley';
+import '@fontsource-variable/besley/wght-italic.css';
 import '@fontsource-variable/newsreader';
 import '@fontsource-variable/newsreader/opsz-italic.css';
-import '@fontsource-variable/inter';
+import '@fontsource-variable/libre-franklin';
 // brand.css (the superseded claret system) is loaded FIRST during migration so
 // not-yet-converted pages keep their claret-only vars; site.css overrides the
 // shared tokens with the new "public economist" system. Remove brand.css once
@@ -111,8 +112,8 @@ const personLd = {
         left: var(--sp-4);
         top: -3rem;
         z-index: 200;
-        background: var(--accent);
-        color: var(--ink);
+        background: var(--action);
+        color: var(--on-action);
         padding: var(--sp-2) var(--sp-4);
         border-radius: var(--radius);
         text-decoration: none;

@@ -1,52 +1,56 @@
 /* ============================================================================
-   site.css — "the public economist" design system
-   The from-scratch, outward-first system for the marketing pages
-   (Home / Speaking / Writing / Research / About / Teaching / Contact).
-   Loaded by MarketingLayout.astro on src/pages/* routes ONLY — it never shares
-   selectors with the Starlight guide theme (src/styles/fau-theme.css).
+   site.css — the "ledger v5" design system
+   The semantic token foundation for the marketing pages (Home / Speaking /
+   Writing / Research / About / Teaching / Contact). Loaded by
+   MarketingLayout.astro on src/pages/* routes ONLY — it never shares selectors
+   with the Starlight guide theme (src/styles/fau-theme.css).
 
-   Concept: "the public economist" — restrained, confident, typographic craft
-   pointed OUTWARD. Bright archival paper, warm ink, one disciplined accent, and a
-   two-face pairing (Fraunces display for voice, Newsreader for reading, Inter for
-   the small apparatus). Built 2026-07-01; supersedes the claret brand.css.
+   Concept: "the economist's briefing." Every color derives from Bryan's
+   portrait: the deep navy FIELD is the suit; the warm stone GROUND is the
+   studio backdrop, lightened; STRUCTURE/DATA green is the tie's forest stripe;
+   ACTION red is the tie's red stripe. Type: Besley (Clarendon display) ·
+   Newsreader (prose) · Libre Franklin (labels/UI). Signature device: the ruled
+   dated record (see DatedList). Migrated 2026-07-22 from the "public
+   economist" system; plan: ~/.claude/plans/ledger-v5-migration.md.
 
-   Legacy --brand token names are aliased at the bottom so reused components
-   (Section, Button, DownloadCard, BookingForm) keep working during migration.
+   Legacy aliases at the bottom keep brand.css-era and public-economist-era
+   component/page CSS rendering during the phased migration. Shrink toward zero
+   in the cleanup phase.
    ========================================================================== */
 
 :root {
-  /* --- palette: paper, ink, one accent --------------------------------- */
-  --paper: #fbfaf7;         /* page background — cool, bright, archival white */
-  --paper-raised: #ffffff;  /* cards, form fields */
-  --paper-sunk: #f3f1ea;    /* quiet alternating band */
-  --ink: #1a1917;           /* text + dark header/footer (never pure black) */
-  --ink-soft: #2a2825;      /* panels on ink */
-  --muted: #6b6862;         /* metadata, captions (AA 5.3:1 on paper) */
-  --hairline: #e4e1da;      /* rules / borders — decorative weight only */
-  --rule-strong: #cfcabd;   /* a firmer rule where a real boundary is needed */
+  /* --- semantic palette ------------------------------------------------- */
+  --ground: #eae6df;          /* page background — warm stone-gray */
+  --ground-deep: #dfdad1;     /* alternating band (darker than ground) */
+  --card: #f7f5f0;            /* cards, panels, form fields */
+  --field: #242932;           /* dark sections: header, hero, booking, footer */
+  --field-edge: #191d24;      /* the field's edge border */
+  --text: #24262a;
+  --text-muted: #635f58;      /* AA 5.1:1 on ground */
+  --on-field: #ece9e2;
+  --on-field-muted: #a7a49c;
+  --structure: #b7c0b6;       /* rules, dividers — structural weight only */
+  --data: #35594b;            /* metadata labels — the data voice */
+  --data-inverse: #9db8ac;    /* data labels on the field */
+  --action: #a33b2a;          /* links, buttons, record years */
+  --action-hover: #7e2c1f;
+  --action-inverse: #dfa091;  /* action fill on the field; field-colored text */
+  --action-inverse-hover: #eab3a6;
+  --on-action: #fbf3e8;       /* text on an action fill */
+  --action-tint: color-mix(in srgb, var(--action) 8%, var(--card));
 
-  /* accent — ONE structural job: the invite/booking affordance + record years.
-     Token knob: swap --accent to #1e3a5f (ink-blue) or #33322e (graphite). */
-  --accent: #22453b;        /* ledger-green */
-  --accent-hover: #163029;
-  --accent-tint: #e7ede9;   /* faint wash for hover/selected */
-  --accent-on-ink: #b8d0c6; /* the accent's variant on dark surfaces (>=4.5:1) */
-
-  --on-ink: #f6f4ee;        /* text on ink */
-  --on-ink-muted: #b4afa6;  /* muted text on ink */
-
-  /* --- type: a two-face pairing (fonts already self-hosted) ------------- */
-  --font-display: 'Fraunces Variable', 'Newsreader Variable', Georgia, serif;
+  /* --- type: Besley display · Newsreader prose · Libre Franklin labels -- */
+  --font-display: 'Besley Variable', Georgia, serif;
   --font-text: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
-  --font-label: 'Inter Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, Helvetica, Arial, sans-serif;
+  --font-label: 'Libre Franklin Variable', -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 
-  /* fluid scale */
-  --fs-mast: clamp(2.6rem, 1.4rem + 5.4vw, 5rem);   /* home masthead line */
-  --fs-display: clamp(2.1rem, 1.5rem + 3vw, 3.4rem);/* page H1 */
-  --fs-h2: clamp(1.55rem, 1.2rem + 1.7vw, 2.15rem);
-  --fs-h3: clamp(1.2rem, 1.05rem + 0.7vw, 1.45rem);
-  --fs-lead: clamp(1.15rem, 1.05rem + 0.55vw, 1.4rem);
+  /* fluid scale (v5 mockup values) */
+  --fs-mast: clamp(2.3rem, 1.2rem + 4.4vw, 3.9rem);  /* home masthead line */
+  --fs-display: clamp(2rem, 1.5rem + 2.6vw, 3.1rem); /* interior page H1 */
+  --fs-h2: clamp(1.5rem, 1.2rem + 1.5vw, 2rem);
+  --fs-h3: clamp(1.15rem, 1.03rem + 0.6vw, 1.35rem);
+  --fs-lead: clamp(1.1rem, 1.02rem + 0.45vw, 1.28rem);
   --fs-body: clamp(1rem, 0.97rem + 0.18vw, 1.0625rem);
   --fs-small: 0.875rem;
   --fs-label: 0.72rem;
@@ -59,11 +63,11 @@
   /* --- layout --- */
   --container: 1080px;
   --reading: 700px;
-  --header-h: 76px;
-  --radius: 3px;
-  --radius-lg: 6px;
+  --header-h: 68px;
+  --radius: 2px;
+  --radius-lg: 4px;
   --section-y: clamp(3.5rem, 2.4rem + 5vw, 5.5rem);
-  --section-y-ink: clamp(4.5rem, 3rem + 6vw, 7rem);
+  --section-y-ink: clamp(4rem, 2.8rem + 5.5vw, 6.5rem);
 }
 
 /* --- reset --- */
@@ -74,86 +78,83 @@ body {
   font-family: var(--font-text);
   font-size: var(--fs-body);
   line-height: 1.62;
-  color: var(--ink);
-  background: var(--paper);
+  color: var(--text);
+  background: var(--ground);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   font-optical-sizing: auto;
 }
 img, picture, svg, video { display: block; max-width: 100%; height: auto; }
 
-/* --- headings: Fraunces display, the site's voice --- */
+/* --- headings: Besley, the display voice --- */
 h1, h2, h3, h4 {
   font-family: var(--font-display);
-  font-weight: 460;
+  font-weight: 550;
   line-height: 1.1;
-  letter-spacing: -0.014em;
-  color: var(--ink);
+  letter-spacing: -0.012em;
+  color: var(--text);
   margin: 0 0 var(--sp-4);
-  font-optical-sizing: auto;
+  text-wrap: balance;
 }
 h1 { font-size: var(--fs-display); }
 h2 { font-size: var(--fs-h2); }
-h3 { font-size: var(--fs-h3); font-weight: 500; }
+h3 { font-size: var(--fs-h3); font-weight: 600; }
 
 p { margin: 0 0 var(--sp-4); max-width: 68ch; }
 em { font-style: italic; }
 
 a {
-  color: var(--accent);
+  color: var(--action);
   text-decoration: underline;
-  text-decoration-color: color-mix(in srgb, var(--accent) 38%, transparent);
+  text-decoration-color: color-mix(in srgb, var(--action) 38%, transparent);
   text-underline-offset: 3px;
   text-decoration-thickness: 1px;
   transition: text-decoration-color 0.15s ease, color 0.15s ease;
 }
-a:hover { color: var(--accent-hover); text-decoration-color: currentColor; }
+a:hover { color: var(--action-hover); text-decoration-color: currentColor; }
+
+::selection { background: var(--action-inverse); color: var(--field); }
 
 ul, ol { margin: 0 0 var(--sp-4); padding-left: 1.2rem; }
 
-/* --- the label / apparatus voice: Inter, small, tracked ---------------
-   Replaces decorative eyebrows. Used for kickers, metadata, nav, table heads. */
+/* --- the label voice: DATA APPARATUS ONLY --------------------------------
+   Libre Franklin, small, tracked, uppercase. For real metadata — dates,
+   formats, table heads, provenance — never section eyebrows (sections open
+   with a double structural rule instead; see .head in page styles). */
 .label {
   font-family: var(--font-label);
   font-size: var(--fs-label);
   font-weight: 600;
-  letter-spacing: 0.11em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--data);
   font-feature-settings: 'tnum' 1;
 }
-.label--accent { color: var(--accent); }
+.label--accent { color: var(--action); } /* action-voiced label (links, years) */
 
-/* a short accent rule that precedes a kicker */
+/* transitional: the old eyebrow kicker, restyled into the data voice until
+   each page migrates to double-rule section heads. Remove in cleanup. */
 .kicker {
   display: inline-flex;
   align-items: center;
   gap: 0.65rem;
   font-family: var(--font-label);
   font-size: var(--fs-label);
-  font-weight: 600;
+  font-weight: 650;
   letter-spacing: 0.11em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--data);
   margin: 0 0 var(--sp-4);
 }
-.kicker::before {
-  content: '';
-  inline-size: 1.6rem;
-  block-size: 2px;
-  background: currentColor;
-  flex: none;
-}
-/* on ink, the accent is too dark — use the on-ink variant */
 .section--ink .kicker,
-.section--ink .label--accent { color: var(--accent-on-ink); }
+.section--ink .label--accent { color: var(--data-inverse); }
 
 /* lede paragraph */
 .lede {
   font-family: var(--font-text);
   font-size: var(--fs-lead);
   line-height: 1.5;
-  color: var(--muted);
+  color: var(--text-muted);
   max-width: 60ch;
 }
 
@@ -165,11 +166,12 @@ ul, ol { margin: 0 0 var(--sp-4); padding-left: 1.2rem; }
   html { scroll-behavior: auto; }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
     transition-duration: 0.01ms !important;
   }
 }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.section--ink :focus-visible { outline-color: var(--accent-on-ink); }
+:focus-visible { outline: 2px solid var(--action); outline-offset: 2px; }
+.section--ink :focus-visible { outline-color: var(--action-inverse); }
 
 .visually-hidden {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
@@ -177,17 +179,34 @@ ul, ol { margin: 0 0 var(--sp-4); padding-left: 1.2rem; }
 }
 
 /* ============================================================================
-   Legacy aliases — map the old --brand names onto the new tokens so the reused
-   components (Section, Button, DownloadCard, BookingForm) render correctly under
-   this system without edits. Remove once those components are updated directly.
+   Legacy aliases — keep every not-yet-migrated component/page rendering in the
+   v5 palette. Two generations are mapped: the "public economist" names
+   (--paper/--ink/--accent…) and the brand.css-era names (--surface/--text…).
+   NB: --paper-sunk's polarity flips (bands are now DARKER than the page).
+   --fs-eyebrow existed only in brand.css; aliased here so retiring brand.css
+   can't strand the teaching pages. Shrink this block toward zero in cleanup.
    ========================================================================== */
 :root {
-  --surface: var(--paper);
-  --surface-raised: var(--paper-raised);
-  --text: var(--ink);
-  --text-muted: var(--muted);
-  --rule: var(--hairline);
+  --paper: var(--ground);
+  --paper-raised: var(--card);
+  --paper-sunk: var(--ground-deep);
+  --ink: var(--field);
+  --ink-soft: var(--field);
+  --muted: var(--text-muted);
+  --hairline: var(--structure);
+  --rule-strong: var(--structure);
+  --accent: var(--action);
+  --accent-hover: var(--action-hover);
+  --accent-tint: var(--action-tint);
+  --accent-on-ink: var(--action-inverse);
+  --on-ink: var(--on-field);
+  --on-ink-muted: var(--on-field-muted);
+
+  --surface: var(--ground);
+  --surface-raised: var(--card);
+  --rule: var(--structure);
   --font-body: var(--font-text);
   --font-mono: var(--font-label);
-  --shadow-hover: 0 8px 30px rgba(26, 28, 30, 0.07);
+  --fs-eyebrow: var(--fs-label);
+  --shadow-hover: 0 6px 24px rgba(25, 29, 36, 0.08);
 }
