@@ -58,43 +58,46 @@ const { items, class: className = '' } = Astro.props;
 </ul>
 
 <style>
+  /* the ruled dated record — the site's signature device */
   .drec {
     list-style: none;
     margin: 0;
     padding: 0;
-    border-top: 1px solid var(--hairline);
+    border-top: 3px double var(--structure);
   }
   .drec__item {
-    border-bottom: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--structure);
   }
   .drec__row {
     display: grid;
-    grid-template-columns: 5.5rem 1fr auto;
+    grid-template-columns: 5.25rem 1fr auto;
     align-items: baseline;
-    gap: var(--sp-2) var(--sp-6);
+    gap: var(--sp-2) 0;
     padding: var(--sp-4) 0;
     text-decoration: none;
-    color: var(--ink);
+    color: var(--text);
   }
   .drec__date {
     font-family: var(--font-label);
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--accent);
-    letter-spacing: 0.02em;
+    font-size: 0.85rem;
+    font-weight: 650;
+    color: var(--action);
+    letter-spacing: 0.03em;
   }
   .drec__body {
     display: flex;
     flex-direction: column;
     gap: var(--sp-1);
     min-width: 0;
+    border-left: 3px double var(--structure);
+    padding-left: 1.4rem;
   }
   .drec__title {
     font-family: var(--font-display);
-    font-size: 1.15rem;
-    font-weight: 480;
-    line-height: 1.25;
-    color: var(--ink);
+    font-size: 1.08rem;
+    font-weight: 550;
+    line-height: 1.3;
+    color: var(--text);
   }
   .drec__meta {
     margin-top: 2px;
@@ -105,16 +108,17 @@ const { items, class: className = '' } = Astro.props;
     font-weight: 600;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: var(--text-muted);
     white-space: nowrap;
+    margin-left: var(--sp-4);
   }
-  .drec__ext { color: var(--accent); font-size: 0.85em; }
+  .drec__ext { color: var(--action); font-size: 0.85em; }
 
-  /* linked rows: quiet accent wash + title picks up accent */
+  /* linked rows: quiet card wash + title picks up the action hue */
   .drec__row.is-link:hover {
-    background: color-mix(in srgb, var(--accent) 4%, transparent);
+    background: rgba(247, 245, 240, 0.55);
   }
-  .drec__row.is-link:hover .drec__title { color: var(--accent); }
+  .drec__row.is-link:hover .drec__title { color: var(--action-hover); }
   .drec__row.is-link:focus-visible { outline-offset: -2px; }
 
   /* honest scaffold state */
@@ -132,12 +136,13 @@ const { items, class: className = '' } = Astro.props;
     white-space: nowrap;
   }
 
+  /* small screens keep the date gutter (narrower), per the v5 record grammar */
   @media (max-width: 640px) {
     .drec__row {
-      grid-template-columns: 1fr auto;
-      gap: var(--sp-1) var(--sp-4);
+      grid-template-columns: 3.6rem 1fr;
     }
-    .drec__date { grid-column: 1 / -1; order: -1; font-size: 0.8rem; }
-    .drec__note { grid-column: 2; }
+    .drec__date { font-size: 0.8rem; }
+    .drec__body { padding-left: 0.9rem; }
+    .drec__note { grid-column: 2; margin-left: 0; padding-left: calc(0.9rem + 3px); }
   }
 </style>
