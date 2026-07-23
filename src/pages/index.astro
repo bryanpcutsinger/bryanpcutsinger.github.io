@@ -60,9 +60,7 @@ const workingPaperCount = (pubData.workingPapers ?? []).filter(
   description="Bryan Cutsinger is a Florida Atlantic University economist and speaker on the U.S. economic outlook, South Florida's regional economy, and monetary policy."
 >
   <!-- Masthead: the briefing opener on the navy field. The sticky header sits
-       on the same field, so the two read as one block. One dominant action;
-       credentials set as labeled proof rows (facts verbatim — never extend
-       without verification). -->
+       on the same field, so the two read as one block. One dominant action. -->
   <section class="mast">
     <div class="mast__inner">
       <div class="mast__copy">
@@ -78,25 +76,6 @@ const workingPaperCount = (pubData.workingPapers ?? []).filter(
         <div class="mast__cta">
           <Button href="/speaking/" variant="action-inverse">Invite me to speak</Button>
           <a href="/writing/" class="mast__quiet">Read my writing →</a>
-        </div>
-        <div class="proof">
-          <p class="proof__roles">
-            Associate editor, <em>Public Choice</em> · Acting director, AIER
-            Sound Money Project
-          </p>
-          <dl class="proof__rows">
-            <div class="proof__row">
-              <dt>Research</dt>
-              <dd>
-                <em>European Economic Review</em> ·
-                <em>Explorations in Economic History</em> · <em>Public Choice</em>
-              </dd>
-            </div>
-            <div class="proof__row">
-              <dt>Press</dt>
-              <dd>National Review · The Hill · The Washington Examiner</dd>
-            </div>
-          </dl>
         </div>
       </div>
       <figure class="mast__portrait">
@@ -229,47 +208,6 @@ const workingPaperCount = (pubData.workingPapers ?? []).filter(
   }
   .mast__quiet:hover { color: var(--on-field); }
 
-  /* the proof block: factual apparatus, set as labeled data rows */
-  .proof {
-    border-top: 1px solid rgba(236, 233, 226, 0.22);
-    padding-top: var(--sp-4);
-    max-width: 56ch;
-  }
-  .proof__roles {
-    font-family: var(--font-label);
-    font-size: 0.8rem;
-    font-weight: 650;
-    letter-spacing: 0.02em;
-    color: var(--on-field);
-    margin: 0 0 var(--sp-2);
-    max-width: none;
-  }
-  .proof__rows { margin: 0; }
-  .proof__row {
-    display: grid;
-    grid-template-columns: 5.25rem 1fr;
-    gap: 0.9rem;
-    padding-block: 0.22rem;
-  }
-  .proof__row dt {
-    font-family: var(--font-label);
-    font-size: 0.68rem;
-    font-weight: 650;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--data-inverse);
-    padding-top: 0.15em;
-  }
-  .proof__row dd {
-    margin: 0;
-    font-family: var(--font-label);
-    font-size: 0.78rem;
-    font-weight: 500;
-    letter-spacing: 0.02em;
-    line-height: 1.7;
-    color: var(--on-field-muted);
-  }
-
   .mast__portrait {
     margin: 0;
     justify-self: end;
@@ -290,7 +228,6 @@ const workingPaperCount = (pubData.workingPapers ?? []).filter(
   .mast__headline { animation: rise 0.55s cubic-bezier(0.2, 0.7, 0.3, 1) 0.05s backwards; }
   .mast__sub { animation: rise 0.55s cubic-bezier(0.2, 0.7, 0.3, 1) 0.13s backwards; }
   .mast__cta { animation: rise 0.55s cubic-bezier(0.2, 0.7, 0.3, 1) 0.21s backwards; }
-  .proof { animation: rise 0.55s cubic-bezier(0.2, 0.7, 0.3, 1) 0.29s backwards; }
   .mast__portrait { animation: rise 0.65s cubic-bezier(0.2, 0.7, 0.3, 1) 0.16s backwards; }
 
   /* --- section heads: a double structural rule, no eyebrow --- */
