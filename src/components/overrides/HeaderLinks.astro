@@ -2,9 +2,17 @@
 // Overrides Starlight's `SocialIcons` slot (empty — no socials configured) to
 // reproduce the marketing SiteHeader's nav inside the /ai/ guides: same links
 // (including "AI", shown active since this chrome only renders under /ai/),
-// same Newsreader nav type, and the green "Invite me to speak" CTA. Values
-// mirror site.css tokens (--on-ink #f6f4ee, --accent #22453b, --accent-on-ink
-// #b8d0c6) — Starlight pages don't load site.css, so they're inlined here.
+// same uppercase Libre Franklin label voice. No header CTA (v5 decision —
+// the Speaking pages carry the action). Values mirror site.css tokens
+// (--on-field #ece9e2, --on-field-muted #a7a49c, --action-inverse #dfa091,
+// --action #a33b2a) — Starlight pages don't load site.css, so they're inlined.
+//
+// MOBILE FIX (2026-07-22): Starlight renders this component in TWO places —
+// the top header bar (navy) and the MobileMenuFooter inside the sidebar
+// drawer (light stone). It used to display:none below 50rem, which removed
+// the marketing nav entirely on phones (the drawer only covers docs nav).
+// Now only the HEADER copy hides on small screens; the drawer copy renders
+// with dark-on-light styling, so every marketing section stays reachable.
 const links = [
   { label: 'Speaking', href: '/speaking/' },
   { label: 'Writing', href: '/writing/' },
@@ -27,63 +35,54 @@ const links = [
       </a>
     ))
   }
-  <a href="/speaking/" class="nav-cta">Invite me to speak</a>
 </nav>
 
 <style>
   .header-links {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.3rem;
   }
+  /* base = the mobile-drawer context: dark labels on the light stone pane */
   .nav-link {
-    font-family: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: #f6f4ee;
+    font-family: 'Libre Franklin Variable', -apple-system, BlinkMacSystemFont,
+      'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: #26282c;
     text-decoration: none;
     white-space: nowrap;
     padding-bottom: 2px;
     border-bottom: 2px solid transparent;
   }
   .nav-link:hover {
-    color: #ffffff;
-    border-bottom-color: rgba(243, 239, 232, 0.4);
+    color: #a33b2a;
+    border-bottom-color: rgba(163, 59, 42, 0.4);
   }
   .nav-link.is-active {
-    border-bottom-color: #b8d0c6;
+    border-bottom-color: #a33b2a;
   }
-  /* the marketing Button.astro btn--primary, inlined */
-  .nav-cta {
-    display: inline-block;
-    font-family: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
-    font-weight: 550;
-    font-size: 0.9375rem;
-    letter-spacing: 0.005em;
-    line-height: 1;
-    padding: 15px 28px;
-    border-radius: 4px;
-    text-decoration: none;
-    white-space: nowrap;
-    background: #22453b;
-    color: #f6f4ee;
-    border: 1px solid #22453b;
-    transition: background-color 0.18s ease, color 0.18s ease,
-      border-color 0.18s ease;
+
+  /* header context: light labels on the navy bar */
+  :global(header.header) .nav-link {
+    color: #a7a49c;
   }
-  .nav-cta:hover {
-    background: #163029;
-    border-color: #163029;
-    color: #ffffff;
+  :global(header.header) .nav-link:hover {
+    color: #ece9e2;
+    border-bottom-color: rgba(236, 233, 226, 0.4);
   }
-  /* hide on narrow screens; Starlight's mobile menu covers navigation there */
-  @media (max-width: 68rem) {
-    .nav-cta {
-      display: none;
-    }
+  :global(header.header) .nav-link.is-active {
+    color: #ece9e2;
+    border-bottom-color: #dfa091;
   }
+
+  /* hide only the HEADER copy on narrow screens — the drawer copy (rendered
+     by Starlight's MobileMenuFooter) takes over there */
   @media (max-width: 50rem) {
-    .header-links {
+    :global(header.header) .header-links {
       display: none;
     }
   }

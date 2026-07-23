@@ -1,10 +1,10 @@
 /* =====================================================================
    Brand theme for Starlight (the /ai/ guides)
    The guides share the marketing site's FULL visual language so they read as
-   one brand: the "public economist" system — bright archival paper, deep ink, one
-   ledger-green accent; Fraunces (display) + Newsreader (reading prose) + Inter
-   (UI/nav) + IBM Plex Mono (code); sentence-case headings, minimal hairline
-   tables, and cards that lift on hover. The ONLY thing that stays distinct is the
+   one brand: the "ledger v5" system — warm stone ground, navy field chrome,
+   red action accents, green data labels; Besley (display) + Newsreader
+   (reading prose) + Libre Franklin (UI/nav) + IBM Plex Mono (code);
+   sentence-case headings, minimal hairline tables, cards that lift on hover. The ONLY thing that stays distinct is the
    Starlight DOCS LAYOUT (sidebar + right-rail TOC) — the guides are reference docs
    that need navigation. Fonts load site-wide from
    src/components/overrides/SiteTitle.astro. Marketing tokens live in
@@ -14,32 +14,32 @@
 
 :root {
   /* --- brand palette (mapped onto the historical --fau-* names) ---
-     The "public economist" system: bright archival paper, deep ink, one
-     ledger-green accent. Retuned 2026-07-01 to match src/styles/site.css. */
-  --fau-blue: #1a1917;          /* ink: chrome bars, headings, nav text, borders */
-  --fau-red: #22453b;           /* ledger-green accent: active nav item, emphasis */
-  --fau-red-hover: #163029;
-  --fau-dark-gray: #1a1917;     /* body-copy color */
-  --fau-gray: #e4e1da;          /* hairline borders / rules */
-  --fau-light-gray: #f3f1ea;    /* cool surface tint */
-  --fau-electric-blue: #22453b; /* brand links/buttons -> ledger-green */
-  --fau-link: #22453b;          /* body link color -> ledger-green */
-  --fau-link-hover: #163029;
-  --fau-skyblue: #e7ede9;       /* accent-tint: callout bg (green tint) */
-  --fau-stone: #6b6862;         /* muted: secondary accents */
-  --fau-sand: #cfcabd;
-  --surface-nav: #f3f1ea;       /* cool left-nav / table-header panel bg */
+     The "ledger v5" system: stone ground, navy field, red action, green data.
+     Retuned 2026-07-22 to match src/styles/site.css. */
+  --fau-blue: #242932;          /* field navy: chrome bars, headings, nav text */
+  --fau-red: #a33b2a;           /* action red: active nav item, links, emphasis */
+  --fau-red-hover: #7e2c1f;
+  --fau-dark-gray: #24262a;     /* body-copy color */
+  --fau-gray: #cfc9bf;          /* hairline borders / rules (neutral, not green) */
+  --fau-light-gray: #dfdad1;    /* deeper stone surface tint */
+  --fau-electric-blue: #a33b2a; /* brand links/buttons -> action red */
+  --fau-link: #a33b2a;          /* body link color -> action red */
+  --fau-link-hover: #7e2c1f;
+  --fau-skyblue: #e6eae4;       /* data-green tint: callout / current-nav bg */
+  --fau-stone: #635f58;         /* muted: secondary accents */
+  --fau-sand: #cfc9bf;
+  --surface-nav: #e1dcd3;       /* left-nav hover / table-header panel bg */
 
-  /* Type -> the two-face pairing. UI/nav in Inter; markdown prose in Newsreader
-     (set below); headings in Fraunces; code in IBM Plex Mono. Loaded via SiteTitle. */
-  --sl-font: 'Inter Variable', -apple-system, BlinkMacSystemFont,
+  /* Type -> UI/nav in Libre Franklin; markdown prose in Newsreader (set
+     below); headings in Besley; code in IBM Plex Mono. Loaded via SiteTitle. */
+  --sl-font: 'Libre Franklin Variable', -apple-system, BlinkMacSystemFont,
     'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   --sl-font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas,
     monospace;
 
-  /* Match the marketing header's height (site.css --header-h: 76px) so the ink
+  /* Match the marketing header's height (site.css --header-h: 68px) so the navy
      bar reads as the SAME bar when moving between the two systems. */
-  --sl-nav-height: 4.75rem;
+  --sl-nav-height: 4.25rem;
 }
 
 /* Force a single light appearance so the brand neutrals read consistently, and
@@ -50,30 +50,30 @@
 :root[data-theme='dark'] {
   color-scheme: light;
 
-  /* Accent ramp -> ledger-green */
-  --sl-color-accent-low: #e7ede9;
-  --sl-color-accent: #22453b;
-  --sl-color-accent-high: #1a1917;
+  /* Accent ramp -> action red */
+  --sl-color-accent-low: #eedcd6;
+  --sl-color-accent: #a33b2a;
+  --sl-color-accent-high: #7e2c1f;
 
-  /* Text / surface ramp tuned to bright paper neutrals (light) */
-  --sl-color-white: #1a1917;      /* Starlight uses this for headings/strong */
-  --sl-color-gray-1: #1c1e20;
-  --sl-color-gray-2: #1c1e20;
-  --sl-color-gray-3: #5a5e63;
-  --sl-color-gray-4: #86827a;
-  --sl-color-gray-5: #e4e1da;
-  --sl-color-gray-6: #f3f1ea;
-  --sl-color-gray-7: #f7f6f2;
+  /* Text / surface ramp tuned to the warm stone neutrals (light) */
+  --sl-color-white: #24262a;      /* Starlight uses this for headings/strong */
+  --sl-color-gray-1: #26282c;
+  --sl-color-gray-2: #26282c;
+  --sl-color-gray-3: #56534c;
+  --sl-color-gray-4: #635f58;     /* was #86827a — failed AA (3.67:1) on paper */
+  --sl-color-gray-5: #cfc9bf;
+  --sl-color-gray-6: #dfdad1;
+  --sl-color-gray-7: #f0ede6;
   --sl-color-black: #ffffff;      /* inverse anchor */
 
-  --sl-color-text: #1c1e20;
-  --sl-color-text-accent: #22453b;
-  --sl-color-bg: #fbfaf7;         /* page background -> bright archival paper */
-  --sl-color-bg-nav: #1a1917;     /* top header bar -> ink */
-  --sl-color-bg-sidebar: #fbfaf7; /* same paper as the page — one surface, not a panel */
-  --sl-color-hairline: #e4e1da;
-  --sl-color-hairline-light: #eae7e0;
-  --sl-color-hairline-shade: #e4e1da;
+  --sl-color-text: #26282c;
+  --sl-color-text-accent: #a33b2a;
+  --sl-color-bg: #eae6df;         /* page background -> warm stone ground */
+  --sl-color-bg-nav: #242932;     /* top header bar -> field navy */
+  --sl-color-bg-sidebar: #eae6df; /* same ground as the page — one surface, not a panel */
+  --sl-color-hairline: #cfc9bf;
+  --sl-color-hairline-light: #d8d2c8;
+  --sl-color-hairline-shade: #cfc9bf;
 }
 
 /* Hide the theme switcher (single appearance) */
@@ -82,8 +82,8 @@ starlight-theme-select {
 }
 
 /* --------------------------------------------------------------------
-   Typography: Fraunces (display) headings in ink; Newsreader reading prose;
-   Inter UI/nav (via --sl-font); IBM Plex Mono code.
+   Typography: Besley (display) headings; Newsreader reading prose;
+   Libre Franklin UI/nav (via --sl-font); IBM Plex Mono code.
    -------------------------------------------------------------------- */
 /* h1#_top is Starlight's page-title <h1> (id from PAGE_TITLE_ID) — it lives
    OUTSIDE .sl-markdown-content, so without this selector it rendered in Inter. */
@@ -91,8 +91,8 @@ starlight-theme-select {
 h1#_top,
 h1.content-title,
 .hero h1 {
-  font-family: 'Fraunces Variable', Georgia, 'Times New Roman', serif !important;
-  font-weight: 460;
+  font-family: 'Besley Variable', Georgia, 'Times New Roman', serif !important;
+  font-weight: 550;
   color: var(--fau-blue);
   line-height: 1.12;
   letter-spacing: -0.014em;
@@ -109,7 +109,7 @@ h1.content-title,
   font-family: var(--sl-font-mono);
 }
 
-/* Body links -> brass, underlined by default (matches the marketing pages) */
+/* Body links -> action red, underlined by default (matches the marketing pages) */
 .sl-markdown-content a {
   color: var(--fau-link);
   text-decoration: underline;
@@ -126,7 +126,7 @@ h1.content-title,
    -------------------------------------------------------------------- */
 .header {
   background-color: var(--fau-blue) !important;
-  border-bottom: 1px solid rgba(243, 239, 232, 0.1);
+  border-bottom: 1px solid rgba(236, 233, 226, 0.16);
 }
 /* Constrain the header CONTENTS to the marketing container (site.css
    --container: 1080px incl. 1.5rem side padding) so the wordmark and nav sit
@@ -165,17 +165,17 @@ starlight-menu-button button {
 }
 
 /* --------------------------------------------------------------------
-   Left sidebar nav: ink links, brass current page, soft warm hover
+   Left sidebar nav: ink links, action-red current page, soft stone hover
    -------------------------------------------------------------------- */
 .sidebar-content a {
   color: var(--fau-blue);
-  border-radius: 4px;
+  border-radius: 2px;
 }
 .sidebar-content a:hover {
   background-color: var(--surface-nav);
   color: var(--fau-blue);
 }
-/* Current page -> brass on a warm tint */
+/* Current page -> action red on the data tint */
 .sidebar-content a[aria-current='page'],
 .sidebar-content a[aria-current='page']:hover {
   color: var(--fau-red);
@@ -198,12 +198,12 @@ starlight-menu-button button {
   color: var(--fau-red);
   border-inline-start-color: var(--fau-red);
 }
-/* "On this page" -> the marketing kicker voice: mono, uppercase, short rule */
+/* "On this page" -> the data-label voice: Libre Franklin, uppercase, short rule */
 .right-sidebar h2 {
   display: flex;
   align-items: center;
   gap: 0.7rem;
-  font-family: var(--sl-font-mono);
+  font-family: var(--sl-font);
   font-size: 0.7rem;
   font-weight: 500;
   letter-spacing: 0.16em;
@@ -223,16 +223,16 @@ starlight-menu-button button {
    Asides / callouts: 4px left border + warm pale fill (brand editorial)
    -------------------------------------------------------------------- */
 .starlight-aside {
-  border-radius: 4px;
+  border-radius: 2px;
   border-inline-start-width: 4px;
   border-inline-start-style: solid;
   padding: 0.75rem 1rem;
 }
-/* Note uses the brand accent; tip/caution/danger keep their SEMANTIC colors
-   (green/amber/red) so warnings still read as warnings — not brass. */
+/* Note uses the DATA-GREEN voice (not action red, which would read as a
+   warning); tip/caution/danger keep their SEMANTIC colors. */
 .starlight-aside--note {
-  background-color: #e7ede9;
-  border-inline-start-color: var(--fau-red); /* ledger-green */
+  background-color: #e6eae4;
+  border-inline-start-color: #35594b; /* data green */
 }
 .starlight-aside--tip {
   background-color: #e6f4ea;
@@ -272,13 +272,13 @@ starlight-menu-button button {
 }
 
 /* --------------------------------------------------------------------
-   Cards / LinkCards: white, 1px hairline, 4px corners; hover = lift with a
-   brass border + soft warm shadow (the marketing card pattern). Text colors
+   Cards / LinkCards: card-white, 1px hairline, 2px corners; hover = lift with
+   an action-red border + soft shadow (the marketing card pattern). Text colors
    stay put on hover — no navy takeover.
    -------------------------------------------------------------------- */
 .card,
 .sl-link-card {
-  border-radius: 4px !important;
+  border-radius: 2px !important;
   border: 1px solid var(--fau-gray);
   box-shadow: none;
 }
@@ -292,30 +292,30 @@ starlight-menu-button button {
 .sl-link-card:hover {
   transform: translateY(-2px);
   border-color: var(--fau-red);
-  box-shadow: 0 8px 30px rgba(26, 28, 30, 0.08);
+  box-shadow: 0 6px 24px rgba(25, 29, 36, 0.08);
 }
 
 /* --------------------------------------------------------------------
    Prev/next pager: same card language as LinkCards — hairline, 4px corners,
-   lift on hover; "Previous / Next" labels in the mono kicker voice and the
-   destination title in Fraunces (Starlight's default is a sans card with a
+   lift on hover; "Previous / Next" labels in the data-label voice and the
+   destination title in Besley (Starlight's default is a sans card with a
    drop shadow, which reads as another design system).
    -------------------------------------------------------------------- */
 .pagination-links a {
-  border-radius: 4px;
+  border-radius: 2px;
   border: 1px solid var(--fau-gray);
   box-shadow: none;
-  background: #ffffff;
+  background: #f7f5f0;
   transition: transform 0.18s ease, border-color 0.18s ease,
     box-shadow 0.18s ease;
 }
 .pagination-links a:hover {
   transform: translateY(-2px);
   border-color: var(--fau-red);
-  box-shadow: 0 8px 30px rgba(26, 28, 30, 0.08);
+  box-shadow: 0 6px 24px rgba(25, 29, 36, 0.08);
 }
 .pagination-links a > span {
-  font-family: var(--sl-font-mono);
+  font-family: var(--sl-font);
   font-size: 0.7rem;
   font-weight: 500;
   letter-spacing: 0.16em;
@@ -323,8 +323,8 @@ starlight-menu-button button {
   color: var(--fau-stone);
 }
 .pagination-links .link-title {
-  font-family: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
-  font-weight: 460;
+  font-family: 'Besley Variable', Georgia, 'Times New Roman', serif;
+  font-weight: 550;
   font-size: 1.35rem;
   letter-spacing: -0.014em;
   text-transform: none;
@@ -335,7 +335,7 @@ starlight-menu-button button {
 }
 
 /* --------------------------------------------------------------------
-   Softened 4px corners everywhere (matches the marketing brand's --radius).
+   Flat 2px corners everywhere (matches the marketing brand's --radius).
    -------------------------------------------------------------------- */
 .sl-markdown-content :is(pre, code, img, blockquote),
 .sl-link-button,
@@ -343,10 +343,10 @@ input,
 button,
 .tab,
 details {
-  border-radius: 4px;
+  border-radius: 2px;
 }
 
-/* Blockquote -> brass left rule */
+/* Blockquote -> action-red left rule */
 .sl-markdown-content blockquote {
   border-inline-start: 3px solid var(--fau-red);
   color: var(--fau-dark-gray);
@@ -362,14 +362,15 @@ details {
   color: var(--fau-dark-gray);
 }
 
-/* Hero (splash) call-to-action buttons -> brand 4px, not uppercase; type
-   matches the marketing Button.astro (Newsreader 550 at 0.9375rem). */
+/* Hero (splash) call-to-action buttons -> the v5 Button voice: uppercase
+   Libre Franklin on a 2px radius (matches marketing Button.astro). */
 .hero .sl-link-button {
-  border-radius: 4px;
-  font-family: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
-  font-weight: 550;
-  font-size: 0.9375rem;
-  letter-spacing: 0.005em;
+  border-radius: 2px;
+  font-family: var(--sl-font);
+  font-weight: 650;
+  font-size: 0.84rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 .hero .sl-link-button.primary {
   background-color: var(--fau-link);
@@ -381,6 +382,6 @@ details {
   border-color: var(--fau-link-hover);
 }
 .hero .sl-link-button.minimal {
-  color: var(--fau-link);
-  border: 2px solid var(--fau-electric-blue);
+  color: var(--fau-dark-gray);
+  border: 1px solid var(--fau-dark-gray);
 }

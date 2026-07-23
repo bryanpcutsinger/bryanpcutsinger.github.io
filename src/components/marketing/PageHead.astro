@@ -1,21 +1,22 @@
 ---
 // PageHead — the interior-page header (Speaking / Writing / Research / About).
-// Lighter than the Home masthead: a kicker + edition bracketed by an ink hairline,
-// a Fraunces H1, and an optional lede. Sits under the sticky header and pads its
-// own top by --header-h. Rich H1 markup via the `headline` slot.
+// v5 grammar: a double structural rule opens the page; an optional `edition`
+// data label ("Booking open") sits right-aligned on the rule line; Besley H1;
+// optional lede. No kicker eyebrow — uppercase labels are reserved for data
+// apparatus, and the active nav state already names the section. The `kicker`
+// prop is accepted for back-compat but no longer rendered.
 interface Props {
-  kicker: string;
+  kicker?: string;
   edition?: string;
   headline: string;
   lede?: string;
 }
-const { kicker, edition, headline, lede } = Astro.props;
+const { edition, headline, lede } = Astro.props;
 const hasHeadlineSlot = Astro.slots.has('headline');
 ---
 <header class="phead">
   <div class="phead__inner">
     <div class="phead__runline">
-      <span class="label label--accent">{kicker}</span>
       {edition && <span class="label phead__edition">{edition}</span>}
     </div>
     <h1 class="phead__headline">
@@ -27,8 +28,8 @@ const hasHeadlineSlot = Astro.slots.has('headline');
 
 <style>
   .phead {
-    background: var(--paper);
-    padding-top: calc(var(--header-h) + var(--sp-16));
+    background: var(--ground);
+    padding-top: calc(var(--header-h) + var(--sp-12));
     padding-bottom: var(--sp-12);
   }
   .phead__inner {
@@ -39,21 +40,22 @@ const hasHeadlineSlot = Astro.slots.has('headline');
   .phead__runline {
     display: flex;
     align-items: baseline;
-    justify-content: space-between;
+    justify-content: flex-end;
+    min-height: 1.1rem;
     gap: var(--sp-4);
     padding-top: var(--sp-3);
-    border-top: 2px solid var(--ink);
+    border-top: 3px double var(--structure);
     margin-bottom: var(--sp-8);
   }
-  .phead__edition { color: var(--muted); }
+  .phead__edition { color: var(--data); }
   .phead__headline {
     font-size: var(--fs-display);
-    line-height: 1.03;
-    letter-spacing: -0.018em;
+    line-height: 1.05;
+    letter-spacing: -0.015em;
     margin: 0;
     max-width: 20ch;
   }
-  .phead__headline :global(em) { font-style: italic; color: var(--accent); }
+  .phead__headline :global(em) { font-style: italic; }
   .phead__lede { margin: var(--sp-6) 0 0; }
 
   @media (max-width: 640px) {

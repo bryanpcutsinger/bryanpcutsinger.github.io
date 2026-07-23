@@ -37,14 +37,13 @@ const sectionOrder = [
   'working',
 ];
 const variantOf = (key: string) =>
-  sectionOrder.indexOf(key) % 2 === 0 ? 'surface' : 'raised';
+  sectionOrder.indexOf(key) % 2 === 0 ? 'surface' : 'sunk';
 ---
 <MarketingLayout
   title="Research — Bryan Cutsinger"
   description="Research by Bryan Cutsinger in monetary theory, economic history, and public choice — peer-reviewed articles, working papers, and current projects."
 >
   <PageHead
-    kicker="Research"
     headline="Money, institutions, and the incentives behind policy."
     lede="My research sits at the intersection of monetary economics and economic history, with a recurring focus on seigniorage — the revenue governments raise by creating money — and the public-choice incentives that shape monetary institutions. My current work takes up the credibility of redeemable paper money, whether deflation's effects depend on its source, and the political economy of central banking, alongside a book with Alexander Salter on money and fiscal policy under contract for 2027."
   >
@@ -66,7 +65,6 @@ const variantOf = (key: string) =>
   <!-- Peer-reviewed articles -->
   <Section variant={variantOf('articles')}>
     <div class="head">
-      <p class="kicker">Publications</p>
       <h2>Peer-reviewed articles.</h2>
     </div>
     <CitationList entries={articles} />
@@ -77,8 +75,7 @@ const variantOf = (key: string) =>
     bookChapters.length > 0 && (
       <Section variant={variantOf('chapters')}>
         <div class="head">
-          <p class="kicker">Publications</p>
-          <h2>Book chapters.</h2>
+              <h2>Book chapters.</h2>
         </div>
         <CitationList entries={bookChapters} />
       </Section>
@@ -90,8 +87,7 @@ const variantOf = (key: string) =>
     worksInPress.length > 0 && (
       <Section variant={variantOf('books')}>
         <div class="head">
-          <p class="kicker">Publications</p>
-          <h2>Books.</h2>
+              <h2>Books.</h2>
         </div>
         <CitationList entries={worksInPress} />
       </Section>
@@ -101,7 +97,6 @@ const variantOf = (key: string) =>
   <!-- Working papers -->
   <Section variant={variantOf('working')}>
     <div class="head">
-      <p class="kicker">In progress</p>
       <h2>Working papers.</h2>
       <p class="lede">Current projects — drafts available on request.</p>
     </div>
@@ -109,7 +104,6 @@ const variantOf = (key: string) =>
   </Section>
 
   <CloseBand
-    kicker="Collaboration"
     heading="Working on a related question?"
     subtext="I'm glad to hear from students, coauthors, and journalists about monetary policy, economic history, and the political economy of money."
     cta={{ label: 'Get in touch', href: '/contact/' }}
@@ -117,7 +111,11 @@ const variantOf = (key: string) =>
 </MarketingLayout>
 
 <style>
-  .head { margin-bottom: var(--sp-8); }
-  .head h2 { max-width: 22ch; }
+  .head {
+    border-top: 3px double var(--structure);
+    padding-top: var(--sp-6);
+    margin-bottom: var(--sp-8);
+  }
+  .head h2 { max-width: 22ch; margin-bottom: var(--sp-2); }
   .head .lede { margin-top: var(--sp-3); }
 </style>

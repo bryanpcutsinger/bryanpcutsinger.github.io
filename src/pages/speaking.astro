@@ -53,7 +53,6 @@ const venues = [
   description="Invite economist Bryan Cutsinger to speak on the U.S. economic outlook, South Florida's regional economy, or monetary policy for business, civic, academic, and policy audiences."
 >
   <PageHead
-    kicker="Speaking"
     edition="Booking open"
     headline="Economic ideas your audience can use."
     lede="I turn current data, monetary economics, and economic history into clear briefings on the U.S. outlook, South Florida's regional economy, and monetary policy — shaped to your audience and event."
@@ -67,10 +66,10 @@ const venues = [
   <Section variant="surface">
     <div class="book-lead">
       <div class="book-lead__cta">
-        <Button href="#book" variant="primary">Check availability</Button>
+        <Button href="#book" variant="action">Check availability</Button>
       </div>
       <p class="book-lead__details">
-        <span class="label label--accent">Availability</span>
+        <span class="label">Availability</span>
         Local, national, and virtual engagements are available. Travel expenses
         are handled separately for in-person events outside South Florida.
       </p>
@@ -80,7 +79,6 @@ const venues = [
   <!-- Signature topics as outcomes -->
   <Section variant="surface" id="topics">
     <div class="head">
-      <p class="kicker">What I speak about</p>
       <h2>Signature talks.</h2>
       <p class="lede">
         Starting points, not scripts — each talk is adjusted to the host,
@@ -91,7 +89,7 @@ const venues = [
       {
         talks.map((t) => (
           <li class="topic">
-            <p class="topic__meta label label--accent">{t.format} · {t.audience}</p>
+            <p class="topic__meta label">{t.format} · {t.audience}</p>
             <h3 class="topic__title">{t.title}</h3>
             <p class="topic__dek">{t.description}</p>
             {t.href && (
@@ -110,8 +108,8 @@ const venues = [
   </Section>
 
   <!-- On the stage -->
-  <Section variant="raised">
-    <div class="head"><p class="kicker">On the stage</p><h2>See a talk.</h2></div>
+  <Section variant="sunk">
+    <div class="head"><h2>See a talk.</h2></div>
     <figure class="stage-photo">
       <Image
         src={salveLecture}
@@ -160,7 +158,7 @@ const venues = [
   <Section variant="surface">
     <div class="two-col">
       <div>
-        <div class="head"><p class="kicker">Formats</p><h2>How we can work together.</h2></div>
+        <div class="head"><h2>How we can work together.</h2></div>
         <ul class="ledger">
           {formats.map((f) => (
             <li>
@@ -171,7 +169,7 @@ const venues = [
         </ul>
       </div>
       <div>
-        <div class="head"><p class="kicker">Audiences</p><h2>Who I speak to.</h2></div>
+        <div class="head"><h2>Who I speak to.</h2></div>
         <ul class="chips">
           {audiences.map((a) => <li>{a}</li>)}
         </ul>
@@ -179,9 +177,8 @@ const venues = [
     </div>
   </Section>
 
-  <Section variant="raised">
+  <Section variant="sunk">
     <div class="head">
-      <p class="kicker">Selected hosts</p>
       <h2>Where I've spoken.</h2>
       <p class="lede">
         Selected universities, chambers, and professional audiences from past
@@ -195,8 +192,8 @@ const venues = [
 
   {
     testimonials.length > 0 && (
-      <Section variant="raised">
-        <div class="head"><p class="kicker">What hosts say</p><h2>From the room.</h2></div>
+      <Section variant="sunk">
+        <div class="head"><h2>From the room.</h2></div>
         <ul class="quotes">
           {testimonials.map((q: any) => (
             <li class="quote">
@@ -211,7 +208,7 @@ const venues = [
 
   <!-- Booking -->
   <Section variant="ink" id="book">
-    <div class="head"><p class="kicker">Get in touch</p><h2>Invite Bryan to speak.</h2>
+    <div class="head head--on-field"><h2>Invite Bryan to speak.</h2>
       <p class="lede book-lede">
         Tell me about your event and I'll get back to you personally. The more
         detail you can share, the faster I can respond.
@@ -222,9 +219,14 @@ const venues = [
 </MarketingLayout>
 
 <style>
-  .head { margin-bottom: var(--sp-8); }
-  .head h2 { max-width: 22ch; }
+  .head {
+    border-top: 3px double var(--structure);
+    padding-top: var(--sp-6);
+    margin-bottom: var(--sp-8);
+  }
+  .head h2 { max-width: 22ch; margin-bottom: var(--sp-2); }
   .head .lede { margin-top: var(--sp-3); }
+  .head--on-field { border-top-color: rgba(236, 233, 226, 0.25); }
 
   /* booking lead */
   .book-lead {
@@ -241,7 +243,7 @@ const venues = [
   .topics {
     list-style: none; margin: 0; padding: var(--sp-8) 0 0;
     display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-12) var(--sp-16);
-    border-top: 1px solid var(--hairline);
+    border-top: 0;
   }
   .topic__meta { display: block; margin-bottom: var(--sp-3); }
   .topic__title { font-size: var(--fs-h3); margin: 0 0 var(--sp-3); }
