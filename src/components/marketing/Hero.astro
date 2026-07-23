@@ -57,7 +57,7 @@ const hasPlateCap = !!(plateName || plateRole);
           (primaryCta || secondaryCta) && (
             <div class="hero__actions">
               {primaryCta && (
-                <Button href={primaryCta.href} variant="primary">
+                <Button href={primaryCta.href} variant="action-inverse">
                   {primaryCta.label}
                 </Button>
               )}
@@ -132,19 +132,17 @@ const hasPlateCap = !!(plateName || plateRole);
   }
 
   .hero__headline {
-    font-size: clamp(2.9rem, 1.7rem + 5.4vw, 5.25rem);
-    font-weight: 400;
+    font-size: var(--fs-mast);
+    font-weight: 600;
     line-height: 1.02;
     letter-spacing: -0.022em;
     color: var(--on-ink);
     margin: 0;
     max-width: 16ch;
   }
-  /* italic emphasis inside the headline picks up the soft claret accent —
-     the one small "spark" that makes the type treatment memorable. */
   .hero__headline :global(em) {
     font-style: italic;
-    color: #d79aa1;
+    color: var(--action-inverse);
   }
 
   .hero__subhead {

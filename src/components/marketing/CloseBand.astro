@@ -1,23 +1,23 @@
 ---
-// CloseBand — the in-system ink closing call-to-action for interior pages
-// (Writing, Research, About…). Replaces the claret-era Colophon. A kicker, a
-// Fraunces heading, a line of subtext, and one light button on ink.
+// CloseBand — the closing call-to-action band on the navy field for interior
+// pages (Writing, Research, About…). A Besley heading, a line of subtext, and
+// one action-inverse button. No kicker eyebrow (v5); the prop is accepted for
+// back-compat but not rendered.
 import Button from './Button.astro';
 interface Props {
-  kicker: string;
+  kicker?: string;
   heading: string;
   subtext?: string;
   cta: { label: string; href: string };
 }
-const { kicker, heading, subtext, cta } = Astro.props;
+const { heading, subtext, cta } = Astro.props;
 ---
 <section class="close">
   <div class="close__inner">
-    <p class="kicker">{kicker}</p>
     <h2 class="close__heading">{heading}</h2>
     {subtext && <p class="close__sub">{subtext}</p>}
     <div class="close__cta">
-      <Button href={cta.href} variant="on-ink">{cta.label}</Button>
+      <Button href={cta.href} variant="action-inverse">{cta.label}</Button>
     </div>
   </div>
 </section>

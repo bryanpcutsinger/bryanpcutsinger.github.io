@@ -29,7 +29,6 @@ const speakChips = [
   description="Bryan Cutsinger is an economics professor at Florida Atlantic University, interim director of the Sound Money Project at the American Institute for Economic Research, and Associate Editor of Public Choice. He works in monetary theory and economic history, has written for National Review, The Hill, and The Washington Examiner, and speaks to audiences seeking clear economic analysis of money, markets, and public policy."
 >
   <PageHead
-    kicker="About"
     edition="Florida Atlantic University"
     headline="Bryan Cutsinger."
     lede="Bryan works on monetary theory, economic history, and public choice, with a focus on the institutions and incentives that shape markets and policy."
@@ -39,7 +38,6 @@ const speakChips = [
   <Section variant="surface">
     <div class="bio-lead">
       <div class="bio-lead__copy">
-        <p class="kicker">The short version</p>
         <h2>Bio for hosts.</h2>
         <p>
           Bryan Cutsinger is an economics professor at Florida Atlantic University
@@ -62,8 +60,8 @@ const speakChips = [
   </Section>
 
   <!-- Long bio -->
-  <Section variant="raised" width="reading">
-    <div class="head"><p class="kicker">The longer story</p><h2>About Bryan.</h2></div>
+  <Section variant="sunk" width="reading">
+    <div class="head"><h2>About Bryan.</h2></div>
     <p>
       Bryan's work sits at the intersection of monetary theory, economic history,
       and political economy. He studies how monetary institutions develop, how
@@ -88,7 +86,7 @@ const speakChips = [
 
   <!-- At a glance -->
   <Section variant="surface" width="reading">
-    <div class="head"><p class="kicker">At a glance</p><h2>The essentials.</h2></div>
+    <div class="head"><h2>The essentials.</h2></div>
     <dl class="glance">
       {
         glance.map((g) => (
@@ -102,10 +100,10 @@ const speakChips = [
   </Section>
 
   <!-- On the stage -->
-  <Section variant="raised">
+  <Section variant="sunk">
     <div class="about-speak">
       <div class="about-speak__copy">
-        <div class="head"><p class="kicker">On the stage</p><h2>What I speak about.</h2></div>
+        <div class="head"><h2>What I speak about.</h2></div>
         <ul class="chips">
           {speakChips.map((c) => <li>{c}</li>)}
         </ul>
@@ -123,7 +121,6 @@ const speakChips = [
   </Section>
 
   <CloseBand
-    kicker="Booking"
     heading="Bring Bryan to your next event."
     subtext="Keynotes, lectures, and panels for universities, conferences, and professional audiences."
     cta={{ label: 'Invite me to speak', href: '/speaking/' }}
@@ -131,7 +128,11 @@ const speakChips = [
 </MarketingLayout>
 
 <style>
-  .head { margin-bottom: var(--sp-6); }
+  .head {
+    border-top: 3px double var(--structure);
+    padding-top: var(--sp-6);
+    margin-bottom: var(--sp-6);
+  }
 
   .bio-lead {
     display: grid;
@@ -142,14 +143,14 @@ const speakChips = [
   .bio-lead__hint {
     margin-top: var(--sp-6);
     padding: var(--sp-4) var(--sp-6);
-    background: var(--accent-tint);
+    background: color-mix(in srgb, var(--data) 8%, var(--card));
     border-radius: var(--radius);
     font-size: var(--fs-small);
     color: var(--ink);
     max-width: none;
   }
   .bio-lead__portrait { margin: 0; }
-  .bio-lead__portrait img { border-radius: var(--radius-lg); filter: grayscale(0.15); }
+  .bio-lead__portrait img { border-radius: var(--radius); border: 1px solid var(--structure); padding: 6px; background: var(--card); }
 
   .glance { margin: 0; }
   .glance__row {
@@ -187,7 +188,7 @@ const speakChips = [
     font-weight: 600;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--accent);
+    color: var(--data);
   }
 
   @media (max-width: 820px) {

@@ -9,7 +9,6 @@ import BookingForm from '../components/marketing/BookingForm.astro';
   description="Get in touch with Bryan Cutsinger about speaking engagements, media, or academic inquiries."
 >
   <PageHead
-    kicker="Contact"
     edition="Response within a few days"
     headline="Get in touch."
     lede="Use the form below for speaking, media, academic, and other professional inquiries."
@@ -18,7 +17,6 @@ import BookingForm from '../components/marketing/BookingForm.astro';
   <!-- All inquiries use one direct form; no email address is exposed in HTML. -->
   <Section variant="surface" id="book">
     <div class="head">
-      <p class="kicker">Contact</p>
       <h2>Send an inquiry.</h2>
       <p class="lede">
         Tell me what you have in mind. For time-sensitive media requests,
@@ -30,6 +28,10 @@ import BookingForm from '../components/marketing/BookingForm.astro';
 </MarketingLayout>
 
 <style>
-  .head { margin-bottom: var(--sp-8); }
+  .head {
+    border-top: 3px double var(--structure);
+    padding-top: var(--sp-6);
+    margin-bottom: var(--sp-8);
+  }
   .head .lede { margin-top: var(--sp-3); }
 </style>
