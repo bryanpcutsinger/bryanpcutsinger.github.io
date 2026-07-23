@@ -1,13 +1,14 @@
 ---
-// Brand wordmark in the ink top bar — Bryan's own identity (no FAU logo/wordmark).
+// Brand wordmark in the navy top bar — Bryan's own identity (no FAU logo/wordmark).
 // Replaces Starlight's default SiteTitle. Links to the site root.
 // This override also LOADS the brand fonts for every Starlight page (it renders
 // in the chrome site-wide), so the guides match the marketing site's type:
-// Fraunces (display) + Newsreader (reading) + Inter (UI); IBM Plex Mono for code.
-import '@fontsource-variable/fraunces';
+// Besley (display) + Newsreader (reading) + Libre Franklin (UI); IBM Plex Mono for code.
+import '@fontsource-variable/besley';
+import '@fontsource-variable/besley/wght-italic.css';
 import '@fontsource-variable/newsreader';
 import '@fontsource-variable/newsreader/opsz-italic.css';
-import '@fontsource-variable/inter';
+import '@fontsource-variable/libre-franklin';
 import '@fontsource/ibm-plex-mono/400.css';
 import '@fontsource/ibm-plex-mono/500.css';
 ---
@@ -15,19 +16,19 @@ import '@fontsource/ibm-plex-mono/500.css';
 
 <style>
   /* Mirrors the marketing SiteHeader .wordmark exactly (site.css tokens:
-     --font-display 600 / 1.25rem / --on-ink #f6f4ee). */
+     --font-display 600 / 1.25rem / --on-field #ece9e2). */
   .fau-site-title {
-    font-family: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
+    font-family: 'Besley Variable', Georgia, 'Times New Roman', serif;
     font-weight: 600;
     font-size: 1.25rem;
     letter-spacing: -0.01em;
-    color: #f6f4ee;
+    color: #ece9e2;
     text-decoration: none;
     white-space: nowrap;
     line-height: 1;
   }
   .fau-site-title:hover {
-    color: #f6f4ee;
+    color: #ece9e2;
     text-decoration: none;
     opacity: 0.85;
   }
