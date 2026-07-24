@@ -190,7 +190,9 @@ const subtopics = topicSubtopics
     margin-bottom: var(--sp-12);
   }
   .bank__head h1 {
-    font-size: var(--fs-display-lg);
+    /* --fs-display, NOT --fs-display-lg: the -lg token was never defined, so
+       the declaration was invalid and the H1 collapsed to body size. */
+    font-size: var(--fs-display);
     max-width: 18ch;
   }
   .bank__count {
@@ -255,9 +257,6 @@ const subtopics = topicSubtopics
     display: grid;
     gap: var(--sp-12);
   }
-  .source-group {
-    scroll-margin-top: var(--sp-16);
-  }
   .source-group[hidden],
   .problem[hidden] {
     display: none;
@@ -267,7 +266,6 @@ const subtopics = topicSubtopics
     border-radius: var(--radius);
     background: var(--surface-raised);
     padding: var(--sp-8);
-    scroll-margin-top: var(--sp-16);
   }
 
   /* Question text — verbatim, with blank-line-separated parts as paragraphs. */

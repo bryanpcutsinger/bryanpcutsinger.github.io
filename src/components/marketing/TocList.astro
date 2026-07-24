@@ -1,0 +1,77 @@
+---
+// Nested in-page outline list for long-form topic pages. Renders H2 entries as
+// a numbered list with their H3 subsections indented beneath, visually muted so
+// the two levels never read alike. Used twice by the topic templates: inside
+// the sticky desktop "On this page" sidebar and inside the mobile "In this
+// lesson" disclosure — keep it presentation-only (links + hierarchy, no state).
+// The active-section highlight targets [aria-current], set at runtime by the
+// page's scroll script; the styles below cover it because the runtime attribute
+// lands on elements that already carry this component's scope class.
+interface TocEntry {
+  slug: string;
+  text: string;
+  children?: { slug: string; text: string }[];
+}
+interface Props {
+  items: TocEntry[];
+}
+const { items } = Astro.props;
+---
+<ol class="toc-list">
+  {
+    items.map((item) => (
+      <li>
+        <a href={`#${item.slug}`}>{item.text}</a>
+        {(item.children?.length ?? 0) > 0 && (
+          <ol class="toc-list__sub">
+            {item.children!.map((sub) => (
+              <li>
+                <a href={`#${sub.slug}`}>{sub.text}</a>
+              </li>
+            ))}
+          </ol>
+        )}
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .toc-list {
+    margin: 0;
+    padding-left: 1.1rem;
+    display: grid;
+    gap: var(--sp-2);
+    font-size: var(--fs-small);
+  }
+  .toc-list li::marker {
+    color: var(--text-muted);
+  }
+  .toc-list a {
+    text-decoration: none;
+  }
+  .toc-list a:hover {
+    text-decoration: underline;
+  }
+  /* H3 subsections: unnumbered, indented, a step smaller and muted. */
+  .toc-list__sub {
+    list-style: none;
+    margin: var(--sp-1) 0 0;
+    padding-left: var(--sp-3);
+    display: grid;
+    gap: var(--sp-1);
+    font-size: 0.8125rem;
+    border-left: 1px solid var(--structure);
+  }
+  .toc-list__sub a {
+    color: var(--text-muted);
+  }
+  .toc-list__sub a:hover {
+    color: var(--action);
+  }
+  /* Current reading position (set by the page's scroll script). */
+  .toc-list a[aria-current] {
+    color: var(--action);
+    font-weight: 600;
+  }
+</style>

@@ -273,9 +273,11 @@ live topic index renders all 21. To refresh after an upstream edit, re-run
 `src/content/courses/microeconomics/`), rebuild, and commit.
 
 **Rendering:** `src/pages/teaching/microeconomics/[topic].astro` (`getStaticPaths` +
-`render()`) — eyebrow band (course · T#), in-page TOC from `##` claim headers, scoped
-`.prose` CSS (incl. GFM tables + figure/caption styling), prev/next pager, back-link,
-CTABand. The course home lists published topics as an ordered index. Slides are LaTeX and
+`render()`) — eyebrow band (course · T#), build-time "About N minutes" reading time,
+in-page TOC from the `##`/`###` headers (nested `TocList.astro`; sticky desktop sidebar
++ a mobile "In this lesson" `<details>` disclosure; a small scroll script highlights
+the current section via `aria-current`), scoped `.prose` CSS (incl. GFM tables +
+figure/caption styling), prev/next pager, back-link, CTABand. The course home lists published topics as an ordered index. Slides are LaTeX and
 on hold upstream → `DownloadCard`s show "Request" until PDFs land in `public/downloads/`.
 **Note:** in `[topic].astro`, `getStaticPaths()` runs in an isolated scope — keep the
 consts it needs (`COURSE`, helpers) *inside* it; the template re-declares `COURSE`.
@@ -449,7 +451,31 @@ the intro, above the publication lists.
   computed `variantOf()` helper (robust to the conditionally-rendered chapters/books sections),
   not hardcoded variants.
 
-## Current status (as of 2026-07-22)
+## Current status (as of 2026-07-24)
+
+**Latest (2026-07-24) — topic-page UX/a11y pass ("Track A" of an external page review):**
+(1) **Real bug fixed:** both topic templates sized their H1 with `var(--fs-display-lg)` —
+a token that was never defined, so lecture titles rendered at body size (17px live).
+Now `--fs-display` (fluid 32→49.6px). (2) **Sitewide anchor offset:** `html
+{ scroll-padding-top: calc(--header-h + --sp-8) }` in `site.css` replaces the
+per-heading `scroll-margin-top`s (removed), so `#main`, heading ids, and the price-theory
+source anchors all clear the sticky header (64px desktop / 76px mobile vs 100px offset).
+(3) **Micro topic pages:** TOC now nests `###` subsections (new
+`src/components/marketing/TocList.astro`, reused by a new mobile "In this lesson"
+`<details>` disclosure), sticky sidebar keys off `--header-h` and scrolls internally,
+current section highlighted via a rAF scroll script (`aria-current`), and a build-time
+"About N minutes" reading-time line (225 wpm, ≥10 min rounds to nearest 5) sits under
+the eyebrow. (4) **Mobile menu is properly modal** (`SiteHeader.astro`): focus moves in,
+Tab is contained (header + menu focusables), Escape closes, focus returns to the toggle,
+page behind gets `inert` + scroll-lock, all state restored symmetrically (incl. a
+matchMedia close when crossing to desktop). Verified: build green (63 pages, notes gate
+passed) + browser checks at 390/768/desktop widths (no horizontal overflow; menu
+open/close/Escape/Tab-wrap; outline links; live-site comparison confirmed the H1 bug is
+in production). Note: content items from that review (objectives rewrite, pause-and-check
+answers, claim-status pass) are deliberately NOT here — they belong in the
+`micro-principles` source repo pending instructor decisions.
+
+## Earlier status (2026-07-22)
 
 **Latest (2026-07-22) — FULL "ledger v5" REDESIGN built on branch `redesign/ledger-v5`
 (NOT yet merged to main — merge only on Bryan's final sign-off; deploy = push to main):**

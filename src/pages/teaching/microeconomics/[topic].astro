@@ -10,6 +10,7 @@
 import { getCollection, render } from 'astro:content';
 import MarketingLayout from '../../../layouts/MarketingLayout.astro';
 import Eyebrow from '../../../components/marketing/Eyebrow.astro';
+import TocList from '../../../components/marketing/TocList.astro';
 import DownloadCard from '../../../components/marketing/DownloadCard.astro';
 import CTABand from '../../../components/marketing/CTABand.astro';
 
@@ -70,9 +71,31 @@ const courseLabel = (data.course ?? 'Principles of Microeconomics').replace(
 );
 const lectureLabel = lectureNum ? `Lecture ${lectureNum}` : '';
 
-// In-page TOC from the post's ## claim headers. Collapses (hidden) on short
-// posts. Astro auto-assigns slug ids to headings, so #slug anchors resolve.
-const toc = headings.filter((h) => h.depth === 2);
+// In-page TOC from the post's ## claim headers, with ### subsections nested
+// under their parent (an h3 before any h2 would be dropped — none exist in the
+// course corpus). Collapses (hidden) on short posts. Astro auto-assigns slug
+// ids to headings, so #slug anchors resolve.
+type TocEntry = {
+  slug: string;
+  text: string;
+  children: { slug: string; text: string }[];
+};
+const toc: TocEntry[] = [];
+for (const h of headings) {
+  if (h.depth === 2) toc.push({ slug: h.slug, text: h.text, children: [] });
+  else if (h.depth === 3) toc.at(-1)?.children.push({ slug: h.slug, text: h.text });
+}
+
+// Estimated reading time, computed at build from the post body (raw Markdown +
+// the raw-HTML callouts, tags stripped). 225 wpm; ≥10 min rounds to the nearest
+// 5 so the label reads naturally ("About 15 minutes", not "About 17 minutes").
+const wordCount = (entry.body ?? '')
+  .replace(/<[^>]+>/g, ' ')
+  .split(/\s+/)
+  .filter(Boolean).length;
+const rawMinutes = Math.max(1, Math.round(wordCount / 225));
+const readMinutes = rawMinutes >= 10 ? Math.round(rawMinutes / 5) * 5 : rawMinutes;
+const readLabel = `About ${readMinutes} minute${readMinutes === 1 ? '' : 's'}`;
 
 // Meta description: frontmatter if present, else a ~155-char excerpt from the
 // first real body paragraph (the source has no `description`).
@@ -103,15 +126,9 @@ const isDraft = (data.status ?? '').toLowerCase() !== 'approved';
     <div class="topic__layout">
       {
         toc.length > 1 && (
-          <nav class="toc-sidebar" aria-label="On this page">
+          <nav class="toc-sidebar" aria-label="On this page" data-toc>
             <p class="toc__label">On this page</p>
-            <ol class="toc__list">
-              {toc.map((h) => (
-                <li>
-                  <a href={`#${h.slug}`}>{h.text}</a>
-                </li>
-              ))}
-            </ol>
+            <TocList items={toc} />
           </nav>
         )
       }
@@ -119,6 +136,7 @@ const isDraft = (data.status ?? '').toLowerCase() !== 'approved';
       <div class="topic__main">
         <header class="topic__head">
           <Eyebrow text={lectureLabel ? `${courseLabel} · ${lectureLabel}` : courseLabel} />
+          <p class="topic__meta">{readLabel}</p>
           {
             isDraft && (
               <p class="topic__draft">
@@ -127,6 +145,15 @@ const isDraft = (data.status ?? '').toLowerCase() !== 'approved';
             )
           }
         </header>
+
+        {
+          toc.length > 1 && (
+            <details class="toc-mobile" data-toc>
+              <summary>In this lesson</summary>
+              <TocList items={toc} />
+            </details>
+          )
+        }
 
         <div class="prose">
           <Content />
@@ -186,6 +213,52 @@ const isDraft = (data.status ?? '').toLowerCase() !== 'approved';
   />
 </MarketingLayout>
 
+<script>
+  // Highlight the section currently being read in the outline (sidebar +
+  // mobile disclosure). Pure progressive enhancement: the links work without
+  // this. A rAF-throttled scroll read (no IntersectionObserver bookkeeping,
+  // no animation): the current section is the last heading above the same
+  // offset line the anchor scroll-padding uses.
+  const tocLinks = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>('[data-toc] a[href^="#"]'),
+  );
+  if (tocLinks.length) {
+    const byId = new Map<string, HTMLAnchorElement[]>();
+    for (const a of tocLinks) {
+      const id = decodeURIComponent(a.hash.slice(1));
+      byId.set(id, [...(byId.get(id) ?? []), a]);
+    }
+    const heads = Array.from(
+      document.querySelectorAll<HTMLElement>('.prose h2[id], .prose h3[id]'),
+    ).filter((h) => byId.has(h.id));
+
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const offset = 120; // just below the sticky header + anchor padding
+      let current: string | null = null;
+      for (const h of heads) {
+        if (h.getBoundingClientRect().top <= offset) current = h.id;
+        else break;
+      }
+      for (const a of tocLinks) {
+        const on = current !== null && byId.get(current)?.includes(a);
+        if (on) a.setAttribute('aria-current', 'true');
+        else a.removeAttribute('aria-current');
+      }
+    };
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    update();
+  }
+</script>
+
 <style>
   .topic {
     max-width: 64rem;
@@ -233,8 +306,12 @@ const isDraft = (data.status ?? '').toLowerCase() !== 'approved';
     .toc-sidebar {
       display: block;
       position: sticky;
-      top: var(--sp-16);
+      top: calc(var(--header-h) + var(--sp-6));
       align-self: start;
+      /* The outline now includes H3s, so cap it to the viewport and let the
+         list itself scroll rather than pushing past the fold. */
+      max-height: calc(100vh - var(--header-h) - var(--sp-12));
+      overflow-y: auto;
     }
   }
   .toc__label {
@@ -244,25 +321,50 @@ const isDraft = (data.status ?? '').toLowerCase() !== 'approved';
     text-transform: uppercase;
     color: var(--text-muted);
   }
-  .toc__list {
-    margin: 0;
-    padding-left: 1.1rem;
-    display: grid;
-    gap: var(--sp-1);
+
+  /* Mobile "In this lesson" outline — a compact native disclosure shown only
+     where the sidebar TOC is hidden. Collapsed by default; no overlay. */
+  .toc-mobile {
+    margin: 0 0 var(--sp-8);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius);
+    background: var(--surface-raised);
+  }
+  .toc-mobile > summary {
+    padding: var(--sp-3) var(--sp-4);
+    cursor: pointer;
+    font-family: var(--font-label);
+    font-size: var(--fs-eyebrow);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .toc-mobile[open] > summary {
+    border-bottom: 1px solid var(--hairline);
+  }
+  .toc-mobile > :global(.toc-list) {
+    padding: var(--sp-4) var(--sp-4) var(--sp-4) var(--sp-8);
+  }
+  @media (min-width: 60rem) {
+    .toc-mobile {
+      display: none;
+    }
+  }
+
+  .topic__meta {
+    margin: var(--sp-2) 0 0;
     font-size: var(--fs-small);
-  }
-  .toc__list a {
-    text-decoration: none;
-  }
-  .toc__list a:hover {
-    text-decoration: underline;
+    color: var(--text-muted);
   }
 
   /* ---- long-form prose (renders the imported Markdown body) ---------------- */
   .prose :global(h1) {
     font-family: var(--font-display);
     font-weight: 500;
-    font-size: var(--fs-display-lg);
+    /* --fs-display, NOT --fs-display-lg: the -lg token was never defined, so
+       the declaration was invalid and the H1 collapsed to body size. */
+    font-size: var(--fs-display);
     line-height: 1.12;
     letter-spacing: -0.01em;
     color: var(--ink);
@@ -275,7 +377,6 @@ const isDraft = (data.status ?? '').toLowerCase() !== 'approved';
     line-height: 1.18;
     color: var(--ink);
     margin: var(--sp-16) 0 var(--sp-4);
-    scroll-margin-top: var(--sp-16);
   }
   .prose :global(h3) {
     font-family: var(--font-display);
@@ -283,7 +384,6 @@ const isDraft = (data.status ?? '').toLowerCase() !== 'approved';
     font-size: var(--fs-h3);
     color: var(--ink);
     margin: var(--sp-12) 0 var(--sp-4);
-    scroll-margin-top: var(--sp-16);
   }
   .prose :global(p) {
     font-size: 1.0625rem;
