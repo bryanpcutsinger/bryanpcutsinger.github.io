@@ -4,14 +4,15 @@ topic: "T6 — Production, Costs, and Specialization (Part B)"
 course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 13 (Tue 10/6)"]
 ue_anchors: ["UE 15 (Specialization and Exchange)"]
-be_anchors: ["BE 6 (specialization / economies of scale / middleman block)"]
+be_anchors: []
 ep_anchors: ["E&P Fig 7-9 (ch. 7, p. 148) — gains from specialized production and exchange at a common market price"]
 word_target: "2900-3600"
-word_budget: 3652
+word_budget: 3612
   # word_budget 3600 -> 3652 (+52): For Further Reading section added 2026-07-22
+  # word_budget 3652 -> 3612 (-40): BE->lecture redraft 2026-07-23 (Ford Model T sentence -> ext-t06b-ford-01)
 status: approved        # scope-reduction R4 pass 2026-07-21; E&P integration M7 done-gate 2026-07-20; prior approval 2026-06-15
 audience: students
-note: "Self-contained — assumes no access to the textbooks. Part B of T6 core: comparative advantage, the cheaper newcomer, blocking entry via occupational licensing, and the two meanings of specialization plus market size (UE 15 + BE 6). Diseconomies of scale and the firms-specialize/middleman material are lecture-only content in this topic's extensions.md. Part A covers UE 7's marginal toolkit plus UE 14 production/cost and BE 10. UE 17 is owned by T7."
+note: "Self-contained — assumes no access to the textbooks. Part B of T6 core: comparative advantage, the cheaper newcomer, blocking entry via occupational licensing, and the two meanings of specialization plus market size (UE 15). Diseconomies of scale and the firms-specialize/middleman material are lecture-only content in this topic's extensions.md. Part A covers UE 7's marginal toolkit plus UE 14 production/cost and BE 10. UE 17 is owned by T7."
 # brief: ../t06-production-costs-specialization/brief.md
 ---
 
@@ -172,7 +173,7 @@ How far specialization can go depends on how big the market is, and this single 
 
 Picture a small town with one doctor. He has to be a generalist, handling everything from broken arms to fevers, because the town cannot keep a knee specialist busy. Move to a large city and you find specialists in knees, ankles, and feet, each doing nothing else, each better at his sliver than any generalist could be, because the city is big enough to fill their schedules. The size of the market set the depth of specialization, and that is part of why large, open economies out-produce small, closed ones.
 
-Market size drives cost down through scale as well, because a large volume unlocks cheaper methods. This is why we make a few standardized models in enormous quantities rather than countless custom ones: the public would rather have a low-cost standard product than a pricey bespoke one, and the volume of a standard model is exactly what makes mass production cheap. Henry Ford's assembly line slashed the labor in building a car and brought the price within reach of ordinary families precisely because he committed to producing the same model in staggering numbers, spreading huge fixed investments over millions of units. Now imagine a law forbidding car sales across state lines. Prices would jump for two reasons: you would lose the volume that makes mass production cheap, and the room to specialize that only a large market provides. Shrink the market and you give up both engines of low cost at once.
+Market size drives cost down through scale as well, because a large volume unlocks cheaper methods. This is why we make a few standardized models in enormous quantities rather than countless custom ones: the public would rather have a low-cost standard product than a pricey bespoke one, and the volume of a standard model is exactly what makes mass production cheap. Now imagine a law forbidding car sales across state lines. Prices would jump for two reasons: you would lose the volume that makes mass production cheap, and the room to specialize that only a large market provides. Shrink the market and you give up both engines of low cost at once.
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>

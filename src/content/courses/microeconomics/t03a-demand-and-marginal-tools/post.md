@@ -5,11 +5,12 @@ course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 3 (Tue 9/1)"]
 order: 150   # display/pager sort override: t01 (100) < t03a < t03b (160) < t02 (200) — reorder 2026-07-22
 ue_anchors: ["UE 5"]
-be_anchors: ["BE 2 (unmet-needs/demand-vs-need slice)"]
-ep_anchors: ["E&P Fig 2-3 (ch. 2, p. 21) — paradox of value: total worth as area vs marginal worth as height (diamond–water)"]
+be_anchors: []
+ep_anchors: ["E&P Fig 2-3 (ch. 2, p. 21) — paradox of value: total worth as area vs marginal worth as height (diamond–water)", "E&P Ch 2 'Needs or Amounts Demanded' (ch. 2, pp. 20-21) — no-fixed-need principle: no particular amount of a good is required; the real question is relative value (poverty-person food/clothing trade; safety accepted at the margin)"]
 word_target: "3200-3600"
-word_budget: 3654
+word_budget: 3650
   # word_budget 3600 -> 3654 (+54): For Further Reading section added 2026-07-22
+  # word_budget 3654 -> 3650 (-4): BE->A&A no-fixed-need redraft — kibbutz/oxygen/national-priorities illustrations to extensions; section re-grounded on E&P ch 2 "Needs or Amounts Demanded" (near-flat measured 3645, re-ground replaces the moved BE prose) 2026-07-23
 status: approved        # E&P integration M6 done-gate 2026-07-20; prior approval 2026-07-01
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Source-of-truth for session 3. Covers laws of demand, shifts versus movements, marginal personal worth, verbal consumer surplus, demand as a rate, relative price, and demand versus fixed-needs language. UE 7's general total/marginal/average and equimarginal machinery is owned by T6."
@@ -20,7 +21,7 @@ note: "Self-contained — assumes no access to the textbooks. Source-of-truth fo
 
 The opening topic ended with the idea where our work on demand begins: the more of something you already have, the less you will give up to get one more unit of it. Underneath it is a plain fact: people value things differently, and the value they place on one more unit changes as they get more of it. Here we put that fact under a microscope and describe how the amount people are willing to buy responds to price. Out of that description comes the most reliable principle in all of economics and a way of cutting through one of the slipperiest words in public debate: "need."
 
-Keep one puzzle in mind. Almost everyone agrees that people "need" food, housing, medicine, and clean water. Politicians announce national priorities and unmet needs; reports declare that a city needs more parking or more golf courses. Yet the moment you ask "how much, and at what price?" the language of need falls apart. By the end of this post you should see why there is no such thing as a fixed need, only a quantity people will buy at a given price, and why that is not a cold dismissal of human wants but the only honest way to think about them.
+Keep one puzzle in mind. Almost everyone agrees that people "need" food, housing, medicine, and clean water. We call some of those needs urgent, others basic or vital, as if a fixed quantity of each were simply required, cost aside. Yet the moment you ask "how much, and at what price?" the language of need falls apart. By the end of this post you should see why there is no such thing as a fixed need, only a quantity people will buy at a given price, and why that is not a cold dismissal of human wants but the only honest way to think about them.
 
 <aside class="econ-callout econ-objectives">
 <p class="econ-callout__label">Learning objectives</p>
@@ -211,9 +212,9 @@ Underneath every dollar figure is something more basic. A *price* is an exchange
 
 Now we can dismantle the slippery word from the opening. People talk about urgent, critical, vital, basic, minimum *needs*, as if some quantity of a good were simply required, full stop, regardless of cost. There is no such quantity. The amount of any good a person or a society chooses is a function of its price: always a matter of *how much at what price*, more-or-less, never all-or-none.
 
-The cleanest demonstration comes from an Israeli kibbutz that provided electricity and food to members at no charge. People left lights burning all day and brought outside friends in for meals; consumption ran wild. Once the kibbutz began charging prices, consumption of each dropped sharply. There was no fixed "need" for food or electricity, however indispensable both are; quantity demanded responded to price, exactly as the first law says. Even the most life-sustaining goods follow more-or-less, not all-or-none: food, water, even oxygen become unnecessary and then harmful past some point, as people overeat into illness, floods drown, and too much oxygen has blinded newborns. Nothing is a "need" in the categorical sense.
+To see why, ask what a person really needs and the honest answer is always a comparison. Picture someone with almost nothing, down to what they would call bare necessities. Offer them a little more food for some of their clothing, and they will not refuse on the grounds that no gain in food could make a bit less clothing bearable; offer them enough of another comfort, and they will part with a little of the food they hold. However poor a person is, there is always some amount of one good they will give up for enough of another. Even our own safety works this way: we accept a slightly higher chance of harm, driving fast or taking other risks, to get things we want more than that sliver of security. Nothing, however indispensable, is required in a fixed, all-or-none amount.
 
-Because there is no fixed need, the political language built on it tends to mislead. The very idea of a "national priorities" list, or a roster of "unmet needs" government should fill, hides the trade-off at its heart. If economics is the study of scarce resources with alternative uses, there will always be unmet needs, by definition. You can meet one desire 100 percent, a parking space for every car everywhere at all times, but only by leaving other desires, hospitals, police, schools, even more starved than before. Calling something a need does not lift the constraint; it only disguises which other things you have decided to do without.
+Because there is no fixed need, the political language built on it tends to mislead. Labeling a good a need makes it sound as though some amount were simply required, past all argument, when the real question is always how much more of it is worth to us than the other things we would have to give up to get it. The word itself settles nothing; it only hides which of those other things you have chosen to do without.
 
 A bonus from taking this seriously: the law of demand turns out to be nearly universal. The number of children people choose to have, the number of immigrants who seek entry, the demand for pianos, for winning sports teams, even for medical procedures, all respond to the price, broadly understood, of getting them. Wherever a desire confronts a cost, the law of demand is at work.
 

@@ -4,11 +4,12 @@ topic: "T12 — Risk, Insurance, and Financial Markets (Part B)"
 course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 26 (Thu 11/19)"]
 ue_anchors: ["UE 35 (arbitrage, random walk, intermediation)", "UE 37 (futures, options, uncertainty)"]
-be_anchors: ["BE 13 (speculation and inventories)", "BE 15 (uncertainty)"]
+be_anchors: []
 ep_anchors: ["E&P ch. 16 pp. 358–360 — protective credit controls, margin requirements, fungibility, and the paternalism tradeoff"]
 word_target: "2500-5500"
-word_budget: 3194
+word_budget: 3250
   # word_budget 3131 -> 3194 (+63): For Further Reading section added 2026-07-22
+  # word_budget 3194 -> 3250 (+56): BE->lecture redraft 2026-07-23 (HP/poor-countries moved to extensions.md; speculation-vs-gambling and both parasite framings re-grounded on UE 34/35/37)
 status: approved
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Part B of T12: speculation and inventories, futures and options, arbitrage, information in asset prices, financial intermediation, and the boundary between measurable risk and uncertainty. Final content session."
@@ -67,13 +68,13 @@ A call is insurance against a rise, useful to someone who has committed to buy. 
 
 ## Speculators Smooth Consumption Between Harvests
 
-So far the people in our story are hedgers, businesses laying off a risk they do not want. Who takes the other side? Often a *speculator*, willing to hold the price risk in hopes of a profit, and far from being a parasite he performs a genuine social service.
+So far the people in our story are hedgers, businesses laying off a risk they do not want. Who takes the other side? Often a *speculator*, willing to hold the price risk in hopes of a profit, and though the word conjures an idle bettor, he performs a genuine social service.
 
 No central planner decides how much of this year's harvest to hold back so consumption is smooth until the next one. Yet it gets done, and futures markets are how. Suppose word spreads that frost has damaged next year's coffee crop. Owners of this year's beans now expect higher prices next year, so they hold beans back rather than sell them all now. That withholding raises today's price, even though not a single bean has yet been lost, and the predictable cry goes up that greedy speculators are gouging consumers. The speculator's honest defense is that we did not cause the frost. There will be less coffee next year no matter what; the only question is when the shortfall is felt. Either we keep drinking today as if nothing were wrong and suffer the whole shortage next year, or we trim a little now, carry some over, and spread the scarcity across both years. By bidding up today's price and easing next year's, speculators do the second, and most people prefer a modest squeeze spread over time to a sudden, sharp shortage, so this smoothing is a service, not a swindle.
 
 A few corollaries follow. First, the work is mostly done by profit-seekers, not by farsighted households canning their own preserves; the self-interested speculator accomplishes for the whole economy what individual prudence accomplishes for one family. Second, speculators respond to *news*, not events. Prices often move before the thing everyone worries about actually happens, and they move asymmetrically: bad news lifts today's price at once because beans can be carried forward, but good news barely moves it because next year's crop cannot be hauled back. Storage is a one-way street, so the claim that speculators "push up" prices, evidenced by prices rising before any actual change in supply, gets the causation backward. Third, *storability* governs how big the swing is. A good that stores cheaply barely dips in price when the new crop arrives; a perishable one collapses when fresh supply floods in. The harder a good is to store, the wilder its seasonal price swing.
 
-This also separates commodity speculation from gambling, even though both bet on an unknown future. A casino bet creates a risk for its own sake; nothing is allocated better because the dice rolled. Commodity speculation reallocates a real, scarce, storable good across time toward its higher-valued uses. The gambler manufactures risk; the speculator carries an existing one.
+This also separates commodity speculation from gambling, even though both stake wealth on an unknown future. To gamble is to take on a wider spread of possible outcomes for its own sake; the casino bet opens a brand-new range of wins and losses, and nothing real is allocated any better because the dice rolled. Speculation runs the other way: the scarcity risk already exists — next year's crop is already in doubt — so rather than create a risk, the speculator takes an existing one off the hedger's hands, the way risk is exchanged between people rather than conjured from nothing. In carrying it he reallocates a real, storable good across time toward its higher-valued uses. Gambling widens the range of outcomes; speculation shoulders a risk that was already there.
 
 ## The Futures Price Is the Market's Best Forecast
 
@@ -99,7 +100,7 @@ Two practical lessons follow. First, you cannot have high returns with no risk; 
 
 Part A's distinction between measurable risk and deeper uncertainty now pays off. Diversification can narrow exposure to many independent risks, but it cannot reveal news that no one yet knows. Financial intermediaries sit between those two facts: they pool and redistribute risks that can be combined while leaving genuine uncertainty for owners and entrepreneurs to bear.
 
-And those intermediaries are not the parasites they are sometimes accused of being. A bank, a broker, or a mutual fund earns a spread by moving savings from the many who have it to the few who can put it to productive use, reconciling savers who want safety and quick access with borrowers who need long-term commitment. They create wealth by matching capital to talent. Sowell reminds us that great American fortunes often began with almost none of the founder's own money, Hewlett and Packard in a rented garage, and that poor countries stay poor in part because they lack the institutions to gather up scattered savings and channel them to entrepreneurs. The "paper-shuffling" of finance is, done well, the circulatory system of a productive economy.
+And this intermediation is productive work, not the idle skimming it is sometimes accused of being. A bank, a broker, or a mutual fund earns a spread by moving savings from the many who have it to the few who can put it to productive use, reconciling savers who want safety and quick access with borrowers who need long-term commitment. Without such intermediaries the flow of savings to productive investment would be smaller, less well directed, and more expensive. They create wealth by matching capital to talent, and the "paper-shuffling" of finance is, done well, the circulatory system of a productive economy.
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>

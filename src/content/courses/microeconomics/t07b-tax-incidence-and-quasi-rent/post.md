@@ -4,7 +4,8 @@ topic: "T7 — Competitive Markets (Part B)"
 course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 15 (Tue 10/13)"]
 ue_anchors: ["UE 11 (fixed-land incidence and amenity capitalization)", "UE 17", "UE 18", "UE 27 (corporate-tax incidence across time)"]
-be_anchors: ["BE 5", "BE 9 (partial)"]
+be_anchors: []
+  # be_anchors ["BE 5","BE 9 (partial)"] -> [] (2026-07-23 BE→A&A redraft, ruling R6): the BE 5/9 material left the body in the R3 rebuild and lives only in extensions.md (ext-churn-survival-01, ext-losses-discipline-01, ext-reputation-01) via mig-t07b-011/012/013; BE provenance is preserved in those cards and the migration records, so no live post pin is owed.
 ep_anchors: ["E&P Fig 4-6 (ch. 4, p. 66) — a tax on fixed land: consumer price unchanged, owner bears all, legal side irrelevant", "E&P ch. 4 & ch. 11 — tax political economy: immobile bases taxed, mobile bases escape", "E&P ch. 18 pp. 394–398 — graduated-income-tax rationales, implicit housing rent, and federal revenue sharing"]
 word_target: "2900-3400"
 word_budget: 3482

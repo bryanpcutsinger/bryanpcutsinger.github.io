@@ -4,11 +4,11 @@ topic: "T1 — Introduction and the Economic Way of Thinking"
 course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 2 (Thu 8/27)"]
 ue_anchors: ["UE 1", "UE 2", "UE 3"]
-be_anchors: ["BE 1", "BE 25"]
+be_anchors: []
 ep_anchors: ["E&P ch. 1 (Scarcity, Competition, and Social Control) — mercantilism as the third system between capitalism and socialism: resources nominally private property but the state grants a politically favored group protected market access ('government-aided monopolization'); a noticeable share of real economies, no society purely one system", "E&P ch. 1 — every rationing criterion is a form of competition that selects the society's traits over time: reward cheap time and patience, charm and rhetoric (as in politics), or productivity, and the society grows more of that trait; even a 'fair' random draw is a criterion no one wants deciding their surgeon", "E&P ch. 3 §Freedom: As You Like It — democracy allocates political power but does not determine whether the resulting uses of power preserve open choice"]
 word_target: "3600-4000"
-word_budget: 4067
-  # word_budget 4000 -> 4067 (+67): For Further Reading section added 2026-07-22
+word_budget: 4000
+  # word_budget 4067 -> 4000 (-67): BE->A&A redraft 2026-07-23 (measured stripped 3924, headroom 76); incentives/Lange-Friedman/China + BE 25 values close moved to extensions.md, Robbins/money re-grounded on UE 1, obj 2 re-grounded on UE 2 per CP2 sheet
 status: approved        # M9 done gate 2026-07-20 (§10 A+B PASS); prior Stage-2 2026-06-15
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Source-of-truth for the T1 deck; section headers are claims that map to slide titles."
@@ -22,7 +22,7 @@ Most people assume economics is about money, the stock market, or getting rich. 
 <p>By the end of this post you should be able to:</p>
 <ul>
 <li>Define scarcity, and explain why every choice carries an opportunity cost, full cost is explicit plus implicit, sunk costs are irrelevant, a $0 money price is not free, and the production possibilities frontier pictures the trade-off (efficiency as no waste) and growth.</li>
-<li>Explain economics as positive, cause-and-effect reasoning: judge a policy by the incentives it creates rather than its intentions, judge a theory by whether its predictions survive testing, and keep positive claims separate from normative ones.</li>
+<li>Use positive, cause-and-effect economic analysis to state refutable if–then predictions, judge a theory by whether its predictions survive testing against evidence, and keep positive claims ("what is / what will happen") separate from normative judgments ("what should be").</li>
 <li>Explain why voluntary exchange is positive-sum and depends on property rights, and why the behavior of governments, firms, and markets traces back to the incentives facing the individuals inside them.</li>
 </ul>
 </aside>
@@ -31,14 +31,14 @@ Most people assume economics is about money, the stock market, or getting rich. 
 
 Economics begins with a stubborn fact: there are never enough resources to give everyone everything they want. That shortfall is not a problem we will eventually solve; it is a permanent part of the human condition. Because resources are scarce, every society must decide what to produce, how to produce it, and who receives it. Different societies answer these questions differently; a market economy answers them largely through prices, property rights, and exchange.
 
-Economics is how we reason about those questions. The classic definition, which we owe to the economist [Lionel Robbins](https://www.econlib.org/library/Enc/bios/Robbins.html), is short:
+Economics is how we reason about those questions, and it starts from a single fact about the world:
 
 <aside class="econ-callout econ-def">
 <p class="econ-callout__label">Definition</p>
-<p>Economics is the study of how people use scarce resources that have alternative uses.</p>
+<p>Economics is the study of how people cope with scarcity: our wants for goods of every kind run ahead of the means available to satisfy them.</p>
 </aside>
 
-Scarce means there is not enough to go around; alternative uses means each resource could serve more than one purpose. An hour of your time could go to studying, sleeping, or a paying shift. Because resources are limited and usable in many ways, committing one to a single purpose gives up all its other uses.
+Whatever you enjoy, you got it through some effort, and however much you get, you find you want still more. Two things stand between you and everything you want: the limited stock of goods that actually exists, and everyone else who wants those same goods. And because any resource you put to one use is a resource you cannot put to another, using a scarce thing always means giving up the other things it could have done instead.
 
 <aside class="econ-callout econ-termset">
 <p class="econ-callout__label">Key term</p>
@@ -47,11 +47,11 @@ Scarce means there is not enough to go around; alternative uses means each resou
 </dl>
 </aside>
 
-Money appears nowhere in that definition. For a society as a whole, money is just a tool for moving real things around; if printing it made a nation rich, no country would ever be poor. A decision can even be economic with no money at all: a medical team that reaches a disaster with more wounded than it can treat must decide who gets care first, scarcity, alternative uses, and a hard trade-off, with no price in sight.
+Notice that money appears nowhere in this. Economics is not about personal finance or getting rich; it is about coping with scarcity, and scarcity would press on us even in a world with no money at all. Wherever there is not enough of something to go around and someone has to decide who gets it, an economic problem is present, whether or not a single dollar changes hands.
 
 ### Scarcity Is Permanent, So Trade-offs Are Unavoidable
 
-Scarcity is not unique to any society, nor the result of producing the "wrong" things: human wants outrun any quantity of means, and rearranging what we produce does not make the shortfall disappear. It is not a problem only for the poor, either. A [news feature once profiled middle-class American families](https://fortune.com/2023/05/18/is-100000-salary-six-figure-enough-for-henry-millennials/), prosperous by the standards of almost any earlier century, as barely getting by; their problem was not a budget someone could loosen, it was reality.
+Scarcity is not unique to any society, nor the result of producing the "wrong" things: human wants outrun any quantity of means, and rearranging what we produce does not make the shortfall disappear. It is not a problem only for the poor, either. Even people who are rich by the standards of almost any earlier century still run up against wants that outstrip their means; scarcity is about the gap between what people want and what there is, not about how much anyone happens to have.
 
 Picture the alternative: the Garden of Eden, where everything anyone could want is simply there for the taking. Such a place would have production and consumption, but no economy, because no one would ever have to choose.
 
@@ -147,15 +147,13 @@ What pushes the frontier outward is productivity, and productivity tracks a coun
 
 Being on the frontier still does not tell you which point is best. You might trade food for cleaner air while I trade the other way, and efficiency alone cannot crown a winner: it is a no-waste test, not a verdict about what is good, which people forget the instant a policy gets branded "inefficient."
 
-## Economics Looks Past Intentions to Consequences
+## Economics Traces Cause and Effect
 
 Economics is a science: a careful effort to work out what actually happens when a price rises, a law passes, or a new opportunity opens up. The emphasis is on cause and effect, not right or wrong.
 
-The economic way of thinking does not belong to a political party. A committed socialist like [Oskar Lange](https://www.econlib.org/library/Enc/bios/Lange.html) and a free-market champion like [Milton Friedman](https://www.econlib.org/library/Enc/bios/Friedman.html) reached for the same analytical tools, however bitterly they disagreed over the state's role; they parted company over what they wanted, not over how incentives influence behavior.
+That means the goal is to say what will follow from a given cause, stated plainly enough that the world could prove you wrong. A claim that a policy "might" help or "could" backfire is close to empty, because it rules nothing out. A useful claim says what will happen, or at least what becomes more or less likely: a legal cap on rents, for instance, raises the odds of a housing shortage. That is a refutable prediction, and once you have one you can check it against the evidence instead of arguing about what anyone meant to do.
 
-More importantly, if you want to understand what a policy will do, look at the incentives it creates, not the intentions behind it. Good intentions are cheap. Every policy changes the rewards and penalties people face, and people adjust their behavior in response, so a law meant to help can end up hurting, and a measure that sounds cold can end up saving lives. The only way to tell which is which is to trace the chain of cause and effect through.
-
-The stakes are real. When China shifted toward more market-friendly policies, [hundreds of millions of people climbed out of severe poverty](https://humanprogress.org/explaining-chinas-economic-miracle/) within a single generation, because the rules changed: people were allowed to keep more of what they grew, built, and earned, and the new incentives changed how millions worked, saved, and traded. Getting the rules right or wrong can be the difference between a society where most people live comfortably and one where most stay poor.
+None of this depends on the outcome being one you like. Tracing cause and effect can show that a policy meant to help ends up hurting, or that a measure that sounds harsh ends up doing good; the analysis reports what follows, and leaves the approving or condemning to you.
 
 ### Good Theories Are Useful, Not Perfect
 
@@ -186,11 +184,7 @@ Be on guard against economists themselves here too, myself included, meaning the
 
 ### Economics Clarifies Your Trade-offs; It Doesn't Supply Your Values
 
-Economics has less to say about values than people expect, and that is a feature, not a bug. Nearly every value that matters to us is non-economic, and economics supplies none of them; it will not tell you what to care about, only what pursuing one thing you care about costs you in terms of the others. It certainly never orders you to make as much money as possible: an economics professor could almost always earn more in private industry, and a talented doctor could chase the most lucrative specialty instead of the one he loves, and economics tells neither to do so.
-
-You cannot avoid weighing the trade-off, because scarcity is always there. There are no costless fixes, only trade-offs, the meaning of "no free lunch," and refusing to weigh one does not make it vanish; the choice still gets made by default, on whatever terms circumstances impose.
-
-That is why I think of economics as the real art of the possible. Politics often invites us to vote for several things that cannot all happen at once; economics keeps pointing out that those promises compete for the same scarce resources, so choosing more of one really does mean accepting less of another. That is not cynicism. It is what taking your own values seriously requires.
+The same positive footing marks a limit on what economics can do for you. It can lay out what pursuing one thing you care about will cost you in terms of the others, but it holds no scale for weighing those things against each other. Economics contains no basis for calling a result good or bad; that verdict is yours to add once you have seen the trade-off. What the analysis insists on is only that the trade-off is real: there are no costless fixes, and refusing to weigh one does not make it vanish, it just settles the choice by default, on whatever terms circumstances impose.
 ## Only Individuals Choose
 
 Only individuals choose, and that fact underlies almost everything we do this term. "The government," "the firm," and "the market" have no minds or goals of their own. The people inside them do. A government is officials, voters, and interest groups, each responding to their own incentives. A firm is owners, managers, and employees. A market is people buying and selling.
@@ -240,7 +234,7 @@ Want to explore the source material? This lecture draws on the following chapter
 <h3>Key takeaways</h3>
 <ul>
 <li><strong>Scarcity forces trade-offs.</strong> Every choice has an opportunity cost, counted in full (explicit plus implicit, not just money), sunk costs are irrelevant, and a $0 price does not mean free; the production possibilities frontier pictures efficiency (no waste) and growth (the frontier shifting out).</li>
-<li><strong>Economics is positive, not normative.</strong> Judge a policy by the incentives it creates, not its intentions, and judge a theory by whether its predictions survive testing; the "should" is a separate value judgment you supply.</li>
+<li><strong>Economics is positive, not normative.</strong> State refutable if–then predictions and judge a theory by whether its predictions survive testing against evidence; keep what is separate from what should be, the "should" being a value judgment you supply.</li>
 <li><strong>Only individuals choose,</strong> and voluntary exchange is positive-sum: it rests on property rights, and both sides expect to gain, or the trade does not happen.</li>
 </ul>
 </section>

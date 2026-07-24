@@ -4,7 +4,7 @@ topic: "T11 — Capital, Interest, and Time (Part A)"
 course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 23 (Tue 11/10)"]
 ue_anchors: ["UE 30", "UE 31", "UE 36 (front half)"]
-be_anchors: ["BE 13 (PV/intermediation — partial)"]
+be_anchors: []
 ep_anchors: ["E&P ch. 6 (Capital Values and Interest) — usury as an ambiguous pejorative for interest; early Christian dogma, the Koran, and Communist doctrine each condemned it yet readmitted it under euphemism (Church 'discount', Communist 'efficiency index', Treasury 'discount')", "E&P ch. 16 (Wealth, Saving, and Investing) — Aristotle's 'sterile money'; interest paid before and after each condemnation because the demand for savings exceeded supply at a zero price; the Papacy charged interest as 'fees'/'gratuities'; Christians borrowed from Jews"]
 univecon_anchors: ["University Economics (1994) ch. 11 p. 187 — Feather River project's low-discount-rate political-economy example"]
 word_target: "3300-3700"
@@ -134,7 +134,7 @@ In that market, the words run backward from ordinary usage. A *lender* is buying
 <figcaption><strong>The interest rate is the price of current income, and it settles where borrowing and saving match.</strong> Demand for more current income (from borrowers) slopes down; supply of current income offered (from savers) slopes up. Above the five-percent equilibrium rate, savers offer more than borrowers want and the surplus pushes the rate down; below it, borrowers want more than savers offer and the shortage pushes the rate up. Drag the rate line (or use the arrow keys) to see the gap close at the market-clearing rate. If the frame does not load, <a href="/teaching/microeconomics/t11a-present-value-and-interest/figures/t11a-loan-market-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t11a-present-value-and-interest/figures/t11a-loan-market.svg">view the static figure</a>.</figcaption>
 </figure>
 
-It does not matter whether the current income is wanted for consumption or for investment; both wants press on the same market and help set the same rate. And though we often say that saving equals investment by definition, the economy still has to coordinate the people who save with the people who invest, because they are usually different people acting for different reasons. The saver setting aside money for retirement and the entrepreneur building a plant never meet, yet the interest rate brings their plans into line, rationing current income to its most valued uses, exactly as any price coordinates strangers.
+It does not matter whether the current income is wanted for consumption or for investment; both wants press on the same market and help set the same rate. And though we often say that saving equals investment by definition, the economy still has to coordinate the people who save with the people who invest, because they are usually different people acting for different reasons. The saver setting aside money for retirement and the entrepreneur building a plant never meet, yet the interest rate brings their plans into line, coordinating saving and investment and settling at the rate where the two are equal.
 
 One warning about what interest is not: it is not "the price of money." Printing more money does not push the interest rate down for long; mostly it raises the price level. The interest rate is the price of current versus future income, a real thing, and we are deliberately leaving the money-supply machinery to a later course.
 

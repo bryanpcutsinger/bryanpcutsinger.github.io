@@ -4,11 +4,12 @@ topic: "T8 — Market Power (Part A)"
 course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 16 (Thu 10/15)"]
 ue_anchors: ["UE 19", "UE 20 (Q1–Q6, Q8)", "UE 21", "UE 26 (Q2/Q5/Q6 cartels+stadium)"]
-be_anchors: ["BE 6", "BE 7 (Monopolies & Cartels)"]
+be_anchors: []
 ep_anchors: ["E&P Fig 13-1 (p. 282) — monopoly rent / Ricardian rent / social loss", "E&P Fig 11-4 (p. 239) — lost consumer value", "E&P ch. 11 pp. 256–257 — Denver versus San Francisco rail rates as demand-based pricing constrained by water competition"]
 word_target: "3200-3800"
-word_budget: 3870
+word_budget: 3850
   # word_budget 3800 -> 3870 (+70): For Further Reading section added 2026-07-22
+  # word_budget 3870 -> 3850 (-20): BE->lecture redraft 2026-07-23 (railroad-cartel + cruise/hotel excess-capacity moved to extensions; measured stripped 3838)
 status: approved        # one-per-lecture split; approved 2026-07-01 (M3 E&P figure embeds 2026-07-19; R4 scope-reduction pass 2026-07-21)
 audience: students
 note: "Self-contained — assumes no access to the textbooks. First of two market-power posts (session 16); session 17 covers antitrust and regulation."
@@ -19,7 +20,7 @@ note: "Self-contained — assumes no access to the textbooks. First of two marke
 
 So far we have mostly studied a seller who has no choice about price. A wheat farmer takes whatever the market offers; if he asks a penny more, buyers walk to the next stall, and he can sell all he wants without ever cutting it. That farmer is a *price-taker*. Most firms you actually deal with are not like that. The coffee shop on your corner sets its own prices and changes them. Each one searches for the price that serves it best.
 
-That gap between searching for a price and simply taking one drives almost everything in this topic: why a sold-out concert can mean the promoter priced too low, why senior citizens cruise cheaper than honeymooners, why a locked taxi medallion is worth a fortune, and why firms that agree to hold prices up keep secretly undercutting each other anyway. Part A builds the tool and turns it on how price-searchers actually price and on why cartels tend to fall apart on their own. Part B turns it on the policies meant to police market power: antitrust law and economic regulation.
+That gap between searching for a price and simply taking one drives almost everything in this topic: why a sold-out concert can mean the promoter priced too low, why a student pays less than a business traveler for the very same seat, why a locked taxi medallion is worth a fortune, and why firms that agree to hold prices up keep secretly undercutting each other anyway. Part A builds the tool and turns it on how price-searchers actually price and on why cartels tend to fall apart on their own. Part B turns it on the policies meant to police market power: antitrust law and economic regulation.
 
 <aside class="econ-callout econ-objectives">
 <p class="econ-callout__label">Learning objectives</p>
@@ -191,7 +192,7 @@ Now suppose several firms try to behave like a single monopolist: agree to hold 
 
 To work, a cartel has to do several hard things at once: identify all the producers and get them to join, agree on how much each will cut, block new firms from undercutting the propped-up price, and police *non*-price competition, since members barred from cutting prices compete on service and quality instead. Above all it must detect and punish cheating, because every single member has a powerful private incentive to cheat. If the cartel holds the price high, any one member can quietly shave its price, win new business, and pocket the gain while the others keep restricting; the holdout captures the extra sales precisely because everyone else is behaving, so the reward for defecting is large and immediate, the punishment slow and uncertain, and members chisel.
 
-History is a graveyard of cartels for exactly this reason. Nineteenth-century railroad "trunk lines" drove prices down toward the bare cost of adding freight to a train already running, so they repeatedly banded together to fix rates, and the cartels kept breaking down: once a train is rolling, an extra ton of freight is almost pure profit, so the temptation to offer a secret rebate was irresistible, one rebate triggered another, and a price war followed. A homogeneous product, lumpy capacity, and the chance to cheat undetected are poison to collusion.
+History is a graveyard of private cartels for exactly this reason. The more producers a cartel must enlist, and the more substitutes wait outside it, the easier some member finds it to chisel undetected: a steel cartel would have to corral hundreds of small foundries and still face plastics, aluminum, and concrete, any of which expands under the umbrella of the propped-up price and undercuts it.
 
 What can keep a cartel alive? One answer is a way to make cheating visible, which is why some cartels funnel all sales through a central pool. The decisive force is government: a cartel that cannot police itself can survive if the law forces every producer to join and obey, as it did for European coal producers, whose pool detected secret price-cutting while the law compelled members to stay in. That move, government enforcement of what private collusion cannot sustain, is the door into our political-economy topic: competition barred from the marketplace reappears in the political arena. Left to themselves, cartels cheat themselves to death.
 ## Price Discrimination Is Marginal-Revenue Equalization, Not a Moral Failing
@@ -229,7 +230,7 @@ Suppose the seller is charging both customers $7. From A it sells 6 units; from 
 <p>Back in the two-buyer table, the seller charges both A and B $7, and the last unit sold to A brings in $2 at the margin while the last sold to B brings in $6. Which buyer should face a higher price to raise total revenue, and where do the two marginal revenues end up once the seller finishes adjusting?</p>
 </aside>
 
-Read as marginal-revenue equalization, a long list of everyday pricing is all the same move. *Senior, student, and off-peak discounts* charge a lower price to the more price-sensitive buyer; cruise lines and resorts go further on idle capacity, since empty cabins cost almost nothing to fill, which is why a luxury hotel late in the day may price below a budget motel. *"Dumping,"* selling cheaper abroad than at home, is the same move across two markets, not selling below cost, since a seller never knowingly sells below marginal cost. *Coupons and rebates* deliver a lower price only to the price-sensitive customers who bother to clip and redeem. *Tuition scholarships* pair a high sticker price with targeted markdowns, charging each family closer to what it will pay; calling it "discriminatory" describes the practice, it does not condemn it.
+Read as marginal-revenue equalization, a long list of everyday pricing is all the same move. *Senior, student, and off-peak discounts* charge a lower price to the more price-sensitive buyer, and an off-peak seat or room that would otherwise sit empty costs so little to fill that discounting it still pays. *"Dumping,"* selling cheaper abroad than at home, is the same move across two markets, not selling below cost, since a seller never knowingly sells below marginal cost. *Coupons and rebates* deliver a lower price only to the price-sensitive customers who bother to clip and redeem. *Tuition scholarships* pair a high sticker price with targeted markdowns, charging each family closer to what it will pay; calling it "discriminatory" describes the practice, it does not condemn it.
 
 One condition makes all of this possible: the low-price buyers must not be able to resell to the high-price buyers, or they would buy cheap, undercut the seller, and collapse the two prices into one. That is why discrimination thrives where resale is hard: on services, on personalized deals, on tickets tied to an ID.
 

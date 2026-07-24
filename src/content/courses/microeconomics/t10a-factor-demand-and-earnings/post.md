@@ -3,12 +3,13 @@ title: "Factor Markets and Labor, Part A: What an Extra Worker Is Worth"
 topic: "T10 — Factor Markets and Labor (Part A)"
 course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 21 (Tue 11/3)"]
-ue_anchors: ["UE 29", "UE 39", "UE 22 (Codlandia)"]
+ue_anchors: ["UE 29", "UE 39", "UE 22 (Codlandia; National Development)"]
 ep_anchors: ["E&P Fig 8-1 — team marginal products", "E&P Fig 14-6 — demand for labor services"]
-be_anchors: ["BE 10"]
+be_anchors: []
 word_target: "2500-3600"
 word_budget: 3672
   # word_budget 3600 -> 3672 (+72): For Further Reading section added 2026-07-22
+  # word_budget unchanged 2026-07-23: BE->A&A re-ground of the §1 context-dependence paragraph on UE 29 (Social and Cultural Resources as Productive Inputs) + UE 22 (National Development); measured stripped 3130 -> 3217, ample headroom retained
 status: approved        # Stage-2 sign-off 2026-06-15
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Part A of the two-part T10 (factor demand, VMP, earnings); Part B (topics/t10b-labor-coalitions-and-constraints) covers unions, the minimum wage, discrimination, and licensing. Source-of-truth for the deck; section headers are claims that map to slide titles."
@@ -44,7 +45,7 @@ Nobody hires a worker for the pleasure of his company. A firm hires labor becaus
 </dl>
 </aside>
 
-This quietly settles a great deal. It means the value of a worker is not a fixed personal trait you carry around like your height. It depends on what that worker helps produce and what people will pay for it. The same person can be worth far more in one setting than another. Drop a skilled mechanic into an economy with no tools, no reliable transport, and no honest courts, and the value of his work collapses, not because he got worse but because the surroundings that turned his effort into valuable output disappeared. A worker's productivity depends on the capital, the coworkers, the roads, even the level of corruption around him. So the same labor is worth different amounts in different places, which is most of why wages differ so much across countries.
+This quietly settles a great deal. It means the value of a worker is not a fixed personal trait you carry around like your height. It depends on what that worker helps produce and what people will pay for it. The same person can be worth far more in one setting than another. Drop a skilled mechanic into an economy with no tools, no reliable transport, and no honest courts, and the value of his work collapses, not because he got worse but because the surroundings that turned his effort into valuable output disappeared. A worker never produces alone. How much he adds depends on the cooperating inputs around him: the tools and machines he uses, the coworkers he works alongside, and the shared infrastructure a productive society supplies, from paved roads and reliable power to impartial courts, secure property rights, and honest government. Economists sometimes call that surrounding stock of productive resources a society's social capital, and it is why the same effort yields far more in a developed economy than in a poor one. So the same labor is worth different amounts in different places, which is most of why wages differ so much across countries. The next section makes this exact, showing how a worker's contribution rises and falls with the other inputs he has to work with.
 
 When we ask "what is a worker worth," then, we are really asking "how much does this worker add to what the firm can sell." To answer that precisely we need a tool.
 

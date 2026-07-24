@@ -3,11 +3,12 @@ title: "Markets and Coordination"
 topic: "T4 — Markets, Prices, and Coordination (Part A)"
 course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 6 (Thu 9/10)"]
-ue_anchors: ["UE 6", "UE 10", "UE 11 (marketing arrangements and Q9 universal allocation)", "UE 25 (predictable prices, voluntary queues, preferred customers, and blind blocks)"]
-be_anchors: ["BE 2", "BE 4 (incremental-vs-categorical; shortage≠scarcity)"]
-ep_anchors: ["E&P Fig 4-1 (ch. 4) — market demand as horizontal sum of individual demands", "E&P Fig 4-4 (ch. 4) — supply elasticity and input generality", "E&P ch. 5 pp. 88–90 — inventories, reserve capacity, stable prices, and queues as information-cost economizers"]
-word_budget: 3687
+ue_anchors: ["UE 6", "UE 10", "UE 11 (marketing arrangements, Q8 derived-cost price web, and Q9 universal allocation)", "UE 25 (predictable prices, voluntary queues, preferred customers, and blind blocks)"]
+be_anchors: []
+ep_anchors: ["E&P Fig 4-1 (ch. 4) — market demand as horizontal sum of individual demands", "E&P Fig 4-4 (ch. 4) — supply elasticity and input generality", "E&P ch. 4 (Figs 4-2/4-3) — reduction in supply, reallocation of a fixed stock, and the anti-'gouging' price-ceiling case (a car destroyed by fire)", "E&P ch. 5 pp. 88–90 — inventories, reserve capacity, stable prices, and queues as information-cost economizers"]
+word_budget: 3660
   # word_budget 3600 -> 3687 (+87): For Further Reading section added 2026-07-22
+  # word_budget 3687 -> 3660 (-27): BE→A&A redraft 2026-07-24 — Thatcher/three-jobs (BE 2) + hurricane/1906-earthquake (BE 3) → lecture cards; opener/§4 coordination/§6/§7 re-grounded on E&P 4 (signals-and-rewards, car-fire anti-gouging, reduction-vs-shortage) + UE 11 Q8 price web; be_anchors []. Measured stripped 3,646.
 word_target: "3400-3600"
 status: approved        # E&P integration M4 done-gate 2026-07-20; prior approval 2026-07-01
 audience: students
@@ -17,9 +18,9 @@ note: "Self-contained — assumes no access to the textbooks. Source-of-truth fo
 
 # Markets and Coordination
 
-Late in the Soviet era, a senior official is said to have asked Margaret Thatcher how Britain made sure its people got fed. The honest answer was that she did not. No one in London drew up a plan for how much bread to bake or where to ship the milk. Yet Britain's groceries stayed stocked, while the Soviet Union, which did plan all of that, kept running short of food it could not deliver even after a century of trying. So how does a place with no one in charge of feeding it end up better fed than a place with a ministry for exactly that job?
+A modern economy is a bewildering thing. Millions of people who never meet and never coordinate on purpose somehow produce, ship, and sell the food, fuel, and clothing each of the others wants, in roughly the right amounts and the right places, with no authority computing anyone's share. No one plans how much bread to bake or where to send the milk, yet the groceries stay stocked. How do all those separate decisions add up to a working whole instead of chaos, and when goods do run short, what has gone wrong?
 
-That puzzle is the subject of this post. A modern economy coordinates the work of millions of strangers who never meet and never coordinate on purpose. It does this through prices. Prices are not just numbers on a tag; they are signals that carry information, light fires under people to act, and parcel out scarce goods to the people who value them most. This post builds up that machinery: where trade stops and why, what makes a market open or closed, how a price settles at a level that matches buyers to goods, and how a single number coordinates an economy no one is running. Once that machinery is in hand, the posts that follow take up what happens when a law forbids that price from moving.
+That is the puzzle this post takes up. A modern economy coordinates the work of millions of strangers who never meet and never coordinate on purpose, and it does this through prices. The seemingly chaotic activity is in fact guided by an ordered flow of signals and rewards, with no one in charge: a price at once tells people how scarce a thing is, rewards those who supply more of it and economize on using it, and steers each scarce good toward whoever values it most. This post builds up that machinery: where trade stops and why, what makes a market open or closed, how a price settles at a level that matches buyers to goods, and how a single number coordinates an economy no one is running. Once that machinery is in hand, the posts that follow take up what happens when a law forbids that price from moving.
 
 <aside class="econ-callout econ-objectives">
 <p class="econ-callout__label">Learning objectives</p>
@@ -27,7 +28,7 @@ That puzzle is the subject of this post. A modern economy coordinates the work o
 <ul>
 <li>Explain why the full price of a trade is the money price plus every nonmoney cost of completing it, and why a middleman who shrinks those costs can raise the seller's net while lowering the buyer's full price.</li>
 <li>Distinguish an open market from a closed one, explain why closing a market by restricting entry transfers wealth to protected insiders without creating any, and tell freedom of competition apart from freedom from competition.</li>
-<li>Explain how prices coordinate an economy no one is running by transmitting information, motivating action, and rationing scarce goods; show how summing individual demands yields a market-clearing price; explain why a higher price still rations a good whose supply cannot grow; and distinguish a shortage or surplus, creatures of price control, from scarcity, a permanent fact of nature.</li>
+<li>Construct market demand as the horizontal sum of individual demands, identify the market-clearing price that matches the amount demanded to a fixed available quantity, and explain how a rising price reallocates that fixed stock toward its highest-valued uses regardless of who held it first — distinguishing a price-controlled shortage or surplus from physical scarcity.</li>
 </ul>
 </aside>
 
@@ -108,13 +109,13 @@ A confusion runs through the politics of this. A president might praise free mar
 
 ## Prices Coordinate an Economy No One Is Running
 
-Now back to Thatcher's puzzle. The reason an unplanned economy can feed itself is that prices do three jobs at once, and they do them without anyone intending it.
+Return now to the puzzle of coordination. An unplanned economy can feed itself because its prices are an ordered set of signals and rewards, and they do their work without anyone intending it.
 
-First, prices *transmit information*. A price compresses facts that no single person could ever gather: how badly people want a thing, how scarce it is, how costly it is to produce, all squeezed into one number anyone can read. A market drops that price the moment a good piles up unsold, and the message reaches everyone who might supply it without anyone sending a memo.
+A price is a *signal*: it compresses into one number what no one person could gather, how badly a thing is wanted, how scarce it is, how costly to produce. When a good piles up unsold the price falls and the message reaches every possible supplier without a memo; when it grows scarce the price rises and the message runs the other way.
 
-Second, prices *motivate action*. The hope of profit pulls resources toward what people want, and the threat of loss pushes them away from what they do not. Where that discipline is missing, waste creeps in: a producer charged little or nothing for its inputs has no reason to use them sparingly. A firm that buys its inputs at their real cost and answers to a profit-and-loss statement has every reason to economize.
+A price is also a *reward*. A higher price at once restrains what buyers ask for and gives suppliers both the revenue and the reason to provide more. Where that reward is missing, waste follows: a producer charged nothing for its inputs has no reason to husband them, while one that pays their real cost economizes.
 
-Third, prices *ration and allocate*. They guide each scarce good toward the person willing to give up the most for it, a rough but powerful test of who values it most. This allocation runs in every direction at once, because one buyer's price is another's cost: the price dairies pay for milk becomes the cost faced by everyone who wants to make cheese, ice cream, or yogurt, so a surge in demand for one ripples into the prices of the others. Seemingly unrelated goods are linked this way by a web of prices no central planner could map by hand.
+And a price *rations*, steering each scarce good toward whoever will give up the most for it. This runs in every direction at once, because one buyer's price is another's cost: the price meatpackers pay for cattle becomes a cost to butchers and part of the price of a steak, so a surge in demand for beef ripples along a whole chain of prices no central planner could map by hand.
 
 Demand and supply are not just a story about shopping; they are a tool for thinking about how any scarce resource gets parceled out among the rival uses competing for it. For any one use, the resource's value in that use is its *demand*; its value in all the other uses it could go to instead is its *supply*. Every system for deciding who gets what is discriminatory in this sense, because something always has to do the rationing. Under private property and open markets, that something is mostly money; suppress money competition, as a control does, and the rationing does not stop, it just shifts to nonmoney criteria: connections, persuasion, political pull, cultural fit. No system escapes having a criterion; the only question is which one.
 
@@ -166,16 +167,16 @@ Two smaller points sharpen this. "The price" of a car means the price actually a
 
 People often grant that prices should rise when more can be produced, but bristle when a price jumps for something whose supply is fixed, calling it immoral or an unearned windfall. The objection misses what the higher price is doing. Even when not one extra unit can be made, a higher price still performs its rationing job: it steers the existing stock toward those who value it most and away from lower-valued uses.
 
-The clearest case is a disaster. After a hurricane, the supply of bottled water, plywood, and hotel rooms cannot expand overnight. When prices are allowed to rise, a family that would have grabbed two hotel rooms and a dozen flashlights "just in case" takes one room and one flashlight, leaving the rest for others; high prices also pull supplies toward the disaster, because it suddenly pays to truck water in. Anti-price-gouging laws forbid exactly this: with prices frozen, the early arrivals clear the shelves and the family an hour behind finds nothing. The point is not that high prices are pleasant; it is that with supply fixed, the choice is between rationing by price and rationing by luck, hoarding, and empty shelves.
+The clearest case brings back the seven cars from the last section. Suppose one is destroyed by fire, so six remain and no new car can be built. The person who lost his car still wants one, so at the old price more cars are wanted than exist, and his willingness to bid the price up reallocates the smaller stock toward whoever values a car most. It can look unfair that one owner gains from another's misfortune, but forbidding the price to rise does not undo the fire; it only keeps the man who lost his car from replacing it. A ceiling meant to stop "gouging" or "profiteering from another's misfortune" puts no burned car back on the road; it only manufactures a shortage and leaves the rationing to luck and lines.
 
 <figure class="econ-figure" style="margin:1.5em 0;">
 <iframe src="/teaching/microeconomics/t04a-markets-coordination/figures/t04a-ep4-4-supply-elasticity-interactive.html" title="Interactive supply-elasticity figure: drag the demand curve rightward and compare how the same demand increase raises price a little on an elastic (flat) supply and a lot on an inelastic (steep) supply." loading="lazy" style="width:100%; max-width:480px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t04a-markets-coordination/figures/t04a-ep4-4-supply-elasticity-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t04a-markets-coordination/figures/t04a-ep4-4-supply-elasticity.svg">view the static supply-elasticity figure</a>.</p></iframe>
-<figcaption><strong>The same jump in demand raises price by very different amounts.</strong> What decides the split between a higher price and more quantity is how easily suppliers can bring more to market, and that turns on how general a good's inputs are. When the inputs are general and easy to redeploy, supply is elastic (the flat curve) and price barely moves; when they are specialized, supply is inelastic (the steep curve) and the demand increase shows up almost entirely as a higher price. The disaster case above, where the stock cannot grow at all, is the steep extreme of this same spectrum. Drag the demand curve rightward to compare the two. If the frame does not load, <a href="/teaching/microeconomics/t04a-markets-coordination/figures/t04a-ep4-4-supply-elasticity-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t04a-markets-coordination/figures/t04a-ep4-4-supply-elasticity.svg">view the static supply-elasticity figure</a>.</figcaption>
+<figcaption><strong>The same jump in demand raises price by very different amounts.</strong> What decides the split between a higher price and more quantity is how easily suppliers can bring more to market, and that turns on how general a good's inputs are. When the inputs are general and easy to redeploy, supply is elastic (the flat curve) and price barely moves; when they are specialized, supply is inelastic (the steep curve) and the demand increase shows up almost entirely as a higher price. The fixed-stock case above, where the stock cannot grow at all, is the steep extreme of this same spectrum. Drag the demand curve rightward to compare the two. If the frame does not load, <a href="/teaching/microeconomics/t04a-markets-coordination/figures/t04a-ep4-4-supply-elasticity-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t04a-markets-coordination/figures/t04a-ep4-4-supply-elasticity.svg">view the static supply-elasticity figure</a>.</figcaption>
 </figure>
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
-<p>After a hurricane the stock of bottled water cannot grow overnight. If its price is free to rise, how does that change what one family grabs off the shelf, and what does an anti-gouging law leave to do the rationing instead?</p>
+<p>One of a fixed number of cars is destroyed by fire, and none can be built to replace it. If the price is free to rise, how does that ration the cars that remain, and what does a price ceiling at the old level leave to do the rationing instead?</p>
 </aside>
 
 ### A Shortage Is Not Scarcity, and a Surplus Is Not Abundance
@@ -193,11 +194,11 @@ We need three words kept rigorously apart, because newspapers and politicians bl
 </dl>
 </aside>
 
-The difference is easiest to see when the two come apart. The 1906 San Francisco earthquake destroyed something like half the city's housing, a sudden, massive increase in physical scarcity. Yet there was no housing shortage: rents were free to rise, and people economized on space until everyone fit. A huge jump in scarcity, no shortage. The reverse happened after the Second World War: the ratio of housing to people had not worsened, yet American cities suffered a notorious housing "shortage," because wartime rent control had pinned prices below their clearing level. When the controls were lifted, the shortage melted away before a single new building went up, as people made do with less space once the price gave them a reason to. No real scarcity, but a fierce shortage, conjured entirely by a price control.
+The two come apart in both directions. The fire that cut the stock to six was a real reduction in supply, yet it produced no shortage, because the price was free to rise. And had the supply instead risen to nine, a price pinned below where nine would clear would still produce a shortage, with more cars wanted at that low price than exist. What makes a shortage is never the size of the stock but the law that holds the price below where the market would clear.
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
-<p>The 1906 earthquake destroyed half of San Francisco's housing yet produced no shortage, while postwar cities suffered a shortage with no drop in housing per person. What made the difference in each case?</p>
+<p>A fire cut the car supply to six yet produced no shortage, while a price capped below clearing would produce a shortage even when the supply had risen to nine. What makes the difference in each case?</p>
 </aside>
 
 Surpluses are the mirror image: a *surplus* is the gap that opens when a price is held above the clearing level, so the amount offered exceeds the amount anyone will buy. Like a shortage, it is a creature of price control, not of physical abundance, and it can sit alongside real want, because a floor keeps the price too high for the market to clear.
@@ -222,7 +223,7 @@ Want to explore the source material? This lecture draws on the following chapter
 <ul>
 <li><strong>Trade runs on the full price.</strong> The full price is the money price plus every nonmoney cost of completing a trade, and a middleman earns his cut by shrinking those costs, raising the seller's net while lowering the buyer's full price.</li>
 <li><strong>Closing a market moves wealth; it does not make it.</strong> An open market has free entry, while licensing and similar rules close one by raising the cost of entry; the protection this buys insiders is rent-seeking, a gain smaller than the loss it imposes on everyone else, the difference between freedom of competition and freedom from competition.</li>
-<li><strong>Prices coordinate an economy no one is running.</strong> They transmit information, motivate action, and ration scarce goods; summing individual demands gives a market-clearing price that a rise in demand pushes up regardless of who held the goods first; a higher price still rations even a fixed supply; and a shortage or surplus is a creature of price control, not scarcity, which is a permanent fact of nature.</li>
+<li><strong>Prices coordinate an economy no one is running.</strong> Acting as signals and rewards, they guide an unplanned economy with no one in charge; market demand is the horizontal sum of individual demands, and the clearing price matches the amount wanted to a fixed stock, so a rise in demand pushes that price up, the goods end up with whoever values them most regardless of who held them first, a higher price still rations even a supply that cannot grow, and a shortage or surplus is a creature of price control, not physical scarcity.</li>
 </ul>
 </section>
 </div>

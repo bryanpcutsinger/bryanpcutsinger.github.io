@@ -3,8 +3,8 @@ title: "Marginal Analysis, Production, and Costs"
 topic: "T6 — Production, Costs, and Specialization (Part A)"
 course: "Principles of Microeconomics (FAU)"
 sessions: ["Fall 2026 — content session 12 (Thu 10/1)"]
-ue_anchors: ["UE 7 (totals, marginals, averages, equimarginal allocation)", "UE 14 (Productivity and Costs)", "UE 18 (rate versus volume, learning curves, common costs of joint products)"]
-be_anchors: ["BE 10 (complementary inputs + capital-labor / 'what is efficiency' sections only)"]
+ue_anchors: ["UE 7 (totals, marginals, averages, equimarginal allocation)", "UE 14 (Productivity and Costs)", "UE 18 (rate versus volume, learning curves, common costs of joint products)", "UE 29 (input substitution at the margin; substitutes and complements among inputs) — capital-labor framing only"]
+be_anchors: []
 ep_anchors: ["E&P Figs 7-1 & 7-3 (ch. 7) — producer production-possibility frontiers; marginal cost as the frontier's slope", "E&P ch. 7 'Inefficiency by Authority?' — 1974–1981 crude-oil entitlements program / small-refiner bias vs price coordination (equimarginal), via card EP-EX-07"]
 word_target: "2400-3700"
 word_budget: 3767
@@ -187,9 +187,9 @@ That is the stopping rule, and it is the mirror image of demand: a producer make
 
 ### Capital and Labor Substitute, and "Efficiency" Has No Meaning Until You Name the Goal
 
-Because tools and workers together make output, a firm can often produce the same thing with more machines and fewer people, or the reverse. Capital and labor *substitute* for each other, and which mix is cheapest depends on which input is scarcer and costlier. Poor countries, where capital is scarce, lean on abundant labor; rich countries, where labor is dear, lean on abundant capital. Neither mix is "right" in the abstract. Each economizes on whatever is scarcest locally.
+Because tools and workers together make output, a firm can usually produce the same good with more machines and fewer people, or the reverse. Capital and labor *substitute* for each other, and the substitution runs on relative prices: when one input grows dearer, a firm leans on the others in its place. Raise the wage and firms fit each worker with more equipment and hire fewer of them; let the price of wood climb and builders turn to steel, plaster, and plastic. Substitution at the margin is pervasive, so no single input mix is cheapest in the abstract. The cheapest one follows whichever input has grown scarce and costly relative to the rest.
 
-That brings us to a word people throw around as if it were obvious: *efficiency*. Efficient at what? A method that looks wasteful measured against one resource can look admirable measured against another, depending on which one is actually scarce. There is no efficiency in the abstract, only efficiency relative to a goal, the same lesson we drew on the first day when we called efficiency a no-waste test that cannot, by itself, tell you which point to aim for. Name the goal first; only then does "efficient" mean anything.
+That brings us to a word people throw around as if it were obvious: *efficiency*. Because the cheapest mix depends on which input is scarce and costly, you cannot call a method wasteful just because it uses a great deal of some input; a method that leans hard on a cheap, abundant input may be exactly the right one. There is no efficiency in the abstract, only efficiency relative to a goal, the same lesson we drew on the first day when we called efficiency a no-waste test that cannot, by itself, tell you which point to aim for. Name the goal first; only then does "efficient" mean anything.
 
 Once a goal is named, we can say precisely what efficient production means, and there are two ways to say the same thing. One: production is efficient when the output of one good is as large as it can be for whatever amounts of the other goods you have chosen to make. Two: production is efficient when you cannot make more of one good without making less of another. The two phrasings are equivalent. Each says that nothing is being wasted, that you have squeezed everything possible out of the resources, so the only way to get more of one thing is to give up some of another. Notice that this definition does not assume anyone has perfect knowledge. Efficient production uses the knowledge that actually exists and lets it be tested against results; knowledge is itself a costly resource, so being ignorant of something is not always wasteful or irrational, since gathering the information would have had its own cost.
 
@@ -197,7 +197,7 @@ Once a goal is named, we can say precisely what efficient production means, and 
 
 Want to explore the source material? This lecture draws on the following chapters from two books by Armen A. Alchian and William R. Allen:
 
-- *Universal Economics* (Liberty Fund, 2018): Ch. 7, “Keep Your Eye on the Marginals”; Ch. 14, “Productivity and Costs of Production”; Ch. 18, “Facts of Life”.
+- *Universal Economics* (Liberty Fund, 2018): Ch. 7, “Keep Your Eye on the Marginals”; Ch. 14, “Productivity and Costs of Production”; Ch. 18, “Facts of Life”; Ch. 29, “The Demand for Productive Resources”.
 - *Exchange and Production*, 3rd ed. (Wadsworth, 1983): Ch. 7, “Production with Specialization”.
 
 <div class="econ-review">
