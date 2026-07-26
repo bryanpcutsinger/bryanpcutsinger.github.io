@@ -8,9 +8,10 @@ ue_anchors: ["UE 8", "UE 9"]
 be_anchors: []
 ep_anchors: ["E&P Fig 2-4 (ch. 2, p. 23) — marginal revenue as gain minus loss on inframarginal units", "E&P Fig 2-11 (ch. 2, p. 35) — endowment vs substitution effect (relocated from t03a)"]
 word_target: "2800-3600"
-word_budget: 4051
+word_budget: 3959
   # word_budget 3600 -> 3661 (+61): For Further Reading section added 2026-07-22
   # word_budget 3661 -> 4051 (+390): midpoint-formula pass 2026-07-25 (instructor-directed) — formula display + worked example + table recompute prose + ue8-1 figure-intuition paragraph (same-session feedback)
+  # word_budget 4051 -> 3959 (-92): ue8-3 rectangular-hyperbola figure cut 2026-07-26 (instructor) — figcaption words removed; headroom preserved
 status: approved        # scope-reduction R4 2026-07-21 (word_budget applied); E&P integration M6 done-gate 2026-07-20; prior approval 2026-07-01
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Source-of-truth for the session-4 deck; section headers are claims that map to slide titles. Verbal-marginal throughout: no indifference curves, no measured surplus triangles; the ONE sanctioned piece of algebra is the midpoint elasticity formula (instructor-directed 2026-07-25). Follows the session-3 demand post and precedes gains from exchange in session 5; a short foundational intro re-establishes the downward-sloping demand curve and marginal worth so this post stands on its own."
@@ -101,11 +102,6 @@ Second, and this is the most common student error, elasticity is not the slope: 
 Elasticity matters because it decides what happens to a seller's *total revenue* when the price changes. You can read the rule straight off the market-value column above.
 
 When demand is elastic (greater than one), quantity responds more than proportionally, so a price cut raises total revenue and a price rise lowers it. When demand is inelastic (less than one), quantity barely responds, so a price cut lowers total revenue and a price rise raises it. At unit elasticity (equal to one), revenue is unchanged either way; it sits at its peak, the flat $30 stretch around the middle of the table.
-
-<figure class="econ-figure" style="margin:1.5em 0;">
-<iframe src="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ue8-3-interactive.html" title="Drag the point along the rectangular-hyperbola demand curve and watch the market-value rectangle keep the same area at every position." loading="lazy" style="width:100%; max-width:480px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ue8-3-interactive.html">Open the interactive figure directly</a>.</p></iframe>
-<figcaption><strong>A rectangular hyperbola is the demand curve that is unit-elastic at every point.</strong> Slide anywhere along it and price times quantity (the seller's total revenue) stays exactly the same; a second fixed point (4, $3) shows the same $12 rectangle from a different price and quantity. Drag the accent point (or use the arrow keys) to trace the curve and watch its own tangent line and market-value rectangle update while the area never changes. If the frame does not load, <a href="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ue8-3-interactive.html">open the interactive figure directly</a>.</figcaption>
-</figure>
 
 The whole thing fits in a small grid.
 
