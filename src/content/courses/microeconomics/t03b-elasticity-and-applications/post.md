@@ -8,11 +8,12 @@ ue_anchors: ["UE 8", "UE 9"]
 be_anchors: []
 ep_anchors: ["E&P Fig 2-4 (ch. 2, p. 23) — marginal revenue as gain minus loss on inframarginal units", "E&P Fig 2-11 (ch. 2, p. 35) — endowment vs substitution effect (relocated from t03a)"]
 word_target: "2800-3600"
-word_budget: 3661
+word_budget: 4051
   # word_budget 3600 -> 3661 (+61): For Further Reading section added 2026-07-22
+  # word_budget 3661 -> 4051 (+390): midpoint-formula pass 2026-07-25 (instructor-directed) — formula display + worked example + table recompute prose + ue8-1 figure-intuition paragraph (same-session feedback)
 status: approved        # scope-reduction R4 2026-07-21 (word_budget applied); E&P integration M6 done-gate 2026-07-20; prior approval 2026-07-01
 audience: students
-note: "Self-contained — assumes no access to the textbooks. Source-of-truth for the session-4 deck; section headers are claims that map to slide titles. Verbal-marginal throughout: no indifference curves, no measured surplus triangles, no elasticity algebra in the body. Follows the session-3 demand post and precedes gains from exchange in session 5; a short foundational intro re-establishes the downward-sloping demand curve and marginal worth so this post stands on its own."
+note: "Self-contained — assumes no access to the textbooks. Source-of-truth for the session-4 deck; section headers are claims that map to slide titles. Verbal-marginal throughout: no indifference curves, no measured surplus triangles; the ONE sanctioned piece of algebra is the midpoint elasticity formula (instructor-directed 2026-07-25). Follows the session-3 demand post and precedes gains from exchange in session 5; a short foundational intro re-establishes the downward-sloping demand curve and marginal worth so this post stands on its own."
 # brief: ../t03-demand-consumer-behavior/brief.md
 ---
 
@@ -26,7 +27,7 @@ None of this assumes buyers carry a numerical schedule in their heads or do arit
 <p class="econ-callout__label">Learning objectives</p>
 <p>By the end of this post you should be able to:</p>
 <ul>
-<li>Define elasticity as the percentage change in quantity demanded divided by the percentage change in price, tell elastic from inelastic demand, explain why elasticity varies along a curve rather than equaling its slope, and use it to predict what a price change does to a seller's total revenue.</li>
+<li>Define elasticity as the percentage change in quantity demanded divided by the percentage change in price, calculate it between two points with the midpoint formula, tell elastic from inelastic demand, explain why elasticity varies along a curve rather than equaling its slope, and use it to predict what a price change does to a seller's total revenue.</li>
 <li>State the second law of demand and use the fan of demand curves to explain why demand grows more elastic the longer people have to adjust.</li>
 <li>Explain why a good's real price is its price relative to other goods, so its dollar price can rise while its relative price falls, and apply the Alchian and Allen theorem that adding the same charge to two grades makes the higher grade relatively cheaper wherever it lands.</li>
 </ul>
@@ -55,33 +56,44 @@ If a 1 percent rise in price brings a 3 percent drop in quantity, elasticity is 
 
 Two wording traps are worth disarming now. First, elasticity is a ratio of *percentages*, not an absolute amount: "the percentage change in quantity for a one-cent change in price" is wrong twice over, since it should be a one-*percent* change in price, and a ratio of two percentages, never a per-penny figure. Second, elasticity measures movement along a curve, so "a 3 percent decrease in demand" is sloppy; it should be a 3 percent decrease in *quantity demanded*, not a shift of the whole curve.
 
-Here is a demand schedule with the elasticity between successive points worked out, plus the market value (price times quantity) at each.
+One practical question remains before you can calculate anything: a percentage change measured from which base? A price cut from $10 to $9 is a 10 percent fall, but the same step run backward, from $9 up to $10, is an 11.1 percent rise. To keep the answer from depending on the direction of travel, measure each change against the *midpoint*, the average of the two endpoints. That convention is the *midpoint formula*, and it is the version to use in this course whenever you calculate an elasticity between two points on a demand curve.
 
-| Price | Quantity | Market value | Going down one row: % price cut | % quantity rise | Elasticity |
+<div class="econ-equation" style="margin:1.4em auto; text-align:center; overflow-x:auto;">
+<p style="margin:0 0 1.1em; white-space:nowrap;">elasticity&nbsp;<em>e</em>&nbsp;=&nbsp;<span style="display:inline-block; vertical-align:middle; text-align:center;"><span style="display:block; padding:0 .45em .12em; border-bottom:1.5px solid currentColor;">percentage change in quantity demanded</span><span style="display:block; padding:.12em .45em 0;">percentage change in price</span></span></p>
+<p style="margin:0; white-space:nowrap;">%&#916;Q&nbsp;=&nbsp;<span style="display:inline-block; vertical-align:middle; text-align:center;"><span style="display:block; padding:0 .45em .12em; border-bottom:1.5px solid currentColor;">Q<sub>2</sub>&nbsp;&#8722;&nbsp;Q<sub>1</sub></span><span style="display:block; padding:.12em .45em 0;">(Q<sub>1</sub>&nbsp;+&nbsp;Q<sub>2</sub>)&nbsp;&#247;&nbsp;2</span></span>&nbsp;&#215;&nbsp;100&emsp;&emsp;%&#916;P&nbsp;=&nbsp;<span style="display:inline-block; vertical-align:middle; text-align:center;"><span style="display:block; padding:0 .45em .12em; border-bottom:1.5px solid currentColor;">P<sub>2</sub>&nbsp;&#8722;&nbsp;P<sub>1</sub></span><span style="display:block; padding:.12em .45em 0;">(P<sub>1</sub>&nbsp;+&nbsp;P<sub>2</sub>)&nbsp;&#247;&nbsp;2</span></span>&nbsp;&#215;&nbsp;100</p>
+</div>
+
+Here (Q&#8321;, P&#8321;) and (Q&#8322;, P&#8322;) are the two points you are comparing, and the sign is ignored as usual. Try it on one step: price falls from $6 to $5 while quantity rises from 5 to 6. The quantity change of 1, measured against the midpoint quantity of 5.5, is 18.2 percent; the price change of $1, measured against the midpoint price of $5.50, is also 18.2 percent. So e = 18.2/18.2 = 1: unit elastic, exactly.
+
+Here is a demand schedule with the elasticity between successive points worked out with the midpoint formula, plus the market value (price times quantity) at each.
+
+| Price | Quantity | Market value | Going down one row: % price cut (midpoint) | % quantity rise (midpoint) | Elasticity |
 |---|---|---|---|---|---|
 | $10 | 1 | $10 | — | — | — |
-| $9 | 2 | $18 | 10% | 100% | 10 |
-| $8 | 3 | $24 | 11.1% | 50% | 4.5 |
-| $7 | 4 | $28 | 12.5% | 33% | 2.6 |
-| $6 | 5 | $30 | 14.3% | 25% | 1.7 |
-| $5 | 6 | $30 | 16.7% | 20% | 1.2 |
-| $4 | 7 | $28 | 20% | 17% | 0.85 |
-| $3 | 8 | $24 | 25% | 14% | 0.56 |
-| $2 | 9 | $18 | 33% | 12.5% | 0.38 |
-| $1 | 10 | $10 | 50% | 11.1% | 0.22 |
+| $9 | 2 | $18 | 10.5% | 66.7% | 6.3 |
+| $8 | 3 | $24 | 11.8% | 40% | 3.4 |
+| $7 | 4 | $28 | 13.3% | 28.6% | 2.1 |
+| $6 | 5 | $30 | 15.4% | 22.2% | 1.4 |
+| $5 | 6 | $30 | 18.2% | 18.2% | 1.0 |
+| $4 | 7 | $28 | 22.2% | 15.4% | 0.69 |
+| $3 | 8 | $24 | 28.6% | 13.3% | 0.47 |
+| $2 | 9 | $18 | 40% | 11.8% | 0.29 |
+| $1 | 10 | $10 | 66.7% | 10.5% | 0.16 |
 
-Two features jump out. First, elasticity changes as you move along a straight-line curve: large at high prices near the top, small at low prices near the bottom, passing through one somewhere in the middle. So you cannot speak of "the" elasticity of a demand curve as a single number; you have to say at what price.
+Two features jump out. First, elasticity changes as you move along a straight-line curve: large at high prices near the top, small at low prices near the bottom, passing through one right at the step where the market-value column flattens at its peak. So you cannot speak of "the" elasticity of a demand curve as a single number; you have to say at what price.
+
+Why does the same straight line give different elasticities? Because a percentage depends on its base. The figure below lets you watch this happen. The two dots mark a one-unit step on the line: between them, price falls by $1 and quantity rises by 1. The readout underneath runs the midpoint formula on that step, just as we did above. Near the top of the line, a $1 cut is a small percentage of a high price, while one more unit is a large percentage of a small quantity, so the ratio is large. Near the bottom, the same $1 and the same one unit are set against a low price and a large quantity, so the ratio is small. The step itself never changes; only the bases the percentages are measured against do.
 
 <figure class="econ-figure" style="margin:1.5em 0;">
-<iframe src="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ue8-1-interactive.html" title="Drag the point along the straight demand line to see elasticity change: elastic near the top, unit-elastic at the midpoint, inelastic near the bottom." loading="lazy" style="width:100%; max-width:520px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ue8-1-interactive.html">Open the interactive figure directly</a>.</p></iframe>
-<figcaption><strong>Same line, different responsiveness at every price.</strong> On a single straight demand curve, elasticity is not constant: it is large near the top (a price cut raises revenue), passes through one near the middle, and is small near the bottom, which is why you must always say "elastic at what price." Drag the point (or tap and use the arrow keys) to trace the line and watch the companion point, the readout, and the revenue verdict change together. If the frame does not load, <a href="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ue8-1-interactive.html">open the interactive figure directly</a>.</figcaption>
+<iframe src="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ue8-1-interactive.html" title="Drag the point along the straight demand line and watch the midpoint-formula elasticity change: elastic near the top, unit-elastic where the step straddles the midpoint, inelastic near the bottom." loading="lazy" style="width:100%; max-width:520px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ue8-1-interactive.html">Open the interactive figure directly</a>.</p></iframe>
+<figcaption><strong>Same line, different responsiveness at every price.</strong> On a single straight demand curve, elasticity is not constant: it is large near the top (a price cut raises revenue), passes through one near the middle, and is small near the bottom, which is why you must always say "elastic at what price." Drag the point (or tap and use the arrow keys) to slide a one-unit price step along the line: the readout recalculates the midpoint-formula elasticity between the two marked points at every position, so you can watch the percentages, the elasticity, and the revenue verdict all change together. If the frame does not load, <a href="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ue8-1-interactive.html">open the interactive figure directly</a>.</figcaption>
 </figure>
 
-Second, and this is the most common student error, elasticity is not the slope: two curves can share the very same slope yet differ in elasticity, and two curves with different slopes can share an elasticity at some price, so a flat-looking curve is not automatically the more elastic one. ("Inelastic" does not mean quantity fails to respond at all; that extreme is zero elasticity. It just means the response is less than proportional.)
+Second, and this is the most common student error, elasticity is not the slope: two curves can share the very same slope yet differ in elasticity, and two curves with different slopes can share an elasticity at some price, so a flat-looking curve is not automatically the more elastic one. ("Inelastic" does not mean quantity fails to respond at all; that extreme is zero elasticity. It just means the response is less than proportional.) In the figure below, the two demand curves are exactly parallel, yet the readout, running the same midpoint arithmetic on one shared price step, gives them different elasticities at every price; at the opening price, one is elastic while the other is inelastic. The percentages, not the steepness, decide.
 
 <figure class="econ-figure" style="margin:1.5em 0;">
-<iframe src="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ue8-2-interactive.html" title="Three demand curves compared — drag or tab to the toggle to see why elasticity is not slope" loading="lazy" style="width:100%; max-width:480px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ue8-2-interactive.html">Open the interactive figure directly</a>.</p></iframe>
-<figcaption><strong>Elasticity is not slope.</strong> Curves 1 and 2 share a price-axis intercept, so at price P they have the same elasticity even though curve 2 is flatter. Curves 1 and 3 are parallel (identical slope) yet curve 3 is less elastic at P. A flat-looking curve is not automatically the more elastic one. Toggle "Same intercept" versus "Same slope" above the figure (or use the arrow keys) to compare each pair in turn. If the frame does not load, <a href="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ue8-2-interactive.html">open the interactive figure directly</a>.</figcaption>
+<iframe src="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ue8-2-interactive.html" title="Two parallel demand curves compared: drag the $1 price step and watch the midpoint-formula elasticity differ at every price even though the slopes are identical" loading="lazy" style="width:100%; max-width:480px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ue8-2-interactive.html">Open the interactive figure directly</a>.</p></iframe>
+<figcaption><strong>Elasticity is not slope.</strong> These two demand curves are exactly parallel, yet they do not share an elasticity at any common price. The readout runs the midpoint formula on the same $1 price step for both: the quantity responses are identical, but curve 2's response is measured against a bigger base quantity, so its percentage change is smaller and its elasticity lower (at the opening price, e = 1.33 versus e = 0.67, one elastic and one inelastic). Drag the price step up or down the axis (or use the arrow keys) to see that the verdict holds at every price. A flat-looking curve is not automatically the more elastic one, and an identical slope does not mean an identical elasticity. If the frame does not load, <a href="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ue8-2-interactive.html">open the interactive figure directly</a>.</figcaption>
 </figure>
 
 ## Whether a Price Cut Helps a Seller Depends on Elasticity
@@ -221,7 +233,7 @@ Want to explore the source material? This lecture draws on the following chapter
 <section class="econ-review__section">
 <h3>Key takeaways</h3>
 <ul>
-<li><strong>Elasticity decides how a price change affects revenue.</strong> It is the percentage change in quantity demanded divided by the percentage change in price, it varies along a curve rather than equaling the slope, and where demand is elastic a price cut raises total revenue while where it is inelastic a price cut lowers it, with revenue peaking at unit elasticity.</li>
+<li><strong>Elasticity decides how a price change affects revenue.</strong> It is the percentage change in quantity demanded divided by the percentage change in price, calculated between two points with the midpoint formula, it varies along a curve rather than equaling the slope, and where demand is elastic a price cut raises total revenue while where it is inelastic a price cut lowers it, with revenue peaking at unit elasticity.</li>
 <li><strong>Demand grows more elastic the longer people have to adjust.</strong> The second law says the full response builds as people find substitutes and replace equipment, shown by the fan of curves flattening from short run to long run.</li>
 <li><strong>The real price is the relative price.</strong> What you give up in other goods, not the dollar figure, governs your choice, so a good's dollar price can rise while its relative price falls, and adding the same fixed charge to two grades of a good shrinks the ratio between them, making the finer grade relatively cheaper wherever it lands.</li>
 </ul>

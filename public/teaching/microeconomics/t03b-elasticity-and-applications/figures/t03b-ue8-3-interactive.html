@@ -145,6 +145,20 @@
       </marker>
     </defs>
 
+    <!-- rotated Price axis label: lives in the far-left gutter (root space),
+         OUTSIDE the translated plot below. The live P/T value tags ride the
+         price axis and sweep its full height as the point is dragged, so the
+         only collision-free place for the label is a dedicated leftmost column
+         (busy-left-gutter recipe: the plot is shifted right to open it). -->
+    <text class="axtitle" x="8" y="200" text-anchor="middle"
+          transform="rotate(-90 8 200)">Price</text>
+
+    <!-- plot shifted right (+20) to open the left gutter for the label above.
+         JS keeps positioning live elements in this group's LOCAL space
+         (X0 = 64), and the drag handler reads pointer coords through this
+         group's CTM, so the interaction math is unchanged. -->
+    <g id="plot" transform="translate(20 0)">
+
     <!-- axes (drawn first); extended past the data max so the curve/
          tangents do not crowd the arrowheads -->
     <line class="axis" x1="64" y1="360" x2="400" y2="360" marker-end="url(#arrow)" />
@@ -181,8 +195,6 @@
     <!-- origin + axis titles -->
     <text class="origin"  x="54"  y="378" text-anchor="end">O</text>
     <text class="axtitle" x="232" y="398" text-anchor="middle">Quantity</text>
-    <text class="axtitle" x="20"  y="200" text-anchor="middle"
-          transform="rotate(-90 20 200)">Price</text>
 
     <!-- LIVE point letter + live-value labels (re-rendered on drag) -->
     <text id="mLabel" class="lbl-live" x="120" y="378" text-anchor="middle">M 2.0</text>
@@ -200,9 +212,12 @@
             aria-valuemin="2" aria-valuemax="9.3" aria-valuenow="2"
             aria-valuetext="Quantity 2.0, price $6.00, market value $12.00. Price times quantity always equals $12 -- unit elastic (e = 1) everywhere on this curve." />
 
+    </g>
+
     <!-- readout band: hairline separator, muted STATE line, accent
          TAKEAWAY line (pre-wrapped for the no-JS/initial state; the
-         script re-wraps it on every change) -->
+         script re-wraps it on every change). Stays in root space (centered
+         on x=220), OUTSIDE the shifted plot group above. -->
     <line class="sep" x1="44" y1="430" x2="396" y2="430" />
     <text id="rHint" class="r-hint" x="220" y="454" text-anchor="middle">P = $6.00, Q = 2.0 &#8594; market value = $12.00.</text>
     <text id="rTrade" class="r-trade" text-anchor="middle"><tspan x="220" y="476">Slide anywhere: price &#215; quantity always equals $12 --</tspan><tspan x="220" y="494">a rectangular hyperbola is unit-elastic (e = 1) everywhere.</tspan></text>
@@ -220,6 +235,7 @@
 (function () {
   "use strict";
   var svg      = document.getElementById('fig');
+  var plot     = document.getElementById('plot');
   var pt       = document.getElementById('pt');
   var hit      = document.getElementById('hit');
   var ptFocus  = document.getElementById('ptFocus');
@@ -249,11 +265,12 @@
 
   var q = 2.0; // initial state (matches the static markup)
 
-  // convert a client event to SVG user coords (handles responsive scaling)
+  // convert a client event to the PLOT GROUP's local coords (handles
+  // responsive scaling AND the group's +20 translate, so X0=64 stays valid)
   var spt = svg.createSVGPoint();
   function toSvg(evt) {
     spt.x = evt.clientX; spt.y = evt.clientY;
-    return spt.matrixTransform(svg.getScreenCTM().inverse());
+    return spt.matrixTransform(plot.getScreenCTM().inverse());
   }
 
   function money(v) { return '$' + v.toFixed(2); }

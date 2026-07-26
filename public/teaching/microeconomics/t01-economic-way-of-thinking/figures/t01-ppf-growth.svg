@@ -86,7 +86,7 @@
   <!-- axis labels -->
   <text class="axlabel" x="234" y="392" text-anchor="middle">Food</text>
   <text class="axlabel" x="22" y="204" text-anchor="middle"
-        transform="rotate(-90 22 204)">Clean Air</text>
+        transform="rotate(-90 22 204)">Clean air</text>
 
   <!-- curve labels (placed in clear space: no text over any curve, axis, or arrow) -->
   <text class="name-out" x="360" y="66"  text-anchor="middle">After growth</text>

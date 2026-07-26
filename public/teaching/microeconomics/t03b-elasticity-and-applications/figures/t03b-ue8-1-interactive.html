@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Interactive straight-line demand curve: elasticity changes along one line</title>
+<title>Interactive straight-line demand curve: midpoint-formula elasticity changes along one line</title>
 <!--
   Interactive point-elasticity figure for the t03b (elasticity) blog post.
   Recreates UE Fig 8.1 (p.112), the straight-line-demand / OP-PT elasticity
@@ -14,26 +14,41 @@
   Website-styled (warm-editorial palette), NOT the FAU slide palette.
 
   ARCHITECTURE: the whole figure is REAL SVG markup — a no-JS reader sees the
-  full straight demand line, the T intercept label, both reference points
+  full straight demand line, both reference points
   (M, P) and (M', P') with their droplines and live-value tags, and the
   readout band. The script only ATTACHES the F1 interaction: drag the primary
   point (M, P) anywhere along the line (pointer + arrow keys); a companion
   point (M', P') trails exactly one quantity-unit behind it at every position,
   reproducing the source figure's small P->P' step used to read local
-  elasticity. Crossing the line's midpoint flips the readout between
-  elastic / unit-elastic / inelastic. No area is shaded (verbal-marginal
-  scope lock — the takeaway stays verbal, not an algebraic ratio).
+  elasticity. The readout computes the MIDPOINT-FORMULA elasticity between
+  the two marked points live (%dQ and %dP each measured against the step's
+  average Q and average P) and flips the verdict between elastic /
+  unit-elastic / inelastic as e crosses one. No area is shaded. The numeric
+  midpoint arithmetic is the ONE sanctioned piece of elasticity algebra
+  (instructor-directed 2026-07-25; supersedes the earlier verbal-only lock —
+  the post now teaches the midpoint formula explicitly and this widget is
+  where students watch it recomputed along the line).
 
   GEOMETRY (F1, single-panel, viewBox 440x540, aspect 4/5):
     Data space: Quantity 0..8 on x, Price 0..8 on y (T=(0,8) to (8,0), slope -1).
-    Pixel frame: origin (64,360); 35 px per unit both axes; axes extend past
+    Pixel frame: origin (78,360); 35 px per unit both axes; axes extend past
     the data max so the line does not crowd the arrowheads.
-      px(Q) = 64 + 35*Q      py(P) = 360 - 35*P
-    T (top price intercept) = (0,8) = (64,80).
-    Primary point (M,P) is the draggable one, Q in [0,8]; its companion
-    (M',P') sits at Q-1 (clamped to 0), i.e. exactly the source's P->P' step.
-    Initial state Q=4, P=4 -- the line's true midpoint, the unit-elastic point
-    -- with companion at Q=3, P=5, matching the spec's worked example exactly.
+      px(Q) = 78 + 35*Q      py(P) = 360 - 35*P
+    Top price intercept = (0,8) = (78,80). The source figure's letter "T" at
+    that intercept was REMOVED 2026-07-25 (instructor: an unexplained letter —
+    it only served UE's OP/PT geometric reading, which is not the teaching
+    device here; the midpoint readout is). AXIS-LABEL STANDARD (2026-07-25,
+    course-wide): "Price" is rotated -90 reading bottom-to-top at the far
+    left (x=10); the live P/P' tags are end-anchored at x=73 against the
+    axis (gutter widened 64->78 to hold both) — this file is the sweep's
+    reference implementation for the busy-left-gutter case.
+    Primary point (M,P) is the draggable one, Q in [1,8] (the domain starts
+    at 1 so the full one-unit step always lies on the line — no clamped
+    zero-length step, which would make the midpoint ratio degenerate);
+    its companion (M',P') sits at Q-1, i.e. exactly the source's P->P' step.
+    Initial state Q=4.5, P=3.5 with companion Q'=3.5, P'=4.5 — the step
+    STRADDLES the line's true midpoint (avg Q = 4, avg P = 4), which is
+    exactly where the midpoint formula returns e = 1.00.
 -->
 <style>
   :root {
@@ -90,7 +105,6 @@
 
   /* text */
   .axlabel  { fill: var(--muted); font-size: 15px; font-weight: 600; }
-  .ptlabel  { fill: var(--muted); font-size: 12.5px; font-weight: 600; }
   .tagbg    { fill: var(--surface); }
   .tagtxt   { fill: var(--accent); font-size: 12px; font-weight: 700; }
   .tagtxt2  { fill: var(--muted); font-size: 11px; font-weight: 700; }
@@ -106,12 +120,12 @@
 </head>
 <body>
 <!-- Everything from here to </div> is REAL base SVG: a no-JS reader sees the
-     complete figure (the straight demand line, the T intercept, both the
-     primary and companion points with droplines and live-value tags, and the
+     complete figure (the straight demand line, both the primary and
+     companion points with droplines and live-value tags, and the
      readout). The script only ATTACHES drag / keyboard / live updates. -->
 <div class="fig">
   <svg id="fig" viewBox="0 0 440 540" role="group"
-       aria-label="A single straight-line demand curve running from the price axis to the quantity axis. Drag the accent point along the line to see how elasticity changes: high on the curve it is elastic, at the exact midpoint it is unit elastic, and low on the curve it is inelastic. A smaller companion point trails one quantity unit behind it, marking the small price-quantity step used to read local elasticity.">
+       aria-label="A single straight-line demand curve running from the price axis to the quantity axis. Drag the accent point along the line to see how elasticity changes: high on the curve it is elastic, where the step straddles the midpoint it is unit elastic, and low on the curve it is inelastic. A smaller companion point trails one quantity unit behind it, marking the price-quantity step, and the readout recalculates the midpoint-formula elasticity between the two points at every position.">
     <defs>
       <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
               orient="auto" markerUnits="userSpaceOnUse">
@@ -121,71 +135,76 @@
 
     <!-- axes (drawn before the curve so the curve sits on top); extended past
          the data max so the line does not crowd the arrowheads -->
-    <line class="axis" x1="64" y1="360" x2="405" y2="360" marker-end="url(#arrow)" />
-    <line class="axis" x1="64" y1="360" x2="64"  y2="38"  marker-end="url(#arrow)" />
-    <text class="axlabel" x="36" y="42" text-anchor="start">Price</text>
-    <text class="axlabel" x="396" y="382" text-anchor="end">Quantity</text>
+    <line class="axis" x1="78" y1="360" x2="419" y2="360" marker-end="url(#arrow)" />
+    <line class="axis" x1="78" y1="360" x2="78"  y2="38"  marker-end="url(#arrow)" />
+    <text class="axlabel" x="10" y="220" text-anchor="middle"
+          transform="rotate(-90 10 220)">Price</text>
+    <!-- Quantity sits BELOW both traveling tag rows (M at y 368-383,
+         M' at y 386-400) so no drag position can collide with it -->
+    <text class="axlabel" x="248" y="416" text-anchor="middle">Quantity</text>
 
-    <!-- the single straight demand line: T(0,8) -> (8,0) -->
-    <path class="curve" d="M64,80 L344,360" />
-    <text class="ptlabel" x="78" y="70" text-anchor="start">T</text>
+    <!-- the single straight demand line: (0,8) -> (8,0) -->
+    <path class="curve" d="M78,80 L358,360" />
 
     <!-- companion point's droplines + live tags (Q-1 behind the primary point) -->
-    <line id="dropV2" class="drop-mute" x1="169" y1="360" x2="169" y2="185" />
-    <line id="dropH2" class="drop-mute" x1="64"  y1="185" x2="169" y2="185" />
+    <line id="dropV2" class="drop-mute" x1="200.5" y1="360" x2="200.5" y2="202.5" />
+    <line id="dropH2" class="drop-mute" x1="78"  y1="202.5" x2="200.5" y2="202.5" />
     <g id="qx2Tag">
-      <rect id="qx2Bg" class="tagbg" x="140" y="386" width="58" height="14" rx="2" />
-      <text id="qx2" class="tagtxt2" x="169" y="393" text-anchor="middle"
-            dominant-baseline="middle">M&#8242; = 3.0</text>
+      <rect id="qx2Bg" class="tagbg" x="171.5" y="386" width="58" height="14" rx="2" />
+      <text id="qx2" class="tagtxt2" x="200.5" y="393" text-anchor="middle"
+            dominant-baseline="middle">M&#8242; = 3.5</text>
     </g>
     <g id="qy2Tag">
-      <rect id="qy2Bg" class="tagbg" x="4" y="177.5" width="56" height="14" rx="2" />
-      <text id="qy2" class="tagtxt2" x="32" y="185" text-anchor="middle"
-            dominant-baseline="middle">P&#8242; = 5.0</text>
+      <rect id="qy2Bg" class="tagbg" x="22" y="195.5" width="52" height="14" rx="2" />
+      <text id="qy2" class="tagtxt2" x="73" y="202.5" text-anchor="end"
+            dominant-baseline="middle">P&#8242; = 4.5</text>
     </g>
-    <circle id="pt2" class="pt2" cx="169" cy="185" r="5" />
+    <circle id="pt2" class="pt2" cx="200.5" cy="202.5" r="5" />
 
     <!-- primary point's droplines + live tags -->
-    <line id="dropV" class="drop" x1="204" y1="360" x2="204" y2="220" />
-    <line id="dropH" class="drop" x1="64"  y1="220" x2="204" y2="220" />
+    <line id="dropV" class="drop" x1="235.5" y1="360" x2="235.5" y2="237.5" />
+    <line id="dropH" class="drop" x1="78"  y1="237.5" x2="235.5" y2="237.5" />
     <g id="qxTag">
-      <rect id="qxBg" class="tagbg" x="178" y="368" width="52" height="15" rx="2" />
-      <text id="qx" class="tagtxt" x="204" y="376" text-anchor="middle"
-            dominant-baseline="middle">M = 4.0</text>
+      <rect id="qxBg" class="tagbg" x="209.5" y="368" width="52" height="15" rx="2" />
+      <text id="qx" class="tagtxt" x="235.5" y="376" text-anchor="middle"
+            dominant-baseline="middle">M = 4.5</text>
     </g>
     <g id="qyTag">
-      <rect id="qyBg" class="tagbg" x="4" y="212.5" width="52" height="15" rx="2" />
-      <text id="qy" class="tagtxt" x="30" y="220" text-anchor="middle"
-            dominant-baseline="middle">P = 4.0</text>
+      <rect id="qyBg" class="tagbg" x="24" y="230" width="50" height="15" rx="2" />
+      <text id="qy" class="tagtxt" x="73" y="237.5" text-anchor="end"
+            dominant-baseline="middle">P = 3.5</text>
     </g>
 
     <!-- the draggable point + hit targets (fat invisible line + point circle) -->
-    <path id="hitCurve" class="hit-curve" d="M64,80 L344,360" />
-    <circle id="hit" class="hit" cx="204" cy="220" r="22" />
-    <circle id="pt"  class="pt"  cx="204" cy="220" r="7" />
+    <path id="hitCurve" class="hit-curve" d="M78,80 L358,360" />
+    <circle id="hit" class="hit" cx="235.5" cy="237.5" r="22" />
+    <circle id="pt"  class="pt"  cx="235.5" cy="237.5" r="7" />
     <!-- focusable proxy for keyboard control -->
-    <circle id="ptFocus" class="pt-focus hit" cx="204" cy="220" r="22"
+    <circle id="ptFocus" class="pt-focus hit" cx="235.5" cy="237.5" r="22"
             tabindex="0" role="slider" aria-label="Point on the demand curve (quantity demanded)"
-            aria-valuemin="0" aria-valuemax="8" aria-valuenow="4"
-            aria-valuetext="Quantity 4.0, price 4.0. Middle of the curve. Unit elastic — total revenue is at its peak; a small price move barely changes it." />
+            aria-valuemin="1" aria-valuemax="8" aria-valuenow="4.5"
+            aria-valuetext="Quantity 4.5, price 3.5. Step from quantity 3.5 to 4.5: percent change in quantity 25.0, percent change in price 25.0. Midpoint elasticity 1.00, unit elastic: total revenue is at its peak." />
 
-    <!-- readout band: hairline separator, muted STATE line, accent TAKEAWAY line -->
+    <!-- readout band: hairline separator, muted MIDPOINT-ARITHMETIC lines,
+         accent ELASTICITY + REVENUE-VERDICT lines -->
     <line class="sep" x1="44" y1="434" x2="396" y2="434" />
     <text id="rHint"  class="r-hint"  text-anchor="middle">
-      <tspan x="220" y="452">Middle of the curve.</tspan>
+      <tspan x="220" y="452">Q 3.5 &#8594; 4.5 (avg 4.0) &#183; P $4.50 &#8594; $3.50 (avg $4.00)</tspan>
+      <tspan x="220" y="468">%&#916;Q = 1/4.0 = 25.0% &#183; %&#916;P = 1/4.0 = 25.0%</tspan>
     </text>
     <text id="rTrade" class="r-trade" text-anchor="middle">
-      <tspan x="220" y="486">Unit elastic — total revenue is at its peak;</tspan>
-      <tspan x="220" y="502">a small price move barely changes it.</tspan>
+      <tspan x="220" y="490">e = 25.0% / 25.0% &#8776; 1.00 &#8212; unit elastic:</tspan>
+      <tspan x="220" y="506">total revenue is at its peak.</tspan>
     </text>
   </svg>
   <noscript>
     <p class="fallback">JavaScript is off, so this frame is a still image: the
       complete figure — a single straight demand line from its price-axis
-      intercept T to its quantity-axis intercept, with a point (M, P) and its
+      intercept to its quantity-axis intercept, with a point (M, P) and its
       companion point (M&#8242;, P&#8242;) one unit behind it, each with
-      droplines to both axes. There is no separate static figure to open; the
-      image above is the whole thing.</p>
+      droplines to both axes, and a readout showing the midpoint-formula
+      elasticity for that step (here e = 1.00, unit elastic). There is no
+      separate static figure to open; the image above is the whole thing.</p>
   </noscript>
 </div>
 
@@ -215,17 +234,23 @@
   var NS = 'http://www.w3.org/2000/svg';
 
   // pixel frame + scale: px(Q) = X0 + Q*SCALE ; py(P) = Y0 - P*SCALE
-  var X0 = 64, Y0 = 360, SCALE = 35;
+  // (X0 widened 64 -> 78 in the 2026-07-25 axis-label pass: the left gutter
+  //  now holds the rotated "Price" label PLUS the end-anchored P/P' tags)
+  var X0 = 78, Y0 = 360, SCALE = 35;
   var qpx = function (q) { return X0 + q * SCALE; };
   var ppy = function (p) { return Y0 - p * SCALE; };
   var toQ = function (px) { return (px - X0) / SCALE; };
 
-  // model: straight demand line P = 8 - Q, Q in [0,8]
-  var QLO = 0, QHI = 8, MID = 4, EPS = 0.15;
+  // model: straight demand line P = 8 - Q. Q in [1,8]: the domain starts at 1
+  // so the one-unit companion step always lies fully on the line (a clamped
+  // shorter step would make the midpoint ratio degenerate at the ends).
+  var QLO = 1, QHI = 8;
   function priceAt(q) { return 8 - q; }
-  function companionQ(q) { return Math.max(0, q - 1); }
+  function companionQ(q) { return q - 1; }
 
-  var q = 4; // initial state (matches the static markup): Q=4, P=4 (midpoint)
+  var q = 4.5; // initial state (matches the static markup): the step
+               // (3.5, $4.5) -> (4.5, $3.5) straddles the line's midpoint,
+               // where the midpoint formula returns e = 1.00 exactly
 
   // convert a client event to SVG user coords (handles responsive scaling)
   var spt = svg.createSVGPoint();
@@ -234,17 +259,15 @@
     return spt.matrixTransform(svg.getScreenCTM().inverse());
   }
 
-  // readout copy for the three elasticity states
-  var COPY = {
-    elastic:   { hint: ['High on the curve: P high, Q small.'],
-                 trade: ['Elastic here (response more than proportional)',
-                         '— a price cut would raise total revenue.'] },
-    mid:       { hint: ['Middle of the curve.'],
-                 trade: ['Unit elastic — total revenue is at its peak;',
-                         'a small price move barely changes it.'] },
-    inelastic: { hint: ['Low on the curve: P low, Q large.'],
-                 trade: ['Inelastic here — a price cut would lower',
-                         'total revenue.'] }
+  // revenue-verdict copy for the three elasticity states (the numeric
+  // midpoint arithmetic is built live in render())
+  var VERDICT = {
+    elastic:   { label: 'elastic',
+                 line2: 'a price cut here raises total revenue.' },
+    mid:       { label: 'unit elastic',
+                 line2: 'total revenue is at its peak.' },
+    inelastic: { label: 'inelastic',
+                 line2: 'a price cut here lowers total revenue.' }
   };
 
   function setLines(el, lines, y0, dy) {
@@ -258,9 +281,16 @@
     }
   }
 
-  function stateFor(qq) {
-    if (Math.abs(qq - MID) <= EPS) return 'mid';
-    return (qq < MID) ? 'elastic' : 'inelastic';
+  // midpoint-formula elasticity over the one-unit step ending at q:
+  // dQ = 1 against the step's average Q; dP = 1 against the step's average P;
+  // e = %dQ / %dP = avgP / avgQ. Same band as the old q-space EPS=0.15.
+  function midpointE(qq) {
+    var qAvg = qq - 0.5, pAvg = 8.5 - qq;
+    return pAvg / qAvg;
+  }
+  function stateFor(e) {
+    if (e >= 0.93 && e <= 1.08) return 'mid';
+    return (e > 1) ? 'elastic' : 'inelastic';
   }
 
   function render() {
@@ -297,16 +327,32 @@
     qy2.setAttribute('y', cy2); qy2.textContent = 'P′ = ' + pc.toFixed(1);
     qy2Bg.setAttribute('y', cy2 - 7);
 
-    // readout grammar (muted state line + accent takeaway line)
-    var st = stateFor(q);
-    var c = COPY[st];
-    setLines(rHint, c.hint, 452, 16);
-    setLines(rTrade, c.trade, 486, 16);
+    // readout grammar: muted midpoint-arithmetic lines + accent verdict lines
+    var qAvg = (q + qc) / 2, pAvg = (p + pc) / 2;
+    var dqPct = 100 / qAvg, dpPct = 100 / pAvg;   // dQ = dP = 1 on this line
+    var e = pAvg / qAvg;
+    var st = stateFor(e);
+    var v = VERDICT[st];
+    var hintLines = [
+      'Q ' + qc.toFixed(1) + ' → ' + q.toFixed(1) + ' (avg ' + qAvg.toFixed(1) + ') · P $'
+        + pc.toFixed(2) + ' → $' + p.toFixed(2) + ' (avg $' + pAvg.toFixed(2) + ')',
+      '%ΔQ = 1/' + qAvg.toFixed(1) + ' = ' + dqPct.toFixed(1) + '% · %ΔP = 1/'
+        + pAvg.toFixed(1) + ' = ' + dpPct.toFixed(1) + '%'
+    ];
+    var tradeLines = [
+      'e = ' + dqPct.toFixed(1) + '% / ' + dpPct.toFixed(1) + '% ≈ ' + e.toFixed(2)
+        + ' — ' + v.label + ':',
+      v.line2
+    ];
+    setLines(rHint, hintLines, 452, 16);
+    setLines(rTrade, tradeLines, 490, 16);
 
     ptFocus.setAttribute('aria-valuenow', q.toFixed(1));
     ptFocus.setAttribute('aria-valuetext',
-      'Quantity ' + q.toFixed(1) + ', price ' + p.toFixed(1) + '. ' +
-      c.hint.join(' ') + ' ' + c.trade.join(' '));
+      'Quantity ' + q.toFixed(1) + ', price ' + p.toFixed(1) + '. Step from quantity '
+      + qc.toFixed(1) + ' to ' + q.toFixed(1) + ': percent change in quantity '
+      + dqPct.toFixed(1) + ', percent change in price ' + dpPct.toFixed(1)
+      + '. Midpoint elasticity ' + e.toFixed(2) + ', ' + v.label + ': ' + v.line2);
   }
 
   function setQ(newQ) {
@@ -366,7 +412,10 @@
     set: function (v) { setQ(+v); },
     get: function () {
       var qc = companionQ(q);
-      return { q: q, p: priceAt(q), qPrime: qc, pPrime: priceAt(qc), state: stateFor(q) };
+      var e = midpointE(q);
+      return { q: q, p: priceAt(q), qPrime: qc, pPrime: priceAt(qc),
+               qAvg: (q + qc) / 2, pAvg: (priceAt(q) + priceAt(qc)) / 2,
+               e: e, state: stateFor(e) };
     }
   };
 
