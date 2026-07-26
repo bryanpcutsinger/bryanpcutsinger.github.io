@@ -8,12 +8,13 @@ ue_anchors: ["UE 8", "UE 9"]
 be_anchors: []
 ep_anchors: ["E&P Fig 2-4 (ch. 2, p. 23) — marginal revenue as gain minus loss on inframarginal units", "E&P Fig 2-11 (ch. 2, p. 35) — endowment vs substitution effect (relocated from t03a)"]
 word_target: "2800-3600"
-word_budget: 4201
+word_budget: 4438
   # word_budget 3600 -> 3661 (+61): For Further Reading section added 2026-07-22
   # word_budget 3661 -> 4051 (+390): midpoint-formula pass 2026-07-25 (instructor-directed) — formula display + worked example + table recompute prose + ue8-1 figure-intuition paragraph (same-session feedback)
   # word_budget 4051 -> 3959 (-92): ue8-3 rectangular-hyperbola figure cut 2026-07-26 (instructor) — figcaption words removed; headroom preserved
   # word_budget 3959 -> 4240 (+281): UE 8.4A/B faithful-rebuild pass 2026-07-26 (instructor: "don't worry so much about hard caps... get the content right") — gas-stocks prose expansion around the shifts figure; instructor may revisit length later
   # word_budget 4240 -> 4201 (-39): shifts figure made static 2026-07-26 (instructor) — figcaption shortened (no interaction/fallback text); headroom preserved
+  # word_budget 4201 -> 4438 (+237): income-elasticity section added 2026-07-26 (instructor-directed; length caveat still standing) — new H2 lead-in to the substitution/wealth section per UE Ch 8's own order
 status: approved        # scope-reduction R4 2026-07-21 (word_budget applied); E&P integration M6 done-gate 2026-07-20; prior approval 2026-07-01
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Source-of-truth for the session-4 deck; section headers are claims that map to slide titles. Verbal-marginal throughout: no indifference curves, no measured surplus triangles; the ONE sanctioned piece of algebra is the midpoint elasticity formula (instructor-directed 2026-07-25). Follows the session-3 demand post and precedes gains from exchange in session 5; a short foundational intro re-establishes the downward-sloping demand curve and marginal worth so this post stands on its own."
@@ -126,7 +127,7 @@ Gasoline makes the difference concrete. The stock of gasoline available in a giv
 Now run the other experiment. Hold the week's stocks fixed and let demand itself rise, say a holiday weekend that puts more drivers on the road. The whole demand curve shifts to a higher one, and the price rises with no change in quantity at all: the market moves from where the old curve crossed the fixed supply to where the new curve crosses it. Nobody slid along a demand curve, so no elasticity of demand describes this price change.
 
 <figure class="econ-figure" style="margin:1.5em 0;">
-<img src="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03-elasticity-shifts.svg" alt="Two panels. Left panel, supply changes with demand unchanged: one straight demand line crossed by three vertical supply lines for low, moderate, and high gas stocks, with dotted price lines showing the price highest under low stocks and lowest under high stocks, and dashed arrows running alongside the demand line. Right panel, demand changes with supply unchanged: one vertical supply line crossed by a lower and a higher demand line, with the price rising from the lower crossing to the higher one at the same quantity." style="width:100%; max-width:760px; display:block; margin:0 auto;" />
+<img src="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03-elasticity-shifts-web.svg" alt="Two panels. Left panel, supply changes with demand unchanged: one straight demand line crossed by three vertical supply lines for low, moderate, and high gas stocks, with dotted price lines showing the price highest under low stocks and lowest under high stocks, and dashed arrows running alongside the demand line. Right panel, demand changes with supply unchanged: one vertical supply line crossed by a lower and a higher demand line, with the price rising from the lower crossing to the higher one at the same quantity." style="width:100%; max-width:760px; display:block; margin:0 auto; background:#f7f4ef; border:1px solid #e3ddd3; border-radius:4px; padding:12px; box-sizing:border-box;" />
 <figcaption><strong>A price change from a supply shift is not the same as one from a demand shift.</strong> In the left panel, supply changes and demand does not: each stock level is a vertical supply line, and the price slides from its highest level under low stocks to its lowest under high stocks, always along the same demand line, which is why the dashed arrows run alongside the curve. In the right panel, stocks are fixed and demand itself shifts from the lower line to the higher one: the price rises at the very same quantity, and no movement along any curve occurs.</figcaption>
 </figure>
 
@@ -160,6 +161,20 @@ The last is the subtlest, and it bridges to a later topic. When such a seller wa
 <iframe src="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ep2-4-marginal-revenue-interactive.html" title="Interactive marginal-revenue figure: drag the quantity handle to sell one more unit and watch the gain rectangle (the new unit at the new price) fight the loss rectangle (the price cut on every earlier unit)." loading="lazy" style="width:100%; max-width:480px; aspect-ratio:1/1; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ep2-4-marginal-revenue-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ep2-4-marginal-revenue.svg">view the static figure</a>.</p></iframe>
 <figcaption><strong>Selling one more unit brings in its price but gives up revenue on every unit already sold.</strong> When a seller must lower its price to sell one more unit, the lower price applies to every unit, not just the extra one. So the marginal revenue from that unit is the price it fetches (the gain rectangle) minus the revenue given up on the units already being sold (the loss rectangle). Selling the second unit at $9 brings in $9 but costs $1 of revenue on the first unit, so marginal revenue is $8, below the $9 price. Drag the handle to sell one more unit and watch the two rectangles, and see marginal revenue fall further, and eventually turn negative, as the price cut spreads over more and more units. If the frame does not load, <a href="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ep2-4-marginal-revenue-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ep2-4-marginal-revenue.svg">view the static figure</a>.</figcaption>
 </figure>
+
+## Income Shifts Demand, and Income Elasticity Measures by How Much
+
+A change in price moves buyers along a demand curve. A change in income moves the curve itself. For most goods, higher income raises demand, shifting the whole curve rightward roughly in proportion to the income gain; economists call these *normal* goods. Some goods respond more than proportionally, called *superior* goods, and some less than proportionally, called *inferior* goods. The same good can even switch categories as you climb: cheap wine may be a superior good at a low income, while at a higher income your wine spending moves to better bottles instead.
+
+How much an income change moves demand is measured exactly the way we measured price responsiveness, with a ratio of percentage changes:
+
+<div class="econ-equation" style="margin:1.4em auto; text-align:center; overflow-x:auto;">
+<p style="margin:0; white-space:nowrap;">income elasticity of demand&nbsp;=&nbsp;<span style="display:inline-block; vertical-align:middle; text-align:center;"><span style="display:block; padding:0 .45em .12em; border-bottom:1.5px solid currentColor;">percentage change in quantity demanded</span><span style="display:block; padding:.12em .45em 0;">percentage change in income</span></span></p>
+</div>
+
+If a 10 percent rise in income raises the quantity demanded at each price by 20 percent, income elasticity is 2 over that range, the mark of a superior good. One refinement matters: which income? A raise you expect to keep changes what you buy; a one-time windfall barely does. What moves your demand is your expected, lasting income, not this month's lucky bonus.
+
+Income is one force that moves the whole curve. The next question is stranger: sometimes a price change itself changes your wealth, moving the curve and your position on it at the same time.
 
 ## A Higher Price Pushes You Away, but If You Own a Lot It Also Makes You Richer
 
