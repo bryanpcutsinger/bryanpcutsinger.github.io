@@ -23,16 +23,20 @@
     Pixel frame: origin (64,360); x-unit 31.6 px, y-unit 30.4 px. Axes extend
     past the data so curves do not crowd the arrowheads.
       px(x) = 64 + 31.6*x     py(p) = 360 - 30.4*p
-    Common pivot at (X=3, P1=6) = (158.8, 177.6). Five demand curves radiate
+    Common pivot at (Q=3, P1=6) = (158.8, 177.6). Five demand curves radiate
     through it, each straight, ordered by steepness at the pivot:
-      curve 1 (short run, steepest, slope -3.00)  crosses P2=3 at X1 = 4.0
-      curve 2 (slope -1.667)                       crosses P2=3 at X2 = 4.8
-      curve 3 (slope -1.111)                       crosses P2=3 at X3 = 5.7
-      curve 4 (slope -0.789)                       crosses P2=3 at X4 = 6.8
-      curve L (long run, flattest, slope -0.577)   crosses P2=3 at XL = 8.2
+      curve 1 (short run, steepest, slope -3.00)  crosses P2=3 at Q1 = 4.0
+      curve 2 (slope -1.667)                       crosses P2=3 at Q2 = 4.8
+      curve 3 (slope -1.111)                       crosses P2=3 at Q3 = 5.7
+      curve 4 (slope -0.789)                       crosses P2=3 at Q4 = 6.8
+      curve L (long run, flattest, slope -0.577)   crosses P2=3 at QL = 8.2
     P2=3 line at py 268.8. After the price falls P1->P2, the quantity response
-    grows the longer the elapsed time: steep curve 1 -> small X1, flat curve L
-    -> large XL (the "second law of demand"). Initial X=3 sits left of X1.
+    grows the longer the elapsed time: steep curve 1 -> small Q1, flat curve L
+    -> large QL (the "second law of demand"). Initial Q=3 sits left of Q1.
+    Quantity labels are Q (not the source's X) per instructor direction
+    2026-07-26: the post's prose never uses X, and Q matches the course's
+    notation everywhere else. "Long Run" sits to the RIGHT of the L-curve
+    tail (start-anchored, clear gap), fixing the label-on-curve overlap.
 
   DEVIATION (documented): the fan curves are drawn STRAIGHT rather than the
   source's slight convexity. Straight lines guarantee each accent crossing dot
@@ -159,20 +163,21 @@
     <text class="clabel" x="86"  y="130" text-anchor="middle">L</text>
     <text class="clabel-lr" x="150" y="60" text-anchor="start">Short Run</text>
 
-    <!-- lower-end curve labels (1,2,3,4) + "Long Run" at the L curve -->
+    <!-- lower-end curve labels (1,2,3,4) + "Long Run" right of the L-curve
+         tail (start-anchored past x=364.2 so it cannot sit on the curve) -->
     <text class="clabel" x="204" y="337" text-anchor="middle">1</text>
     <text class="clabel" x="238" y="323" text-anchor="middle">2</text>
     <text class="clabel" x="274" y="316" text-anchor="middle">3</text>
     <text class="clabel" x="316" y="311" text-anchor="middle">4</text>
-    <text class="clabel-lr" x="370" y="288" text-anchor="middle">Long Run</text>
+    <text class="clabel-lr" x="371" y="296" text-anchor="start">Long Run</text>
 
-    <!-- x-axis quantity marks: X (initial), then X1..XL -->
-    <text class="ptlabel" x="158.8" y="376" text-anchor="middle">X</text>
-    <text class="ptlabel" x="190.4" y="376" text-anchor="middle">X&#8321;</text>
-    <text class="ptlabel" x="215.68" y="376" text-anchor="middle">X&#8322;</text>
-    <text class="ptlabel" x="244.12" y="376" text-anchor="middle">X&#8323;</text>
-    <text class="ptlabel" x="278.88" y="376" text-anchor="middle">X&#8324;</text>
-    <text class="ptlabel" x="323.12" y="376" text-anchor="middle">X&#8343;</text>
+    <!-- x-axis quantity marks: Q (initial), then Q1..QL -->
+    <text class="ptlabel" x="158.8" y="376" text-anchor="middle">Q</text>
+    <text class="ptlabel" x="190.4" y="376" text-anchor="middle">Q&#8321;</text>
+    <text class="ptlabel" x="215.68" y="376" text-anchor="middle">Q&#8322;</text>
+    <text class="ptlabel" x="244.12" y="376" text-anchor="middle">Q&#8323;</text>
+    <text class="ptlabel" x="278.88" y="376" text-anchor="middle">Q&#8324;</text>
+    <text class="ptlabel" x="323.12" y="376" text-anchor="middle">Q&#8343;</text>
 
     <!-- pivot dot -->
     <circle class="pivot" cx="158.8" cy="177.6" r="4" />
@@ -207,7 +212,7 @@
     <!-- readout band: hairline separator, muted STATE lines, accent TAKEAWAY lines -->
     <line class="sep" x1="44" y1="434" x2="396" y2="434" />
     <text id="rHint"  class="r-hint"  x="220" y="452" text-anchor="middle">
-      <tspan x="220" dy="0">Short run &#183; steep curve 1 &#183; quantity at P&#8322; = X&#8321;</tspan>
+      <tspan x="220" dy="0">Short run &#183; steep curve 1 &#183; quantity at P&#8322; = Q&#8321;</tspan>
       <tspan x="220" dy="16">(small response).</tspan>
     </text>
     <text id="rTrade" class="r-trade" x="220" y="486" text-anchor="middle">
@@ -256,22 +261,22 @@
   // readout copy per curve (index 0 = short run ... 4 = long run).
   // Lines are pre-split so they never overflow the SVG width.
   var COPY = [
-    { muted: ['Short run · steep curve 1 · quantity at P₂ = X₁',
+    { muted: ['Short run · steep curve 1 · quantity at P₂ = Q₁',
               '(small response).'],
       trade: ['Right after a price change, quantity barely',
               'moves — demand is least elastic.'] },
     { muted: ['A short while later · curve 2 ·',
-              'quantity at P₂ = X₂.'],
+              'quantity at P₂ = Q₂.'],
       trade: ['A bit more time flattens the curve —',
               'quantity responds more.'] },
-    { muted: ['About a year out · curve 3 · quantity = X₃.'],
+    { muted: ['About a year out · curve 3 · quantity = Q₃.'],
       trade: ['More time → flatter curve →',
               'bigger quantity response.'] },
     { muted: ['Well after the change · curve 4 ·',
-              'quantity = X₄.'],
+              'quantity = Q₄.'],
       trade: ['Still more time → flatter still →',
               'quantity responds more.'] },
-    { muted: ['Long run · flattest curve · quantity = X_L',
+    { muted: ['Long run · flattest curve · quantity = Qₗ',
               '(largest).'],
       trade: ['The second law of demand: demand is more',
               'elastic the longer the interval after a',
