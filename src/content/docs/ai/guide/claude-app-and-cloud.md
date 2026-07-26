@@ -25,7 +25,7 @@ your files.
 **Claude Code** is the tool you've been using: it works inside a folder you point it at,
 reads and edits the actual files there, and asks your permission before each change. That
 working-in-your-folder, review-the-diff loop from [your first
-session](/ai/your-first-session/) is the thing the chat interface doesn't do.
+session](/ai/guide/your-first-session/) is the thing the chat interface doesn't do.
 
 The two are made by the same company and you sign into both with the same account, but
 they're different tools for different moments. A useful rule of thumb: if you're
@@ -62,7 +62,7 @@ without tying up your own machine — a long, low-steering task you leave runnin
 teach, or several independent fixes to a replication package dispatched at once, each
 coming back as its own branch to review. The cloud machine clones your repository, does
 the work, and pushes the result back to GitHub for you to review — which is where
-[Git and GitHub](/ai/git-and-github/) stop being optional housekeeping and become the thing that *lets
+[Git and GitHub](/ai/guide/git-and-github/) stop being optional housekeeping and become the thing that *lets
 the cloud see your project at all*. A cloud session knows only what's committed to the
 repository: a file that lives only on your Mac is invisible to it, and so is your
 personal setup — it reads the `CLAUDE.md` and settings stored *in the repo*, not the ones
@@ -89,7 +89,7 @@ in the guide rather than being a footnote.
 When Claude Code runs **on your Mac**, your files start on your machine. (They don't stay
 purely local — anything Claude reads is still sent over the network to the model to be
 processed, which is the central point of [keeping your data
-private](/ai/keeping-your-data-private/).) But the files at least *originate* on your computer, and
+private](/ai/guide/keeping-your-data-private/).) But the files at least *originate* on your computer, and
 nothing is copied to a third location to sit there.
 
 When you run work **in the cloud**, you are deliberately moving your project off your
@@ -108,7 +108,7 @@ Treat "should this leave my Mac?" as a question you answer *before* reaching for
 session, not after. If the honest answer for this particular project is no — and for raw
 or identifiable research data it usually is — keep the work local. The full set of rules
 for de-identifying data and choosing the right plan lives in [keeping your data
-private](/ai/keeping-your-data-private/); read it before you point any cloud tool at sensitive work.
+private](/ai/guide/keeping-your-data-private/); read it before you point any cloud tool at sensitive work.
 :::
 
 The same caution scales down to the chat app. Pasting a confidential table into the
@@ -143,6 +143,6 @@ about each on its own terms.
 The short version: chat is for talking, Claude Code is for editing your project, and the
 same Claude Code engine runs in your Terminal, in the desktop app's Code tab, and in the
 cloud — which is handy for public, GitHub-hosted work and the wrong move for restricted
-data. When in doubt, keep the work local and check [keeping your data private](/ai/keeping-your-data-private/)
-before you let a project leave your machine. From here, the [guide overview](/ai/) points
+data. When in doubt, keep the work local and check [keeping your data private](/ai/guide/keeping-your-data-private/)
+before you let a project leave your machine. From here, the [guide overview](/ai/guide/) points
 to the rest of the chapters.

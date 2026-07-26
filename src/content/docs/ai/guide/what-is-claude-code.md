@@ -57,5 +57,5 @@ include Claude Code (plans change, so check Anthropic's current requirements whe
 you set up) — and about thirty minutes for a one-time setup.
 
 Ready? The next chapter walks you through the one-time setup: [set up Claude
-Code](/ai/setting-up-claude-code/) — install the tool, sign in, and get VS Code running
+Code](/ai/guide/setting-up-claude-code/) — install the tool, sign in, and get VS Code running
 as your home base.

@@ -6,8 +6,8 @@ draft: false
 
 Most of the guide so far has used short, safe examples. Writing a paper is where the
 pieces come together: Claude edits LaTeX on your machine, the [LaTeX
-toolchain](/ai/working-in-vs-code/) compiles it, [Git and GitHub](/ai/git-and-github/) keep the
-history and the cloud copy, and your [house style](/ai/claude-md-file/) does the work of
+toolchain](/ai/guide/working-in-vs-code/) compiles it, [Git and GitHub](/ai/guide/git-and-github/) keep the
+history and the cloud copy, and your [house style](/ai/guide/claude-md-file/) does the work of
 sounding like *you*. This chapter wires those together on a real manuscript — and draws
 one bright line you must never cross when an LLM touches your citations.
 
@@ -50,7 +50,7 @@ script, and check Overleaf's current documentation for the present details.
 ## Compiling and iterating
 
 With the project folder open in VS Code, you have the [LaTeX
-toolchain](/ai/working-in-vs-code/) from the editor chapter right there — the
+toolchain](/ai/guide/working-in-vs-code/) from the editor chapter right there — the
 extension that builds the PDF and shows you the result beside the source. That tight loop
 is what makes Claude useful on a paper rather than just a fancy way to write text.
 
@@ -98,7 +98,7 @@ concept, examples on their own slides — then prune what doesn't earn its class
 That keeps everything in one toolchain, which is the appeal. If you'd rather end up in
 **PowerPoint** — a job talk in your department's template, say — that's a different route
 that goes through a connector on the Claude app side rather than local LaTeX. The
-[connectors & MCP](/ai/connectors-and-mcp/) chapter covers it; it's the right tool when the
+[connectors & MCP](/ai/guide/connectors-and-mcp/) chapter covers it; it's the right tool when the
 destination has to be a `.pptx`, not a PDF.
 
 ## Verify every citation
@@ -142,16 +142,16 @@ instead of reconstructing one from memory; it can even flag retracted papers. Th
 discipline that goes with it: search your library first, and treat any web or Scholar
 hit as unverified until it's matched there. One honest caveat — this guarantees the
 citation matches your Zotero record, not that the record itself is correct, so the
-check-at-the-source rule still applies. The [connectors & MCP](/ai/connectors-and-mcp/) chapter covers
+check-at-the-source rule still applies. The [connectors & MCP](/ai/guide/connectors-and-mcp/) chapter covers
 wiring up Zotero. And this is exactly the kind of non-negotiable that belongs in your
-[CLAUDE.md](/ai/claude-md-file/): *never invent citations, DOIs, page numbers, or quoted
+[CLAUDE.md](/ai/guide/claude-md-file/): *never invent citations, DOIs, page numbers, or quoted
 text* — written down once, enforced every session.
 
 ## Where the style lives
 
 Notice what this chapter *didn't* do: it didn't teach you how to make Claude write like
 you. That's deliberate. Your house style — the em-dashes, the *Fed* convention, the ban
-on breathless adjectives — lives in your [CLAUDE.md](/ai/claude-md-file/), described once
+on breathless adjectives — lives in your [CLAUDE.md](/ai/guide/claude-md-file/), described once
 and inherited by every session. By the time you sit down to draft a paper, that briefing
 is already done, and the writing work is *applying* a style Claude already has rather than
 re-explaining it. That's what lets the whole workflow feel like editing instead of
@@ -167,4 +167,4 @@ CLAUDE.md.
 
 That's the academic writing loop end to end: pull from GitHub, edit LaTeX locally with
 Claude, compile and review, push back so Overleaf catches up, and verify every reference
-before it lands. The [guide overview](/ai/) points to what's next.
+before it lands. The [guide overview](/ai/guide/) points to what's next.

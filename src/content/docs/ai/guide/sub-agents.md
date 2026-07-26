@@ -4,7 +4,7 @@ description: What sub-agents are — separate Claude workers you hand a focused 
 draft: false
 ---
 
-By the time you've worked through [controlling Claude](/ai/controlling-claude/), you know that a session's
+By the time you've worked through [controlling Claude](/ai/guide/controlling-claude/), you know that a session's
 memory — its context window — is finite, and that a long, wandering conversation
 eventually gets crowded. Some tasks are crowding by nature: searching a folder of two
 hundred files to find where a variable is defined, reading a long appendix to extract one
@@ -41,7 +41,7 @@ reaches for on its own, and the two you'll notice most are **Explore** and **Pla
   an Explore sub-agent to comb the folder and come back with the answer and the relevant
   file paths — instead of pulling every file it opened into your session.
 - **Plan** is the one that thinks through an approach before any work happens. It's the
-  engine behind the planning step you met in [controlling Claude](/ai/controlling-claude/): it studies the
+  engine behind the planning step you met in [controlling Claude](/ai/guide/controlling-claude/): it studies the
   task, weighs how to tackle it, and hands back a plan for you to read and approve. The
   exploring and deliberating happen off to the side; what reaches you is the plan itself.
 
@@ -79,14 +79,14 @@ You can also define your own sub-agents — a named worker with its own instruct
 restricted set of tools, created through that same `/agents` command. The official docs'
 example: a data-analysis sub-agent whose database access is *mechanically* limited to
 read-only queries — "read the data, never alter it" enforced by the tool, not by a polite
-request. That style of guardrail gets its own treatment in a [later chapter](/ai/rules-hooks-and-skills/).
+request. That style of guardrail gets its own treatment in a [later chapter](/ai/guide/rules-hooks-and-skills/).
 
 What comes back is a report, not a finished change — and that's the part to slow down on.
 A sub-agent did its reading in a context you never saw, so you can't watch its reasoning
 the way you watch a normal turn. Treat its summary as a claim to check, not a conclusion
 to trust. If it says a variable is defined in one file, open that file. If it found three
 papers that use a method, the citations still need verifying against the actual sources —
-the [same discipline](/ai/what-is-claude-code/) that governs everything Claude produces.
+the [same discipline](/ai/guide/what-is-claude-code/) that governs everything Claude produces.
 The sub-agent saved you the digging; it didn't relieve you of being the reviewer.
 
 :::caution
@@ -131,11 +131,11 @@ sends back still lands in your main conversation, so dispatching many of them fi
 context anyway while multiplying token use. For one or two focused errands that's a fair
 trade — a bit more spending for a clean main context — but it's a real cost, worth knowing
 before you reach for one reflexively. How that spending works, and the limits it counts
-against, is the subject of the [models, cost & limits](/ai/models-cost-and-limits/) chapter.
+against, is the subject of the [models, cost & limits](/ai/guide/models-cost-and-limits/) chapter.
 
 ---
 
 A sub-agent is one helper you send off and get a report from. The deep end of this idea is
 several agents working at once on a big, fan-out task — a team rather than an errand — and
-that's its own [chapter](/ai/orchestration-and-workflows/) later in the guide. Sub-agents are the building block it's
+that's its own [chapter](/ai/guide/orchestration-and-workflows/) later in the guide. Sub-agents are the building block it's
 made of, so this is the right place to have started.

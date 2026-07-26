@@ -4,7 +4,7 @@ description: What happens to data you give Claude, why your plan choice matters,
 draft: false
 ---
 
-When you [set up Claude Code](/ai/setting-up-claude-code/) you made a couple of quick
+When you [set up Claude Code](/ai/guide/setting-up-claude-code/) you made a couple of quick
 privacy decisions at signup — pick a plan, turn data-sharing off, don't paste anything
 confidential. This chapter is the full version of that briefing: what actually happens
 to the data you hand Claude, why the plan you're on changes the answer, and how to work
@@ -160,4 +160,4 @@ before Claude sees it.** Get those right and you can use Claude across most of y
 teaching and research without exposing anything you're responsible for. The related
 discipline — never letting an API key or password into a file, a commit, or printed
 output — is its own topic, covered in
-[API keys & secrets](/ai/api-keys-and-secrets/).
+[API keys & secrets](/ai/guide/api-keys-and-secrets/).

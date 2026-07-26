@@ -4,7 +4,7 @@ description: Before you point Claude at real work — how folder scope limits wh
 draft: false
 ---
 
-The [Sandbox](/ai/your-first-session/) was the safe place to learn the rhythm. At some
+The [Sandbox](/ai/guide/your-first-session/) was the safe place to learn the rhythm. At some
 point, though, you want Claude looking at a real syllabus, a real replication folder, a
 real draft. Graduating to real files isn't a leap — it's the same ask → review → approve
 loop you already know — but a few habits make the difference between a recoverable
@@ -27,7 +27,7 @@ The working directory is where Claude *starts looking* — not a sealed box it c
 Once Claude runs a shell command or uses a tool, that command can in principle reach files
 outside the folder, just like any command you'd type yourself. Folder scope makes the easy
 path the safe one; it is **not** a security boundary, and it is **not** a substitute for the
-privacy practices in [keeping your data private](/ai/keeping-your-data-private/). Don't treat "I only opened this one
+privacy practices in [keeping your data private](/ai/guide/keeping-your-data-private/). Don't treat "I only opened this one
 folder" as protection for confidential data.
 :::
 
@@ -51,11 +51,11 @@ deliberately decided otherwise.
 - **Confidential or restricted material.** IRB-governed data, student records, anything
   under a data-use agreement, an unpublished manuscript under review — if it shouldn't
   leave your machine, the time to decide that is *before* it's in the folder, not after.
-  The [data-privacy chapter](/ai/keeping-your-data-private/) covers de-identifying and the rules research offices
+  The [data-privacy chapter](/ai/guide/keeping-your-data-private/) covers de-identifying and the rules research offices
   use; this is just the blunt version: when in doubt, leave it out.
 - **Secrets.** API keys, passwords, tokens. These don't belong in a working folder any
-  more than they belong in a [CLAUDE.md](/ai/claude-md-file/) — the [API keys &
-  secrets](/ai/api-keys-and-secrets/) chapter covers where they go instead.
+  more than they belong in a [CLAUDE.md](/ai/guide/claude-md-file/) — the [API keys &
+  secrets](/ai/guide/api-keys-and-secrets/) chapter covers where they go instead.
 
 The reframe is simple: you're not restricting Claude so much as curating what it sees.
 A folder with exactly the files the task needs is both safer and easier for Claude to
@@ -86,7 +86,7 @@ not redundant; keep both.
 :::
 
 If your project is already under version control, you have a third and even better net —
-but that's [Git's](/ai/git-and-github/) job, and it gets its own chapter. The point here is that you do
+but that's [Git's](/ai/guide/git-and-github/) job, and it gets its own chapter. The point here is that you do
 *not* need to know Git to work safely: a duplicate folder and Time Machine get you most of
 the way.
 
@@ -138,4 +138,4 @@ That's the safety kit for real work: open a tightly-scoped folder, keep the wron
 out of it, run on a copy with Time Machine behind you, and reach for `/rewind` when an
 edit needs taking back. None of it slows you down once it's habit. The one thing folder
 scope deliberately does *not* solve is what happens to data once Claude reads it — and
-that's the next chapter, [keeping your data private](/ai/keeping-your-data-private/).
+that's the next chapter, [keeping your data private](/ai/guide/keeping-your-data-private/).

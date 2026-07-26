@@ -43,7 +43,7 @@ slowest one. That's the entire appeal — wall-clock speed on work that fans out
 
 ## Two steps up from sub-agents
 
-You met [sub-agents](/ai/sub-agents/) in the previous chapter: separate Claude workers you hand a
+You met [sub-agents](/ai/guide/sub-agents/) in the previous chapter: separate Claude workers you hand a
 focused job so their work doesn't clutter your main conversation. Sub-agents report to
 *you* and don't talk to each other — like sending two research assistants off to separate
 libraries, each returning a memo to your desk. Above them sit two tools that solve
@@ -56,7 +56,7 @@ useful extra isn't just headcount: workflows can run **adversarial verification*
 agents actively try to refute what one agent found before it enters the final result. The
 built-in `/deep-research` workflow works this way for literature questions: it fans out
 searches, has agents vote on each claim, and returns a cited report with unsupported
-claims filtered out — exactly the safeguard you want where a [fabricated citation](/ai/writing-papers-and-slides/)
+claims filtered out — exactly the safeguard you want where a [fabricated citation](/ai/guide/writing-papers-and-slides/)
 is the main risk.
 
 An **agent team** is a different shape: not hundreds of workers, but a handful — think
@@ -94,7 +94,7 @@ running several Claudes at once: each teammate in an agent team is a full sessio
 dynamic workflows cost the most of all — enough that Claude asks for confirmation before
 your first run. Treat the multiple as a ballpark; gauge a workflow on a small slice before
 committing the whole job, and watch your own `/usage` (see [models, cost & usage
-limits](/ai/models-cost-and-limits/)). You're spending money and your usage allowance to buy speed — a fine trade
+limits](/ai/guide/models-cost-and-limits/)). You're spending money and your usage allowance to buy speed — a fine trade
 when the speed matters and a poor one when it doesn't.
 
 So the question to ask before fanning out is narrow: *is this actually wide, and do I
@@ -119,7 +119,7 @@ cost. When any is no, stay with one session.
 The discipline that runs through this whole guide doesn't relax at the top; it gets
 harder. With one Claude you read one stream of work and approve one set of diffs. With a
 fleet you have many streams of work happening at once, and the same rule still
-holds — [verify everything it produces](/ai/what-is-claude-code/) — but there's now more of
+holds — [verify everything it produces](/ai/guide/what-is-claude-code/) — but there's now more of
 it, arriving faster, and you didn't watch each piece happen.
 
 That's the real reason orchestration is the deep end. Not the commands, which you can look
@@ -134,8 +134,8 @@ pass — so you're reviewing against something concrete rather than trusting vol
 ## Where this sits in the guide
 
 This is the ceiling, and you reach it rarely. The everyday tools — a good
-[CLAUDE.md](/ai/claude-md-file/), the [work loop and plan mode](/ai/controlling-claude/), choosing a
-[model](/ai/models-cost-and-limits/) — carry the overwhelming majority of real teaching and research work. Agent
+[CLAUDE.md](/ai/guide/claude-md-file/), the [work loop and plan mode](/ai/guide/controlling-claude/), choosing a
+[model](/ai/guide/models-cost-and-limits/) — carry the overwhelming majority of real teaching and research work. Agent
 teams and workflows are for the genuine fan-out task that comes along now and then: the
 big audit, the broad sweep, the project-wide migration that's both wide and urgent.
 
@@ -143,4 +143,4 @@ Knowing the deep end exists is most of the value. When a task is plainly wide,
 independent, and worth the cost, you'll recognize it — and you'll know to confirm the
 current mechanics, fan the work out, and then settle in to do the part that was always
 yours: reviewing the result. That's where the guide ends and your own work begins. The
-[overview](/ai/) ties the whole path together.
+[overview](/ai/guide/) ties the whole path together.

@@ -14,7 +14,7 @@ become a software engineer, but because they turn "I think I broke it" into a ca
 `undo` — which is exactly the safety net you want once Claude Code starts editing your
 files.
 
-This chapter assumes you're [working in VS Code](/ai/working-in-vs-code/), where Git is built in and most of
+This chapter assumes you're [working in VS Code](/ai/guide/working-in-vs-code/), where Git is built in and most of
 what follows happens with a click or a single command.
 
 ## What is Git
@@ -48,7 +48,7 @@ That separation is the whole point. Pushing to GitHub is an off-site backup — 
 laptop dies, your work and its full history are safe. It's also how you share: a
 collaborator can pull your commits, and you can pull theirs, each of you working locally
 and syncing when ready. And it's the spine of the writing workflow later in this guide,
-where a paper stays in sync between [Overleaf and GitHub](/ai/writing-papers-and-slides/).
+where a paper stays in sync between [Overleaf and GitHub](/ai/guide/writing-papers-and-slides/).
 
 :::note
 A GitHub repository can be **private** (only you and people you invite can see it) or
@@ -94,7 +94,7 @@ same loop with clicks — not a crutch, just a different interface.)
   what's changed since your last commit. This is your "what am I about to save?" view.
 - **Review the diff.** Before committing, look at *exactly* what changed — the old lines
   and the new, side by side, the same red/green **diff** you saw approving an edit in
-  [your first session](/ai/your-first-session/). Click a changed file in the Source
+  [your first session](/ai/guide/your-first-session/). Click a changed file in the Source
   Control panel and VS Code shows it. Never commit without looking; the diff is where you
   catch a stray edit or a number that shouldn't have moved.
 - **Commit.** Write a one-line message describing the change and save the snapshot. In the
@@ -138,7 +138,7 @@ only the edits Claude made through its own editing tools. A commit is *permanent
 history*: you choose when to take it, it captures everything, and it survives cleanups,
 restarts, and even a dead laptop once you've pushed it. Use `/rewind` for the small stuff mid-conversation, and
 lean on a commit for the deliberate "I'm about to do something big" moment. Checkpoints
-and `/rewind` get their own treatment in [working safely](/ai/working-safely/); this is the
+and `/rewind` get their own treatment in [working safely](/ai/guide/working-safely/); this is the
 version-control half of the same safety net.
 
 :::tip
@@ -166,7 +166,7 @@ gets staged, committed, or pushed. Three categories belong in it for an economis
   physically cannot be committed. Your *code* goes on GitHub; the protected data stays on
   your Mac.
 - **Secrets.** API keys, tokens, passwords, any `.env` file that holds them. These should
-  never be in a file you commit — see [API keys & secrets](/ai/api-keys-and-secrets/) for where they
+  never be in a file you commit — see [API keys & secrets](/ai/guide/api-keys-and-secrets/) for where they
   belong instead.
 - **Large or regenerable files.** Big binaries, build artifacts, and anything a script can
   recreate (intermediate datasets, compiled PDFs). GitHub isn't built for large files, and
@@ -176,7 +176,7 @@ The second line of defense is the repo's visibility. Unpublished work — a work
 before it circulates, a project on sensitive data — belongs in a **private** repository,
 where only people you invite can see it. Private repos plus a careful `.gitignore` are how
 version control coexists with confidentiality; the broader question of what data should
-leave your machine at all is the subject of [keeping your data private](/ai/keeping-your-data-private/).
+leave your machine at all is the subject of [keeping your data private](/ai/guide/keeping-your-data-private/).
 
 :::caution
 A `.gitignore` only blocks files that aren't *already* committed. If you accidentally
@@ -212,5 +212,5 @@ makes the commits cheap enough that you actually take them.
 That's version control end to end — snapshots you can return to, a cloud home that backs
 them up, and a `.gitignore` keeping the private things off it. With commits as a reliable
 safety net, you're set up for the workflows that lean on them most: keeping a paper in sync
-between [Overleaf and GitHub](/ai/writing-papers-and-slides/), and the heavier [orchestration](/ai/orchestration-and-workflows/) work later in the
-guide. The [guide overview](/ai/) points to what's next.
+between [Overleaf and GitHub](/ai/guide/writing-papers-and-slides/), and the heavier [orchestration](/ai/guide/orchestration-and-workflows/) work later in the
+guide. The [guide overview](/ai/guide/) points to what's next.

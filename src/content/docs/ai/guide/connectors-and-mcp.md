@@ -54,7 +54,7 @@ transformative ones. A connector to your cloud drive saves you the step of downl
 working paper before asking about it. The browser extension saves you a copy-paste when
 you're reading something online. Useful, but each one also widens what a remote service
 can see, which matters more for confidential or IRB-governed material than for a public
-PDF — a tradeoff the [keeping your data private](/ai/keeping-your-data-private/) chapter takes up directly.
+PDF — a tradeoff the [keeping your data private](/ai/guide/keeping-your-data-private/) chapter takes up directly.
 
 These are app-side features, so they don't touch your Claude Code sessions in VS Code at
 all. If your work happens mostly in the terminal, you can leave them off and lose nothing.
@@ -88,7 +88,7 @@ Other MCP servers follow the same shape, and several were built by and for econo
   and `e()` results directly, instead of you relaying output by hand.
 - **A GitHub server** lets it read issues, pull requests, and repository contents, which
   matters once a paper or replication package lives on GitHub (its own chapter,
-  [Git & GitHub](/ai/git-and-github/), covers that workflow).
+  [Git & GitHub](/ai/guide/git-and-github/), covers that workflow).
 
 Registering an MCP server is a one-time setup step, done with a single command
 (`claude mcp add`) rather than a click; once you have servers registered, typing `/mcp`
@@ -97,7 +97,7 @@ Others — the ones that reach a service with an account behind it, like a hoste
 database or a web API — need a **credential** so
 the server can authenticate as you. That credential is an **API key**, and where it comes
 from and how to handle it without leaking it is exactly the subject of the
-[API keys & secrets](/ai/api-keys-and-secrets/) chapter, which is the prerequisite here. The one rule worth
+[API keys & secrets](/ai/guide/api-keys-and-secrets/) chapter, which is the prerequisite here. The one rule worth
 stating now, because it's the rule everywhere keys appear: a key goes in an environment
 variable, never pasted into a CLAUDE.md or committed to a repository.
 
@@ -112,7 +112,7 @@ grant is the thing to avoid.
 ## Which are worth it
 
 Most of this you can skip, at least at first — and that's the useful thing to hear. The
-working directory plus the [CLAUDE.md file](/ai/claude-md-file/) gets you a very long way,
+working directory plus the [CLAUDE.md file](/ai/guide/claude-md-file/) gets you a very long way,
 and every integration you add is one more piece of setup to maintain and one more surface
 your data can travel across. Each connected server also spends a little of Claude's
 working memory just by being registered — as of mid-2026 only the tool names load up
@@ -134,7 +134,7 @@ So the order that makes sense:
 
 The honest summary is that integrations are an amplifier, not a foundation. They make
 Claude reach further into the tools you already use, but none of them changes the one rule
-this guide keeps coming back to from [what Claude Code is](/ai/what-is-claude-code/): you
+this guide keeps coming back to from [what Claude Code is](/ai/guide/what-is-claude-code/): you
 review what it produces. A Zotero server that returns a real citation key still hands you a
 citation *you* confirm before it enters a draft. Wider reach raises the stakes of that
 review; it never removes it.
@@ -149,6 +149,6 @@ documentation for today's exact list and setup steps before you follow them.
 ---
 
 That's the integration landscape: two surfaces, named clearly, with Zotero as the one most
-likely to repay the setup for a working economist. From here the [guide overview](/ai/)
-points to the rest — including the [API keys & secrets](/ai/api-keys-and-secrets/) chapter you'll want before
+likely to repay the setup for a working economist. From here the [guide overview](/ai/guide/)
+points to the rest — including the [API keys & secrets](/ai/guide/api-keys-and-secrets/) chapter you'll want before
 wiring up any server that needs a credential.

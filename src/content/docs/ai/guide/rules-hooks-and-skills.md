@@ -4,7 +4,7 @@ description: The customization layer beyond CLAUDE.md — hooks that run on thei
 draft: false
 ---
 
-A [CLAUDE.md file](/ai/claude-md-file/) gets you a long way: standing instructions Claude
+A [CLAUDE.md file](/ai/guide/claude-md-file/) gets you a long way: standing instructions Claude
 reads at the start of every session. But a CLAUDE.md is *guidance Claude usually follows*,
 not a wall it cannot walk through — and some things you'd rather not leave to good
 intentions. That's where the next layer comes in. **Hooks** are commands your machine runs
@@ -128,7 +128,7 @@ the setup, not the checking.
 
 ## Where advanced rules go beyond a basic CLAUDE.md
 
-The [CLAUDE.md chapter](/ai/claude-md-file/) covers the everyday rules — who you are, your
+The [CLAUDE.md chapter](/ai/guide/claude-md-file/) covers the everyday rules — who you are, your
 house style, the integrity lines you never want crossed — and for most people that file
 is the whole story. But once you've lived with it for a while, you may find a rule that a
 plain CLAUDE.md isn't the right home for, and that's the seam this chapter sits on.
@@ -168,12 +168,12 @@ A reasonable path is to live on a good CLAUDE.md until something pushes you past
 you keep wishing were a hard stop (that's a hook) or a procedure you keep re-explaining
 (that's a skill). You don't graduate to these by hitting some threshold — you reach for one
 the day a specific friction makes the case for it. Until then, the [CLAUDE.md
-file](/ai/claude-md-file/) is plenty, and the [core review loop](/ai/your-first-session/)
+file](/ai/guide/claude-md-file/) is plenty, and the [core review loop](/ai/guide/your-first-session/)
 is what keeps any of it honest.
 
 ---
 
-None of this changes the one rule the [whole guide](/ai/what-is-claude-code/) rests on:
+None of this changes the one rule the [whole guide](/ai/guide/what-is-claude-code/) rests on:
 you verify what Claude produces. Hooks and skills move *where* the work happens — a hook
 moves a guardrail out of Claude's reasoning and into your machine; a skill moves a
 procedure out of your typing and into a command — but neither moves the reviewing off your

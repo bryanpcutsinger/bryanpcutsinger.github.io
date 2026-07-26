@@ -1,32 +1,32 @@
 {
   "label": "Getting Started with Claude Code",
   "items": [
-    { "label": "Start here", "slug": "ai" },
+    { "label": "Start here", "slug": "ai/guide" },
     { "label": "Set up", "items": [
-      { "slug": "ai/what-is-claude-code" },
-      { "slug": "ai/setting-up-claude-code" }
+      { "slug": "ai/guide/what-is-claude-code" },
+      { "slug": "ai/guide/setting-up-claude-code" }
     ]},
     { "label": "Get oriented", "items": [
-      { "slug": "ai/your-first-session" },
-      { "slug": "ai/claude-md-file" },
-      { "slug": "ai/controlling-claude" },
-      { "slug": "ai/models-cost-and-limits" },
-      { "slug": "ai/getting-material-into-claude" }
+      { "slug": "ai/guide/your-first-session" },
+      { "slug": "ai/guide/claude-md-file" },
+      { "slug": "ai/guide/controlling-claude" },
+      { "slug": "ai/guide/models-cost-and-limits" },
+      { "slug": "ai/guide/getting-material-into-claude" }
     ]},
     { "label": "Work on real projects", "items": [
-      { "slug": "ai/working-safely" },
-      { "slug": "ai/keeping-your-data-private" },
-      { "slug": "ai/working-in-vs-code" },
-      { "slug": "ai/git-and-github" },
-      { "slug": "ai/writing-papers-and-slides" }
+      { "slug": "ai/guide/working-safely" },
+      { "slug": "ai/guide/keeping-your-data-private" },
+      { "slug": "ai/guide/working-in-vs-code" },
+      { "slug": "ai/guide/git-and-github" },
+      { "slug": "ai/guide/writing-papers-and-slides" }
     ]},
     { "label": "Reference (for after)", "items": [
-      { "slug": "ai/api-keys-and-secrets" },
-      { "slug": "ai/connectors-and-mcp" },
-      { "slug": "ai/claude-app-and-cloud" },
-      { "slug": "ai/sub-agents" },
-      { "slug": "ai/rules-hooks-and-skills" },
-      { "slug": "ai/orchestration-and-workflows" }
+      { "slug": "ai/guide/api-keys-and-secrets" },
+      { "slug": "ai/guide/connectors-and-mcp" },
+      { "slug": "ai/guide/claude-app-and-cloud" },
+      { "slug": "ai/guide/sub-agents" },
+      { "slug": "ai/guide/rules-hooks-and-skills" },
+      { "slug": "ai/guide/orchestration-and-workflows" }
     ]}
   ]
 }

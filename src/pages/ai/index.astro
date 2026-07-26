@@ -1,0 +1,284 @@
+---
+import MarketingLayout from '../../layouts/MarketingLayout.astro';
+import PageHead from '../../components/marketing/PageHead.astro';
+import Section from '../../components/marketing/Section.astro';
+import Button from '../../components/marketing/Button.astro';
+import BookingForm from '../../components/marketing/BookingForm.astro';
+
+const learn = [
+  {
+    name: 'Research workflows',
+    note: 'Turning a data-cleaning script, a literature pass, or a replication into a repeatable Claude Code or Codex workflow, not a one-off chat.',
+  },
+  {
+    name: 'Writing & slides',
+    note: 'Keeping a LaTeX paper or Beamer deck in sync with an AI assistant without losing control of citations or formatting.',
+  },
+  {
+    name: 'Verification & judgment',
+    note: 'The habit that matters most: checking output against a source before it goes in a paper, a problem set, or a report.',
+  },
+  {
+    name: 'Reusable setups',
+    note: 'A CLAUDE.md (or equivalent) that encodes how you work once, so you stop re-explaining yourself every session.',
+  },
+  {
+    name: 'Version control as an undo button',
+    note: 'Git and GitHub taught as safety net first, collaboration tool second — the framing that makes it click for non-developers.',
+  },
+  {
+    name: 'Privacy & safety',
+    note: 'What actually happens to data you share, and how to work on confidential, unpublished, or IRB-governed material without exposing it.',
+  },
+];
+
+const formats = [
+  {
+    name: 'Briefing',
+    length: '60–90 minutes · virtual or in person',
+    note: 'An orientation talk plus live demo, shaped to your audience — a department, a conference session, a team meeting.',
+  },
+  {
+    name: 'Workshop',
+    length: 'Multi-day · virtual or in person',
+    note: 'The flagship format: short pre-work, then hands-on time turning your own research, teaching, or business workflow into something repeatable.',
+  },
+  {
+    name: 'Custom engagement',
+    length: 'Ongoing · virtual or in person',
+    note: 'Embedded support for a department, journal, or team adopting these tools together — setup, review, and follow-up over time.',
+  },
+];
+
+const audiences = [
+  'Economics departments & faculty',
+  'Other academic disciplines',
+  'Editorial & journal operations',
+  'Businesses & professional teams',
+  'Individual researchers',
+];
+
+const faqs = [
+  {
+    q: 'Do I need to already know how to code?',
+    a: "No. Most of the people I work with are beginners at the command line — that's the starting assumption, not an edge case.",
+  },
+  {
+    q: 'Do you teach Claude Code, Codex, or something else?',
+    a: 'Both, and AI tools generally. The workflow habits — context, verification, version control — transfer across tools; I pick the concrete examples to match what your group already uses or is deciding between.',
+  },
+  {
+    q: 'Can I bring sensitive or IRB-governed data to a session?',
+    a: "We can, with the right setup — which is itself part of what a session covers: what a tool does and doesn't do with your data, and how to keep confidential material out of the wrong place.",
+  },
+  {
+    q: 'Can this be customized for my department or firm?',
+    a: 'Yes — that\'s the point of the workshop and custom-engagement formats. Tell me about your group and I\'ll shape the content and examples to it.',
+  },
+  {
+    q: 'What happens after the session?',
+    a: "You leave with a working setup, not just notes — a CLAUDE.md or equivalent, a couple of real workflows, and the free guide below for anything you want to revisit.",
+  },
+];
+---
+<MarketingLayout
+  title="AI Workshops & Consulting — Bryan Cutsinger"
+  description="Hands-on workshops and consulting on Claude Code, Codex, and AI tools generally — for economics departments, other academics, and businesses. Virtual or in person; briefings, multi-day workshops, and custom engagements."
+>
+  <PageHead
+    edition="Workshops & consulting"
+    headline="Put AI to work in your research, teaching, or organization."
+    lede="I run hands-on workshops and consulting engagements on Claude Code, Codex, and AI tools generally — built first for economists, and just as useful for other academics and business teams who want workflows that hold up, not just an impressive demo."
+  />
+
+  <!-- Two-path lead: book, or try the free guide -->
+  <Section variant="surface">
+    <div class="lead">
+      <div class="lead__cta">
+        <Button href="#book" variant="action">Discuss an engagement</Button>
+        <Button href="/ai/guide/" variant="secondary">Start with the free guide</Button>
+      </div>
+      <p class="lead__details">
+        <span class="label">Format</span>
+        Virtual or in person. A single briefing, a multi-day workshop, or an ongoing
+        custom engagement — see the formats below.
+      </p>
+    </div>
+  </Section>
+
+  <!-- The problem -->
+  <Section variant="sunk" width="reading">
+    <div class="head"><h2>Generic AI advice doesn't transfer to research or teaching.</h2></div>
+    <p>
+      Most guidance on using Claude, Codex, or AI tools generally is written for
+      software developers, or aimed at generic office work. It skips the parts that
+      matter most for a researcher, instructor, or analyst: setting up context an
+      assistant can actually use, verifying output against a source before it goes in a
+      paper or a problem set, and keeping confidential or unpublished material out of
+      the wrong place. That's the gap these sessions close — with examples drawn from
+      real research and teaching workflows, not generic demos.
+    </p>
+  </Section>
+
+  <!-- What you'll learn -->
+  <Section variant="surface" id="learn">
+    <div class="head">
+      <h2>What a session covers.</h2>
+      <p class="lede">
+        The same core habits, adapted to your group's discipline and tools.
+      </p>
+    </div>
+    <ul class="ledger">
+      {learn.map((l) => (
+        <li>
+          <span class="ledger__name">{l.name}</span>
+          <span class="ledger__note">{l.note}</span>
+        </li>
+      ))}
+    </ul>
+  </Section>
+
+  <!-- Formats -->
+  <Section variant="sunk" id="formats">
+    <div class="head">
+      <h2>Choose a format.</h2>
+      <p class="lede">Every format is available virtually or in person. Scope and price are worked out per engagement.</p>
+    </div>
+    <ol class="formats">
+      {formats.map((f) => (
+        <li class="format">
+          <p class="format__length label">{f.length}</p>
+          <h3 class="format__name">{f.name}</h3>
+          <p class="format__note">{f.note}</p>
+        </li>
+      ))}
+    </ol>
+  </Section>
+
+  <!-- Who it's for -->
+  <Section variant="surface">
+    <div class="head"><h2>Who it's for.</h2></div>
+    <ul class="chips">
+      {audiences.map((a) => <li>{a}</li>)}
+    </ul>
+  </Section>
+
+  <!-- Proof of work: the free guide, instead of testimonials -->
+  <Section variant="sunk" width="reading">
+    <div class="head"><h2>Try it yourself first.</h2></div>
+    <p class="proof__lede">
+      The free <a href="/ai/guide/">Getting Started with Claude Code</a> guide is the
+      same material a workshop builds on — a self-paced path for economists new to the
+      command line and AI tools. No sign-up, no paywall. Read it before a session to
+      arrive further along, or send it to your group afterward as the reference they
+      come back to.
+    </p>
+    <Button href="/ai/guide/" variant="secondary">Read the free guide</Button>
+  </Section>
+
+  <!-- FAQ -->
+  <Section variant="surface" width="reading">
+    <div class="head"><h2>Questions.</h2></div>
+    <div class="faq">
+      {faqs.map((f) => (
+        <details class="faq__item">
+          <summary>{f.q}</summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </Section>
+
+  <!-- Booking -->
+  <Section variant="ink" id="book">
+    <div class="head head--on-field">
+      <h2>Tell me about your group.</h2>
+      <p class="lede book-lede">
+        Share what you're hoping for and I'll get back to you personally — the more
+        detail on your group and goals, the faster I can shape a proposal.
+      </p>
+    </div>
+    <BookingForm subject="AI workshop inquiry - bryancutsinger.com" />
+  </Section>
+</MarketingLayout>
+
+<style>
+  .head {
+    border-top: 3px double var(--structure);
+    padding-top: var(--sp-6);
+    margin-bottom: var(--sp-8);
+  }
+  .head h2 { max-width: 26ch; margin-bottom: var(--sp-2); }
+  .head .lede { margin-top: var(--sp-3); }
+  .head--on-field { border-top-color: rgba(236, 233, 226, 0.25); }
+
+  /* two-path lead */
+  .lead {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--sp-8) var(--sp-16);
+    align-items: center;
+  }
+  .lead__cta { display: flex; align-items: center; gap: var(--sp-4); flex-wrap: wrap; }
+  .lead__details { margin: 0; color: var(--muted); max-width: 60ch; }
+  .lead__details .label { display: block; margin-bottom: var(--sp-2); }
+
+  /* what you'll learn */
+  .ledger { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--hairline); }
+  .ledger li { display: flex; flex-direction: column; gap: 2px; padding: var(--sp-4) 0; border-bottom: 1px solid var(--hairline); }
+  .ledger__name { font-family: var(--font-display); font-size: 1.15rem; color: var(--ink); }
+  .ledger__note { color: var(--muted); font-size: 0.95rem; }
+
+  /* formats */
+  .formats {
+    list-style: none; margin: 0; padding: var(--sp-8) 0 0;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-12) var(--sp-8);
+    border-top: 0;
+  }
+  .format__length { display: block; margin-bottom: var(--sp-3); }
+  .format__name { font-size: var(--fs-h3); margin: 0 0 var(--sp-3); }
+  .format__note { margin: 0; color: var(--muted); }
+
+  /* who it's for */
+  .chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--sp-3); }
+  .chips li {
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius);
+    padding: var(--sp-3) var(--sp-5);
+    font-family: var(--font-label);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--data);
+  }
+
+  /* proof of work: free guide */
+  .proof__lede { color: var(--muted); margin: 0 0 var(--sp-6); }
+
+  /* FAQ */
+  .faq { border-top: 1px solid var(--hairline); }
+  .faq__item { border-bottom: 1px solid var(--hairline); padding: var(--sp-5) 0; }
+  .faq__item summary {
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: var(--ink);
+    list-style: none;
+  }
+  .faq__item summary::-webkit-details-marker { display: none; }
+  .faq__item summary::before { content: '+ '; color: var(--action); }
+  .faq__item[open] summary::before { content: '– '; }
+  .faq__item p { margin: var(--sp-3) 0 0; color: var(--muted); }
+
+  .book-lede { color: var(--on-field-muted, inherit); }
+
+  @media (max-width: 1100px) {
+    .formats { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 820px) {
+    .lead { grid-template-columns: 1fr; gap: var(--sp-6); }
+    .formats { grid-template-columns: 1fr; gap: var(--sp-8); }
+  }
+</style>

@@ -4,7 +4,7 @@ description: Choosing a model and managing what it costs — the model tiers, re
 draft: false
 ---
 
-Once you can [steer a session](/ai/controlling-claude/), the next thing worth understanding is what each
+Once you can [steer a session](/ai/guide/controlling-claude/), the next thing worth understanding is what each
 session costs — in money or in your usage allowance — and the few knobs that move that
 cost. None of this is hard, and most of it comes down to two choices you make casually
 many times a day: which model answers, and how much room you give it to think.
@@ -49,7 +49,7 @@ in the last section).
 ## Effort and fast mode
 
 Model choice is one dial; two others sit alongside it, and they do different things.
-(These are the cost-and-quality knobs deferred from the [steering chapter](/ai/controlling-claude/),
+(These are the cost-and-quality knobs deferred from the [steering chapter](/ai/guide/controlling-claude/),
 because they belong with cost rather than with the work loop.)
 
 - **Reasoning effort** (`/effort`) governs how much the model deliberates before
@@ -82,7 +82,7 @@ How any of this turns into a bill depends on which of two arrangements you're on
   account and pay per *token* — a chunk of text roughly three-quarters of an English
   word, counted both in and out. There's no monthly pool; every message costs what it
   costs, and bigger models and longer conversations cost more. This is the track that
-  surfaces when you wire Claude into external services; the [API keys chapter](/ai/api-keys-and-secrets/)
+  surfaces when you wire Claude into external services; the [API keys chapter](/ai/guide/api-keys-and-secrets/)
   covers the mechanics and its own spend and rate limits.
 
 For getting started, a paid plan is almost certainly what you want. The API route is
@@ -149,7 +149,7 @@ is keeping context tight — the same habits that keep Claude focused and accura
   unrelated problem set? Clear first. Carrying the data-cleaning conversation into the
   drafting work makes every drafting message more expensive *and* muddies what Claude is
   paying attention to. One focused task per session is the habit from [your first
-  session](/ai/your-first-session/) — it's a cost habit too.
+  session](/ai/guide/your-first-session/) — it's a cost habit too.
 - **`/compact` when a single task runs long.** When one genuine task legitimately needs a
   long conversation, `/compact` summarizes what's happened so far and frees up room
   without losing the thread. Run it at a natural break — between cleaning and estimation,
@@ -177,4 +177,4 @@ allowance — under control.
 ---
 
 That's the cost picture: a model dial, an effort dial, a billing arrangement, and a
-handful of habits that keep a session lean. From here the [guide overview](/ai/) points to what's next.
+handful of habits that keep a session lean. From here the [guide overview](/ai/guide/) points to what's next.

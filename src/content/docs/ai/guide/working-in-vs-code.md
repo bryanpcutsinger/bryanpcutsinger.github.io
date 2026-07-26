@@ -4,8 +4,8 @@ description: Settle into VS Code for real work — open and juggle multiple inte
 draft: false
 ---
 
-By now you've [set up Claude Code](/ai/setting-up-claude-code/) and run a
-[full session](/ai/your-first-session/) inside VS Code's terminal. That's enough to be
+By now you've [set up Claude Code](/ai/guide/setting-up-claude-code/) and run a
+[full session](/ai/guide/your-first-session/) inside VS Code's terminal. That's enough to be
 productive, but real work tends to want two things the bare setup doesn't give you: a
 second terminal so Claude isn't sharing a window with everything else you do, and a
 handful of extensions so VS Code can actually open the files you live in. Both are quick,
@@ -75,7 +75,7 @@ the capability is there from then on.
 This section is deliberately about **installing**, not mastering. The goal is a VS Code
 that can open and handle the files an economist actually works with, so that when a later
 chapter puts Claude inside a real writing or analysis workflow, the tools are already in
-place. Using LaTeX with Claude belongs to the [writing chapter](/ai/writing-papers-and-slides/); this is just the
+place. Using LaTeX with Claude belongs to the [writing chapter](/ai/guide/writing-papers-and-slides/); this is just the
 starter set.
 
 A reasonable kit for teaching and research:
@@ -121,5 +121,5 @@ count, and verify it's current rather than assuming this list is.
 
 With a second terminal to keep Claude's work separate from your own, and the few
 extensions that let VS Code open your real files, the editor is ready for actual projects.
-The [guide overview](/ai/) points to what comes next — putting these pieces to work on a
+The [guide overview](/ai/guide/) points to what comes next — putting these pieces to work on a
 paper, a dataset, or a course, with version control and a writing workflow built on top.

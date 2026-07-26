@@ -6,7 +6,7 @@ draft: false
 
 This is the one part of the guide that's pure setup. It takes about thirty minutes,
 you do it once, and then you never think about it again. You'll need a Mac (macOS 13
-or later) and the **paid Claude plan** from [what Claude Code is](/ai/what-is-claude-code/) —
+or later) and the **paid Claude plan** from [what Claude Code is](/ai/guide/what-is-claude-code/) —
 the free plan doesn't include Claude Code.
 
 We install the command-line tool first, then VS Code, then the extension that ties them
@@ -66,7 +66,7 @@ The browser sign-in page on first launch.
 
 :::note
 If sign-in says your plan doesn't include Claude Code, you're on the free tier. Claude
-Code needs a paid plan (Pro or Max) — see [what you'll need](/ai/what-is-claude-code/#what-youll-need).
+Code needs a paid plan (Pro or Max) — see [what you'll need](/ai/guide/what-is-claude-code/#what-youll-need).
 :::
 
 ## If something went wrong
@@ -163,5 +163,5 @@ A later chapter covers de-identification and the plan, training, and retention d
 full — this is just the part you can't skip on day one.
 :::
 
-That's the whole setup. Next, you'll [run your first session](/ai/your-first-session/) —
+That's the whole setup. Next, you'll [run your first session](/ai/guide/your-first-session/) —
 make a safe practice folder, ask Claude a question, and watch it work.

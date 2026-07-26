@@ -8,14 +8,21 @@ Pages** as a user site (`bryanpcutsinger.github.io`, served at the root). One re
 - `/`, `/about/`, `/speaking/`, `/contact/` — the **professional marketing site**
   (custom Astro pages in `src/pages/`, NOT Starlight). Built out 2026-06-14 — see the
   **Marketing site** section below. This is now the primary front end.
-- `/ai/` — **Getting Started with Claude Code**: a beginner's guide to getting started with
-  Claude Code, written for **academic economists** on a Mac who are new to the
-  command line and AI tools. **Framed as a LEAN pre-read** (see the Goal below): a
-  short *required path* of **8 pages** (orientation + set up + get oriented) that
-  gets a reader self-sufficient, with the other **9 posts demoted to a collapsed
-  "Reference (for after)" group** — good material, but for when a topic comes up,
-  not pre-read. (Framed for an economist audience — examples draw on **teaching
-  economics and doing economic research**, balanced roughly evenly. Stay
+- `/ai/` — **AI workshops & consulting** (built 2026-07-26): a custom Astro marketing
+  page (`src/pages/ai/index.astro`, NOT Starlight — same system as Speaking) pitching
+  Bryan's hands-on workshops and consulting on Claude Code, Codex, and AI tools
+  generally, for economics departments, other academics, and businesses. Replaced the
+  guide overview that used to live at this route. See the **Marketing site** section
+  below.
+- `/ai/guide/` — **Getting Started with Claude Code**: the free beginner's guide,
+  written for **academic economists** on a Mac who are new to the command line and AI
+  tools. Nested here (was `/ai/`) since 2026-07-26 so `/ai/` could become the workshops
+  page above; the new page links into this guide as its primary CTA. **Framed as a LEAN
+  pre-read** (see the Goal below): a short *required path* of **8 pages** (orientation +
+  set up + get oriented) that gets a reader self-sufficient, with the other **9 posts
+  demoted to a collapsed "Reference (for after)" group** — good material, but for when a
+  topic comes up, not pre-read. (Framed for an economist audience — examples draw on
+  **teaching economics and doing economic research**, balanced roughly evenly. Stay
   beginner-friendly: the reader is a fellow economist new to these tools, not a
   developer. Keep new content in this academic-economist register.)
 - **Goal / guiding lens (2026-06-13):** the site exists to get a reader *self-sufficient
@@ -126,8 +133,12 @@ credentials = interim director of the **AIER Sound Money Project**, Associate Ed
 - **Content lives in `src/content/docs/`** (Starlight's `docs` collection, defined
   in `src/content.config.ts` via `docsLoader()` + `docsSchema()`):
   - `docs/index.mdx` → `/` (splash landing)
-  - `docs/ai/index.mdx` → `/ai/` (overview: stage cards + "What you'll need" table)
-  - `docs/ai/<slug>.md` → `/ai/<slug>/` (the 17 guide posts; flat slugs)
+  - `docs/ai/guide/index.mdx` → `/ai/guide/` (overview: stage cards + "What you'll need"
+    table; nested under `guide/` since 2026-07-26 so `/ai/` could become the custom
+    workshops marketing page — see the "What this is" bullets and "Claude Code guide"
+    section)
+  - `docs/ai/guide/<slug>.md` → `/ai/guide/<slug>/` (the 18 guide posts; flat slugs
+    under `guide/`)
   - `public/templates/CLAUDE-md-economist-template.md` → `/templates/...` (a
     downloadable economist CLAUDE.md starter, linked from `claude-md-and-memory.md`)
 - **Frontmatter is Starlight's** (`title`, `description`, `draft`, optionally
@@ -212,7 +223,7 @@ user site `bryanpcutsinger/bryanpcutsinger.github.io`, public).
   to these tools — examples from teaching and research, balanced (syllabi, problem
   sets, lecture notes; data cleaning, replication, working papers, citations).
   Beginner-friendly, not developer-facing. Voice: practical, low-hype, second person.
-  **Never hand-edit `src/content/docs/ai/` here — it's a generated copy.**
+  **Never hand-edit `src/content/docs/ai/guide/` here — it's a generated copy.**
 - **A new sub-site:** add content under `src/content/docs/<name>/`, give it its own
   `sidebar` group in `astro.config.mjs` (and/or a splash index). It inherits the
   brand theme automatically.
@@ -326,8 +337,9 @@ Markdown pipeline):
 
 ## Claude Code guide — imported from its own repo (split out 2026-06-17)
 
-The `/ai/` "Getting Started with Claude Code" guide is **no longer hand-authored in
-this repo**. Its source of truth is `bryanpcutsinger/claude-code-guide` (private; local
+The `/ai/guide/` "Getting Started with Claude Code" guide (moved from `/ai/` on
+2026-07-26 — see the "What this is" bullets) is **no longer hand-authored in this
+repo**. Its source of truth is `bryanpcutsinger/claude-code-guide` (private; local
 folder `~/Projects/claude-code-guide`, a top-level sibling of `Website`). This repo
 holds a **generated, committed copy** — same source-of-truth model as the micro course,
 but for Starlight content. Plan: `~/.claude/plans/would-it-make-sense-humble-cupcake.md`.
@@ -338,7 +350,7 @@ npm run import:guide        # scripts/import-guide.sh, via gh
 ```
 It pulls from the guide repo (default branch) over `gh` — no local cross-folder
 dependency — and writes:
-- `posts/**` → `src/content/docs/ai/**` (**clear-and-rewrite**: this dir is 100%
+- `posts/**` → `src/content/docs/ai/guide/**` (**clear-and-rewrite**: this dir is 100%
   generated, so a renamed/deleted source post can't leave an orphan live page),
 - `guide.manifest.json` → `src/data/guide-sidebar.json` (drives the Starlight sidebar
   via the `import` in `astro.config.mjs`),
@@ -346,10 +358,21 @@ dependency — and writes:
   site-owned files like `favicon.svg` or `teaching/**`; this is how
   `public/templates/CLAUDE-md-economist-template.md` arrives).
 
-No notes-strip / no path-rewrite needed (no instructor notes in the guide). The global
-`postbuild` `INSTRUCTOR NOTES` gate still runs but is a harmless no-op here.
+**Link/slug rewrite (added 2026-07-26, part of the `/ai/` → `/ai/guide/` nesting):**
+the source repo's posts and `guide.manifest.json` write plain absolute `/ai/...` links
+and slugs (it has no idea this repo nests the guide one level deeper). `import-guide.sh`
+rewrites both after each fetch — `/ai/<slug>/` → `/ai/guide/<slug>/` in post content
+(Markdown links, `href=`, and YAML `link:` forms) and `"slug": "ai..."` →
+`"slug": "ai/guide..."` in the sidebar JSON — then fails closed if any un-rewritten
+`/ai/` link survives. This is a single pass over freshly-fetched, pristine content each
+run (fetch always overwrites from the source repo first), so it does not need to be
+idempotent against its own prior output — never hand-touch the generated files to
+"fix" a link; fix the rewrite in the script instead.
 
-**Rules:** never hand-edit `src/content/docs/ai/` or `src/data/guide-sidebar.json` —
+No notes-strip needed (no instructor notes in the guide). The global `postbuild`
+`INSTRUCTOR NOTES` gate still runs but is a harmless no-op here.
+
+**Rules:** never hand-edit `src/content/docs/ai/guide/` or `src/data/guide-sidebar.json` —
 edit the source repo + re-import (the next import clobbers local edits). The generated
 files **must stay committed** (CI builds from local files only; it never runs the
 import). `posts/` in the guide repo is **flat** (the importer's listing is via the git
@@ -451,7 +474,40 @@ the intro, above the publication lists.
   computed `variantOf()` helper (robust to the conditionally-rendered chapters/books sections),
   not hardcoded variants.
 
-## Current status (as of 2026-07-24)
+## Current status (as of 2026-07-26)
+
+**Latest (2026-07-26) — `/ai/` reoriented from the guide overview to an AI workshops &
+consulting marketing page; the guide moved to `/ai/guide/`:** Bryan is launching paid
+workshops/consulting on Claude Code, Codex, and AI tools generally, for economics
+departments, other academics, and businesses (virtual or in person). Rather than bolt
+that onto the Starlight guide, `/ai/` is now a custom Astro page
+(`src/pages/ai/index.astro`, same system as Speaking: `MarketingLayout` + `PageHead` +
+`Section` + `Button` + `BookingForm`) — problem framing, a "what a session covers"
+list, three format tiers (briefing / workshop / custom engagement, no pricing shown,
+per Bryan's decision), a "who it's for" chip list, a free-guide CTA + real credentials
+in place of testimonials (none exist yet for this fresh offering — deliberately
+omitted, not placeholdered, matching how `testimonials.json` empty already auto-hides
+that block on Speaking), an FAQ, and a booking section reusing `BookingForm` verbatim.
+Planned via a blind dual-model consult (deep-reasoner + Codex, run in parallel, each
+independently reading the repo) per house rules for the correctness-critical routing
+change, since both legs had to independently confirm the same facts before any file
+moved: Starlight derives routes straight from `src/content/docs/**` file paths, so
+nesting the guide under `docs/ai/guide/` (from `docs/ai/`) shifts its routes to
+`/ai/guide/` and `/ai/guide/<slug>/` with no `astro.config.mjs` change, and removing
+`ai/index.mdx` from the collection is what frees the literal `/ai/` route for the new
+page (no collision). Landed: the guide's 18 posts + overview moved under
+`src/content/docs/ai/guide/`; `scripts/import-guide.sh` updated to write there and to
+rewrite the guide's absolute `/ai/...` links and `guide-sidebar.json` slugs to
+`/ai/guide/...` on every future import (fail-closed check added — see the "Claude Code
+guide" section); no nav change needed (`HeaderLinks.astro`'s single "AI" link already
+pointed at `/ai/`, so it now reaches the new page, with the guide reachable only via the
+in-page CTA). Verified: `npm run build` green (64 pages, notes gate passed, sitemap has
+both `/ai/` and `/ai/guide/**`), a synthetic dry-run of the link/slug rewrite regex, and
+a `npm run dev` browser pass (nav → new page, "read the free guide" CTA → `/ai/guide/`
+→ a guide post, ink-section text contrast checked). Not yet committed/pushed — pending
+Bryan's review in `dev`.
+
+## Earlier status (2026-07-24)
 
 **Latest (2026-07-24) — topic-page UX/a11y pass ("Track A" of an external page review):**
 (1) **Real bug fixed:** both topic templates sized their H1 with `var(--fs-display-lg)` —

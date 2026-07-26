@@ -4,7 +4,7 @@ description: How to steer a Claude session on real work — the explore, plan, i
 draft: false
 ---
 
-In [your first session](/ai/your-first-session/) you approved one small edit: Claude
+In [your first session](/ai/guide/your-first-session/) you approved one small edit: Claude
 showed you a diff, you said yes, the file changed. That single approval is the whole game
 in miniature. Real work is just more of it — a data-cleaning script with a dozen edits, a
 paper section that touches three files — and approving a dozen diffs one at a time gets
@@ -166,7 +166,7 @@ expect — at which point they drifted into hunting for specifications that deli
 
 A check that *runs* and *reports* turns "I think this is fine" into "here is the evidence
 it's fine" — which is the standard your own research already holds itself to. This is the
-same reviewer-of-record stance from the [CLAUDE.md chapter](/ai/claude-md-file/), now
+same reviewer-of-record stance from the [CLAUDE.md chapter](/ai/guide/claude-md-file/), now
 scaled from one edit to a whole run: a CLAUDE.md shifts the odds in your favor, plan mode
 lets you steer before the work happens, and a runnable check confirms it afterward. None
 of them excuses you from the final read.
@@ -182,4 +182,4 @@ You can now steer a session, not just approve a single edit: explore before acti
 before implementing, choose how often Claude pauses, and verify the result with a check
 that runs. The one knob deliberately left out here is *which model* does the work and what
 it costs — a quality-and-cost dial that deserves its own treatment, and gets it in the
-next chapter. The [guide overview](/ai/) maps the rest of the guide.
+next chapter. The [guide overview](/ai/guide/) maps the rest of the guide.

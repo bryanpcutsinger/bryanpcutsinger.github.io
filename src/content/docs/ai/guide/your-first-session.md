@@ -4,7 +4,7 @@ description: Run Claude Code end to end on a safe practice folder — ask it a q
 draft: false
 ---
 
-With Claude Code [installed](/ai/setting-up-claude-code/), the best first move is a
+With Claude Code [installed](/ai/guide/setting-up-claude-code/), the best first move is a
 low-stakes one: a throwaway folder where you can poke around, make a mistake, and learn
 the rhythm before you point it at a real paper or dataset.
 
@@ -111,4 +111,4 @@ sessions instead, run `claude` and then `/resume`.)
 ---
 
 That's a full session, start to finish — the same loop you'll use on real work. From
-here, the [guide overview](/ai/) points to what's next.
+here, the [guide overview](/ai/guide/) points to what's next.

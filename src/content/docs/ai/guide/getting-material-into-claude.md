@@ -9,7 +9,7 @@ in*. A long instruction is tedious to type. A draft lives in a Word file, the da
 dictionary is a PDF, and the thing you actually want to show Claude is a figure or an
 error message on your screen. This chapter is about all three: talking instead of typing,
 converting documents into the format Claude reads best, and handing it images and PDFs
-directly. None of it requires anything beyond [your first session](/ai/your-first-session/).
+directly. None of it requires anything beyond [your first session](/ai/guide/your-first-session/).
 
 ## Talking instead of typing
 
@@ -131,4 +131,4 @@ the wording against the source before they go anywhere.
 
 Voice for the asking, Markdown for your documents, images and PDFs for everything that
 isn't text: between them you can get almost anything in front of Claude without retyping or
-reformatting it by hand. The [guide overview](/ai/) points to what's next.
+reformatting it by hand. The [guide overview](/ai/guide/) points to what's next.

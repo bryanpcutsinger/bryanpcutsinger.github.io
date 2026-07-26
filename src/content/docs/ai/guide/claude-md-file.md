@@ -4,7 +4,7 @@ description: The single highest-leverage habit — a CLAUDE.md file that tells C
 draft: false
 ---
 
-In [your first session](/ai/your-first-session/) you may have noticed yourself
+In [your first session](/ai/guide/your-first-session/) you may have noticed yourself
 repeating things: *I'm on a Mac, explain the shell command first, default to Python,
 don't invent citations.* Type those out once per session and they cost you a few minutes
 each time. Write them down once in a **CLAUDE.md** file and Claude knows them from the
@@ -85,7 +85,7 @@ And one category that must **never** go in a CLAUDE.md: **secrets.** No API keys
 passwords, no tokens. The file is read into context every single session and is exactly
 the kind of thing that ends up committed to a shared repository — both ways to leak a
 credential you meant to keep private. Keys belong in environment variables; the [API keys
-& secrets](/ai/api-keys-and-secrets/) chapter covers how.
+& secrets](/ai/guide/api-keys-and-secrets/) chapter covers how.
 
 ## Your house style lives here
 

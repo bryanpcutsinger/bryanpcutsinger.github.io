@@ -46,7 +46,7 @@ place you control; your scripts, your notebooks, and Claude all point at the *na
 That indirection is what keeps the actual characters out of everywhere they'd otherwise
 end up. Three places they must **never** end up:
 
-- **Not in a CLAUDE.md or settings file.** Your [CLAUDE.md](/ai/claude-md-file/) is read
+- **Not in a CLAUDE.md or settings file.** Your [CLAUDE.md](/ai/guide/claude-md-file/) is read
   into context at the start of every single session, and both it and Claude Code's
   `settings.json` are exactly the kind of files that get committed to a shared repository —
   two clean ways to leak a credential you meant to keep private. Standing instructions and
@@ -106,7 +106,7 @@ Anthropic documentation rather than memorize.
 The deeper question of *which* billing model to choose — a plan seat versus a
 pay-as-you-go API key — along with model tiers, effort levels, and the rolling and weekly
 limits on plans, belongs to its own chapter on
-[models, cost, and usage limits](/ai/models-cost-and-limits/). This one is just the key and the discipline
+[models, cost, and usage limits](/ai/guide/models-cost-and-limits/). This one is just the key and the discipline
 around it.
 
 ---
@@ -115,5 +115,5 @@ A key is a credential, so you treat it like one: store it once in an environment
 refer to it by name, and keep it out of files, commits, and printed output. That habit is
 the floor for the next two topics — connecting Claude to your apps, and working in the
 cloud — both of which lean on credentials you'll now know how to handle. Those are
-[connectors & MCP](/ai/connectors-and-mcp/) and [the Claude app & the
-cloud](/ai/claude-app-and-cloud/).
+[connectors & MCP](/ai/guide/connectors-and-mcp/) and [the Claude app & the
+cloud](/ai/guide/claude-app-and-cloud/).
