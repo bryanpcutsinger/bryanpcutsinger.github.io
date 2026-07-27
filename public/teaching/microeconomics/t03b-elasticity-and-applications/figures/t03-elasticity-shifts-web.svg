@@ -102,11 +102,12 @@
     <line class="curve" x1="70" y1="110" x2="332" y2="372" />
     <text class="clabel" x="338" y="366" text-anchor="start">Demand</text>
 
-    <!-- dashed accent arrows ALONGSIDE the demand line (both directions):
-         the buyer slides along one unchanged curve; offset so they never
-         sit on the line itself -->
+    <!-- dashed accent arrows ALONGSIDE the demand line, ONE PER SIDE as in
+         UE Fig 8.4A: the down-the-curve arrow rides the upper-right side,
+         the up-the-curve arrow the lower-left side (the buyer slides along
+         one unchanged curve; both offset clear of the line and dots) -->
+    <line class="slide" x1="176" y1="200" x2="286" y2="310" marker-end="url(#arrowAccent)" />
     <line class="slide" x1="224" y1="280" x2="143" y2="199" marker-end="url(#arrowAccent)" />
-    <line class="slide" x1="154" y1="226" x2="235" y2="307" marker-end="url(#arrowAccent)" />
 
     <!-- accent dots at the three crossings -->
     <circle class="dot" cx="151" cy="191" r="4" />
