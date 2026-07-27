@@ -106,8 +106,8 @@
          UE Fig 8.4A: the down-the-curve arrow rides the upper-right side,
          the up-the-curve arrow the lower-left side (the buyer slides along
          one unchanged curve; both offset clear of the line and dots) -->
-    <line class="slide" x1="176" y1="200" x2="286" y2="310" marker-end="url(#arrowAccent)" />
-    <line class="slide" x1="224" y1="280" x2="143" y2="199" marker-end="url(#arrowAccent)" />
+    <line class="slide" x1="159" y1="183" x2="267" y2="291" marker-end="url(#arrowAccent)" />
+    <line class="slide" x1="251" y1="307" x2="143" y2="199" marker-end="url(#arrowAccent)" />
 
     <!-- accent dots at the three crossings -->
     <circle class="dot" cx="151" cy="191" r="4" />
