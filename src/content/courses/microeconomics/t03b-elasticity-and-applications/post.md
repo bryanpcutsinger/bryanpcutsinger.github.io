@@ -27,7 +27,7 @@ note: "Self-contained — assumes no access to the textbooks. Source-of-truth fo
 
 # Elasticity and the Applications of Demand
 
-The previous post established the machinery this one puts to work. The *first law of demand* says that at a higher price people buy a smaller quantity of a good, and at a lower price a larger one, holding everything else the same. Plotted with price up the vertical axis and quantity along the horizontal, that traces a demand curve sloping downward to the right and never upward. Why does it slope down? Because of *marginal personal worth*: the most you would pay for one more unit falls as you already have more, so each additional unit is worth less than the one before, and the curve that plots worth against quantity tilts downward. That diminishing worth is the engine under the whole law.
+The previous post established the machinery this one puts to work. The *first law of demand* says that at a higher price people buy a smaller quantity of a good, and at a lower price a larger one, holding everything else the same. Plotted with price up the vertical axis and quantity along the horizontal, that traces a demand curve sloping downward to the right and never upward. Why does it slope down? Because of *marginal personal worth*: the most you would pay for one more unit falls the more you already have, so each additional unit is worth less than the one before, and the curve that plots worth against quantity tilts downward. That diminishing worth is the engine under the whole law.
 
 None of this assumes buyers carry a numerical schedule in their heads or do arithmetic at the register; the law describes how people behave when their options change, not what they consciously think. What the first law does not tell us is how much quantity moves when price changes, what that does to a seller's revenue, why time changes the answer, or why the same dollar charge can send the better grade of a good to the far side of the country. Those are this post's questions.
 
@@ -73,7 +73,7 @@ One practical question remains before you can calculate anything: a percentage c
 
 Here (Q&#8321;, P&#8321;) and (Q&#8322;, P&#8322;) are the two points you are comparing, and the sign is ignored as usual. Try it on one step: price falls from $6 to $5 while quantity rises from 5 to 6. The quantity change of 1, measured against the midpoint quantity of 5.5, is 18.2 percent; the price change of $1, measured against the midpoint price of $5.50, is also 18.2 percent. So e = 18.2/18.2 = 1: unit elastic, exactly.
 
-Here is a demand schedule with the elasticity between successive points worked out with the midpoint formula, plus the market value (price times quantity) at each.
+Here is a demand schedule with the elasticity between successive points computed by the midpoint formula, plus the market value (price times quantity) at each.
 
 | Price | Quantity | Market value | Going down one row: % price cut (midpoint) | % quantity rise (midpoint) | Elasticity |
 |---|---|---|---|---|---|
@@ -90,7 +90,7 @@ Here is a demand schedule with the elasticity between successive points worked o
 
 Two features jump out. First, elasticity changes as you move along a straight-line curve: large at high prices near the top, small at low prices near the bottom, passing through one right at the step where the market-value column flattens at its peak. So you cannot speak of "the" elasticity of a demand curve as a single number; you have to say at what price.
 
-Why does the same straight line give different elasticities? Because a percentage depends on its base. The figure below lets you watch this happen. The two dots mark a one-unit step on the line: between them, price falls by $1 and quantity rises by 1. The readout underneath runs the midpoint formula on that step, just as we did above. Near the top of the line, a $1 cut is a small percentage of a high price, while one more unit is a large percentage of a small quantity, so the ratio is large. Near the bottom, the same $1 and the same one unit are set against a low price and a large quantity, so the ratio is small. The step itself never changes; only the bases the percentages are measured against do.
+Why does the same straight line give different elasticities? Because a percentage depends on its base. The figure below lets you watch the bases do the work. The two dots mark a one-unit step on the line: between them, price falls by $1 and quantity rises by 1. The readout underneath runs the midpoint formula on that step, just as we did above. Near the top of the line, a $1 cut is a small percentage of a high price, while one more unit is a large percentage of a small quantity, so the ratio is large. Near the bottom, the same $1 and the same one unit are set against a low price and a large quantity, so the ratio is small. The step itself never changes; only the bases the percentages are measured against do.
 
 <figure class="econ-figure" style="margin:1.5em 0;">
 <iframe src="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ue8-1-interactive.html" title="Drag the point along the straight demand line and watch the midpoint-formula elasticity change: elastic near the top, unit-elastic where the step straddles the midpoint, inelastic near the bottom." loading="lazy" style="width:100%; max-width:520px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03b-ue8-1-interactive.html">Open the interactive figure directly</a>.</p></iframe>
@@ -117,7 +117,7 @@ The whole thing fits in a small grid.
 | **Price rises** | Total revenue falls | Unchanged | Total revenue rises |
 | **Price falls** | Total revenue rises | Unchanged | Total revenue falls |
 
-This is why you can never say in the abstract whether a seller should raise or lower price to make more money; it depends entirely on where the seller sits on the demand curve. It also lands on a point worth carrying forward: a seller raising revenue by exploiting inelastic demand is not the same as buyers being better off.
+So you can never say in the abstract whether a seller should raise or lower price to make more money; the answer depends entirely on where the seller sits on the demand curve. One point is worth carrying forward: a seller raising revenue by exploiting inelastic demand is not the same as buyers being better off.
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
@@ -148,7 +148,7 @@ Gasoline is the standard case. Double the price overnight and consumption falls 
 <p>Someone insists a 10 percent gas-price rise will not change how much he drives next week, so the law of demand must be broken. Where is the flaw in that reasoning, and what would you expect his driving to look like after three years?</p>
 </aside>
 
-The neat way to picture this: any single demand curve is one member of a *fan* of curves radiating from the original price-quantity point. The short-run curve through that point is steep, because little adjustment has happened yet; the long-run curve through the same point is flatter, because more adjustment has accumulated. That fan is the visual signature of the second law.
+The neat way to picture the buildup: any single demand curve is one member of a *fan* of curves radiating from the original price-quantity point. The short-run curve through that point is steep, because little adjustment has happened yet; the long-run curve through the same point is flatter, because more adjustment has accumulated. That fan is the visual signature of the second law.
 
 To read the figure below, start at the point where every curve meets: gasoline sells at the price P₁, and drivers buy the quantity Q. Then the price falls to P₂. In the first weeks the steep curve 1 is the one that applies, so quantity moves only from Q out to Q₁; people still have the same cars and the same commutes. As the months pass, the operative curve flattens through 2, 3, and 4, and the quantity bought at that same price P₂ climbs to Q₂, then Q₃, then Q₄. Once every adjustment has run its course, the flattest curve L takes over, and purchases settle at Qₗ, far to the right of where they began. The price fell once, but the response to it keeps building for years. That is what it means for demand to grow more elastic with time.
 
@@ -170,7 +170,7 @@ The last is the subtlest, and it bridges to a later topic. When such a seller wa
 
 ## Income Shifts Demand, and Income Elasticity Measures by How Much
 
-A change in price moves buyers along a demand curve. A change in income moves the curve itself. For most goods, higher income raises demand, shifting the whole curve rightward roughly in proportion to the income gain; economists call these *normal* goods. Some goods respond more than proportionally, called *superior* goods, and some less than proportionally, called *inferior* goods. The same good can even switch categories as you climb: cheap wine may be a superior good at a low income, while at a higher income your wine spending moves to better bottles instead.
+A change in price moves buyers along a demand curve. A change in income moves the curve itself. For most goods, higher income raises demand, shifting the whole curve rightward roughly in proportion to the income gain; economists call these *normal* goods. Some goods respond more than proportionally, called *superior* goods, and some less than proportionally, called *inferior* goods. The same good can even switch categories as income climbs: cheap wine may be a superior good at a low income, while at a higher income your wine spending moves to better bottles instead.
 
 How much an income change moves demand is measured exactly the way we measured price responsiveness, with a ratio of percentage changes:
 
@@ -227,7 +227,7 @@ A good's price can fall relative to others even when its dollar price rises. Sup
 
 The same lens dissolves a seeming paradox. Why do people wait in line for small, run-down apartments while bigger, better ones sit available with no waiting list? Not because anyone prefers cramped to spacious. The better apartments are *priced* higher, which reduces the quantity demanded for them and clears the line, while the cheap ones are priced low enough to draw a crowd. The preference for more and better is intact; the price did the work.
 
-This relative-price idea does real work in a striking, memorably named application: the "shipping the good apples out" theorem, due to Alchian and Allen.
+The relative-price idea does real work in a memorably named application: the "shipping the good apples out" theorem, due to Alchian and Allen.
 
 ### Adding the Same Charge to Two Goods Sends the Better One Away
 
