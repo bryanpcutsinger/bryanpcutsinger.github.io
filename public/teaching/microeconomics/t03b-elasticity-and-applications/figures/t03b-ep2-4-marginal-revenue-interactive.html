@@ -10,8 +10,11 @@
   t03b's OWN demand schedule (Table 8.1, the post's revenue grid) so the figure IS
   that table drawn as marginal-revenue rectangles, zero drift.
 
-  FAMILY F4 (area accounting). Geometry class: single-panel, viewBox 480x480,
-  aspect-ratio 1/1, max-width 480px.
+  FAMILY F4 (area accounting). Geometry class: single-panel, viewBox 440x540,
+  aspect-ratio 4/5, max-width 520px — realigned 2026-07-26 (instructor) to match
+  the section's other figures (ue8-1, ue8-2, fan: same 4/5 frame, same plain
+  axis-title style). Y-axis title simplified to "Price ($)": marginal revenue
+  appears only as the dashed accent tick, and the course never draws an MR curve.
 
   MODEL: demand P = 11 - Q (Q=1->$10, Q=2->$9, ... Q=10->$1; TR = P*Q).
     Selling the Qth unit means moving from Q-1 units at the old price P(Q-1) to Q
@@ -34,7 +37,7 @@
   / deadweight vocabulary appears anywhere (verbal-marginal + vocabulary lock).
 
   GEOMETRY / coordinate frame:
-    Data origin (Q=0, $0) at pixel (72, 280). x: px = 72 + Q*35. y: px = 280 - P*22.5.
+    Data origin (Q=0, $0) at pixel (76, 356). x: px = 76 + Q*30. y: px = 356 - P*28.
     Draggable focus unit Q in [2, 10], integer steps (the schedule is discrete units).
     Default / no-JS state = selling the 2nd unit (old price $10 -> new price $9),
     which the static base markup below matches exactly.
@@ -72,7 +75,7 @@
     -webkit-font-smoothing: antialiased;
   }
   /* min-width:0 lets the figure scale DOWN on phones instead of clipping. */
-  .fig { width: 100%; max-width: 480px; min-width: 0; }
+  .fig { width: 100%; max-width: 520px; min-width: 0; }
   svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
 
   /* structural strokes */
@@ -125,7 +128,7 @@
      and the readout. The script only ATTACHES drag / keyboard / live re-rendering,
      stepping the focus unit Q along the demand line. -->
 <div class="fig">
-  <svg id="fig" viewBox="0 0 480 480" role="group"
+  <svg id="fig" viewBox="0 0 440 540" role="group"
        aria-label="A downward-sloping demand line, price equals eleven minus quantity. Selling one more unit forces the price down on every unit. The revenue on the new unit is drawn as a tall gain rectangle, and the price cut on the units already sold is drawn as a thin loss rectangle above it. Marginal revenue is the gain minus the loss, which is less than the price. Drag the point along the demand line to sell one more unit and watch marginal revenue fall and eventually turn negative.">
     <title>Interactive marginal revenue as gain minus loss</title>
     <defs>
@@ -142,57 +145,59 @@
 
     <!-- money rectangles (drawn first, under the demand line and points) -->
     <!-- LOSS: price cut $1 over the 1 inframarginal unit, x[0,1] y[$9,$10] -->
-    <rect id="lossRect" class="loss" x="72" y="55" width="35" height="22.5" />
+    <rect id="lossRect" class="loss" x="76" y="76" width="30" height="28" />
     <!-- GAIN: revenue on the new (2nd) unit, $9 over x[1,2] down to the axis -->
-    <rect id="gainRect" class="gain" x="107" y="77.5" width="35" height="202.5" />
+    <rect id="gainRect" class="gain" x="106" y="104" width="30" height="252" />
 
     <!-- axes (over the rectangle fills; extended past the data so the demand
          line and arrowheads do not crowd) -->
-    <line class="axis" x1="72" y1="280" x2="452" y2="280" marker-end="url(#arrow)" />
-    <line class="axis" x1="72" y1="280" x2="72"  y2="28"  marker-end="url(#arrow)" />
+    <line class="axis" x1="76" y1="356" x2="410" y2="356" marker-end="url(#arrow)" />
+    <line class="axis" x1="76" y1="356" x2="76"  y2="36"  marker-end="url(#arrow)" />
 
     <!-- price + MR guide lines for the default (Q=2) state -->
-    <line id="dropP"   class="drop"  x1="72" y1="77.5" x2="142" y2="77.5" />
-    <line id="guideMR" class="guide" x1="72" y1="100"  x2="142" y2="100" />
+    <line id="dropP"   class="drop"  x1="76" y1="104" x2="136" y2="104" />
+    <line id="guideMR" class="guide" x1="76" y1="132"  x2="106" y2="132" />
 
     <!-- demand line P = 11 - Q, from (0,$11) to (10,$1) -->
-    <line id="demand" class="curve" x1="72" y1="32.5" x2="422" y2="257.5" />
+    <line id="demand" class="curve" x1="76" y1="48" x2="376" y2="328" />
 
     <!-- old-price point (1,$10) and new-price point (2,$9) -->
-    <circle id="ptOld" class="pt-old" cx="107" cy="55" r="4.5" />
+    <circle id="ptOld" class="pt-old" cx="106" cy="76" r="4.5" />
 
     <!-- static $10 old-price tick + axis titles + x-axis unit numbers -->
-    <text class="tick" x="64" y="55"  text-anchor="end" dominant-baseline="middle">$10</text>
-    <text class="origin"  x="64"  y="294" text-anchor="end">O</text>
-    <text class="axtitle" x="247" y="322" text-anchor="middle">Quantity</text>
-    <text class="axtitle" x="20"  y="150" text-anchor="middle"
-          transform="rotate(-90 20 150)">Price / marginal revenue ($)</text>
+    <text class="tick" x="68" y="76"  text-anchor="end" dominant-baseline="middle">$10</text>
+    <text class="origin"  x="68"  y="372" text-anchor="end">O</text>
+    <text class="axtitle" x="226" y="400" text-anchor="middle">Quantity</text>
+    <text class="axtitle" x="12"  y="202" text-anchor="middle"
+          transform="rotate(-90 12 202)">Price ($)</text>
     <g class="tick" text-anchor="middle">
-      <text x="107" y="298">1</text><text x="142" y="298">2</text>
-      <text x="177" y="298">3</text><text x="212" y="298">4</text>
-      <text x="247" y="298">5</text><text x="282" y="298">6</text>
-      <text x="317" y="298">7</text><text x="352" y="298">8</text>
-      <text x="387" y="298">9</text><text x="422" y="298">10</text>
+      <text x="106" y="374">1</text><text x="136" y="374">2</text>
+      <text x="166" y="374">3</text><text x="196" y="374">4</text>
+      <text x="226" y="374">5</text><text x="256" y="374">6</text>
+      <text x="286" y="374">7</text><text x="316" y="374">8</text>
+      <text x="346" y="374">9</text><text x="376" y="374">10</text>
     </g>
-    <text class="curvelbl" x="426" y="256" text-anchor="start">Demand</text>
+    <!-- curve label at the UPPER tip: the draggable point travels the whole
+         lower tail (out to Q=10), so a tail-end label would collide with it -->
+    <text class="curvelbl" x="86" y="46" text-anchor="start">Demand</text>
 
     <!-- live price + MR axis labels (Q=2 state) -->
-    <text id="lblP"  class="lbl-p"  x="64" y="77.5" text-anchor="end" dominant-baseline="middle">$9</text>
-    <text id="lblMR" class="lbl-mr" x="64" y="100"  text-anchor="end" dominant-baseline="middle">MR $8</text>
+    <text id="lblP"  class="lbl-p"  x="68" y="104" text-anchor="end" dominant-baseline="middle">$9</text>
+    <text id="lblMR" class="lbl-mr" x="68" y="132"  text-anchor="end" dominant-baseline="middle">MR $8</text>
 
     <!-- draggable new-price point (2,$9) + hit targets -->
-    <line id="hitCurve" class="hit-curve" x1="72" y1="32.5" x2="422" y2="257.5" />
-    <circle id="hit" class="hit" cx="142" cy="77.5" r="22" />
-    <circle id="pt"  class="pt"  cx="142" cy="77.5" r="7" />
-    <circle id="ptFocus" class="pt-focus hit" cx="142" cy="77.5" r="22"
+    <line id="hitCurve" class="hit-curve" x1="76" y1="48" x2="376" y2="328" />
+    <circle id="hit" class="hit" cx="136" cy="104" r="22" />
+    <circle id="pt"  class="pt"  cx="136" cy="104" r="7" />
+    <circle id="ptFocus" class="pt-focus hit" cx="136" cy="104" r="22"
             tabindex="0" role="slider" aria-label="Unit being sold, along the demand line"
             aria-valuemin="2" aria-valuemax="10" aria-valuenow="2"
             aria-valuetext="Selling the 2nd unit: gain $9 on the new unit, lose $1 on the 1st -- marginal revenue $8." />
 
     <!-- readout band -->
-    <line class="sep" x1="44" y1="336" x2="436" y2="336" />
-    <text id="rHint" class="r-hint" text-anchor="middle"><tspan x="240" y="356">Selling the 2nd unit: gain $9 on the new unit,</tspan><tspan x="240" y="372">lose $1 on the 1st &#8212; marginal revenue $8.</tspan></text>
-    <text id="rTrade" class="r-trade" text-anchor="middle"><tspan x="240" y="400">Marginal revenue ($8) is below the price ($9), because the new</tspan><tspan x="240" y="418">unit&#8217;s price is cut on the old unit too.</tspan></text>
+    <line class="sep" x1="44" y1="428" x2="396" y2="428" />
+    <text id="rHint" class="r-hint" text-anchor="middle"><tspan x="220" y="448">Selling the 2nd unit: gain $9 on the new unit,</tspan><tspan x="220" y="464">lose $1 on the 1st &#8212; marginal revenue $8.</tspan></text>
+    <text id="rTrade" class="r-trade" text-anchor="middle"><tspan x="220" y="492">Marginal revenue ($8) is below the price ($9),</tspan><tspan x="220" y="510">because the new unit&#8217;s price is cut on the old unit too.</tspan></text>
   </svg>
   <noscript>
     <p class="fallback">JavaScript is off, so this frame is a still image showing the
@@ -223,7 +228,7 @@
   var NS = 'http://www.w3.org/2000/svg';
 
   // pixel frame + scale (mirrors the static SVG markup above)
-  var X0 = 72, Y0 = 280, DX = 35, DY = 22.5;
+  var X0 = 76, Y0 = 356, DX = 30, DY = 28;
   var xq = function (q) { return X0 + q * DX; };   // quantity -> px x
   var py = function (p) { return Y0 - p * DY; };    // price/MR -> px y
   var toQ = function (px) { return (px - X0) / DX; };
@@ -252,10 +257,10 @@
   function signed(v) { return (v < 0 ? '−' : '') + '$' + Math.abs(v); }
 
   // Greedily word-wrap a readout string into <tspan> lines so it never overflows
-  // the 480-wide viewBox (same approach as the sibling F4 widget). Used for BOTH
+  // the 440-wide viewBox (same approach as the sibling F4 widget). Used for BOTH
   // the muted state line and the accent takeaway line.
   function layout(el, str, y0, lineH, maxW) {
-    var x = 240;
+    var x = 220;
     while (el.firstChild) el.removeChild(el.firstChild);
     var probe = document.createElementNS(NS, 'tspan');
     el.appendChild(probe);
@@ -346,8 +351,8 @@
     lblMR.textContent = 'MR ' + signed(mr);
 
     // readout band (both lines wrap to fit the viewBox width)
-    layout(rHint, mutedLine(q), 356, 16, 430);
-    layout(rTrade, accentLine(q), 400, 18, 420);
+    layout(rHint, mutedLine(q), 448, 16, 390);
+    layout(rTrade, accentLine(q), 492, 18, 380);
 
     ptFocus.setAttribute('aria-valuenow', q);
     ptFocus.setAttribute('aria-valuetext', mutedLine(q));
