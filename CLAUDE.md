@@ -93,9 +93,8 @@ completely separate from Starlight (which still owns `/ai/`).
 - **LIVE** (redesign deployed 2026-07-01, commit `369cf5f`); still **`noindex`ed**.
 
 **Placeholders Bryan still owes (marked `[PLACEHOLDER]` in code; all `noindex`, but
-publicly viewable by link on the live site):** real **essay/press
-URLs** (`data/writing.json` — Writing page); the home **Recent** list (literals in
-`index.astro`); Web3Forms access key + booking email (booking form inert until then —
+publicly viewable by link on the live site):** Web3Forms access key + booking email
+(booking form inert until then —
 `BookingForm.astro`) and a list provider for `EmailCapture` (mailto fallback until then);
 speaker **one-sheet PDF** + a **video reel** (Speaking's
 paid-speaking launch gate: at least one on-stage photo + short clip before lifting `noindex`);
@@ -104,8 +103,11 @@ paid-speaking launch gate: at least one on-stage photo + short clip before lifti
 topics (`data/topics.json`), short + long bio + credentials (`about.astro`), **publications**
 (`data/publications.json` — Research page; GENERATED from the CV since 2026-07-15, see the
 CV section; 12 articles + 3 chapters + 1 book in press + 4 under review + 3 working papers,
-no DOIs yet — the CV carries none), and the **CV PDF** (`import:cv` pipeline — see
-below). Verified facts
+no DOIs yet — the CV carries none), the **CV PDF** (`import:cv` pipeline — see
+below), **popular writing** (`data/writing.json` — Writing page; GENERATED weekly from
+Bryan's EconLog + Daily Economy author RSS feeds since 2026-07-19, see the **Writing feed**
+section), and the home **Recent** list (computed in `index.astro` by merging those two
+generated files — no literals). Verified facts
 only: "Featured in" = National Review, The Hill, The Washington Examiner, RealClearEducation;
 credentials = interim director of the **AIER Sound Money Project**, Associate Editor of
 *Public Choice*, FAU economics professor (WSJ was a letter to the editor — not featured).
@@ -437,6 +439,34 @@ source repo, same source-of-truth → import → commit model as the guide/micro
   (real **"Download my CV (PDF)"** button; the request-fallback path is gone). The generated
   PDF is **never hand-edited** — it's owned by the CV repo / import.
 
+## Writing feed — self-updating from RSS (built 2026-07-19)
+
+`src/data/writing.json` is **GENERATED — never hand-edit it.** Bryan's popular writing
+reaches the site on its own: he publishes at an outlet, and the site picks it up.
+
+- **Sources of truth = two author-scoped RSS feeds** (verified 2026-07-19): **EconLog**
+  (`econlib.org/author/bcutsinger/feed/` → labeled `Column`) and **The Daily Economy**
+  /AIER (`thedailyeconomy.org/article/article-author/bryan-cutsinger/feed/` → labeled
+  `Commentary`). Adding an outlet = adding an entry to `FEEDS` in the script — but only
+  if it exposes a real author feed; never hand-add an entry to the JSON.
+- **Generator:** `scripts/build_writing.py` (`npm run import:writing`) fetches both
+  feeds, copies title/link/date **VERBATIM**, merges, sorts newest-first, caps at
+  `MAX_ITEMS = 30`. **INTEGRITY: fails closed** — if either feed is unreachable or
+  yields zero items it aborts *without touching* `writing.json`, so an outage can never
+  blank the list or publish a garbled entry. It fabricates nothing.
+- **Schedule:** `.github/workflows/refresh-writing.yml` runs it **Mondays 12:00 UTC**
+  (+ `workflow_dispatch` for a manual run). On a diff it commits as `writing-feed[bot]`
+  and then **explicitly dispatches `deploy.yml`** — a `GITHUB_TOKEN` push does not
+  trigger `on: push` workflows, so the dispatch is load-bearing; don't "simplify" it away.
+- **Rendering:** `src/pages/writing.astro` (full list) and `src/pages/index.astro`
+  (home **Recent work** — merges these columns with the CV-generated `publications.json`
+  and sorts by date; undated working papers are surfaced as a count-link, never
+  given an invented date).
+- **Known gaps:** `press` (interviews/podcasts) is an empty list — not wired to any
+  source (future: the CV's Selected Media). Pieces at outlets with no author feed
+  (National Review, The Hill, Washington Examiner, one-off op-eds) have **no path onto
+  the site** today; wiring one up is a real task, not a JSON edit.
+
 ## Research overview — self-refreshing prose (built 2026-07-15)
 
 The `/research/` page (`src/pages/research.astro`) opens with the **PageHead** — a headline
@@ -548,6 +578,15 @@ and the /ai/ mobile nav disappearing below 50rem (now renders in Starlight's dra
 Decisions of record: light interior openings (navy = Home cover only); no header CTA;
 outline secondary kept; downward band alternation (ground → ground-deep) sitewide.
 
+**Prior (2026-07-19, `d90d601`) — the Writing page now auto-publishes from RSS:**
+`src/data/writing.json` went from placeholder to GENERATED — `scripts/build_writing.py`
+merges Bryan's EconLog + Daily Economy author feeds verbatim (fail-closed), and a weekly
+`refresh-writing` Action commits any change and dispatches the deploy. Publishing at
+either outlet now reaches the site with no manual step; the home "Recent work" list is
+computed from this plus `publications.json` rather than literals. Full spec: the
+**Writing feed** section above. Still unwired: `press` (interviews/podcasts) and outlets
+with no author feed.
+
 **Prior (2026-07-15) — publications now auto-publish from the CV:** the Research
 page's `publications.json` is GENERATED from `cutsinger_CV.tex` by a fail-closed
 parser in the `cv` repo; the Publish CV Action now syncs PDF + JSON to this repo in
@@ -576,7 +615,9 @@ nothing fabricated). (3) **CV download is now a live PDF** via a new **`import:c
 from the new `bryanpcutsinger/cv` source repo (see "CV — imported from its own repo" above).
 Build green throughout (63 pages, INSTRUCTOR NOTES gate passed). **Open:** confirm the CV seed
 is current vs. any post-2026-06-04 Overleaf edits; add DOIs/`sameAs` when available; Writing
-page (`data/writing.json`) still placeholder.
+page (`data/writing.json`) still placeholder — **✅ RESOLVED 2026-07-19**: `writing.json` is
+now generated weekly from the EconLog + Daily Economy author feeds (see the **Writing feed**
+section).
 
 **Prior (2026-07-06) — full 21-topic micro course published + pushed + deployed
 (`b8b0acc`, still `noindex`ed):** Closes the "micro course publish gap" below. Re-imported
@@ -605,10 +646,13 @@ Codex review + a 5-adversary red-team; client chose outward-first / design-first
 - **Deliberately DEFERRED (open follow-ups):** (1) **Teaching pages** still use the reused/
   claret-era components under aliased tokens — they render fine + build green, but a full
   restyle is pending; (2) **`brand.css` + claret-era components** (`ClaretOpener`, `Colophon`,
-  `EditorialIndex`, `PageMasthead`) stay until Teaching is migrated, then retire; (3) **RSS**
-  for Writing not yet added (would be empty until real essays) — add `@astrojs/rss` when
-  `writing.json` has real entries; (4) all `[PLACEHOLDER]` content above (real publications,
-  essay URLs, Recent, CV, forms, reel) still owed by Bryan.
+  `EditorialIndex`, `PageMasthead`) stay until Teaching is migrated, then retire; (3) **an
+  outbound RSS feed** for the Writing page not yet added — was blocked on "until real
+  essays," which **no longer applies** (the feed pipeline filled `writing.json` on
+  2026-07-19), so `@astrojs/rss` could be added whenever Bryan wants one; (4) all
+  `[PLACEHOLDER]` content above (forms, reel, testimonials, `sameAs`) still owed by Bryan —
+  publications, essay URLs, Recent, and the CV have since been resolved by the
+  `import:cv` and writing-feed pipelines.
 
 **Prior (2026-06-21) — committed + pushed to `main` (`a62547c`, deployed, still `noindex`ed):**
 - **Price Theory bank refreshed: 311 → 477 problems across 40 sources.** Bryan added new
