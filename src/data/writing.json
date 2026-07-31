@@ -3,6 +3,22 @@
   "essays": [
     {
       "date": "Jul 2026",
+      "isoDate": "2026-07-31",
+      "title": "One Month of Falling Prices Won’t Restore Price Stability",
+      "outlet": "The Daily Economy",
+      "url": "https://thedailyeconomy.org/article/one-month-of-falling-prices-wont-restore-price-stability/",
+      "kind": "Commentary"
+    },
+    {
+      "date": "Jul 2026",
+      "isoDate": "2026-07-30",
+      "title": "Standing Still as Inflation Runs Hot",
+      "outlet": "The Daily Economy",
+      "url": "https://thedailyeconomy.org/article/standing-still-as-inflation-runs-hot/",
+      "kind": "Commentary"
+    },
+    {
+      "date": "Jul 2026",
       "isoDate": "2026-07-15",
       "title": "June Inflation Slowed as Energy Prices Fell",
       "outlet": "The Daily Economy",
@@ -223,22 +239,6 @@
       "title": "Rate of Inflation Cools in July, Case for Rate Cuts Builds",
       "outlet": "The Daily Economy",
       "url": "https://thedailyeconomy.org/article/rate-of-inflation-cools-in-july-case-for-rate-cuts-builds/",
-      "kind": "Commentary"
-    },
-    {
-      "date": "Aug 2025",
-      "isoDate": "2025-08-05",
-      "title": "Fed Governor’s Labor Market Warning Validated by BLS Revision",
-      "outlet": "The Daily Economy",
-      "url": "https://thedailyeconomy.org/article/fed-governors-labor-market-warning-validated-by-bls-revision/",
-      "kind": "Commentary"
-    },
-    {
-      "date": "Jul 2025",
-      "isoDate": "2025-07-31",
-      "title": "Fed Holds Rates Steady Amid Political Pressure",
-      "outlet": "The Daily Economy",
-      "url": "https://thedailyeconomy.org/article/fed-holds-rates-steady-amid-political-pressure/",
       "kind": "Commentary"
     }
   ],
