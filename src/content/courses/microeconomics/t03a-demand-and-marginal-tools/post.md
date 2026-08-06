@@ -46,7 +46,7 @@ Start with what we will call the *first law of demand*:
 
 That is it. It is the most dependable regularity economists have, and almost nothing in the course will contradict it.
 
-The word *demand* needs care, because we use it precisely and the world uses it loosely. By a person's demand for a good I do not mean the single amount they happen to buy at today's price. I mean the whole schedule: how much they would buy at each of the prices they might face. Think of it as a snapshot taken at one moment, showing what the buyer would do across a range of possible prices, not a record of purchases made one after another as price drifts over time. Here is such a schedule for one person's weekly purchases of milk.
+The word *demand* needs care, because we use it precisely and the world uses it loosely. By a person's demand for a good I do not mean the single amount they happen to buy at today's price. I mean the whole schedule: how much they would buy at each of the prices they might face. Think of it as a snapshot taken at one moment, not a record of purchases made one after another as price drifts over time. Here is such a schedule for one person's weekly purchases of milk.
 
 | Price of a quart | Quarts demanded per week |
 |---|---|
@@ -172,7 +172,7 @@ Here is the same schedule with two more columns: the *total market value* the bu
 | $0.20 | 9 | $5.40 | $0.20 | $1.80 | $3.60 |
 | $0.10 | 10 | $5.50 | $0.10 | $1.00 | $4.50 |
 
-At $0.50, the buyer pays $3.00 for milk they value at $4.50, walking away with a net gain worth $1.50, which is the whole point of buying. We keep this verbal and arithmetic on purpose: *consumer surplus* is simply total personal worth minus total expenditure, a gap, not a geometric area you measure off a diagram. We will use the idea again when we judge how sellers with market power price their goods, but we will not turn it into a machine for calculating "deadweight loss."
+At $0.50, the buyer pays $3.00 for milk they value at $4.50, walking away with a net gain worth $1.50, which is the whole point of buying. We keep the accounting verbal and arithmetic on purpose: *consumer surplus* is simply total personal worth minus total expenditure, a gap, not a geometric area you measure off a diagram. We will use the idea again when we judge how sellers with market power price their goods, but we will not turn it into a machine for calculating "deadweight loss."
 
 <figure class="econ-figure" style="margin:1.5em 0;">
 <iframe src="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-marginal-worths-interactive.html" title="Drag the handle down and to the right to take more units at a lower price and watch total personal worth split into the market value paid and the consumer surplus gained." loading="lazy" style="width:100%; max-width:480px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-marginal-worths-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-marginal-worths.svg">view the static figure</a>.</p></iframe>
@@ -193,7 +193,7 @@ The surplus column also exposes a fallacy that sounds reasonable and is dead wro
 
 ## Demand Is a Rate, Not a Pile
 
-A small but stubborn confusion: demand describes a rate of consumption, a flow over time, not a fixed lump. The milk schedule is quarts per week, which matters because consumption is a rate even when the good sits around as a stock: the milk in your refrigerator is a stock on hand, the quarts you drink per week is the rate, and demand is about the rate.
+A small but stubborn confusion: demand describes a rate of consumption, a flow over time, not a fixed lump. The milk schedule is quarts per week, and the unit matters: consumption is a rate even when the good sits around as a stock. The milk in your refrigerator is a stock on hand, the quarts you drink per week is the rate, and demand is about the rate.
 
 Because demand is a rate, not a weekly delivery slip, you cannot read a year's demand as a fixed weekly quota. If a household's demand for water doubles over a year, from roughly 3,650 to 7,300 gallons, you cannot say how many extra gallons fall in the first week. The rate is what doubles; the week-to-week timing floats around it.
 
@@ -212,7 +212,7 @@ Underneath every dollar figure is something more basic. A *price* is an exchange
 
 Now we can dismantle the slippery word from the opening. People talk about urgent, critical, vital, basic, minimum *needs*, as if some quantity of a good were simply required, full stop, regardless of cost. There is no such quantity. The amount of any good a person or a society chooses is a function of its price: always a matter of *how much at what price*, more-or-less, never all-or-none.
 
-To see why, ask what a person really needs and the honest answer is always a comparison. Picture someone with almost nothing, down to what they would call bare necessities. Offer them a little more food for some of their clothing, and they will not refuse on the grounds that no amount of food could make up for a bit less clothing; offer them enough of another comfort, and they will part with a little of the food they hold. However poor a person is, there is always some amount of one good they will give up for enough of another. Even our own safety works this way: we accept a slightly higher chance of harm, driving fast or taking other risks, to get things we want more than that sliver of security. Nothing, however indispensable, is required in a fixed, all-or-none amount.
+To see why, ask what a person really needs; the honest answer is always a comparison. Picture someone with almost nothing, down to what they would call bare necessities. Offer them a little more food for some of their clothing, and they will not refuse on the grounds that no amount of food could make up for a bit less clothing; offer them enough of another comfort, and they will part with a little of the food they hold. However poor a person is, there is always some amount of one good they will give up for enough of another. Even our own safety works this way: we accept a slightly higher chance of harm, driving fast or taking other risks, to get things we want more than that sliver of security. Nothing, however indispensable, is required in a fixed, all-or-none amount.
 
 Because there is no fixed need, the political language built on it tends to mislead. Labeling a good a need makes it sound as though some amount were simply required, past all argument, when the real question is always how much more of it is worth to us than the other things we would have to give up to get it. The word itself settles nothing; it only hides which of those other things you have chosen to do without.
 

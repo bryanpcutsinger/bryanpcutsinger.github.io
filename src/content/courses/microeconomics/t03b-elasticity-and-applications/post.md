@@ -71,7 +71,7 @@ One practical question remains before you can calculate anything: a percentage c
 <p style="margin:0; white-space:nowrap;">%&#916;Q&nbsp;=&nbsp;<span style="display:inline-block; vertical-align:middle; text-align:center;"><span style="display:block; padding:0 .45em .12em; border-bottom:1.5px solid currentColor;">Q<sub>2</sub>&nbsp;&#8722;&nbsp;Q<sub>1</sub></span><span style="display:block; padding:.12em .45em 0;">(Q<sub>1</sub>&nbsp;+&nbsp;Q<sub>2</sub>)&nbsp;&#247;&nbsp;2</span></span>&nbsp;&#215;&nbsp;100&emsp;&emsp;%&#916;P&nbsp;=&nbsp;<span style="display:inline-block; vertical-align:middle; text-align:center;"><span style="display:block; padding:0 .45em .12em; border-bottom:1.5px solid currentColor;">P<sub>2</sub>&nbsp;&#8722;&nbsp;P<sub>1</sub></span><span style="display:block; padding:.12em .45em 0;">(P<sub>1</sub>&nbsp;+&nbsp;P<sub>2</sub>)&nbsp;&#247;&nbsp;2</span></span>&nbsp;&#215;&nbsp;100</p>
 </div>
 
-Here (Q&#8321;, P&#8321;) and (Q&#8322;, P&#8322;) are the two points you are comparing, and the sign is ignored as usual. Try it on one step: price falls from $6 to $5 while quantity rises from 5 to 6. The quantity change of 1, measured against the midpoint quantity of 5.5, is 18.2 percent; the price change of $1, measured against the midpoint price of $5.50, is also 18.2 percent. So e = 18.2/18.2 = 1: unit elastic, exactly.
+Here (Q&#8321;, P&#8321;) and (Q&#8322;, P&#8322;) are the two points you are comparing; ignore the sign, as usual. Try it on one step: price falls from $6 to $5 while quantity rises from 5 to 6. The quantity change of 1, measured against the midpoint quantity of 5.5, is 18.2 percent; the price change of $1, measured against the midpoint price of $5.50, is also 18.2 percent. So e = 18.2/18.2 = 1: unit elastic, exactly.
 
 Here is a demand schedule with the elasticity between successive points computed by the midpoint formula, plus the market value (price times quantity) at each.
 
@@ -117,14 +117,14 @@ The whole thing fits in a small grid.
 | **Price rises** | Total revenue falls | Unchanged | Total revenue rises |
 | **Price falls** | Total revenue rises | Unchanged | Total revenue falls |
 
-So you can never say in the abstract whether a seller should raise or lower price to make more money; the answer depends entirely on where the seller sits on the demand curve. One point is worth carrying forward: a seller raising revenue by exploiting inelastic demand is not the same as buyers being better off.
+So you can never say in the abstract whether a seller should raise or lower price to make more money; the answer depends entirely on where the seller sits on the demand curve. Carry one point forward: a seller raising revenue by exploiting inelastic demand is not the same as buyers being better off.
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
 <p>A transit agency finds that riders barely change their trips when the fare moves, so its demand is inelastic. To collect more revenue, should it raise the fare or cut it? Walk through the revenue rule to justify your answer.</p>
 </aside>
 
-One caution matters enough to spell out: elasticity is a measure of movements along a demand schedule, not of shifts in the schedule. Every price change we have discussed so far was a slide along one fixed curve. But prices also change because the whole schedule moves, and when that happens, the old curve's elasticity cannot tell you what will happen to quantity or to the seller's revenue.
+One caution: elasticity measures movements along a demand schedule, not shifts in the schedule. Every price change we have discussed so far was a slide along one fixed curve. But prices also change because the whole schedule moves, and when that happens, the old curve's elasticity cannot tell you what will happen to quantity or to the seller's revenue.
 
 Gasoline makes the difference concrete. The stock of gasoline available in a given week is whatever it is; buyers cannot change it, so supply is a vertical line at that week's quantity. When stocks are low, the market clears at a high price. When stocks are moderate, it clears at a middle price, and when stocks are plentiful, at a low one. Through all three episodes the demand curve never moves: the price changes because supply changed, and each new price is simply a different point on the same demand curve. That is the kind of price change elasticity is built for, since it tells you exactly how sharply quantity adjusts as the market slides along the curve.
 
@@ -150,7 +150,7 @@ Gasoline is the standard case. Double the price overnight and consumption falls 
 
 The neat way to picture the buildup: any single demand curve is one member of a *fan* of curves radiating from the original price-quantity point. The short-run curve through that point is steep, because little adjustment has happened yet; the long-run curve through the same point is flatter, because more adjustment has accumulated. That fan is the visual signature of the second law.
 
-To read the figure below, start at the point where every curve meets: gasoline sells at the price P₁, and drivers buy the quantity Q. Then the price falls to P₂. In the first weeks the steep curve 1 is the one that applies, so quantity moves only from Q out to Q₁; people still have the same cars and the same commutes. As the months pass, the operative curve flattens through 2, 3, and 4, and the quantity bought at that same price P₂ climbs to Q₂, then Q₃, then Q₄. Once every adjustment has run its course, the flattest curve L takes over, and purchases settle at Qₗ, far to the right of where they began. The price fell once, but the response to it keeps building for years. That is what it means for demand to grow more elastic with time.
+To read the figure below, start at the point where every curve meets: gasoline sells at the price P₁, and drivers buy the quantity Q. Then the price falls to P₂. In the first weeks the steep curve 1 is the one that applies, so quantity moves only from Q out to Q₁. As the months pass, the operative curve flattens through 2, 3, and 4, and the quantity bought at that same price P₂ climbs to Q₂, then Q₃, then Q₄. Once every adjustment has run its course, the flattest curve L takes over, and purchases settle at Qₗ, far to the right of where they began. The price fell once, but the response to it keeps building for years. That is what it means for demand to grow more elastic with time.
 
 <figure class="econ-figure" style="margin:1.5em 0;">
 <iframe src="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03-elasticity-fan-interactive.html" title="Drag the time slider from short run to long run to sweep the active demand curve from steepest to flattest and watch the quantity response to the price fall grow." loading="lazy" style="width:100%; max-width:520px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03-elasticity-fan-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t03b-elasticity-and-applications/figures/t03-elasticity-fan.svg">view the static figure</a>.</p></iframe>
@@ -210,7 +210,7 @@ The figure below turns that tug-of-war into a picture. Before the price change t
 <p>You own a large vineyard and the price of grapes jumps. Which way does the substitution effect push your own grape buying, and which way does the wealth effect push it? Why is the net direction unclear for you but not for an ordinary shopper?</p>
 </aside>
 
-This wealth effect, when someone holds a large stock of the good whose price changes, is the nearest thing to a genuine exception to the law of demand, and even it is a shift of the curve, not an upward-sloping one.
+For someone holding a large stock of the good whose price changes, the wealth effect is the nearest thing to a genuine exception to the law of demand, and even it is a shift of the curve, not an upward-sloping one.
 
 ## The Real Price Is the Relative Price
 
@@ -225,7 +225,7 @@ A good's dollar tag is not the price that governs your choice. What matters is i
 
 A good's price can fall relative to others even when its dollar price rises. Suppose candy goes from $4 to $5 while ice cream goes from $2 to $3. In dollars, candy got more expensive. But ice cream rose by a larger *percentage*, so candy is now relatively cheaper than it was: in terms of ice cream forgone, a candy bar costs less than before. When you hear "the price of X went up," always ask "relative to what?"
 
-The same lens dissolves a seeming paradox. Why do people wait in line for small, run-down apartments while bigger, better ones sit available with no waiting list? Not because anyone prefers cramped to spacious. The better apartments are *priced* higher, which reduces the quantity demanded for them and clears the line, while the cheap ones are priced low enough to draw a crowd. The preference for more and better is intact; the price did the work.
+The same lens dissolves a seeming paradox. Why do people wait in line for small, run-down apartments while bigger, better ones sit available with no waiting list? Not because anyone prefers cramped to spacious. The better apartments are *priced* higher, which reduces the quantity demanded and clears the line, while the cheap ones are priced low enough to draw a crowd. The preference for more and better is intact; the price did the work.
 
 The relative-price idea does real work in a memorably named application: the "shipping the good apples out" theorem, due to Alchian and Allen.
 
