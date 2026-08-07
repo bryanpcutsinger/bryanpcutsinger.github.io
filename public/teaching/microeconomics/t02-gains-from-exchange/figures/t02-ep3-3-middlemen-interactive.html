@@ -60,14 +60,14 @@
                  'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; height: 100%; }
+  html, body { margin: 0; height: 100%; overflow: hidden; }
   body {
     background: var(--surface);
     color: var(--text);
     font-family: var(--font-body);
     display: grid;            /* grid, not flex — see t03b-ue8-1 mobile note */
     place-items: center;
-    padding: 8px;
+    padding: 0;
     -webkit-font-smoothing: antialiased;
   }
   .fig { width: 100%; max-width: 640px; min-width: 0; }
@@ -110,9 +110,8 @@
   .sep     { stroke: var(--hairline); stroke-width: 1; }
   .r-state { fill: var(--muted); font-size: 12.5px; }
   .r-take  { fill: var(--accent); font-size: 13px; font-weight: 600; }
+  .hintln  { fill: var(--muted); font-size: 12px; }
 
-  .hint { color: var(--muted); font-size: 13px; margin: 6px 2px 2px;
-          text-align: center; }
   .fallback { margin: 8px 0 0; color: var(--muted); font-size: 13px;
               line-height: 1.35; text-align: center; }
   .fallback a { color: var(--ink); }
@@ -120,7 +119,7 @@
 </head>
 <body>
 <div class="fig">
-  <svg id="fig" viewBox="0 0 720 460" role="group"
+  <svg id="fig" viewBox="0 0 720 510" role="group"
        aria-label="Sam's and Joe's personal-worth lines on the shared 40-bottle frame, with a draggable cost wedge: two dashed price lines symmetric around the 0.6 crossing. The upper line is Sam's full price, the price plus his share of the cost of arranging a trade; the lower is Joe's net after his share. The figure opens at a cost of 0.8 bars a bottle, where the wedge swallows the whole worth gap between the two men: not one bottle is worth trading and both still hold the 20 they started with. Trade runs only while the gap between the worths covers the cost, so dragging the wedge tighter — cheaper and cheaper middlemen — starts trade and carries both men out toward the crossing at 30 bottles. Drag either line: at 0.4 bars per bottle, arranging it yourselves, 5 of the 10 gainful bottles trade; at 0.2, a newcomer's cheaper rate, trade grows to 7.5 and both gains grow; at zero all 10 move and the market reaches the crossing.">
     <title>Middlemen carry the market to equilibrium: start at the no-trade wall, then drag the cost wedge tighter</title>
 
@@ -239,11 +238,11 @@
     <line class="sep" x1="16" y1="424" x2="704" y2="424"/>
     <text id="rState" class="r-state" x="360" y="440" text-anchor="middle">Costs 0.80 a bottle: 0 bottles trade &#183; each side gains 0.00 bars &#183; 0.00 bars go to arranging</text>
     <text id="rTake" class="r-take" x="360" y="456" text-anchor="middle">The cost of arranging swallows the whole worth gap &#8212; no one trades; both men sit at 20 bottles</text>
+  
+    <text class="hintln" x="360" y="481" text-anchor="middle">Start where costs are so high that no one trades. Drag the wedge tighter &#8212; cheaper and cheaper middlemen &#8212;</text>
+    <text class="hintln" x="360" y="499" text-anchor="middle">and watch trade carry both men toward the crossing (arrow keys work too). Try 0.40, then 0.20, then zero.</text>
   </svg>
 
-  <p class="hint">Start where costs are so high that no one trades. Drag the wedge
-    tighter &#8212; cheaper and cheaper middlemen &#8212; and watch trade carry both men
-    toward the crossing (arrow keys work too). Try 0.40, then 0.20, then zero.</p>
 
   <noscript>
     <p class="fallback">The interactive view needs JavaScript. See the

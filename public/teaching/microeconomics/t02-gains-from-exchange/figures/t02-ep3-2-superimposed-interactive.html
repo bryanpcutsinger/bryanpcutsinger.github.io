@@ -62,14 +62,14 @@
                  'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; height: 100%; }
+  html, body { margin: 0; height: 100%; overflow: hidden; }
   body {
     background: var(--surface);
     color: var(--text);
     font-family: var(--font-body);
     display: grid;            /* grid, not flex — see t03b-ue8-1 mobile note */
     place-items: center;
-    padding: 8px;
+    padding: 0;
     -webkit-font-smoothing: antialiased;
   }
   .fig { width: 100%; max-width: 640px; min-width: 0; }
@@ -120,9 +120,8 @@
   .sep     { stroke: var(--hairline); stroke-width: 1; }
   .r-state { fill: var(--muted); font-size: 12.5px; }
   .r-take  { fill: var(--accent); font-size: 13px; font-weight: 600; }
+  .hintln  { fill: var(--muted); font-size: 12px; }
 
-  .hint { color: var(--muted); font-size: 13px; margin: 6px 2px 2px;
-          text-align: center; }
   .fallback { margin: 8px 0 0; color: var(--muted); font-size: 13px;
               line-height: 1.35; text-align: center; }
   .fallback a { color: var(--ink); }
@@ -130,7 +129,7 @@
 </head>
 <body>
 <div class="fig">
-  <svg id="fig" viewBox="0 0 720 460" role="group"
+  <svg id="fig" viewBox="0 0 720 510" role="group"
        aria-label="Sam's and Joe's personal-worth lines superimposed on one frame holding all 40 bottles. Sam's line runs from the top of the left axis down across the frame; Joe's rises from near the axis on the left to the top of the right axis. The figure opens at the starting allocation: 20 bottles each, marked by one dashed vertical through both starting dots, where a bottle is worth 1.0 granola bars to Sam but only 0.2 to Joe, and a brass connector shows the whole gap still open between them. Drag either brass dot along its worth line to trade: both dots move together, Sam sliding down his line and Joe up his own, until the worths meet at the crossing, 0.6 bars per bottle with Sam holding 30 and Joe 10. The shaded bowtie is the captured gain; the fainter shading is gain still on the table. Drag past the crossing and both traders take shaded losses.">
     <title>Trade slides both traders along their own worth lines to the crossing, and past it both would lose</title>
 
@@ -258,11 +257,11 @@
         <path d="M0,0 L6,3 L0,6 Z" fill="#b07a2c"/>
       </marker>
     </defs>
+  
+    <text class="hintln" x="360" y="481" text-anchor="middle">Drag either brass dot forward along its line until the two worths meet &#8212;</text>
+    <text class="hintln" x="360" y="499" text-anchor="middle">then keep dragging past the crossing to see why the trading stops there (arrow keys work too).</text>
   </svg>
 
-  <p class="hint">Drag either brass dot forward along its line until the two
-    worths meet &#8212; then keep dragging past the crossing to see why the
-    trading stops there (arrow keys work too).</p>
 
   <noscript>
     <p class="fallback">The interactive view needs JavaScript. See the

@@ -71,14 +71,14 @@
                  'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; height: 100%; }
+  html, body { margin: 0; height: 100%; overflow: hidden; }
   body {
     background: var(--surface);
     color: var(--text);
     font-family: var(--font-body);
     display: grid;            /* grid, not flex — see t03b-ue8-1 mobile note */
     place-items: center;
-    padding: 8px;
+    padding: 0;
     -webkit-font-smoothing: antialiased;
   }
   .fig { width: 100%; max-width: 640px; min-width: 0; }
@@ -125,9 +125,8 @@
   .sep     { stroke: var(--hairline); stroke-width: 1; }
   .r-state { fill: var(--muted); font-size: 12.5px; }
   .r-take  { fill: var(--accent); font-size: 13px; font-weight: 600; }
+  .hintln  { fill: var(--muted); font-size: 12px; }
 
-  .hint { color: var(--muted); font-size: 13px; margin: 6px 2px 2px;
-          text-align: center; }
   .fallback { margin: 8px 0 0; color: var(--muted); font-size: 13px;
               line-height: 1.35; text-align: center; }
   .fallback a { color: var(--ink); }
@@ -135,7 +134,7 @@
 </head>
 <body>
 <div class="fig">
-  <svg id="fig" viewBox="0 0 720 460" role="group"
+  <svg id="fig" viewBox="0 0 720 510" role="group"
        aria-label="Gains from exchange. Two panels. Sam and Joe START WITH THE SAME 20 BOTTLES of water each, but they value them very differently: one more bottle is worth 1.0 granola bars to Sam and only 0.2 to Joe. Two brass dashed lines, one for each man, run across both panels at those worths, so the gap between them is visible at a glance. Drag either brass dot to move bottles from Joe to Sam: Sam's worth line falls as he gets more water, Joe's rises as he keeps less, and the shaded areas record the gain each man collects. The two lines meet at 0.6 after 10 bottles have changed hands, and that is where the gains run out and trade stops on its own.">
     <title>Gains from exchange: the two worth lines start far apart at 20 bottles each and converge as Joe sells to Sam</title>
 
@@ -276,12 +275,11 @@
         <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066"/>
       </marker>
     </defs>
+  
+    <text class="hintln" x="360" y="481" text-anchor="middle">Both start with the same 20 bottles &#8212; they just value them differently, so the two brass worth lines start far apart.</text>
+    <text class="hintln" x="360" y="499" text-anchor="middle">Drag either brass dot to move bottles from Joe to Sam and watch the lines close the gap (arrow keys work too).</text>
   </svg>
 
-  <p class="hint">Both men start with the same 20 bottles &#8212; they just value them
-    differently, which is why the two brass lines start so far apart. Drag either
-    brass dot to move bottles from Joe to Sam and watch the lines close the gap
-    (arrow keys work too).</p>
 
   <noscript>
     <p class="fallback">The interactive view needs JavaScript. See the
