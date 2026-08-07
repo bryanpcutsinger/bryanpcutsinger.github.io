@@ -21,7 +21,7 @@ Most people assume economics is about money, the stock market, or getting rich. 
 <p class="econ-callout__label">Learning objectives</p>
 <p>By the end of this post you should be able to:</p>
 <ul>
-<li>Define scarcity, and explain why every choice carries an opportunity cost, full cost is explicit plus implicit, sunk costs are irrelevant, a $0 money price is not free, and the production possibilities frontier pictures the trade-off (efficiency as no waste) and growth.</li>
+<li>Define scarcity, and explain why every choice carries an opportunity cost, full cost is explicit plus implicit, sunk costs are irrelevant, a $0 money price is not free, and the production possibilities frontier pictures the trade-off (productive efficiency as no waste) and growth.</li>
 <li>Use positive, cause-and-effect economic analysis to state refutable if–then predictions, judge a theory by whether its predictions survive testing against evidence, and keep positive claims ("what is / what will happen") separate from normative judgments ("what should be").</li>
 <li>Explain why voluntary exchange is positive-sum and depends on property rights, and why the behavior of governments, firms, and markets traces back to the incentives facing the individuals inside them.</li>
 </ul>
@@ -125,16 +125,16 @@ One last idea, where our work on demand will begin: the more of something you al
 <p>You bought a concert ticket last month, but tonight you would rather study and sleep. Which part of the situation is sunk, and what is the real cost of going?</p>
 </aside>
 
-### Efficiency Means No Waste
+### Productive Efficiency Means No Waste
 
-People throw around "efficient" as if it meant "produce as much as possible." Take two goods, food and clean air, and trace out the largest combinations of them an economy's resources could produce. That boundary line is the *production possibilities frontier*. Any point on the frontier is efficient: the only way to get more of one good is to give up some of the other. Any point inside is wasteful, since you could have more of both at once. Efficiency means no waste: being on the frontier, not having the most of any single thing.
+People throw around "efficient" as if it meant "produce as much as possible." Take two goods, food and clean air, and trace out the largest combinations of them an economy's resources could produce. That boundary line is the *production possibilities frontier*. Any point on the frontier is efficient: the only way to get more of one good is to give up some of the other. In this production setting, the precise term is *productively efficient*. Any point inside is wasteful, since you could have more of both at once. Productive efficiency means no waste: being on the frontier, not having the most of any single thing.
 
 <figure class="econ-figure" style="margin:1.5em 0;">
 <iframe src="/teaching/microeconomics/t01-economic-way-of-thinking/figures/t01-ppf-interactive.html" title="Interactive production possibilities frontier for food and clean air: drag the point along the curve to see the trade-off" loading="lazy" style="width:100%; max-width:480px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t01-economic-way-of-thinking/figures/t01-ppf-interactive.html">Open the interactive PPF directly</a> or <a href="/teaching/microeconomics/t01-economic-way-of-thinking/figures/t01-ppf.svg">view the static PPF</a>.</p></iframe>
-<figcaption><strong>Interactive PPF.</strong> Every combination of food and clean air on the curve is efficient: the only way to get more of one good is to give up some of the other, and the cost of extra food rises as you go. The point inside the curve is inefficient: from there you could have more of both, shown by the two arrows. Drag the point to explore the trade-off. If the frame does not load, <a href="/teaching/microeconomics/t01-economic-way-of-thinking/figures/t01-ppf-interactive.html">open the interactive PPF directly</a> or <a href="/teaching/microeconomics/t01-economic-way-of-thinking/figures/t01-ppf.svg">view the static PPF</a>.</figcaption>
+<figcaption><strong>Interactive PPF.</strong> Every combination of food and clean air on the curve is productively efficient: the only way to get more of one good is to give up some of the other, and the cost of extra food rises as you go. The point inside the curve is productively inefficient: from there you could have more of both, shown by the two arrows. Drag the point to explore the trade-off. If the frame does not load, <a href="/teaching/microeconomics/t01-economic-way-of-thinking/figures/t01-ppf-interactive.html">open the interactive PPF directly</a> or <a href="/teaching/microeconomics/t01-economic-way-of-thinking/figures/t01-ppf.svg">view the static PPF</a>.</figcaption>
 </figure>
 
-"Maximize one good" is an incoherent goal: grow nothing but food and the air turns to smog; shut down for clean air and you breathe beautifully with nothing to eat. People want some workable combination, and the frontier shows every efficient combination and its trade-off.
+"Maximize one good" is an incoherent goal: grow nothing but food and the air turns to smog; shut down for clean air and you breathe beautifully with nothing to eat. People want some workable combination, and the frontier shows every productively efficient combination and its trade-off.
 
 How far out the frontier sits is not fixed. Better tools and technology can push it outward, so a society can have more food and more clean air at once; that outward shift is economic growth, the old trade-off growing less severe. Scarcity does not vanish: the new frontier still bounds what is possible, and every point on it still forces a choice.
 
@@ -145,7 +145,7 @@ How far out the frontier sits is not fixed. Better tools and technology can push
 
 What pushes the frontier outward is productivity, and productivity tracks a country's rules far more than the resources it happens to start with: secure property, enforceable agreements, the freedom to try new ideas.
 
-Being on the frontier still does not tell you which point is best. You might trade food for cleaner air while I trade the other way, and efficiency alone cannot crown a winner. It is a no-waste test, not a verdict about what is good, a difference people forget the instant a policy gets branded "inefficient."
+Being on the frontier still does not tell you which point is best. You might trade food for cleaner air while I trade the other way, and productive efficiency alone cannot crown a winner. It is a no-waste test about production, not a verdict about what is good. Later we will use *Pareto efficiency*, also called *Pareto-optimality*, for a different no-waste test about allocation: whether goods can be rearranged to make someone better off without making anyone worse off. Neither concept tells us which efficient outcome is best.
 
 ## Economics Traces Cause and Effect
 
@@ -234,7 +234,7 @@ Want to explore the source material? This lecture draws on the following chapter
 <section class="econ-review__section">
 <h3>Key takeaways</h3>
 <ul>
-<li><strong>Scarcity forces trade-offs.</strong> Every choice has an opportunity cost, counted in full (explicit plus implicit, not just money), sunk costs are irrelevant, and a $0 price does not mean free; the production possibilities frontier pictures efficiency (no waste) and growth (the frontier shifting out).</li>
+<li><strong>Scarcity forces trade-offs.</strong> Every choice has an opportunity cost, counted in full (explicit plus implicit, not just money), sunk costs are irrelevant, and a $0 price does not mean free; the production possibilities frontier pictures productive efficiency (no waste) and growth (the frontier shifting out).</li>
 <li><strong>Economics is positive, not normative.</strong> State refutable if–then predictions and judge a theory by whether its predictions survive testing against evidence; keep what is separate from what should be, the "should" being a value judgment you supply.</li>
 <li><strong>Only individuals choose,</strong> and voluntary exchange is positive-sum: it rests on property rights, and both sides expect to gain, or the trade does not happen.</li>
 </ul>
