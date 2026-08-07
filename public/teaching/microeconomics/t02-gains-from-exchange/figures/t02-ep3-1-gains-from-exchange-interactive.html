@@ -1,165 +1,290 @@
-<!doctype html>
-<!--
-  t02-ep3-1-gains-from-exchange-interactive.html
-  Interactive version of the T2 gains-from-exchange figure (after E&P Fig 3-1,
-  course-adapted to Sam/Joe water-for-granola; brief Section C invariants).
-  Family F8 (two-agent margins) + F4 area accounting: drag the shared PRICE line
-  vertically; each panel recomputes independently (Sam buys while his worth of the
-  next bottle >= price; Joe sells while his worth <= price). The readout's match
-  line is the payoff: quantities agree only at P = 0.75 - at any other price one
-  side wants more trades than the other, so the price gets bid back.
-  Static-base architecture: the initial P=0.75 state is real markup below; the
-  script only re-attaches drag/keyboard/readout behavior. The static SVG
-  t02-ep3-1-gains-from-exchange.svg is the slide asset and the <noscript> fallback.
-  Numbers: Sam worth(20+k) = 1.15 - 0.10k; Joe worth(q) = 0.75 - 0.05(q-16).
-  Drag range P in [0.55, 0.90] (keeps every trade on-panel), step 0.05.
--->
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gains from exchange - drag the price</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gains from exchange: two worth lines that start far apart and converge as Joe sells to Sam</title>
+<!--
+  t02-ep3-1-gains-from-exchange-interactive.html — REBUILT 2026-08-06
+  (instructor-directed source-fidelity pass; replaces the 2026-07-19 build).
+
+  Course-adapted, construction-faithful version of E&P Fig 3-1 "Gains From
+  Exchange" (p. 46): two side-by-side panels — buyer (Ms. A -> Sam) and seller
+  (Mr. B -> Joe) — each trader's gain shaded as a continuous area between his
+  personal-worth line and the 0.6 level, initial-endowment droplines, and
+  curved axis arrows for the quantities traded. The old build's draggable price
+  line taught the E&P 3-2 / UE 6.2 price-formation lesson and moved to
+  t02-ep3-2-superimposed-interactive.html; HERE the interaction is the traded
+  QUANTITY.
+
+  ROUND 3 (2026-08-06, instructor round 3) — OPEN AT THE ENDOWMENT, NOT THE
+  EQUILIBRIUM. The figure used to start at n = 10 with a single pinned price
+  line, so the thing it was supposed to teach — that the two men value the same
+  bottle very differently BEFORE they trade, and that this gap is what prompts
+  trade — was invisible. Now:
+    * default / no-JS state is n = 0, the 20/20 endowment (no shading, no
+      arcs, stop dots resting on the endowment dots);
+    * the pinned price line is replaced by TWO MOVING accent dashed lines, one
+      per trader, each spanning BOTH panels, sitting at that man's personal
+      worth of the next bottle — Sam 1.00 and Joe 0.20 at the endowment. They
+      CONVERGE as bottles move from Joe to Sam and coincide at 0.6 when n = 10,
+      which is what "the gains run out" looks like;
+    * the 0.6 level survives only as a quiet, unlabeled muted hairline that
+      explains the flat edge of the gain shading. The two "Price paid/received"
+      labels are gone.
+  Deviations from the round-3 brief's exact coordinates, all forced by the
+  no-label-may-overlap-a-curve rule (see the placement notes inline): Sam's live
+  tag hangs BELOW his line at the far left, Joe's ABOVE his line at the far
+  right; the quiet hairline runs endowment-to-gutter rather than edge-to-edge;
+  the arc labels sit 6px lower; Sam's worth-line label moved down beside his
+  curve so the n = 0 default state is unbroken.
+
+  Numbers (shared system, derived from the post's prose pins — see
+  interactive-specs.md): Sam w_S(x) = 1.0 - 0.04(x-20) bars/bottle at x bottles
+  held; Joe w_J(x) = 0.2 + 0.04(20-x); trade stops at 10 bottles (Sam 20->30,
+  Joe 20->10) where both worths equal 0.6; gains 2 + 2 = 4 bars.
+
+  INTERACTION (F8 two-agent margins + F4 area accounting): drag either stopping
+  dot along its worth line (or arrow keys, Home/End on the slider proxy) to set
+  n = bottles traded, 0..12 step 1; the other panel mirrors. Gain areas fill to
+  n; past n = 10 a muted LOSS wedge shades (the worth lines have crossed) — the
+  overshoot is the sanctioned addition that shows WHY trade stops (spec
+  deviation note 5).
+
+  GEOMETRY: two-panel viewBox 720x460 (embed aspect-ratio 16/10, max-width
+  640). Left panel x = bottles Sam holds 16..32, XL(q) = 18q - 224; right
+  panel x = bottles Joe holds 8..24, XR(q) = 18q + 264; shared y = granola
+  bars per bottle 0..1.2, Y(v) = 366 - 260v. Quiet 0.6 level y = 210.
+  Sam init (20,1.0) = (136,106); Joe init (20,0.2) = (624,314); at n = 10 both
+  worth lines sit at y = 210, Sam's dot (316,210), Joe's (444,210).
+-->
 <style>
-  :root{
-    --font-body: Georgia, 'Times New Roman', serif;
-    --paper:   #f7f4ef;   /* card background            */
-    --surface: #fdfcf9;   /* plot backing               */
-    --ink:     #1a1c1e;   /* worth lines + headings     */
-    --muted:   #6b6459;   /* axes, ticks, state line    */
-    --accent:  #b3402a;   /* price line, gains, takeaway*/
-    --accent2: #b07a2c;   /* secondary tags (house warm gold) */
-    --grid:    #e3ddd3;
+  :root {
+    --surface: #f7f4ef;   /* warm bone background        */
+    --ink:     #1a1c1e;   /* worth lines + headings      */
+    --text:    #16181a;   /* body text                   */
+    --muted:   #5c6066;   /* axes / labels / state line  */
+    --hairline:#e3ddd3;   /* droplines / separators      */
+    --accent:  #b07a2c;   /* brass — worth lines + takeaway */
+    --accent-tint: #efe4d2; /* gain areas                */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   }
-  html,body{margin:0;padding:0;background:var(--paper);font-family:var(--font-body);}
-  .wrap{max-width:720px;margin:0 auto;padding:10px 8px 6px;}
-  svg{display:block;width:100%;height:auto;background:var(--surface);
-      border:1px solid var(--grid);border-radius:4px;}
-  .hint{color:var(--muted);font-size:13px;margin:6px 2px 2px;text-align:center;}
-  .fallback{color:var(--muted);font-size:14px;padding:8px;}
-  .fallback a{color:var(--ink);}
-  text{font-family:var(--font-body);}
-  .axis{stroke:var(--muted);stroke-width:1.4;}
-  .tick{fill:var(--muted);font-size:11px;}
-  .axlbl{fill:var(--muted);font-size:12.5px;}
-  .title{fill:var(--ink);font-size:13.5px;font-weight:bold;}
-  .worth{stroke:var(--ink);stroke-width:2.6;fill:none;stroke-linecap:round;}
-  .worthlbl{fill:var(--ink);font-size:12px;font-style:italic;}
-  .price{stroke:var(--accent);stroke-width:2.2;stroke-dasharray:7 5;}
-  .pricehit{stroke:transparent;stroke-width:22;cursor:ns-resize;}
-  .bar{fill:var(--accent);fill-opacity:.18;stroke:var(--accent);stroke-width:1;}
-  .drop{stroke:var(--muted);stroke-width:1;stroke-dasharray:3 4;opacity:.8;}
-  .dot{fill:var(--ink);}
-  .pricetag{fill:var(--accent);font-size:12px;}
-  .state{fill:var(--muted);font-size:13.5px;}
-  .takeaway{fill:var(--accent);font-size:14px;font-weight:bold;}
-  .sep{stroke:var(--grid);stroke-width:1;}
-  #priceFocus:focus{outline:none;}
-  #priceFocus:focus + .focusring{opacity:1;}
-  .focusring{opacity:0;stroke:var(--accent2);stroke-width:1.5;fill:none;
-             stroke-dasharray:3 3;}
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: grid;            /* grid, not flex — see t03b-ue8-1 mobile note */
+    place-items: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .fig { width: 100%; max-width: 640px; min-width: 0; }
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+
+  .axis   { stroke: var(--muted); stroke-width: 1.4; fill: none; }
+  .worth  { stroke: var(--ink); stroke-width: 2.6; fill: none;
+            stroke-linecap: round; }
+  .drop   { stroke: var(--hairline); stroke-width: 1.6; stroke-dasharray: 5 4; }
+  /* the two MOVING personal-worth levels (round 3) */
+  .vline  { stroke: var(--accent); stroke-width: 2.2; stroke-dasharray: 7 5; }
+  /* the quiet, unlabeled 0.6 reference that the gain shading rests on */
+  .eqline { stroke: var(--muted); stroke-width: 1.2; stroke-dasharray: 2 3;
+            opacity: 0.8; }
+  .gain   { fill: var(--accent-tint); stroke: var(--accent); stroke-width: 1;
+            fill-opacity: 0.9; }
+  .loss   { fill: var(--muted); fill-opacity: 0.16; stroke: var(--muted);
+            stroke-width: 1; stroke-dasharray: 3 3; }
+  .arc    { stroke: var(--muted); stroke-width: 1.6; fill: none; }
+  .dot    { fill: var(--ink); stroke: var(--surface); stroke-width: 1.5; }
+  .stopdot { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5; }
+
+  .hit-curve { fill: none; stroke: transparent; stroke-width: 28;
+               touch-action: none; cursor: grab; }
+  .hit-dot   { fill: transparent; stroke: transparent; touch-action: none;
+               cursor: grab; }
+  .grabbing, .grabbing .hit-curve, .grabbing .hit-dot { cursor: grabbing; }
+  .pt-focus:focus-visible { outline: none; }
+  .focusring { opacity: 0; stroke: var(--accent); stroke-width: 1.5; fill: none;
+               stroke-dasharray: 3 3; }
+  .pt-focus:focus-visible ~ .focusring { opacity: 1; }
+  .grabbing .stopdot { stroke: var(--accent); stroke-width: 3.5; }
+
+  .ptitle  { fill: var(--ink); font-size: 14px; font-weight: 700; }
+  .tick    { fill: var(--muted); font-size: 11px; font-weight: 400; }
+  .axlabel { fill: var(--muted); font-size: 13px; font-weight: 600; }
+  .wlabel  { fill: var(--ink); font-size: 12px; font-weight: 600;
+             font-style: italic; }
+  .vtag    { fill: var(--accent); font-size: 11px; font-weight: 700; }
+  .arclbl  { fill: var(--muted); font-size: 11.5px; font-weight: 600; }
+  .tagbg   { fill: var(--surface); }
+  .chip    { fill: var(--accent-tint); }   /* sits inside the gain shading */
+  .glabel  { fill: var(--accent); font-size: 11.5px; font-weight: 700; }
+  .sep     { stroke: var(--hairline); stroke-width: 1; }
+  .r-state { fill: var(--muted); font-size: 12.5px; }
+  .r-take  { fill: var(--accent); font-size: 13px; font-weight: 600; }
+
+  .hint { color: var(--muted); font-size: 13px; margin: 6px 2px 2px;
+          text-align: center; }
+  .fallback { margin: 8px 0 0; color: var(--muted); font-size: 13px;
+              line-height: 1.35; text-align: center; }
+  .fallback a { color: var(--ink); }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <svg id="fig" viewBox="0 0 760 460" role="group"
-       aria-label="Gains from exchange. Two panels share one price line, at first 0.75 granola bars per bottle of water. Left: Sam, a buyer, whose personal worth of one more bottle declines as he holds more; he buys while that worth is at least the price. Right: Joe, a seller, who sells while the price is at least his worth of the bottle. Drag the price line up or down to see each side's trades and gains change, and how only one price lets every mutually beneficial trade happen.">
+<div class="fig">
+  <svg id="fig" viewBox="0 0 720 460" role="group"
+       aria-label="Gains from exchange. Two panels. Sam and Joe START WITH THE SAME 20 BOTTLES of water each, but they value them very differently: one more bottle is worth 1.0 granola bars to Sam and only 0.2 to Joe. Two brass dashed lines, one for each man, run across both panels at those worths, so the gap between them is visible at a glance. Drag either brass dot to move bottles from Joe to Sam: Sam's worth line falls as he gets more water, Joe's rises as he keeps less, and the shaded areas record the gain each man collects. The two lines meet at 0.6 after 10 bottles have changed hands, and that is where the gains run out and trade stops on its own.">
+    <title>Gains from exchange: the two worth lines start far apart at 20 bottles each and converge as Joe sells to Sam</title>
 
-    <!-- ====================== static base: panel frames ====================== -->
-    <!-- LEFT panel: x = bottles Sam holds, q 15.5..26.8 -> px 70..360 ;
-         y = bars/bottle, 0..1.45 -> px 380..40  (Y = 380 - v*234.5)          -->
-    <!-- RIGHT panel: q 11.5..22.8 -> px 430..720, same y scale               -->
+    <!-- ===================== static base (n = 0 endowment) ===================== -->
 
-    <text class="title" x="120" y="26">Sam &#8212; buyer of water</text>
-    <text class="title" x="482" y="26">Joe &#8212; seller of water</text>
+    <text class="ptitle" x="64" y="26">Sam &#8212; buyer, starts with 20 bottles</text>
+    <text class="ptitle" x="408" y="26">Joe &#8212; seller, starts with 20 bottles</text>
 
-    <!-- axes -->
-    <line class="axis" x1="70" y1="40"  x2="70"  y2="380"/>
-    <line class="axis" x1="70" y1="380" x2="360" y2="380"/>
-    <line class="axis" x1="430" y1="40" x2="430" y2="380"/>
-    <line class="axis" x1="430" y1="380" x2="720" y2="380"/>
+    <!-- gain areas (JS reshapes); empty at the endowment -->
+    <path id="gainL" class="gain" d=""/>
+    <path id="gainR" class="gain" d=""/>
+    <path id="lossL" class="loss" d="" visibility="hidden"/>
+    <path id="lossR" class="loss" d="" visibility="hidden"/>
 
-    <!-- y ticks (shared scale, labeled on left panel only) -->
+    <!-- axes (drawn past the data max; curve sits on top) -->
+    <line class="axis" x1="64"  y1="40" x2="64"  y2="366"/>
+    <line class="axis" x1="64"  y1="366" x2="356" y2="366"/>
+    <line class="axis" x1="408" y1="40" x2="408" y2="366"/>
+    <line class="axis" x1="408" y1="366" x2="700" y2="366"/>
+
+    <!-- y ticks (shared scale, labeled on the left panel only) -->
     <g class="tick" text-anchor="end">
-      <text x="64" y="325">0.25</text><text x="64" y="266">0.50</text>
-      <text x="64" y="208">0.75</text><text x="64" y="149">1.00</text>
-      <text x="64" y="90">1.25</text>
+      <text x="58" y="318">0.2</text><text x="58" y="266">0.4</text>
+      <text x="58" y="214">0.6</text><text x="58" y="162">0.8</text>
+      <text x="58" y="110">1.0</text><text x="58" y="58">1.2</text>
     </g>
-    <text class="axlbl" transform="rotate(-90 24 240)" x="24" y="240"
+    <text class="axlabel" transform="rotate(-90 16 203)" x="16" y="203"
           text-anchor="middle">Granola bars per bottle</text>
 
     <!-- x ticks -->
     <g class="tick" text-anchor="middle">
-      <text x="83" y="396">16</text><text x="134" y="396">18</text>
-      <text x="185" y="396">20</text><text x="237" y="396">22</text>
-      <text x="288" y="396">24</text><text x="339" y="396">26</text>
-      <text x="443" y="396">12</text><text x="494" y="396">14</text>
-      <text x="545" y="396">16</text><text x="597" y="396">18</text>
-      <text x="648" y="396">20</text><text x="699" y="396">22</text>
+      <text x="64" y="382">16</text><text x="136" y="382">20</text>
+      <text x="208" y="382">24</text><text x="280" y="382">28</text>
+      <text x="352" y="382">32</text>
+      <text x="408" y="382">8</text><text x="480" y="382">12</text>
+      <text x="552" y="382">16</text><text x="624" y="382">20</text>
+      <text x="696" y="382">24</text>
     </g>
-    <text class="axlbl" x="215" y="416" text-anchor="middle">Bottles of water Sam holds</text>
-    <text class="axlbl" x="575" y="416" text-anchor="middle">Bottles of water Joe holds</text>
+    <text class="axlabel" x="210" y="402" text-anchor="middle">Bottles Sam holds</text>
+    <text class="axlabel" x="554" y="402" text-anchor="middle">Bottles Joe holds</text>
 
-    <!-- gain bars (JS redraws; initial markup = P 0.75 state) -->
-    <g id="barsL">
-      <rect class="bar" x="185.5" y="133.8" width="25.7" height="70.3"/>
-      <rect class="bar" x="211.2" y="157.2" width="25.7" height="46.9"/>
-      <rect class="bar" x="236.8" y="180.7" width="25.7" height="23.4"/>
-    </g>
-    <g id="barsR">
-      <rect class="bar" x="545.3" y="204.1" width="25.7" height="11.7"/>
-      <rect class="bar" x="571.0" y="204.1" width="25.7" height="23.4"/>
-      <rect class="bar" x="596.6" y="204.1" width="25.7" height="35.2"/>
-      <rect class="bar" x="622.3" y="204.1" width="25.7" height="46.9"/>
-    </g>
+    <!-- endowment droplines (fixed): each trader starts at 20 bottles -->
+    <line class="drop" x1="64"  y1="106" x2="136" y2="106"/>
+    <line class="drop" x1="136" y1="106" x2="136" y2="366"/>
+    <line class="drop" x1="408" y1="314" x2="624" y2="314"/>
+    <line class="drop" x1="624" y1="314" x2="624" y2="366"/>
 
-    <!-- worth lines -->
-    <line class="worth" x1="134.2" y1="63.4"  x2="339.5" y2="251.0"/>   <!-- Sam 18..26 -->
-    <line class="worth" x1="468.5" y1="168.9" x2="699.4" y2="274.5"/>   <!-- Joe 13..22 -->
-    <text class="worthlbl" x="238" y="84">Sam&#8217;s personal worth</text>
-    <text class="worthlbl" x="238" y="99">of one more bottle</text>
-    <text class="worthlbl" x="440" y="120">Joe&#8217;s personal worth</text>
-    <text class="worthlbl" x="440" y="135">of one more bottle</text>
+    <!-- stopping droplines (JS moves) -->
+    <line id="dropSL" class="drop" x1="136" y1="106" x2="136" y2="366"/>
+    <line id="dropSR" class="drop" x1="624" y1="314" x2="624" y2="366"/>
 
-    <!-- endowment dots (fixed) -->
-    <circle class="dot" cx="185.5" cy="110.3" r="4"/>   <!-- Sam (20, 1.15) -->
-    <circle class="dot" cx="648.2" cy="251.0" r="4"/>   <!-- Joe (20, 0.55) -->
+    <!-- quiet, unlabeled 0.6 reference: the flat edge the gain areas rest on.
+         Runs from each trader's endowment in toward the gutter, so it brackets
+         exactly the region that can ever be shaded. -->
+    <line class="eqline" x1="136" y1="210" x2="356" y2="210"/>
+    <line class="eqline" x1="408" y1="210" x2="624" y2="210"/>
 
-    <!-- moving pieces: droplines + stopping dots (JS updates) -->
-    <line id="dropL" class="drop" x1="288.2" y1="204.1" x2="288.2" y2="380"/>
-    <line id="dropR" class="drop" x1="545.3" y1="204.1" x2="545.3" y2="380"/>
-    <circle id="stopL" class="dot" cx="288.2" cy="204.1" r="4"/>
-    <circle id="stopR" class="dot" cx="545.3" cy="204.1" r="4"/>
+    <!-- the two MOVING personal-worth levels, each spanning both panels -->
+    <line id="vlineSA" class="vline" x1="64"  y1="106" x2="356" y2="106"/>
+    <line id="vlineSB" class="vline" x1="408" y1="106" x2="700" y2="106"/>
+    <line id="vlineJA" class="vline" x1="64"  y1="314" x2="356" y2="314"/>
+    <line id="vlineJB" class="vline" x1="408" y1="314" x2="700" y2="314"/>
 
-    <!-- shared PRICE line (draggable): two visible segments + one wide hit zone -->
-    <g id="priceG">
-      <line id="priceL" class="price" x1="70"  y1="204.1" x2="360" y2="204.1"/>
-      <line id="priceR" class="price" x1="430" y1="204.1" x2="720" y2="204.1"/>
-      <text id="priceTag" class="pricetag" x="76" y="197">Price: 0.75 bars per bottle &#8597;</text>
-      <line id="priceHitL" class="pricehit" x1="70"  y1="204.1" x2="360" y2="204.1"/>
-      <line id="priceHitR" class="pricehit" x1="430" y1="204.1" x2="720" y2="204.1"/>
-    </g>
+    <!-- personal-worth lines -->
+    <line class="worth" x1="73"  y1="69.6"  x2="343" y2="225.6"/>
+    <line class="worth" x1="417" y1="194.4" x2="687" y2="350.4"/>
+    <!-- surface plates: the moving levels pass behind these labels -->
+    <rect class="tagbg" x="218" y="112" width="138" height="30"/>
+    <text class="wlabel" x="222" y="124">Sam&#8217;s personal worth</text>
+    <text class="wlabel" x="222" y="139">of one more bottle</text>
+    <rect class="tagbg" x="501" y="144" width="130" height="30"/>
+    <text class="wlabel" x="505" y="156">Joe&#8217;s personal worth</text>
+    <text class="wlabel" x="505" y="171">of one more bottle</text>
 
-    <!-- keyboard proxy for the price line -->
-    <rect id="priceFocus" x="70" y="196" width="650" height="16" fill="transparent"
-          tabindex="0" role="slider"
-          aria-label="Shared price of water, in granola bars per bottle"
-          aria-valuemin="0.55" aria-valuemax="0.9" aria-valuenow="0.75"
-          aria-valuetext="Price 0.75. Sam buys 4 bottles gaining 0.60 bars; Joe sells 4 bottles gaining 0.50 bars. Offers match: every gainful trade happens."/>
-    <rect class="focusring" x="66" y="192" width="658" height="24" rx="4"/>
+    <!-- gain labels: shown only from n = 5, the point at which the shading is
+         wide enough to hold the label whole. Below that the label would be
+         crossed by the wedge's own right edge and by the stopping dropline.
+         The chip behind each is GAIN-TINTED, so inside the shading it is
+         invisible and it keeps the moving worth level from cutting the text. -->
+    <rect id="gbgL" class="chip" x="145" y="166" width="76" height="14"
+          visibility="hidden"/>
+    <text id="glblL" class="glabel" x="152" y="176" visibility="hidden">Sam&#8217;s gain</text>
+    <rect id="gbgR" class="chip" x="549" y="229" width="72" height="14"
+          visibility="hidden"/>
+    <text id="glblR" class="glabel" x="556" y="239" visibility="hidden">Joe&#8217;s gain</text>
+
+    <!-- curved axis arrows: the bottles that change hands (JS reshapes) -->
+    <path id="arcL" class="arc" d="M136,358 Q226,330 316,358"
+          marker-end="url(#arrowMuted)" visibility="hidden"/>
+    <path id="arcR" class="arc" d="M624,358 Q534,330 444,358"
+          marker-end="url(#arrowMuted)" visibility="hidden"/>
+    <rect id="arcBgL" class="tagbg" x="138" y="319" width="176" height="14"
+          visibility="hidden"/>
+    <rect id="arcBgR" class="tagbg" x="446" y="319" width="176" height="14"
+          visibility="hidden"/>
+    <text id="arcLblL" class="arclbl" x="226" y="330" text-anchor="middle">No bottles traded yet</text>
+    <text id="arcLblR" class="arclbl" x="534" y="330" text-anchor="middle"></text>
+
+    <!-- endowment dots -->
+    <circle class="dot" cx="136" cy="106" r="4.5"/>
+    <circle class="dot" cx="624" cy="314" r="4.5"/>
+
+    <!-- stopping dots (draggable) — at the endowment until trade begins -->
+    <circle id="stopL" class="stopdot" cx="136" cy="106" r="6"/>
+    <circle id="stopR" class="stopdot" cx="624" cy="314" r="6"/>
+
+    <!-- live value tags for the two moving levels. Sam's hangs BELOW his line
+         at the far left and Joe's ABOVE his at the far right: those are the
+         only anchors that clear both worth curves AND the other man's line at
+         every n (0..12). -->
+    <rect id="tagBgS" class="tagbg" x="68" y="109" width="62" height="14"/>
+    <text id="tagS" class="vtag" x="71" y="119.5">Sam: 1.00</text>
+    <rect id="tagBgJ" class="tagbg" x="634" y="297" width="62" height="14"/>
+    <text id="tagJ" class="vtag" x="637" y="307.5">Joe: 0.20</text>
+
+    <!-- hit targets: wide strokes along each worth line + fat dot targets -->
+    <line id="hitL" class="hit-curve" x1="136" y1="106" x2="352" y2="230.8"/>
+    <line id="hitR" class="hit-curve" x1="624" y1="314" x2="408" y2="189.2"/>
+    <circle id="hitDotL" class="hit-dot" cx="136" cy="106" r="26"/>
+    <circle id="hitDotR" class="hit-dot" cx="624" cy="314" r="26"/>
+
+    <!-- keyboard proxy (slider over the traded quantity) -->
+    <rect id="nFocus" class="pt-focus" x="110" y="80" width="52" height="52"
+          fill="transparent" tabindex="0" role="slider"
+          aria-label="Bottles traded from Joe to Sam"
+          aria-valuemin="0" aria-valuemax="12" aria-valuenow="0"
+          aria-valuetext="No bottles traded yet. Both men still hold 20 bottles. Next bottle: worth 0.98 to Sam, only 0.22 to Joe - that gap is the reason to trade."/>
+    <rect id="focusRing" class="focusring" x="106" y="76" width="60" height="60" rx="6"/>
 
     <!-- readout band -->
-    <line class="sep" x1="20" y1="424" x2="740" y2="424"/>
-    <text id="stateLine" class="state" x="380" y="441" text-anchor="middle">
-      Price 0.75: Sam buys 4 (gain 0.60 bars) &#183; Joe sells 4 (gain 0.50 bars)</text>
-    <text id="takeLine" class="takeaway" x="380" y="457" text-anchor="middle">
-      Offers match &#8212; every gainful trade happens</text>
+    <line class="sep" x1="16" y1="414" x2="704" y2="414"/>
+    <text id="rState" class="r-state" x="360" y="432" text-anchor="middle">Both men still hold 20 bottles &#183; no gains captured yet</text>
+    <text id="rTake" class="r-take" x="360" y="451" text-anchor="middle">Next bottle: worth 0.98 to Sam, only 0.22 to Joe &#8212; that gap is the reason to trade</text>
+
+    <defs>
+      <marker id="arrowMuted" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066"/>
+      </marker>
+    </defs>
   </svg>
 
-  <p class="hint">Drag the dashed price line up or down (or focus it and use the
-    arrow keys). Watch when the two sides&#8217; offers match.</p>
+  <p class="hint">Both men start with the same 20 bottles &#8212; they just value them
+    differently, which is why the two brass lines start so far apart. Drag either
+    brass dot to move bottles from Joe to Sam and watch the lines close the gap
+    (arrow keys work too).</p>
 
   <noscript>
-    <p class="fallback">Interactive view needs JavaScript. See the
+    <p class="fallback">The interactive view needs JavaScript. See the
       <a href="t02-ep3-1-gains-from-exchange.svg">static version of this figure</a>.</p>
   </noscript>
 </div>
@@ -167,114 +292,161 @@
 <script>
 (function () {
   'use strict';
-  // ---- geometry (must mirror the base markup) ----
-  var SCALE = 25.664;                       // px per bottle (290 / 11.3)
-  var XL0 = 70, QL0 = 15.5;                 // left panel x-origin
-  var XR0 = 430, QR0 = 11.5;                // right panel x-origin
-  var YAX = 380, YPB = 234.483;             // y-axis foot; px per bar (340/1.45)
-  function Y (v) { return YAX - v * YPB; }
-  function XL (q) { return XL0 + (q - QL0) * SCALE; }
-  function XR (q) { return XR0 + (q - QR0) * SCALE; }
 
-  // ---- economics (brief Section C invariants) ----
-  var PMIN = 0.55, PMAX = 0.90, STEP = 0.05;
-  function samWorth (k) { return 1.15 - 0.10 * k; }        // k-th bottle bought
-  function joeWorth (q) { return 0.75 - 0.05 * (q - 16); } // worth of q-th bottle held
-  function trades (p) {
-    var nS = 0, gS = 0;
-    while (nS < 6 && samWorth(nS + 1) >= p - 1e-9) { nS++; gS += samWorth(nS) - p; }
-    var nJ = 0, gJ = 0;
-    // seller keeps his break-even bottle (buyer takes his): this asymmetric
-    // tie-break is the brief invariant that makes quantities match at P=0.75
-    while (nJ < 7 && joeWorth(20 - nJ) < p - 1e-9) { gJ += p - joeWorth(20 - nJ); nJ++; }
-    return { nS: nS, gS: gS, nJ: nJ, gJ: gJ };
-  }
+  // ---- geometry (must mirror the base markup) ----
+  function XL (q) { return 18 * q - 224; }   // left panel: bottles Sam holds
+  function XR (q) { return 18 * q + 264; }   // right panel: bottles Joe holds
+  function Y  (v) { return 366 - 260 * v; }  // bars per bottle
+  var LEVEL = 0.6, YL = Y(LEVEL);            // 210 — the quiet reference
+  var NMAX = 12;
+
+  // ---- economics (see interactive-specs.md) ----
+  function samWorth (x) { return 1.0 - 0.04 * (x - 20); }
+  function joeWorth (x) { return 0.2 + 0.04 * (20 - x); }
+  function samNext (n) { return samWorth(20 + n + 0.5); } // n+1-th bottle bought
+  function joeNext (n) { return joeWorth(20 - n - 0.5); } // n+1-th bottle sold
+  function gain (n) { return 0.4 * n - 0.02 * n * n; }    // each side's area
 
   var svg = document.getElementById('fig');
   var $ = function (id) { return document.getElementById(id); };
-  var price = 0.75;
+  var n = 0;
 
-  function fmt (v) { return v.toFixed(2).replace(/^0\./, '0.'); }
+  function f2 (v) { return v.toFixed(2); }
+  function level (id, y) {
+    var e = $(id); e.setAttribute('y1', y); e.setAttribute('y2', y);
+  }
+  function show (id, on) {
+    $(id).setAttribute('visibility', on ? 'visible' : 'hidden');
+  }
 
   function render () {
-    var y = Y(price), t = trades(price);
+    var qS = 20 + n, qJ = 20 - n;
+    var xS = XL(qS), xJ = XR(qJ);
+    var wS = samWorth(qS), wJ = joeWorth(qJ);
+    var yS = Y(wS), yJ = Y(wJ);
 
-    ['priceL', 'priceR', 'priceHitL', 'priceHitR'].forEach(function (id) {
-      $(id).setAttribute('y1', y); $(id).setAttribute('y2', y);
-    });
-    $('priceTag').setAttribute('y', y - 7.1);
-    $('priceTag').textContent = 'Price: ' + fmt(price) + ' bars per bottle ↕';
-    $('priceFocus').setAttribute('y', y - 8);
+    // stopping dots + droplines + hit/focus followers
+    $('stopL').setAttribute('cx', xS); $('stopL').setAttribute('cy', yS);
+    $('stopR').setAttribute('cx', xJ); $('stopR').setAttribute('cy', yJ);
+    $('hitDotL').setAttribute('cx', xS); $('hitDotL').setAttribute('cy', yS);
+    $('hitDotR').setAttribute('cx', xJ); $('hitDotR').setAttribute('cy', yJ);
+    $('dropSL').setAttribute('x1', xS); $('dropSL').setAttribute('x2', xS);
+    $('dropSL').setAttribute('y1', yS);
+    $('dropSR').setAttribute('x1', xJ); $('dropSR').setAttribute('x2', xJ);
+    $('dropSR').setAttribute('y1', yJ);
+    $('nFocus').setAttribute('x', xS - 26); $('nFocus').setAttribute('y', yS - 26);
+    $('focusRing').setAttribute('x', xS - 30); $('focusRing').setAttribute('y', yS - 30);
 
-    // Sam bars: bottle k spans [20+k-1, 20+k], from price up to worth
-    var bl = $('barsL'); while (bl.firstChild) bl.removeChild(bl.firstChild);
-    for (var k = 1; k <= t.nS; k++) {
-      var w = samWorth(k); if (w - price < 1e-9) continue;
-      var r = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-      r.setAttribute('class', 'bar');
-      r.setAttribute('x', XL(20 + k - 1)); r.setAttribute('width', SCALE);
-      r.setAttribute('y', Y(w)); r.setAttribute('height', Y(price) - Y(w));
-      bl.appendChild(r);
+    // the two moving worth levels + their live tags
+    level('vlineSA', yS); level('vlineSB', yS);
+    level('vlineJA', yJ); level('vlineJB', yJ);
+    $('tagBgS').setAttribute('y', yS + 3);
+    $('tagS').setAttribute('y', yS + 13.5);
+    $('tagS').textContent = 'Sam: ' + f2(wS);
+    $('tagBgJ').setAttribute('y', yJ - 17);
+    $('tagJ').setAttribute('y', yJ - 6.5);
+    $('tagJ').textContent = 'Joe: ' + f2(wJ);
+
+    // gain areas (up to min(n,10)); loss wedges past 10
+    var m = Math.min(n, 10);
+    var xSm = XL(20 + m), ySm = Y(samWorth(20 + m));
+    var xJm = XR(20 - m), yJm = Y(joeWorth(20 - m));
+    $('gainL').setAttribute('d', m === 0 ? '' :
+      'M136,106 L' + xSm + ',' + ySm + ' L' + xSm + ',' + YL + ' L136,' + YL + ' Z');
+    $('gainR').setAttribute('d', m === 0 ? '' :
+      'M' + xJm + ',' + YL + ' L624,' + YL + ' L624,314 L' + xJm + ',' + yJm + ' Z');
+    if (n > 10) {
+      $('lossL').setAttribute('d',
+        'M316,' + YL + ' L' + xS + ',' + YL + ' L' + xS + ',' + yS + ' Z');
+      $('lossR').setAttribute('d',
+        'M444,' + YL + ' L' + xJ + ',' + yJ + ' L' + xJ + ',' + YL + ' Z');
     }
-    // Joe bars: j-th sale is bottle (20-j+1), spans [20-j, 20-j+1], price down to worth
-    var br = $('barsR'); while (br.firstChild) br.removeChild(br.firstChild);
-    for (var j = 1; j <= t.nJ; j++) {
-      var q = 20 - j + 1, wj = joeWorth(q); if (price - wj < 1e-9) continue;
-      var r2 = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-      r2.setAttribute('class', 'bar');
-      r2.setAttribute('x', XR(q - 1)); r2.setAttribute('width', SCALE);
-      r2.setAttribute('y', Y(price)); r2.setAttribute('height', Y(wj) - Y(price));
-      br.appendChild(r2);
-    }
+    show('lossL', n > 10); show('lossR', n > 10);
 
-    // stopping dots ride each worth line at worth = price
-    var qL = 20 + (1.15 - price) / 0.10, qR = 16 - (price - 0.75) / 0.05;
-    $('stopL').setAttribute('cx', XL(qL)); $('stopL').setAttribute('cy', y);
-    $('dropL').setAttribute('x1', XL(qL)); $('dropL').setAttribute('x2', XL(qL));
-    $('dropL').setAttribute('y1', y);
-    $('stopR').setAttribute('cx', XR(qR)); $('stopR').setAttribute('cy', y);
-    $('dropR').setAttribute('x1', XR(qR)); $('dropR').setAttribute('x2', XR(qR));
-    $('dropR').setAttribute('y1', y);
+    // gain labels (and their tinted plates) appear only once the shading is
+    // wide enough to swallow them whole — see the markup note
+    var named = n >= 5;
+    show('glblL', named); show('glblR', named);
+    show('gbgL', named);  show('gbgR', named);
+
+    // curved axis arrows + labels
+    if (n === 0) {
+      show('arcL', false); show('arcR', false);
+      show('arcBgL', false); show('arcBgR', false);
+      $('arcLblL').textContent = 'No bottles traded yet';
+      $('arcLblR').textContent = '';
+      $('arcLblL').setAttribute('x', 226);
+    } else {
+      show('arcL', true); show('arcR', true);
+      show('arcBgL', true); show('arcBgR', true);
+      $('arcL').setAttribute('d', 'M136,358 Q' + ((136 + xS) / 2) + ',330 ' + xS + ',358');
+      $('arcR').setAttribute('d', 'M624,358 Q' + ((624 + xJ) / 2) + ',330 ' + xJ + ',358');
+      $('arcLblL').textContent = 'Sam buys ' + n + (n === 1 ? ' bottle' : ' bottles') + ' from Joe';
+      $('arcLblR').textContent = 'Joe sells ' + n + (n === 1 ? ' bottle' : ' bottles') + ' to Sam';
+      // Each label rides the middle of its arc, but clamped: its plate must
+      // not reach the y-axis on the left, and on the right the label must stay
+      // clear of Joe's worth line, which dips into this band past x = 630.
+      var cL = Math.max(154, Math.min(268, (136 + xS) / 2));
+      var cR = Math.max(498, Math.min(534, (624 + xJ) / 2));
+      $('arcLblL').setAttribute('x', cL);
+      $('arcLblR').setAttribute('x', cR);
+      $('arcBgL').setAttribute('x', cL - 88);
+      $('arcBgR').setAttribute('x', cR - 88);
+    }
 
     // readout
-    $('stateLine').textContent = 'Price ' + fmt(price) + ': Sam buys ' + t.nS +
-      ' (gain ' + fmt(t.gS) + ' bars) · Joe sells ' + t.nJ +
-      ' (gain ' + fmt(t.gJ) + ' bars)';
-    var take;
-    if (t.nS === t.nJ) {
-      take = 'Offers match — every gainful trade happens';
-    } else if (t.nS > t.nJ) {
-      take = 'Sam wants ' + t.nS + ' but Joe only offers ' + t.nJ +
-             ' — price gets bid up';
+    var g = gain(n);
+    var state, ariaState;
+    if (n === 0) {
+      state = 'Both men still hold 20 bottles · no gains captured yet';
+      ariaState = 'No bottles traded yet. Both men still hold 20 bottles.';
     } else {
-      take = 'Joe offers ' + t.nJ + ' but Sam only wants ' + t.nS +
-             ' — price gets bid down';
+      state = n + (n === 1 ? ' bottle' : ' bottles') +
+        ' traded · Sam’s gain ' + f2(g) + ' bars · Joe’s gain ' + f2(g) + ' bars';
+      ariaState = n + (n === 1 ? ' bottle' : ' bottles') + ' traded. Sam’s gain ' +
+        f2(g) + ' bars, Joe’s gain ' + f2(g) + ' bars.';
     }
-    $('takeLine').textContent = take;
+    $('rState').textContent = state;
 
-    var pf = $('priceFocus');
-    pf.setAttribute('aria-valuenow', price.toFixed(2));
-    pf.setAttribute('aria-valuetext', 'Price ' + fmt(price) + '. Sam buys ' +
-      t.nS + ' bottles gaining ' + fmt(t.gS) + ' bars; Joe sells ' + t.nJ +
-      ' bottles gaining ' + fmt(t.gJ) + ' bars. ' +
-      (t.nS === t.nJ ? 'Offers match: every gainful trade happens.'
-                     : take.replace(/—/g, '-') + '.'));
+    var take, sn = samNext(n), jn = joeNext(n);
+    if (n === 0) {
+      take = 'Next bottle: worth ' + f2(sn) + ' to Sam, only ' + f2(jn) +
+             ' to Joe — that gap is the reason to trade';
+    } else if (n < 10) {
+      take = 'Next bottle: worth ' + f2(sn) + ' to Sam, only ' + f2(jn) +
+             ' to Joe — another trade helps both';
+    } else if (n === 10) {
+      take = 'A bottle is now worth 0.60 to Sam and 0.60 to Joe — ' +
+             'the worth lines have met; trade stops on its own';
+    } else {
+      take = 'Past 10 the lines have crossed: the next bottle is worth less to ' +
+             'Sam than to Joe — voluntary trade never goes here';
+    }
+    $('rTake').textContent = take;
+
+    var pf = $('nFocus');
+    pf.setAttribute('aria-valuenow', n);
+    pf.setAttribute('aria-valuetext', ariaState + ' ' + take.replace(/—/g, '-') + '.');
   }
 
-  function clampSnap (p) {
-    p = Math.max(PMIN, Math.min(PMAX, p));
-    return Math.round(p / STEP) * STEP;
-  }
+  function clampN (v) { return Math.max(0, Math.min(NMAX, Math.round(v))); }
 
-  // ---- pointer drag (pointer capture; fast drags stay attached) ----
+  // ---- pointer drag (either panel; pointer capture holds fast drags) ----
   function svgPoint (evt) {
     var pt = svg.createSVGPoint();
     pt.x = evt.clientX; pt.y = evt.clientY;
     return pt.matrixTransform(svg.getScreenCTM().inverse());
   }
   var dragging = false;
+  function nFromPointer (evt) {
+    var p = svgPoint(evt);
+    // whichever panel the pointer is in decides; both map to the same n
+    if (p.x < 382) { return clampN((p.x - 136) / 18); }
+    return clampN((624 - p.x) / 18);
+  }
   function onDown (evt) {
     dragging = true;
+    svg.classList.add('grabbing');
     if (evt.pointerId !== undefined && evt.target.setPointerCapture) {
       try { evt.target.setPointerCapture(evt.pointerId); } catch (e) {}
     }
@@ -282,17 +454,18 @@
   }
   function onMove (evt) {
     if (!dragging) return;
-    var p = (YAX - svgPoint(evt).y) / YPB;
-    var snapped = clampSnap(p);
-    if (Math.abs(snapped - price) > 1e-9) { price = snapped; render(); }
+    var v = nFromPointer(evt);
+    if (v !== n) { n = v; render(); }
   }
   function onUp (evt) {
     dragging = false;
+    svg.classList.remove('grabbing');
     if (evt.pointerId !== undefined && evt.target.releasePointerCapture) {
       try { evt.target.releasePointerCapture(evt.pointerId); } catch (e) {}
     }
   }
-  ['priceHitL', 'priceHitR', 'priceFocus'].forEach(function (id) {
+  // nFocus paints over hitDotL (ep2-11 lesson): it must also start drags
+  ['hitL', 'hitR', 'hitDotL', 'hitDotR', 'nFocus'].forEach(function (id) {
     $(id).addEventListener('pointerdown', onDown);
   });
   svg.addEventListener('pointermove', onMove);
@@ -300,25 +473,28 @@
   svg.addEventListener('pointercancel', onUp);
 
   // ---- keyboard ----
-  $('priceFocus').addEventListener('keydown', function (evt) {
-    var delta = 0;
-    if (evt.key === 'ArrowUp' || evt.key === 'ArrowRight') delta = STEP;
-    else if (evt.key === 'ArrowDown' || evt.key === 'ArrowLeft') delta = -STEP;
-    else if (evt.key === 'Home') { price = PMIN; render(); evt.preventDefault(); return; }
-    else if (evt.key === 'End') { price = PMAX; render(); evt.preventDefault(); return; }
+  $('nFocus').addEventListener('keydown', function (evt) {
+    var v = n;
+    if (evt.key === 'ArrowUp' || evt.key === 'ArrowRight') v = n + 1;
+    else if (evt.key === 'ArrowDown' || evt.key === 'ArrowLeft') v = n - 1;
+    else if (evt.key === 'Home') v = 0;
+    else if (evt.key === 'End') v = NMAX;
     else return;
     evt.preventDefault();
-    price = clampSnap(price + delta);
-    render();
+    v = clampN(v);
+    if (v !== n) { n = v; render(); }
   });
 
   // ---- debug hook (widget standard) ----
   window.__fig = {
-    set: function (p) { price = clampSnap(Number(p)); render(); return price; },
+    set: function (v) { n = clampN(Number(v)); render(); return n; },
     get: function () {
-      var t = trades(price);
-      return { price: price, samBuys: t.nS, samGain: +t.gS.toFixed(2),
-               joeSells: t.nJ, joeGain: +t.gJ.toFixed(2), match: t.nS === t.nJ };
+      return { n: n, level: LEVEL, samGain: +gain(n).toFixed(2),
+               joeGain: +gain(n).toFixed(2),
+               samWorth: +samWorth(20 + n).toFixed(2),
+               joeWorth: +joeWorth(20 - n).toFixed(2),
+               samNext: +samNext(n).toFixed(2),
+               joeNext: +joeNext(n).toFixed(2), stopped: n === 10 };
     }
   };
 

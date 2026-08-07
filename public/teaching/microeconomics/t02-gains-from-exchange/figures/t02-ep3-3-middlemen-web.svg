@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  t02-ep3-3-middlemen-web.svg — NEW BUILD 2026-08-06 (see interactive-specs.md)
+
+  Static web-native figure for the t02 blog post (website theme, NOT FAU).
+  HAND-AUTHORED SVG per the commons web-theme rule (2026-07-26): inline statics
+  share the widgets' FULL theme — warm bone surface, ink 2.6px curves, brass
+  accents, muted 1.4px axes, system sans stack. The FAU LaTeX build
+  t02-ep3-3-middlemen.tex -> .svg is the slide asset; this file is the embed.
+
+  Course-adapted, construction-faithful version of E&P Fig 3-3 "Exchange With
+  Transactions Costs With And Without Middlemen" (p. 49): two stacked panels
+  on the same double-origin frame as the superimposed figure (40 bottles,
+  Sam's holdings left-to-right, Joe's right-to-left).
+    Panel A — trading without a middleman, arranging costs 0.4 bars/bottle:
+      Sam's full price 0.80 and Joe's net 0.40 straddle the 0.6 market price;
+      trade stops at 5 bottles (Sam 25 from his origin), short of the 30 the
+      costless crossing would reach. Realized gains shaded; the band the costs
+      eat shaded muted.
+    Panel B — the newcomer arranges the trade for 0.2 bars/bottle:
+      price lines 0.70 / 0.50 (the prose's "paid 7, received 5" per bottle);
+      trade extends to 7.5 bottles; the ADDED gains from the middleman are the
+      deeper-tinted bands; his cut is the middle band.
+  Numbers (shared system): Sam w = 1.8 - 0.04x, Joe w = 0.04x - 0.6 (shared x
+  from Sam's origin); crossing (30, 0.6). Gains: A = 0.5 + 0.5 bars, costs eat
+  2.0, unrealized 1.0; B = 1.125 + 1.125, cut 1.5, unrealized 0.25.
+  Deviations (spec notes 1-4): equal slopes forced by the prose pins; tint
+  fills instead of the source's hatching; quantities read from the tick rows
+  (the source's abstract X-labels are not reproduced); x-axis break marked
+  left of the data region (bottles 0-14 compressed), as the source breaks its
+  axes.
+
+  Pixel frame: X(b) = 64 + 23.85*(b - 14) for b bottles from Sam's origin
+  (X(20)=207, X(25)=326, X(27.5)=386, X(30)=445.5, X(40)=684).
+  Panel A: Y(v) = 330 - 225*v.  Panel B: Y(v) = 735 - 225*v.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 815" role="img"
+     aria-label="Two stacked panels on the shared 40-bottle frame. Panel A: when arranging a trade yourself costs 0.4 granola bars per bottle, Sam's full price of 0.80 and Joe's net receipt of 0.40 straddle the market price, only 5 bottles trade instead of the 10 that free trading would move, both gain areas shrink, and a wide muted band between the two price lines is eaten by the costs of trading. Panel B: a middleman who arranges the trade for 0.2 bars per bottle narrows that band to 0.70 and 0.50, trade expands toward the free-trading quantity, and each trader's gain grows by the deeper-shaded areas even though the middleman keeps his cut.">
+  <title>Transaction costs shrink trade; a cheaper middleman gives some of it back</title>
+  <style>
+    .surface { fill: #f7f4ef; }
+    .axis    { stroke: #5c6066; stroke-width: 1.4; fill: none; }
+    .worth   { stroke: #1a1c1e; stroke-width: 2.6; fill: none; stroke-linecap: round; }
+    .drop    { stroke: #e3ddd3; stroke-width: 1.6; fill: none; stroke-dasharray: 5 4; }
+    .dropmut { stroke: #5c6066; stroke-width: 1.2; fill: none; stroke-dasharray: 2 3; }
+    .price   { stroke: #b07a2c; stroke-width: 2; fill: none; stroke-dasharray: 7 5; }
+    .gain    { fill: #efe4d2; stroke: #b07a2c; stroke-width: 1; fill-opacity: 0.9; }
+    .gainx   { fill: #b07a2c; fill-opacity: 0.32; stroke: #b07a2c; stroke-width: 1; }
+    .cost    { fill: #5c6066; fill-opacity: 0.13; }
+    .dot     { fill: #1a1c1e; stroke: #f7f4ef; stroke-width: 1.5; }
+    .dotstop { fill: #b07a2c; stroke: #f7f4ef; stroke-width: 2; }
+    .dotmut  { fill: #5c6066; stroke: #f7f4ef; stroke-width: 1.5; }
+    text     { font-family: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+               'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+    .ptitle  { fill: #1a1c1e; font-size: 14px; font-weight: 700; }
+    .tick    { fill: #5c6066; font-size: 11px; font-weight: 400; }
+    .rowlbl  { fill: #5c6066; font-size: 11px; font-weight: 700; }
+    .axlabel { fill: #5c6066; font-size: 13px; font-weight: 600; }
+    .wlabel  { fill: #1a1c1e; font-size: 12px; font-weight: 600; font-style: italic; }
+    .glabel  { fill: #b07a2c; font-size: 11.5px; font-weight: 700; }
+    .plabel  { fill: #b07a2c; font-size: 11px; font-weight: 700; }
+    .mutlbl  { fill: #5c6066; font-size: 10.5px; font-weight: 600; }
+  </style>
+
+  <rect class="surface" x="0" y="0" width="720" height="815"/>
+
+  <!-- ============================ PANEL A ============================ -->
+  <text class="ptitle" x="64" y="28">A &#8212; Trading without a middleman: arranging costs 0.4 bars a bottle</text>
+
+  <!-- gains + cost band (drawn first; axes and lines sit on top) -->
+  <path class="gain" d="M207,105 L326,150 L207,150 Z"/>
+  <path class="gain" d="M207,240 L326,240 L207,285 Z"/>
+  <rect class="cost" x="207" y="150" width="119" height="90"/>
+  <text class="glabel" x="212" y="146">Sam&#8217;s gain</text>
+  <text class="glabel" x="212" y="252">Joe&#8217;s gain</text>
+  <text class="mutlbl" x="266" y="190" text-anchor="middle">eaten by the costs</text>
+  <text class="mutlbl" x="266" y="204" text-anchor="middle">of arranging trades</text>
+
+  <!-- axes (twin y axes, shared x base) + x-axis break mark -->
+  <line class="axis" x1="64" y1="50" x2="64" y2="330"/>
+  <line class="axis" x1="684" y1="50" x2="684" y2="330"/>
+  <line class="axis" x1="64" y1="330" x2="700" y2="330"/>
+  <path class="axis" d="M80,336 L88,324 M85,336 L93,324"/>
+
+  <!-- y ticks (mirrored) -->
+  <g class="tick" text-anchor="end">
+    <text x="58" y="289">0.2</text><text x="58" y="244">0.4</text>
+    <text x="58" y="199">0.6</text><text x="58" y="154">0.8</text>
+    <text x="58" y="109">1.0</text><text x="58" y="64">1.2</text>
+  </g>
+  <g class="tick" text-anchor="start">
+    <text x="690" y="289">0.2</text><text x="690" y="244">0.4</text>
+    <text x="690" y="199">0.6</text><text x="690" y="154">0.8</text>
+    <text x="690" y="109">1.0</text><text x="690" y="64">1.2</text>
+  </g>
+  <text class="axlabel" transform="rotate(-90 16 190)" x="16" y="190"
+        text-anchor="middle">Granola bars per bottle</text>
+
+  <!-- x tick rows: Sam from the left, Joe from the right -->
+  <g class="tick" text-anchor="middle">
+    <text x="64" y="348">0</text><text x="207" y="348">20</text>
+    <text x="445.5" y="348">30</text><text x="684" y="348">40</text>
+  </g>
+  <g class="tick" text-anchor="middle">
+    <text x="64" y="363">40</text><text x="207" y="363">20</text>
+    <text x="445.5" y="363">10</text><text x="684" y="363">0</text>
+  </g>
+  <text class="rowlbl" x="112" y="348" text-anchor="start">Sam &#8594;</text>
+  <text class="rowlbl" x="610" y="363" text-anchor="end">&#8592; Joe</text>
+  <text class="axlabel" x="374" y="382" text-anchor="middle">Bottles of water &#8212; 40 in all</text>
+
+  <!-- initial-allocation dropline (both hold 20) -->
+  <line class="drop" x1="207" y1="105" x2="207" y2="330"/>
+
+  <!-- the costless stopping point, kept for reference -->
+  <line class="dropmut" x1="445.5" y1="195" x2="445.5" y2="330"/>
+  <circle class="dotmut" cx="445.5" cy="195" r="3.5"/>
+  <text class="mutlbl" x="452" y="305">where trade would stop</text>
+  <text class="mutlbl" x="452" y="318">if arranging it were free</text>
+
+  <!-- price lines the two traders actually face -->
+  <line class="price" x1="64" y1="150" x2="684" y2="150"/>
+  <line class="price" x1="64" y1="240" x2="684" y2="240"/>
+  <text class="plabel" x="68" y="145">0.80 &#183; Sam&#8217;s full price</text>
+  <text class="plabel" x="68" y="235">0.40 &#183; Joe&#8217;s net</text>
+
+  <!-- trade stops where the worth gap equals the 0.4 cost -->
+  <line class="drop" x1="326" y1="150" x2="326" y2="330"/>
+
+  <!-- personal-worth lines -->
+  <line class="worth" x1="111.7" y1="69"  x2="588.7" y2="249"/>
+  <line class="worth" x1="135.6" y1="312" x2="612.6" y2="132"/>
+  <text class="wlabel" x="150" y="80">Sam&#8217;s personal worth</text>
+  <text class="wlabel" x="608" y="120" text-anchor="end">Joe&#8217;s personal worth</text>
+
+  <!-- dots: endowment (ink) and stopping points (brass) -->
+  <circle class="dot" cx="207" cy="105" r="4.5"/>
+  <circle class="dot" cx="207" cy="285" r="4.5"/>
+  <circle class="dotstop" cx="326" cy="150" r="5"/>
+  <circle class="dotstop" cx="326" cy="240" r="5"/>
+
+  <!-- ============================ PANEL B ============================ -->
+  <text class="ptitle" x="64" y="433">B &#8212; A middleman arranges the trade for 0.2 bars a bottle</text>
+
+  <!-- gains: full areas in the base tint, the middleman's ADDITION deeper -->
+  <path class="gain" d="M207,510 L386,577.5 L207,577.5 Z"/>
+  <path class="gain" d="M207,622.5 L386,622.5 L207,690 Z"/>
+  <path class="gainx" d="M207,555 L326,555 L386,577.5 L207,577.5 Z"/>
+  <path class="gainx" d="M207,622.5 L386,622.5 L326,645 L207,645 Z"/>
+  <rect class="cost" x="207" y="577.5" width="179" height="45"/>
+  <text class="glabel" x="212" y="551">Sam&#8217;s gain</text>
+  <text class="glabel" x="212" y="658">Joe&#8217;s gain</text>
+  <text class="mutlbl" x="296" y="604" text-anchor="middle">the newcomer&#8217;s cut</text>
+  <text class="glabel" x="396" y="569">extra gain to Sam</text>
+  <text class="glabel" x="396" y="641">extra gain to Joe</text>
+
+  <!-- axes + break -->
+  <line class="axis" x1="64" y1="455" x2="64" y2="735"/>
+  <line class="axis" x1="684" y1="455" x2="684" y2="735"/>
+  <line class="axis" x1="64" y1="735" x2="700" y2="735"/>
+  <path class="axis" d="M80,741 L88,729 M85,741 L93,729"/>
+
+  <!-- y ticks (mirrored) -->
+  <g class="tick" text-anchor="end">
+    <text x="58" y="694">0.2</text><text x="58" y="649">0.4</text>
+    <text x="58" y="604">0.6</text><text x="58" y="559">0.8</text>
+    <text x="58" y="514">1.0</text><text x="58" y="469">1.2</text>
+  </g>
+  <g class="tick" text-anchor="start">
+    <text x="690" y="694">0.2</text><text x="690" y="649">0.4</text>
+    <text x="690" y="604">0.6</text><text x="690" y="559">0.8</text>
+    <text x="690" y="514">1.0</text><text x="690" y="469">1.2</text>
+  </g>
+  <text class="axlabel" transform="rotate(-90 16 595)" x="16" y="595"
+        text-anchor="middle">Granola bars per bottle</text>
+
+  <!-- x tick rows -->
+  <g class="tick" text-anchor="middle">
+    <text x="64" y="753">0</text><text x="207" y="753">20</text>
+    <text x="445.5" y="753">30</text><text x="684" y="753">40</text>
+  </g>
+  <g class="tick" text-anchor="middle">
+    <text x="64" y="768">40</text><text x="207" y="768">20</text>
+    <text x="445.5" y="768">10</text><text x="684" y="768">0</text>
+  </g>
+  <text class="rowlbl" x="112" y="753" text-anchor="start">Sam &#8594;</text>
+  <text class="rowlbl" x="610" y="768" text-anchor="end">&#8592; Joe</text>
+  <text class="axlabel" x="374" y="787" text-anchor="middle">Bottles of water &#8212; 40 in all</text>
+
+  <!-- initial-allocation dropline -->
+  <line class="drop" x1="207" y1="510" x2="207" y2="735"/>
+
+  <!-- the costless stopping point -->
+  <line class="dropmut" x1="445.5" y1="600" x2="445.5" y2="735"/>
+  <circle class="dotmut" cx="445.5" cy="600" r="3.5"/>
+
+  <!-- price lines with the narrower middleman spread -->
+  <line class="price" x1="64" y1="577.5" x2="684" y2="577.5"/>
+  <line class="price" x1="64" y1="622.5" x2="684" y2="622.5"/>
+  <text class="plabel" x="68" y="572">0.70 &#183; Sam&#8217;s full price</text>
+  <text class="plabel" x="68" y="637">0.50 &#183; Joe&#8217;s net</text>
+
+  <!-- trade now reaches 7.5 bottles -->
+  <line class="drop" x1="386" y1="577.5" x2="386" y2="735"/>
+
+  <!-- personal-worth lines -->
+  <line class="worth" x1="111.7" y1="474" x2="588.7" y2="654"/>
+  <line class="worth" x1="135.6" y1="717" x2="612.6" y2="537"/>
+  <text class="wlabel" x="150" y="486">Sam</text>
+  <text class="wlabel" x="150" y="700">Joe</text>
+
+  <!-- dots -->
+  <circle class="dot" cx="207" cy="510" r="4.5"/>
+  <circle class="dot" cx="207" cy="690" r="4.5"/>
+  <circle class="dotstop" cx="386" cy="577.5" r="5"/>
+  <circle class="dotstop" cx="386" cy="622.5" r="5"/>
+</svg>
