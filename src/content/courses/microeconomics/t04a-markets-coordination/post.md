@@ -12,6 +12,7 @@ word_budget: 3610
   # word_budget 3660 -> 3758 (+98): ep4-1 widget round-2 rebuild 2026-08-07 — figure now carries the full E&P Fig 4-1/4-2/4-3 sequence (scenario buttons); figcaption rewritten + three prose echo pointers (new-buyer lesson, car-burns rerun, two-cars-arrive clearing). Measured stripped 3,744; 14-word headroom preserved.
   # word_budget unchanged (3758): ep4-1 round-3 + ep4-4 round-2 figcaption edits 2026-08-07 (drag sentences replaced by button/old-price sentences). Measured stripped 3,718; 40-word headroom.
   # word_budget 3758 -> 3610 (-148): ep4-4 figure PULLED AND BANKED 2026-08-07 (instructor: supply not yet taught at session 6; re-host in T7) — embed + figcaption removed, lecture card ext-t04a-supply-elasticity-10 added. Measured stripped 3,570; 40-word headroom preserved.
+  # word_budget unchanged (3610): econ-writing round 2 2026-08-07 (10 line edits). Measured stripped 3,541.
 word_target: "3400-3600"
 status: approved        # E&P integration M4 done-gate 2026-07-20; prior approval 2026-07-01
 audience: students
@@ -47,9 +48,9 @@ Trade makes both sides better off: each hands over something worth less to get s
 </dl>
 </aside>
 
-Middlemen exist for exactly this reason. A *middleman* stands between the original seller and the final buyer and lowers the cost of the trade for both: a wholesaler or broker can search, sort, and vouch at far lower cost than you could on your own, so he raises the price the seller pockets while lowering the full price the buyer pays. Both sides come out ahead, and his cut comes out of the gain he creates by shrinking the transaction costs.
+Middlemen exist to shrink these costs. A *middleman* stands between the original seller and the final buyer: a wholesaler or broker can search, sort, and vouch at far lower cost than you could on your own, so he raises the price the seller pockets while lowering the full price the buyer pays. Both sides come out ahead, and his cut comes from the gain he creates.
 
-The table below traces the gain for a single egg. Without a middleman, the buyer pays eight cents in cash plus a penny of his own trouble, a full price of nine cents; the seller collects eight cents but bears half a cent of selling costs, netting seven and a half. A specialist handles the messy parts. Now the buyer pays eight and a half cents in cash but nothing in extra trouble, and the seller nets seven and three-quarter cents. The buyer's full price fell and the seller's take rose, even though the cash price the buyer hands over went up.
+The table below traces the gain for a single egg. Without a middleman, the buyer pays eight cents in cash plus a penny of his own trouble, a full price of nine cents; the seller collects eight cents but bears half a cent of selling costs, netting seven and a half. A specialist handles the messy parts. Now the buyer pays eight and a half cents in cash but nothing in extra trouble, and the seller nets seven and three-quarter cents. The buyer's full price falls and the seller's take rises, even though the cash price the buyer hands over goes up.
 
 | Buying one egg | Money | Nonmoney | Full price |
 |---|---|---|---|
@@ -64,7 +65,7 @@ The table below traces the gain for a single egg. Without a middleman, the buyer
 
 *The middleman earned three-quarters of a cent per egg by cutting the buyer's and seller's combined transaction costs in half. The buyer's full price still fell, and the seller's net rose, which is why "buy direct and eliminate the middleman's cost" is usually a confusion.*
 
-A discount store boasts that it "cuts out the middleman" so you save, but eliminating the middleman does not eliminate the work he was doing; it just hands that work back to you. Do it yourself, and the cost has not vanished, only changed hands. Sometimes doing it yourself is genuinely cheaper; often the specialist is, which is why he has a business.
+A discount store boasts that it "cuts out the middleman" so you save, but eliminating the middleman does not eliminate the work he was doing; it just hands that work back to you. Do it yourself, and the cost has not vanished, only changed hands. Sometimes doing it yourself is cheaper; often the specialist is, which is why he has a business.
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
@@ -133,7 +134,7 @@ When trade is free, competition drives the price toward the level where the amou
 </dl>
 </aside>
 
-To see where it comes from, build *market demand*, which is just the sum of every individual's demand at each price. The table below imagines a society of four people, A through D, and seven cars. Each person, at each possible price, wants to own some number of cars; add those across all four and you get the market demand in the right-hand column.
+To see where that price comes from, build *market demand*, which is just the sum of every individual's demand at each price. The table below imagines a society of four people, A through D, and seven cars. Each person, at each possible price, wants to own some number of cars; add those across all four and you get the market demand in the right-hand column.
 
 | Price | A wants | B wants | C wants | D wants | Market demand |
 |---|---|---|---|---|---|
@@ -155,9 +156,9 @@ To see where it comes from, build *market demand*, which is just the sum of ever
 <figcaption><strong>One staircase, three experiments.</strong> The figure opens with the table drawn as a picture: each buyer's whole-number demand adds sideways at every price into the market staircase T = A + B + C + D, the fixed stock of seven cars stands as the vertical line S, and the two meet at the clearing point, $7,000. The buttons then rerun the market. Burn a car and the unchanged staircase meets a six-car stock at $8,000; let two more cars arrive and nine clear at $4,000; let a new buyer join and the staircase itself shifts right, so the same seven cars re-clear at $8,000. Each experiment also marks the old $7,000 price, with the shortage or surplus that forces the price to move. If the frame does not load, <a href="/teaching/microeconomics/t04a-markets-coordination/figures/t04a-ep4-1-market-demand-sum-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t04a-markets-coordination/figures/t04a-ep4-1-market-demand-sum.svg">view the static market-demand figure</a>.</figcaption>
 </figure>
 
-Two lessons fall out of this table. First, the price settles where the quantity demanded equals the quantity available: with seven cars, the clearing price is seven thousand dollars, the row where market demand reads seven. If demand rose, the clearing price would rise too, because the fixed seven cars would have to be rationed among hungrier buyers; press "A new buyer joins" in the figure to watch it happen, as buyer E's demand shifts the whole staircase right and the same seven cars re-clear at $8,000. Second, it does not matter who starts with the cars: voluntary trading shuffles them to the same final owners, because each person keeps buying as long as a car is worth more to him than its price and keeps selling whenever it is worth less. The *initial allocation* does not determine the *final allocation*; the cars end up with whoever values them most regardless of who held them first.
+Two lessons fall out of this table. First, the price settles where the quantity demanded equals the quantity available: with seven cars, the clearing price is $7,000, the row where market demand reads seven. If demand rose, the clearing price would rise too, because the fixed seven cars would have to be rationed among hungrier buyers; press "A new buyer joins" in the figure to watch it happen, as buyer E's demand shifts the whole staircase right and the same seven cars re-clear at $8,000. Second, it does not matter who starts with the cars: voluntary trading shuffles them to the same final owners, because each person keeps buying as long as a car is worth more to him than its price and keeps selling whenever it is worth less. The *initial allocation* does not determine the *final allocation*; the cars end up with whoever values them most regardless of who held them first.
 
-At this stage, supply is a market-level description of willingness to sell from the existing stock, including what current owners require before giving up a unit. A later session derives each firm's supply from marginal cost. For now, read supply as what is available for sale at each price.
+At this stage, read supply as willingness to sell from the existing stock at each price, including what current owners require before giving up a unit. A later session derives each firm's supply from marginal cost.
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
@@ -170,7 +171,7 @@ Two smaller points sharpen the picture. "The price" of a car means the price act
 
 People often grant that prices should rise when more can be produced, but bristle when a price jumps for something whose supply is fixed, calling it immoral or an unearned windfall. The objection misses what the higher price is doing. Even when not one extra unit can be made, a higher price still performs its rationing job: it steers the existing stock toward those who value it most and away from lower-valued uses.
 
-The clearest case brings back the seven cars from the last section. Suppose one is destroyed by fire, so six remain and no new car can be built. The person who lost his car still wants one, so at the old price more cars are wanted than exist, and his willingness to bid the price up reallocates the smaller stock toward whoever values a car most. The figure above reruns this experiment: press "A car burns," and the demand staircase, which has not moved, meets the six-car stock at $8,000. It can look unfair that one owner gains from another's misfortune, but forbidding the price to rise does not undo the fire; it only keeps the man who lost his car from replacing it. A ceiling meant to stop "gouging" or "profiteering from another's misfortune" puts no burned car back on the road; it manufactures a shortage and leaves the rationing to luck and lines.
+The clearest case brings back the seven cars from the last section. Suppose one is destroyed by fire, so six remain and no new car can be built. The person who lost his car still wants one, so at the old price more cars are wanted than exist, and he bids the price up, steering the smaller stock toward whoever values a car most. The figure above reruns this experiment: press "A car burns," and the demand staircase, which has not moved, meets the six-car stock at $8,000. It can look unfair that one owner gains from another's misfortune, but forbidding the price to rise does not undo the fire; it only keeps the man who lost his car from replacing it. A ceiling meant to stop "gouging" or "profiteering from another's misfortune" puts no burned car back on the road; it manufactures a shortage and leaves the rationing to luck and lines.
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
@@ -179,9 +180,9 @@ The clearest case brings back the seven cars from the last section. Suppose one 
 
 ### A Shortage Is Not Scarcity, and a Surplus Is Not Abundance
 
-We need three words kept rigorously apart, because newspapers and politicians blur them constantly.
+We need three words kept apart, because newspapers and politicians blur them constantly.
 
-*Scarcity* is the permanent condition we met on day one: less of a thing exists than people would want at a price of zero, and it never goes away. A *reduction in supply* is a fall in the amount available, a real, physical change, as when a crop fails or a fire destroys housing. A *shortage* is something else entirely: the gap that opens when a price is held below the clearing level, so that the amount people want to buy exceeds the amount offered. A shortage is a price phenomenon, not a physical fact, and it is created by a law, not by nature.
+*Scarcity* is the condition we met on day one: less of a thing exists than people would want at a price of zero, and it never goes away. A *reduction in supply* is a fall in the amount available, a real, physical change, as when a crop fails or a fire destroys housing. A *shortage* is something else entirely: the gap that opens when a price is held below the clearing level, so that the amount people want to buy exceeds the amount offered. A shortage is a price phenomenon, not a physical fact, and it is created by a law, not by nature.
 
 <aside class="econ-callout econ-termset">
 <p class="econ-callout__label">Key terms</p>
@@ -192,7 +193,7 @@ We need three words kept rigorously apart, because newspapers and politicians bl
 </dl>
 </aside>
 
-The two come apart in both directions. The fire that cut the stock to six was a real reduction in supply, yet it produced no shortage, because the price was free to rise. And had the supply instead risen to nine, a price pinned below where nine would clear (the figure's "Two cars arrive" scenario puts that clearing price at $4,000) would still produce a shortage, with more cars wanted at that low price than exist. What makes a shortage is never the size of the stock but the law that holds the price below where the market would clear.
+A reduction in supply and a shortage come apart in both directions. The fire that cut the stock to six was a real reduction in supply, yet it produced no shortage, because the price was free to rise. And had the supply instead risen to nine, a price pinned below where nine would clear (the figure's "Two cars arrive" scenario puts that clearing price at $4,000) would still produce a shortage, with more cars wanted at that low price than exist. What makes a shortage is never the size of the stock but the law that holds the price below where the market would clear.
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
