@@ -1,222 +1,378 @@
-<!doctype html>
-<!--
-  t04a-ep4-1-market-demand-sum-interactive.html
-  Interactive version of the t04a market-demand-sum figure (after E&P Fig 4-1,
-  "market demand = horizontal sum of individual demands"; course-adapted so the
-  numbers ARE UE Table 10.1, brief §C "E&P supplements" invariants, 2026-07-20).
-  Family F8 (horizontal summation): drag one horizontal PRICE line up/down. At
-  each price the four buyers' whole-number demands A, B, C, D are read off and
-  summed SIDEWAYS into the market demand T = A + B + C + D; the vertical supply
-  S = 7 (a fixed stock of seven cars) shows whether the market wants more, fewer,
-  or exactly the seven cars available.
-
-  ECONOMICS (the horizontal-sum identity is the whole point — never hard-code T):
-    Quantity demanded by a buyer at price P = how many of that buyer's units are
-    worth at least P. Marginal worths (the $1,000s a buyer would pay for the qth
-    car), from Table 10.1:
-      A: 10, 8, 3, 1      B: 9, 6, 2, 1      C: 10, 7      D: 10, 9, 4, 1
-    so at every price  T(P) = qA(P) + qB(P) + qC(P) + qD(P).  Checks:
-      P=$10k -> (1,0,1,1)=3 ; P=$8k -> (2,1,1,2)=6 ; P=$7k -> (2,1,2,2)=7 (clears)
-      P=$6k -> (2,2,2,2)=8 ; P=$1k -> (4,4,2,4)=14.
-    T crosses the fixed stock S=7 at exactly P=$7,000; above $7,000 T<7 (the
-    stock cannot all sell), below $7,000 T>7 (buyers want more than exist).
-    NO welfare shading, no surplus areas (F8 is a summation/allocation figure).
-
-  Static-base architecture: the initial P=$7,000 (clearing) state is real markup
-  below; the script only re-attaches drag/keyboard/readout behavior. The static
-  SVG t04a-ep4-1-market-demand-sum.svg is the slide asset and <noscript> fallback.
-  Drag range $1,000-$10,000 in $1,000 steps (every step is an integer $1,000s
-  value, so the line snaps onto $7,000 like any other tick).
--->
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Market demand as a horizontal sum - drag the price</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>One staircase, three experiments: sum the demands, then change the stock or the buyers</title>
+<!--
+  t04a-ep4-1-market-demand-sum-interactive.html — ROUND 2, 2026-08-07
+  (instructor: the round-1 widget captured only E&P Fig 4-1; rebuild it as an
+  effective teaching tool for the WHOLE E&P Figs 4-1 / 4-2 / 4-3 sequence, fix
+  the frame overflow, and match the t01/t02/t03 warm widget theme.)
+
+  Course-adapted interactive of E&P ch. 4:
+    Fig 4-1  market demand = horizontal sum of individual demands; a fixed
+             stock is a vertical supply line; T crosses S at the clearing price.
+    Fig 4-2  supply changes, demand does not: S shifts left (a car burns) or
+             right (two cars arrive) along the UNCHANGED staircase; the price
+             is bid up to $8,000 or falls to $4,000.
+    Fig 4-3  demand changes, supply does not: a new buyer E joins, the whole
+             staircase shifts right (T-new = A+B+C+D+E), and the same seven
+             cars re-clear at a higher price, $8,000.
+  Numbers are course-adapted (the post's own table, UE Table 10.1 scale), NOT
+  the book's $100–$1,000 scale: fidelity target is the E&P construction.
+
+  ECONOMICS (the horizontal-sum identity is the whole point — never hard-code T):
+    Marginal worths (the $1,000s a buyer would pay for the qth car):
+      A: 10, 8, 3, 1    B: 9, 6, 2, 1    C: 10, 7    D: 10, 9, 4, 1
+      E: 9, 4, 1        (the Fig 4-3 newcomer, course-adapted)
+    Quantity demanded at price P = units worth at least P; T(P) = the sum over
+    the scenario's buyers. Invariants (each clearing is unique):
+      base    stock 7 → clears (7, $7,000):  T(7)=7;  T(8)=6, T(6)=8
+      burn    stock 6 → clears (6, $8,000):  T(8)=6   (T unchanged — Fig 4-2)
+      arrive  stock 9 → clears (9, $4,000):  T(4)=9   (T unchanged — Fig 4-2)
+      newb    stock 7 → clears (7, $8,000):  T+E at $8,000 = 6+1 = 7 (Fig 4-3;
+              one step up, mirroring the book's $500→$600; the car E gains is
+              the second car C stops demanding above $7,000)
+    NO welfare shading, no surplus areas (summation / allocation figure).
+
+  GEOMETRY: everything — buttons, plot, readout, hint — lives INSIDE one
+  640×600 SVG; the iframe embeds at aspect-ratio:640/600 so the widget fits
+  its frame exactly (the round-1 build overflowed: SVG 520/464 + an HTML hint
+  below inside a 13/11 frame → internal scrolling).
+    X(q) = 48 + 33q  (q cars, 0..17)     Y(p) = 420 - 33p  (p $1,000s, 0..10)
+    S base x=279 (q7) · burn x=246 (q6) · arrive x=345 (q9)
+    clearing dots: base (279,189) · burn (246,156) · arrive (345,288) ·
+    newb (279,156)
+
+  Static-base architecture: the no-JS state is the base scenario at the
+  $7,000 clearing, all real markup; scenario-only groups start hidden. The
+  script attaches drag/keyboard/readout behavior and the scenario buttons
+  (in-SVG buttons per the ep2-11 precedent; hit rects painted LAST so they
+  sit on top). The static t04a-ep4-1-market-demand-sum.svg (slide asset)
+  stays the <noscript> fallback.
+-->
 <style>
-  :root{
-    --font-body: Georgia, 'Times New Roman', serif;
-    --paper:   #f7f4ef;   /* card background                 */
-    --surface: #fdfcf9;   /* plot backing                    */
-    --ink:     #1a1c1e;   /* market staircase T + headings   */
-    --muted:   #6b6459;   /* axes, ticks, individual demands */
-    --accent:  #b3402a;   /* price line, supply, stack, mark */
-    --accent2: #b07a2c;   /* focus ring (house warm gold)    */
-    --grid:    #e3ddd3;
+  :root {
+    --surface: #f7f4ef;
+    --ink:     #1a1c1e;
+    --text:    #16181a;
+    --muted:   #5c6066;
+    --hairline:#e3ddd3;
+    --accent:  #b07a2c;
+    --accent-tint: #efe4d2;
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   }
-  html,body{margin:0;padding:0;background:var(--paper);font-family:var(--font-body);}
-  .wrap{max-width:560px;margin:0 auto;padding:10px 8px 6px;}
-  svg{display:block;width:100%;height:auto;background:var(--surface);
-      border:1px solid var(--grid);border-radius:4px;}
-  .hint{color:var(--muted);font-size:13px;margin:6px 2px 2px;text-align:center;}
-  .fallback{color:var(--muted);font-size:14px;padding:8px;}
-  .fallback a{color:var(--ink);}
-  text{font-family:var(--font-body);}
-  .axis{stroke:var(--muted);stroke-width:1.4;}
-  .tick{fill:var(--muted);font-size:11px;}
-  .tick7{fill:var(--ink);font-size:11px;font-weight:bold;}
-  .axlbl{fill:var(--muted);font-size:12.5px;}
-  .stair{stroke:var(--muted);stroke-width:1.5;fill:none;opacity:.6;
-         stroke-linecap:round;stroke-linejoin:round;}
-  .stairlbl{fill:var(--muted);font-size:12px;font-style:italic;}
-  .tcurve{stroke:var(--ink);stroke-width:2.7;fill:none;
-          stroke-linecap:round;stroke-linejoin:round;}
-  .tlbl{fill:var(--ink);font-size:13px;font-weight:bold;}
-  .tdot{fill:var(--ink);}
-  .supply{stroke:var(--accent);stroke-width:2;stroke-dasharray:7 5;}
-  .supplylbl{fill:var(--accent);font-size:13px;font-weight:bold;font-style:italic;}
-  .clearlbl{fill:var(--muted);font-size:11.5px;}
-  .drop{stroke:var(--muted);stroke-width:1;stroke-dasharray:3 4;opacity:.8;}
-  .cdot{fill:var(--ink);}
-  .stackbar{fill:var(--accent);opacity:.16;}
-  .stacksep{stroke:var(--surface);stroke-width:1.4;}
-  .tmark{fill:var(--accent);}
-  .price{stroke:var(--accent);stroke-width:2.2;stroke-dasharray:7 5;}
-  .pricehit{stroke:transparent;stroke-width:22;cursor:ns-resize;}
-  .glyph{fill:var(--accent);font-size:13px;font-weight:bold;}
-  .state{fill:var(--muted);font-size:12.5px;}
-  .takeaway{fill:var(--accent);font-size:13px;font-weight:bold;}
-  .sep{stroke:var(--grid);stroke-width:1;}
-  #priceFocus:focus{outline:none;}
-  #priceFocus:focus + .focusring{opacity:1;}
-  .focusring{opacity:0;stroke:var(--accent2);stroke-width:1.5;fill:none;
-             stroke-dasharray:3 3;}
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; overflow: hidden; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: grid;            /* grid, not flex — see t03b-ue8-1 mobile note */
+    place-items: center;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+  .fig { width: 100%; max-width: 600px; min-width: 0; }
+  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+
+  .axis   { stroke: var(--muted); stroke-width: 1.4; fill: none; }
+  .stair  { stroke: var(--muted); stroke-width: 1.5; fill: none; opacity: .62;
+            stroke-linecap: round; stroke-linejoin: round; }
+  .stairlbl { fill: var(--muted); font-size: 11.5px; font-weight: 600;
+              font-style: italic; }
+  .tcurve { stroke: var(--ink); stroke-width: 2.7; fill: none;
+            stroke-linecap: round; stroke-linejoin: round; }
+  .tghost { stroke: var(--muted); stroke-width: 1.8; fill: none; opacity: .75;
+            stroke-dasharray: 6 5; stroke-linecap: round;
+            stroke-linejoin: round; }
+  .tlbl   { fill: var(--ink); font-size: 12.5px; font-weight: 700; }
+  .ghostlbl { fill: var(--muted); font-size: 11px; font-weight: 600; }
+  .tdot   { fill: var(--ink); }
+  .supply { stroke: var(--ink); stroke-width: 2.2; }
+  .sghost { stroke: var(--muted); stroke-width: 1.6; stroke-dasharray: 6 5;
+            opacity: .8; }
+  .supplylbl { fill: var(--ink); font-size: 12.5px; font-weight: 700;
+               font-style: italic; }
+  .shift  { stroke: var(--accent); stroke-width: 2; fill: none; }
+  .shifthead { fill: var(--accent); }
+  .shiftlbl  { fill: var(--accent); font-size: 11.5px; font-weight: 700; }
+  .drop   { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 4;
+            opacity: .8; }
+  .cdot   { fill: var(--ink); }
+  .clearlbl  { fill: var(--muted); font-size: 11px; }
+  .clearlbl2 { fill: var(--ink); font-size: 11px; font-weight: 700; }
+  .stackbar  { fill: var(--accent-tint); stroke: var(--accent);
+               stroke-width: .8; }
+  .stacksep  { stroke: var(--accent); stroke-width: 1; }
+  .tmark  { fill: var(--accent); }
+  .price  { stroke: var(--accent); stroke-width: 2.2; stroke-dasharray: 7 5; }
+  .pricehit { stroke: transparent; stroke-width: 26; cursor: ns-resize;
+              touch-action: none; }
+  .glyph  { fill: var(--accent); font-size: 13px; font-weight: 700; }
+  .tick   { fill: var(--muted); font-size: 11px; }
+  .tick7  { fill: var(--ink); font-size: 11px; font-weight: 700; }
+  .axlabel { fill: var(--muted); font-size: 13px; font-weight: 600; }
+  .sep    { stroke: var(--hairline); stroke-width: 1; }
+  .r-state { fill: var(--muted); font-size: 12.5px; }
+  .r-take  { fill: var(--accent); font-size: 13px; font-weight: 600; }
+  .hintln  { fill: var(--muted); font-size: 12px; }
+
+  /* in-SVG scenario buttons (ep2-11 pattern): visible rect + label are inert;
+     the transparent focusable hit rect painted LAST does the work */
+  .btn      { fill: var(--surface); stroke: var(--hairline);
+              stroke-width: 1.5; }
+  .btn.on   { fill: var(--accent); stroke: var(--accent); }
+  .btnlabel { fill: var(--ink); font-size: 12px; font-weight: 600;
+              pointer-events: none; }
+  .btnlabel.on { fill: var(--surface); }
+  .btnfocus { cursor: pointer; }
+  .btnfocus:focus-visible { outline: 2px solid var(--accent);
+                            outline-offset: 2px; }
+
+  .pt-focus:focus-visible { outline: none; }
+  .focusring { opacity: 0; stroke: var(--accent); stroke-width: 1.5;
+               fill: none; stroke-dasharray: 3 3; }
+  .pt-focus:focus-visible ~ .focusring { opacity: 1; }
+
+  .fallback { margin: 8px 0 0; color: var(--muted); font-size: 13px;
+              line-height: 1.35; text-align: center; }
+  .fallback a { color: var(--ink); }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <svg id="fig" viewBox="0 0 520 464" role="group"
-       aria-label="Market demand as a horizontal sum. Four buyers A, B, C and D each hold a whole-number demand for cars that rises as the price falls. Their demands add across at every price into the market demand T, a descending staircase. A fixed stock of seven cars is a vertical supply line at a quantity of seven. The market clears where T meets the fixed stock, at a price of 7,000 dollars and seven cars. Drag the horizontal price line up or down to read each buyer's demand, watch the four sum sideways into the market demand, and see whether the market wants more, fewer, or exactly the seven cars available.">
+<div class="fig">
+  <svg id="fig" viewBox="0 0 640 600" role="group"
+       aria-label="Market demand as a horizontal sum, with three experiments. Four buyers A, B, C and D each hold a whole-number demand for cars; their demands add sideways at every price into the market staircase T. A fixed stock of seven cars is a vertical supply line, and the market clears where the staircase meets it, at seven cars and 7,000 dollars. Drag the horizontal price line to read each buyer's demand and the market total. Four buttons rerun the market: with the demands summed, seven cars clear at 7,000 dollars; if a car burns, the same staircase meets a six-car stock at 8,000 dollars; if two more cars arrive, nine cars clear at 4,000 dollars; and if a new buyer E joins, the staircase shifts right and the same seven cars re-clear at 8,000 dollars.">
+    <title>One staircase, three experiments: drag the price line, then change the stock or the buyers</title>
 
-    <!-- ================= static base ($7,000 clearing state) =================
-         Geometry:  X(q) = 54 + 31q   (q cars, 0..14)
-                    Y(p) = 360 - 32p   (p in thousands of dollars, 0..10)
-         At $7,000: qA=2, qB=1, qC=2, qD=2, T=7; the stack bar runs x54..X(7)=271
-         with separators at cumulative 2,3,5 -> x116,147,209.                 -->
+    <!-- ============ static base (scenario: sum the demands, $7,000) ========
+         X(q) = 48 + 33q ; Y(p) = 420 - 33p. At $7,000: qA=2, qB=1, qC=2,
+         qD=2, T=7; stack bar runs x48..X(7)=279, separators at cumulative
+         2,3,5 -> x114,147,213.                                            -->
+
+    <!-- scenario buttons -->
+    <rect id="btn-base"   class="btn on" x="14"  y="14" width="147" height="30" rx="6"/>
+    <text id="btnl-base"  class="btnlabel on" x="87.5" y="33.5" text-anchor="middle">Sum the demands</text>
+    <rect id="btn-burn"   class="btn" x="169" y="14" width="147" height="30" rx="6"/>
+    <text id="btnl-burn"  class="btnlabel" x="242.5" y="33.5" text-anchor="middle">A car burns</text>
+    <rect id="btn-arrive" class="btn" x="324" y="14" width="147" height="30" rx="6"/>
+    <text id="btnl-arrive" class="btnlabel" x="397.5" y="33.5" text-anchor="middle">Two cars arrive</text>
+    <rect id="btn-newb"   class="btn" x="479" y="14" width="147" height="30" rx="6"/>
+    <text id="btnl-newb"  class="btnlabel" x="552.5" y="33.5" text-anchor="middle">A new buyer joins</text>
 
     <!-- axes -->
-    <line class="axis" x1="54" y1="32"  x2="54"  y2="360"/>
-    <line class="axis" x1="54" y1="360" x2="500" y2="360"/>
+    <line class="axis" x1="48" y1="68"  x2="48"  y2="420"/>
+    <line class="axis" x1="48" y1="420" x2="620" y2="420"/>
 
-    <!-- x ticks (0..14; 7 emphasized). INTENTIONAL divergence from the spec's
-         "ticks only at labeled values": a drag-to-read staircase needs the full
-         integer tick sets to be usable; the static .tex (slide track) obeys the
-         7-only rule. Endorsed at fidelity review 2026-07-20. -->
+    <!-- x ticks (0..17; 7 emphasized). INTENTIONAL divergence from the static
+         spec's "ticks only at labeled values": a drag-to-read staircase needs
+         the full integer tick sets to be usable (endorsed at the 2026-07-20
+         fidelity review; carried over to the round-2 rebuild). -->
     <g text-anchor="middle">
-      <text class="tick"  x="54"  y="376">0</text>
-      <text class="tick"  x="85"  y="376">1</text>
-      <text class="tick"  x="116" y="376">2</text>
-      <text class="tick"  x="147" y="376">3</text>
-      <text class="tick"  x="178" y="376">4</text>
-      <text class="tick"  x="209" y="376">5</text>
-      <text class="tick"  x="240" y="376">6</text>
-      <text class="tick7" x="271" y="376">7</text>
-      <text class="tick"  x="302" y="376">8</text>
-      <text class="tick"  x="333" y="376">9</text>
-      <text class="tick"  x="364" y="376">10</text>
-      <text class="tick"  x="395" y="376">11</text>
-      <text class="tick"  x="426" y="376">12</text>
-      <text class="tick"  x="457" y="376">13</text>
-      <text class="tick"  x="488" y="376">14</text>
+      <text class="tick"  x="48"  y="436">0</text>
+      <text class="tick"  x="81"  y="436">1</text>
+      <text class="tick"  x="114" y="436">2</text>
+      <text class="tick"  x="147" y="436">3</text>
+      <text class="tick"  x="180" y="436">4</text>
+      <text class="tick"  x="213" y="436">5</text>
+      <text class="tick"  x="246" y="436">6</text>
+      <text class="tick7" x="279" y="436">7</text>
+      <text class="tick"  x="312" y="436">8</text>
+      <text class="tick"  x="345" y="436">9</text>
+      <text class="tick"  x="378" y="436">10</text>
+      <text class="tick"  x="411" y="436">11</text>
+      <text class="tick"  x="444" y="436">12</text>
+      <text class="tick"  x="477" y="436">13</text>
+      <text class="tick"  x="510" y="436">14</text>
+      <text class="tick"  x="543" y="436">15</text>
+      <text class="tick"  x="576" y="436">16</text>
+      <text class="tick"  x="609" y="436">17</text>
     </g>
     <!-- y ticks (1..10; 7 emphasized) -->
     <g text-anchor="end">
-      <text class="tick"  x="48" y="332">1</text>
-      <text class="tick"  x="48" y="300">2</text>
-      <text class="tick"  x="48" y="268">3</text>
-      <text class="tick"  x="48" y="236">4</text>
-      <text class="tick"  x="48" y="204">5</text>
-      <text class="tick"  x="48" y="172">6</text>
-      <text class="tick7" x="48" y="140">7</text>
-      <text class="tick"  x="48" y="108">8</text>
-      <text class="tick"  x="48" y="76">9</text>
-      <text class="tick"  x="48" y="44">10</text>
+      <text class="tick"  x="42" y="391">1</text>
+      <text class="tick"  x="42" y="358">2</text>
+      <text class="tick"  x="42" y="325">3</text>
+      <text class="tick"  x="42" y="292">4</text>
+      <text class="tick"  x="42" y="259">5</text>
+      <text class="tick"  x="42" y="226">6</text>
+      <text class="tick7" x="42" y="193">7</text>
+      <text class="tick"  x="42" y="160">8</text>
+      <text class="tick"  x="42" y="127">9</text>
+      <text class="tick"  x="42" y="94">10</text>
     </g>
-    <text class="axlbl" x="277" y="394" text-anchor="middle">Quantity of cars</text>
-    <text class="axlbl" transform="rotate(-90 16 200)" x="16" y="200"
+    <text class="axlabel" x="334" y="454" text-anchor="middle">Quantity of cars</text>
+    <text class="axlabel" transform="rotate(-90 15 244)" x="15" y="244"
           text-anchor="middle">Price ($ thousands)</text>
 
-    <!-- individual step-demands A, B, C, D (muted, one dash pattern each) -->
-    <polyline class="stair" points="54,40 85,40 85,104 116,104 116,264 147,264 147,328 178,328"/>
-    <polyline class="stair" points="54,72 85,72 85,168 116,168 116,296 147,296 147,328 178,328"
-              stroke-dasharray="5 3"/>
-    <polyline class="stair" points="54,40 85,40 85,136 116,136" stroke-dasharray="1.5 3"/>
-    <polyline class="stair" points="54,40 85,40 85,72 116,72 116,232 147,232 147,328 178,328"
-              stroke-dasharray="1.5 2.5 5 2.5"/>
-    <text class="stairlbl" x="128" y="101">A</text>
-    <text class="stairlbl" x="128" y="165">B</text>
-    <text class="stairlbl" x="128" y="133">C</text>
-    <text class="stairlbl" x="129" y="218">D</text>
-
-    <!-- market staircase T = A+B+C+D (heavy) + demand-schedule points -->
-    <polyline class="tcurve" points="54,40 147,40 147,72 209,72 209,104 240,104 240,136 271,136 271,168 302,168 302,232 333,232 333,264 364,264 364,296 395,296 395,328 488,328"/>
-    <g class="tdot">
-      <circle cx="147" cy="40"  r="2.6"/>
-      <circle cx="209" cy="72"  r="2.6"/>
-      <circle cx="240" cy="104" r="2.6"/>
-      <circle cx="302" cy="168" r="2.6"/>
-      <circle cx="333" cy="232" r="2.6"/>
-      <circle cx="364" cy="264" r="2.6"/>
-      <circle cx="395" cy="296" r="2.6"/>
-      <circle cx="488" cy="328" r="2.6"/>
+    <!-- individual step-demands A, B, C, D (base scenario only) -->
+    <g id="gIndiv">
+      <polyline class="stair" points="48,90 81,90 81,156 114,156 114,321 147,321 147,387 180,387"/>
+      <polyline class="stair" points="48,123 81,123 81,222 114,222 114,354 147,354 147,387 180,387"
+                stroke-dasharray="5 3"/>
+      <polyline class="stair" points="48,90 81,90 81,189 114,189 114,387" stroke-dasharray="1.5 3"/>
+      <polyline class="stair" points="48,90 81,90 81,123 114,123 114,288 147,288 147,387 180,387"
+                stroke-dasharray="1.5 2.5 5 2.5"/>
+      <text class="stairlbl" x="124" y="152">A</text>
+      <text class="stairlbl" x="124" y="218">B</text>
+      <text class="stairlbl" x="124" y="185">C</text>
+      <text class="stairlbl" x="125" y="284">D</text>
     </g>
-    <text class="tlbl" x="342" y="114">T = A + B + C + D</text>
 
-    <!-- fixed-stock supply S (vertical at Q = 7) -->
-    <line class="supply" x1="271" y1="360" x2="271" y2="32"/>
-    <text class="supplylbl" x="276" y="52">S</text>
+    <!-- market staircase T = A+B+C+D (heavy) + demand-schedule points.
+         In the new-buyer scenario this heavy T hides and #gTghost/#gTnew
+         show instead. -->
+    <g id="gTbase">
+      <polyline class="tcurve" points="48,90 147,90 147,123 213,123 213,156 246,156 246,189 279,189 279,222 312,222 312,288 345,288 345,321 378,321 378,354 411,354 411,387 510,387"/>
+      <g class="tdot">
+        <circle cx="147" cy="90"  r="2.6"/>
+        <circle cx="213" cy="123" r="2.6"/>
+        <circle cx="246" cy="156" r="2.6"/>
+        <circle cx="279" cy="189" r="2.6"/>
+        <circle cx="312" cy="222" r="2.6"/>
+        <circle cx="345" cy="288" r="2.6"/>
+        <circle cx="378" cy="321" r="2.6"/>
+        <circle cx="411" cy="354" r="2.6"/>
+        <circle cx="510" cy="387" r="2.6"/>
+      </g>
+      <text id="tbaseLbl" class="tlbl" x="424" y="310">T = A + B + C + D</text>
+    </g>
 
-    <!-- clearing point (7, $7,000): always drawn -->
-    <line class="drop" x1="271" y1="136" x2="271" y2="360"/>
-    <line class="drop" x1="54"  y1="136" x2="271" y2="136"/>
-    <circle class="cdot" cx="271" cy="136" r="3.4"/>
-    <text class="clearlbl" x="288" y="180">market clears at</text>
-    <text class="clearlbl" x="288" y="194" style="font-weight:bold;fill:var(--ink);">7 cars, $7,000</text>
+    <!-- new-buyer scenario: old T as ghost, T-new = A+B+C+D+E heavy -->
+    <g id="gTghost" visibility="hidden">
+      <polyline class="tghost" points="48,90 147,90 147,123 213,123 213,156 246,156 246,189 279,189 279,222 312,222 312,288 345,288 345,321 378,321 378,354 411,354 411,387 510,387"/>
+      <text class="ghostlbl" x="392" y="375" text-anchor="end">T (before E)</text>
+    </g>
+    <g id="gTnew" visibility="hidden">
+      <polyline class="tcurve" points="48,90 147,90 147,123 246,123 246,156 279,156 279,189 312,189 312,222 345,222 345,288 411,288 411,321 444,321 444,354 477,354 477,387 609,387"/>
+      <g class="tdot">
+        <circle cx="147" cy="90"  r="2.6"/>
+        <circle cx="246" cy="123" r="2.6"/>
+        <circle cx="279" cy="156" r="2.6"/>
+        <circle cx="312" cy="189" r="2.6"/>
+        <circle cx="345" cy="222" r="2.6"/>
+        <circle cx="411" cy="288" r="2.6"/>
+        <circle cx="444" cy="321" r="2.6"/>
+        <circle cx="477" cy="354" r="2.6"/>
+        <circle cx="609" cy="387" r="2.6"/>
+      </g>
+      <text class="tlbl" x="455" y="310">T = A + B + C + D + E</text>
+    </g>
 
-    <!-- horizontal-sum stack along the price line (JS redraws; base = $7,000) -->
-    <rect id="stackbar" class="stackbar" x="54" y="131.5" width="217" height="9"/>
+    <!-- supply: the fixed stock. Base S at q=7; burn/arrive swap in a ghost
+         S0 plus the shifted line. -->
+    <g id="gS">
+      <line class="supply" x1="279" y1="420" x2="279" y2="76"/>
+      <text class="supplylbl" x="285" y="88">S</text>
+    </g>
+    <g id="gSburn" visibility="hidden">
+      <line class="sghost" x1="279" y1="420" x2="279" y2="76"/>
+      <text class="ghostlbl" x="285" y="88">S before</text>
+      <line class="supply" x1="246" y1="420" x2="246" y2="76"/>
+      <text class="supplylbl" x="222" y="88" text-anchor="end">S after</text>
+      <g class="shift">
+        <line x1="276" y1="106" x2="256" y2="106"/>
+        <polygon class="shifthead" points="256,102 248,106 256,110"/>
+      </g>
+      <text class="shiftlbl" x="330" y="110">supply falls</text>
+    </g>
+    <g id="gSarrive" visibility="hidden">
+      <line class="sghost" x1="279" y1="420" x2="279" y2="76"/>
+      <text class="ghostlbl" x="253" y="88" text-anchor="end">S before</text>
+      <line class="supply" x1="345" y1="420" x2="345" y2="76"/>
+      <text class="supplylbl" x="351" y="88">S after</text>
+      <g class="shift">
+        <line x1="282" y1="106" x2="335" y2="106"/>
+        <polygon class="shifthead" points="335,102 343,106 335,110"/>
+      </g>
+      <text class="shiftlbl" x="351" y="110">supply rises</text>
+    </g>
+
+    <!-- horizontal-sum stack along the price line (JS redraws; base = $7,000).
+         In the new-buyer scenario a fifth E segment appears — the visible
+         source of the demand shift. -->
+    <rect id="stackbar" class="stackbar" x="48" y="184.5" width="231" height="9"/>
     <g id="stackseps">
-      <line class="stacksep" id="sep1" x1="116" y1="131.5" x2="116" y2="140.5"/>
-      <line class="stacksep" id="sep2" x1="147" y1="131.5" x2="147" y2="140.5"/>
-      <line class="stacksep" id="sep3" x1="209" y1="131.5" x2="209" y2="140.5"/>
+      <line class="stacksep" id="sep1" x1="114" y1="184.5" x2="114" y2="193.5"/>
+      <line class="stacksep" id="sep2" x1="147" y1="184.5" x2="147" y2="193.5"/>
+      <line class="stacksep" id="sep3" x1="213" y1="184.5" x2="213" y2="193.5"/>
+      <line class="stacksep" id="sep4" x1="279" y1="184.5" x2="279" y2="193.5" opacity="0"/>
     </g>
     <!-- market-demand marker: rides the price line at x = X(T(P)) -->
-    <circle id="tmark" class="tmark" cx="271" cy="136" r="3.6"/>
+    <circle id="tmark" class="tmark" cx="279" cy="189" r="3.6"/>
 
     <!-- draggable price line + wide hit zone + drag glyph -->
     <g id="priceG">
-      <line id="price"    class="price"    x1="54" y1="136" x2="493" y2="136"/>
-      <text id="glyph"    class="glyph"    x="497" y="140">&#8597;</text>
-      <line id="priceHit" class="pricehit" x1="54" y1="136" x2="493" y2="136"/>
+      <line id="price" class="price" x1="48" y1="189" x2="612" y2="189"/>
+      <text id="glyph" class="glyph" x="616" y="193">&#8597;</text>
+      <line id="priceHit" class="pricehit" x1="48" y1="189" x2="612" y2="189"/>
+    </g>
+
+    <!-- clearing point: dot + droplines + two-line label (JS repositions per
+         scenario; base = (7, $7,000)). Painted AFTER the price line/stack bar
+         so the sweeping drag can never overpaint it (adversarial-check fix);
+         pointer-events:none keeps it clear of the drag hit zone. -->
+    <g id="gClear" pointer-events="none">
+      <line id="clearDropV" class="drop" x1="279" y1="189" x2="279" y2="420"/>
+      <line id="clearDropH" class="drop" x1="48"  y1="189" x2="279" y2="189"/>
+      <circle id="clearDot" class="cdot" cx="279" cy="189" r="3.4"/>
+      <text id="clearL1" class="clearlbl"  x="296" y="166">market clears at</text>
+      <text id="clearL2" class="clearlbl2" x="296" y="180">7 cars, $7,000</text>
+    </g>
+    <!-- newb demand-shift annotation: late-painted for the same reason -->
+    <g id="gShiftNewb" pointer-events="none" visibility="hidden">
+      <g class="shift">
+        <line x1="317" y1="252" x2="337" y2="252"/>
+        <polygon class="shifthead" points="337,248 345,252 337,256"/>
+      </g>
+      <text class="shiftlbl" x="352" y="244">demand rises</text>
     </g>
 
     <!-- keyboard proxy for the price line -->
-    <rect id="priceFocus" x="54" y="128" width="439" height="16" fill="transparent"
-          tabindex="0" role="slider"
+    <rect id="priceFocus" class="pt-focus" x="48" y="181" width="564" height="16"
+          fill="transparent" tabindex="0" role="slider"
           aria-label="Market price of a car, in thousands of dollars"
           aria-valuemin="1" aria-valuemax="10" aria-valuenow="7"
-          aria-valuetext="At $7,000: A wants 2, B wants 1, C wants 2, D wants 2 - market demand 7."/>
-    <rect class="focusring" x="50" y="124" width="447" height="24" rx="4"/>
+          aria-valuetext="At $7,000: A wants 2, B wants 1, C wants 2, D wants 2 - market demand 7. The four demands sum sideways to 7, exactly the seven cars available: the market clears."/>
+    <rect id="focusRing" class="focusring" x="44" y="177" width="572" height="24" rx="4"/>
+
+    <!-- button hit rects: painted LAST so they sit on top (ep2-11 lesson) -->
+    <rect id="btnh-base"   class="btnfocus" x="14"  y="14" width="147" height="30" rx="6"
+          fill="transparent" tabindex="0" role="button" aria-pressed="true"
+          aria-label="Scenario: sum the demands. Four buyers, a fixed stock of seven cars; the market clears at 7,000 dollars."/>
+    <rect id="btnh-burn"   class="btnfocus" x="169" y="14" width="147" height="30" rx="6"
+          fill="transparent" tabindex="0" role="button" aria-pressed="false"
+          aria-label="Scenario: a car burns. The stock falls to six; the same demand staircase now clears at 8,000 dollars."/>
+    <rect id="btnh-arrive" class="btnfocus" x="324" y="14" width="147" height="30" rx="6"
+          fill="transparent" tabindex="0" role="button" aria-pressed="false"
+          aria-label="Scenario: two cars arrive. The stock rises to nine; the same demand staircase clears at 4,000 dollars."/>
+    <rect id="btnh-newb"   class="btnfocus" x="479" y="14" width="147" height="30" rx="6"
+          fill="transparent" tabindex="0" role="button" aria-pressed="false"
+          aria-label="Scenario: a new buyer joins. Buyer E's demand shifts the staircase right; the same seven cars re-clear at 8,000 dollars."/>
 
     <!-- readout band: muted state + accent takeaway (each wraps to 2 rows;
-         each row a fixed-y tspan, the base = the no-JS $7,000 fallback text) -->
-    <line class="sep" x1="18" y1="400" x2="502" y2="400"/>
-    <text class="state" text-anchor="middle">
-      <tspan id="state1" x="260" y="416">At $7,000: A wants 2, B wants 1, C wants 2, D wants</tspan>
-      <tspan id="state2" x="260" y="430">2 &#8212; market demand 7.</tspan>
+         the base rows are the no-JS $7,000 fallback text) -->
+    <line class="sep" x1="16" y1="468" x2="624" y2="468"/>
+    <text class="r-state" text-anchor="middle">
+      <tspan id="state1" x="320" y="486">At $7,000: A wants 2, B wants 1, C wants 2, D wants 2 &#8212; market demand 7.</tspan>
+      <tspan id="state2" x="320" y="502"></tspan>
     </text>
-    <text class="takeaway" text-anchor="middle">
-      <tspan id="take1" x="260" y="446">The four demands sum sideways to 7, exactly the seven</tspan>
-      <tspan id="take2" x="260" y="460">cars available: the market clears.</tspan>
+    <text class="r-take" text-anchor="middle">
+      <tspan id="take1" x="320" y="520">The four demands sum sideways to 7, exactly the seven</tspan>
+      <tspan id="take2" x="320" y="536">cars available: the market clears.</tspan>
     </text>
+
+    <text class="hintln" x="320" y="562" text-anchor="middle">Drag the dashed price line (or use the arrow keys) to read each buyer&#8217;s demand and the market total.</text>
+    <text class="hintln" x="320" y="580" text-anchor="middle">Then press the buttons: burn a car, let two arrive, or add a buyer &#8212; and find the new clearing price.</text>
   </svg>
 
-  <p class="hint">Drag the dashed price line up or down (or focus it and use the
-    arrow keys). Watch the four buyers&#8217; demands add sideways into the market
-    demand, and compare it to the seven cars available.</p>
-
   <noscript>
-    <p class="fallback">Interactive view needs JavaScript. See the
+    <p class="fallback">JavaScript is off, so this frame shows only the
+      summation scenario at its $7,000 clearing; the buttons that burn a car,
+      add two, or bring in a new buyer need the interactive view. See the
       <a href="t04a-ep4-1-market-demand-sum.svg">static version of this figure</a>.</p>
   </noscript>
 </div>
@@ -225,30 +381,53 @@
 (function () {
   'use strict';
   // ---- geometry (must mirror the base markup) ----
-  var X0 = 54, SX = 31;                 // x px origin; px per car
-  var YAX = 360, SY = 32;               // x-axis foot; px per $1,000
+  var X0 = 48, SX = 33;                 // x px origin; px per car
+  var YAX = 420, SY = 33;               // x-axis foot; px per $1,000
   function X (q) { return X0 + q * SX; }
   function Y (p) { return YAX - p * SY; }
 
-  // ---- economics (brief §C invariants; the horizontal-sum identity) ----
-  // Marginal worths of each buyer's units (Table 10.1). Quantity demanded at a
-  // price = how many of that buyer's units are worth at least the price.
-  var WORTHS = { A: [10, 8, 3, 1], B: [9, 6, 2, 1], C: [10, 7], D: [10, 9, 4, 1] };
-  function q (arr, p) {
+  // ---- economics (spec invariants; the horizontal-sum identity) ----
+  // Marginal worths of each buyer's units. Quantity demanded at a price =
+  // how many of that buyer's units are worth at least the price.
+  var WORTHS = { A: [10, 8, 3, 1], B: [9, 6, 2, 1], C: [10, 7],
+                 D: [10, 9, 4, 1], E: [9, 4, 1] };
+  function qOf (arr, p) {
     var n = 0;
     for (var i = 0; i < arr.length; i++) if (arr[i] >= p - 1e-9) n++;
     return n;
   }
-  function demands (p) {
-    var a = q(WORTHS.A, p), b = q(WORTHS.B, p),
-        c = q(WORTHS.C, p), d = q(WORTHS.D, p);
-    return { a: a, b: b, c: c, d: d, T: a + b + c + d }; // T recomputed, never stored
+  function demands (buyers, p) {
+    var out = { T: 0 };                  // T recomputed, never stored
+    for (var i = 0; i < buyers.length; i++) {
+      var k = buyers[i];
+      out[k] = qOf(WORTHS[k], p);
+      out.T += out[k];
+    }
+    return out;
   }
-  var STOCK = 7, PCLEAR = 7;             // fixed stock; clearing price ($1,000s)
+
+  // ---- scenarios (E&P Figs 4-1 / 4-2 / 4-3, course-adapted) ----
+  var SCEN = {
+    base:   { buyers: 'ABCD',  stock: 7, pclear: 7,
+              clearLbl: ['7 cars, $7,000'],  clearAt: [296, 166],
+              show: ['gIndiv', 'gTbase', 'gS'] },
+    burn:   { buyers: 'ABCD',  stock: 6, pclear: 8,
+              clearLbl: ['6 cars, $8,000'],  clearAt: [110, 202],
+              show: ['gTbase', 'gSburn'] },
+    arrive: { buyers: 'ABCD',  stock: 9, pclear: 4,
+              clearLbl: ['9 cars, $4,000'],  clearAt: [357, 262],
+              show: ['gTbase', 'gSarrive'] },
+    newb:   { buyers: 'ABCDE', stock: 7, pclear: 8,
+              clearLbl: ['7 cars, $8,000'],  clearAt: [291, 124],
+              show: ['gTghost', 'gTnew', 'gShiftNewb', 'gS'] }
+  };
+  var ALLGROUPS = ['gIndiv', 'gTbase', 'gTghost', 'gTnew', 'gShiftNewb', 'gS',
+                   'gSburn', 'gSarrive'];
   var PMIN = 1, PMAX = 10, STEP = 1;
 
   var svg = document.getElementById('fig');
   var $ = function (id) { return document.getElementById(id); };
+  var scen = 'base';
   var price = 7;
 
   function dollars (p) { return '$' + p + ',000'; }
@@ -265,29 +444,68 @@
     $(id2).textContent = r[1];
   }
 
-  function strings (p, dm) {
-    var out = {};
-    if (p === PCLEAR) {                  // clears: the verbose "wants" form
-      out.state = 'At ' + dollars(p) + ': A wants ' + dm.a + ', B wants ' + dm.b +
-        ', C wants ' + dm.c + ', D wants ' + dm.d + ' — market demand ' + dm.T + '.';
-      out.take = 'The four demands sum sideways to ' + dm.T +
-        ', exactly the seven cars available: the market clears.';
-    } else {                            // off-clearing: the compact form
-      out.state = 'At ' + dollars(p) + ': A ' + dm.a + ', B ' + dm.b + ', C ' + dm.c +
-        ', D ' + dm.d + ' — market demand ' + dm.T + '.';
-      if (p < PCLEAR) {                 // below clearing: T > 7, excess demand
-        out.take = 'Buyers want ' + dm.T + ' but only ' + STOCK +
-          ' cars exist; at this lower price the fixed stock cannot go around.';
-      } else {                          // above clearing: T < 7, excess supply
-        out.take = 'Buyers want only ' + dm.T + ' of the ' + STOCK +
-          ' cars; the price is above the level that clears the stock.';
+  function stateString (p, dm, S) {
+    var parts = [], verbose = (p === S.pclear);
+    for (var i = 0; i < S.buyers.length; i++) {
+      var k = S.buyers[i];
+      parts.push(verbose ? (k + ' wants ' + dm[k]) : (k + ' ' + dm[k]));
+    }
+    var s = 'At ' + dollars(p) + ': ' + parts.join(', ') +
+            ' — market demand ' + dm.T + '.';
+    // the old-price rows carry the changed fact in the state line
+    if (scen === 'burn'   && p === 7) {
+      s = s.slice(0, -1) + ', but the fire left only 6.';
+    }
+    if (scen === 'arrive' && p === 7) {
+      s = s.slice(0, -1) + ', but 9 cars now exist.';
+    }
+    if (scen === 'newb'   && p === 7) {
+      s = s.slice(0, -1) + ', but only 7 cars exist.';
+    }
+    return s;
+  }
+
+  function takeString (p, dm, S) {
+    var stock = S.stock;
+    if (p === S.pclear) {
+      switch (scen) {
+        case 'base':   return 'The four demands sum sideways to ' + dm.T +
+          ', exactly the seven cars available: the market clears.';
+        case 'burn':   return 'Demand did not move — the same staircase meets ' +
+          'a six-car stock at a higher price, $8,000.';
+        case 'arrive': return 'Same demand staircase, bigger stock: nine cars ' +
+          'clear only at the lower price of $4,000.';
+        case 'newb':   return 'The higher price moves one car from C, who ' +
+          'values a second at less than $8,000, to E: the market re-clears.';
       }
     }
-    return out;
+    if (scen === 'burn'   && p === 7) {
+      return 'At the old price seven are demanded and six exist; the man who ' +
+        'lost his car bids the price up.';
+    }
+    if (scen === 'arrive' && p === 7) {
+      return 'Two cars go begging at the old price; sellers undercut one ' +
+        'another and the price falls.';
+    }
+    if (scen === 'newb'   && p === 7) {
+      return 'E’s added demand outruns the stock at the old price; his ' +
+        'bidding pushes the price up.';
+    }
+    if (dm.T > stock) {
+      return 'Buyers want ' + dm.T + ' but only ' + stock + ' cars exist; at ' +
+        'this low price the stock cannot go around, so bidding pushes the ' +
+        'price up.';
+    }
+    if (dm.T < stock) {
+      return 'Buyers want only ' + dm.T + ' of the ' + stock + ' cars; the ' +
+        'price is above the level that clears the stock.';
+    }
+    return 'Amount demanded equals the stock: the market clears.';
   }
 
   function render () {
-    var p = price, y = Y(p), dm = demands(p), xT = X(dm.T);
+    var S = SCEN[scen];
+    var p = price, y = Y(p), dm = demands(S.buyers, p), xT = X(dm.T);
 
     // price line + hit zone + glyph + focus targets
     ['price', 'priceHit'].forEach(function (id) {
@@ -295,16 +513,22 @@
     });
     $('glyph').setAttribute('y', y + 4);
     $('priceFocus').setAttribute('y', y - 8);
-    document.querySelector('.focusring').setAttribute('y', y - 12);
+    $('focusRing').setAttribute('y', y - 12);
 
-    // horizontal-sum stack bar along the line, x0 .. X(T); seps at cumulatives
+    // horizontal-sum stack bar along the line, x0 .. X(T); seps at the
+    // cumulative sums (A|B|C|D and, with E, a fourth separator)
     $('stackbar').setAttribute('y', y - 4.5);
-    $('stackbar').setAttribute('width', xT - X0);
-    var cum = [dm.a, dm.a + dm.b, dm.a + dm.b + dm.c];
-    ['sep1', 'sep2', 'sep3'].forEach(function (id, i) {
-      var el = $(id), xc = X(cum[i]);
-      // hide a separator that would sit at the bar's own left/right edge
-      var show = cum[i] > 0 && cum[i] < dm.T;
+    $('stackbar').setAttribute('width', Math.max(0, xT - X0));
+    var cum = [], run = 0, i, k;
+    for (i = 0; i < S.buyers.length - 1; i++) {
+      run += dm[S.buyers[i]];
+      cum.push(run);
+    }
+    ['sep1', 'sep2', 'sep3', 'sep4'].forEach(function (id, j) {
+      var el = $(id);
+      if (j >= cum.length) { el.setAttribute('opacity', 0); return; }
+      var xc = X(cum[j]);
+      var show = cum[j] > 0 && cum[j] < dm.T;
       el.setAttribute('opacity', show ? 1 : 0);
       el.setAttribute('x1', xc); el.setAttribute('x2', xc);
       el.setAttribute('y1', y - 4.5); el.setAttribute('y2', y + 4.5);
@@ -314,18 +538,47 @@
     $('tmark').setAttribute('cx', xT);
     $('tmark').setAttribute('cy', y);
 
+    // clearing marker (scenario-fixed)
+    var xc2 = X(S.stock), yc = Y(S.pclear);
+    $('clearDropV').setAttribute('x1', xc2); $('clearDropV').setAttribute('x2', xc2);
+    $('clearDropV').setAttribute('y1', yc);
+    $('clearDropH').setAttribute('y1', yc); $('clearDropH').setAttribute('y2', yc);
+    $('clearDropH').setAttribute('x2', xc2);
+    $('clearDot').setAttribute('cx', xc2); $('clearDot').setAttribute('cy', yc);
+    $('clearL1').setAttribute('x', S.clearAt[0]);
+    $('clearL1').setAttribute('y', S.clearAt[1]);
+    $('clearL2').setAttribute('x', S.clearAt[0]);
+    $('clearL2').setAttribute('y', S.clearAt[1] + 14);
+    $('clearL2').textContent = S.clearLbl[0];
+
     // readout + aria
-    var str = strings(p, dm);
-    setRows('state1', 'state2', str.state, 52);
-    setRows('take1', 'take2', str.take, 52);
+    var st = stateString(p, dm, S), tk = takeString(p, dm, S);
+    setRows('state1', 'state2', st, 88);
+    setRows('take1', 'take2', tk, 82);
     var pf = $('priceFocus');
     pf.setAttribute('aria-valuenow', String(p));
-    pf.setAttribute('aria-valuetext', str.state);
+    pf.setAttribute('aria-valuetext', st + ' ' + tk);
+  }
+
+  function setScenario (name) {
+    if (!SCEN[name]) return;
+    scen = name;
+    ALLGROUPS.forEach(function (g) {
+      $(g).setAttribute('visibility',
+        SCEN[name].show.indexOf(g) >= 0 ? 'visible' : 'hidden');
+    });
+    Object.keys(SCEN).forEach(function (n) {
+      var on = (n === name);
+      $('btn-' + n).classList.toggle('on', on);
+      $('btnl-' + n).classList.toggle('on', on);
+      $('btnh-' + n).setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    render();
   }
 
   function clampSnap (p) {
     p = Math.max(PMIN, Math.min(PMAX, p));
-    return Math.round(p / STEP) * STEP;   // integer $1,000s: snaps onto $7,000 too
+    return Math.round(p / STEP) * STEP;   // integer $1,000s
   }
 
   // ---- pointer drag (pointer capture; fast drags stay attached) ----
@@ -357,11 +610,11 @@
   ['priceHit', 'priceFocus'].forEach(function (id) {
     $(id).addEventListener('pointerdown', onDown);
   });
-  svg.addEventListener('pointermove', onMove);
-  svg.addEventListener('pointerup', onUp);
-  svg.addEventListener('pointercancel', onUp);
+  window.addEventListener('pointermove', onMove);
+  window.addEventListener('pointerup', onUp);
+  window.addEventListener('pointercancel', onUp);
 
-  // ---- keyboard ----
+  // ---- keyboard: price slider ----
   $('priceFocus').addEventListener('keydown', function (evt) {
     var delta = 0;
     if (evt.key === 'ArrowUp' || evt.key === 'ArrowRight') delta = STEP;
@@ -374,17 +627,36 @@
     render();
   });
 
+  // ---- scenario buttons: click + Enter/Space ----
+  Object.keys(SCEN).forEach(function (name) {
+    var hit = $('btnh-' + name);
+    hit.addEventListener('click', function () { setScenario(name); });
+    hit.addEventListener('keydown', function (evt) {
+      if (evt.key === 'Enter' || evt.key === ' ' || evt.key === 'Spacebar') {
+        evt.preventDefault();
+        setScenario(name);
+      }
+    });
+  });
+
   // ---- debug hook (widget standard) ----
   window.__fig = {
-    set: function (p) { price = clampSnap(Number(p)); render(); return price; },
+    set: function (p, name) {
+      if (name) setScenario(name);
+      price = clampSnap(Number(p));
+      render();
+      return { scenario: scen, price: price };
+    },
     get: function () {
-      var dm = demands(price);
-      return {
-        price: price, a: dm.a, b: dm.b, c: dm.c, d: dm.d,
-        marketDemand: dm.T, stock: STOCK,
-        regime: price > PCLEAR ? 'excess-supply'
-              : (price < PCLEAR ? 'excess-demand' : 'clears')
-      };
+      var S = SCEN[scen], dm = demands(S.buyers, price);
+      var out = { scenario: scen, price: price, stock: S.stock,
+                  pclear: S.pclear, marketDemand: dm.T,
+                  regime: dm.T > S.stock ? 'excess-demand'
+                        : (dm.T < S.stock ? 'excess-supply' : 'clears') };
+      for (var i = 0; i < S.buyers.length; i++) {
+        out[S.buyers[i]] = dm[S.buyers[i]];
+      }
+      return out;
     }
   };
 
