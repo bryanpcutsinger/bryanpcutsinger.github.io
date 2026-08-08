@@ -13,6 +13,7 @@ word_budget: 3610
   # word_budget unchanged (3758): ep4-1 round-3 + ep4-4 round-2 figcaption edits 2026-08-07 (drag sentences replaced by button/old-price sentences). Measured stripped 3,718; 40-word headroom.
   # word_budget 3758 -> 3610 (-148): ep4-4 figure PULLED AND BANKED 2026-08-07 (instructor: supply not yet taught at session 6; re-host in T7) — embed + figcaption removed, lecture card ext-t04a-supply-elasticity-10 added. Measured stripped 3,570; 40-word headroom preserved.
   # word_budget unchanged (3610): econ-writing round 2 2026-08-07 (10 line edits). Measured stripped 3,541.
+  # word_budget unchanged (3610): sequence-alignment review 2026-08-08 — transaction-cost accounting, reservation demand, fixed-stock interpretation, allocation assumptions, ceteris-paribus demand, and persistent-control terminology tightened. Measured stripped 3,521; 89-word headroom.
 word_target: "3400-3600"
 status: approved        # E&P integration M4 done-gate 2026-07-20; prior approval 2026-07-01
 audience: students
@@ -32,13 +33,13 @@ That is the puzzle this post takes up, and the answer runs through prices. An or
 <ul>
 <li>Explain why the full price of a trade is the money price plus every nonmoney cost of completing it, and why a middleman who shrinks those costs can raise the seller's net while lowering the buyer's full price.</li>
 <li>Distinguish an open market from a closed one, explain why closing a market by restricting entry transfers wealth to protected insiders without creating any, and tell freedom of competition apart from freedom from competition.</li>
-<li>Construct market demand as the horizontal sum of individual demands, identify the market-clearing price that matches the amount demanded to a fixed available quantity, and explain how a rising price reallocates that fixed stock toward its highest-valued uses regardless of who held it first — distinguishing a price-controlled shortage or surplus from physical scarcity.</li>
+<li>Construct market demand as the horizontal sum of individual demands, identify the market-clearing price that matches the amount demanded to a fixed available quantity, and explain why, under the model's assumptions, a rising price reallocates that stock regardless of who held it first — distinguishing a price-controlled shortage or surplus from physical scarcity.</li>
 </ul>
 </aside>
 
 ## Trade Runs on the Full Price, Not Just the Money Price
 
-Trade makes both sides better off: each hands over something worth less to get something worth more. But trade does not continue until every last beneficial swap is made, because trading itself eats up time and effort: you must find someone who has what you want, judge the goods, haggle, haul them home, and make sure the other side delivers. Those are *transaction costs*, and they are as real as the price on the tag. So the *full price* of a thing is the money price plus all the nonmoney costs of completing the trade. A used car listed at five thousand dollars can cost considerably more once you add the weekends spent searching, the inspection fee, and the risk of being cheated.
+As the previous post showed, informed voluntary trade makes both sides expect gains, realized when they understand the terms and each delivers as promised. Yet trade stops before every otherwise-beneficial swap because finding a partner, judging goods, haggling, hauling, and enforcing delivery all consume resources. Those *transaction costs* stop the remaining trades once their expected gains no longer cover the costs. So the *full price* of a thing is the money price plus all the nonmoney costs of completing the trade. A used car listed at five thousand dollars can cost considerably more once you add weekends spent searching, time arranging an inspection, and the risk of being cheated.
 
 <aside class="econ-callout econ-termset">
 <p class="econ-callout__label">Key terms</p>
@@ -48,7 +49,7 @@ Trade makes both sides better off: each hands over something worth less to get s
 </dl>
 </aside>
 
-Middlemen exist to shrink these costs. A *middleman* stands between the original seller and the final buyer: a wholesaler or broker can search, sort, and vouch at far lower cost than you could on your own, so he raises the price the seller pockets while lowering the full price the buyer pays. Both sides come out ahead, and his cut comes from the gain he creates.
+Middlemen exist to shrink these costs. A *middleman* stands between the original seller and final buyer: a wholesaler or broker can search, sort, and vouch at lower cost, raising the seller's net while lowering the buyer's full price. The cash spread between what he collects and pays compensates him for those services; profit is only what remains after his own real costs.
 
 The table below traces the gain for a single egg. Without a middleman, the buyer pays eight cents in cash plus a penny of his own trouble, a full price of nine cents; the seller collects eight cents but bears half a cent of selling costs, netting seven and a half. A specialist handles the messy parts. Now the buyer pays eight and a half cents in cash but nothing in extra trouble, and the seller nets seven and three-quarter cents. The buyer's full price falls and the seller's take rises, even though the cash price the buyer hands over goes up.
 
@@ -61,9 +62,9 @@ The table below traces the gain for a single egg. Without a middleman, the buyer
 | **With a middleman** | | | |
 | Buyer pays | 8.5¢ | 0 | 8.5¢ (paid) |
 | Seller gets | 7.75¢ | 0 | 7.75¢ (received) |
-| | | total transaction cost | 0.75¢ |
+| | | specialized service cost | 0.75¢ |
 
-*The middleman earned three-quarters of a cent per egg by cutting the buyer's and seller's combined transaction costs in half. The buyer's full price still fell, and the seller's net rose, which is why "buy direct and eliminate the middleman's cost" is usually a confusion.*
+*The three-quarter-cent spread pays for the intermediary's service, which this example treats as a real cost rather than pure profit. It replaces 1.5 cents of do-it-yourself costs: the buyer saves half a cent and the seller gains a quarter-cent. That is why "buy direct and eliminate the middleman's cost" is usually a confusion.*
 
 A discount store boasts that it "cuts out the middleman" so you save, but eliminating the middleman does not eliminate the work he was doing; it just hands that work back to you. Do it yourself, and the cost has not vanished, only changed hands. Sometimes doing it yourself is cheaper; often the specialist is, which is why he has a business.
 
@@ -115,22 +116,22 @@ A confusion runs through the politics of protection. A president might praise fr
 
 Return now to the puzzle of coordination. An unplanned economy can feed itself because its prices are an ordered set of signals and rewards, and they do their work without anyone intending it.
 
-A price is a *signal*: it compresses into one number what no one person could gather, how badly a thing is wanted, how scarce it is, how costly to produce. When a good piles up unsold the price falls and the message reaches every possible supplier without a memo; when it grows scarce the price rises and the message runs the other way.
+A price is a *signal*: it summarizes many competing demands and the available supply in one number. It does not reveal by itself which condition changed, but a pileup tends to lower the price and stronger competition for what is available tends to raise it, spreading the message without a memo.
 
-A price is also a *reward*. A higher price at once restrains what buyers ask for and gives suppliers both the revenue and the reason to provide more. Where that reward is missing, waste follows: a producer charged nothing for its inputs has no reason to husband them, while one that pays their real cost economizes.
+A price is also a *reward*. A higher price at once restrains what buyers ask for and, when output can respond, gives suppliers both the revenue and the reason to provide more. Where that reward is missing, waste follows: a producer charged nothing for its inputs has no reason to husband them, while one that pays their real cost economizes.
 
-And a price *rations*, steering each scarce good toward whoever will give up the most for it. The rationing runs in every direction at once, because one buyer's price is another's cost: the price meatpackers pay for cattle becomes a cost to butchers and part of the price of a steak, so a surge in demand for beef ripples along a whole chain of prices no central planner could map by hand.
+And a price *rations*, steering each scarce good toward whoever will give up the most for it. The rationing runs in every direction at once because one seller's price becomes the next producer's cost: the price meatpackers charge for beef becomes a cost to butchers and part of the price of a steak, so a surge in demand for beef ripples along a whole chain of prices no central planner could map by hand.
 
-Demand and supply are more than a story about shopping; they are a tool for thinking about how any scarce resource gets parceled out among the rival uses competing for it. For any one use, the resource's value in that use is its *demand*; its value in all the other uses it could go to instead is its *supply*. Every system for deciding who gets what discriminates, because something always has to do the rationing. Under private property and open markets, that something is mostly money; suppress money competition, as a control does, and the rationing does not stop. It shifts to nonmoney criteria: connections, persuasion, political pull, cultural fit. No system escapes having a criterion; the only question is which one.
+Demand and supply also help explain how a scarce resource gets parceled among rival uses. In opportunity-cost terms, its value in one use generates demand there, while its value elsewhere affects what must be paid to draw it away. This is not yet a firm's supply curve, which a later session derives from marginal cost. Every system for deciding who gets what discriminates, because something must ration the good. Under private property and open markets, that something is mostly money; suppress money competition, as a control does, and rationing shifts to nonmoney criteria: connections, persuasion, political pull, cultural fit. No system escapes a criterion; the question is which one.
 
 ## A Market-Clearing Price Balances What Buyers Want With What Is Available
 
-When trade is free, competition drives the price toward the level where the amount people want to buy equals the amount available. That is the *market-clearing price*, or equilibrium price. At any higher price, sellers cannot find enough buyers; at any lower price, buyers cannot find enough goods; only at the clearing price do the two match.
+When trade is free, competition drives the price toward the level where the quantity demanded equals the quantity available or supplied. That is the *market-clearing price*, or equilibrium price. In the fixed-stock car model below, the relevant demand is how many cars people want to own. Above the clearing price, their total desired holdings fall short of the stock; below it, their desired holdings exceed the stock. Only at the clearing price do the two match.
 
 <aside class="econ-callout econ-termset">
 <p class="econ-callout__label">Key term</p>
 <dl class="econ-term-list">
-<div><dt>Market-Clearing Price</dt><dd>The price at which the amount buyers want to purchase equals the amount available.</dd></div>
+<div><dt>Market-Clearing Price</dt><dd>The price at which the quantity demanded equals the quantity available or supplied.</dd></div>
 </dl>
 </aside>
 
@@ -153,25 +154,25 @@ To see where that price comes from, build *market demand*, which is just the sum
 
 <figure class="econ-figure" style="margin:1.5em 0;">
 <iframe src="/teaching/microeconomics/t04a-markets-coordination/figures/t04a-ep4-1-market-demand-sum-interactive.html" title="Interactive market-clearing figure: four individual step-demands sum sideways into the market demand staircase and meet the fixed stock of seven cars, and scenario buttons burn a car, let two more arrive, or bring in a new buyer, each showing the old $7,000 price failing and the new clearing price." loading="lazy" style="width:100%; max-width:600px; aspect-ratio:640/600; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t04a-markets-coordination/figures/t04a-ep4-1-market-demand-sum-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t04a-markets-coordination/figures/t04a-ep4-1-market-demand-sum.svg">view the static market-demand figure</a>.</p></iframe>
-<figcaption><strong>One staircase, three experiments.</strong> The figure opens with the table drawn as a picture: each buyer's whole-number demand adds sideways at every price into the market staircase T = A + B + C + D, the fixed stock of seven cars stands as the vertical line S, and the two meet at the clearing point, $7,000. The buttons then rerun the market. Burn a car and the unchanged staircase meets a six-car stock at $8,000; let two more cars arrive and nine clear at $4,000; let a new buyer join and the staircase itself shifts right, so the same seven cars re-clear at $8,000. Each experiment also marks the old $7,000 price, with the shortage or surplus that forces the price to move. If the frame does not load, <a href="/teaching/microeconomics/t04a-markets-coordination/figures/t04a-ep4-1-market-demand-sum-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t04a-markets-coordination/figures/t04a-ep4-1-market-demand-sum.svg">view the static market-demand figure</a>.</figcaption>
+<figcaption><strong>One staircase, three experiments.</strong> The figure opens with the table drawn as a picture: each buyer's whole-number demand adds sideways at every price into the market staircase T = A + B + C + D, the fixed stock of seven cars stands as the vertical line S, and the two meet at the clearing point, $7,000. The buttons then rerun the market. Burn a car and the unchanged staircase meets a six-car stock at $8,000; let two more cars arrive and nine clear at $4,000; let a new buyer join and the staircase itself shifts right, so the same seven cars re-clear at $8,000. Each experiment also marks the old $7,000 price and the excess demand or supply that puts pressure on it to move. If the frame does not load, <a href="/teaching/microeconomics/t04a-markets-coordination/figures/t04a-ep4-1-market-demand-sum-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t04a-markets-coordination/figures/t04a-ep4-1-market-demand-sum.svg">view the static market-demand figure</a>.</figcaption>
 </figure>
 
-Two lessons fall out of this table. First, the price settles where the quantity demanded equals the quantity available: with seven cars, the clearing price is $7,000, the row where market demand reads seven. If demand rose, the clearing price would rise too, because the fixed seven cars would have to be rationed among hungrier buyers; press "A new buyer joins" in the figure to watch it happen, as buyer E's demand shifts the whole staircase right and the same seven cars re-clear at $8,000. Second, it does not matter who starts with the cars: voluntary trading shuffles them to the same final owners, because each person keeps buying as long as a car is worth more to him than its price and keeps selling whenever it is worth less. The *initial allocation* does not determine the *final allocation*; the cars end up with whoever values them most regardless of who held them first.
+Two lessons fall out of this table. First, the price settles where the quantity demanded equals the quantity available: with seven cars, the clearing price is $7,000, the row where market demand reads seven. If demand rose, the clearing price would rise too; press "A new buyer joins" to watch buyer E shift the staircase right so the same seven cars re-clear at $8,000. Second, in this stripped-down model, the cars reach the same final owners no matter who starts with them. That result assumes informed voluntary trade, enforceable ownership, negligible transaction costs, and transfers too small to shift demand through a wealth effect. Under those assumptions, each person buys while another car is worth more than its price and sells when it is worth less. The *initial allocation* does not determine the *final allocation*.
 
-At this stage, read supply as willingness to sell from the existing stock at each price, including what current owners require before giving up a unit. A later session derives each firm's supply from marginal cost.
+At this stage, read the vertical line S as the total stock available to be held, not as a firm's supply curve. Current owners' willingness to keep or release cars is already included in their individual demands to own. A later session derives each firm's supply from marginal cost.
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
-<p>The seven cars clear at $7,000. If more people wanted a car at every price, which way would the clearing price move, and why do the cars end up with the same final owners no matter who held them first?</p>
+<p>The seven cars clear at $7,000. If more people wanted a car at every price, which way would the clearing price move, and, under the model's assumptions, why do the cars end up with the same final owners?</p>
 </aside>
 
-Two smaller points sharpen the picture. "The price" of a car means the price actually agreed to in real transactions, not the sticker on the windshield or the optimistic figure in an ad. And the law that people buy more of a thing at a lower price than at a higher one is more dependable than any particular market outcome: a government can suspend a market by freezing its price, but it cannot repeal the fact that people respond to prices. The law of demand always holds, while the tidy market-clearing result can be blocked by a law that forbids the price to move.
+Two smaller points sharpen the picture. "The price" of a car means the price actually agreed to in real transactions, not the sticker on the windshield or the optimistic figure in an ad. And the law that people buy more at a lower price than at a higher one, holding other relevant conditions fixed, is more dependable than any particular market outcome. A legal ceiling can prevent price adjustment from clearing a market, but it cannot repeal people's response to price. The law of demand remains in force while the market-clearing result is blocked.
 
 ### A Higher Price Rations Even a Supply That Cannot Grow
 
 People often grant that prices should rise when more can be produced, but bristle when a price jumps for something whose supply is fixed, calling it immoral or an unearned windfall. The objection misses what the higher price is doing. Even when not one extra unit can be made, a higher price still performs its rationing job: it steers the existing stock toward those who value it most and away from lower-valued uses.
 
-The clearest case brings back the seven cars from the last section. Suppose one is destroyed by fire, so six remain and no new car can be built. The person who lost his car still wants one, so at the old price more cars are wanted than exist, and he bids the price up, steering the smaller stock toward whoever values a car most. The figure above reruns this experiment: press "A car burns," and the demand staircase, which has not moved, meets the six-car stock at $8,000. It can look unfair that one owner gains from another's misfortune, but forbidding the price to rise does not undo the fire; it only keeps the man who lost his car from replacing it. A ceiling meant to stop "gouging" or "profiteering from another's misfortune" puts no burned car back on the road; it manufactures a shortage and leaves the rationing to luck and lines.
+The clearest case brings back the seven cars from the last section. Suppose one is destroyed by fire, so six remain and no new car can be built. The person who lost his car still wants one, so at the old price more cars are wanted than exist, and competitive bidding raises the price, steering the smaller stock toward whoever values a car most. The figure above reruns this experiment: press "A car burns," and the demand staircase, which has not moved, meets the six-car stock at $8,000. It can look unfair that the remaining cars become more valuable after another owner's misfortune, but forbidding the price to rise does not undo the fire. The man who lost his car may or may not replace it; at the controlled price, luck, lines, or some other rule must settle the competing claims. A ceiling meant to stop "gouging" or "profiteering from another's misfortune" puts no burned car back on the road; it manufactures a shortage and shifts the rationing elsewhere.
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
@@ -182,30 +183,30 @@ The clearest case brings back the seven cars from the last section. Suppose one 
 
 We need three words kept apart, because newspapers and politicians blur them constantly.
 
-*Scarcity* is the condition we met on day one: less of a thing exists than people would want at a price of zero, and it never goes away. A *reduction in supply* is a fall in the amount available, a real, physical change, as when a crop fails or a fire destroys housing. A *shortage* is something else entirely: the gap that opens when a price is held below the clearing level, so that the amount people want to buy exceeds the amount offered. A shortage is a price phenomenon, not a physical fact, and it is created by a law, not by nature.
+*Scarcity* is the condition we met on day one: less exists than people would want at a price of zero, and it never goes away. A *reduction in supply* is a physical fall in the amount available, as when a crop fails or a fire destroys housing. A *shortage* is the gap that persists when a price is held below clearing, so the amount demanded exceeds the amount offered. In the legal-control case studied here, it is a price phenomenon, not a physical fact, and it is created by a law, not by nature. A temporary stockout while prices or inventories adjust need not be this persistent controlled shortage.
 
 <aside class="econ-callout econ-termset">
 <p class="econ-callout__label">Key terms</p>
 <dl class="econ-term-list">
 <div><dt>Scarcity</dt><dd>The permanent condition in which less of a thing exists than people would want at a price of zero.</dd></div>
 <div><dt>Reduction in Supply</dt><dd>A fall in the physical amount of a good available, as when a crop fails or a fire destroys housing.</dd></div>
-<div><dt>Shortage</dt><dd>The gap that opens when a price is held below the clearing level, so buyers want more than is offered.</dd></div>
+<div><dt>Shortage</dt><dd>The gap that persists when a price is held below the clearing level, so buyers want more than is offered.</dd></div>
 </dl>
 </aside>
 
-A reduction in supply and a shortage come apart in both directions. The fire that cut the stock to six was a real reduction in supply, yet it produced no shortage, because the price was free to rise. And had the supply instead risen to nine, a price pinned below where nine would clear (the figure's "Two cars arrive" scenario puts that clearing price at $4,000) would still produce a shortage, with more cars wanted at that low price than exist. What makes a shortage is never the size of the stock but the law that holds the price below where the market would clear.
+A reduction in supply and a shortage come apart in both directions. The fire that cut the stock to six was a real reduction in supply, yet it produced no shortage, because the price was free to rise. And had the supply instead risen to nine, a price pinned below where nine would clear (the figure's "Two cars arrive" scenario puts that clearing price at $4,000) would still produce a shortage, with more cars wanted at that low price than exist. What makes the persistent shortage in this example is not the stock's size but the law holding price below clearing.
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
 <p>A fire cut the car supply to six yet produced no shortage, while a price capped below clearing would produce a shortage even when the supply had risen to nine. What makes the difference in each case?</p>
 </aside>
 
-Surpluses are the mirror image: a *surplus* is the gap that opens when a price is held above the clearing level, so the amount offered exceeds the amount anyone will buy. Like a shortage, it is a creature of price control, not of physical abundance, and it can sit alongside real want, because a floor keeps the price too high for the market to clear.
+The controlled *surplus* is the mirror image: the gap that persists when a price is held above the clearing level, so the amount offered exceeds the amount anyone will buy. It is not physical abundance, and it can sit alongside real want because a floor keeps the price too high for the market to clear.
 
 <aside class="econ-callout econ-termset">
 <p class="econ-callout__label">Key term</p>
 <dl class="econ-term-list">
-<div><dt>Surplus</dt><dd>The gap that opens when a price is held above the clearing level, so more is offered than anyone will buy.</dd></div>
+<div><dt>Surplus</dt><dd>The gap that persists when a price is held above the clearing level, so more is offered than anyone will buy.</dd></div>
 </dl>
 </aside>
 
@@ -220,9 +221,9 @@ Want to explore the source material? This lecture draws on the following chapter
 <section class="econ-review__section">
 <h3>Key takeaways</h3>
 <ul>
-<li><strong>Trade runs on the full price.</strong> The full price is the money price plus every nonmoney cost of completing a trade, and a middleman earns his cut by shrinking those costs, raising the seller's net while lowering the buyer's full price.</li>
+<li><strong>Trade runs on the full price.</strong> The full price is the money price plus every nonmoney cost of completing a trade, and a middleman can be paid for shrinking those costs, raising the seller's net while lowering the buyer's full price; his profit is what remains after his own real costs.</li>
 <li><strong>Closing a market moves wealth; it does not make it.</strong> An open market has free entry, while licensing and similar rules close one by raising the cost of entry; the protection this buys insiders is rent-seeking, a gain smaller than the loss it imposes on everyone else, the difference between freedom of competition and freedom from competition.</li>
-<li><strong>Prices coordinate an economy no one is running.</strong> Acting as signals and rewards, they guide an unplanned economy with no one in charge; market demand is the horizontal sum of individual demands, and the clearing price matches the amount wanted to a fixed stock, so a rise in demand pushes that price up, the goods end up with whoever values them most regardless of who held them first, a higher price still rations even a supply that cannot grow, and a shortage or surplus is a creature of price control, not physical scarcity.</li>
+<li><strong>Prices coordinate an economy no one is running.</strong> Acting as signals and rewards, they guide an unplanned economy with no one in charge; market demand is the horizontal sum of individual demands, and the clearing price matches the amount wanted to a fixed stock, so a rise in demand pushes that price up, the model's assumptions make initial ownership irrelevant to final ownership, a higher price still rations even a supply that cannot grow, and a controlled shortage or surplus is not physical scarcity.</li>
 </ul>
 </section>
 </div>
