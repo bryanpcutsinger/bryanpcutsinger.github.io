@@ -3,384 +3,559 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Interactive oil shortage: capping the input price can't undo a supply cut</title>
+<title>Interactive oil shortage: the cut raised the price, the cap opened the gap</title>
 <!--
-  Interactive oil/gasoline-shortage diagram for the t04b-price-controls blog post
-  (website-styled warm palette, NOT the FAU slide palette). Self-contained:
-  vanilla SVG + JS, no libraries, no network, no build step. The static FAU
-  figure (figures/t04b-oil-shortage.{tex,svg}) is the SLIDE version, untouched,
-  and is the <noscript> fallback.
+  t04b-oil-shortage-interactive.html — REBUILD, 2026-08-08
+  (instructor-directed: adds the welfare/dissipation layer that the old
+  "gap diagram only" lock forbade, and moves to the exact-fit 480x600 frame.)
 
-  Recreates UE Fig 12.2 (p.161). Family F3 (policy line / wedge): the horizontal
-  CEILING line P3 is draggable in price (vertical drag; arrow keys step it).
-  Demand D is fixed. Supply has been cut from the original S (dashed, "before",
-  x=7.0) to the reduced S1 (solid, x=3.5), so the free-market clearing price
-  would rise from P1=3.5 to P2=6.514 at the reduced stock. The quantity
-  demanded at the capped price is read off D: Qd = 0.6 + (9.0-ceiling)/0.857.
-  While the ceiling sits below the 6.5 clearing price, Qd > 3.5 (the reduced
-  supply) and the shortage gap shades between them; raise the ceiling to 6.5
-  and the cap stops binding (the price cut simply raised price, no shortage).
-  The point of the figure: a ceiling on the OUTPUT (or, as the surrounding
-  prose argues, on an INPUT) cannot restore a supply a real-world cut removed.
+  Recreates UE Fig 12.2, "Reduction in Supply and Price Ceiling below
+  Market-Clearing Level" (p.161) — the 1970s energy crisis. Family F3
+  (policy line / wedge): the horizontal CEILING line P3 is draggable in price.
 
-  ARCHITECTURE: the base figure is REAL SVG markup — a no-JS reader sees the
-  full still figure (demand, both supplies, the shift arrow, the ceiling,
-  the three key points, all axis labels, droplines, the shortage band +
-  bracket, and the readout for the initial ceiling = 5.0 state). The script
-  only ATTACHES behavior (drag the ceiling, keyboard, live readouts +
-  shading); it never builds the DOM.
+  ECONOMICS (UE ch.12, "The Energy Crisis"). Three things must be readable:
+    1. The supply CUT raises the clearing price. The stock falls from S (7.0)
+       to S1 (3.5); demand does not move; the clearing price rises from
+       P1 = 3.5 to P2 = 6.5. At P2 there is NO shortage — buyers get all they
+       demand at the reduced stock, they just pay more for it.
+    2. The PRICE CONTROL, not the cut, creates the shortage. A cap below P2
+       leaves Q3 demanded against only Q2 = 3.5 available; the gap widens as
+       the cap is pushed down.
+    3. The full price rises anyway. Money price capped at P3, buyers compete
+       by NONMONEY means (gas lines, tie-ins, poorer service) until the full
+       price reaches the marginal worth of the reduced amount, P2. The
+       (P2 - P3) x Q2 rectangle is the value that competition consumes rather
+       than transfers — the dissipation band.
+    Supply is VERTICAL on purpose: over this interval the amount supplied does
+    not respond to price. Never give it a slope.
 
-  DATA SPACE: x = quantity 0..9.5, y = price 0..9.5 (matches the .tex source).
-  PIXEL FRAME: origin (64,360). Data max maps q=9.5 -> x=392, p=9.5 -> y=44.
-  Axes extend PAST the data max (x to 418, y to 24) so lines never crowd the
-  arrowheads. sx = 328/9.5 = 34.526 px/unit; sy = 316/9.5 = 33.263 px/unit.
+  BAND RATIONALE (why that exact rectangle). The band is bounded on three
+  sides by lines the figure already draws: the price axis on the left, the
+  S1 stock line on the right, the P2 dropline on top, and the draggable
+  ceiling on the bottom. So it is not a free-floating shading — it is the
+  region between "what buyers would have to pay to clear the reduced stock"
+  and "what the law lets sellers charge", over the units that actually exist.
+  It is NAMED, never measured: no computed area or dollar figure is ever
+  printed, per the course's no-formal-welfare-apparatus scope lock. The
+  diagonal hatch is a redundant, non-color cue distinguishing it from the
+  plain accent used for the shortage gap.
+
+  COLOUR ENCODING (deliberate): BRASS/accent = the price control and
+  everything it causes (ceiling, dissipation band, shortage gap, Qd).
+  MUTED GREY = the pre-control world (the original stock S, the old clearing
+  point P1, the supply-falls arrow). INK = the market as it stands after the
+  cut (demand D, the reduced stock S1, the new clearing point P2). The reader
+  should be able to see at a glance that the brass ink is the policy's.
+
+  ARCHITECTURE: static-base. Everything a no-JS reader sees is real SVG
+  markup — every curve, dot, dropline, band, label and the readout for the
+  initial ceiling = 5.0 state. The script only ATTACHES behaviour (drag,
+  keyboard, live readouts, re-shading). It never builds the figure DOM.
+
+  FRAME: ONE svg, viewBox 0 0 480 600 (exactly 4/5, matching the iframe), with
+  plot, readout and hint all inside it. No width/height attributes, no media
+  query, so the widget fits its frame exactly at any embed width.
+
+  GEOMETRY MAP (data space x 0..9.5, y 0..9.5):
+    X(q) = 58 + 37.894737 q      (x-axis at y = 372, drawn on to 440)
+    Y(p) = 372 - 34.947368 p     (y-axis at x = 58,  drawn up to 24)
+    X: 0.6 -> 80.74 | 3.5 -> 190.63 | 7.0 -> 323.26 | 9.0 -> 399.05 | 9.5 -> 418
+    Y: 1.8 -> 309.09 | 3.514286 -> 249.18 | 5.0 -> 197.26 |
+       6.514286 -> 144.36 | 8.0 -> 92.42 | 9.0 -> 57.47
+    D:   (0.6, 9.0) -> (9.0, 1.8), slope -6/7 = -0.857142857, label at the
+         lower-right end.
+    S:   vertical at q = 7.0, dashed muted (the stock before the cut).
+    S1:  vertical at q = 3.5, solid ink (the stock after). S1 doubles as the
+         Q2 dropline, so no separate dropline is drawn there.
+    P1 = D(7.0) = 3.514286 (displayed 3.5); P2 = D(3.5) = 6.514286
+         (displayed 6.5). The exact values are what make Qd land on 7.0 at the
+         P1 snap and on 3.5 at the P2 snap; the axis tags show the round form.
+    Ceiling P3: horizontal, accent, dashed, default 5.0, drag range 2..8,
+         snapping to P1 and P2 within 0.18.
+    Qd(c) = 0.6 + (9.0 - c)/0.857142857 (recomputed, never hard-coded).
+
+  VERTICAL LAYOUT (y, top to bottom):
+     24  y-axis arrowhead        42  S / S1 labels
+     48  tops of the stock lines 68  supply-falls arrow (60 = its label)
+    372  x-axis                 390  quantity foot tags (Qs, Qd, Q1)
+    414  "Quantity of oil"      436  readout hairline
+    458/474  state lines    498/514/530  takeaway lines
+    556/572  hint lines
+
+  COLLISION RULES (all verified at both drag extremes, 2.0 and 8.0):
+    - Axis price tags are the bare symbols P2/P3/P1; the numbers live in the
+      readout. A tag like "P3 = 5.0" would run into the rotated "Price ($)"
+      title in the left gutter, which is only 58px wide.
+    - One tag per height in the gutter (they need ~16px of separation). P2
+      never hides: it names the band's top edge and it is the number the
+      readout keeps citing, so P3 gives way as the cap closes on P2. P1 is
+      only context, so there P3 wins, except AT the snap where the cap has
+      become the old price and that name is what matters.
+    - The "Shortage" word is END-anchored at x = 184, just left of the S1
+      line, rather than centred inside the gap: centring would force it to
+      disappear whenever the gap is narrower than the word. It carries a
+      glyph-hugging surface halo (paint-order: stroke) so where it crosses the
+      P1 dropline it interrupts the hairline only around the letters.
+    - The Q1 foot tag hides when the live Qd tag would reach it (measured with
+      getComputedTextLength, not guessed). At the P1 snap that is exactly
+      right: Q3 has become Q1.
+    - The band label hides when the band is under ~1.1 data units tall, and is
+      anchored to the TOP of the band so it can never sit on the P1 dropline.
 -->
 <style>
   :root {
-    --surface: #f7f4ef;   /* warm bone background        */
-    --ink:     #1a1c1e;    /* primary curves + headings   */
-    --text:    #16181a;    /* body text                   */
-    --muted:   #5c6066;    /* axes / secondary labels     */
-    --hairline:#e3ddd3;    /* axis muting / droplines     */
-    --accent:  #b07a2c;    /* brass — ceiling + shortage  */
-    --accent-tint: #efe4d2;/* shaded shortage gap         */
+    --surface: #f7f4ef;   /* warm bone background                    */
+    --ink:     #1a1c1e;   /* the market after the cut: D, S1, P2     */
+    --text:    #16181a;   /* body text                               */
+    --muted:   #5c6066;   /* axes, the pre-cut world: S, P1, arrow   */
+    --hairline:#e3ddd3;   /* droplines, rules                        */
+    --accent:  #b07a2c;   /* brass: the control and all it causes    */
+    --accent-tint: #efe4d2;/* the dissipation band                   */
     --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
                  'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; height: 100%; }
+  html, body { margin: 0; height: 100%; overflow: hidden; }
   body {
     background: var(--surface);
     color: var(--text);
     font-family: var(--font-body);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
+    display: grid;              /* grid, not flex — see t03b-ue8-1 mobile note */
+    /* pin the track to the frame: an implicit `auto` track can size itself to
+       the SVG's intrinsic 480px and overflow a narrower embed. Verified in
+       real 300 / 360 / 480px iframes (headless Chrome clamps its own window
+       to innerWidth >= 500, so a bare --window-size run cannot test this) */
+    grid-template-columns: minmax(0, 1fr);
+    place-items: center;
     -webkit-font-smoothing: antialiased;
   }
-  /* min-width:0 lets this flex item shrink below the SVG's min-content width,
-     so the figure tracks the viewport instead of overflowing on narrow screens */
   .fig { width: 100%; max-width: 480px; min-width: 0; }
-  svg { width: 100%; max-width: 100%; height: auto; display: block;
-        touch-action: pan-y; }
+  svg { width: 100%; height: auto; display: block; }
 
-  /* structural strokes */
-  .axis      { stroke: var(--muted); stroke-width: 1.4; }
-  .curve     { stroke: var(--ink); stroke-width: 2.6; fill: none;
-               stroke-linecap: round; }
-  .curve-before { stroke: var(--ink); stroke-width: 2.6; fill: none;
-               stroke-linecap: round; stroke-dasharray: 7 5; }
-  .shift     { stroke: var(--muted); stroke-width: 2.2; fill: none;
-               stroke-linecap: round; }
-  .drop      { stroke: var(--hairline); stroke-width: 1.6;
-               stroke-dasharray: 5 4; }
+  /* structure */
+  .axis   { stroke: var(--muted); stroke-width: 1.4; fill: none; }
+  .curve  { stroke: var(--ink); stroke-width: 2.6; fill: none;
+            stroke-linecap: round; }
+  .ghost  { stroke: var(--muted); stroke-width: 2; fill: none;
+            stroke-linecap: round; stroke-dasharray: 7 5; opacity: .9; }
+  .shift  { stroke: var(--muted); stroke-width: 2.2; fill: none;
+            stroke-linecap: round; }
+  .shifthead { fill: var(--muted); }
+  .drop   { stroke: var(--hairline); stroke-width: 1.6; stroke-dasharray: 5 4; }
 
-  /* ceiling (draggable policy line) + shortage shading */
-  .ceiling   { stroke: var(--accent); stroke-width: 2.6; fill: none;
-               stroke-linecap: round; stroke-dasharray: 9 5; }
-  .band      { fill: var(--accent-tint); opacity: 0.75; stroke: none; }
-  .bracket   { stroke: var(--accent); stroke-width: 1.8; fill: none;
-               stroke-linecap: round; }
+  /* the control and what it causes */
+  .ceiling { stroke: var(--accent); stroke-width: 2.6; fill: none;
+             stroke-linecap: round; stroke-dasharray: 9 5; }
+  .bandfill { fill: var(--accent-tint); }
+  .bandhatch { fill: url(#dissipation); }
+  .dim     { stroke: var(--accent); stroke-width: 2.2; fill: none;
+             stroke-linecap: butt; }
+  .dimhead { fill: var(--accent); }
 
   /* points */
-  .pt-static { fill: var(--ink); stroke: var(--surface); stroke-width: 1.5; }
-  .pt        { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5; }
-  .knob      { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5;
-               pointer-events: none; }
+  .pt-new  { fill: var(--ink);    stroke: var(--surface); stroke-width: 1.6; }
+  .pt-old  { fill: var(--muted);  stroke: var(--surface); stroke-width: 1.6; }
+  .pt-live { fill: var(--accent); stroke: var(--surface); stroke-width: 2.2; }
+  /* the drag handle is a GRIP PILL, not a circle: at a low ceiling it comes
+     within a few pixels of the round Q3 dot, and a control must not read as
+     a data point */
+  .knob    { fill: var(--accent); stroke: var(--surface); stroke-width: 2; }
 
-  /* transparent hit targets */
-  .hit       { fill: transparent; stroke: transparent; touch-action: none;
-               cursor: grab; }
-  .hit-line  { fill: none; stroke: transparent; stroke-width: 28;
-               touch-action: none; cursor: ns-resize; }
-  .pt-focus:focus-visible { outline: none; }
-  .pt-focus:focus-visible + .knob,
+  /* hit targets. NOTHING else in the figure may receive pointer events: the
+     ceiling's 30px hit stroke sweeps across decorative text (the band label,
+     the Shortage label, the Ceiling label), which would otherwise swallow a
+     grab wherever the cap happens to sit. */
+  svg *     { pointer-events: none; }
+  .hit-line { fill: none; stroke: transparent; stroke-width: 30;
+              touch-action: none; cursor: ns-resize; pointer-events: stroke; }
+  .hit-pt   { fill: transparent; stroke: transparent; touch-action: none;
+              cursor: grab; pointer-events: all; }
+  .hit-pt:focus-visible { outline: none; }
+  .hit-pt:focus-visible + .knob,
   .grabbing .knob { stroke: var(--ink); stroke-width: 3.2; }
 
   /* text */
-  .lab     { fill: var(--ink); font-size: 13px; font-weight: 600; }
-  .axlab   { fill: var(--muted); font-size: 14px; font-weight: 600; }
-  .plab    { fill: var(--muted); font-size: 12.5px; font-weight: 600; }
+  .lab     { fill: var(--ink);    font-size: 13px;   font-weight: 600; }
+  .lab-old { fill: var(--muted);  font-size: 13px;   font-weight: 600; }
+  .ceillab { fill: var(--accent); font-size: 12px;   font-weight: 700; }
+  .plab    { fill: var(--muted);  font-size: 12.5px; font-weight: 600; }
   .p3lab   { fill: var(--accent); font-size: 12.5px; font-weight: 700; }
-  .qlab    { fill: var(--muted); font-size: 12px; font-weight: 600; }
-  .ceil-lab{ fill: var(--accent); font-size: 13px; font-weight: 700; }
-  .brlab   { fill: var(--accent); font-size: 12px; font-weight: 700; }
+  .qlab    { fill: var(--muted);  font-size: 11px;   font-weight: 600; }
+  .qdlab   { fill: var(--accent); font-size: 11px;   font-weight: 700; }
+  .shiftlab{ fill: var(--muted);  font-size: 11.5px; font-weight: 600; }
+  .bandlab { fill: var(--ink);    font-size: 11.5px; font-weight: 600; }
+  /* glyph-hugging halo rather than a backing rect: where the label crosses the
+     P1 dropline it interrupts the hairline only around the letters, so the
+     dashed line still reads above, below and between them */
+  .gaplab  { fill: var(--accent); font-size: 11.5px; font-weight: 700;
+             paint-order: stroke; stroke: var(--surface); stroke-width: 3.5;
+             stroke-linejoin: round; }
+  .axlab   { fill: var(--muted);  font-size: 13px;   font-weight: 600; }
   .sep     { stroke: var(--hairline); stroke-width: 1; }
-  .readout { font-family: var(--font-body); text-align: center; }
-  .r-hint  { color: var(--muted); font-size: 12.5px; line-height: 1.3;
-             margin-bottom: 5px; }
-  .r-trade { color: var(--accent); font-size: 14px; font-weight: 600;
-             line-height: 1.3; }
-  .fallback {
-    margin: 8px 0 0;
-    color: var(--muted);
-    font-size: 13px;
-    line-height: 1.35;
-    text-align: center;
-  }
+  .r-state { fill: var(--muted);  font-size: 12.5px; }
+  .r-take  { fill: var(--accent); font-size: 13px;   font-weight: 600; }
+  .hintln  { fill: var(--muted);  font-size: 12px; }
+
+  .fallback { margin: 8px 0 0; color: var(--muted); font-size: 13px;
+              line-height: 1.35; text-align: center; }
   .fallback a { color: var(--ink); }
 </style>
 </head>
 <body>
 <div class="fig">
-  <svg id="fig" viewBox="0 0 440 540" role="group"
-       aria-label="An oil-shortage diagram. Demand for gasoline is fixed. Supply has fallen from an original stock S to a reduced stock S1, so the free-market clearing price would rise to 6.5. Drag the horizontal price ceiling up or down: when it sits below 6.5, buyers want more gasoline than the reduced supply provides and a shortage opens between the reduced supply and the quantity demanded.">
-    <title>Interactive oil-shortage diagram</title>
+  <svg id="fig" viewBox="0 0 480 600" role="group"
+       aria-label="A price-ceiling diagram for gasoline after a supply cut. Demand slopes down and does not move. The stock of gasoline has fallen from an original vertical supply S at 7 units to a reduced vertical supply S sub 1 at 3.5 units, so the clearing price rises from 3.5 to 6.5. A dashed horizontal price ceiling can be dragged up and down. While the ceiling sits below 6.5 it binds: buyers want more than the 3.5 units that exist, a shortage gap opens along the ceiling, and a shaded band between the ceiling and the 6.5 clearing price marks the value burned in nonmoney competition such as waiting in gas lines. Raise the ceiling to 6.5 and the shortage vanishes: the supply cut raised the price, but every buyer who pays it can still buy.">
+    <title>Interactive oil shortage: a supply cut, a price ceiling, and the gap the ceiling opens</title>
+
     <defs>
       <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
               orient="auto" markerUnits="userSpaceOnUse">
         <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
       </marker>
+      <!-- subtle diagonal hatch for the dissipation band: a redundant,
+           non-colour cue so the band survives greyscale printing -->
+      <pattern id="dissipation" width="7" height="7" patternUnits="userSpaceOnUse"
+               patternTransform="rotate(45)">
+        <line x1="0" y1="0" x2="0" y2="7" stroke="#b07a2c" stroke-width="1"
+              opacity="0.30" />
+      </pattern>
     </defs>
 
-    <!-- static droplines (drawn first so curves sit on top) -->
-    <!-- P2 -> y-axis horizontal dropline (new clearing price at the reduced stock) -->
-    <line class="drop" x1="64" y1="143.3" x2="184.8" y2="143.3" />
-    <!-- P1 -> y-axis horizontal dropline (old clearing price at the original stock) -->
-    <line class="drop" x1="64" y1="243.1" x2="305.7" y2="243.1" />
-    <!-- Q2 vertical dropline at x=3.5 (coincident with S1) -->
-    <line class="drop" x1="184.8" y1="193.7" x2="184.8" y2="360" />
-    <!-- Q3 vertical dropline (moves with the ceiling) -->
-    <line id="dropQ3" class="drop" x1="245.9" y1="193.7" x2="245.9" y2="360" />
+    <!-- ============================ THE BAND ============================
+         (P2 - ceiling) over the units that exist, x in [0, 3.5]. Painted
+         FIRST so every curve, dropline and axis reads on top of it. -->
+    <g id="gBand">
+      <rect id="bandFill"  class="bandfill"  x="58" y="144.36" width="132.63" height="52.90" />
+      <rect id="bandHatch" class="bandhatch" x="58" y="144.36" width="132.63" height="52.90" />
+    </g>
+
+    <!-- droplines -->
+    <line class="drop" x1="58" y1="144.36" x2="190.63" y2="144.36" />
+    <line class="drop" x1="58" y1="249.18" x2="323.26" y2="249.18" />
+    <line class="drop" x1="323.26" y1="249.18" x2="323.26" y2="372" />
+    <line id="dropQ3" class="drop" x1="257.58" y1="197.26" x2="257.58" y2="372" />
 
     <!-- axes (drawn before the curves; extended past the data max) -->
-    <line class="axis" x1="64" y1="360" x2="418" y2="360" marker-end="url(#arrow)" />
-    <line class="axis" x1="64" y1="360" x2="64"  y2="24"  marker-end="url(#arrow)" />
+    <line class="axis" x1="58" y1="372" x2="440" y2="372" marker-end="url(#arrow)" />
+    <line class="axis" x1="58" y1="372" x2="58"  y2="24"  marker-end="url(#arrow)" />
 
-    <!-- shortage band along the ceiling, Q2 -> Q3 (below the curves so they read on top) -->
-    <rect id="band" class="band" x="184.8" y="187.7" width="61.1" height="12" />
+    <!-- demand D, fixed: (0.6, 9.0) to (9.0, 1.8) -->
+    <line class="curve" x1="80.74" y1="57.47" x2="399.05" y2="309.09" />
 
-    <!-- fixed demand D: P = 9.0 - 0.857*(x-0.6), x in [0.6, 9.0] -->
-    <line class="curve" x1="84.7" y1="60.6" x2="374.7" y2="300.1" />
+    <!-- the stock before the cut, S at q = 7.0 (dashed ghost) -->
+    <line class="ghost" x1="323.26" y1="372" x2="323.26" y2="48" />
+    <!-- the stock after the cut, S1 at q = 3.5. It also serves as the Q2
+         dropline, so no separate dropline is drawn at 3.5. -->
+    <line class="curve" x1="190.63" y1="372" x2="190.63" y2="48" />
 
-    <!-- original supply S (dashed = "before" the cut), vertical at x=7.0 -->
-    <line class="curve-before" x1="305.7" y1="343.4" x2="305.7" y2="67.3" />
-    <!-- reduced supply S1 (solid, shifted LEFT to x=3.5) -->
-    <line class="curve" x1="184.8" y1="343.4" x2="184.8" y2="67.3" />
+    <!-- the supply cut: S -> S1, in clear space above the demand curve -->
+    <g>
+      <line class="shift" x1="317" y1="68" x2="202" y2="68" />
+      <polygon class="shifthead" points="194,68 203,63.5 203,72.5" />
+      <text class="shiftlab" x="257" y="60" text-anchor="middle">supply falls</text>
+    </g>
 
-    <!-- leftward "supply falls" shift arrow, S -> S1, in clear space above D -->
-    <line class="shift" x1="298.8" y1="100.5" x2="191.7" y2="100.5" marker-end="url(#arrow)" />
+    <!-- the draggable ceiling, P3 = 5.0 -->
+    <line id="ceiling" class="ceiling" x1="58" y1="197.26" x2="418" y2="197.26" />
 
-    <!-- the draggable ceiling line at P3 = 5.0 -->
-    <line id="ceiling" class="ceiling" x1="64" y1="193.7" x2="381.6" y2="193.7" />
+    <!-- the shortage gap: a dimension line just under the ceiling, from the
+         stock that exists (S1) to the amount demanded at the capped price.
+         Inward arrowheads, not extension ticks: both endpoints land on a
+         vertical, and a tick of any length would repaint that line in brass. -->
+    <g id="gShort">
+      <line id="dimLine" class="dim" x1="190.63" y1="210.26" x2="257.58" y2="210.26" />
+      <polygon id="dimHeadL" class="dimhead" points="190.63,210.26 197.63,206.26 197.63,214.26" />
+      <polygon id="dimHeadR" class="dimhead" points="257.58,210.26 250.58,206.26 250.58,214.26" />
+      <text id="gapLab" class="gaplab" x="184" y="214.26" text-anchor="end">Shortage</text>
+    </g>
+
+    <!-- key points: the old clearing (muted context), the new clearing, and
+         the live quantity demanded at the cap -->
+    <circle class="pt-old"  cx="323.26" cy="249.18" r="4.4" />
+    <circle class="pt-new"  cx="190.63" cy="144.36" r="4.8" />
+    <circle id="q3Dot" class="pt-live" cx="257.58" cy="197.26" r="5.5" />
+
+    <!-- curve labels, each in clear space -->
+    <text class="lab-old" x="329" y="42">S</text>
+    <text class="lab" x="196.6" y="42">S<tspan baseline-shift="sub" font-size="9.5">1</tspan></text>
+    <text class="lab" x="404" y="322">D</text>
+    <text id="ceilLab" class="ceillab" x="422" y="201.26">Ceiling</text>
+
+    <!-- price-axis tags: bare symbols (the numbers live in the readout, which
+         keeps the left gutter clear for the rotated axis title) -->
+    <text id="p2Lab" class="plab"  x="52" y="148.36" text-anchor="end">P<tspan baseline-shift="sub" font-size="9.5">2</tspan></text>
+    <text id="p3Lab" class="p3lab" x="52" y="201.26" text-anchor="end">P<tspan baseline-shift="sub" font-size="9.5">3</tspan></text>
+    <text id="p1Lab" class="plab"  x="52" y="253.18" text-anchor="end">P<tspan baseline-shift="sub" font-size="9.5">1</tspan></text>
+
+    <!-- quantity foot tags, flanking their droplines OUTWARD so the two live
+         tags can never collide with each other -->
+    <text class="qlab" x="186.63" y="390" text-anchor="end">Q<tspan baseline-shift="sub" font-size="8.5">s</tspan> = Q<tspan baseline-shift="sub" font-size="8.5">2</tspan></text>
+    <text id="qdLab" class="qdlab" x="261.58" y="390">Q<tspan baseline-shift="sub" font-size="8.5">d</tspan> = Q<tspan baseline-shift="sub" font-size="8.5">3</tspan></text>
+    <text id="q1Lab" class="qlab" x="323.26" y="390" text-anchor="middle">Q<tspan baseline-shift="sub" font-size="8.5">1</tspan></text>
+
+    <!-- the band, named but never measured -->
+    <g id="gBandLab" text-anchor="middle">
+      <text class="bandlab" x="124.3" y="162.4">Value burned</text>
+      <text class="bandlab" x="124.3" y="176.4">waiting in line</text>
+    </g>
 
     <!-- axis titles -->
-    <text class="axlab" x="228" y="430" text-anchor="middle">Quantity of gasoline</text>
-    <text class="axlab" x="22" y="200" text-anchor="middle"
-          transform="rotate(-90 22 200)">Price</text>
+    <text class="axlab" x="238" y="414" text-anchor="middle">Quantity of oil</text>
+    <text class="axlab" x="16" y="198" text-anchor="middle"
+          transform="rotate(-90 16 198)">Price ($)</text>
 
-    <!-- curve labels (held clear of the lines) -->
-    <text class="lab" x="380" y="305" text-anchor="start">D</text>
-    <text class="lab" x="313.7" y="64" text-anchor="start">S</text>
-    <text class="lab" x="192.8" y="64" text-anchor="start">S<tspan baseline-shift="sub" font-size="9.5">1</tspan></text>
-    <text id="ceilLabel" class="ceil-lab" x="386" y="189" text-anchor="start">Ceiling</text>
+    <!-- readout: hairline rule, muted state lines, accent takeaway lines -->
+    <line class="sep" x1="20" y1="436" x2="460" y2="436" />
+    <text class="r-state" text-anchor="middle">
+      <tspan id="s1" x="240" y="458">Supply fell to S&#8321; (3.5 units). Ceiling at 5.0 &#8594; buyers want 5.3.</tspan>
+      <tspan id="s2" x="240" y="474">Qd 5.3 vs Qs 3.5 &#8594; a shortage of 1.8 units.</tspan>
+    </text>
+    <text class="r-take" text-anchor="middle">
+      <tspan id="t1" x="240" y="498">The cap can&#8217;t undo the supply cut &#8212; it opens a 1.8-unit</tspan>
+      <tspan id="t2" x="240" y="514">shortage, and waiting in line burns the gap between the</tspan>
+      <tspan id="t3" x="240" y="530">capped price and what the scarce gasoline is worth.</tspan>
+    </text>
 
-    <!-- price-axis reference labels (top -> bottom: P2, P3 ceiling, P1) -->
-    <text class="plab" x="55" y="147" text-anchor="end">P<tspan baseline-shift="sub" font-size="9.5">2</tspan></text>
-    <text id="p3Label" class="p3lab" x="55" y="198" text-anchor="end">P<tspan baseline-shift="sub" font-size="9.5">3</tspan></text>
-    <text class="plab" x="55" y="247" text-anchor="end">P<tspan baseline-shift="sub" font-size="9.5">1</tspan></text>
+    <text class="hintln" x="240" y="556" text-anchor="middle">Drag the dashed ceiling up or down, or tab to it and use the</text>
+    <text class="hintln" x="240" y="572" text-anchor="middle">arrow keys. It snaps at P&#8321;, the old price, and P&#8322;, the new one.</text>
 
-    <!-- static context points: P2 (D∩S1, new clearing) and P1 (D∩S, old clearing) -->
-    <circle class="pt-static" cx="184.8" cy="143.3" r="4.5" />
-    <circle class="pt-static" cx="305.7" cy="243.1" r="4.5" />
-
-    <!-- the moving point Q3 = demand at the ceiling (quantity demanded) -->
-    <circle id="q3Dot" class="pt" cx="245.9" cy="193.7" r="6" />
-
-    <!-- quantity-axis labels -->
-    <text class="qlab" x="184.8" y="377" text-anchor="middle">Q<tspan baseline-shift="sub" font-size="9.5">2</tspan></text>
-    <text id="q3Label" class="qlab" x="245.9" y="377" text-anchor="middle">Q<tspan baseline-shift="sub" font-size="9.5">3</tspan></text>
-
-    <!-- shortage bracket below the x-axis, Q2 -> Q3 -->
-    <path id="bracket" class="bracket" d="M184.8,393 L184.8,403 M184.8,398 L245.9,398 M245.9,393 L245.9,403" />
-    <text id="bracketLabel" class="brlab" x="215.4" y="414" text-anchor="middle">Shortage</text>
-
-    <!-- fat invisible hit line over the ceiling (grab anywhere) -->
-    <line id="ceilHit" class="hit-line" x1="64" y1="193.7" x2="381.6" y2="193.7" />
-    <!-- keyboard proxy (screen-reader slider) beneath the visible knob -->
-    <circle id="ptFocus" class="pt-focus hit" cx="110" cy="193.7" r="22"
+    <!-- interaction layer, painted last -->
+    <line id="ceilHit" class="hit-line" x1="58" y1="197.26" x2="418" y2="197.26" />
+    <circle id="ptFocus" class="hit-pt" cx="410" cy="197.26" r="22"
             tabindex="0" role="slider" aria-label="Price ceiling"
-            aria-valuemin="2.5" aria-valuemax="7.5" aria-valuenow="5.0"
-            aria-valuetext="Ceiling at 5.0. Supply has fallen to S1, 3.5 units. Buyers want 5.3; only 3.5 exist. The cap can't undo the supply cut — it opens a 1.8-unit shortage." />
-    <!-- visible drag knob on the ceiling -->
-    <circle id="ceilKnob" class="knob" cx="110" cy="193.7" r="6" />
-
-    <!-- readout band: hairline separator, muted STATE line, accent TAKEAWAY line.
-         A foreignObject lets the full-sentence readouts wrap so nothing clips. -->
-    <line class="sep" x1="44" y1="446" x2="396" y2="446" />
-    <foreignObject x="38" y="452" width="364" height="86">
-      <div xmlns="http://www.w3.org/1999/xhtml" class="readout">
-        <div id="rHint"  class="r-hint">Supply has fallen to S&#8321; (3.5 units). Ceiling at 5.0 &#8594; buyers want 5.3.</div>
-        <div id="rTrade" class="r-trade">The cap can't undo the supply cut &#8212; it opens a 1.8-unit shortage.</div>
-      </div>
-    </foreignObject>
+            aria-valuemin="2" aria-valuemax="8" aria-valuenow="5.0"
+            aria-valuetext="Ceiling at 5.0. Supply fell to S1, 3.5 units; buyers want 5.3, so a 1.8-unit shortage opens. The cap cannot undo the supply cut, and waiting in line burns the gap between the capped price and what the scarce gasoline is worth." />
+    <rect id="ceilKnob" class="knob" x="402" y="192.76" width="16" height="9" rx="4.5" />
   </svg>
+
   <noscript>
-    <p class="fallback">JavaScript is off, so this frame is a still image: fixed demand, a supply that has fallen from S to a reduced S&#8321;, and a price ceiling P&#8323; sitting below the new 6.5 clearing price, leaving the Q2&#8211;Q3 shortage. You can also <a href="t04b-oil-shortage.svg">open the static figure</a>.</p>
+    <p class="fallback">JavaScript is off, so this frame is a still figure: a
+      fixed demand, a stock that has fallen from S to S&#8321;, and a price
+      ceiling sitting below the new clearing price, with the shortage it opens
+      and the value burned in the queue. You can also
+      <a href="/teaching/microeconomics/t04b-price-controls/figures/t04b-oil-shortage.svg">open
+      the static figure</a>.</p>
   </noscript>
 </div>
 
 <script>
 (function () {
-  "use strict";
-  var svg = document.getElementById('fig');
-  var ceiling  = document.getElementById('ceiling');
-  var ceilHit  = document.getElementById('ceilHit');
-  var ceilKnob = document.getElementById('ceilKnob');
-  var ptFocus  = document.getElementById('ptFocus');
-  var ceilLabel= document.getElementById('ceilLabel');
-  var p3Label  = document.getElementById('p3Label');
-  var q3Dot    = document.getElementById('q3Dot');
-  var dropQ3   = document.getElementById('dropQ3');
-  var q3Label  = document.getElementById('q3Label');
-  var band     = document.getElementById('band');
-  var bracket  = document.getElementById('bracket');
-  var bracketLabel = document.getElementById('bracketLabel');
-  var rHint    = document.getElementById('rHint');
-  var rTrade   = document.getElementById('rTrade');
+  'use strict';
 
-  // pixel frame + scale (mirrors the base SVG markup)
-  var QMAX = 9.5, PMAX = 9.5;
-  var X0 = 64, X1 = 392, Y0 = 360, Y1 = 44;
-  var px = function (q) { return X0 + (q / QMAX) * (X1 - X0); };  // qty   -> px x
-  var py = function (p) { return Y0 - (p / PMAX) * (Y0 - Y1); };  // price -> px y
-  var toP = function (yy) { return ((Y0 - yy) / (Y0 - Y1)) * PMAX; };
+  // ---- pixel frame (mirrors the base markup exactly) ----
+  var X0 = 58, Y0 = 372, QMAX = 9.5, PMAX = 9.5;
+  var XM = 418, YM = 40;                       // pixels of q = 9.5 and p = 9.5
+  var SX = (XM - X0) / QMAX;                   // 37.894737 px per unit of q
+  var SY = (Y0 - YM) / PMAX;                   // 34.947368 px per unit of p
+  function X (q) { return X0 + q * SX; }
+  function Y (p) { return Y0 - p * SY; }
+  function toP (yy) { return (Y0 - yy) / SY; }
 
-  // model constants (read off the .tex / corrected inventory)
-  var QS1 = 3.5;         // fixed reduced supply (vertical S1 at x = 3.5)
-  var PCLEAR = 6.514286; // new free-market clearing price (D ∩ S1)
-  var POLD = 3.514286;   // old clearing price (D ∩ original S, x = 7.0) — static P1 label
-  var XQ2 = px(QS1);     // pixel x of Q2 = 3.5
-  var YP2 = py(PCLEAR);  // pixel y of the static P2 axis label
-  var YP1 = py(POLD);    // pixel y of the static P1 axis label
+  // ---- economics ----
+  // Demand is fixed: (0.6, 9.0) to (9.0, 1.8). Quantity demanded at the capped
+  // price is always recomputed from the line, never stored.
+  var D_Q0 = 0.6, D_P0 = 9.0, D_SLOPE = 6 / 7;          // 0.857142857
+  function qDemanded (p) { return D_Q0 + (D_P0 - p) / D_SLOPE; }
+  function pOnD (q) { return D_P0 - D_SLOPE * (q - D_Q0); }
 
-  // demand line D: from (0.6, 9.0) to (9.0, 1.8); slope = -0.857142857
-  var D_X0 = 0.6, D_P0 = 9.0, D_SLOPE = 0.857142857;
-  function qDemanded(c) { return D_X0 + (D_P0 - c) / D_SLOPE; }
+  var QS   = 3.5;            // the stock after the cut (vertical S1)
+  var QOLD = 7.0;            // the stock before the cut (vertical S)
+  var P2   = pOnD(QS);       // 6.514286 — clearing price at the reduced stock
+  var P1   = pOnD(QOLD);     // 3.514286 — clearing price before the cut
+  var XQS  = X(QS);          // 190.63
+  var XQ1  = X(QOLD);        // 323.26
+  var YP2  = Y(P2);          // 144.36
+  var YP1  = Y(P1);          // 249.18
 
-  // ceiling range (in price). Keeps Q3 on the drawn demand segment [0.6, 9.0]
-  // and keeps the ceiling clear of the top annotation band and the D label.
-  var CMIN = 2.5, CMAX = 7.5;
+  var CMIN = 2, CMAX = 8;    // ceiling drag range
+  var SNAP = 0.18;           // snap radius around P1 and P2
+  var EPS  = 0.02;           // "is the cap at the clearing price" tolerance
+  var BAND_MIN = 1.1;        // data units of band height needed for its label
 
-  // State in DATA units.
-  var c = 5.0;   // initial ceiling = P3
+  var c = 5.0;               // state: the ceiling price, in data units
 
-  // convert a client event to SVG user coords (handles responsive scaling)
+  // ---- element handles ----
+  function el (id) { return document.getElementById(id); }
+  var svg = el('fig');
+  var bandFill = el('bandFill'), bandHatch = el('bandHatch'),
+      gBandLab = el('gBandLab');
+  var ceiling = el('ceiling'), ceilHit = el('ceilHit'), ceilKnob = el('ceilKnob'),
+      ptFocus = el('ptFocus'), ceilLab = el('ceilLab'),
+      p1Lab = el('p1Lab'), p3Lab = el('p3Lab');   // P2's tag never hides
+  var gShort = el('gShort'), dimLine = el('dimLine'),
+      dimHeadL = el('dimHeadL'), dimHeadR = el('dimHeadR'),
+      gapLab = el('gapLab');
+  var q3Dot = el('q3Dot'), dropQ3 = el('dropQ3'),
+      qdLab = el('qdLab'), q1Lab = el('q1Lab');
+  var s1 = el('s1'), s2 = el('s2'), t1 = el('t1'), t2 = el('t2'), t3 = el('t3');
+
+  // '' rather than 'visible', so that showing a child never overrides a hidden
+  // parent (the dimension arrowheads live inside the shortage group)
+  function show (node, on) { node.style.visibility = on ? '' : 'hidden'; }
+
+  // Measured text width, so the Q1 / Qd collision rule is not a guess.
+  function widthOf (node) {
+    try { return node.getComputedTextLength(); } catch (e) { return 46; }
+  }
+
+  // ---- readout copy -------------------------------------------------------
+  // Line breaks are hand-set. Every interpolated number is fixed to one
+  // decimal, so a line's width cannot change when the value does.
+  function copyFor (cc, qd, gap) {
+    var C = cc.toFixed(1), QD = qd.toFixed(1), G = gap.toFixed(1);
+
+    if (cc < P2 - EPS) {
+      if (Math.abs(cc - P1) < EPS) {
+        // the cap frozen at the price that ruled before the cut
+        return {
+          s: ['Ceiling at ' + C + ', the old clearing price → buyers want ' + QD + ',',
+              'exactly the pre-cut quantity; only ' + QS.toFixed(1) + ' units exist.'],
+          t: ['Freezing the old price after supply falls opens a wide',
+              'shortage — the control, not the cut, creates it.', '']
+        };
+      }
+      return {
+        s: ['Supply fell to S₁ (' + QS.toFixed(1) + ' units). Ceiling at ' + C +
+              ' → buyers want ' + QD + '.',
+            'Qd ' + QD + ' vs Qs ' + QS.toFixed(1) + ' → a shortage of ' + G + ' units.'],
+        t: ['The cap can’t undo the supply cut — it opens a ' + G + '-unit',
+            'shortage, and waiting in line burns the gap between the',
+            'capped price and what the scarce gasoline is worth.']
+      };
+    }
+
+    if (cc <= P2 + EPS) {
+      return {
+        s: ['Ceiling at ' + C + ' = the new clearing price → ' + QS.toFixed(1) + ' wanted,',
+            QS.toFixed(1) + ' available at the reduced stock.'],
+        t: ['Let the price rise and the shortage disappears — the cut',
+            'raised price, not the amount people can actually buy.', '']
+      };
+    }
+
+    return {
+      s: ['Ceiling at ' + C + ' sits above the ' + P2.toFixed(1) + ' clearing price, so it',
+          'does not bind: ' + QS.toFixed(1) + ' wanted, ' + QS.toFixed(1) + ' available.'],
+      t: ['A cap above the clearing price changes nothing — the cut',
+          'raised the price, but not the amount people can buy.', '']
+    };
+  }
+
+  // ---- render -------------------------------------------------------------
+  function render () {
+    var cy = Y(c);
+    var qd = qDemanded(c);
+    var gx = X(qd);
+    var gap = qd - QS;
+    var binds = c < P2 - EPS;
+
+    // the ceiling itself
+    ceiling.setAttribute('y1', cy);   ceiling.setAttribute('y2', cy);
+    ceilHit.setAttribute('y1', cy);   ceilHit.setAttribute('y2', cy);
+    ceilKnob.setAttribute('y', cy - 4.5);  ptFocus.setAttribute('cy', cy);
+    ceilLab.setAttribute('y', cy + 4);
+    p3Lab.setAttribute('y', cy + 4);
+    // Left gutter: exactly one tag per height, since two 12.5px tags need
+    // ~16px of baseline separation. P2 never yields — it names the band's top
+    // edge and it is the number the readout keeps citing ("the 6.5 clearing
+    // price"), so the cap gives way as it closes on P2. P1 is only context, so
+    // there the LIVE tag wins, except at the snap itself where the cap HAS
+    // become the old price and that name is the informative one.
+    var nearP1 = Math.abs(cy - YP1) < 16, nearP2 = Math.abs(cy - YP2) < 16;
+    var atSnap = Math.abs(c - P1) < EPS || Math.abs(c - P2) < EPS;
+    show(p3Lab, !(nearP2 || (nearP1 && atSnap)));
+    show(p1Lab, !(nearP1 && !atSnap));
+
+    // the dissipation band: bounded by the axis, S1, the P2 dropline, the cap
+    var h = binds ? (cy - YP2) : 0;
+    bandFill.setAttribute('height', h);
+    bandHatch.setAttribute('height', h);
+    show(bandFill, binds);  show(bandHatch, binds);
+    show(gBandLab, binds && h >= BAND_MIN * SY);
+
+    // quantity demanded at the capped price, its dropline and foot tag
+    show(q3Dot, binds);  show(dropQ3, binds);  show(qdLab, binds);
+    if (binds) {
+      q3Dot.setAttribute('cx', gx);   q3Dot.setAttribute('cy', cy);
+      dropQ3.setAttribute('x1', gx);  dropQ3.setAttribute('x2', gx);
+      dropQ3.setAttribute('y1', cy);
+      qdLab.setAttribute('x', gx + 4);
+    }
+
+    // Q1 stands down when the live Qd tag reaches it (at the P1 snap the two
+    // quantities genuinely coincide, so dropping the static tag is right)
+    var wQd = widthOf(qdLab), wQ1 = widthOf(q1Lab) / 2;
+    show(q1Lab, !binds ||
+                (gx + 4 + wQd < XQ1 - wQ1 - 3) || (gx + 4 > XQ1 + wQ1 + 3));
+
+    // the shortage gap
+    show(gShort, binds);
+    if (binds) {
+      var gpx = gx - XQS;
+      dimLine.setAttribute('x1', XQS);  dimLine.setAttribute('x2', gx);
+      dimLine.setAttribute('y1', cy + 13);  dimLine.setAttribute('y2', cy + 13);
+      dimHeadL.setAttribute('points',
+        XQS + ',' + (cy + 13) + ' ' + (XQS + 7) + ',' + (cy + 9) + ' ' +
+        (XQS + 7) + ',' + (cy + 17));
+      dimHeadR.setAttribute('points',
+        gx + ',' + (cy + 13) + ' ' + (gx - 7) + ',' + (cy + 9) + ' ' +
+        (gx - 7) + ',' + (cy + 17));
+      // two 7px heads cannot share a gap narrower than ~18px
+      show(dimHeadL, gpx > 18);  show(dimHeadR, gpx > 18);
+      gapLab.setAttribute('y', cy + 17);
+    }
+
+    // readout + the spoken version of it
+    var copy = copyFor(c, qd, gap);
+    s1.textContent = copy.s[0];  s2.textContent = copy.s[1];
+    t1.textContent = copy.t[0];  t2.textContent = copy.t[1];
+    t3.textContent = copy.t[2];
+    ptFocus.setAttribute('aria-valuenow', c.toFixed(1));
+    ptFocus.setAttribute('aria-valuetext',
+      copy.s.join(' ') + ' ' + copy.t.join(' ').replace(/\s+/g, ' ').trim());
+  }
+
+  // ---- input --------------------------------------------------------------
+  function clampSnap (v) {
+    if (v < CMIN) v = CMIN;
+    if (v > CMAX) v = CMAX;
+    if (Math.abs(v - P1) < SNAP) v = P1;
+    if (Math.abs(v - P2) < SNAP) v = P2;
+    return v;
+  }
+
   var spt = svg.createSVGPoint();
-  function toSvg(evt) {
-    spt.x = evt.clientX; spt.y = evt.clientY;
+  function toSvg (evt) {
+    spt.x = evt.clientX;  spt.y = evt.clientY;
     return spt.matrixTransform(svg.getScreenCTM().inverse());
   }
-
-  // format a quantity: drop a trailing .0 so "5" not "5.0"
-  function fmt(v) {
-    var r = Math.round(v * 10) / 10;
-    return (Math.abs(r - Math.round(r)) < 0.05) ? String(Math.round(r)) : r.toFixed(1);
-  }
-
-  function setShortageVisible(on) {
-    var v = on ? 'visible' : 'hidden';
-    band.style.visibility = v;
-    bracket.style.visibility = v;
-    bracketLabel.style.visibility = v;
-  }
-
-  function render() {
-    var cy = py(c);
-    var qd = qDemanded(c);
-    var gx = px(qd);
-    var gap = qd - QS1;
-    var shortage = gap > 0.05;
-
-    // ceiling line + its handle, hit target, labels
-    ceiling.setAttribute('y1', cy); ceiling.setAttribute('y2', cy);
-    ceilHit.setAttribute('y1', cy); ceilHit.setAttribute('y2', cy);
-    ceilKnob.setAttribute('cy', cy);
-    ptFocus.setAttribute('cy', cy);
-    ceilLabel.setAttribute('y', cy - 5);
-    p3Label.setAttribute('y', cy + 4);
-    // when the ceiling coincides with the static P2 OR P1 label's height, hide
-    // the P3 label so the two axis tags don't print on top of each other
-    p3Label.style.visibility =
-      (Math.abs(cy - YP2) < 8 || Math.abs(cy - YP1) < 8) ? 'hidden' : 'visible';
-
-    // Q3 point (quantity demanded on D at the ceiling) + its dropline + label
-    q3Dot.setAttribute('cx', gx); q3Dot.setAttribute('cy', cy);
-    dropQ3.setAttribute('x1', gx); dropQ3.setAttribute('x2', gx);
-    dropQ3.setAttribute('y1', cy); dropQ3.setAttribute('y2', Y0);
-    q3Label.setAttribute('x', gx);
-    // when the ceiling clears the market, Q3's foot coincides with Q2's —
-    // hide the Q3 axis label to avoid it overprinting Q2
-    q3Label.style.visibility = (Math.abs(gx - XQ2) < 26) ? 'hidden' : 'visible';
-
-    // shortage shading (band along the ceiling Q2->Q3) + below-axis bracket
-    if (shortage) {
-      band.setAttribute('x', XQ2);
-      band.setAttribute('width', gx - XQ2);
-      band.setAttribute('y', cy - 6);
-      bracket.setAttribute('d',
-        'M' + XQ2 + ',393 L' + XQ2 + ',403 ' +
-        'M' + XQ2 + ',398 L' + gx + ',398 ' +
-        'M' + gx + ',393 L' + gx + ',403');
-      bracketLabel.setAttribute('x', (XQ2 + gx) / 2);
-      setShortageVisible(true);
-    } else {
-      setShortageVisible(false);
-    }
-
-    // readout grammar: muted state line + accent takeaway line
-    var hint, trade;
-    if (shortage) {
-      hint  = 'Supply has fallen to S₁ (3.5 units). Ceiling at ' +
-              c.toFixed(1) + ' → buyers want ' + fmt(qd) + '.';
-      trade = 'The cap can’t undo the supply cut — it opens a ' +
-              fmt(gap) + '-unit shortage.';
-    } else if (Math.abs(gap) <= 0.05) {
-      hint  = 'Ceiling at ' + c.toFixed(1) + ' = the new clearing price → 3.5 wanted = 3.5 available.';
-      trade = 'At the new clearing price the market clears — the cut raised price, no shortage.';
-    } else {
-      hint  = 'Ceiling at ' + c.toFixed(1) + ' (above the new clearing price) → quantity demanded ' +
-              fmt(qd) + ', quantity supplied 3.5.';
-      trade = 'Above the ' + PCLEAR.toFixed(1) + ' clearing price the cap no longer binds — no shortage.';
-    }
-    rHint.textContent  = hint;
-    rTrade.textContent = trade;
-
-    ptFocus.setAttribute('aria-valuenow', c.toFixed(1));
-    ptFocus.setAttribute('aria-valuetext', hint + ' ' + trade);
-  }
-
-  function setFromPointer(evt) {
+  function setFromPointer (evt) {
     var p = toSvg(evt);
-    var cc = toP(p.y);
-    if (isNaN(cc)) return;
-    if (cc < CMIN) cc = CMIN;
-    if (cc > CMAX) cc = CMAX;
-    c = cc;
+    var v = toP(p.y);
+    if (isNaN(v)) return;
+    c = clampSnap(v);
     render();
   }
 
-  // --- drag (pointer events + pointer capture so a fast drag can't get stuck) ---
-  var dragging = false;
-  var capturedEl = null, capturedId = null;
-  function onMove(evt) { if (dragging) { evt.preventDefault(); setFromPointer(evt); } }
-  function onUp() {
+  // pointer capture keeps a fast drag from getting stuck
+  var dragging = false, capEl = null, capId = null;
+  function onMove (evt) { if (dragging) { evt.preventDefault(); setFromPointer(evt); } }
+  function onUp () {
     dragging = false;
     svg.classList.remove('grabbing');
-    if (capturedEl && capturedId !== null) {
-      try { capturedEl.releasePointerCapture(capturedId); } catch (e) {}
+    if (capEl && capId !== null) {
+      try { capEl.releasePointerCapture(capId); } catch (e) {}
     }
-    capturedEl = null; capturedId = null;
+    capEl = null;  capId = null;
     window.removeEventListener('pointermove', onMove);
     window.removeEventListener('pointerup', onUp);
   }
-  function onDown(evt) {
+  function onDown (evt) {
     evt.preventDefault();
     dragging = true;
     svg.classList.add('grabbing');
-    capturedEl = evt.currentTarget; capturedId = evt.pointerId;
-    try { capturedEl.setPointerCapture(capturedId); } catch (e) {}
+    capEl = evt.currentTarget;  capId = evt.pointerId;
+    try { capEl.setPointerCapture(capId); } catch (e) {}
     setFromPointer(evt);
     window.addEventListener('pointermove', onMove);
     window.addEventListener('pointerup', onUp);
@@ -388,25 +563,27 @@
   ceilHit.addEventListener('pointerdown', onDown);
   ptFocus.addEventListener('pointerdown', onDown);
 
-  // --- keyboard: arrows step the ceiling in price ---
   ptFocus.addEventListener('keydown', function (evt) {
     var step = 0.2;
-    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') { c += step; }
-    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') { c -= step; }
+    if (evt.key === 'ArrowUp' || evt.key === 'ArrowRight') { c = clampSnap(c + step); }
+    else if (evt.key === 'ArrowDown' || evt.key === 'ArrowLeft') { c = clampSnap(c - step); }
+    else if (evt.key === 'Home') { c = CMIN; }
+    else if (evt.key === 'End') { c = CMAX; }
     else return;
     evt.preventDefault();
-    if (c < CMIN) c = CMIN;
-    if (c > CMAX) c = CMAX;
     render();
   });
 
-  // Debug hook (inert for students): set/get the ceiling price.
+  // Reviewer hook (inert for students): set / read the ceiling price.
   window.__fig = {
-    set: function (v) { c = Math.max(CMIN, Math.min(CMAX, +v)); render(); },
-    get: function () { return { ceiling: c, qDemanded: qDemanded(c), qSupplied: QS1 }; }
+    set: function (v) { c = clampSnap(+v); render(); },
+    get: function () {
+      return { ceiling: c, qDemanded: qDemanded(c), qSupplied: QS,
+               shortage: Math.max(0, qDemanded(c) - QS), pClear: P2, pOld: P1 };
+    }
   };
 
-  render(); // sync JS state with the static markup on load
+  render();   // sync the JS state with the static markup on load
 })();
 </script>
 </body>

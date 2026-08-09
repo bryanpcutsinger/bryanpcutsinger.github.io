@@ -3,391 +3,534 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Interactive price floor: a floor above the clearing price creates a surplus</title>
+<title>Interactive price floor: a floor above the clearing price blocks trades and creates a surplus</title>
 <!--
-  Interactive price-floor diagram for the t04b-price-controls blog post
-  (website-styled warm palette, NOT the FAU slide palette). Self-contained:
-  vanilla SVG + JS, no libraries, no network, no build step. The static FAU
-  figure (figures/t04b-price-floor.{tex,svg}) is the SLIDE version, untouched,
-  and is the <noscript> fallback.
+  t04b-price-floor-interactive.html — REBUILD, 2026-08-08
+  (instructor-directed: this is now the CANONICAL WELFARE WIDGET of the module.
+  The old build showed the Qd–Qs gap only; the "gap diagram only" lock is
+  superseded. The floor now also shades the DEADWEIGHT LOSS — the trades the
+  floor blocks — alongside the surplus bracket it always had.)
 
-  Recreates UE Fig 12.4 (p.166). Family F3 (policy line / wedge): the horizontal
-  FLOOR line is draggable in price (vertical drag; arrow keys step it). Supply
-  slopes up (P = Q) and demand slopes down (P = 7 - Q), crossing at the fixed
-  equilibrium (3.5, 3.5). While the floor sits ABOVE 3.5 it binds: quantity
-  supplied Qs = floor (read off supply) exceeds quantity demanded Qd = 7 -
-  floor (read off demand), and the Qd->Qs gap is the surplus someone must buy
-  or store. Drop the floor to 3.5 or below and it stops binding -- the market
-  simply settles at the 3.5 equilibrium, gap closed.
+  Recreates UE Fig 12.4 (p.166) "Price Floor above Competitive Equilibrium
+  Creates Surplus", course-adapted. Family F3 (policy line / wedge): the
+  horizontal FLOOR is draggable in price; arrow keys step it.
 
-  ARCHITECTURE: the base figure is REAL SVG markup -- a no-JS reader sees the
-  full still figure (both S/D curves, the fixed equilibrium point + droplines,
-  the floor line at its initial 5.0, the Qd/Qs points + droplines + axis
-  labels, the shaded surplus band, the surplus bracket + label, the sellers'
-  nonprice-attractions annotation, and the readout for the initial floor = 5.0
-  state). The script only ATTACHES behavior (drag the floor, keyboard, live
-  readouts + shading); it never builds the DOM.
+  ECONOMICS (UE ch. 12, "Surpluses and Price Floors"). Supply P = Q, demand
+  P = 7 − Q, clearing at E = (3.5, 3.5). Raise the floor above 3.5 and:
+    Qs = floor        (read off supply)   sellers OFFER this much
+    Qd = 7 − floor    (read off demand)   buyers TAKE only this much
+    surplus  = Qs − Qd = 2·floor − 7      nobody's trade — it is bought,
+                                          stored, or dumped by government
+  Trades actually happen only up to Qd. The units between Qd and Q* = 3.5 are
+  worth MORE to a buyer (their height on D) than they cost a seller (their
+  height on S), and the floor forbids them at any price below itself: that
+  blocked value is the DEADWEIGHT LOSS, the triangle between D above and S
+  below over x ∈ [Qd, 3.5]. The surplus is created by the control, not by
+  "excessive supply" — sellers also compete by adding nonpriced extras.
+  NEVER print a computed area or dollar figure for the triangle: name it,
+  don't quantify it (UE teaches surplus/welfare verbally).
 
-  DATA SPACE: x = quantity 0..7, y = price 0..7.
-  PIXEL FRAME: origin (64,360). Data max maps q=7 -> x=392, p=7 -> y=44. Axes
-  extend past the data max (x to 418, y to 24) so lines never crowd the
-  arrowheads. sx = 328/7 = 46.857 px/unit; sy = 316/7 = 45.143 px/unit.
-  Drag range: floor in [2.5, 5.7] (keeps Qd/Qs within the drawn curve domain
-  [1, 6.2] on both sides of the 3.5 equilibrium).
+  GEOMETRY MAP. Data space x = quantity 0..7, y = price 0..7. One SVG,
+  viewBox 0 0 480 600 (exactly 4/5, matching the iframe); plot, readout and
+  hint all live inside it.
+    X(q) = 48 + 58q        Y(p) = 400 − 44p
+    q: 1→106  2→164  3→222  3.5→251  4→280  5→338  6→396  6.2→407.6
+    p: 1→356  2→312  3.5→246  5→180  6→136  6.2→127.2
+    S drawn q∈[1,6.2] = (106,356)→(407.6,127.2), label S upper right
+    D drawn q∈[1,6.2] = (106,136)→(407.6,364.8), label D upper left
+    E = (251,246), ink dot + dashed droplines to both axes, tags P* and Q*
+    floor line spans the full plot width x 48..424; drag range 3.0..6.0
+  Y-LAYOUT (top to bottom):
+     74, 88  muted surplus annotation (government / nonprice extras)
+        100  price-axis top (arrowhead)
+    100..400 plot
+        400  quantity axis (arrowhead at x=424)
+        418  Qd / Q* / Qs foot labels
+        440  "Quantity"
+        458  hairline separator
+    478..494 muted state line (1–2 rows, centered on 486)
+    516..548 accent takeaway line (1–3 rows, centered on 532)
+        578  drag hint
+
+  DEVIATIONS (with reasons):
+  1. FMAX is 6.0, not the briefed 6.2. At 6.2 the demand reading Qd = 0.8
+     falls OFF the drawn demand domain [1, 6.2], so the Qd dot would float
+     past the curve's tip. At 6.0 both extremes land EXACTLY on the drawn
+     endpoints (Qd on D's top end, Qs on S's top end).
+  2. The deadweight-loss label is two stacked lines, "Deadweight loss" over
+     "(blocked trades)", not one 175px run. At 480px wide there is no clear
+     175px channel adjacent to the triangle at every floor value: below the
+     floor the plot is cut into narrow gaps by the Qd, Q* and Qs droplines.
+  3. That label has TWO homes, chosen by MEASURED text width at each render:
+     Zone A (in the demand–supply channel left of the triangle, right-anchored
+     just left of the Qd dropline) whenever it fits there, else Zone B (below
+     both curves, centred in the gap between the Qd and Q* droplines, which is
+     widest exactly when Zone A is narrowest). A short leader points at the
+     triangle from either home. The two zones swap at floor ≈ 5.3.
+  4. The floor's live value tag rides in the RIGHT gutter (end-anchored at
+     x=474), not the left. The left gutter carries P*, and the two tags would
+     sit on top of each other whenever the floor is dragged near the 3.5
+     clearing price — exactly when the student is reading both.
+  5. The "government buys or stores the excess" annotation sits in the top
+     strip rather than beside the bracket as briefed. Every other spot next
+     to the bracket is either inside the plot's own crossing curves or in the
+     narrow right column; the top strip is the one place clear at all floors,
+     and the bracket climbs toward it as the floor rises.
+  6. Small-gap hiding: below floor 3.95 the surplus label, the Qd/Qs foot
+     labels and the deadweight-loss label all hide (they collide with Q* and
+     with each other once the gap closes). Dots, droplines, bracket and
+     SHADING stay. Everything welfare-related vanishes at floor ≤ 3.5.
+
+  ARCHITECTURE: static base. Everything a no-JS reader sees is real SVG markup
+  drawn at the initial floor of 5.0 — curves, equilibrium, floor, both
+  quantity readings, the shaded triangle, the surplus bracket, the annotation
+  and the readout. The script only ATTACHES behaviour (drag, keyboard, live
+  re-layout and re-wording); it never builds the figure DOM.
+  <noscript> points at the static slide asset t04b-price-floor.svg.
 -->
 <style>
   :root {
-    --surface: #f7f4ef;   /* warm bone background        */
-    --ink:     #1a1c1e;    /* primary curves + headings   */
-    --text:    #16181a;    /* body text                   */
-    --muted:   #5c6066;    /* axes / secondary labels     */
-    --hairline:#e3ddd3;    /* axis muting / droplines     */
-    --accent:  #b07a2c;    /* brass -- floor + surplus     */
-    --accent-tint: #efe4d2;/* shaded surplus gap          */
+    --surface: #f7f4ef;   /* warm bone background            */
+    --ink:     #1a1c1e;   /* curves + primary labels         */
+    --text:    #16181a;   /* body text                       */
+    --muted:   #5c6066;   /* axes / secondary labels         */
+    --hairline:#e3ddd3;   /* separators                      */
+    --accent:  #b07a2c;   /* brass: the floor + its effects  */
+    --accent-tint: #efe4d2;/* deadweight-loss shading        */
     --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
                  'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; height: 100%; }
+  html, body { margin: 0; height: 100%; overflow: hidden; }
   body {
     background: var(--surface);
     color: var(--text);
     font-family: var(--font-body);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
+    display: grid;              /* grid, not flex — see t03b-ue8-1 mobile note */
+    place-items: center;
     -webkit-font-smoothing: antialiased;
   }
-  /* min-width:0 lets this flex item shrink below the SVG's min-content width,
-     so the figure tracks the viewport instead of overflowing on narrow screens */
   .fig { width: 100%; max-width: 480px; min-width: 0; }
-  svg { width: 100%; max-width: 100%; height: auto; display: block;
-        touch-action: pan-y; }
+  svg { width: 100%; height: auto; display: block; }
 
-  /* structural strokes */
-  .axis      { stroke: var(--muted); stroke-width: 1.4; }
-  .curve     { stroke: var(--ink); stroke-width: 2.6; fill: none;
-               stroke-linecap: round; }
-  .drop      { stroke: var(--hairline); stroke-width: 1.6;
-               stroke-dasharray: 5 4; }
+  /* structure */
+  .axis   { stroke: var(--muted); stroke-width: 1.4; fill: none; }
+  .curve  { stroke: var(--ink); stroke-width: 2.6; fill: none;
+            stroke-linecap: round; }
+  .drop   { stroke: var(--muted); stroke-width: 1.1; fill: none;
+            stroke-dasharray: 4 4; opacity: .55; }
 
-  /* floor (draggable policy line) + surplus shading */
-  .floor     { stroke: var(--accent); stroke-width: 2.6; fill: none;
-               stroke-linecap: round; }
-  .band      { fill: var(--accent-tint); opacity: 0.75; stroke: none; }
-  .bracket   { stroke: var(--accent); stroke-width: 1.8; fill: none;
-               stroke-linecap: round; }
+  /* the policy line and what it does */
+  .floor  { stroke: var(--accent); stroke-width: 2.6; fill: none;
+            stroke-linecap: round; }
+  .dwl-bg   { fill: var(--accent-tint); }
+  .dwl-hatch{ stroke: var(--accent); stroke-width: 1.1; opacity: .45; }
+  .dwl-fill { fill: url(#dwlHatch); stroke: none; }
+  .lead   { stroke: var(--accent); stroke-width: 1.1; fill: none; opacity: .85; }
+  .bracket{ stroke: var(--accent); stroke-width: 1.6; fill: none;
+            stroke-linecap: round; }
 
   /* points */
-  .pt-static { fill: var(--ink); stroke: var(--surface); stroke-width: 1.5; }
-  .pt        { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5; }
-  .knob      { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5;
-               pointer-events: none; }
+  .pt-eq  { fill: var(--ink);    stroke: var(--surface); stroke-width: 1.6; }
+  .pt     { fill: var(--accent); stroke: var(--surface); stroke-width: 2.2; }
+  .knob   { fill: var(--accent); stroke: var(--surface); stroke-width: 2.4;
+            pointer-events: none; }
 
-  /* transparent hit targets */
-  .hit       { fill: transparent; stroke: transparent; touch-action: none;
-               cursor: grab; }
-  .hit-line  { fill: none; stroke: transparent; stroke-width: 28;
-               touch-action: none; cursor: ns-resize; }
+  /* hit targets */
+  .hit-line { fill: none; stroke: transparent; stroke-width: 30;
+              touch-action: none; cursor: ns-resize; }
+  .hit      { fill: transparent; stroke: transparent; touch-action: none;
+              cursor: grab; }
   .pt-focus:focus-visible { outline: none; }
   .pt-focus:focus-visible + .knob,
   .grabbing .knob { stroke: var(--ink); stroke-width: 3.2; }
 
   /* text */
-  .lab     { fill: var(--ink); font-size: 13px; font-weight: 600; }
-  .axlab   { fill: var(--muted); font-size: 14px; font-weight: 600; }
-  .qlab    { fill: var(--muted); font-size: 12px; font-weight: 600; }
-  .floor-lab { fill: var(--accent); font-size: 13px; font-weight: 700; }
-  .brlab   { fill: var(--accent); font-size: 12px; font-weight: 700; }
-  .annot   { fill: var(--muted); font-size: 11px; }
-  .sep     { stroke: var(--hairline); stroke-width: 1; }
-  .readout { font-family: var(--font-body); text-align: center; }
-  .r-hint  { color: var(--muted); font-size: 12.5px; line-height: 1.3;
-             margin-bottom: 5px; }
-  .r-trade { color: var(--accent); font-size: 14px; font-weight: 600;
-             line-height: 1.3; }
-  .fallback {
-    margin: 8px 0 0;
-    color: var(--muted);
-    font-size: 13px;
-    line-height: 1.35;
-    text-align: center;
-  }
+  .lab      { fill: var(--ink);   font-size: 13px;   font-weight: 700; }
+  .axlab    { fill: var(--muted); font-size: 12.5px; font-weight: 600; }
+  .qlab     { fill: var(--muted); font-size: 12px;   font-weight: 600; }
+  .ptag     { fill: var(--muted); font-size: 12px;   font-weight: 600; }
+  .floortag { fill: var(--accent);font-size: 11px;   font-weight: 700; }
+  .brlab    { fill: var(--accent);font-size: 11.5px; font-weight: 700; }
+  .dwl1     { fill: var(--accent);font-size: 10px;   font-weight: 700; }
+  .dwl2     { fill: var(--accent);font-size: 10px;   font-weight: 600; }
+  .annot    { fill: var(--muted); font-size: 10.5px; }
+  .sep      { stroke: var(--hairline); stroke-width: 1; }
+  .r-state  { fill: var(--muted); font-size: 12.5px; }
+  .r-take   { fill: var(--accent);font-size: 12.5px; font-weight: 600; }
+  .hintln   { fill: var(--muted); font-size: 11.5px; }
+
+  .fallback { margin: 8px 0 0; color: var(--muted); font-size: 13px;
+              line-height: 1.35; text-align: center; }
   .fallback a { color: var(--ink); }
 </style>
 </head>
 <body>
 <div class="fig">
-  <svg id="fig" viewBox="0 0 440 540" role="group"
-       aria-label="A price-floor diagram. Supply slopes up and demand slopes down, crossing at an equilibrium price of 3.5. Drag the horizontal price floor up or down: when it sits above 3.5, sellers offer more units than buyers will take at that price, and a surplus opens between the quantity demanded and the quantity supplied.">
-    <title>Interactive price floor diagram</title>
+  <svg id="fig" viewBox="0 0 480 600" role="group"
+       aria-label="A price-floor diagram. Supply slopes up, demand slopes down, and they cross at the clearing price of 3.5, marked P star and Q star. A brass horizontal price floor can be dragged up or down. While the floor sits above 3.5 it binds: sellers offer the quantity read off supply, buyers take only the smaller quantity read off demand, a bracket marks the surplus between the two, and a shaded triangle between demand above and supply below marks the trades the floor blocks, the deadweight loss. Drop the floor to 3.5 or below and the floor stops binding: the market simply clears at Q star.">
+    <title>Interactive price floor: the surplus and the blocked trades</title>
+
     <defs>
       <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
               orient="auto" markerUnits="userSpaceOnUse">
         <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
       </marker>
+      <!-- diagonal hatch over the warm tint: the blocked-trades triangle -->
+      <pattern id="dwlHatch" patternUnits="userSpaceOnUse" width="6" height="6"
+               patternTransform="rotate(45)">
+        <rect class="dwl-bg" x="0" y="0" width="6" height="6" />
+        <line class="dwl-hatch" x1="0" y1="0" x2="0" y2="6" />
+      </pattern>
     </defs>
 
-    <!-- static droplines for the fixed equilibrium (never move) -->
-    <line class="drop" x1="228.0" y1="202.0" x2="228.0" y2="360" />
-    <line class="drop" x1="64"    y1="202.0" x2="228.0" y2="202.0" />
+    <!-- ===== muted annotation: who ends up holding the surplus (UE 12.4) ===== -->
+    <g id="gAnnot">
+      <text class="annot" x="251" y="74" text-anchor="middle">Government buys or stores the excess;</text>
+      <text class="annot" x="251" y="88" text-anchor="middle">sellers add free extras to attract buyers.</text>
+    </g>
 
-    <!-- dynamic droplines for Qd / Qs (move with the floor; hidden when the
-         floor doesn't bind) -->
-    <line id="dropQd" class="drop" x1="157.7" y1="134.3" x2="157.7" y2="360" />
-    <line id="dropQs" class="drop" x1="298.3" y1="134.3" x2="298.3" y2="360" />
+    <!-- ===== deadweight loss: painted first so both curves read on top ===== -->
+    <g id="gDwl">
+      <polygon id="dwlPoly" class="dwl-fill" points="164,180 164,312 251,246" />
+    </g>
 
-    <!-- axes (drawn before the curves; extended past the data max) -->
-    <line class="axis" x1="64" y1="360" x2="418" y2="360" marker-end="url(#arrow)" />
-    <line class="axis" x1="64" y1="360" x2="64"  y2="24"  marker-end="url(#arrow)" />
+    <!-- ===== reference droplines ===== -->
+    <line id="eqDropH" class="drop" x1="48"  y1="246" x2="251" y2="246" />
+    <line id="eqDropV" class="drop" x1="251" y1="246" x2="251" y2="400" />
+    <g id="gQdrops">
+      <line id="dropQd" class="drop" x1="164" y1="180" x2="164" y2="400" />
+      <line id="dropQs" class="drop" x1="338" y1="180" x2="338" y2="400" />
+    </g>
 
-    <!-- surplus band along the floor, Qd -> Qs (below the curves so they read on top) -->
-    <rect id="band" class="band" x="157.7" y="128.3" width="140.6" height="12" />
+    <!-- ===== axes (drawn before the curves; extended past the drawn data) ===== -->
+    <line class="axis" x1="48" y1="400" x2="424" y2="400" marker-end="url(#arrow)" />
+    <line class="axis" x1="48" y1="400" x2="48"  y2="100" marker-end="url(#arrow)" />
 
-    <!-- upward supply S: P = Q, Q in [1, 6.2] -->
-    <line class="curve" x1="110.9" y1="314.9" x2="354.5" y2="80.1" />
-    <!-- downward demand D: P = 7 - Q, Q in [1, 6.2] -->
-    <line class="curve" x1="110.9" y1="89.1" x2="354.5" y2="323.9" />
+    <!-- ===== supply P = Q and demand P = 7 − Q, drawn q ∈ [1, 6.2] ===== -->
+    <line class="curve" x1="106" y1="356" x2="407.6" y2="127.2" />
+    <line class="curve" x1="106" y1="136" x2="407.6" y2="364.8" />
+    <text class="lab" x="414" y="122" text-anchor="start">S</text>
+    <text class="lab" x="98"  y="124" text-anchor="end">D</text>
 
-    <!-- the draggable floor line at P_min = 5.0 -->
-    <line id="floor" class="floor" x1="68.7" y1="134.3" x2="373.3" y2="134.3" />
+    <!-- ===== the draggable floor, at its initial 5.0 ===== -->
+    <line id="floor" class="floor" x1="48" y1="180" x2="424" y2="180" />
+    <text id="floorTag" class="floortag" x="474" y="184" text-anchor="end">Floor 5.0</text>
 
-    <!-- axis titles -->
-    <text class="axlab" x="228" y="430" text-anchor="middle">Quantity</text>
-    <text class="axlab" x="22" y="200" text-anchor="middle"
-          transform="rotate(-90 22 200)">Price</text>
+    <!-- ===== the surplus: bracket along the floor from Qd to Qs ===== -->
+    <g id="gSurplus">
+      <path id="bracket" class="bracket"
+            d="M164,156 L164,164 M164,160 L338,160 M338,156 L338,164" />
+      <text id="brLabel" class="brlab" x="251" y="152" text-anchor="middle">Surplus (Q<tspan dy="3" font-size="9">s</tspan><tspan dy="-3"> &#8722; Q</tspan><tspan dy="3" font-size="9">d</tspan><tspan dy="-3">)</tspan></text>
+    </g>
 
-    <!-- curve labels (held clear of the lines) -->
-    <text class="lab" x="362" y="76" text-anchor="start">S</text>
-    <text class="lab" x="100" y="71" text-anchor="end">D</text>
-    <text id="floorLabel" class="floor-lab" x="55" y="129.3" text-anchor="end">P<tspan baseline-shift="sub" font-size="9.5">min</tspan></text>
+    <!-- ===== points ===== -->
+    <circle class="pt-eq" cx="251" cy="246" r="5" />
+    <g id="gQdots">
+      <circle id="dotQd" class="pt" cx="164" cy="180" r="5.5" />
+      <circle id="dotQs" class="pt" cx="338" cy="180" r="5.5" />
+    </g>
 
-    <!-- static annotation (fidelity: mirrors UE's "sellers offer nonpriced
-         added attractions" note; fixed position, clear of every curve and of
-         the floor line's full drag range) -->
-    <text class="annot" x="235" y="42" text-anchor="middle">Sellers offer nonprice attractions;</text>
-    <text class="annot" x="235" y="57" text-anchor="middle">government typically buys the excess.</text>
+    <!-- ===== deadweight-loss label + leader (Zone A at the initial floor) ===== -->
+    <g id="gDwlLabel">
+      <line id="dwlLead" class="lead" x1="160" y1="269" x2="164" y2="258" />
+      <text id="dwlL1" class="dwl1" x="156" y="272" text-anchor="end">Deadweight loss</text>
+      <text id="dwlL2" class="dwl2" x="156" y="286" text-anchor="end">(blocked trades)</text>
+    </g>
 
-    <!-- static context point: the fixed equilibrium (S ∩ D), unlabeled (the
-         droplines locate it; a numeric label would collide with the axis titles) -->
-    <circle class="pt-static" cx="228.0" cy="202.0" r="4.5" />
+    <!-- ===== axis tags ===== -->
+    <text class="ptag" x="42" y="250" text-anchor="end">P*</text>
+    <text class="qlab" x="251" y="418" text-anchor="middle">Q*</text>
+    <g id="gQfeet">
+      <text id="labQd" class="qlab" x="164" y="418" text-anchor="middle">Q<tspan dy="3" font-size="9">d</tspan></text>
+      <text id="labQs" class="qlab" x="338" y="418" text-anchor="middle">Q<tspan dy="3" font-size="9">s</tspan></text>
+    </g>
+    <text class="axlab" x="236" y="440" text-anchor="middle">Quantity</text>
+    <text class="axlab" x="16" y="250" text-anchor="middle"
+          transform="rotate(-90 16 250)">Price ($)</text>
 
-    <!-- the moving points Qd (on demand) and Qs (on supply) at the floor -->
-    <circle id="dotQd" class="pt" cx="157.7" cy="134.3" r="6" />
-    <circle id="dotQs" class="pt" cx="298.3" cy="134.3" r="6" />
-
-    <!-- quantity-axis labels for Qd / Qs -->
-    <text id="qdLabel" class="qlab" x="157.7" y="377" text-anchor="middle">Q<tspan baseline-shift="sub" font-size="9.5">d</tspan></text>
-    <text id="qsLabel" class="qlab" x="298.3" y="377" text-anchor="middle">Q<tspan baseline-shift="sub" font-size="9.5">s</tspan></text>
-
-    <!-- surplus bracket, just above the floor, Qd -> Qs -->
-    <path id="bracket" class="bracket" d="M157.7,103.2 L157.7,111.2 M157.7,107.2 L298.3,107.2 M298.3,103.2 L298.3,111.2" />
-    <text id="bracketLabel" class="brlab" x="228.0" y="98.2" text-anchor="middle">Surplus (Q<tspan baseline-shift="sub" font-size="9">s</tspan> &gt; Q<tspan baseline-shift="sub" font-size="9">d</tspan>)</text>
-
-    <!-- fat invisible hit line over the floor (grab anywhere) -->
-    <line id="floorHit" class="hit-line" x1="68.7" y1="134.3" x2="373.3" y2="134.3" />
-    <!-- keyboard proxy (screen-reader slider) beneath the visible knob -->
-    <circle id="ptFocus" class="pt-focus hit" cx="140" cy="134.3" r="22"
+    <!-- ===== drag surface: fat hit line, keyboard proxy, visible knob ===== -->
+    <line id="floorHit" class="hit-line" x1="48" y1="180" x2="424" y2="180" />
+    <circle id="ptFocus" class="pt-focus hit" cx="62" cy="180" r="22"
             tabindex="0" role="slider" aria-label="Price floor"
-            aria-valuemin="2.5" aria-valuemax="5.7" aria-valuenow="5.0"
-            aria-valuetext="Floor at 5.0. Sellers offer 5, buyers take 2. Propped above the 3.5 clearing price, the 3-unit surplus must be bought or stored." />
-    <!-- visible drag knob on the floor -->
-    <circle id="floorKnob" class="knob" cx="140" cy="134.3" r="6" />
+            aria-valuemin="3.0" aria-valuemax="6.0" aria-valuenow="5.0"
+            aria-valuetext="Floor at 5.0. Sellers offer 5, buyers take only 2, and the clearing quantity is 3.5. The trades between 2 and 3.5 were worth more to buyers than they cost sellers, and that lost value is the deadweight loss; taxpayers buy or store the 3-unit surplus." />
+    <circle id="floorKnob" class="knob" cx="62" cy="180" r="6" />
 
-    <!-- readout band: hairline separator, muted STATE line, accent TAKEAWAY line.
-         A foreignObject lets the full-sentence readouts wrap so nothing clips. -->
-    <line class="sep" x1="44" y1="446" x2="396" y2="446" />
-    <foreignObject x="38" y="452" width="364" height="86">
-      <div xmlns="http://www.w3.org/1999/xhtml" class="readout">
-        <div id="rHint"  class="r-hint">Floor at 5.0 &#8594; sellers offer 5, buyers take 2.</div>
-        <div id="rTrade" class="r-trade">Propped above the 3.5 clearing price, the 3-unit surplus must be bought or stored.</div>
-      </div>
-    </foreignObject>
+    <!-- ===== readout band ===== -->
+    <line class="sep" x1="16" y1="458" x2="464" y2="458" />
+    <g id="readout">
+      <text class="r-state" text-anchor="middle">
+        <tspan id="s1" x="240" y="486">Floor at 5.0 &#8594; sellers offer 5, buyers take only 2 (Q* is 3.5).</tspan>
+        <tspan id="s2" x="240" y="502"></tspan>
+      </text>
+      <text class="r-take" text-anchor="middle">
+        <tspan id="t1" x="240" y="516">The trades between 2 and 3.5 were worth more to buyers than</tspan>
+        <tspan id="t2" x="240" y="532">they cost sellers &#8212; that lost value is the deadweight loss;</tspan>
+        <tspan id="t3" x="240" y="548">taxpayers buy or store the 3-unit surplus.</tspan>
+      </text>
+    </g>
+    <text class="hintln" x="240" y="578" text-anchor="middle">Drag the brass floor line up or down, or press an arrow key.</text>
+
+    <!-- off-canvas ruler used to measure text before it is laid out -->
+    <text id="meas" x="-999" y="-999" />
   </svg>
+
   <noscript>
-    <p class="fallback">JavaScript is off, so this frame is a still image: an upward supply and downward demand crossing at the 3.5 equilibrium, and a price floor at 5.0 above it that leaves a Q<sub>d</sub>&#8211;Q<sub>s</sub> surplus. You can also <a href="t04b-price-floor.svg">open the static figure</a>.</p>
+    <p class="fallback">JavaScript is off, so this frame is a still image: an
+      upward supply and a downward demand crossing at the clearing price, and a
+      price floor above it that leaves buyers taking less than sellers offer.
+      You can also <a href="/teaching/microeconomics/t04b-price-controls/figures/t04b-price-floor.svg">open the static figure</a>.</p>
   </noscript>
 </div>
-
 <script>
 (function () {
   "use strict";
-  var svg = document.getElementById('fig');
-  var floor      = document.getElementById('floor');
-  var floorHit   = document.getElementById('floorHit');
-  var floorKnob  = document.getElementById('floorKnob');
-  var ptFocus    = document.getElementById('ptFocus');
-  var floorLabel = document.getElementById('floorLabel');
-  var dotQd      = document.getElementById('dotQd');
-  var dotQs      = document.getElementById('dotQs');
-  var dropQd     = document.getElementById('dropQd');
-  var dropQs     = document.getElementById('dropQs');
-  var qdLabel    = document.getElementById('qdLabel');
-  var qsLabel    = document.getElementById('qsLabel');
-  var band       = document.getElementById('band');
-  var bracket    = document.getElementById('bracket');
-  var bracketLabel = document.getElementById('bracketLabel');
-  var rHint      = document.getElementById('rHint');
-  var rTrade     = document.getElementById('rTrade');
 
-  // pixel frame + scale (mirrors the base SVG markup)
-  var QMAX = 7, PMAX = 7;
-  var X0 = 64, X1 = 392, Y0 = 360, Y1 = 44;
-  var px = function (q) { return X0 + (q / QMAX) * (X1 - X0); };  // qty   -> px x
-  var py = function (p) { return Y0 - (p / PMAX) * (Y0 - Y1); };  // price -> px y
-  var toP = function (yy) { return ((Y0 - yy) / (Y0 - Y1)) * PMAX; };
+  // ---- pixel frame (mirrors the base markup; see the geometry map above) ----
+  var X0 = 48,  SX = 58;              // x px origin; px per unit of quantity
+  var Y0 = 400, SY = 44;              // x-axis foot; px per unit of price
+  function X (q) { return X0 + q * SX; }
+  function Y (p) { return Y0 - p * SY; }
+  function toP (yy) { return (Y0 - yy) / SY; }
 
-  // model constants (read off the .tex / corrected inventory)
-  var PEQ = 3.5;       // equilibrium price = equilibrium quantity (S=D at 3.5,3.5)
+  var PEQ = 3.5;                      // S = D at (3.5, 3.5)
+  var XEQ = X(PEQ), YEQ = Y(PEQ);     // 251, 246
+  var FMIN = 3.0, FMAX = 6.0;         // drag range (see deviation 1)
+  var SNAP = [5.0, PEQ], SNAPTOL = 0.12;
+  var SMALL = 3.95;                   // below this the gap labels hide
+  var BRACKET_MIN_Y = 118;            // bracket may not climb into the annotation
+  var MAXW = 448;                     // readout text column
 
-  // floor range (in price). Keeps Qd = 7-floor and Qs = floor within the
-  // curves' drawn domain [1, 6.2] on both sides of the 3.5 equilibrium.
-  var FMIN = 2.5, FMAX = 5.7;
+  // ---- the two readings the floor produces ----
+  function qSupplied (f) { return f; }        // off S: P = Q
+  function qDemanded (f) { return 7 - f; }    // off D: P = 7 − Q
 
-  // Lowest pixel-y (i.e. highest screen position) the surplus bracket may
-  // reach. Below FMAX the "0.6 price-units above the floor" offset alone
-  // would carry the bracket label's glyphs on top of the fixed annotation
-  // strip (its two lines sit at y=42/57); clamping the bracket at this y
-  // keeps a clear gap under the annotation for every reachable floor value.
-  var MIN_BRACKET_Y = 90;
+  var $ = function (id) { return document.getElementById(id); };
+  var svg = $('fig'), meas = $('meas');
+  var floor = $('floor'), floorHit = $('floorHit'), knob = $('floorKnob'),
+      ptFocus = $('ptFocus'), floorTag = $('floorTag');
+  var dwlPoly = $('dwlPoly'), dwlL1 = $('dwlL1'), dwlL2 = $('dwlL2'),
+      dwlLead = $('dwlLead'), gDwlLabel = $('gDwlLabel'), gDwl = $('gDwl');
+  var dotQd = $('dotQd'), dotQs = $('dotQs'), dropQd = $('dropQd'),
+      dropQs = $('dropQs'), labQd = $('labQd'), labQs = $('labQs');
+  var gQdots = $('gQdots'), gQdrops = $('gQdrops'), gQfeet = $('gQfeet');
+  var bracket = $('bracket'), brLabel = $('brLabel'), gSurplus = $('gSurplus'),
+      gAnnot = $('gAnnot');
 
-  // demand/supply read at the floor
-  function qDemanded(f) { return 7 - f; }
-  function qSupplied(f) { return f; }
+  var c = 5.0;                        // state, in data units: the floor price
 
-  // State in DATA units.
-  var c = 5.0;   // initial floor = P_min
+  function fmt (v) {
+    var r = Math.round(v * 10) / 10;
+    return (Math.abs(r - Math.round(r)) < 0.05) ? String(Math.round(r))
+                                                : r.toFixed(1);
+  }
+  function vis (el, on) { el.setAttribute('visibility', on ? 'visible' : 'hidden'); }
 
-  // convert a client event to SVG user coords (handles responsive scaling)
+  // ---- text measuring + greedy wrap into at most `rows` lines ----
+  function widthOf (s, cls) {
+    meas.setAttribute('class', cls);
+    meas.textContent = s;
+    return meas.getComputedTextLength();
+  }
+  // Words are measured ONCE, then laid out arithmetically, so the balancing
+  // search below costs no extra text measurement.
+  function layout (words, w, sp, maxW, rows) {
+    var out = [], widths = [], line = [], run = 0, wide = 0;
+    function close () { out.push(line.join(' ')); widths.push(run);
+                        if (run > wide) { wide = run; } }
+    for (var i = 0; i < words.length; i++) {
+      var add = (line.length ? sp : 0) + w[i];
+      if (line.length && run + add > maxW && out.length < rows - 1) {
+        close(); line = [words[i]]; run = w[i];
+      } else {
+        line.push(words[i]); run += add;
+      }
+    }
+    close();
+    return { lines: out, n: out.length, wide: wide };
+  }
+  function wrap (s, cls, maxW, rows) {
+    meas.setAttribute('class', cls);
+    var words = s.split(' '), w = [], i;
+    for (i = 0; i < words.length; i++) {
+      meas.textContent = words[i];
+      w.push(meas.getComputedTextLength());
+    }
+    meas.textContent = 'x x';
+    var sp = meas.getComputedTextLength();
+    meas.textContent = 'xx';
+    sp -= meas.getComputedTextLength();
+
+    var n = layout(words, w, sp, maxW, rows).n;
+    // narrow the column to the tightest width that still fits in n rows, so a
+    // two-row readout never ends on a one-word widow
+    var lo = 0, hi = maxW;
+    for (i = 0; i < 12; i++) {
+      var mid = (lo + hi) / 2, trial = layout(words, w, sp, mid, rows);
+      if (trial.n > n || trial.wide > mid + 0.5) { lo = mid; } else { hi = mid; }
+    }
+    return layout(words, w, sp, hi, rows).lines;
+  }
+  // rows are laid out symmetrically about `mid` at `lh` line height
+  function setRows (ids, lines, mid, lh) {
+    var n = lines.length;
+    var top = mid - ((n - 1) * lh) / 2;
+    for (var i = 0; i < ids.length; i++) {
+      var el = $(ids[i]);
+      el.textContent = i < n ? lines[i] : '';
+      el.setAttribute('y', top + i * lh);
+    }
+  }
+
+  // ---- readout wording ----
+  function stateLine (f, qd, qs, binding) {
+    if (binding) {
+      return 'Floor at ' + f.toFixed(1) + ' → sellers offer ' + fmt(qs) +
+             ', buyers take only ' + fmt(qd) + ' (Q* is 3.5).';
+    }
+    if (Math.abs(f - PEQ) <= 0.05) {
+      return 'Floor at 3.5 = the clearing price → 3.5 offered, 3.5 taken.';
+    }
+    return 'Floor at ' + f.toFixed(1) + ' → below the clearing price, so ' +
+           'the market still clears at Q* = 3.5.';
+  }
+  function takeLine (f, qd, gap, binding) {
+    if (!binding) {
+      return 'At or below clearing the floor doesn’t bind — no ' +
+             'surplus, no blocked trades.';
+    }
+    if (f >= 4.5) {
+      return 'The trades between ' + fmt(qd) + ' and 3.5 were worth more to ' +
+             'buyers than they cost sellers — that lost value is the ' +
+             'deadweight loss; taxpayers buy or store the ' + fmt(gap) +
+             '-unit surplus.';
+    }
+    return 'The shaded triangle is the trades the floor blocks; the surplus ' +
+           'still has to be bought or stored. Both shrink as the floor ' +
+           'nears clearing.';
+  }
+
+  // ---- the deadweight-loss label: two homes, picked on measured width ----
+  // Zone A: the demand–supply channel LEFT of the triangle (widest at low
+  // floors). Zone B: below both curves, centred between the Qd and Q*
+  // droplines (widest at high floors, when Zone A has closed up).
+  function placeDwlLabel (qd, xQd, yFloor) {
+    var w = Math.max(dwlL1.getComputedTextLength(), dwlL2.getComputedTextLength());
+    var rx = Math.min(xQd - 8, 156);          // 156 keeps the block clear of S
+    if (rx - 56 >= w) {                        // Zone A
+      dwlL1.setAttribute('text-anchor', 'end'); dwlL1.setAttribute('x', rx);
+      dwlL2.setAttribute('text-anchor', 'end'); dwlL2.setAttribute('x', rx);
+      dwlL1.setAttribute('y', 272); dwlL2.setAttribute('y', 286);
+      dwlLead.setAttribute('x1', rx + 4); dwlLead.setAttribute('y1', 269);
+      dwlLead.setAttribute('x2', xQd);    dwlLead.setAttribute('y2', 258);
+    } else {                                   // Zone B
+      var cx = (xQd + XEQ) / 2;
+      dwlL1.setAttribute('text-anchor', 'middle'); dwlL1.setAttribute('x', cx);
+      dwlL2.setAttribute('text-anchor', 'middle'); dwlL2.setAttribute('x', cx);
+      dwlL1.setAttribute('y', 364); dwlL2.setAttribute('y', 378);
+      dwlLead.setAttribute('x1', cx - w / 2 - 6); dwlLead.setAttribute('y1', 357);
+      dwlLead.setAttribute('x2', xQd);            dwlLead.setAttribute('y2', Y(qd));
+    }
+  }
+
+  function render () {
+    var f  = c,
+        qd = qDemanded(f), qs = qSupplied(f),
+        gap = qs - qd,
+        binding = f > PEQ + 0.02,
+        yF = Y(f), xQd = X(qd), xQs = X(qs);
+
+    // the policy line itself, its handle and its live value tag
+    floor.setAttribute('y1', yF);    floor.setAttribute('y2', yF);
+    floorHit.setAttribute('y1', yF); floorHit.setAttribute('y2', yF);
+    knob.setAttribute('cy', yF);     ptFocus.setAttribute('cy', yF);
+    floorTag.setAttribute('y', yF + 4);
+    floorTag.textContent = 'Floor ' + f.toFixed(1);
+
+    vis(gDwl, binding); vis(gSurplus, binding); vis(gAnnot, binding);
+    vis(gQdots, binding); vis(gQdrops, binding);
+
+    if (binding) {
+      // the blocked trades: D above, S below, from Qd across to the crossing
+      dwlPoly.setAttribute('points',
+        xQd + ',' + yF + ' ' + xQd + ',' + Y(qd) + ' ' + XEQ + ',' + YEQ);
+
+      dotQd.setAttribute('cx', xQd); dotQd.setAttribute('cy', yF);
+      dotQs.setAttribute('cx', xQs); dotQs.setAttribute('cy', yF);
+      dropQd.setAttribute('x1', xQd); dropQd.setAttribute('x2', xQd);
+      dropQd.setAttribute('y1', yF);
+      dropQs.setAttribute('x1', xQs); dropQs.setAttribute('x2', xQs);
+      dropQs.setAttribute('y1', yF);
+      labQd.setAttribute('x', xQd); labQs.setAttribute('x', xQs);
+
+      // surplus bracket, held 20px above the floor but never into the annotation
+      var by = Math.max(yF - 20, BRACKET_MIN_Y);
+      bracket.setAttribute('d',
+        'M' + xQd + ',' + (by - 4) + ' L' + xQd + ',' + (by + 4) +
+        ' M' + xQd + ',' + by + ' L' + xQs + ',' + by +
+        ' M' + xQs + ',' + (by - 4) + ' L' + xQs + ',' + (by + 4));
+      brLabel.setAttribute('y', by - 8);
+
+      // once the gap closes these labels crowd Q* and each other; the shading,
+      // the bracket and the dots carry the picture on their own
+      var roomy = f >= SMALL;
+      vis(brLabel, roomy); vis(gQfeet, roomy); vis(gDwlLabel, roomy);
+      if (roomy) { placeDwlLabel(qd, xQd, yF); }
+    } else {
+      // an explicit visibility on a child outranks a hidden parent, so the
+      // labels that carry one must be switched off by name as well
+      vis(gDwlLabel, false); vis(gQfeet, false); vis(brLabel, false);
+    }
+
+    var state = stateLine(f, qd, qs, binding);
+    var take  = takeLine(f, qd, gap, binding);
+    setRows(['s1', 's2'],       wrap(state, 'r-state', MAXW, 2), 486, 16);
+    setRows(['t1', 't2', 't3'], wrap(take,  'r-take',  MAXW, 3), 532, 16);
+
+    ptFocus.setAttribute('aria-valuenow', f.toFixed(1));
+    ptFocus.setAttribute('aria-valuetext', state + ' ' + take);
+  }
+
+  // ---- drag (pointer capture, so a fast drag cannot get stuck) ----
   var spt = svg.createSVGPoint();
-  function toSvg(evt) {
+  function toSvg (evt) {
     spt.x = evt.clientX; spt.y = evt.clientY;
     return spt.matrixTransform(svg.getScreenCTM().inverse());
   }
-
-  // format a quantity: drop a trailing .0 so "5" not "5.0"
-  function fmt(v) {
-    var r = Math.round(v * 10) / 10;
-    return (Math.abs(r - Math.round(r)) < 0.05) ? String(Math.round(r)) : r.toFixed(1);
-  }
-
-  function setDynamicVisible(on) {
-    var v = on ? 'visible' : 'hidden';
-    dotQd.style.visibility = v; dotQs.style.visibility = v;
-    dropQd.style.visibility = v; dropQs.style.visibility = v;
-    qdLabel.style.visibility = v; qsLabel.style.visibility = v;
-    band.style.visibility = v;
-    bracket.style.visibility = v; bracketLabel.style.visibility = v;
-  }
-
-  function render() {
-    var fy = py(c);
-    var qd = qDemanded(c);
-    var qs = qSupplied(c);
-    var gap = qs - qd;
-    var binding = gap > 0.05;
-
-    // floor line + its handle, hit target, label
-    floor.setAttribute('y1', fy); floor.setAttribute('y2', fy);
-    floorHit.setAttribute('y1', fy); floorHit.setAttribute('y2', fy);
-    floorKnob.setAttribute('cy', fy);
-    ptFocus.setAttribute('cy', fy);
-    floorLabel.setAttribute('y', fy - 5);
-
-    if (binding) {
-      var qdx = px(qd), qsx = px(qs);
-
-      dotQd.setAttribute('cx', qdx); dotQd.setAttribute('cy', fy);
-      dotQs.setAttribute('cx', qsx); dotQs.setAttribute('cy', fy);
-
-      dropQd.setAttribute('x1', qdx); dropQd.setAttribute('x2', qdx);
-      dropQd.setAttribute('y1', fy);  dropQd.setAttribute('y2', Y0);
-      dropQs.setAttribute('x1', qsx); dropQs.setAttribute('x2', qsx);
-      dropQs.setAttribute('y1', fy);  dropQs.setAttribute('y2', Y0);
-
-      qdLabel.setAttribute('x', qdx);
-      qsLabel.setAttribute('x', qsx);
-
-      band.setAttribute('x', qdx);
-      band.setAttribute('width', qsx - qdx);
-      band.setAttribute('y', fy - 6);
-
-      // bracket sits a fixed 0.6 price-units above the CURRENT floor, but is
-      // clamped to a minimum pixel height (MIN_BRACKET_Y) so it can never
-      // climb into the fixed annotation strip near the top of the frame --
-      // the naive "0.6 above the floor" offset alone puts the bracket LABEL
-      // (whose glyphs extend ~9px above its anchor) on top of the
-      // annotation's second line once the floor is dragged past ~5.4, so the
-      // clamp takes over for the top of the drag range instead of trusting
-      // the fixed offset to stay clear on its own.
-      var by = py(c + 0.6);
-      if (by < MIN_BRACKET_Y) by = MIN_BRACKET_Y;
-      bracket.setAttribute('d',
-        'M' + qdx + ',' + (by - 4) + ' L' + qdx + ',' + (by + 4) + ' ' +
-        'M' + qdx + ',' + by + ' L' + qsx + ',' + by + ' ' +
-        'M' + qsx + ',' + (by - 4) + ' L' + qsx + ',' + (by + 4));
-      bracketLabel.setAttribute('x', (qdx + qsx) / 2);
-      bracketLabel.setAttribute('y', by - 9);
-
-      setDynamicVisible(true);
-    } else {
-      setDynamicVisible(false);
+  function clamp (v) { return v < FMIN ? FMIN : (v > FMAX ? FMAX : v); }
+  function setFromPointer (evt) {
+    var v = toP(toSvg(evt).y);
+    if (isNaN(v)) return;
+    v = clamp(v);
+    for (var i = 0; i < SNAP.length; i++) {          // snap to 5.0 and to 3.5
+      if (Math.abs(v - SNAP[i]) < SNAPTOL) { v = SNAP[i]; break; }
     }
-
-    // readout grammar: muted state line + accent takeaway line
-    var hint, trade;
-    if (binding) {
-      hint  = 'Floor at ' + c.toFixed(1) + ' → sellers offer ' + fmt(qs) +
-              ', buyers take ' + fmt(qd) + '.';
-      trade = 'Propped above the ' + PEQ.toFixed(1) +
-              ' clearing price, the ' + fmt(gap) + '-unit surplus must be bought or stored.';
-    } else if (Math.abs(c - PEQ) <= 0.05) {
-      hint  = 'Floor at 3.5 = the clearing price → 3.5 offered = 3.5 taken.';
-      trade = 'At or below clearing the floor doesn’t bind — no surplus.';
-    } else {
-      hint  = 'Floor at ' + c.toFixed(1) +
-              ' → the market settles at the ' + PEQ.toFixed(1) + ' clearing price.';
-      trade = 'Below the ' + PEQ.toFixed(1) +
-              ' clearing price the floor doesn’t bind — no surplus.';
-    }
-    rHint.textContent  = hint;
-    rTrade.textContent = trade;
-
-    ptFocus.setAttribute('aria-valuenow', c.toFixed(1));
-    ptFocus.setAttribute('aria-valuetext', hint + ' ' + trade);
-  }
-
-  function setFromPointer(evt) {
-    var p = toSvg(evt);
-    var cc = toP(p.y);
-    if (isNaN(cc)) return;
-    if (cc < FMIN) cc = FMIN;
-    if (cc > FMAX) cc = FMAX;
-    c = cc;
+    // Quantize to the same 0.1 grid the arrow keys use. Off-grid floors read
+    // out rounded, and a rounded 5.25 would claim sellers offer 5.3 while
+    // buyers take 1.8 — a figure whose point is reading Qd and Qs off the
+    // curves must not show two numbers that fail to sum to 7.
+    c = Math.round(v * 10) / 10;
     render();
   }
-
-  // --- drag (pointer events + pointer capture so a fast drag can't get stuck) ---
-  var dragging = false;
-  var capturedEl = null, capturedId = null;
-  function onMove(evt) { if (dragging) { evt.preventDefault(); setFromPointer(evt); } }
-  function onUp() {
+  var dragging = false, capEl = null, capId = null;
+  function onMove (evt) { if (dragging) { evt.preventDefault(); setFromPointer(evt); } }
+  function onUp () {
     dragging = false;
     svg.classList.remove('grabbing');
-    if (capturedEl && capturedId !== null) {
-      try { capturedEl.releasePointerCapture(capturedId); } catch (e) {}
+    if (capEl && capId !== null) {
+      try { capEl.releasePointerCapture(capId); } catch (e) {}
     }
-    capturedEl = null; capturedId = null;
+    capEl = null; capId = null;
     window.removeEventListener('pointermove', onMove);
     window.removeEventListener('pointerup', onUp);
   }
-  function onDown(evt) {
+  function onDown (evt) {
     evt.preventDefault();
     dragging = true;
     svg.classList.add('grabbing');
-    capturedEl = evt.currentTarget; capturedId = evt.pointerId;
-    try { capturedEl.setPointerCapture(capturedId); } catch (e) {}
+    capEl = evt.currentTarget; capId = evt.pointerId;
+    try { capEl.setPointerCapture(capId); } catch (e) {}
     setFromPointer(evt);
     window.addEventListener('pointermove', onMove);
     window.addEventListener('pointerup', onUp);
@@ -395,25 +538,32 @@
   floorHit.addEventListener('pointerdown', onDown);
   ptFocus.addEventListener('pointerdown', onDown);
 
-  // --- keyboard: arrows step the floor in price ---
+  // ---- keyboard: arrows step the floor in price ----
   ptFocus.addEventListener('keydown', function (evt) {
-    var step = 0.2;
-    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') { c += step; }
-    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') { c -= step; }
+    var step = 0.1;
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp')        { c += step; }
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown')  { c -= step; }
+    else if (evt.key === 'PageUp')   { c += 0.5; }
+    else if (evt.key === 'PageDown') { c -= 0.5; }
+    else if (evt.key === 'Home')     { c = FMIN; }
+    else if (evt.key === 'End')      { c = FMAX; }
     else return;
     evt.preventDefault();
-    if (c < FMIN) c = FMIN;
-    if (c > FMAX) c = FMAX;
+    c = Math.round(clamp(c) * 10) / 10;
     render();
   });
 
-  // Debug hook (inert for students): set/get the floor price.
+  // ---- debug hook (inert for students): set/get the floor price ----
   window.__fig = {
-    set: function (v) { c = Math.max(FMIN, Math.min(FMAX, +v)); render(); },
-    get: function () { return { floor: c, qDemanded: qDemanded(c), qSupplied: qSupplied(c) }; }
+    set: function (v) { c = clamp(+v); render(); return window.__fig.get(); },
+    get: function () {
+      return { floor: c, qDemanded: qDemanded(c), qSupplied: qSupplied(c),
+               surplus: Math.max(0, qSupplied(c) - qDemanded(c)),
+               binding: c > PEQ + 0.02 };
+    }
   };
 
-  render(); // sync JS state with the static markup on load
+  render();   // sync the JS state with the static markup on load
 })();
 </script>
 </body>

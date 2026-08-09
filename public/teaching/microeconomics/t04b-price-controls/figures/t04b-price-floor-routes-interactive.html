@@ -3,123 +3,161 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Interactive price floor: two routes to the same support price</title>
+<title>One support price, two routes: restrict supply or boost demand</title>
 <!--
-  Interactive recreation of UE Fig 12.3 (p.165) for the t04b-price-controls blog
-  post (website-styled warm palette, NOT the FAU slide palette). Self-contained:
-  vanilla SVG + JS, no libraries, no network, no build step. The static FAU
-  figure (figures/t04b-price-floor-routes.{tex,svg}) is the SLIDE version,
-  untouched, and is this widget's <noscript> fallback.
+  t04b-price-floor-routes-interactive.html — REBUILD round 2, 2026-08-08
+  (round 1 moved the buttons inside the SVG and added the consequence layers.
+  Round 2 re-pins the NUMBER SYSTEM onto the sibling t04b-price-floor widget,
+  which sits in the same post section: the two figures now share one market,
+  so the reader never meets two different clearing quantities a paragraph
+  apart.)
 
-  ARCHITECTURE: the base figure is REAL SVG markup — a no-JS reader sees the
-  FULL still figure: original S and D, BOTH alternative routes S' (restrict
-  supply) and D' (boost demand) each drawn in full with their shift arrow and
-  label, the equilibrium dot + droplines, the P' support-price line, and the
-  filled dots at both P' crossings. The script only ATTACHES behavior (the
-  Neither / Route 1 / Route 2 toggle — by click or by dragging/stepping a knob
-  along the P' line — dimming the route NOT currently selected to a muted
-  dashed ghost, plus live readouts); it never builds figure DOM.
+  Course recreation of Universal Economics Fig 12.3 (p.165): a support price P'
+  ABOVE the market crossing is not reached by announcing it. It is reached
+  either by RESTRICTING SUPPLY (tax output, or pay producers to cut it, so
+  S -> S') or by BLOATING DEMAND (government buys the "excess" output, so
+  D -> D'). Same price, two machineries, two different sets of losers.
 
-  Family F2 (before/after shift), corrected from the ledger's F3 at the
-  2026-07 audit: this figure teaches two ALTERNATIVE shift scenarios that both
-  reach one target price, not a single draggable ceiling/floor line. The
-  "before" role is played by whichever route is not selected: its shifted
-  curve, arrow, and label go to a muted dashed ghost while the selected
-  route's shifted curve stays accent-solid with its arrow.
+  DATA SPACE: x = quantity 0..7, y = price 0..7.
+    X(q) = 56 + 48q      Y(p) = 400 - 48p      (48 px per unit on BOTH axes, so
+    the +/-1 slopes read as true 45 degrees, as in the source figure)
 
-  DATA SPACE: x = quantity 0..7.8, y = price 0..7.8. Pixel frame:
-  px(q) = 64 + 40*q ; py(p) = 360 - 40*p (40 px/unit, both axes).
-  Axes are drawn PAST the data max (x to 402, y to 30) so the curves and
-  arrows never crowd the arrowheads.
-    Original supply S:  P = 0.5 + Q   from (0.3,0.8) to (6.2,6.7)
-    Original demand D:  P = 6.5 - Q   from (0.3,6.2) to (6.2,0.3)
-    Equilibrium:         (3.0, 3.5)
-    Support price P':    y = 5.0, from the axis to x ~= 5.2
-    Route 1 (limit output)   S': P = 3.5 + Q  (0.3,3.8)-(3.5,7.0); crosses D at (1.5,5.0)
-    Route 2 (govt. purchases) D': P = 9.5 - Q  (2.5,7.0)-(6.5,3.0); crosses S at (4.5,5.0)
+  SHARED MARKET (identical to t04b-price-floor-interactive.html)
+    S : P = Q          D : P = 7 - Q
+    Equilibrium E = (3.5, 3.5):  Q = 7 - Q  ->  Q = 3.5, P = 3.5
+    Support price P' = 5.0 (above 3.5, so it binds)
+    At P' the sibling's readings are Qs = 5 (off S) and Qd = 2 (off D); those
+    same two quantities are this figure's two route crossings, which is what
+    ties the pair together.
+
+  ROUTE 1 — RESTRICT SUPPLY (S -> S')
+    S': P = 3 + Q,  drawn q in [0.2, 3.2]
+    S' meets the UNCHANGED D at P':  3 + Q = 7 - Q  ->  Q = 2, P = 5.0
+    Consequence drawn: output falls 3.5 -> 2 (the "output cut" dimension line
+    between the two droplines). Buyers pay 5.0 instead of 3.5 AND get 2 units
+    instead of 3.5 — they pay for this route twice.
+
+  ROUTE 2 — BOOST DEMAND (D -> D', government purchases)
+    D': P = 10 - Q, drawn q in [3.8, 7.0]
+    D' meets the UNCHANGED S at P':  Q = 10 - Q  ->  Q = 5, P = 5.0
+    At P' = 5.0 PRIVATE demand D still takes only 7 - 5 = 2, while S supplies
+    5. Government absorbs 5 - 2 = 3 units — the bracket along the P' line from
+    x = 2 to x = 5. The private-demand point (2, 5.0) is a small muted dot so
+    the split is visible. That 3-unit block is exactly the surplus the sibling
+    price-floor figure brackets at the same floor.
+    No dollar cost is ever computed or printed: the outlay is named, not priced.
+
+  KEY CROSSINGS (dots, per the source figure): E (3.5, 3.5); S' x D (2, 5.0);
+  D' x S (5, 5.0). Note (2, 5.0) is also where D meets the P' line, and
+  (5, 5.0) is where S meets it — the routes bend a curve to each of the two
+  readings the bare floor already produces.
+
+  GEOMETRY: buttons, plot, readout and hint all live inside ONE 480x600 SVG, so
+  the widget fits an aspect-ratio:4/5 iframe exactly. No media query, no HTML
+  modebar, no width/height attributes on the svg.
+    y  12.. 40  segmented buttons (Neither / Restrict supply / Boost demand)
+    y  80..400  plot (y-axis 80..400, x-axis at 400 running x 56..400)
+    y     418   quantity foot labels (Q* at 3.5; Q' at the route's quantity)
+    y     440   "Quantity" axis label
+    y     458   hairline separator
+    y 478..494  muted state rows
+    y 516..532  accent takeaway rows
+    y 556..574  hint rows
+
+  Static-base architecture: the DEFAULT state (Restrict supply) is fully drawn
+  in markup — a no-JS reader sees route 1 complete. The script only toggles
+  visibility, ghosts the moved curve's ORIGINAL position, and rewrites the
+  readout. The static t04b-price-floor-routes.svg (FAU slide asset) is the
+  <noscript> fallback.
 -->
 <style>
   :root {
-    --surface: #f7f4ef;   /* warm bone background        */
-    --ink:     #1a1c1e;    /* primary curves + headings   */
-    --text:    #16181a;    /* body text                   */
-    --muted:   #5c6066;    /* axes / ghosted routes       */
-    --hairline:#e3ddd3;    /* axis muting / droplines     */
-    --accent:  #b07a2c;    /* brass — active route + knob */
-    --accent-tint: #efe4d2;/* unused wash reserved        */
+    --surface: #f7f4ef;
+    --ink:     #1a1c1e;
+    --text:    #16181a;
+    --muted:   #5c6066;
+    --hairline:#e3ddd3;
+    --accent:  #b07a2c;
+    --accent-tint: #efe4d2;
     --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
                  'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; height: 100%; }
+  html, body { margin: 0; height: 100%; overflow: hidden; }
   body {
     background: var(--surface);
     color: var(--text);
     font-family: var(--font-body);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
+    display: grid;            /* grid, not flex — see t03b-ue8-1 mobile note */
+    /* the explicit minmax(0,1fr) track is load-bearing: an AUTO track sizes to
+       the svg's intrinsic 480px viewBox width, so on a narrower viewport the
+       figure overflows and clips instead of scaling down */
+    grid-template-columns: minmax(0, 1fr);
+    place-items: center;
+    padding: 0;
     -webkit-font-smoothing: antialiased;
   }
-  /* min-width:0 lets this flex item shrink below the SVG's min-content width,
-     so the figure tracks the viewport instead of overflowing on narrow screens */
   .fig { width: 100%; max-width: 480px; min-width: 0; }
-  svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+  svg { width: 100%; height: auto; display: block; }
 
-  /* mode toggle (above the figure) */
-  .modebar { display: flex; align-items: center; gap: 8px;
-             margin: 0 0 8px; flex-wrap: wrap; }
-  .modelabel { color: var(--muted); font-size: 13px; font-weight: 600; }
-  .seg { font-family: inherit; font-size: 12.5px; font-weight: 600;
-         color: var(--ink); background: var(--surface);
-         border: 1.5px solid var(--hairline); border-radius: 6px;
-         padding: 5px 12px; cursor: pointer; }
-  .seg + .seg { margin-left: -1px; }
-  .seg.on { background: var(--accent); color: var(--surface);
-            border-color: var(--accent); }
-  .seg:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  /* structure */
+  .axis   { stroke: var(--muted); stroke-width: 1.4; fill: none; }
+  .axlabel{ fill: var(--muted); font-size: 12.5px; font-weight: 600; }
+  .drop   { stroke: var(--hairline); stroke-width: 1.5; stroke-dasharray: 5 4; }
+  .pfloor { stroke: var(--accent); stroke-width: 1.6; stroke-dasharray: 5 4; }
 
-  /* structural strokes */
-  .axis  { stroke: var(--muted); stroke-width: 1.4; }
-  .curve { stroke: var(--ink); stroke-width: 2.6; fill: none;
-           stroke-linecap: round; }
-  .drop  { stroke: var(--hairline); stroke-width: 1.6; stroke-dasharray: 5 4; }
-  .pfloor{ stroke: var(--accent); stroke-width: 1.6; stroke-dasharray: 4 3; }
+  /* original curves; .ghost marks the pre-shift position of the curve that
+     MOVED (route 1 ghosts S, route 2 ghosts D) */
+  .curve      { stroke: var(--ink); stroke-width: 2.6; fill: none;
+                stroke-linecap: round; }
+  .curve.ghost{ stroke: var(--muted); stroke-width: 1.8; stroke-dasharray: 6 5;
+                opacity: .8; }
+  .clab       { fill: var(--ink); font-size: 13px; font-weight: 700;
+                font-style: italic; }
+  .clab.ghost { fill: var(--muted); font-weight: 600; }
 
-  /* route curves: accent-solid when selected, muted dashed ghost otherwise */
-  .rcurve      { stroke: var(--accent); stroke-width: 2.6; fill: none;
-                 stroke-linecap: round; }
-  .rcurve.ghost{ stroke: var(--muted); stroke-width: 2; stroke-dasharray: 6 5;
-                 opacity: 0.75; }
-  .rarrow      { stroke: var(--accent); stroke-width: 2.2; }
-  .rnote       { fill: var(--muted); font-size: 11px; }
-  .rlab        { fill: var(--accent); font-size: 13px; font-weight: 700; }
-  .rlab.ghost  { fill: var(--muted); font-weight: 600; }
-  .rdot        { fill: var(--accent); stroke: var(--surface); stroke-width: 1.6; }
+  /* the shifted curve of the selected route */
+  .rcurve { stroke: var(--accent); stroke-width: 2.6; fill: none;
+            stroke-linecap: round; }
+  .rlab   { fill: var(--accent); font-size: 13px; font-weight: 700;
+            font-style: italic; }
+  .shift  { stroke: var(--accent); stroke-width: 2.1; fill: none; }
+  .shifthead { fill: var(--accent); }
+  .shiftlbl  { fill: var(--accent); font-size: 10.5px; font-weight: 700; }
 
-  /* fixed (always-on) points and labels */
-  .pt-static { fill: var(--ink); stroke: var(--surface); stroke-width: 1.5; }
-  .lab   { fill: var(--ink); font-size: 13px; font-weight: 600; }
-  .axlab { fill: var(--muted); font-size: 14px; font-weight: 600; }
-  .plab  { fill: var(--muted); font-size: 12.5px; font-weight: 600; }
+  /* points. The two P' crossings carry a WIDE surface halo so that where the
+     bracket, D' and S all converge the dot still reads as its own mark. */
+  .pt      { fill: var(--ink); stroke: var(--surface); stroke-width: 1.6; }
+  .ptr     { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5; }
+  .ptmuted { fill: var(--muted); stroke: var(--surface); stroke-width: 2; }
+  .plab    { fill: var(--muted); font-size: 12px; font-weight: 600; }
 
-  /* draggable knob on the P' line + generous hit targets */
-  .knob    { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5; }
-  .hit     { fill: transparent; stroke: transparent; touch-action: none;
-             cursor: grab; }
-  .hit-line{ fill: none; stroke: transparent; stroke-width: 30;
-             touch-action: none; cursor: grab; }
-  .pt-focus:focus-visible { outline: none; }
-  .pt-focus:focus-visible + .knob,
-  .grabbing .knob { stroke: var(--ink); stroke-width: 3.2; }
+  /* consequence markers: the output cut and the government purchase span */
+  .dim     { stroke: var(--accent); stroke-width: 2.2; fill: none;
+             stroke-linecap: butt; }
+  .dimhead { fill: var(--accent); }
+  .dimlbl  { fill: var(--accent); font-size: 10.5px; font-weight: 700; }
+  .brk     { stroke: var(--accent); stroke-width: 2.2; fill: none;
+             stroke-linecap: butt; stroke-linejoin: miter; }
 
+  /* readout band */
   .sep     { stroke: var(--hairline); stroke-width: 1; }
-  .readout { font-family: var(--font-body); text-align: center; }
-  .r-hint  { color: var(--muted); font-size: 12.5px; line-height: 1.3;
-             margin-bottom: 5px; }
-  .r-trade { color: var(--accent); font-size: 14px; font-weight: 600;
-             line-height: 1.3; }
+  .r-state { fill: var(--muted); font-size: 11.5px; }
+  .r-take  { fill: var(--accent); font-size: 12px; font-weight: 600; }
+  .hintln  { fill: var(--muted); font-size: 11px; }
+
+  /* in-SVG segmented buttons (ep2-11 / ep4-1 pattern): the visible rect and its
+     label are inert; the transparent focusable hit rect is painted LAST so the
+     click always lands on the element that carries the listener */
+  .btn      { fill: var(--surface); stroke: var(--hairline); stroke-width: 1.5; }
+  .btn.on   { fill: var(--accent); stroke: var(--accent); }
+  .btnlabel { fill: var(--ink); font-size: 12px; font-weight: 600;
+              pointer-events: none; }
+  .btnlabel.on { fill: var(--surface); }
+  .btnfocus { cursor: pointer; }
+  .btnfocus:focus-visible { outline: 2px solid var(--accent);
+                            outline-offset: 2px; }
+
   .fallback { margin: 8px 0 0; color: var(--muted); font-size: 13px;
               line-height: 1.35; text-align: center; }
   .fallback a { color: var(--ink); }
@@ -127,248 +165,280 @@
 </head>
 <body>
 <div class="fig">
-  <div class="modebar" role="group" aria-label="Choose a route to the support price">
-    <span class="modelabel">Route to P&#8242;:</span>
-    <button id="btnNeither" class="seg" type="button" aria-pressed="false">Neither</button>
-    <button id="btnRoute1" class="seg on" type="button" aria-pressed="true">Restrict supply</button>
-    <button id="btnRoute2" class="seg" type="button" aria-pressed="false">Boost demand</button>
-  </div>
+  <svg id="fig" viewBox="0 0 480 600" role="group"
+       aria-label="A supply and demand diagram of a support price, drawn on the same market as the price-floor figure: supply and demand cross at a price of 3.5 and a quantity of 3.5. A support price P prime of 5.0 is drawn above that crossing. Three buttons show how it can be reached. With neither route, nothing holds the price there: a bare decree of 5.0 would leave sellers offering 5 while buyers take only 2. Restricting supply shifts supply left to S prime, which meets demand at the support price with a quantity of only 2, so buyers pay more and get less. Boosting demand with government purchases shifts demand right to D prime, which meets supply at the support price with a quantity of 5, while private buyers still take only 2, so taxpayers buy the three unit difference.">
+    <title>One support price, two routes: restrict supply or boost demand</title>
 
-  <svg id="fig" viewBox="0 0 440 540" role="group"
-       aria-label="A supply and demand diagram. The original curves cross at price 3.5. A support price of 5.0 above that crossing can be reached two ways: restricting supply so it shifts left to S prime, meeting demand at quantity 1.5, or boosting demand with government purchases so it shifts right to D prime, meeting supply at quantity 4.5. Choose a route with the buttons or drag the knob along the support-price line.">
-    <title>Interactive price floor: two routes to the same support price</title>
     <defs>
-      <marker id="arw" markerWidth="9" markerHeight="9" refX="6" refY="4"
+      <marker id="axhead" markerWidth="9" markerHeight="9" refX="6" refY="4"
               orient="auto" markerUnits="userSpaceOnUse">
         <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
       </marker>
-      <marker id="acc" markerWidth="9" markerHeight="9" refX="6" refY="4"
-              orient="auto" markerUnits="userSpaceOnUse">
-        <path d="M0,0 L8,4 L0,8 Z" fill="#b07a2c" />
-      </marker>
-      <marker id="accL" markerWidth="9" markerHeight="9" refX="6" refY="4"
-              orient="auto" markerUnits="userSpaceOnUse">
-        <path d="M8,0 L0,4 L8,8 Z" fill="#b07a2c" />
-      </marker>
     </defs>
 
-    <!-- axes (drawn before the curves; extended past the data max) -->
-    <line class="axis" x1="64" y1="360" x2="402" y2="360" marker-end="url(#arw)" />
-    <line class="axis" x1="64" y1="360" x2="64"  y2="30"  marker-end="url(#arw)" />
-    <text class="axlab" x="232" y="392" text-anchor="middle">Quantity</text>
-    <text class="axlab" x="24" y="208" text-anchor="middle"
-          transform="rotate(-90 24 208)">Price</text>
+    <!-- ================= segmented buttons (visible layer) ================= -->
+    <rect id="btn-neither" class="btn"    x="12"  y="12" width="148" height="28" rx="6"/>
+    <text id="btnl-neither" class="btnlabel" x="86" y="31" text-anchor="middle">Neither</text>
+    <rect id="btn-route1"  class="btn on" x="166" y="12" width="148" height="28" rx="6"/>
+    <text id="btnl-route1" class="btnlabel on" x="240" y="31" text-anchor="middle">Restrict supply</text>
+    <rect id="btn-route2"  class="btn"    x="320" y="12" width="148" height="28" rx="6"/>
+    <text id="btnl-route2" class="btnlabel" x="394" y="31" text-anchor="middle">Boost demand</text>
 
-    <!-- original supply S and demand D (always full-strength — never toggled) -->
-    <path class="curve" d="M76,328 L312,92" />
-    <text class="lab" x="318" y="92" text-anchor="start">S</text>
-    <path class="curve" d="M76,112 L312,348" />
-    <text class="lab" x="318" y="352" text-anchor="start">D</text>
+    <!-- ================= axes ================= -->
+    <line class="axis" x1="56" y1="400" x2="400" y2="400" marker-end="url(#axhead)"/>
+    <line class="axis" x1="56" y1="400" x2="56"  y2="80"  marker-end="url(#axhead)"/>
+    <text class="axlabel" x="228" y="440" text-anchor="middle">Quantity</text>
+    <text class="axlabel" x="18" y="240" text-anchor="middle"
+          transform="rotate(-90 18 240)">Price ($)</text>
 
-    <!-- equilibrium at (3.0, 3.5): dashed droplines + static dot -->
-    <line class="drop" x1="184" y1="360" x2="184" y2="220" />
-    <line class="drop" x1="64"  y1="220" x2="184" y2="220" />
-    <circle class="pt-static" cx="184" cy="220" r="4.5" />
-    <text class="plab" x="54" y="224" text-anchor="end">P</text>
+    <!-- ================= original supply and demand =================
+         S : P = Q      drawn q in [1, 6.2]  (the sibling figure's domain)
+         D : P = 7 - Q  drawn q in [1, 6.2]
+         The DEFAULT state is route 1, in which S is the curve that MOVES, so
+         the base markup ships S ghosted (its pre-shift position) and D solid. -->
+    <path id="sCurve" class="curve ghost" d="M104,352 L353.6,102.4"/>
+    <text id="sLab"   class="clab ghost" x="360" y="99" text-anchor="start">S</text>
+    <path id="dCurve" class="curve" d="M104,112 L353.6,361.6"/>
+    <text id="dLab"   class="clab" x="360" y="366" text-anchor="start">D</text>
 
-    <!-- support price P' (accent, dashed): axis to just past the D'xS crossing -->
-    <line class="pfloor" x1="64" y1="160" x2="272" y2="160" />
-    <text class="plab" x="54" y="164" text-anchor="end">P&#8242;</text>
+    <!-- equilibrium E = (3.5, 3.5): droplines to both axes, dot, axis tags.
+         P* / Q* match the sibling price-floor widget's tags for this same
+         crossing. -->
+    <line class="drop" x1="224" y1="400" x2="224" y2="232"/>
+    <line class="drop" x1="56"  y1="232" x2="224" y2="232"/>
+    <circle class="pt" cx="224" cy="232" r="4.4"/>
+    <text class="plab" x="48" y="236" text-anchor="end">P*</text>
+    <text class="plab" x="224" y="418" text-anchor="middle">Q*</text>
 
-    <!-- ============ Route 1: restrict supply, S -> S' ============ -->
-    <g id="route1">
-      <path id="sPrime" class="rcurve" d="M76,208 L204,80" />
-      <text id="labSPrime" class="rlab" x="208" y="72" text-anchor="start">S&#8242;</text>
-      <line id="arrow1" class="rarrow" marker-end="url(#accL)" x1="296" y1="76" x2="228" y2="76" />
-      <text id="note1" class="rnote" x="262" y="68" text-anchor="middle">limit output</text>
-      <circle id="dot1" class="rdot" cx="124" cy="160" r="4" />
+    <!-- the support price P' = 5.0, drawn past both P' crossings -->
+    <line class="pfloor" x1="56" y1="160" x2="312" y2="160"/>
+    <text class="plab" x="48" y="164" text-anchor="end">P&#8242;</text>
+
+    <!-- ================= ROUTE 1: restrict supply (default) =================
+         S' : P = 3 + Q, drawn q in [0.2, 3.2]; meets D at (2, 5.0).
+         The output cut 3.5 -> 2 is a dimension line between the two droplines,
+         in the empty lower-left of the plot (S is far above it there).     -->
+    <g id="gRoute1">
+      <path class="rcurve" d="M65.6,246.4 L209.6,102.4"/>
+      <text class="rlab" x="216" y="99" text-anchor="start">S&#8242;</text>
+
+      <!-- leftward shift arrow at P = 5.6, between S' (x=181) and S (x=325) -->
+      <g class="shift">
+        <line x1="310" y1="131" x2="199" y2="131"/>
+      </g>
+      <polygon class="shifthead" points="191,131 200,126 200,136"/>
+      <text class="shiftlbl" x="253" y="123" text-anchor="middle">limit output</text>
+
+      <!-- the new quantity: dropline, foot label, and the crossing dot -->
+      <line class="drop" x1="152" y1="400" x2="152" y2="160"/>
+      <text class="plab" x="152" y="418" text-anchor="middle">Q&#8242;</text>
+      <circle class="ptr" cx="152" cy="160" r="4.4"/>
+
+      <!-- output cut: 3.5 -> 2 on the quantity axis -->
+      <line class="dim" x1="159" y1="386" x2="217" y2="386"/>
+      <polygon class="dimhead" points="152,386 160,382 160,390"/>
+      <polygon class="dimhead" points="224,386 216,382 216,390"/>
+      <text class="dimlbl" x="188" y="377" text-anchor="middle">output cut</text>
     </g>
 
-    <!-- ============ Route 2: boost demand, D -> D' ============ -->
-    <g id="route2">
-      <path id="dPrime" class="rcurve" d="M164,80 L324,240" />
-      <text id="labDPrime" class="rlab" x="330" y="244" text-anchor="start">D&#8242;</text>
-      <line id="arrow2" class="rarrow" marker-end="url(#acc)" x1="204" y1="336" x2="276" y2="336" />
-      <text id="note2" class="rnote" x="240" y="352" text-anchor="middle">govt. purchases</text>
-      <circle id="dot2" class="rdot" cx="244" cy="160" r="4" />
+    <!-- ================= ROUTE 2: boost demand (hidden by default) ==========
+         D' : P = 10 - Q, drawn q in [3.8, 7.0]; meets S at (5, 5.0).
+         At P' private demand D takes 2; S supplies 5; the 3-unit difference is
+         the bracket along the P' line.                                      -->
+    <g id="gRoute2" visibility="hidden">
+      <path class="rcurve" d="M238.4,102.4 L392,256"/>
+      <text class="rlab" x="398" y="260" text-anchor="start">D&#8242;</text>
+
+      <!-- Rightward shift arrow at P = 3.33. It sits BELOW the crossing on
+           purpose: between P = 3.5 and P = 5.0 the solid S runs through the
+           middle of the D-to-D' gap, so a label there would land on it. The
+           two label rows also sit right of the Q' dropline (x=296), which
+           otherwise ran through the words. -->
+      <g class="shift">
+        <line x1="242" y1="240" x2="350" y2="240"/>
+      </g>
+      <polygon class="shifthead" points="358,240 349,235 349,245"/>
+      <text class="shiftlbl" x="338" y="258" text-anchor="middle">government</text>
+      <text class="shiftlbl" x="338" y="270" text-anchor="middle">purchases</text>
+
+      <!-- the quantity produced: dropline, foot label, and the crossing dot -->
+      <line class="drop" x1="296" y1="400" x2="296" y2="160"/>
+      <text class="plab" x="296" y="418" text-anchor="middle">Q&#8242;</text>
+      <circle class="ptr" cx="296" cy="160" r="4.4"/>
+
+      <!-- private buyers still take only 2 at P' — the small muted dot -->
+      <circle class="ptmuted" cx="152" cy="160" r="3.4"/>
+
+      <!-- What the government buys: the span along P' from 2 to 5. The rail
+           rides at y=140 so its one crossing with D' (x=276) falls well short
+           of the right tick, and both ticks stop at y=154 — on the halo of the
+           crossing dots, not through them, so bracket and curve stay distinct
+           marks despite sharing the accent colour. -->
+      <path class="brk" d="M152,154 L152,140 L296,140 L296,154"/>
+      <text class="dimlbl" x="196" y="132" text-anchor="middle">government buys this</text>
     </g>
 
-    <!-- fat invisible hit line over the whole P' line (grab anywhere) -->
-    <line id="knobHit" class="hit-line" x1="64" y1="160" x2="272" y2="160" />
-    <!-- keyboard proxy (screen-reader slider): 0 = neither, 1 = route1, 2 = route2 -->
-    <circle id="ptFocus" class="pt-focus hit" cx="124" cy="160" r="22"
-            tabindex="0" role="slider" aria-label="Route to the support price"
-            aria-valuemin="0" aria-valuemax="2" aria-valuenow="1"
-            aria-valuetext="Route 1: supply shifts left to S prime. Price rises to 5.0 at quantity 1.5." />
-    <!-- visible drag knob -->
-    <circle id="knob" class="knob" cx="124" cy="160" r="7" />
+    <!-- ============ button hit rects: painted LAST so they sit on top ====== -->
+    <rect id="btnh-neither" class="btnfocus" x="12" y="12" width="148" height="28" rx="6"
+          fill="transparent" tabindex="0" role="button" aria-pressed="false"
+          aria-label="Neither route. Supply and demand are left alone and the market clears at a price of 3.5 with a quantity of 3.5. A bare decree of 5.0 would leave sellers offering 5 and buyers taking only 2."/>
+    <rect id="btnh-route1" class="btnfocus" x="166" y="12" width="148" height="28" rx="6"
+          fill="transparent" tabindex="0" role="button" aria-pressed="true"
+          aria-label="Restrict supply. Taxing output or paying producers to cut it shifts supply left to S prime, which meets demand at the support price of 5.0, but quantity falls from 3.5 to 2, so buyers pay more and get less."/>
+    <rect id="btnh-route2" class="btnfocus" x="320" y="12" width="148" height="28" rx="6"
+          fill="transparent" tabindex="0" role="button" aria-pressed="false"
+          aria-label="Boost demand. Government purchases shift demand right to D prime, which meets supply at the support price of 5.0 with a quantity of 5, while private buyers take only 2, so taxpayers buy the three unit difference and the state stores or gives it away."/>
 
-    <!-- readout band: hairline separator, muted STATE line, accent TAKEAWAY line.
-         A foreignObject lets the full-sentence readouts wrap so nothing clips. -->
-    <line class="sep" x1="44" y1="446" x2="396" y2="446" />
-    <foreignObject x="38" y="452" width="364" height="80">
-      <div xmlns="http://www.w3.org/1999/xhtml" class="readout">
-        <div id="rHint"  class="r-hint">Supply shifts left (S&#8594;S&#8242;): price rises to P&#8242; = 5.0 at Q = 1.5.</div>
-        <div id="rTrade" class="r-trade">Route 1 reaches the support price by cutting output &#8212; buyers pay more for less.</div>
-      </div>
-    </foreignObject>
+    <!-- ================= readout band ================= -->
+    <line class="sep" x1="16" y1="458" x2="464" y2="458"/>
+    <g id="readout" role="status" aria-live="polite">
+      <text class="r-state" text-anchor="middle">
+        <tspan id="state1" x="240" y="478">Supply is cut back to S&#8242; (tax output, or pay producers to cut it),</tspan>
+        <tspan id="state2" x="240" y="494">so S&#8242; meets D at P&#8242; = 5.0 with Q = 2, down from Q = 3.5.</tspan>
+      </text>
+      <text class="r-take" text-anchor="middle">
+        <tspan id="take1" x="240" y="516">Buyers pay 5.0 instead of 3.5 &#8212; and get 2 units instead of 3.5.</tspan>
+        <tspan id="take2" x="240" y="532">Consumers pay for this route twice: higher price, less of the good.</tspan>
+      </text>
+    </g>
+
+    <text class="hintln" x="240" y="556" text-anchor="middle">Press a button to reach the same support price a different way.</text>
+    <text class="hintln" x="240" y="574" text-anchor="middle">Both routes hold the price at P&#8242; = 5.0; each one bills a different group.</text>
   </svg>
 
   <noscript>
-    <p class="fallback">JavaScript is off, so this frame is a still image: the
-      original S and D cross at price 3.5; a support price of 5.0 is reached
-      either by restricting supply (S shifts left to S&#8242;, meeting demand
-      at quantity 1.5) or by government purchases boosting demand (D shifts
-      right to D&#8242;, meeting supply at quantity 4.5). You can also
-      <a href="t04b-price-floor-routes.svg">open the static figure</a>.</p>
+    <p class="fallback">JavaScript is off, so this frame shows only the
+      restrict-supply route: supply shifts left to S&#8242; and meets demand at
+      the support price 5.0, where just 2 units change hands instead of 3.5.
+      The government-purchase route needs the interactive view. See the
+      <a href="/teaching/microeconomics/t04b-price-controls/figures/t04b-price-floor-routes.svg">static version of this figure</a>.</p>
   </noscript>
 </div>
 
 <script>
 (function () {
-  "use strict";
-  var svg = document.getElementById('fig');
-  var byId = function (id) { return document.getElementById(id); };
+  'use strict';
 
-  var btnNeither = byId('btnNeither'), btnRoute1 = byId('btnRoute1'), btnRoute2 = byId('btnRoute2');
-  var sPrime = byId('sPrime'), labSPrime = byId('labSPrime'), arrow1 = byId('arrow1'),
-      note1 = byId('note1'), dot1 = byId('dot1');
-  var dPrime = byId('dPrime'), labDPrime = byId('labDPrime'), arrow2 = byId('arrow2'),
-      note2 = byId('note2'), dot2 = byId('dot2');
-  var knob = byId('knob'), knobHit = byId('knobHit'), ptFocus = byId('ptFocus');
-  var rHint = byId('rHint'), rTrade = byId('rTrade');
+  // ---- economics: the four lines, solved, never hard-coded ----
+  // Shared with t04b-price-floor-interactive.html:  S : P = Q,  D : P = 7 - Q.
+  var S  = { a: 0,  m:  1 };                    // P = a + m*Q
+  var D  = { a: 7,  m: -1 };
+  var S2 = { a: 3,  m:  1 };                    // S' — supply restricted
+  var D2 = { a: 10, m: -1 };                    // D' — demand bloated
+  var PSUP = 5.0;                               // the support price P'
 
-  // knob positions along the P' line (y = 160), one per state
-  var KX = { 0: 184, 1: 124, 2: 244 };
-  var KY = 160;
-
-  // state: 0 = neither, 1 = route 1 (restrict supply), 2 = route 2 (boost demand)
-  var state = 1;
-
-  function setGhost(el, ghost) {
-    var base = el.getAttribute('data-base') || el.getAttribute('class').replace(/\s*ghost\s*/, '');
-    el.setAttribute('data-base', base);
-    el.setAttribute('class', ghost ? (base + ' ghost') : base);
+  function qAt (L, p) { return (p - L.a) / L.m; }           // quantity on a line
+  function cross (L1, L2) {                                  // where two lines meet
+    var q = (L2.a - L1.a) / (L1.m - L2.m);
+    return { q: q, p: L1.a + L1.m * q };
   }
 
-  function render() {
-    var active1 = (state === 1), active2 = (state === 2);
+  var EQ  = cross(S, D);          // (3.5, 3.5)
+  var R1  = cross(S2, D);         // (2, 5.0) — restricted supply meets demand
+  var R2  = cross(S, D2);         // (5, 5.0) — bloated demand meets supply
+  var QPRIV = qAt(D, PSUP);       // 2 — what private buyers take at P'
+  var QSUPP = qAt(S, PSUP);       // 5 — what sellers offer at P' (= R2.q)
+  var QGOV  = QSUPP - QPRIV;      // 3 — the units the government must absorb
 
-    setGhost(sPrime, !active1);
-    setGhost(labSPrime, !active1);
-    arrow1.style.opacity = active1 ? 1 : 0.3;
-    note1.style.opacity = active1 ? 1 : 0.45;
-    dot1.style.opacity = active1 ? 1 : 0.45;
-
-    setGhost(dPrime, !active2);
-    setGhost(labDPrime, !active2);
-    arrow2.style.opacity = active2 ? 1 : 0.3;
-    note2.style.opacity = active2 ? 1 : 0.45;
-    dot2.style.opacity = active2 ? 1 : 0.45;
-
-    var kx = KX[state];
-    knob.setAttribute('cx', kx); knob.setAttribute('cy', KY);
-    ptFocus.setAttribute('cx', kx); ptFocus.setAttribute('cy', KY);
-
-    var hint, trade;
-    if (state === 1) {
-      hint = 'Supply shifts left (S→S′): price rises to P′ = 5.0 at Q = 1.5.';
-      trade = 'Route 1 reaches the support price by cutting output — buyers pay more for less.';
-    } else if (state === 2) {
-      hint = 'Demand shifts right (D→D′): price rises to P′ = 5.0 at Q = 4.5.';
-      trade = 'Route 2 reaches the same support price by government buying the surplus — taxpayers foot it.';
-    } else {
-      hint = 'Both routes start from the same S/D crossing at P = 3.5.';
-      trade = 'Pick a route to see how each pushes the price up to the support level P′ = 5.0.';
+  // ---- states ----
+  // `ghost` names the curve that MOVES in this route; its original position is
+  // drawn as the muted dashed ghost. Route 1 moves S, route 2 moves D.
+  var STATES = {
+    neither: {
+      ghost: null, group: null,
+      state: ['Left alone, S and D cross at P = 3.5 with Q = 3.5.',
+              'The support price P′ = 5.0 sits above that crossing.'],
+      take:  ['A bare decree of 5.0 leaves sellers offering 5, buyers taking 2 —',
+              'the 3-unit surplus. The two routes are ways to make 5.0 hold.']
+    },
+    route1: {
+      ghost: 'S', group: 'gRoute1',
+      state: ['Supply is cut back to S′ (tax output, or pay producers to cut it),',
+              'so S′ meets D at P′ = 5.0 with Q = 2, down from Q = 3.5.'],
+      take:  ['Buyers pay 5.0 instead of 3.5 — and get 2 units instead of 3.5.',
+              'Consumers pay for this route twice: higher price, less of the good.']
+    },
+    route2: {
+      ghost: 'D', group: 'gRoute2',
+      state: ['Demand is bloated to D′ by government buying, so D′ meets',
+              'supply at the support price: P′ = 5.0 with Q = 5.'],
+      take:  ['Sellers supply 5, private buyers take 2 — taxpayers buy the',
+              '3-unit difference and the state stores or gives it away.']
     }
-    rHint.textContent = hint;
-    rTrade.textContent = trade;
+  };
+  var NAMES  = ['neither', 'route1', 'route2'];
+  var GROUPS = ['gRoute1', 'gRoute2'];
 
-    btnNeither.classList.toggle('on', state === 0);
-    btnRoute1.classList.toggle('on', state === 1);
-    btnRoute2.classList.toggle('on', state === 2);
-    btnNeither.setAttribute('aria-pressed', state === 0 ? 'true' : 'false');
-    btnRoute1.setAttribute('aria-pressed', state === 1 ? 'true' : 'false');
-    btnRoute2.setAttribute('aria-pressed', state === 2 ? 'true' : 'false');
+  var $ = function (id) { return document.getElementById(id); };
+  var route = 'route1';                          // matches the static markup
 
-    ptFocus.setAttribute('aria-valuenow', state);
-    ptFocus.setAttribute('aria-valuetext', hint + ' ' + trade);
+  function ghostToggle (curveId, labId, on) {
+    $(curveId).setAttribute('class', on ? 'curve ghost' : 'curve');
+    $(labId).setAttribute('class',   on ? 'clab ghost'  : 'clab');
   }
 
-  function setState(s) {
-    state = Math.max(0, Math.min(2, s));
+  function render () {
+    var st = STATES[route];
+
+    GROUPS.forEach(function (g) {
+      $(g).setAttribute('visibility', st.group === g ? 'visible' : 'hidden');
+    });
+    ghostToggle('sCurve', 'sLab', st.ghost === 'S');
+    ghostToggle('dCurve', 'dLab', st.ghost === 'D');
+
+    $('state1').textContent = st.state[0];
+    $('state2').textContent = st.state[1];
+    $('take1').textContent  = st.take[0];
+    $('take2').textContent  = st.take[1];
+
+    NAMES.forEach(function (n) {
+      var on = (n === route);
+      $('btn-' + n).classList.toggle('on', on);
+      $('btnl-' + n).classList.toggle('on', on);
+      $('btnh-' + n).setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
+
+  function setRoute (name) {
+    if (!STATES[name]) return;
+    route = name;
     render();
   }
 
-  // nearest-state lookup from a pointer x along the P' line
-  function stateFromX(px) {
-    if (px < 154) return 1;
-    if (px < 214) return 0;
-    return 2;
-  }
-
-  // convert a client event to SVG user coords (handles responsive scaling)
-  var spt = svg.createSVGPoint();
-  function toSvg(evt) {
-    spt.x = evt.clientX; spt.y = evt.clientY;
-    return spt.matrixTransform(svg.getScreenCTM().inverse());
-  }
-
-  function setFromPointer(evt) {
-    var pnt = toSvg(evt);
-    setState(stateFromX(pnt.x));
-  }
-
-  // --- drag (pointer events + pointer capture so a fast drag can't get stuck) ---
-  var dragging = false, capturedEl = null, capturedId = null;
-  function onMove(evt) { if (dragging) { evt.preventDefault(); setFromPointer(evt); } }
-  function onUp() {
-    dragging = false;
-    svg.classList.remove('grabbing');
-    if (capturedEl && capturedId !== null) {
-      try { capturedEl.releasePointerCapture(capturedId); } catch (e) {}
-    }
-    capturedEl = null; capturedId = null;
-    window.removeEventListener('pointermove', onMove);
-    window.removeEventListener('pointerup', onUp);
-  }
-  function onDown(evt) {
-    evt.preventDefault();
-    dragging = true;
-    svg.classList.add('grabbing');
-    capturedEl = evt.currentTarget; capturedId = evt.pointerId;
-    try { capturedEl.setPointerCapture(capturedId); } catch (e) {}
-    setFromPointer(evt);
-    window.addEventListener('pointermove', onMove);
-    window.addEventListener('pointerup', onUp);
-  }
-  knobHit.addEventListener('pointerdown', onDown);
-  ptFocus.addEventListener('pointerdown', onDown);
-
-  // --- keyboard: arrows step through Route 1 <-> Neither <-> Route 2 ---
-  ptFocus.addEventListener('keydown', function (evt) {
-    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') { setState(state + 1); }
-    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') { setState(state - 1); }
-    else return;
-    evt.preventDefault();
+  // ---- buttons: click + Enter/Space ----
+  NAMES.forEach(function (name) {
+    var hit = $('btnh-' + name);
+    hit.addEventListener('click', function () { setRoute(name); });
+    hit.addEventListener('keydown', function (evt) {
+      if (evt.key === 'Enter' || evt.key === ' ' || evt.key === 'Spacebar') {
+        evt.preventDefault();
+        setRoute(name);
+      }
+    });
   });
 
-  // --- direct buttons ---
-  btnNeither.addEventListener('click', function () { setState(0); ptFocus.focus(); });
-  btnRoute1.addEventListener('click', function () { setState(1); ptFocus.focus(); });
-  btnRoute2.addEventListener('click', function () { setState(2); ptFocus.focus(); });
-
-  // Debug hook (inert for students): set/get the active route.
+  // ---- debug hook (widget standard §2.9). set('neither'|'route1'|'route2') ----
   window.__fig = {
-    set: function (v) {
-      v = v || {};
-      if (typeof v.state === 'number') state = Math.max(0, Math.min(2, v.state));
-      render();
-    },
-    get: function () { return { state: state }; }
+    set: function (name) { setRoute(name); return window.__fig.get(); },
+    get: function () {
+      var out = { route: route, supportPrice: PSUP,
+                  equilibrium: { q: EQ.q, p: EQ.p },
+                  atSupportPrice: { offered: QSUPP, privateTaken: QPRIV,
+                                    surplus: QGOV } };
+      if (route === 'route1') {
+        out.price = R1.p; out.quantity = R1.q;
+        out.outputCut = { from: EQ.q, to: R1.q };
+      } else if (route === 'route2') {
+        out.price = R2.p; out.quantity = R2.q;
+        out.split = { supplied: R2.q, privateBuyers: QPRIV, government: QGOV };
+      } else {
+        out.price = EQ.p; out.quantity = EQ.q;
+      }
+      return out;
+    }
   };
 
-  render(); // sync JS state with the static markup on load
+  render();   // sync JS state with the static markup on load
 })();
 </script>
 </body>

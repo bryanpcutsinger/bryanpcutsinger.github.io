@@ -5,141 +5,191 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Rent, reallocation, and a shortage: a fixed housing stock split between two renters</title>
 <!--
-  Interactive figure for the t04b-price-controls blog post, after E&P Figs 4-7
-  and 4-8 (ch. 4). Website-styled warm palette (NOT the FAU slide palette).
-  Self-contained: vanilla SVG + JS, no libraries, no network, no build step.
-  The static FAU figure (t04b-ep4-7-8-rent-control-reallocation.{tex,svg}) is
-  the SLIDE version and the <noscript> fallback; it draws State 1.
+  t04b-ep4-7-8-rent-control-reallocation-interactive.html — REBUILD, 2026-08-08
+  Course-adapted interactive of Exchange & Production (Alchian & Allen, 3rd ed.)
+    Fig 4-7  a rising rent REALLOCATES a fixed housing stock between two named
+             renters; nothing is built, the same 10 apartments change hands.
+    Fig 4-8  the rent is held below the new clearing rent: the reallocation is
+             blocked, a shortage opens, and the increased market value of the
+             same 10 apartments is captured by SITTING TENANTS, not owners.
+  Website-styled warm palette (NOT the FAU slide palette). Self-contained
+  vanilla SVG + JS: no libraries, no network, no build step. The static
+  t04b-ep4-7-8-rent-control-reallocation.svg is the SLIDE asset and the
+  <noscript> fallback; it draws State 1.
 
-  ONE two-state toggle over a FIXED stock of 10 apartments split between two
-  NAMED renters A and B (family F3 rent-ceiling/shortage + F8 horizontal sum):
+  WHAT CHANGED vs the previous build
+    - The HTML controls block below the SVG is GONE (it overflowed the iframe).
+      Buttons, scrubber, plot, readout and hint now live inside ONE
+      viewBox="0 0 480 600" SVG; the embed is aspect-ratio 4/5 (was 12/13).
+    - NEW source-fidelity layer: Fig 4-8's stippled band, x in [0,10], y in
+      [rent, $6]. It is the part of the SAME ten apartments' higher worth that
+      the cap hands to sitting tenants rather than owners (a tenant could
+      sublease at $6 what he rents at r), so it is labelled "Captured by
+      sitting tenants". At $4 that is the WHOLE increase — the readout says so
+      in E&P's own terms; at $5 owners have collected $1 more per apartment
+      and the band is the last $1; at $6 the band vanishes and owners receive
+      the full increase as rent. The band's dollar AREA is never printed.
+    - The State-2 drag runs $4 to $6 ONLY, which is exactly E&P's story: the
+      cap at the old rent, the clearing at the new one. Below $4 the band
+      would claim more than the demand rise created; above $6 no cap binds,
+      and a market left with vacancies is a price-FLOOR story taught elsewhere.
+    - The totals are now drawn KINKED. A total demand is the horizontal sum of
+      quantities, so above the price at which B's quantity hits zero the total
+      lies ON A. The old build drew one straight line through that range, which
+      overstated the total at high rents. Vertices are recomputed, never pinned.
 
-    State 1 "Rent free to rise" (E&P Fig 4-7, the base / no-JS state):
-      A rising rent REALLOCATES the fixed stock between A and B. Scrub B's
-      demand up (B -> B') and the summed demand rises (Dt -> Dt'), the clearing
-      rent rises $4 -> $6 on the vertical fixed stock S (Q = 10), and the 10
-      units move from A to B: A 8 -> 6, B 2 -> 4. The two allocation dots slide
-      while their sum stays pinned at 10 (the price does the rationing).
+  PINNED SCHEDULES (course-adapted integers; every total is recomputed as a
+  horizontal sum of the individual quantities, never hard-coded):
+    A  (fixed, larger demander):  Qa  = 12 - P
+    B  (initial):                 Qb  =  6 - P        B rises to  Qb' = 10 - P
+    B  while scrubbing:           Qb(t) = (6 + 4t) - P,  t in [0,1]
+    S  (fixed stock):             Qs  = 10 at every rent
+    Dt  = Qa + Qb  = 18 - 2P   below P = 6   (= Qa above it)
+    Dt' = Qa + Qb' = 22 - 2P   below P = 10  (= Qa above it)
 
-    State 2 "Rent held down" (E&P Fig 4-8):
-      After B's demand rose, the rent is pinned. Drag the rent line down below
-      the new $6 clearing rent and the blocked reallocation opens a shortage:
-      on the risen total Dt' the quantity demanded exceeds the fixed 10.
+  IDENTITY CHECKS (asserted live by __fig.get(), and by the JS bisection that
+  solves the clearing rent from the SUM rather than from a formula):
+    State 1:  Xa + Xb = 10 at every t   (A 8->6, B 2->4; the stock is fixed)
+              clearing rent 4 + 2t      ($4 at t=0, $6 at t=1)
+    State 2:  Dt'($4) - S = 14 - 10 = 4 apartments of shortage
+              Dt'($5) - S = 12 - 10 = 2
+              Dt'($6) - S = 10 - 10 = 0  (the cap stops binding exactly at $6,
+              where the split A 6 / B 4 reproduces State 1's reallocation)
 
-  ECONOMICS (course-adapted integers; recomputed live, never hard-coded):
-    A:  Qa  = 12 - P            (larger demander, fixed)
-    B:  Qb  =  (6 + 4t) - P     (t in [0,1] scrubs B's demand up)
-    B': Qb' = 10 - P            (t = 1, the raised demand used in State 2)
-    Dt(P)  = Qa(P) + Qb(P)  = (12 + (6+4t)) - 2P   (F8: recompute as a sum)
-    Dt'(P) = Qa(P) + Qb'(P) = 22 - 2P
-    S: vertical fixed stock, Qs = 10 at ANY rent >= 0.
-    State-1 clearing rent (Dt = 10):  P = 1 + (6+4t)/2  = 4 + 2t   ($4 -> $6).
-      Alloc:  A = 12 - P,  B = (6+4t) - P;  A + B = 10 ALWAYS.
-    State-2 shortage (rent r on Dt'):  Dt'(r) - 10 = max(0, 12 - 2r), which is
-      4 at r = $4 and closes to 0 exactly at r = $6.
-
-  T4 STYLE LOCK: a GAP / allocation diagram. No surplus-area shading; the only
-  emphasis marks are the fixed stock S, the reallocation arrows, and the
-  shortage bracket. The welfare-loss term is NEVER named or quantified here
-  (it is handled in the post prose, not the figure).
-
-  DATA SPACE: x = apartments 0..18, y = rent 0..12.
-  PIXEL FRAME: X(q) = 56 + q*20.8 ; Y(p) = 348 - p*24.3. Axes extend past the
-  data max (x to 448, y to 40) so lines never crowd the arrowheads.
+  DATA SPACE: q = apartments 0..22, P = monthly rent $0..$12.
+  PIXEL FRAME: X(q) = 56 + 18q ; Y(p) = 388 - 24p.
+    X: 0->56  2->92  4->128  6->164  8->200  10->236  12->272  14->308
+       18->380  22->452        Y: 0->388  2->340  4->292  6->244  8->196
+       10->148  12->100
+  LAYOUT MAP (one 480x600 SVG, top to bottom):
+     12- 42  two scenario buttons (in-SVG; hit rects painted LAST)
+     50- 88  State-1 scrubber row (caption + live word + track + knob)
+    100-388  plot; y-axis x=56 (drawn to y=92), x-axis y=388 (drawn to x=462)
+    390-404  on-axis marks: allocation dots (live ink + muted "before") /
+             stock tick / Qd tick
+    414-426  State-2 shortage bracket; its label sits BESIDE it at y=424,
+             because under it the label collided with the axis title
+        456  x-axis title;  y-axis title rotated -90 in the x=16 gutter
+        466  hairline separator
+    484-561  readout: 2 muted state rows + 4 accent takeaway rows (the $4
+             takeaway needs all four)
+        583  hint line
+  LEFT-GUTTER RENT TAGS: State 1 puts the live tag 8px ABOVE its own line and
+  the muted "$4" tag 18px BELOW the old line, so the pair is >= 17px apart at
+  every scrub position; State 2 puts the live tag 18px BELOW (clear of the drag
+  knob) and the muted "$6" 8px ABOVE the band's top edge.
+  BUSY-FIGURE RULE: draw only what the active state needs. State 1 = A, B (with
+  the B and total ghosts while scrubbing), the total, S. State 2 = A, B', the
+  risen total, S; B-initial and the old total are not drawn at all.
+  Static-base architecture: State 1 at t=0 is real markup and is the no-JS view;
+  the script only attaches behavior and re-points existing elements.
 -->
 <style>
   :root {
-    --surface: #f7f4ef;    /* warm bone background         */
-    --ink:     #1a1c1e;    /* demand curves + headings     */
-    --text:    #16181a;    /* body text                    */
-    --muted:   #5c6066;    /* axes / secondary labels      */
-    --hairline:#e3ddd3;    /* axis muting / droplines      */
-    --accent:  #b07a2c;    /* brass — supply, arrows, gap  */
-    --accent-tint: #efe4d2;/* shaded shortage width        */
+    --surface: #f7f4ef;    /* warm bone background            */
+    --ink:     #1a1c1e;    /* total demand, stock, headings    */
+    --text:    #16181a;    /* body text                        */
+    --muted:   #5c6066;    /* axes, individual demands, ghosts  */
+    --hairline:#e3ddd3;    /* droplines, separators, tracks     */
+    --accent:  #b07a2c;    /* brass — rent line, band, shortage */
+    --accent-tint: #efe4d2;/* the increased-market-value band   */
     --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
                  'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; height: 100%; }
+  html, body { margin: 0; height: 100%; overflow: hidden; }
   body {
     background: var(--surface);
     color: var(--text);
     font-family: var(--font-body);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
+    /* plain block flow: a centred grid or flex item is sized from the SVG's
+       intrinsic 480px and stops shrinking below it, which clipped the frame
+       at 360px. Block + auto margins scale all the way down. */
+    display: block;
+    padding: 0;
     -webkit-font-smoothing: antialiased;
   }
-  /* min-width:0 lets the flex item shrink below the SVG's min-content width */
-  .fig { width: 100%; max-width: 520px; min-width: 0; }
-  svg { width: 100%; max-width: 100%; height: auto; display: block;
-        touch-action: pan-y; }
+  .fig { width: 100%; max-width: 480px; min-width: 0; margin: 0 auto; }
+  svg { width: 100%; height: auto; display: block; }
 
-  /* structural strokes */
-  .axis  { stroke: var(--muted); stroke-width: 1.4; }
-  .curve { stroke: var(--ink); stroke-width: 2.2; fill: none;
-           stroke-linecap: round; }
-  .curveT{ stroke: var(--ink); stroke-width: 3.4; fill: none;
-           stroke-linecap: round; }
-  .ghost { stroke: var(--muted); stroke-width: 1.8; fill: none;
-           stroke-dasharray: 5 4; opacity: 0.55; }
-  .supply{ stroke: var(--accent); stroke-width: 3.4; fill: none;
-           stroke-linecap: round; }
-  .drop  { stroke: var(--hairline); stroke-width: 1.6; stroke-dasharray: 5 4; }
+  /* ---- structure ---- */
+  .axis   { stroke: var(--muted); stroke-width: 1.4; fill: none; }
+  .curve  { stroke: var(--muted); stroke-width: 1.9; fill: none;
+            stroke-linecap: round; stroke-linejoin: round; }
+  .total  { stroke: var(--ink); stroke-width: 2.7; fill: none;
+            stroke-linecap: round; stroke-linejoin: round; }
+  .ghost  { stroke: var(--muted); stroke-width: 1.6; fill: none; opacity: .7;
+            stroke-dasharray: 6 5; stroke-linecap: round;
+            stroke-linejoin: round; }
+  .stock  { stroke: var(--ink); stroke-width: 2.2; fill: none; }
+  .drop   { stroke: var(--hairline); stroke-width: 1.4; stroke-dasharray: 5 4; }
+  .ref    { stroke: var(--muted); stroke-width: 1.3; stroke-dasharray: 6 5;
+            opacity: .85; }
 
-  /* accent policy line + shortage marks */
+  /* ---- accent policy marks ---- */
   .rentline { stroke: var(--accent); stroke-width: 2.6; fill: none;
               stroke-linecap: round; }
   .bracket  { stroke: var(--accent); stroke-width: 1.8; fill: none;
               stroke-linecap: round; }
-  .rearrow  { stroke: var(--accent); stroke-width: 1.8; fill: none; }
+  .shiftarr { stroke: var(--accent); stroke-width: 1.8; fill: none; }
+  .bandedge { stroke: var(--accent); stroke-width: 1; fill: none; opacity: .7; }
+  .lead     { stroke: var(--accent); stroke-width: 1.1; fill: none;
+              opacity: .8; }
 
-  /* points */
-  .pt-clear { fill: var(--ink); stroke: var(--surface); stroke-width: 1.5; }
-  .pt-alloc { fill: var(--accent); stroke: var(--surface); stroke-width: 1.6; }
+  /* ---- points ---- */
+  .pt-clear { fill: var(--ink); stroke: var(--surface); stroke-width: 1.4; }
+  .pt-alloc { fill: var(--accent); stroke: var(--surface); stroke-width: 1.5; }
   .pt-des   { fill: var(--muted); stroke: var(--surface); stroke-width: 1.4; }
-  .knob     { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5;
+  .knob     { fill: var(--accent); stroke: var(--surface); stroke-width: 2.2;
               pointer-events: none; }
 
-  /* hit targets */
+  /* ---- text ---- */
+  .lab     { fill: var(--ink); font-size: 12.5px; font-weight: 700; }
+  .lab.dim { fill: var(--muted); font-weight: 600; font-size: 12px; }
+  .axlabel { fill: var(--muted); font-size: 13px; font-weight: 600; }
+  .tick    { fill: var(--muted); font-size: 11.5px; font-weight: 600; }
+  .tick.on { fill: var(--accent); font-weight: 700; }
+  .rtag    { fill: var(--accent); font-size: 12px; font-weight: 700; }
+  .rtag.dim{ fill: var(--muted); font-weight: 600; }
+  .bandlbl { fill: var(--accent); font-size: 11.5px; font-weight: 700; }
+  .brlbl   { fill: var(--accent); font-size: 12px; font-weight: 700; }
+  /* a surface halo keeps the two short in-band letters and the rent tags
+     legible where they sit over the stippled band */
+  .halo    { paint-order: stroke fill; stroke: #f7f4ef; stroke-width: 2.6;
+             stroke-linejoin: round; }
+  .sep     { stroke: var(--hairline); stroke-width: 1; }
+  .r-state { fill: var(--muted); font-size: 12px; }
+  .r-take  { fill: var(--accent); font-size: 12.5px; font-weight: 600; }
+  .hintln  { fill: var(--muted); font-size: 11.5px; }
+  .cap     { fill: var(--muted); font-size: 12px; font-weight: 600; }
+  .capnow  { fill: var(--accent); font-size: 12px; font-weight: 700; }
+
+  /* ---- in-SVG buttons (ep2-11 / ep4-1 pattern): the visible rect and its
+     label are inert; the transparent focusable hit rect painted LAST works ---- */
+  .btn      { fill: var(--surface); stroke: var(--hairline); stroke-width: 1.5; }
+  .btn.on   { fill: var(--accent); stroke: var(--accent); }
+  .btnlabel { fill: var(--ink); font-size: 12.5px; font-weight: 600;
+              pointer-events: none; }
+  .btnlabel.on { fill: var(--surface); }
+  .btnfocus { cursor: pointer; }
+  .btnfocus:focus-visible { outline: 2px solid var(--accent);
+                            outline-offset: 2px; }
+
+  /* ---- drag furniture ---- */
+  .track    { stroke: var(--hairline); stroke-width: 5; stroke-linecap: round; }
+  .trackfil { stroke: var(--accent); stroke-width: 5; stroke-linecap: round; }
   .hit-line { fill: none; stroke: transparent; stroke-width: 30;
-              touch-action: none; cursor: ns-resize; }
+              touch-action: none; }
+  .hit-rent { cursor: ns-resize; }
+  .hit-scrub{ cursor: ew-resize; }
+  .pt-focus { cursor: grab; }
   .pt-focus:focus-visible { outline: none; }
-  .pt-focus:focus-visible + .knob,
-  .grabbing .knob { stroke: var(--ink); stroke-width: 3.2; }
+  /* the focus proxies sit in the late hit group, so they are NOT siblings of
+     their knobs; the script toggles .focus on the knob instead of relying on
+     an adjacent-sibling selector that cannot cross those parents */
+  .knob.focus,
+  .grabbing .knob { stroke: var(--ink); stroke-width: 3; }
 
-  /* text */
-  .lab    { fill: var(--ink); font-size: 13px; font-weight: 600; }
-  .axlab  { fill: var(--muted); font-size: 13.5px; font-weight: 600; }
-  .plab   { fill: var(--muted); font-size: 12.5px; font-weight: 600; }
-  .qlab   { fill: var(--muted); font-size: 12px; font-weight: 600; }
-  .brlab  { fill: var(--accent); font-size: 12.5px; font-weight: 700; }
-  .rlab   { fill: var(--accent); font-size: 12.5px; font-weight: 700; }
-  .sep    { stroke: var(--hairline); stroke-width: 1; }
-  .readout{ font-family: var(--font-body); text-align: center; }
-  .r-hint { color: var(--muted); font-size: 12.5px; line-height: 1.3;
-            margin-bottom: 5px; }
-  .r-take { color: var(--accent); font-size: 13.5px; font-weight: 600;
-            line-height: 1.32; }
-
-  /* HTML controls below the figure */
-  .controls { margin: 10px 2px 0; display: flex; flex-direction: column;
-              gap: 9px; align-items: center; }
-  .toggle { display: inline-flex; border: 1px solid var(--hairline);
-            border-radius: 8px; overflow: hidden; background: #fff; }
-  .seg { appearance: none; border: 0; background: transparent; cursor: pointer;
-         font-family: var(--font-body); font-size: 13.5px; font-weight: 600;
-         color: var(--muted); padding: 8px 14px; min-height: 40px; }
-  .seg + .seg { border-left: 1px solid var(--hairline); }
-  .seg.active { background: var(--accent); color: #fff; }
-  .seg:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
-  .scrub { display: flex; align-items: center; gap: 10px; width: 100%;
-           max-width: 420px; font-size: 12.5px; color: var(--muted); }
-  .scrub label { white-space: nowrap; font-weight: 600; }
-  .scrub input[type=range] { flex: 1; min-width: 0; accent-color: var(--accent);
-           height: 26px; }
-  .scrub.hidden { display: none; }
   .fallback { margin: 8px 0 0; color: var(--muted); font-size: 13px;
               line-height: 1.35; text-align: center; }
   .fallback a { color: var(--ink); }
@@ -147,443 +197,717 @@
 </head>
 <body>
 <div class="fig">
-  <svg id="fig" viewBox="0 0 480 520" role="group"
-       aria-label="A fixed stock of ten apartments, drawn as a vertical supply line, split between two named renters A and B whose individual demands add sideways into a total demand. In State one, letting the rent rise moves apartments from A to B while the total stays ten. In State two, holding the rent below the clearing level opens a shortage because renters want more than the ten that exist.">
+  <svg id="fig" viewBox="0 0 480 600" role="group"
+       aria-label="A fixed stock of ten apartments, drawn as a vertical stock line, is split between two named renters A and B whose individual demands add sideways into a total demand. One button lets the rent rise: raising B's demand lifts the clearing rent and moves apartments from A to B, while the total stays ten. The other button holds the rent down after B's demand has risen: more apartments are wanted than exist, a shortage opens, and the part of the stock's higher worth that sitting tenants capture rather than owners is shaded as a band between the held rent and the clearing rent. The readout below reports the rent, the quantities and the shortage at the current setting.">
+    <title>Rent, reallocation, and a shortage: a fixed housing stock split between two renters</title>
+
     <defs>
-      <marker id="ah" markerWidth="9" markerHeight="9" refX="6" refY="4"
-              orient="auto" markerUnits="userSpaceOnUse">
-        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
-      </marker>
-      <marker id="ahA" markerWidth="9" markerHeight="9" refX="6" refY="4"
+      <marker id="ahA" markerWidth="9" markerHeight="9" refX="7.5" refY="4"
               orient="auto" markerUnits="userSpaceOnUse">
         <path d="M0,0 L8,4 L0,8 Z" fill="#b07a2c" />
       </marker>
+      <!-- E&P's stipple, redrawn: tinted ground + a fine brass dot grid -->
+      <pattern id="stipple" width="6" height="6" patternUnits="userSpaceOnUse">
+        <rect width="6" height="6" fill="#efe4d2" />
+        <circle cx="3" cy="3" r="1" fill="#b07a2c" opacity="0.5" />
+      </pattern>
     </defs>
 
-    <!-- ===== droplines (drawn first, under the curves) ===== -->
-    <line id="rentDrop" class="drop" x1="56" y1="250.8" x2="264" y2="250.8" />
+    <!-- ============================ buttons ============================ -->
+    <rect id="btn-real"  class="btn on" x="14"  y="12" width="222" height="30" rx="6"/>
+    <text id="btnl-real" class="btnlabel on" x="125" y="31.5" text-anchor="middle">Rent free to rise</text>
+    <rect id="btn-ctrl"  class="btn" x="244" y="12" width="222" height="30" rx="6"/>
+    <text id="btnl-ctrl" class="btnlabel" x="355" y="31.5" text-anchor="middle">Rent held down</text>
 
-    <!-- ===== axes (extended past the data max) ===== -->
-    <line class="axis" x1="56" y1="348" x2="448" y2="348" marker-end="url(#ah)" />
-    <line class="axis" x1="56" y1="348" x2="56"  y2="40"  marker-end="url(#ah)" />
+    <!-- ===================== State-1 scrubber row ====================== -->
+    <g id="gScrub">
+      <text class="cap" x="14" y="78">B's demand:</text>
+      <text id="scrubWord" class="capnow" x="92" y="78">before</text>
+      <line class="track"    x1="150" y1="74" x2="444" y2="74"/>
+      <line id="scrubFill" class="trackfil" x1="150" y1="74" x2="150" y2="74"/>
+      <circle id="scrubKnob" class="knob" cx="150" cy="74" r="7"/>
+    </g>
 
-    <!-- ===== fixed vertical supply S at Q = 10 (always shown) ===== -->
-    <line class="supply" x1="264" y1="348" x2="264" y2="66" />
+    <!-- ============ State-2: the increased-market-value band ============
+         x in [0,10] (the whole fixed stock), y from the held rent up to the
+         $6 clearing rent. Painted FIRST so every curve rides over it. -->
+    <rect id="band" x="56" y="244" width="180" height="48" fill="url(#stipple)"
+          stroke="#b07a2c" stroke-width="1" opacity="0.75"
+          visibility="hidden"/>
 
-    <!-- ===== demand lines (JS repositions A / B / total by state) ===== -->
-    <!-- A: fixed larger demander, P = 12 - Q  (0,12)->(12,0) -->
-    <line id="lineA" class="curve" x1="56" y1="56.4" x2="305.6" y2="348" />
-    <!-- B (State 1: moves with scrub; State 2: B' raised). Base = B initial. -->
-    <line id="lineB" class="curve" x1="56" y1="202.2" x2="180.8" y2="348" />
-    <!-- ghost of B's initial demand, shown only while scrubbing in State 1 -->
-    <line id="ghostB" class="ghost" x1="56" y1="202.2" x2="180.8" y2="348"
-          visibility="hidden" />
-    <!-- total demand Dt = A + B (heavier). Base = Dt initial. -->
-    <line id="lineT" class="curveT" x1="56" y1="129.3" x2="430.4" y2="348" />
-    <!-- ghost of the initial total, shown while scrubbing / in State 2 -->
-    <line id="ghostT" class="ghost" x1="56" y1="129.3" x2="430.4" y2="348"
-          visibility="hidden" />
+    <!-- ============================== axes ============================= -->
+    <line class="axis" x1="56" y1="388" x2="462" y2="388"/>
+    <line class="axis" x1="56" y1="388" x2="56"  y2="92"/>
 
-    <!-- ===== draggable rent line (State 2 only) ===== -->
-    <line id="rentline" class="rentline" x1="56" y1="250.8" x2="360" y2="250.8"
-          visibility="hidden" />
+    <!-- State-2: the $6 that would clear. Its line IS the band's top edge, so
+         only the tag is drawn (and it hides when the rent has reached $6). -->
+    <text id="ref6Tag" class="rtag dim halo" x="60" y="236"
+          visibility="hidden">$6</text>
 
-    <!-- ===== axis titles ===== -->
-    <text id="xTitle" class="axlab" x="252" y="392" text-anchor="middle">Quantity of apartments</text>
-    <text class="axlab" x="18" y="196" text-anchor="middle"
-          transform="rotate(-90 18 196)">Rent</text>
+    <!-- State-1 "before" furniture (E&P 4-7's P1 and Xa / Xb): the old $4 rent
+         and the old split, kept muted beside the live ink values so the
+         reader sees what moved. Shown once the rise is large enough to read. -->
+    <line id="oldRentLine" class="ref" x1="56" y1="292" x2="236" y2="292"
+          visibility="hidden"/>
+    <!-- The gutter is split so the two tags can never meet: in State 1 the
+         live tag rides ABOVE its own line and this one BELOW the $4 line, so
+         they stay >= 17px apart at every scrub position (the live tag's line
+         is never below $4). Right-end placement was tried and rejected: the
+         total demand sweeps that whole band as B's demand rises. -->
+    <text id="oldRentTag" class="rtag dim halo" x="60" y="310"
+          visibility="hidden">$4</text>
 
-    <!-- ===== rent (y) tick labels ===== -->
-    <text class="plab" x="49" y="255" text-anchor="end">$4</text>
-    <text class="plab" x="49" y="206" text-anchor="end">$6</text>
+    <!-- ============ State-1 ghosts: B and the total before the rise ===== -->
+    <line id="ghostB" class="ghost" x1="56" y1="244" x2="164" y2="388"
+          visibility="hidden"/>
+    <polyline id="ghostT" class="ghost" points="56,100 164,244 380,388"
+              visibility="hidden"/>
 
-    <!-- ===== apartment (x) tick labels ===== -->
-    <text class="qlab" x="97.6"  y="366" text-anchor="middle">2</text>
-    <text class="qlab" x="139.2" y="366" text-anchor="middle">4</text>
-    <text class="qlab" x="180.8" y="366" text-anchor="middle">6</text>
-    <text class="qlab" x="222.4" y="366" text-anchor="middle">8</text>
-    <text class="qlab" x="264"   y="366" text-anchor="middle">10</text>
-    <text id="qdTick" class="brlab" x="347.2" y="366" text-anchor="middle"
+    <!-- ===================== demand curves + stock ===================== -->
+    <!-- A: Qa = 12 - P, fixed in both states -->
+    <line id="lineA" class="curve" x1="56" y1="100" x2="272" y2="388"/>
+    <!-- B: base = the initial schedule Qb = 6 - P -->
+    <line id="lineB" class="curve" x1="56" y1="244" x2="164" y2="388"/>
+    <!-- the total, drawn KINKED: it lies on A until B's quantity leaves zero
+         (vertex at P = B's intercept), then falls twice as fast -->
+    <polyline id="lineT" class="total" points="56,100 164,244 380,388"/>
+
+    <g id="gS">
+      <line class="stock" x1="236" y1="388" x2="236" y2="104"/>
+      <text class="lab" x="242" y="112">S</text>
+    </g>
+
+    <!-- ========= State-1 shift arrows (ghost -> risen) + rent rise ====== -->
+    <g id="gShiftB" visibility="hidden">
+      <line class="shiftarr" x1="114" y1="316" x2="114" y2="316"
+            marker-end="url(#ahA)"/>
+    </g>
+    <g id="gShiftT" visibility="hidden">
+      <line class="shiftarr" x1="348" y1="364" x2="348" y2="364"
+            marker-end="url(#ahA)"/>
+    </g>
+    <g id="gRise" visibility="hidden">
+      <line class="shiftarr" x1="70" y1="292" x2="70" y2="292"
+            marker-end="url(#ahA)"/>
+    </g>
+
+    <!-- ============ State-1 clearing rent: dropline + dot ============== -->
+    <g id="gClear">
+      <line id="clearDrop" class="drop" x1="56" y1="292" x2="236" y2="292"/>
+      <circle id="clearDot" class="pt-clear" cx="236" cy="292" r="4.5"/>
+    </g>
+
+    <!-- ================= State-2 held rent + its readings =============== -->
+    <line id="rentLine" class="rentline" x1="56" y1="292" x2="320" y2="292"
+          visibility="hidden"/>
+    <line id="qdDrop" class="drop" x1="308" y1="292" x2="308" y2="388"
+          visibility="hidden"/>
+    <circle id="desA" class="pt-des" cx="200" cy="292" r="4"
+            visibility="hidden"/>
+    <circle id="desB" class="pt-des" cx="164" cy="292" r="4"
+            visibility="hidden"/>
+    <!-- staggered so neither letter lands on a curve: A rides ABOVE its dot
+         and to the right (its curve leans left as you go up); B' rides BELOW
+         its dot and to the left (its curve leans right as you go down) -->
+    <text id="desLabA" class="lab dim halo" x="206" y="283"
+          text-anchor="middle" visibility="hidden">A</text>
+    <text id="desLabB" class="lab dim halo" x="152" y="305"
+          text-anchor="middle" visibility="hidden">B&#8242;</text>
+    <!-- at $6 the cap stops binding: mark the crossing, as State 1 does -->
+    <circle id="clearDot2" class="pt-clear" cx="236" cy="244" r="4.5"
+            visibility="hidden"/>
+    <circle id="rentKnob" class="knob" cx="74" cy="292" r="7"
+            visibility="hidden"/>
+
+    <!-- the live rent tag. State 1 sets it 8px ABOVE its line (the muted $4
+         tag holds the space below); State 2 sets it 18px BELOW, where it
+         clears the drag knob. Either way B's curve is >= 5px clear, because
+         B's quantity at the ruling rent is never under 1.5 apartments. -->
+    <text id="rentTag" class="rtag halo" x="60" y="284">$4</text>
+
+    <!-- ============ State-1 allocation dots on the stock axis =========== -->
+    <g id="gAlloc">
+      <line id="arrA" class="shiftarr" x1="200" y1="378" x2="200" y2="378"
+            marker-end="url(#ahA)" visibility="hidden"/>
+      <line id="arrB" class="shiftarr" x1="92" y1="378" x2="92" y2="378"
+            marker-end="url(#ahA)" visibility="hidden"/>
+      <!-- the old split, muted, held at the $4 positions (E&P's Xa and Xb) -->
+      <g id="gOldAlloc" visibility="hidden">
+        <circle class="pt-des" cx="200" cy="388" r="3.5"/>
+        <circle class="pt-des" cx="92"  cy="388" r="3.5"/>
+        <text class="tick" x="200" y="404" text-anchor="middle">8</text>
+        <text class="tick" x="92"  y="404" text-anchor="middle">2</text>
+      </g>
+      <circle id="dotXa" class="pt-alloc" cx="200" cy="388" r="4.5"/>
+      <circle id="dotXb" class="pt-alloc" cx="92"  cy="388" r="4.5"/>
+      <text id="labXa" class="tick on" x="200" y="404" text-anchor="middle">A: 8</text>
+      <text id="labXb" class="tick on" x="92"  y="404" text-anchor="middle">B: 2</text>
+    </g>
+
+    <!-- ===================== curve labels (direct) ====================== -->
+    <text id="labA" class="lab dim" x="278" y="382">A</text>
+    <text id="labB" class="lab dim" x="96"  y="310" text-anchor="end">B</text>
+    <text id="labT" class="lab" x="334" y="356">A + B</text>
+
+    <!-- ====== State-2 band label: clear of every curve, short leader ==== -->
+    <g id="gBandLbl" visibility="hidden" pointer-events="none">
+      <path class="lead" d="M248,212 L240,250"/>
+      <text class="bandlbl" x="244" y="190">Captured by</text>
+      <text class="bandlbl" x="244" y="204">sitting tenants</text>
+    </g>
+
+    <!-- ================= marks under the quantity axis ================== -->
+    <line class="axis" x1="236" y1="388" x2="236" y2="394"/>
+    <text class="tick" x="236" y="404" text-anchor="middle">10</text>
+    <text id="qdTick" class="tick on" x="308" y="404" text-anchor="middle"
           visibility="hidden">14</text>
 
-    <!-- ===== curve labels ===== -->
-    <text class="lab" x="268" y="60" text-anchor="start">S</text>
-    <text id="labA" class="lab" x="300" y="342" text-anchor="start">A</text>
-    <text id="labB" class="lab" x="176" y="342" text-anchor="end">B</text>
-    <text id="labT" class="lab" x="418" y="342" text-anchor="end"
-          >D<tspan baseline-shift="sub" font-size="9.5">t</tspan></text>
-
-    <!-- ===== State-1: clearing dot + sliding allocation dots + arrows ===== -->
-    <circle id="clearDot" class="pt-clear" cx="264" cy="250.8" r="5" />
-    <!-- allocation dots on the axis: Xa (A's units) and Xb (B's units) -->
-    <circle id="dotXa" class="pt-alloc" cx="222.4" cy="348" r="5" />
-    <circle id="dotXb" class="pt-alloc" cx="97.6"  cy="348" r="5" />
-    <!-- reallocation arrows just above the axis (shown when scrubbed) -->
-    <line id="arrA" class="rearrow" x1="222.4" y1="340" x2="222.4" y2="340"
-          marker-end="url(#ahA)" visibility="hidden" />
-    <line id="arrB" class="rearrow" x1="97.6" y1="340" x2="97.6" y2="340"
-          marker-end="url(#ahA)" visibility="hidden" />
-
-    <!-- ===== State-2: desired-quantity dots on A and B' at the rent line ===== -->
-    <circle id="dotDesA" class="pt-des" cx="222.4" cy="250.8" r="4"
-            visibility="hidden" />
-    <circle id="dotDesB" class="pt-des" cx="180.8" cy="250.8" r="4"
-            visibility="hidden" />
-
-    <!-- ===== State-2: shortage bracket below the axis, S -> Qd ===== -->
-    <path id="bracket" class="bracket"
-          d="M264,374 L264,384 M264,379 L347.2,379 M347.2,374 L347.2,384"
-          visibility="hidden" />
-    <text id="brLabel" class="brlab" x="305.6" y="397" text-anchor="middle"
+    <!-- ================= State-2 shortage bracket ======================= -->
+    <path id="bracket" class="bracket" visibility="hidden"
+          d="M236,414 L236,426 M236,420 L308,420 M308,414 L308,426"/>
+    <text id="brLabel" class="brlbl" x="316" y="424"
           visibility="hidden">Shortage = 4</text>
 
-    <!-- ===== State-2: draggable rent-line hit zone + knob + keyboard proxy ===== -->
-    <line id="rentHit" class="hit-line" x1="56" y1="250.8" x2="360" y2="250.8"
-          visibility="hidden" />
-    <circle id="rentFocus" class="pt-focus" cx="96" cy="250.8" r="22"
-            tabindex="0" role="slider" aria-label="Rent held (dollars)"
-            aria-valuemin="2" aria-valuemax="8" aria-valuenow="4"
-            aria-valuetext="Rent held at $4 after demand rose: renters want 14, only 10 exist."
-            fill="transparent" visibility="hidden" />
-    <circle id="rentKnob" class="knob" cx="96" cy="250.8" r="6"
-            visibility="hidden" />
+    <!-- ========================= axis titles ============================ -->
+    <text class="axlabel" x="259" y="456" text-anchor="middle">Apartments</text>
+    <text class="axlabel" x="16" y="240" text-anchor="middle"
+          transform="rotate(-90 16 240)">Monthly rent ($)</text>
 
-    <!-- ===== readout band: hairline separator, muted state, accent takeaway ===== -->
-    <line class="sep" x1="24" y1="400" x2="456" y2="400" />
-    <foreignObject x="16" y="406" width="448" height="108">
-      <div xmlns="http://www.w3.org/1999/xhtml" class="readout">
-        <div id="rHint" class="r-hint">Rent $4: A holds 8, B holds 2 &#8212; 10 apartments.</div>
-        <div id="rTake" class="r-take">A and B's demands add sideways to the 10 apartments that exist.</div>
-      </div>
-    </foreignObject>
+    <!-- ===================== readout band + hint ======================== -->
+    <line class="sep" x1="20" y1="466" x2="460" y2="466"/>
+    <g id="readout" role="status" aria-live="polite">
+      <text class="r-state" text-anchor="middle">
+        <tspan id="s1" x="240" y="484">Rent $4: A holds 8, B holds 2 &#8212; 10 apartments.</tspan>
+        <tspan id="s2" x="240" y="498"></tspan>
+      </text>
+      <text class="r-take" text-anchor="middle">
+        <tspan id="k1" x="240" y="519">A and B's demands add sideways to the 10 apartments that exist.</tspan>
+        <tspan id="k2" x="240" y="533"></tspan>
+        <tspan id="k3" x="240" y="547"></tspan>
+        <tspan id="k4" x="240" y="561"></tspan>
+      </text>
+    </g>
+    <!-- the base text is the no-JS line, so it promises no interaction; the
+         script replaces it with the live state's instruction on load -->
+    <text id="hint" class="hintln" x="240" y="583" text-anchor="middle">Still view: the rent is $4 and the ten apartments split 8 to A, 2 to B.</text>
+
+    <!-- ============ HIT TARGETS — PAINTED LAST, ON TOP OF ALL ===========
+         A previous widget shipped clicks-dead because its listeners sat under
+         the visible rects. Nothing interactive is drawn after this group. -->
+    <g id="hits">
+      <rect id="hit-real" class="btnfocus" x="14" y="12" width="222" height="30"
+            rx="6" fill="transparent" tabindex="0" role="button" aria-pressed="true"
+            aria-label="Rent free to rise. A rising rent reallocates the fixed ten apartments between renters A and B."/>
+      <rect id="hit-ctrl" class="btnfocus" x="244" y="12" width="222" height="30"
+            rx="6" fill="transparent" tabindex="0" role="button" aria-pressed="false"
+            aria-label="Rent held down. After B's demand rises the rent is capped, which blocks the reallocation and opens a shortage."/>
+      <g id="hitScrub">
+        <line id="hit-track" class="hit-line hit-scrub" x1="150" y1="74"
+              x2="444" y2="74"/>
+        <circle id="scrubFocus" class="pt-focus" cx="150" cy="74" r="22"
+                fill="transparent" tabindex="0" role="slider"
+                aria-label="B's demand, before to after"
+                aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"
+                aria-valuetext="B's demand before the rise. Rent $4: A holds 8, B holds 2 — 10 apartments."/>
+      </g>
+      <g id="hitRent" visibility="hidden">
+        <line id="hit-rent" class="hit-line hit-rent" x1="56" y1="292"
+              x2="400" y2="292"/>
+        <circle id="rentFocus" class="pt-focus" cx="74" cy="292" r="22"
+                fill="transparent" tabindex="0" role="slider"
+                aria-label="Rent held, in dollars"
+                aria-valuemin="4" aria-valuemax="6" aria-valuenow="4"
+                aria-valuetext="Rent held at $4 after demand rose: renters want 14, only 10 exist."/>
+      </g>
+    </g>
   </svg>
 
-  <div class="controls">
-    <div class="toggle" role="group" aria-label="Choose the rent regime">
-      <button id="btnReal" class="seg active" type="button" aria-pressed="true">Rent free to rise</button>
-      <button id="btnCtrl" class="seg" type="button" aria-pressed="false">Rent held down</button>
-    </div>
-    <div id="scrubWrap" class="scrub">
-      <label for="scrub">B's demand: <span id="scrubState">before</span></label>
-      <input id="scrub" type="range" min="0" max="100" value="0" step="1"
-             aria-label="B's demand rise, before to after" />
-    </div>
-  </div>
-
   <noscript>
-    <p class="fallback">JavaScript is off, so this frame is a still image of
-      State&nbsp;1: a fixed stock of ten apartments reallocated from renter A to
-      renter B as the rent rises from $4 to $6. You can also
-      <a href="t04b-ep4-7-8-rent-control-reallocation.svg">open the static figure</a>.</p>
+    <p class="fallback">JavaScript is off, so this frame is a still picture of
+      the first case: a fixed stock of ten apartments, renter A holding eight
+      and renter B two at a rent of $4. You can also
+      <a href="/teaching/microeconomics/t04b-price-controls/figures/t04b-ep4-7-8-rent-control-reallocation.svg">open
+      the static figure</a>.</p>
   </noscript>
 </div>
-
 <script>
 (function () {
-  "use strict";
+  'use strict';
   var $ = function (id) { return document.getElementById(id); };
   var svg = $('fig');
 
   // ---- pixel frame (mirrors the base markup) ----
-  var X0 = 56, SX = 20.8, Y0 = 348, SY = 24.3;
+  var X0 = 56, SX = 18, Y0 = 388, SY = 24;
   function X (q) { return X0 + q * SX; }
   function Y (p) { return Y0 - p * SY; }
   function toP (yy) { return (Y0 - yy) / SY; }
 
-  // ---- economics (recomputed live; F8 totals are sums, never hard-coded) ----
-  var QS = 10;                     // fixed stock (vertical supply)
-  var AQ = 12;                     // A: Qa = 12 - P
-  function qa (p) { return AQ - p; }
-  function qbInit (p) { return 6 - p; }      // B initial
-  function qbRaised (p) { return 10 - p; }   // B' (t = 1)
-  // B intercept scrubs from 6 (t=0) to 10 (t=1)
-  function qbAt (p, t) { return (6 + 4 * t) - p; }
-  function dt (p, t) { return qa(p) + qbAt(p, t); }   // total = A + B (F8)
-  function dtRaised (p) { return qa(p) + qbRaised(p); } // = 22 - 2P
+  // ---- the schedules. Every total is the horizontal SUM of the individual
+  //      quantities at that rent; no total is ever written down directly. ----
+  var QS = 10;                                     // the fixed stock
+  function qa (p) { return Math.max(0, 12 - p); }          // A: 12 - P
+  function qb (p, t) { return Math.max(0, (6 + 4 * t) - p); } // B; t=1 is B'
+  function dtot (p, t) { return qa(p) + qb(p, t); }        // the sum
 
-  // State-1 clearing rent: total = 10  =>  P = 4 + 2t
-  function clearRent (t) { return 4 + 2 * t; }
+  // clearing rent: solved on the sum itself, not from a formula
+  function clearRent (t) {
+    var lo = 0, hi = 12, mid, i;
+    for (i = 0; i < 50; i++) {
+      mid = (lo + hi) / 2;
+      if (dtot(mid, t) > QS) { lo = mid; } else { hi = mid; }
+    }
+    return (lo + hi) / 2;
+  }
+
+  // the total's vertices: the price axis, the kink where B's quantity leaves
+  // zero (above it the total lies on A), and the P = 0 end
+  function totalPoints (t) {
+    var bI = 6 + 4 * t, pts = [[0, 12]], out = [], i;
+    if (bI < 12) { pts.push([dtot(bI, t), bI]); }
+    pts.push([dtot(0, t), 0]);
+    for (i = 0; i < pts.length; i++) {
+      out.push(X(pts[i][0]) + ',' + Y(pts[i][1]));
+    }
+    return out.join(' ');
+  }
 
   // ---- state ----
-  var state = 'reallocate';   // 'reallocate' | 'control'
-  var t = 0;                  // State-1 scrub position, 0..1
-  var rent = 4;               // State-2 held rent
-  var RMIN = 2, RMAX = 8, RSTEP = 1;
+  var state = 'reallocate';        // 'reallocate' | 'control'
+  var t = 0;                       // State-1 scrub position, 0..1
+  var rent = 4;                    // State-2 held rent
+  // The drag runs only over the E&P story: the cap at the OLD rent ($4) up to
+  // the NEW clearing rent ($6). Below $4 the band would claim more than the
+  // demand rise created; above $6 a cap does not bind at all, and a market
+  // with vacancies is a price-FLOOR story this topic does not teach here.
+  var RMIN = 4, RMAX = 6, RSTEP = 1;
+  var TR0 = 150, TR1 = 444;        // scrub track ends
 
-  // ---- helpers ----
-  function fmt (v) {           // drop a trailing .0
+  // ---- small helpers ----
+  function fmt (v) {
     var r = Math.round(v * 10) / 10;
-    return (Math.abs(r - Math.round(r)) < 0.05) ? String(Math.round(r)) : r.toFixed(1);
+    return (Math.abs(r - Math.round(r)) < 0.05)
+      ? String(Math.round(r)) : r.toFixed(1);
+  }
+  function vis (el, on) {
+    // "inherit", NEVER "visible": SVG visibility is inherited, and an explicit
+    // visible on a CHILD overrides a hidden ancestor. Writing "visible" on the
+    // reallocation arrows (children of gAlloc) floated them over State 2 after
+    // a scrub-then-switch. "inherit" shows a top-level element (the svg root
+    // is visible) while still obeying whichever group owns it.
+    el.setAttribute('visibility', on ? 'inherit' : 'hidden');
   }
   function setLine (el, q1, p1, q2, p2) {
     el.setAttribute('x1', X(q1)); el.setAttribute('y1', Y(p1));
     el.setAttribute('x2', X(q2)); el.setAttribute('y2', Y(p2));
   }
-  function vis (el, on) { el.setAttribute('visibility', on ? 'visible' : 'hidden'); }
+  function px (el, x1, y1, x2, y2) {
+    el.setAttribute('x1', x1); el.setAttribute('y1', y1);
+    el.setAttribute('x2', x2); el.setAttribute('y2', y2);
+  }
+  function at (el, x, y) {
+    if (x != null) el.setAttribute('x', x);
+    if (y != null) el.setAttribute('y', y);
+  }
+  function dot (el, x, y) {
+    el.setAttribute('cx', x); el.setAttribute('cy', y);
+  }
+  function rows (ids, text, maxChars) {
+    var words = String(text).split(' '), out = [], cur = '', i;
+    for (i = 0; i < words.length; i++) {
+      if (cur && (cur + ' ' + words[i]).length > maxChars) {
+        out.push(cur); cur = words[i];
+      } else {
+        cur = cur ? cur + ' ' + words[i] : words[i];
+      }
+    }
+    if (cur) out.push(cur);
+    while (out.length > ids.length) {           // never drop text
+      out[ids.length - 1] += ' ' + out.pop();
+    }
+    for (i = 0; i < ids.length; i++) { $(ids[i]).textContent = out[i] || ''; }
+  }
 
   // ---- element handles ----
   var lineA = $('lineA'), lineB = $('lineB'), lineT = $('lineT');
   var ghostB = $('ghostB'), ghostT = $('ghostT');
-  var rentDrop = $('rentDrop'), clearDot = $('clearDot');
-  var dotXa = $('dotXa'), dotXb = $('dotXb');
-  var arrA = $('arrA'), arrB = $('arrB');
-  var labT = $('labT'), labB = $('labB');
-  var rentline = $('rentline'), rentHit = $('rentHit');
-  var rentKnob = $('rentKnob'), rentFocus = $('rentFocus');
+  var gShiftB = $('gShiftB'), gShiftT = $('gShiftT'), gRise = $('gRise');
+  var shiftB = gShiftB.getElementsByTagName('line')[0];
+  var shiftT = gShiftT.getElementsByTagName('line')[0];
+  var riseArr = gRise.getElementsByTagName('line')[0];
+  var gClear = $('gClear'), clearDrop = $('clearDrop'), clearDot = $('clearDot');
+  var gAlloc = $('gAlloc'), dotXa = $('dotXa'), dotXb = $('dotXb');
+  var labXa = $('labXa'), labXb = $('labXb'), arrA = $('arrA'), arrB = $('arrB');
+  var labA = $('labA'), labB = $('labB'), labT = $('labT');
+  var band = $('band'), gBandLbl = $('gBandLbl'), ref6Tag = $('ref6Tag');
+  var oldRentLine = $('oldRentLine'), oldRentTag = $('oldRentTag');
+  var gOldAlloc = $('gOldAlloc');
+  var rentLine = $('rentLine'), rentKnob = $('rentKnob'), rentTag = $('rentTag');
+  var qdDrop = $('qdDrop'), qdTick = $('qdTick');
+  var desA = $('desA'), desB = $('desB');
+  var desLabA = $('desLabA'), desLabB = $('desLabB'), clearDot2 = $('clearDot2');
   var bracket = $('bracket'), brLabel = $('brLabel');
-  var qdTick = $('qdTick'), dotDesA = $('dotDesA'), dotDesB = $('dotDesB');
-  var rHint = $('rHint'), rTake = $('rTake'), xTitle = $('xTitle');
-  var scrubWrap = $('scrubWrap'), scrub = $('scrub'), scrubState = $('scrubState');
-  var btnReal = $('btnReal'), btnCtrl = $('btnCtrl');
+  var gScrub = $('gScrub'), scrubFill = $('scrubFill'), scrubKnob = $('scrubKnob');
+  var scrubWord = $('scrubWord'), scrubFocus = $('scrubFocus');
+  var hitScrub = $('hitScrub'), hitRent = $('hitRent');
+  var hitRentLine = $('hit-rent'), rentFocus = $('rentFocus');
+  var hintLine = $('hint');
 
-  // ---- render State 1 (reallocation) ----
+  var STATE2_ONLY = ['band', 'gBandLbl', 'ref6Tag', 'rentLine', 'rentKnob',
+    'qdDrop', 'qdTick', 'desA', 'desB', 'desLabA', 'desLabB', 'clearDot2',
+    'bracket', 'brLabel', 'hitRent'];
+  var STATE1_ONLY = ['ghostB', 'ghostT', 'gShiftB', 'gShiftT', 'gRise',
+    'gClear', 'gAlloc', 'gScrub', 'hitScrub', 'oldRentLine', 'oldRentTag'];
+
+  // ================= State 1: the rent is free to rise =================
   function renderReallocate () {
-    var bI = 6 + 4 * t;                 // B's intercept
-    var tot = 12 + bI;                  // total intercept (Q at P=0)
-    var pc = clearRent(t);              // clearing rent
-    var aAlloc = qa(pc), bAlloc = bI - pc;   // A + B = 10
+    var bI = 6 + 4 * t;
+    var pc = clearRent(t);
+    var xa = qa(pc), xb = qb(pc, t);         // xa + xb = QS at every t
 
-    // A fixed
-    setLine(lineA, 0, AQ, AQ, 0);
-    // B: (0,bI) -> (bI,0)
+    setLine(lineA, 0, 12, 12, 0);
     setLine(lineB, 0, bI, bI, 0);
-    // total: (0, tot/2) -> (tot, 0)
-    setLine(lineT, 0, tot / 2, tot, 0);
-    labT.textContent = 'Dt';           // (subscript rebuilt below)
-    labT.innerHTML = 'D<tspan baseline-shift="sub" font-size="9.5">t</tspan>';
-    // reposition the total label near the drawn line's lower-right, off the line
-    labT.setAttribute('x', X(Math.min(tot, 17.8)) - 6);
-    labT.setAttribute('y', Y(Math.max(0, (tot / 2) - (Math.min(tot, 17.8)) / 2)) - 8);
-    labB.textContent = 'B';
-    labB.setAttribute('x', X(bI) - 6);
-    labB.setAttribute('y', Y(0) - 6);
-    xTitle.setAttribute('x', 252);
+    lineT.setAttribute('points', totalPoints(t));
+    setLine(ghostB, 0, 6, 6, 0);
+    ghostT.setAttribute('points', totalPoints(0));
 
-    // clearing rent dropline + dot
-    rentDrop.setAttribute('x1', X(0)); rentDrop.setAttribute('x2', X(QS));
-    rentDrop.setAttribute('y1', Y(pc)); rentDrop.setAttribute('y2', Y(pc));
-    vis(rentDrop, true);
-    clearDot.setAttribute('cx', X(QS)); clearDot.setAttribute('cy', Y(pc));
-    vis(clearDot, true);
-
-    // sliding allocation dots on the axis
-    dotXa.setAttribute('cx', X(aAlloc)); dotXb.setAttribute('cx', X(bAlloc));
-    vis(dotXa, true); vis(dotXb, true);
-
-    // ghosts + reallocation arrows appear once B has started rising
     var moved = t > 0.02;
     vis(ghostB, moved); vis(ghostT, moved);
-    // A moved from 8 to aAlloc (leftward); B from 2 to bAlloc (rightward)
-    if (moved) {
-      arrA.setAttribute('x1', X(8) - 3); arrA.setAttribute('x2', X(aAlloc) + 4);
-      arrB.setAttribute('x1', X(2) + 3); arrB.setAttribute('x2', X(bAlloc) - 4);
-    }
-    vis(arrA, moved); vis(arrB, moved);
 
-    // hide State-2 furniture
-    [rentline, rentHit, rentKnob, rentFocus, bracket, brLabel, qdTick,
-     dotDesA, dotDesB].forEach(function (el) { vis(el, false); });
+    // shift arrows: ghost -> risen, drawn only once they are long enough to read
+    var wide = (bI - 6) * SX >= 16;
+    px(shiftB, X(qb(3, 0)) + 5, Y(3), X(qb(3, t)) - 5, Y(3));
+    px(shiftT, X(dtot(1, 0)) + 5, Y(1), X(dtot(1, t)) - 5, Y(1));
+    vis(gShiftB, wide); vis(gShiftT, wide);
+    // x=96, not 86: it must clear the live rent tag's glyphs (x 60..78) with
+    // room to read, and B's curve never reaches x=96 above the old rent
+    px(riseArr, 96, Y(4), 96, Y(pc) + 5);
+    vis(gRise, (pc - 4) * SY >= 14);
 
-    // scrub label + readout
-    scrubState.textContent = t < 0.02 ? 'before' : (t > 0.98 ? 'after' : 'rising');
-    var hint, take;
+    // E&P 4-7's P1 and Xa / Xb: the OLD rent and the OLD split, muted, beside
+    // the live ink ones. The split pair waits until the live labels have slid
+    // clear of the fixed $4 positions (they are 26px wide, 36px apart at t=1).
+    // the old-rent line waits until it has separated from the live clearing
+    // dropline (below t = 0.15 the two dashed rules sit within a few pixels)
+    vis(oldRentLine, t > 0.15); vis(oldRentTag, t > 0.15);
+    vis(gOldAlloc, t > 0.7);
+
+    // clearing rent
+    px(clearDrop, X(0), Y(pc), X(QS), Y(pc));
+    dot(clearDot, X(QS), Y(pc));
+    at(rentTag, 60, Y(pc) - 8);          // above its line; $4 tag holds below
+    rentTag.textContent = '$' + fmt(pc);
+
+    // the split of the fixed stock, read on the quantity axis
+    dot(dotXa, X(xa), Y(0)); dot(dotXb, X(xb), Y(0));
+    at(labXa, X(xa), null); labXa.textContent = 'A: ' + fmt(xa);
+    at(labXb, X(xb), null); labXb.textContent = 'B: ' + fmt(xb);
+    var slid = moved && (8 - xa) * SX >= 14;
+    px(arrA, X(8) - 3, 378, X(xa) + 3, 378);
+    px(arrB, X(2) + 3, 378, X(xb) - 3, 378);
+    vis(arrA, slid); vis(arrB, slid);
+
+    // direct labels
+    var after = t > 0.98;
+    // B's label rides 60% of the way DOWN its own line, not the midpoint: at
+    // the midpoint it shared a baseline with the left-gutter rent tags and the
+    // pair read as one token.
+    at(labB, X(0.6 * bI) - 14, Y(0.4 * bI) - 6);
+    labB.textContent = after ? 'B′' : 'B';
+    at(labT, X(dtot(1.5, t)) + 8, Y(1.5) + 4);
+    labT.textContent = after ? 'A + B′' : 'A + B';
+
+    // scrubber
+    var kx = TR0 + t * (TR1 - TR0);
+    scrubFill.setAttribute('x2', kx);
+    scrubKnob.setAttribute('cx', kx);
+    scrubFocus.setAttribute('cx', kx);
+    var word = t < 0.02 ? 'before' : (after ? 'after' : 'rising');
+    scrubWord.textContent = word;
+
+    // readout
+    var say, take;
     if (t < 0.02) {
-      hint = 'Rent $4: A holds 8, B holds 2 — 10 apartments.';
+      say = 'Rent $4: A holds 8, B holds 2 — 10 apartments.';
       take = "A and B's demands add sideways to the 10 apartments that exist.";
-    } else if (t > 0.98) {
-      hint = 'Rent rises to $6: A now holds 6, B holds 4 — still 10 apartments.';
+    } else if (after) {
+      say = 'Rent rises to $6: A now holds 6, B holds 4 — still 10 apartments.';
       take = 'The higher rent reallocated the fixed stock: 2 units moved from A ' +
              'to B, the renters who now value them most. Nothing was built.';
     } else {
-      hint = 'Rent $' + fmt(pc) + ': A holds ' + fmt(aAlloc) + ', B holds ' +
-             fmt(bAlloc) + ' — 10 apartments.';
+      say = 'Rent $' + fmt(pc) + ': A holds ' + fmt(xa) + ', B holds ' +
+            fmt(xb) + ' — 10 apartments.';
       take = 'A rising rent is reallocating the fixed 10 apartments from A to B.';
     }
-    rHint.textContent = hint;
-    rTake.textContent = take;
+    rows(['s1', 's2'], say, 74);
+    rows(['k1', 'k2', 'k3', 'k4'], take, 66);
+    hintLine.textContent = "Drag the slider to raise B's demand; arrow keys step it.";
+    scrubFocus.setAttribute('aria-valuenow', String(Math.round(t * 100)));
+    scrubFocus.setAttribute('aria-valuetext',
+      "B's demand " + word + '. ' + say);
+    return { pc: pc, xa: xa, xb: xb };
   }
 
-  // ---- render State 2 (rent control) ----
+  // ================ State 2: the rent is held down =====================
   function renderControl () {
-    // A fixed; B is the raised B'; total is Dt' = 22 - 2P
-    setLine(lineA, 0, AQ, AQ, 0);
-    setLine(lineB, 0, 10, 10, 0);          // B': (0,10)->(10,0)
-    setLine(lineT, 0, 11, 18, 2);          // Dt': (0,11)->(18,2), clipped x<=18
-    labT.innerHTML = 'D<tspan baseline-shift="sub" font-size="9.5">t</tspan>' +
-                     '<tspan baseline-shift="super" font-size="9.5">′</tspan>';
-    labT.setAttribute('x', X(17.8) - 6);
-    labT.setAttribute('y', Y(2.1) - 8);
-    labB.textContent = "B′";
-    labB.setAttribute('x', X(10) - 10);
-    labB.setAttribute('y', Y(0) - 6);
-    xTitle.setAttribute('x', 150);
-
-    // the risen total's ghost hidden here (Dt' is the live line); B ghost off
-    vis(ghostB, false); vis(ghostT, false);
-
-    // hide State-1 furniture
-    [clearDot, dotXa, dotXb, arrA, arrB, rentDrop].forEach(function (el) {
-      vis(el, false);
-    });
-
-    var qd = dtRaised(rent);                // quantity demanded on Dt'
+    var r = rent, y = Y(r);
+    var qd = dtot(r, 1);                      // the risen total at the cap
     var shortage = Math.max(0, qd - QS);
-    var y = Y(rent);
+    var wantA = qa(r), wantB = qb(r, 1);      // wantA + wantB = qd
 
-    // draggable rent line spans from the axis to just past Qd
+    setLine(lineA, 0, 12, 12, 0);
+    setLine(lineB, 0, 10, 10, 0);             // B'
+    lineT.setAttribute('points', totalPoints(1));
+    at(labB, 84, Y(8) + 4); labB.textContent = 'B′';
+    at(labT, X(dtot(1.5, 1)) + 8, Y(1.5) + 4);
+    labT.textContent = 'A + B′';
+
+    // the increased market value of the SAME ten apartments: the band between
+    // the held rent and the $6 that would clear. Named, never measured.
+    var capped = r < 6 - 1e-9;
+    band.setAttribute('y', Y(6));
+    band.setAttribute('height', Math.max(0, y - Y(6)));
+    vis(band, capped); vis(gBandLbl, capped);
+    vis(ref6Tag, capped);
+
+    // the held rent itself
     var xEnd = X(Math.max(qd, QS) + 0.6);
-    rentline.setAttribute('x1', X(0)); rentline.setAttribute('x2', xEnd);
-    rentline.setAttribute('y1', y); rentline.setAttribute('y2', y);
-    rentHit.setAttribute('x1', X(0)); rentHit.setAttribute('x2', xEnd);
-    rentHit.setAttribute('y1', y); rentHit.setAttribute('y2', y);
-    rentKnob.setAttribute('cx', X(0.9)); rentKnob.setAttribute('cy', y);
-    rentFocus.setAttribute('cx', X(0.9)); rentFocus.setAttribute('cy', y);
-    [rentline, rentHit, rentKnob, rentFocus].forEach(function (el) { vis(el, true); });
+    px(rentLine, X(0), y, xEnd, y);
+    px(hitRentLine, X(0), y, 400, y);
+    dot(rentKnob, X(1), y); dot(rentFocus, X(1), y);
+    vis(rentLine, true); vis(rentKnob, true);
+    at(rentTag, 60, y + 18); rentTag.textContent = '$' + fmt(r);
 
-    // desired-quantity dots: A wants qa(rent), B' wants qbRaised(rent)
-    dotDesA.setAttribute('cx', X(qa(rent))); dotDesA.setAttribute('cy', y);
-    dotDesB.setAttribute('cx', X(qbRaised(rent))); dotDesB.setAttribute('cy', y);
-    vis(dotDesA, true); vis(dotDesB, true);
+    // where each renter's own demand crosses the cap. The dots sit only two
+    // apartments (36px) apart, so the letters are STAGGERED off the diagonal
+    // each curve occupies: A up-and-right, B' down-and-left.
+    dot(desA, X(wantA), y); dot(desB, X(wantB), y);
+    at(desLabA, X(wantA) + 6, y - 9);
+    at(desLabB, X(wantB) - 12, y + 13);
+    [desA, desB, desLabA, desLabB].forEach(function (el) { vis(el, true); });
 
-    // below-axis shortage bracket (S -> Qd)
+    // at $6 the cap stops binding: draw the crossing, do not merely say it
+    dot(clearDot2, X(QS), Y(6));
+    vis(clearDot2, !capped);
+
+    // the total wanted, dropped to the quantity axis
+    var offStock = Math.abs(qd - QS) > 0.05;
+    px(qdDrop, X(qd), y, X(qd), Y(0));
+    at(qdTick, X(qd), null); qdTick.textContent = fmt(qd);
+    vis(qdDrop, offStock); vis(qdTick, offStock);
+
+    // the shortage, bracketed under the axis
     if (shortage > 0.05) {
       bracket.setAttribute('d',
-        'M' + X(QS) + ',374 L' + X(QS) + ',384 ' +
-        'M' + X(QS) + ',379 L' + X(qd) + ',379 ' +
-        'M' + X(qd) + ',374 L' + X(qd) + ',384');
-      brLabel.setAttribute('x', (X(QS) + X(qd)) / 2);
-      brLabel.setAttribute('y', 397);
+        'M' + X(QS) + ',414 L' + X(QS) + ',426 ' +
+        'M' + X(QS) + ',420 L' + X(qd) + ',420 ' +
+        'M' + X(qd) + ',414 L' + X(qd) + ',426');
+      // beside the bracket rather than under it, clear of the axis title
+      at(brLabel, X(qd) + 8, null);
       brLabel.textContent = 'Shortage = ' + fmt(shortage);
-      vis(bracket, true); vis(brLabel, true);
-      qdTick.setAttribute('x', X(qd));
-      qdTick.textContent = fmt(qd);
-      vis(qdTick, true);
-    } else {
-      [bracket, brLabel, qdTick].forEach(function (el) { vis(el, false); });
     }
+    vis(bracket, shortage > 0.05); vis(brLabel, shortage > 0.05);
 
-    // readout
-    var hint, take;
-    if (rent < 6) {
-      hint = 'Rent held at $' + fmt(rent) + ' after demand rose: renters want ' +
-             fmt(qd) + ', only 10 exist.';
-      take = 'The cap blocks the reallocation and opens a shortage of ' +
-             fmt(shortage) + ' apartments; the 10 units are now rationed by ' +
-             'lines, favoritism, and pull instead of price.';
-    } else if (rent === 6) {
-      hint = 'At $6 the cap no longer binds: 10 wanted, 10 available.';
+    // readout. The band is NAMED, never measured: what the strings quote is a
+    // rent per apartment, not the band's dollar area.
+    var say, take;
+    if (!capped) {
+      say = 'At $6 the cap no longer binds: 10 wanted, 10 available.';
       take = 'Let the rent reach clearing and the shortage closes — the ' +
-             'same reallocation State 1 shows.';
+             'stock is reallocated to its highest-valuing renters, and owners ' +
+             'receive the higher rent.';
     } else {
-      hint = 'At $' + fmt(rent) + ', above the $6 clearing rent: ' + fmt(qd) +
-             ' wanted, 10 available (some sit empty).';
-      take = 'No shortage — a cap above the clearing rent does not bind.';
+      say = 'Rent held at $' + fmt(r) + ' after demand rose: renters want ' +
+            fmt(qd) + ', only 10 exist (A wants ' + fmt(wantA) +
+            ', B wants ' + fmt(wantB) + ').';
+      // E&P's counterfactual: the sublease is HYPOTHETICAL. It measures where
+      // the value has gone; it is not a reallocation the cap permits.
+      if (Math.abs(r - RMIN) < 1e-9) {
+        take = 'The cap blocks the reallocation and opens a ' + fmt(shortage) +
+               "-unit shortage — and the band, the whole increase in the " +
+               "stock's market value, has gone to sitting tenants rather " +
+               'than owners: were subleasing allowed, a tenant would charge ' +
+               '$6 for what he rents at $' + fmt(r) + '.';
+      } else {
+        take = 'Part of the move is through: owners now collect $' +
+               fmt(r - RMIN) + ' more per apartment, and the band is the ' +
+               'last $' + fmt(6 - r) + ', which still goes to sitting ' +
+               'tenants: were subleasing allowed, a tenant would charge $6 ' +
+               'for what he rents at $' + fmt(r) + '.';
+      }
     }
-    rHint.textContent = hint;
-    rTake.textContent = take;
-    rentFocus.setAttribute('aria-valuenow', String(rent));
-    rentFocus.setAttribute('aria-valuetext', hint);
+    rows(['s1', 's2'], say, 74);
+    rows(['k1', 'k2', 'k3', 'k4'], take, 66);
+    hintLine.textContent =
+      'Drag the rent line between $4 and $6; arrow keys step it by $1.';
+    rentFocus.setAttribute('aria-valuenow', String(r));
+    rentFocus.setAttribute('aria-valuetext', say);
+    return { qd: qd, shortage: shortage, wantA: wantA, wantB: wantB };
   }
 
   function render () {
-    if (state === 'reallocate') { renderReallocate(); }
-    else { renderControl(); }
+    var real = (state === 'reallocate');
+    STATE2_ONLY.forEach(function (id) { if (!real) return; vis($(id), false); });
+    STATE1_ONLY.forEach(function (id) { if (real) return; vis($(id), false); });
+    if (real) {
+      ['gClear', 'gAlloc', 'gScrub', 'hitScrub'].forEach(function (id) {
+        vis($(id), true);
+      });
+      return renderReallocate();
+    }
+    vis(hitRent, true);
+    return renderControl();
   }
 
-  // ---- toggle wiring ----
   function setState (s) {
-    state = s;
-    var real = (s === 'reallocate');
-    btnReal.classList.toggle('active', real);
-    btnCtrl.classList.toggle('active', !real);
-    btnReal.setAttribute('aria-pressed', String(real));
-    btnCtrl.setAttribute('aria-pressed', String(!real));
-    scrubWrap.classList.toggle('hidden', !real);
+    state = (s === 'control') ? 'control' : 'reallocate';
+    var real = (state === 'reallocate');
+    // Never leave focus stranded on the proxy that is about to be hidden:
+    // arrow keys would silently drive an invisible control and its knob would
+    // keep a stale focus ring. (The keydown handlers are gated on the active
+    // state as well, so neither path can regress on its own.)
+    var stale = real ? rentFocus : scrubFocus;
+    if (document.activeElement === stale) { stale.blur(); }
+    rentKnob.classList.remove('focus');
+    scrubKnob.classList.remove('focus');
+    $('btn-real').classList.toggle('on', real);
+    $('btnl-real').classList.toggle('on', real);
+    $('btn-ctrl').classList.toggle('on', !real);
+    $('btnl-ctrl').classList.toggle('on', !real);
+    $('hit-real').setAttribute('aria-pressed', String(real));
+    $('hit-ctrl').setAttribute('aria-pressed', String(!real));
     render();
   }
-  btnReal.addEventListener('click', function () { setState('reallocate'); });
-  btnCtrl.addEventListener('click', function () { setState('control'); });
 
-  // ---- State-1 scrubber ----
-  scrub.addEventListener('input', function () {
-    t = Math.max(0, Math.min(1, (+scrub.value) / 100));
-    if (state !== 'reallocate') setState('reallocate');
-    else render();
+  // ---- buttons: click + Enter/Space ----
+  [['hit-real', 'reallocate'], ['hit-ctrl', 'control']].forEach(function (pair) {
+    var el = $(pair[0]);
+    el.addEventListener('click', function () { setState(pair[1]); });
+    el.addEventListener('keydown', function (evt) {
+      if (evt.key === 'Enter' || evt.key === ' ' || evt.key === 'Spacebar') {
+        evt.preventDefault(); setState(pair[1]);
+      }
+    });
   });
 
-  // ---- State-2 rent-line drag (pointer capture + keyboard) ----
+  // ---- pointer plumbing (capture, so a fast drag never gets stuck) ----
   var spt = svg.createSVGPoint();
   function toSvg (evt) {
     spt.x = evt.clientX; spt.y = evt.clientY;
     return spt.matrixTransform(svg.getScreenCTM().inverse());
   }
-  function clampSnap (r) {
-    r = Math.max(RMIN, Math.min(RMAX, r));
-    return Math.round(r / RSTEP) * RSTEP;
+  function dragger (apply) {
+    var capEl = null, capId = null;
+    function move (evt) { evt.preventDefault(); apply(toSvg(evt)); }
+    function up () {
+      svg.classList.remove('grabbing');
+      if (capEl && capId !== null) {
+        try { capEl.releasePointerCapture(capId); } catch (e) {}
+      }
+      capEl = null; capId = null;
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    }
+    return function (evt) {
+      evt.preventDefault();
+      svg.classList.add('grabbing');
+      capEl = evt.currentTarget; capId = evt.pointerId;
+      try { capEl.setPointerCapture(capId); } catch (e) {}
+      apply(toSvg(evt));
+      window.addEventListener('pointermove', move);
+      window.addEventListener('pointerup', up);
+    };
   }
-  function setRentFromPointer (evt) {
-    var p = toP(toSvg(evt).y);
-    if (isNaN(p)) return;
-    var snapped = clampSnap(p);
-    if (snapped !== rent) { rent = snapped; render(); }
+
+  // ---- State-1 scrubber ----
+  function setT (v) {
+    var nv = Math.max(0, Math.min(1, v));
+    if (nv !== t) { t = nv; render(); }
   }
-  var dragging = false, capEl = null, capId = null;
-  function onMove (evt) { if (dragging) { evt.preventDefault(); setRentFromPointer(evt); } }
-  function onUp () {
-    dragging = false; svg.classList.remove('grabbing');
-    if (capEl && capId !== null) { try { capEl.releasePointerCapture(capId); } catch (e) {} }
-    capEl = null; capId = null;
-    window.removeEventListener('pointermove', onMove);
-    window.removeEventListener('pointerup', onUp);
-  }
-  function onDown (evt) {
-    if (state !== 'control') return;
+  var onScrub = dragger(function (p) {
+    setT((p.x - TR0) / (TR1 - TR0));
+  });
+  $('hit-track').addEventListener('pointerdown', onScrub);
+  scrubFocus.addEventListener('pointerdown', onScrub);
+  scrubFocus.addEventListener('keydown', function (evt) {
+    if (state !== 'reallocate') return;      // gated: this control is hidden
+    var k = evt.key;
+    if (k === 'ArrowRight' || k === 'ArrowUp') { setT(t + 0.1); }
+    else if (k === 'ArrowLeft' || k === 'ArrowDown') { setT(t - 0.1); }
+    else if (k === 'Home') { setT(0); }
+    else if (k === 'End') { setT(1); }
+    else { return; }
     evt.preventDefault();
-    dragging = true; svg.classList.add('grabbing');
-    capEl = evt.currentTarget; capId = evt.pointerId;
-    try { capEl.setPointerCapture(capId); } catch (e) {}
-    setRentFromPointer(evt);
-    window.addEventListener('pointermove', onMove);
-    window.addEventListener('pointerup', onUp);
+  });
+
+  // ---- State-2 rent line ----
+  function clampSnap (v) {
+    v = Math.max(RMIN, Math.min(RMAX, v));
+    return Math.round(v / RSTEP) * RSTEP;
   }
-  rentHit.addEventListener('pointerdown', onDown);
-  rentFocus.addEventListener('pointerdown', onDown);
+  function setRent (v) {
+    var nv = clampSnap(v);
+    if (nv !== rent) { rent = nv; render(); }
+  }
+  var onRent = dragger(function (p) {
+    if (!isNaN(p.y)) setRent(toP(p.y));
+  });
+  hitRentLine.addEventListener('pointerdown', onRent);
+  rentFocus.addEventListener('pointerdown', onRent);
   rentFocus.addEventListener('keydown', function (evt) {
-    var d = 0;
-    if (evt.key === 'ArrowUp' || evt.key === 'ArrowRight') d = RSTEP;
-    else if (evt.key === 'ArrowDown' || evt.key === 'ArrowLeft') d = -RSTEP;
-    else if (evt.key === 'Home') { rent = RMIN; render(); evt.preventDefault(); return; }
-    else if (evt.key === 'End') { rent = RMAX; render(); evt.preventDefault(); return; }
-    else return;
+    if (state !== 'control') return;         // gated: this control is hidden
+    var k = evt.key;
+    if (k === 'ArrowRight' || k === 'ArrowUp') { setRent(rent + RSTEP); }
+    else if (k === 'ArrowLeft' || k === 'ArrowDown') { setRent(rent - RSTEP); }
+    else if (k === 'Home') { setRent(RMIN); }
+    else if (k === 'End') { setRent(RMAX); }
+    else { return; }
     evt.preventDefault();
-    rent = clampSnap(rent + d);
-    render();
+  });
+
+  // ---- keyboard focus ring: paint it on the knob the proxy stands for ----
+  [[scrubFocus, scrubKnob], [rentFocus, rentKnob]].forEach(function (pair) {
+    pair[0].addEventListener('focus', function () {
+      pair[1].classList.add('focus');
+    });
+    pair[0].addEventListener('blur', function () {
+      pair[1].classList.remove('focus');
+    });
   });
 
   // ---- debug hook (inert for students) ----
   window.__fig = {
     set: function (o) {
-      if (o == null) return;
-      if (typeof o === 'string') { setState(o === 'control' ? 'control' : 'reallocate'); return; }
-      if (o.state) setState(o.state === 'control' ? 'control' : 'reallocate');
-      if (o.t != null) { t = Math.max(0, Math.min(1, +o.t)); scrub.value = String(Math.round(t * 100)); }
+      if (o == null) return window.__fig.get();
+      if (typeof o === 'string') { setState(o); return window.__fig.get(); }
+      if (o.state) { setState(o.state); }
+      if (o.step != null || o.t != null) {
+        t = Math.max(0, Math.min(1, +(o.step != null ? o.step : o.t)));
+      }
       if (o.rent != null) { rent = clampSnap(+o.rent); }
       render();
+      return window.__fig.get();
     },
     get: function () {
       if (state === 'reallocate') {
-        var pc = clearRent(t);
-        return { state: state, t: t, clearRent: pc,
-                 aAlloc: qa(pc), bAlloc: (6 + 4 * t) - pc, sum: qa(pc) + ((6 + 4 * t) - pc) };
+        // the bisection lands within 1e-14 of the exact rent; round the
+        // reported values so a reviewer reads 6, not 6.000000000000005
+        var rd = function (v) { return Math.round(v * 1e6) / 1e6; };
+        var pc = clearRent(t), xa = qa(pc), xb = qb(pc, t);
+        return { state: state, step: t, clearRent: rd(pc),
+                 xa: rd(xa), xb: rd(xb), sum: rd(xa + xb),
+                 sumIsStock: Math.abs(xa + xb - QS) < 1e-6 };
       }
-      var qd = dtRaised(rent);
+      var qd = dtot(rent, 1);
       return { state: state, rent: rent, qDemanded: qd, qSupplied: QS,
-               shortage: Math.max(0, qd - QS) };
+               shortage: Math.max(0, qd - QS),
+               wantA: qa(rent), wantB: qb(rent, 1),
+               bandShown: rent < 6,
+               bandFrom: rent, bandTo: 6 };
     }
   };
 
-  setState('reallocate');   // sync to the base markup
-})();
+  render();
+}());
 </script>
 </body>
 </html>
