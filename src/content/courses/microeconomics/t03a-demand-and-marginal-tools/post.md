@@ -8,9 +8,11 @@ ue_anchors: ["UE 5"]
 be_anchors: []
 ep_anchors: ["E&P Fig 2-3 (ch. 2, p. 21) — paradox of value: total worth as area vs marginal worth as height (diamond–water)", "E&P Ch 2 'Needs or Amounts Demanded' (ch. 2, pp. 20-21) — no-fixed-need principle: no particular amount of a good is required; the real question is relative value (poverty-person food/clothing trade; safety accepted at the margin)"]
 word_target: "3200-3600"
-word_budget: 3650
+word_budget: 3514
   # word_budget 3600 -> 3654 (+54): For Further Reading section added 2026-07-22
   # word_budget 3654 -> 3650 (-4): BE->A&A no-fixed-need redraft — kibbutz/oxygen/national-priorities illustrations to extensions; section re-grounded on E&P ch 2 "Needs or Amounts Demanded" (near-flat measured 3645, re-ground replaces the moved BE prose) 2026-07-23
+  # word_budget 3650 -> 3514 (-136): UE–E&P Wave-C verification 2026-08-10;
+  #   threshold/welfare/need qualifications tightened, prior 51-word headroom preserved
 status: approved        # E&P integration M6 done-gate 2026-07-20; prior approval 2026-07-01
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Source-of-truth for session 3. Covers laws of demand, shifts versus movements, marginal personal worth, verbal consumer surplus, demand as a rate, relative price, and demand versus fixed-needs language. UE 7's general total/marginal/average and equimarginal machinery is owned by T6."
@@ -21,7 +23,7 @@ note: "Self-contained — assumes no access to the textbooks. Source-of-truth fo
 
 The opening topic ended with the idea that begins our work on demand: the more of something you already have, the less you will give up to get one more unit of it. Underneath it is a plain fact: people value things differently, and the value they place on one more unit changes as they get more of it. Here we put that fact under a microscope and describe how the amount people are willing to buy responds to price. Out of that description comes the most reliable principle in all of economics and a way of cutting through one of the slipperiest words in public debate: "need."
 
-Keep one puzzle in mind. Almost everyone agrees that people "need" food, housing, medicine, and clean water. We call some of those needs urgent, others basic or vital, as if a fixed quantity of each were simply required, cost aside. Yet the moment you ask "how much, and at what price?" the language of need falls apart. By the end of this post you should see why there is no such thing as a fixed need, only a quantity people will buy at a given price, and why that is not a cold dismissal of human wants but the only honest way to think about them.
+Keep one puzzle in mind. Almost everyone agrees that people "need" food, housing, medicine, and clean water. We call some of those needs urgent, others basic or vital, as if the label by itself established how much must be supplied, cost aside. Yet the moment you ask "how much, and at what price?" trade-offs reappear. By the end of this post you should see why a need label does not determine a fixed quantity demanded, and why saying so does not deny biological requirements or the urgency of human wants.
 
 <aside class="econ-callout econ-objectives">
 <p class="econ-callout__label">Learning objectives</p>
@@ -29,7 +31,7 @@ Keep one puzzle in mind. Almost everyone agrees that people "need" food, housing
 <ul>
 <li>State the first law of demand and read a demand schedule as the whole set of quantities a buyer would take at each price, not a sequence of purchases over time; tell a change in quantity demanded (a slide along the curve) from a change in demand (a shift of the whole curve), and use the shifters to sort substitutes from complements.</li>
 <li>Explain why the demand curve slopes downward using diminishing marginal personal worth, and measure a buyer's gain verbally as consumer surplus, total personal worth minus what is paid, to show why revenue is not a measure of welfare.</li>
-<li>Explain why demand is a rate of consumption, not a fixed pile; explain why the relative price, which can exist without money, is what governs a choice; and explain why there is no such thing as a fixed need, only a quantity people will buy at a given price.</li>
+<li>Explain why demand is a rate of consumption, not a fixed pile; explain why the relative price, which can exist without money, governs a choice; and distinguish a biological or policy threshold from the economic claim that a need label alone does not determine quantity demanded independently of price and constraints.</li>
 </ul>
 </aside>
 
@@ -75,7 +77,7 @@ Read the schedule as that snapshot, not as a purchase diary, and a few common er
 
 Notice too that "quantity" is richer than a simple count. Suppose someone protests that cheaper vacations should make them take more, yet they still take just one a year, so the law must be wrong. It is not: a larger quantity of vacation can mean a longer, fancier, or more frequent one, not just a higher number on the calendar, and you respond to a lower price along whatever margin is open to you.
 
-The law does not claim that buyers carry a numerical schedule in their heads or do calculations at the register. It is a statement about how people behave when their options change, not about what they consciously think. Impulse buying fits it: a lower price raises the chance that a passing impulse becomes a purchase. Habitual buying fits too: a habit is a settled plan revised when the price moves far enough. The only behavior that would actually violate the law is buying more of a good when its price rises, with nothing else changed.
+The law does not claim that buyers carry a numerical schedule in their heads or calculate at the register. It describes behavior when options change, not a thought process. Because purchases can be discrete, a small price change may leave quantity unchanged; the claim is that some sufficiently higher price reduces it, holding the demand schedule fixed. Buying more at a higher price would require some other condition to change or the unusual wealth effect examined next.
 
 ## A Change in Price Slides Along the Curve; Other Conditions Can Shift It
 
@@ -144,7 +146,7 @@ The buyer purchases a second quart only when the price falls to $0.90, which tel
 
 That distinction clears up a question that trips people. Suppose someone buys five units at $0.60 and six units at $0.50, spending exactly $3.00 in both cases. Does that mean the sixth unit is worth nothing, since total spending did not change? No: the sixth unit is worth its marginal worth, $0.50, the price at which the buyer was just willing to take it. The unchanged total is a quirk of the arithmetic, not a statement about the sixth unit's value. Likewise, if a buyer would pay up to $0.90 for a second unit, it does not follow that each of the two units is worth $0.90; only the second, the marginal one, carries that worth, and the first was worth more. By "value" I mean something concrete: the amount of other goods, measured in dollars for convenience, that a person will actually give up to get the good. Not what they say but what they will give up.
 
-Now the reason for the downward slope. The more of a good you already have, the less you will give up for one more unit. Economists call this *diminishing marginal personal worth*, readable straight down the marginal column above: each additional quart is worth less than the one before, from a precious first quart to a tenth barely worth a dime. Because marginal worth falls as quantity rises, the curve that plots worth against quantity slopes down; that is the engine under the first law. A schedule with a *constant* trade-off, where the eleventh unit was worth as much as the first, would violate this principle, and we essentially never see it.
+Now the reason for the downward slope. The more of a good you already have, the less you will give up for one more unit. Economists call this *diminishing marginal personal worth*, readable straight down the marginal column above: each additional quart is worth less than the one before. Because marginal worth falls as quantity rises, the curve that plots worth against quantity slopes down; that is the engine under the first law. Marginal worth can be flat over a limited range, but the maintained economic presumption is that it eventually falls as more uses are satisfied.
 
 ## Buyers Gain Because They Pay Less Than the Goods Are Worth to Them
 
@@ -172,7 +174,7 @@ Here is the same schedule with two more columns: the *total market value* the bu
 | $0.20 | 9 | $5.40 | $0.20 | $1.80 | $3.60 |
 | $0.10 | 10 | $5.50 | $0.10 | $1.00 | $4.50 |
 
-At $0.50, the buyer pays $3.00 for milk they value at $4.50, walking away with a net gain worth $1.50, which is the whole point of buying. We keep the accounting verbal and arithmetic on purpose: *consumer surplus* is simply total personal worth minus total expenditure, a gap, not a geometric area you measure off a diagram. We will use the idea again when we judge how sellers with market power price their goods, but we will not turn it into a machine for calculating "deadweight loss."
+At $0.50, the buyer pays $3.00 for milk they value at $4.50, walking away with a net gain worth $1.50, which is the point of buying. We keep the accounting verbal and arithmetic on purpose: *consumer surplus* is total personal worth minus total expenditure, a gap, not a measured deadweight-loss triangle. It is a money-equivalent, within-person measure under the buyer's current wealth and alternatives. It is not moral worth or a complete license to add welfare across different people without further assumptions.
 
 <figure class="econ-figure" style="margin:1.5em 0;">
 <iframe src="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-marginal-worths-interactive.html" title="Drag the handle down and to the right to take more units at a lower price and watch total personal worth split into the market value paid and the consumer surplus gained." loading="lazy" style="width:100%; max-width:480px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-marginal-worths-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t03a-demand-and-marginal-tools/figures/t03-marginal-worths.svg">view the static figure</a>.</p></iframe>
@@ -210,13 +212,13 @@ Underneath every dollar figure is something more basic. A *price* is an exchange
 
 ## There Is No Such Thing as a Fixed Need
 
-Now we can dismantle the slippery word from the opening. People talk about urgent, critical, vital, basic, minimum *needs*, as if some quantity of a good were simply required, full stop, regardless of cost. There is no such quantity. Economists sometimes put it this way: "The amount of any good a person or a society chooses is a function of its price." That shorthand needs care: people choose, while society's amount aggregates their individual choices. Either way, the question is *how much at what price*, more-or-less, never all-or-none.
+Now we can separate two meanings of the slippery word from the opening. Biology and engineering can identify quantities required for a specified outcome, such as calories needed to avoid a defined deficiency. Economics asks a different question: how much of a scarce good people choose or a policy supplies when obtaining more sacrifices alternatives. The amount of any good a person or a society chooses is a function of its price. That shorthand needs care: choices also depend on income, rights, information, and other conditions, while a social total aggregates individual choices. A need label alone cannot answer *how much at what price*.
 
-To see why, ask what a person really needs; the honest answer is always a comparison. Picture someone with almost nothing, down to what they would call bare necessities. Offer them a little more food for some of their clothing, and they will not refuse on the grounds that no amount of food could make up for a bit less clothing; offer them enough of another comfort, and they will part with a little of the food they hold. However poor a person is, there is always some amount of one good they will give up for enough of another. Even our own safety works this way: we accept a slightly higher chance of harm, driving fast or taking other risks, to get things we want more than that sliver of security. Nothing, however indispensable, is required in a fixed, all-or-none amount.
+To see the choice claim, picture someone with almost nothing, down to bare necessities. Within a feasible voluntary choice set, a little more food can be traded against some clothing, and enough of another comfort can make parting with a little food worthwhile. Safety also enters trade-offs: people accept small increments of risk when driving faster or pursuing other goals. These examples do not deny deprivation or coercion; they show that chosen margins are comparisons rather than all-or-none labels.
 
-Because there is no fixed need, the political language built on it tends to mislead. Labeling a good a need makes it sound as though some amount were simply required, past all argument, when the real question is always how much more of it is worth to us than the other things we would have to give up to get it. The word itself settles nothing; it only hides which of those other things you have chosen to do without.
+Political need-language misleads when it makes a quantity sound settled without stating an outcome, cost, distribution, or alternative. Calling a good necessary may be a defensible value judgment or policy priority, but it does not reveal how much more is worth obtaining or who should bear the sacrifice. The label begins that argument; it does not finish it.
 
-A bonus from taking the point seriously: the law of demand turns out to be nearly universal. The number of children people choose to have, the number of immigrants who seek entry, the demand for pianos, for winning sports teams, even for medical procedures, all respond to the price, broadly understood, of getting them. Wherever a desire confronts a cost, the law of demand is at work.
+A bonus from taking the point seriously: demand reasoning reaches beyond store prices. Family size, migration applications, medical procedures, and other choices can respond to a full price that includes time, risk, legal constraints, and forgone alternatives. The prediction requires that price to be identified and other demand conditions held apart; a raw correlation is not by itself a demand-curve estimate.
 
 ## For Further Reading
 
@@ -231,7 +233,7 @@ Want to explore the source material? This lecture draws on the following chapter
 <ul>
 <li><strong>The first law of demand is the most reliable regularity in economics, and a slide is not a shift.</strong> At a higher price people buy a smaller quantity and at a lower price a larger one; a demand curve is the whole schedule of what a buyer would do at each price right now. A change in the good's own price slides along that fixed curve, while another relevant condition can shift the curve; how one good's price shifts another's demand tells substitutes from complements.</li>
 <li><strong>Diminishing marginal worth tilts the curve down, and that is why buyers gain from trading.</strong> The height of the demand curve is what one more unit is worth to you, and that worth falls as you get more. Consumer surplus is total personal worth minus what was paid, a gap you can total without a triangle, which is why revenue is not a measure of welfare.</li>
-<li><strong>Demand is a rate governed by the relative price, and there is no such thing as a fixed need.</strong> Demand describes a flow of consumption over time, not a fixed pile, and the price that actually governs a choice is the relative price, what a good costs in terms of other goods, which can exist without money at all. Because of that, what a person takes depends on price, and the amount observed for society aggregates those individual choices.</li>
+<li><strong>Demand is a rate governed by relative price, and a need label does not fix quantity demanded.</strong> Demand describes a flow of consumption over time, not a fixed pile, and the relevant price is what a good costs in terms of alternatives, which can exist without money. Biological thresholds can be real, but a chosen or supplied quantity also depends on prices, income, rights, information, and the outcome being pursued.</li>
 </ul>
 </section>
 </div>

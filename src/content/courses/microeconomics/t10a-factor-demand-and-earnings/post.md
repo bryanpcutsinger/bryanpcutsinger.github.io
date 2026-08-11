@@ -7,9 +7,11 @@ ue_anchors: ["UE 29", "UE 39", "UE 22 (Codlandia; National Development)"]
 ep_anchors: ["E&P Fig 8-1 — team marginal products", "E&P Fig 14-6 — demand for labor services"]
 be_anchors: []
 word_target: "2500-3600"
-word_budget: 3672
+word_budget: 3601
   # word_budget 3600 -> 3672 (+72): For Further Reading section added 2026-07-22
   # word_budget unchanged 2026-07-23: BE->A&A re-ground of the §1 context-dependence paragraph on UE 29 (Social and Cultural Resources as Productive Inputs) + UE 22 (National Development); measured stripped 3130 -> 3217, ample headroom retained
+  # word_budget 3672 -> 3613 on 2026-08-10: Wave-B source audit; stripped 3217 -> 3158 while preserving the prior 455-word headroom
+  # word_budget 3613 -> 3601 on 2026-08-10: three-block course read corrected the T9→T10 transition; prior 455-word headroom retained
 status: approved        # Stage-2 sign-off 2026-06-15
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Part A of the two-part T10 (factor demand, VMP, earnings); Part B (topics/t10b-labor-coalitions-and-constraints) covers unions, the minimum wage, discrimination, and licensing. Source-of-truth for the deck; section headers are claims that map to slide titles."
@@ -18,25 +20,25 @@ note: "Self-contained — assumes no access to the textbooks. Part A of the two-
 
 # Factor Markets and Labor, Part A: What an Extra Worker Is Worth
 
-So far we have studied the buying side of the economy: how people choose what to consume, how prices ration scarce goods, how trade leaves both sides better off. Now turn the picture around. The same people who buy groceries also sell something to earn the money that buys them. Most of us sell our labor; some also sell the use of land, machines, or savings. These are the *factors of production*, the inputs firms hire to make everything else, and the markets where they get hired and priced are *factor markets*.
+So far we have studied consumers, product markets, production, and the organizations that hire inputs. Now turn directly to the input markets. The same people who buy groceries also sell something to earn the money that buys them. Most of us sell labor services; some also sell the use of land, machines, or savings. These are the *factors of production*, the inputs firms hire to make everything else, and the markets where they get hired and priced are *factor markets*.
 
 A huge amount of public argument turns on these markets. Why does a surgeon earn more than a cashier? Why does the same job pay differently in different countries? Both questions turn on a single idea we will build from scratch here: the value of what an extra worker adds. Get that straight and the rest falls into place.
 
-This is the first of two parts. Here in Part A we build that central idea and use it to explain how labor demand works, why "machines destroy jobs" is mostly a confusion, and why people's earnings differ. Part B takes the same engine into the most heated policy fights of all: unions, the minimum wage, discrimination, and occupational licensing.
+This is the first of two parts. Here in Part A we build that central idea and use it to explain how labor demand works, how machines reorganize labor demand, and why people's earnings differ. Part B takes the same engine into the most heated policy fights of all: unions, the minimum wage, discrimination, and occupational licensing.
 
 <aside class="econ-callout econ-objectives">
 <p class="econ-callout__label">Learning objectives</p>
 <p>By the end of this post you should be able to:</p>
 <ul>
-<li>Explain why the demand for labor is a derived demand built from the value of marginal product, and use the hiring rule (hire each worker until the value he adds equals his wage) to explain why labor demand slopes down.</li>
-<li>Explain how a higher input price pushes firms to substitute toward other inputs, why "capital replacing labor" really trades the labor built into the machine for the labor once done on site, and why there is no fixed number of jobs while human wants remain unlimited.</li>
-<li>Explain why wages differ across people using both differences in productive ability and the cost of acquiring skills, and why skills are a form of human capital that, unlike physical property, cannot be confiscated.</li>
+<li>Explain why the demand for labor services is a derived demand built from the value of marginal product, and use the competitive-benchmark hiring rule to explain why labor demand slopes down.</li>
+<li>Explain how a higher input price pushes firms to substitute toward other inputs, and distinguish a machine's task-level displacement from its wider effects on product demand, complementary jobs, and total employment.</li>
+<li>Explain why wages differ across people using productivity, skill-acquisition costs, working conditions, entry constraints, and labor-market institutions, and explain both the portability and the limits of human capital.</li>
 </ul>
 </aside>
 
-## Labor Is Wanted for What It Helps Produce, Not for Itself
+## Demand for Labor Services Comes From What They Help Produce
 
-Nobody hires a worker for the pleasure of his company. A firm hires labor because labor helps produce something customers will pay for. Economists say the demand for any input is a *derived demand*: it is derived from the demand for the product the input makes. There is no demand for autoworkers apart from the demand for cars, no demand for cooks apart from the demand for meals.
+This section is about the market demand for a person's specified *labor services*, not the person's dignity or human worth. A firm hires those services because they help produce something customers will pay for. Economists therefore call the demand for any input a *derived demand*: it is derived from demand for the product the input helps make. There is no demand for autoworkers' production services apart from demand for cars, or for cooks' production services apart from demand for meals.
 
 <aside class="econ-callout econ-termset">
 <p class="econ-callout__label">Key term</p>
@@ -45,7 +47,7 @@ Nobody hires a worker for the pleasure of his company. A firm hires labor becaus
 </dl>
 </aside>
 
-This quietly settles a great deal. It means the value of a worker is not a fixed personal trait you carry around like your height. It depends on what that worker helps produce and what people will pay for it. The same person can be worth far more in one setting than another. Drop a skilled mechanic into an economy with no tools, no reliable transport, and no honest courts, and the value of his work collapses, not because he got worse but because the surroundings that turned his effort into valuable output disappeared. A worker never produces alone. How much he adds depends on the cooperating inputs around him: the tools and machines he uses, the coworkers he works alongside, and the shared infrastructure a productive society supplies, from paved roads and reliable power to impartial courts, secure property rights, and honest government. Economists sometimes call that surrounding stock of productive resources a society's social capital, and it is why the same effort yields far more in a developed economy than in a poor one. So the same labor is worth different amounts in different places, which is most of why wages differ so much across countries. The next section makes this exact, showing how a worker's contribution rises and falls with the other inputs he has to work with.
+This quietly settles a great deal. It means the value of a worker is not a fixed personal trait you carry around like your height. More precisely, the market value of an hour of labor service depends on what it helps produce and what buyers will pay for that output. The same person can therefore generate different market value in different settings. Drop a skilled mechanic into an economy with few tools, unreliable transport, or weak contract enforcement, and the value of the mechanic's work may fall, not because the mechanic became less capable but because cooperating inputs changed. Tools, coworkers, infrastructure, law, finance, management, and market access all matter. Economists sometimes call part of that surrounding productive stock *social capital*. This mechanism helps explain cross-country productivity and wage differences, but it is not a complete causal ranking: technology, education, health, geography, history, policy, bargaining institutions, and the prices of what workers produce also matter. The next section isolates one part of that larger system.
 
 When we ask "what is a worker worth," then, we are really asking "how much does this worker add to what the firm can sell." To answer that precisely we need a tool.
 
@@ -61,7 +63,7 @@ Working alone, Jack produces output worth $5 a day and Jill $7. Teamed up they p
 | Jill, working alone | $7 |
 | Jack and Jill together | $15 |
 
-So how much did Jack add? Without him the team would have had only Jill's $7, so Jack added $15 − $7 = $8. By the same logic Jill added $15 − $5 = $10. Those sum to $18, more than the $15 the team produced. Both numbers are correct, and they cannot both be paid. That is the catch with teamwork: the extra value from working together cannot be cleanly sliced and handed to one member. What pins down each person's pay is not this impossible accounting but competition. A worker must be paid at least what he could earn on his next-best team elsewhere, and no more than he adds here.
+So how much did Jack add? Without him the team would have had only Jill's $7, so Jack added $15 − $7 = $8. By the same logic Jill added $15 − $5 = $10. Those sum to $18, more than the $15 the team produced. Both counterfactual comparisons are correct, and they cannot both be paid. Team output cannot be cleanly sliced into uniquely attributable personal products. In a competitive benchmark, outside offers and replacement alternatives place bounds on pay; contracts, bargaining, information, market power, and team-specific investments help determine where pay falls within those bounds.
 
 To see how the value of an added worker drives hiring, we need a cleaner setting. Picture a small island, Codlandia. A thousand people live there, and at first everyone fishes from shore, catching 8 fish a day each. Then someone finds a boat, far more productive than the shore but with limited room, and that limit is what makes the example work. Here is the catch as more people climb aboard.
 
@@ -95,7 +97,7 @@ This also fixes where a sensible employer operates. Nobody stops hiring in the r
 <figcaption><strong>Marginal product turns negative exactly where total product peaks, and it cuts average product from above exactly where average product peaks.</strong> Total product (top) keeps rising as long as marginal product (gold) is positive, and stops rising the instant marginal product hits zero. Average product (black) climbs while marginal is above it and falls once marginal drops below it — three stages of hiring in one figure. Drag the point (or use the arrow keys) to sweep the number of workers through both plots. If the frame does not load, <a href="/teaching/microeconomics/t10a-factor-demand-and-earnings/figures/t10a-product-curves-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t10a-factor-demand-and-earnings/figures/t10a-product-curves.svg">view the static figure</a>.</figcaption>
 </figure>
 
-Put a price on the fish and the construct is finished. Suppose each fish is worth one unit. Then the marginal product column is also the *value of marginal product* (VMP): the extra output from one more worker, valued at what that output sells for. VMP is the demand for labor; it tells the employer the most each successive worker is worth paying.
+Put a price on the fish and the construct is finished. Suppose each fish is worth one unit and the boat's extra catch does not change that price. Then the marginal product column is also the *value of marginal product* (VMP): the extra output from one more worker, valued at the output price. In this competitive product-market benchmark, VMP is the boat's demand schedule for labor services; it tells the employer the most each successive worker is worth paying. A seller with market power instead asks how the added output changes revenue, so its corresponding rule uses *marginal revenue product*.
 
 <aside class="econ-callout econ-termset">
 <p class="econ-callout__label">Key term</p>
@@ -114,7 +116,7 @@ Put a price on the fish and the construct is finished. Suppose each fish is wort
 | 6 | 4 | 4 |
 | 7 | 2 | 2 |
 
-Now the punch line, the hiring rule: **hire each worker up to the point where the value he adds equals the wage you must pay him.** A worker could catch 8 fish on shore, so to lure him aboard you must pay a wage of 8 fish. The owner keeps hiring as long as the next worker adds at least 8 in value. The fifth adds exactly 8, so the owner hires five and stops; a sixth would cost 8 to add only 4. Raise the wage and the calculus shifts: if shore fishing improves so the going wage is 12 fish, the owner hires only to the fourth worker, whose VMP is 12. A higher wage means fewer workers hired. That downward relationship is exactly why the demand curve for labor slopes down, and it falls straight out of diminishing returns.
+Now the punch line, the benchmark hiring rule: **hire each worker up to the point where the value he adds equals the wage you must pay him.** A worker could catch 8 fish on shore, so to lure that worker aboard you must pay 8 fish. The owner keeps hiring as long as the next worker adds at least 8 in value. The fifth adds exactly 8, so the owner hires five and stops; a sixth would cost 8 to add only 4. If the going wage rises to 12 fish, the owner hires only to the fourth worker, whose VMP is 12. Holding the boat, output price, and other inputs fixed, a higher wage means fewer workers demanded. That is why this labor-demand schedule slopes down. Part B adds cases in which the wage or hiring conditions are shaped by buyer power, coalitions, law, or bargaining.
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
@@ -127,7 +129,7 @@ Now the punch line, the hiring rule: **hire each worker up to the point where th
 </figure>
 
 
-Two results follow. First, VMP sets both how many to hire and what the input earns: in a competitive market a worker tends to be paid the value an added worker contributes, because paying less lets a rival bid him away and paying more loses the firm money. Second, the value left after the wage bill, the catch minus what the workers are paid, goes to the owner who supplied the boat and bore the risk. That residual is not a leftover slice of the workers' product; it is the return to the boat and to the person who shouldered the chance the venture might fail. This is the same residual-claimant incentive we met in the property-rights and public-goods topic, now shown inside a production team. If the wage rose so high that paying it left the owner worse off than fishing on shore himself, he would beach the boat. Total factor payments cannot exceed the value produced, because any employer who tried would go broke, and competition steadily pushes payments toward the value each input adds.
+Two results follow within this benchmark. First, VMP helps determine how many workers the boat hires. With many employers and workers able to move, outside bids push pay toward the value of the marginal service, though teamwork prevents us from treating that wage as a unique moral or causal measure of one person's contribution. Second, the contract assigns the catch left after promised payments to the boat owner, who supplies a specialized asset and bears the residual gain or loss. That residual claim can strengthen monitoring incentives; it does not prove that every residual dollar was produced by the owner alone or that every observed contract is competitive. If the wage rose so high that the boat no longer covered all opportunity costs, the owner would beach it. A firm that persistently promises more than its revenue cannot survive without some outside subsidy, but how the feasible total is divided depends on institutions as well as marginal products.
 
 <figure class="econ-figure" style="margin:1.5em 0;">
 <iframe src="/teaching/microeconomics/t10a-factor-demand-and-earnings/figures/t10a-ep14-6-vmp-demand-interactive.html" title="Interactive labor-demand curve: drag a point along the curve to read, at each wage, how many hours of labor services employers hire." loading="lazy" style="width:100%; max-width:480px; aspect-ratio:9/10; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t10a-factor-demand-and-earnings/figures/t10a-ep14-6-vmp-demand-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t10a-factor-demand-and-earnings/figures/t10a-ep14-6-vmp-demand.svg">view the static version</a>.</p></iframe>
@@ -137,40 +139,40 @@ Two results follow. First, VMP sets both how many to hire and what the input ear
 
 That is the engine. The rest of the topic applies it to real arguments.
 
-## Higher Input Prices Push Firms to Substitute, and "Capital Replacing Labor" Hides the Labor Inside the Capital
+## Higher Input Prices Induce Substitution, but Machines Can Substitute for Some Tasks and Complement Others
 
 The VMP picture has a second blade. When an input gets more expensive, firms do not just hire less of it; they shift toward other inputs that now deliver more value per dollar. A gardener whose wage doubles because fewer gardeners are available does not simply price himself into idleness. Homeowners switch to power equipment that lets one person do the work of several, or to rock gardens and low-maintenance plants. If you wonder what the substitutes for a costly input are, watch what its competitors sell: the makers of riding mowers and gravel will gladly show you.
 
 This runs even when a firm seems locked into a fixed recipe. Suppose a tool needs exactly one handle per blade. Make handles costlier and the tool costs more; at the higher price consumers buy fewer tools, so fewer handles get used. The substitution happened, just out among the products rather than inside the factory. And these adjustments deepen over time, so demand for an input is more elastic in the long run than in the short run.
 
-This sets up one of the most stubborn confusions in economics. People say a robot "substitutes capital for labor," as if the machine made human work vanish. The robot, its software, and its sensors were all made by labor. What really happened is that the labor used to build the machine was substituted for the labor that used to do the task on site. The one-man bus is the cleanest case: a coin box and an automatic door replaced the conductor, but workers elsewhere had to make the coin box and the door mechanism, and the on-board labor that remains is reorganized into a higher-output job. Calling it "capital for labor" counts the labor you can see and ignores the labor embodied in the capital.
+Technology can substitute for some tasks and complement others. A robot may reduce the marginal product of an additional assembly worker while raising the marginal product of programmers, maintainers, designers, or workers using the cheaper output. The robot, its software, and its sensors were also made with labor, so counting only the on-site jobs misses part of the adjustment. The one-person bus is a clean example: a fare box and automatic door can replace a conductor, while workers elsewhere make and maintain the equipment. None of this guarantees that the displaced worker, the original occupation, or even total employment rises after a particular innovation. The effect depends on how strongly the machine displaces the original tasks, complements other tasks, lowers the product price, and expands demand for the product.
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
-<p>A factory installs a robot that seems to do the work of three workers. Where did the labor those workers did actually go, and what labor does calling this "capital for labor" leave out of the count?</p>
+<p>A factory installs a robot that performs three workers' former tasks. Identify one substitution effect, one complementary-labor effect, and the demand condition that determines whether the industry's employment rises or falls.</p>
 </aside>
 
-## There Is No Fixed Number of Jobs
+## The Number and Composition of Jobs Are Not Fixed
 
-The substitution point disposes of a fallacy that wrecks more public debate than almost any other: the belief that there is a fixed stock of jobs, so that every task a machine takes is a job permanently lost. Economists call this the *lump-of-labor fallacy*.
+The substitution point exposes the *lump-of-labor fallacy*: the belief that the economy contains a fixed stock of tasks, so one person's or machine's gain must permanently remove an equal number of jobs elsewhere.
 
-In a world of scarcity human wants are endless, so there is always more valuable work waiting than there are people to do it; only the highest-value jobs get filled at any moment. When a refrigerator eliminates the iceman's route, or a household appliance eliminates the domestic servant, or a robot eliminates an assembly task, the freed workers do not evaporate. They move to the best of the still-unfilled jobs, very often including the jobs of building the new machines. The total number of jobs is not reduced, because the amount of work worth doing was never fixed. And the community ends up wealthier, because the same people now produce more.
+Scarcity means there are always additional wants and possible tasks, but a possible task becomes a job only when someone expects its value to cover its opportunity cost. When a refrigerator eliminates an iceman's route or a robot eliminates an assembly task, workers and resources can move toward other tasks, including producing and maintaining the new equipment. In the long-run competitive benchmark, **The total number of jobs is not reduced, because the amount of work worth doing was never fixed** and wages and other prices adjust. That statement rejects a fixed quota; it is not a theorem that every innovation leaves aggregate employment unchanged at every date. Search costs, retraining, location, contracts, policy, and weak demand can make adjustment slow, unequal, or incomplete.
 
-A federal judge once stumbled here, ruling that a dispute over railroad layoffs had to come down "in favor of jobs," as if the choice were between jobs and machines. But the real choice was between jobs and jobs: the railroad jobs on one side, and on the other the jobs displaced workers would take elsewhere, including jobs making railroad equipment. There is no contest between jobs and capital, because capital is itself made by labor and frees labor for other work.
+A ruling framed around preserving railroad jobs illustrates the fixed-stock temptation. The relevant comparison also includes jobs and output created elsewhere and the costs borne during transition. Capital is produced and maintained with labor, but that fact alone does not show how many jobs exist afterward.
 
-One honest caveat: the fallacy is not that nobody is ever hurt. The community gains, and most workers gain from most innovations, but a particular worker displaced by a particular machine has no guarantee he personally comes out ahead from that specific change. The point is about the total. Automation does not shrink the pool of jobs while scarcity lasts; it reshuffles which jobs get done. That holds even for less-skilled work, since pushing a button often demands less skill than the craft it replaced.
+The fallacy is not the claim that displacement never hurts. A productivity-improving innovation can enlarge total output while imposing concentrated losses on workers whose skills, homes, or relationships are tied to the old activity. Whether aggregate employment rises, falls, or recovers is an empirical question about the adjustment mechanisms just named. The analytical lesson is narrower and stronger: do not infer a one-for-one permanent loss of jobs from the disappearance of a task.
 
 ## Earnings Differ Because People and the Cost of Acquiring Skills Differ
 
-Now we can explain why wages differ across people, not just countries. Two forces are at work, both flowing from VMP. People differ in their productive abilities, so they add different value. And people differ in the *cost of acquiring* the skills that raise that value. A surgeon earns more than an orderly partly because she adds more value and partly because few are willing or able to pay the long, costly price of becoming one, which restricts supply and props up the wage.
+Now we can explain part of why wages differ across people, not just places. Productivity and product demand shape employers' willingness to pay. On the supply side, people differ in abilities, preferences, opportunities, and the *cost of acquiring* skills. A surgeon's high earnings may reflect valuable services and a long, costly training path that restricts supply. Working conditions, risk, location, hours, discrimination, bargaining power, licensing, networks, and luck can also create or sustain differences. A money wage is therefore neither a complete measure of job quality nor a verdict on personal merit.
 
-This gives a neat boundary. A wage gap between two jobs cannot stay much larger than the cost of acquiring the higher-paying skill. If it did, people would pour into the training, the added supply would push the wage down, and the gap would shrink to roughly what the training costs. So training cost works on both sides: it signals the value the trained worker can add, and it limits how many acquire the skill.
+This gives a useful competitive tendency, not a hard ceiling. **A wage gap between two jobs cannot stay much larger than the cost of acquiring the higher-paying skill** when people can enter the training, finance it, complete it with similar probability, and compete for the resulting jobs. If the expected lifetime gain exceeded the full cost, entry would expand and press the gap downward. Ability differences, credit constraints, limited training slots, licensing, uncertainty, and job-specific rents can weaken or block that response. Training cost limits supply; it does not by itself prove how productive a credential is.
 
 The same logic explains why we all teach ourselves to read, write, drive, and cook but hire out our medicine and our lawsuits. Generalized skills like reading are cheap to acquire, useful almost anywhere, and durable, so it pays each of us to own them. Specialized skills like surgery or tax law are expensive, narrow, and can lose value when the situation changes, so it pays to buy them from a specialist only when we need them.
 
-## Skills Are Wealth, and Unlike Property They Cannot Be Confiscated
+## Human Capital Is Portable Wealth, but Its Return Can Be Blocked or Lost
 
-It helps to think of skills as a form of wealth. Economists call it *human capital*: the productive capacity stored in a person through education, training, and experience. Like a machine, it took resources to build and yields a return over time. Unlike a machine, no one can take it from you.
+It helps to think of skills as a form of wealth. Economists call it *human capital*: the productive capacity stored in a person through education, training, and experience. Like a machine, it takes resources to build and can yield services over time. Unlike a machine or bank account, the skill itself cannot simply be detached from its holder and handed to someone else. That makes it relatively portable and physically harder to seize.
 
 <aside class="econ-callout econ-termset">
 <p class="econ-callout__label">Key term</p>
@@ -179,7 +181,7 @@ It helps to think of skills as a form of wealth. Economists call it *human capit
 </dl>
 </aside>
 
-That same insight ties human capital to discrimination, a thread Part B picks up directly.
+But human capital is not invulnerable. Illness, technological change, time away from practice, or war can depreciate it. Licensing, discrimination, migration restrictions, incarceration, or coercion can block where and whether it earns a return. And because a lender generally cannot repossess a person's future labor, financing education can be harder than financing a saleable machine. Human capital is wealth with distinctive control and financing limits, not property beyond institutional reach. That insight ties directly to Part B.
 
 ## For Further Reading
 
@@ -192,9 +194,9 @@ Want to explore the source material? This lecture draws on the following chapter
 <section class="econ-review__section">
 <h3>Key takeaways</h3>
 <ul>
-<li><strong>Labor demand is derived demand, priced by the value of marginal product.</strong> A worker is hired for what he helps produce; a firm hires until the value the added worker contributes equals his wage, which is why labor demand slopes down.</li>
-<li><strong>Substitution hides the labor inside the capital, and jobs are never fixed in number.</strong> A higher input price pushes firms toward other inputs, "capital replacing labor" really swaps the labor built into the machine for the labor once done on site, and while human wants stay unlimited, workers freed by a machine move to the next-best unfilled job rather than vanishing.</li>
-<li><strong>Earnings track ability and the cost of acquiring skills, which is human capital.</strong> People add different value and pay different prices to acquire skills, so a wage gap cannot stay much larger than the cost of acquiring the higher-paying one; and because skills are human capital, unlike physical property no government or mob can confiscate them.</li>
+<li><strong>Labor demand is derived demand.</strong> In the competitive benchmark, a firm hires until the value of the marginal service equals its wage; product-market power, bargaining, law, and team production require added steps.</li>
+<li><strong>Technology reorganizes labor demand rather than drawing from a fixed job quota.</strong> Machines can substitute for some tasks and complement others; product-demand and adjustment conditions determine industry and aggregate employment.</li>
+<li><strong>Earnings and human capital reflect several margins.</strong> Productivity and skill costs matter, but so do working conditions, entry constraints, institutions, and bargaining; skills are portable and hard to seize physically, yet they can depreciate or be prevented from earning a return.</li>
 </ul>
 </section>
 </div>

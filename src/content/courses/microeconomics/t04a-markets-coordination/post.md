@@ -6,7 +6,7 @@ sessions: ["Fall 2026 — content session 6 (Thu 9/10)"]
 ue_anchors: ["UE 6", "UE 10", "UE 11 (marketing arrangements, Q8 derived-cost price web, and Q9 universal allocation)", "UE 25 (predictable prices, voluntary queues, preferred customers, and blind blocks)"]
 be_anchors: []
 ep_anchors: ["E&P Fig 4-1 (ch. 4) — market demand as horizontal sum of individual demands", "E&P Fig 4-4 (ch. 4) — supply elasticity and input generality", "E&P ch. 4 (Figs 4-2/4-3) — reduction in supply, reallocation of a fixed stock, and the anti-'gouging' price-ceiling case (a car destroyed by fire)", "E&P ch. 5 pp. 88–90 — inventories, reserve capacity, stable prices, and queues as information-cost economizers"]
-word_budget: 3610
+word_budget: 3340
   # word_budget 3600 -> 3687 (+87): For Further Reading section added 2026-07-22
   # word_budget 3687 -> 3660 (-27): BE→A&A redraft 2026-07-24 — Thatcher/three-jobs (BE 2) + hurricane/1906-earthquake (BE 3) → lecture cards; opener/§4 coordination/§6/§7 re-grounded on E&P 4 (signals-and-rewards, car-fire anti-gouging, reduction-vs-shortage) + UE 11 Q8 price web; be_anchors []. Measured stripped 3,646.
   # word_budget 3660 -> 3758 (+98): ep4-1 widget round-2 rebuild 2026-08-07 — figure now carries the full E&P Fig 4-1/4-2/4-3 sequence (scenario buttons); figcaption rewritten + three prose echo pointers (new-buyer lesson, car-burns rerun, two-cars-arrive clearing). Measured stripped 3,744; 14-word headroom preserved.
@@ -14,7 +14,9 @@ word_budget: 3610
   # word_budget 3758 -> 3610 (-148): ep4-4 figure PULLED AND BANKED 2026-08-07 (instructor: supply not yet taught at session 6; re-host in T7) — embed + figcaption removed, lecture card ext-t04a-supply-elasticity-10 added. Measured stripped 3,570; 40-word headroom preserved.
   # word_budget unchanged (3610): econ-writing round 2 2026-08-07 (10 line edits). Measured stripped 3,541.
   # word_budget unchanged (3610): sequence-alignment review 2026-08-08 — transaction-cost accounting, reservation demand, fixed-stock interpretation, allocation assumptions, ceteris-paribus demand, and persistent-control terminology tightened. Measured stripped 3,521; 89-word headroom.
-word_target: "3400-3600"
+  # word_budget 3610 -> 3340 (-270): UE–E&P Wave-C verification 2026-08-10;
+  #   entry/rent/coordination claims conditioned, prior 89-word headroom preserved
+word_target: "3100-3500"
 status: approved        # E&P integration M4 done-gate 2026-07-20; prior approval 2026-07-01
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Source-of-truth for the T4 session-6 deck; section headers are claims that map to slide titles. First of three T4 session posts; the price-controls post (session 7) and the tax-incidence post (session 8) follow."
@@ -25,15 +27,15 @@ note: "Self-contained — assumes no access to the textbooks. Source-of-truth fo
 
 A modern economy is a bewildering thing. Millions of people who never meet and never coordinate on purpose somehow produce, ship, and sell the food, fuel, and clothing each of the others wants, in roughly the right amounts and the right places, with no authority computing anyone's share. No one plans how much bread to bake or where to send the milk, yet the groceries stay stocked. How do all those separate decisions add up to a working whole instead of chaos, and when goods do run short, what has gone wrong?
 
-That is the puzzle this post takes up, and the answer runs through prices. An ordered flow of signals and rewards guides the seeming chaos, with no one in charge: a price at once tells people how scarce a thing is, rewards those who supply more of it and economize on using it, and steers each scarce good toward whoever values it most. This post builds up that machinery: where trade stops and why, what makes a market open or closed, how a price settles at the level that matches buyers to goods, and how a single number coordinates an economy no one is running. Once that machinery is in hand, the posts that follow ask what happens when a law forbids the price to move.
+That is the puzzle this post takes up, and the answer runs through prices. Under enforceable rights, workable competition, usable information, and room to adjust, prices can guide separate decisions without anyone directing the whole. They signal scarcity, reward economizing and added supply, and allocate goods by willingness and ability to pay. This post builds that machinery, then marks its assumptions; the posts that follow ask what happens when a law forbids the price to move.
 
 <aside class="econ-callout econ-objectives">
 <p class="econ-callout__label">Learning objectives</p>
 <p>By the end of this post you should be able to:</p>
 <ul>
 <li>Explain why the full price of a trade is the money price plus every nonmoney cost of completing it, and why a middleman who shrinks those costs can raise the seller's net while lowering the buyer's full price.</li>
-<li>Distinguish an open market from a closed one, explain why closing a market by restricting entry transfers wealth to protected insiders without creating any, and tell freedom of competition apart from freedom from competition.</li>
-<li>Construct market demand as the horizontal sum of individual demands, identify the market-clearing price that matches the amount demanded to a fixed available quantity, and explain why, under the model's assumptions, a rising price reallocates that stock regardless of who held it first — distinguishing a price-controlled shortage or surplus from physical scarcity.</li>
+<li>Distinguish an open market from a closed one, explain how an entry restriction can transfer wealth to protected insiders and invite rent-seeking, test claimed information or safety benefits, and tell freedom of competition apart from freedom from competition.</li>
+<li>Construct market demand as the horizontal sum of individual demands, identify the market-clearing price that matches the amount demanded to a fixed available quantity, and explain why, under the model's assumptions, a rising price reallocates that stock by willingness and ability to pay regardless of who held it first, distinguishing this allocation criterion and a controlled shortage or surplus from physical scarcity.</li>
 </ul>
 </aside>
 
@@ -75,7 +77,7 @@ A discount store boasts that it "cuts out the middleman" so you save, but elimin
 
 ### Open Markets Have Free Entry; Closed Markets Are Walled Off
 
-A market is *open* when anyone may enter it to buy or sell, with no contrived barriers blocking the way. It is *closed* when access is restricted, when some would-be sellers are kept out by force, collusion among insiders, or law. The distinction matters because nearly every arrangement that protects existing sellers is a way of closing a market.
+A market is *open* when anyone may enter it to buy or sell, with no contrived barriers blocking the way. In this analytic sense, general rules against fraud, unsafe conduct, or rights violations need not make entry closed if they are applied without protecting selected incumbents. A market becomes more closed as selective force, collusion, or law excludes otherwise qualified buyers or sellers.
 
 <aside class="econ-callout econ-termset">
 <p class="econ-callout__label">Key terms</p>
@@ -85,13 +87,13 @@ A market is *open* when anyone may enter it to buy or sell, with no contrived ba
 </dl>
 </aside>
 
-Consider the standard tools for keeping competitors out: occupational licensing (a government permit to work in a trade, so insiders can lobby to make it hard to get), compulsory certification, pure-food rules written stricter than safety requires, and old bans on Sunday sales. Each raises the cost of entering, thinning out competition for those already inside, and each can be defended on other grounds. But measured strictly by whether it keeps entry free, every one of them is a step away from an open market and toward a closed one.
+Licensing, certification, product rules, and sales restrictions all raise entry costs and can protect incumbents. They can also reduce fraud, supply information, protect third parties, or enforce quality when those benefits are real and the rule is well targeted. The economic question is not whether a rule has a reassuring label, but whether its marginal benefit exceeds its entry, compliance, enforcement, and political costs compared with feasible alternatives.
 
 An open market presumes a few things we rarely notice: that people are legally free to make the trade, that private property rights exist so what is traded is actually yours to sell and stays yours after you buy it, and that people are looking to improve their situation. Strip away any of these and the market stops working as one.
 
 ### Restricting Entry Transfers Wealth; It Does Not Create It
 
-Why would anyone bother to close a market? Because being protected from competition is worth money. The only licensed taxi operator in a city can charge more than he could if anyone with a car could pick up fares. So firms compete for the privilege of being shielded: they lobby, donate, and campaign for the right to be the favored seller. Economists call this *rent-seeking*, spending real resources to obtain a government-granted advantage rather than to produce something. The effort is not wasted from the lobbyist's view, since he may win a valuable monopoly. It is wasted from society's, because nothing new gets made; wealth is merely moved from consumers and excluded rivals into the protected firm.
+Why would anyone try to close a market? Protection from competition can be valuable. An exclusive taxi license may raise the holder's earnings, so firms lobby, donate, and campaign for the privilege. Economists call spending real resources to obtain a government-granted advantage rather than to produce something *rent-seeking*. In the pure transfer case, the effort uses resources without creating the service consumers sought. Advocacy can also convey information or improve a rule, so the classification depends on what the activity changes, not merely on contact with government.
 
 <aside class="econ-callout econ-termset">
 <p class="econ-callout__label">Key term</p>
@@ -100,9 +102,9 @@ Why would anyone bother to close a market? Because being protected from competit
 </dl>
 </aside>
 
-Suppose a city grants one company the exclusive right to sell liquor, and a politician is tempted to hand that right to a campaign supporter. The lesson is grim: once political power can create such privileges, they tend to flow to whoever helped the people in power. Consumers as a whole lose more than the favored firm gains, because the protection forces prices up and chokes off trades. But consumers are scattered and each loses only a little, while the monopolist is concentrated and gains a lot, so he will outspend the public to keep the privilege. That asymmetry, concentrated winners against dispersed losers, is a theme that returns across the rest of the course.
+Suppose a city grants one company the exclusive right to sell liquor and a politician favors a campaign supporter. If the restriction raises price and blocks mutually beneficial trades without an offsetting benefit, consumers and excluded rivals lose more than the firm gains. Concentrated gains can make beneficiaries easier to organize than dispersed consumers, but organization, salience, institutions, ideology, and countervailing groups determine whether that advantage wins. This concentrated-versus-dispersed mechanism returns across the course as a hypothesis to test, not a motive or outcome to assume.
 
-A confusion runs through the politics of protection. A president might praise free markets in one breath and defend an import limit that shields domestic producers in the next, seeing no contradiction, because he blurs two different freedoms. *Freedom of competition* means open entry: anyone may try to win customers. *Freedom from competition* means being protected against rivals: favored sellers keep customers they might otherwise lose. The first enlarges the pie; the second carves a bigger slice for insiders, and a policy that "protects" an industry trades the first freedom for the second, even though the incumbents' gain is smaller than the loss it imposes on everyone else.
+A confusion runs through the politics of protection. *Freedom of competition* means open entry: anyone may try to win customers. *Freedom from competition* means protection against rivals. In the benchmark with no corrective benefit, the first opens additional gains from trade while the second transfers a slice to insiders and destroys some trades. A real rule still has to be compared with fraud, safety, information, enforcement, and other institutional alternatives rather than judged from its title alone.
 
 <aside class="econ-callout econ-termset">
 <p class="econ-callout__label">Key terms</p>
@@ -114,19 +116,19 @@ A confusion runs through the politics of protection. A president might praise fr
 
 ## Prices Coordinate an Economy No One Is Running
 
-Return now to the puzzle of coordination. An unplanned economy can feed itself because its prices are an ordered set of signals and rewards, and they do their work without anyone intending it.
+Return now to the puzzle of coordination. An unplanned economy can coordinate through prices because they are an ordered set of signals and rewards, and they do their work without anyone intending it. The mechanism is powerful, not infallible: market power, missing rights, spillovers, bad information, adjustment costs, and legal constraints can distort the signal or the response.
 
 A price is a *signal*: it summarizes many competing demands and the available supply in one number. It does not reveal by itself which condition changed, but a pileup tends to lower the price and stronger competition for what is available tends to raise it, spreading the message without a memo.
 
-A price is also a *reward*. A higher price at once restrains what buyers ask for and, when output can respond, gives suppliers both the revenue and the reason to provide more. Where that reward is missing, waste follows: a producer charged nothing for its inputs has no reason to husband them, while one that pays their real cost economizes.
+A price is also a *reward*. A higher price restrains what buyers ask for and, when output can respond, gives suppliers revenue and reason to provide more. If a scarce input is free to a user who bears none of its opportunity cost, overuse is likely unless budgets, norms, quotas, monitoring, or other rules supply discipline.
 
-And a price *rations*, steering each scarce good toward whoever will give up the most for it. The rationing runs in every direction at once because one seller's price becomes the next producer's cost: the price meatpackers charge for beef becomes a cost to butchers and part of the price of a steak, so a surge in demand for beef ripples along a whole chain of prices no central planner could map by hand.
+And a price *rations*, steering each scarce good toward whoever will give up the most for it given current wealth, rights, and access. That is an allocation rule, not proof of greatest need or moral worth. The rationing runs in every direction because one seller's price becomes the next producer's cost: a change in beef demand ripples through a chain of input and output prices.
 
-Demand and supply also help explain how a scarce resource gets parceled among rival uses. In opportunity-cost terms, its value in one use generates demand there, while its value elsewhere affects what must be paid to draw it away. This is not yet a firm's supply curve, which a later session derives from marginal cost. Every system for deciding who gets what discriminates, because something must ration the good. Under private property and open markets, that something is mostly money; suppress money competition, as a control does, and rationing shifts to nonmoney criteria: connections, persuasion, political pull, cultural fit. No system escapes a criterion; the question is which one.
+Demand and supply help explain how a scarce resource gets parceled among rival uses. In opportunity-cost terms, its value elsewhere affects what must be paid to draw it away. This is not yet a firm's supply curve, which a later session derives from marginal cost. Every allocation system uses criteria. Under private property and open markets, willingness and ability to pay do much of the rationing; suppress money competition and connections, queues, persuasion, lotteries, eligibility rules, or political discretion may replace it. Compare those criteria by information, incentives, distribution, transaction and enforcement costs, spillovers, and error correction.
 
 ## A Market-Clearing Price Balances What Buyers Want With What Is Available
 
-When trade is free, competition drives the price toward the level where the quantity demanded equals the quantity available or supplied. That is the *market-clearing price*, or equilibrium price. In the fixed-stock car model below, the relevant demand is how many cars people want to own. Above the clearing price, their total desired holdings fall short of the stock; below it, their desired holdings exceed the stock. Only at the clearing price do the two match.
+In the benchmark with informed traders, enforceable exchange, responsive bids, and no binding control, competition presses price toward the level where quantity demanded equals quantity available or supplied. Search costs, sticky prices, market power, and adjustment can delay or alter that path. The matching level is the *market-clearing price*, or equilibrium price. In the fixed-stock car model, only that price makes desired holdings equal the stock.
 
 <aside class="econ-callout econ-termset">
 <p class="econ-callout__label">Key term</p>
@@ -170,9 +172,9 @@ Two smaller points sharpen the picture. "The price" of a car means the price act
 
 ### A Higher Price Rations Even a Supply That Cannot Grow
 
-People often grant that prices should rise when more can be produced, but bristle when a price jumps for something whose supply is fixed, calling it immoral or an unearned windfall. The objection misses what the higher price is doing. Even when not one extra unit can be made, a higher price still performs its rationing job: it steers the existing stock toward those who value it most and away from lower-valued uses.
+Even when not one extra unit can be made, a higher price still performs its rationing job: it steers the existing stock toward higher willingness and ability to pay and away from uses whose holders will sell. Under the model's assumptions this exhausts additional measured gains from trade. It does not settle whether the resulting distribution is fair or whether a feasible nonprice rule would serve a stated objective better.
 
-The clearest case brings back the seven cars from the last section. Suppose one is destroyed by fire, so six remain and no new car can be built. The person who lost his car still wants one, so at the old price more cars are wanted than exist, and competitive bidding raises the price, steering the smaller stock toward whoever values a car most. The figure above reruns this experiment: press "A car burns," and the demand staircase, which has not moved, meets the six-car stock at $8,000. It can look unfair that the remaining cars become more valuable after another owner's misfortune, but forbidding the price to rise does not undo the fire. The man who lost his car may or may not replace it; at the controlled price, luck, lines, or some other rule must settle the competing claims. A ceiling meant to stop "gouging" or "profiteering from another's misfortune" puts no burned car back on the road; it manufactures a shortage and shifts the rationing elsewhere.
+Bring back the seven cars. Suppose one is destroyed, so six remain and none can be built. At the old price more cars are wanted than exist, and bidding raises the price. Press "A car burns": the unchanged demand staircase meets the six-car stock at $8,000. Forbidding the rise does not undo the fire. It creates excess demand at the controlled price, and luck, lines, priority rules, or discretion must allocate the cars. Such a rule may deliberately favor a target group, but its distribution, search costs, evasion, enforcement, and lost trades must be compared with price rationing rather than assumed away.
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
@@ -222,8 +224,8 @@ Want to explore the source material? This lecture draws on the following chapter
 <h3>Key takeaways</h3>
 <ul>
 <li><strong>Trade runs on the full price.</strong> The full price is the money price plus every nonmoney cost of completing a trade, and a middleman can be paid for shrinking those costs, raising the seller's net while lowering the buyer's full price; his profit is what remains after his own real costs.</li>
-<li><strong>Closing a market moves wealth; it does not make it.</strong> An open market has free entry, while licensing and similar rules close one by raising the cost of entry; the protection this buys insiders is rent-seeking, a gain smaller than the loss it imposes on everyone else, the difference between freedom of competition and freedom from competition.</li>
-<li><strong>Prices coordinate an economy no one is running.</strong> Acting as signals and rewards, they guide an unplanned economy with no one in charge; market demand is the horizontal sum of individual demands, and the clearing price matches the amount wanted to a fixed stock, so a rise in demand pushes that price up, the model's assumptions make initial ownership irrelevant to final ownership, a higher price still rations even a supply that cannot grow, and a controlled shortage or surplus is not physical scarcity.</li>
+<li><strong>Entry restrictions can transfer wealth and invite rent-seeking.</strong> An open market has free entry, while selective restrictions can protect insiders; judge a rule's information, safety, and enforcement benefits against its entry, compliance, political, and lost-trade costs rather than inferring its effect from its label.</li>
+<li><strong>Prices coordinate under identifiable conditions.</strong> They act as signals, rewards, and a willingness-and-ability-to-pay allocation rule; market demand is the horizontal sum of individual demands, and the clearing price matches a fixed stock under the model's assumptions. This mechanism does not settle fairness, and a controlled shortage or surplus is not physical scarcity.</li>
 </ul>
 </section>
 </div>

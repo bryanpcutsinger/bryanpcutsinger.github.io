@@ -8,7 +8,7 @@ be_anchors: []
 ep_anchors: ["E&P 3 — Fig 3-1 Gains From Exchange", "E&P 4 — Pareto-Optimal Allocations"]
 univecon_anchors: ["University Economics (1994) ch. 4 pp. 41–43 — refugee-camp licensing cartel and franchise-fee capitalization"]
 word_target: "2000-6000"
-word_budget: 4187
+word_budget: 4230
   # word_budget 3307 -> 3364 (+57): For Further Reading section added 2026-07-22
   # word_budget 3364 -> 3900 (+536): A&A figure-suite redesign 2026-08-06 (two new
   #   figures + walkthrough paragraphs and lead-ins; stripped count 3870)
@@ -18,6 +18,8 @@ word_budget: 4187
   #   (figcaptions for moving worth lines + the wall opening; stripped count 3995)
   # word_budget 4030 -> 4187 (+157): rigor pass 2026-08-07 (physical accounting,
   #   ex-ante gains, Pareto conditions, fee/cost/profit separation; count 3952 -> 4109)
+  # word_budget 4187 -> 4230 (+43): UE–E&P Wave-C verification 2026-08-10;
+  #   licensing/nonprice qualifications added, prior 53-word headroom preserved
 status: approved        # E&P integration M1 sign-off 2026-07-19 (prior: Stage-2 2026-06-15)
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Source-of-truth for the T2 deck; section headers are claims that map to slide titles. UE 4 only (pure reallocation); specialization/comparative advantage move to T6."
@@ -128,7 +130,7 @@ The result has maintained conditions. In this two-person model, rights to the go
 
 Because an informed voluntary trade that works as both sides expect leaves both better off, blocking one destroys something real. Yet blocking does not erase the value of controlling the scarce thing. It changes the form in which that value gets collected.
 
-Suppose your college gives you a permit for one of its scarce parking spaces, and gives a friend a desk in the library stacks, and each of you would rather have the other's. The college almost always forbids the swap. Why would it? The people who run it cannot pocket money from selling those spots, because the spots are not theirs to sell. Yet the power to decide who gets a scarce space is itself valuable, and that value does not disappear just because no money may change hands. It gets captured in nonmonetary forms instead: in favors, in goodwill, in the discretion to reward whoever the administration prefers. The lesson generalizes. Whenever an authority that cannot legally collect a price controls a scarce thing, the competition for it moves into nonmonetary channels, and someone still captures its value.
+Suppose your college gives you a permit for one of its scarce parking spaces, and gives a friend a desk in the library stacks, and each of you would rather have the other's. The college almost always forbids the swap. Why would it? The people who run it cannot pocket money from selling those spots, because the spots are not theirs to sell. Yet the power to decide who gets a scarce space is itself valuable, and that value does not disappear just because no money may change hands. It may be captured in nonmonetary forms instead: in favors, in goodwill, or in the discretion to reward whoever the administration prefers. In this simple case, the competition for it moves into nonmonetary channels, and someone still captures its value. More generally, queueing, lobbying, compliance, and search can consume resources, so some of the value may be dissipated rather than captured intact.
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
@@ -168,7 +170,7 @@ How large can that cut get? The very gap that makes the trade worthwhile sets th
 
 Competition can keep a middleman's cut well below that ceiling when rivals are free to enter and buyers and sellers can compare their terms. Back in the camp, a second trader can offer Sam a lower price and Joe a higher one, shrinking the first trader's margin. With continued entry and observable terms, rivalry trims the spread toward the opportunity cost of doing the job. The numbers show the first step: once a second dealer enters, Sam pays a little less and Joe receives a little more, each gaining the equivalent of another half granola bar.
 
-The camp story has a political sequel. The two traders can try to preserve their margin by persuading the camp manager to admit only licensed, "approved" middlemen, with the existing traders deciding who is properly trained and ethical. Consumer protection is the public argument; blocking new rivals is the economic effect. Once the licenses create a protected stream of earnings, the manager discovers that he can charge a franchise fee for them. The fee absorbs the present value of the protected profit, transferring the cartel's gain to the authority that controls entry. A restriction can therefore enrich the first license holders, attract political control, and leave later licensees earning only an ordinary return after paying for the privilege.
+The camp story has a political sequel. The two traders can try to preserve their margin by persuading the camp manager to admit only licensed, "approved" middlemen, with the existing traders deciding who is properly trained and ethical. Licensing can help buyers when requirements credibly screen quality or supply useful information. It can also block capable rivals, especially when incumbents control admission. Which effect matters more is an empirical question, not something the label *consumer protection* settles. Once the licenses create a protected stream of earnings, the manager discovers that he can charge a franchise fee for them. If that protection is credible, durable, and transferable, the fee can capitalize the expected net earnings, adjusted for risk. Early recipients may gain; later licensees who pay the full capitalized value may expect only an ordinary risk-adjusted return. Those results weaken when the restriction is temporary, uncertain, nontransferable, or incorrectly priced.
 
 | After competition among dealers | Water | Granola |
 |---|---|---|

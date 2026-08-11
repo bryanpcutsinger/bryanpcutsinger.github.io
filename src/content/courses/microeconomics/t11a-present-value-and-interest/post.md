@@ -7,9 +7,10 @@ ue_anchors: ["UE 30", "UE 31", "UE 36 (front half)"]
 be_anchors: []
 ep_anchors: ["E&P ch. 6 (Capital Values and Interest) — usury as an ambiguous pejorative for interest; early Christian dogma, the Koran, and Communist doctrine each condemned it yet readmitted it under euphemism (Church 'discount', Communist 'efficiency index', Treasury 'discount')", "E&P ch. 16 (Wealth, Saving, and Investing) — Aristotle's 'sterile money'; interest paid before and after each condemnation because the demand for savings exceeded supply at a zero price; the Papacy charged interest as 'fees'/'gratuities'; Christians borrowed from Jews"]
 univecon_anchors: ["University Economics (1994) ch. 11 p. 187 — Feather River project's low-discount-rate political-economy example"]
-word_target: "3300-3700"
-word_budget: 3777
+word_target: "3200-3700"
+word_budget: 3282
   # word_budget 3700 -> 3777 (+77): For Further Reading section added 2026-07-22
+  # word_budget 3777 -> 3282 on 2026-08-10: Wave-B source audit; stripped 3760 -> 3265 while preserving the prior 17-word headroom
 status: approved        # scope-reduction R4 2026-07-21 (word_budget applied); M8 done gate 2026-07-20 (§10 A+B PASS); prior Stage-2 2026-06-15
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Part A of two on Capital, Interest, and Time; Part B (Capital Values, Profit, and the Political Economy of Time) covers durable assets, wealth, profit, the rate package, and the political economy of time. This half builds the present-value tool and the determinants of the interest rate. Source-of-truth for the Part-A deck; section headers are claims that map to slide titles. UE 36 front half only (loan market); the money-supply/central-bank half is macro and out of scope. The consumer-finance applications are [EXPAND]/lecture-deferred but covered here (logged in §7)."
@@ -27,14 +28,14 @@ This topic gives you the tool that solves it. It is called *present value*, and 
 <p>By the end of this post you should be able to:</p>
 <ul>
 <li>Use P × (1 + r) = F to compound and P = F ÷ (1 + r) to discount, explain why present value shrinks as the horizon lengthens or the rate rises, and apply the Rule of 72 to reduce payoffs at different dates to one comparable figure.</li>
-<li>Explain where interest comes from, the productivity of investment and time preference, and how the loan market sets it as the price of current income.</li>
-<li>Value a stream of payments as an annuity or a perpetuity, show how a level loan payment splits into interest and principal, and use capital value to judge a multi-year venture even when nothing was borrowed.</li>
+<li>Explain how productive investment opportunities and preferences over timing generate a market for current versus future income, and use a loanable-funds benchmark to analyze its rate.</li>
+<li>Value a stream as an annuity or perpetuity, show how a level loan payment splits into interest and principal, and use an appropriate opportunity-cost rate to judge a multi-year venture even when nothing was borrowed.</li>
 </ul>
 </aside>
 
 ## A Future Dollar Is Worth Less Than a Present Dollar
 
-Start with the most basic move. If you put $100 in an account paying 6 percent a year, in a year you have $106. The thing that turned $100 into $106 is the *rate of interest*, the rate at which a present amount grows into a future one. Write it as a formula and the whole topic unfolds from it:
+Start with the most basic move. If you put $100 in an account paying 6 percent a year, in a year you have $106. The *rate of interest* is the rate at which that present amount grows into a future one. Write it as a formula and the whole topic unfolds from it:
 
 P × (1 + r) = F
 
@@ -67,15 +68,15 @@ A couple of entries are worth noting. Put $250 in at 7 percent for three years a
 <p>At 8 percent, about how many years does it take a sum of money to double? Work it out with the Rule of 72, then check your answer against the future-value table above.</p>
 </aside>
 
-Compounding also explains how modest-looking sums become large fortunes. A piece of land bought for $5,000 and worth $85,000 thirty years later has grown seventeenfold; the thirty-year row shows a seventeenfold gain at about 10 percent a year, the kind of return a broad stock-market investment has historically delivered. Compounding is quiet but relentless. The same arithmetic runs in a barnyard: a population of rabbits, or a stored stock of grain that is planted and harvested, grows by a net percentage each year, and that physical growth rate is just an interest rate wearing a different coat. Whenever something compounds at a steady percentage, you are looking at the rate at which a present amount grows into a future one.
+Compounding also explains how modest-looking sums become large. A piece of land bought for $5,000 and worth $85,000 thirty years later has grown seventeenfold; the table implies a compound growth rate of about 10 percent. The same arithmetic can describe rabbits multiplying or grain planted and harvested, although a physical growth rate becomes an economic return only after valuing all inputs, outputs, and costs. Whenever a value compounds at a steady percentage, the formula tells you how a present amount maps into a future one.
 
 ## Present Value Reverses the Arithmetic
 
-Now run the formula backward. If a future amount F is worth P × (1 + r) when it arrives, then an amount arriving in the future is worth less today, and we recover today's value by dividing instead of multiplying:
+Now run the formula backward. For otherwise comparable, certain amounts and a positive rate, an amount arriving in the future has a smaller present value. Recover it by dividing instead of multiplying:
 
 P = F ÷ (1 + r)
 
-Take $220 due one year from now at 10 percent. Its present value is $220 ÷ 1.10 = $200. We say the future $220 has been *discounted* back to a present value of $200. The number you multiply by, 1 ÷ (1 + r), is the *discount factor*; here it is 0.909, so $220 × 0.909 = $200. This is the single most useful operation in finance, because it lets you take any amount arriving at any future date and express it in today's dollars, where it can be compared with anything else.
+Take $220 due one year from now at 10 percent. Its present value is $220 ÷ 1.10 = $200. The future $220 has been *discounted* to a present value of $200. The *discount factor* is 1 ÷ (1 + r); here it is 0.909. This operation puts amounts dated at different times on one common date. The rate must fit the comparison: different risk, liquidity, taxes, or contractual terms can require different rates.
 
 <aside class="econ-callout econ-termset">
 <p class="econ-callout__label">Key terms</p>
@@ -100,7 +101,7 @@ The table below gives the discount factors directly: the present value of $1 rec
 
 Two patterns in this table are themselves economic lessons. First, hold the rate fixed and read down a column: the farther into the future an amount lies, the smaller its present value. At 4 percent, $2,500 due in five years is worth $2,500 × 0.82 = $2,050, but the same $2,500 due in ten years is worth only $2,500 × 0.68 = $1,700. Distance in time eats into value, because over a longer wait, a smaller present sum could have grown to the target on its own. Second, hold the year fixed and read across a row: the higher the interest rate, the smaller the present value. That same $2,500 in five years is worth $1,950 at 5 percent but only $1,700 at 8 percent. A higher rate discounts future amounts more heavily.
 
-Once you can do this, comparing options that pay off at different times becomes routine. Suppose someone offers you either $30,000 in ten years or $40,000 in fifteen years. Which is better? It depends on the rate. Discount each back to today and compare. At 6 percent, $30,000 in ten years is worth about $16,800 (0.56) and $40,000 in fifteen years about $16,800 (0.42), a near tie; at 4 percent the longer, larger prize pulls ahead. The lesson is not the particular answer but the method: reduce every alternative to its present value, then they sit on the same ruler. A subsidized loan reveals the same logic from the other side. A college "loan" of $1,000 at no interest, repaid years later, is partly a gift: the present value of the repayment is less than $1,000, and the difference is what the lender has handed you. The gap between the face amount and its present value is the real subsidy.
+Suppose someone offers either $30,000 in ten years or $40,000 in fifteen years. Which is better? It depends on the applicable rate. At 6 percent their present values are both about $16,800; at 4 percent the later prize pulls ahead. Reduce each comparable alternative to present value so both sit on the same date. A $1,000 college loan carrying no interest and repaid years later is partly a subsidy if its risk-adjusted market rate would be positive: the repayment's present value is then less than $1,000.
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
@@ -111,11 +112,11 @@ Once you can do this, comparing options that pay off at different times becomes 
 
 We have used the interest rate as a given. Where does it come from, and why is it positive at all?
 
-There are two reasons, and you should keep them distinct. The first is the *productivity of investment*. Resources set aside and put to work can yield more later: grapes left to ferment become wine worth more than the juice; grain stored and planted yields a larger harvest; grapes dried into raisins are worth more than the fresh fruit. (Here "more" means more value, not necessarily more physical stuff, a pile of raisins weighs less than the grapes it came from.) Investing simply means giving up some consumption now to get something more valuable later. Painting your own house instead of spending the weekend gaming is an investment, because you sacrifice leisure now for a preserved, more valuable house later. Because such opportunities exist, current resources are worth more than future ones.
+Two forces organize the benchmark. The first is the *productivity of investment*. Resources set aside and put to work can yield more later: grain planted can yield a larger harvest, and grapes can become wine worth more than the juice after all costs. Investing means giving up some consumption now in pursuit of more value later. Painting your house instead of spending the weekend gaming is an investment if the preserved house is worth the sacrificed time and materials.
 
 But not every roundabout, time-consuming method pays off. The claim that "more roundabout production is always more productive" is false. Only the right methods in the right amounts add to wealth. So the productivity of investment is real but not automatic.
 
-The second reason is *time preference*. People generally prefer goods sooner rather than later, partly from impatience, partly because the future is uncertain. Given the choice between a feast today and the same feast a year from now, most take it today. That preference, too, makes current income command a premium over future income.
+The second force is *time preference*: holding amount and certainty fixed, people may prefer consumption sooner rather than later. Uncertainty is separate. A risky promise can require a default or risk premium even for someone with no pure impatience; Part B decomposes the observed rate package.
 
 <aside class="econ-callout econ-termset">
 <p class="econ-callout__label">Key terms</p>
@@ -125,18 +126,18 @@ The second reason is *time preference*. People generally prefer goods sooner rat
 </dl>
 </aside>
 
-Put these together in a market and the interest rate is a price like any other, set by supply and demand, the *price of current income in terms of future income*. People who want current income they don't yet have, to invest or to consume, demand it; people willing to part with current income in exchange for more future income supply it. The buyers and sellers meet in what we can call the loan market, and the price that clears it is the interest rate. If $100 today trades for a promise of $105 next year, the rate is 5 percent: r = (F − P) ÷ P = (105 − 100) ÷ 100.
+Put these together in a market and the interest rate is a price like any other: the *price of current income in terms of future income*. People who want current income to invest or consume demand it; people willing to exchange current income for more future income supply it. In a simple competitive, closed-economy loanable-funds model, their plans meet at a market-clearing rate. If $100 today trades for a comparable, certain promise of $105 next year, the rate is 5 percent: r = (105 − 100) ÷ 100.
 
-In that market, the words run backward from ordinary usage. A *lender* is buying a future income (you hand over money now to buy the borrower's promise to pay later), and a *borrower* is selling future income (selling a claim on next year's money to get cash now). The demand for current income slopes down: at a lower interest rate, more investment projects clear the bar and more current income is demanded. The supply slopes up: a higher rate coaxes out more saving.
+In that model, a *lender* buys a claim to future income and a *borrower* sells one for resources now. Demand for current income slopes down because more projects clear a lower hurdle rate. The diagram draws saving upward-sloping: a higher rate induces more saving, holding wealth and expectations fixed. That is a maintained baseline, not a universal individual response; income effects can offset substitution, and international capital flows can shift market supply.
 
 <figure class="econ-figure" style="margin:1.5em 0;">
 <iframe src="/teaching/microeconomics/t11a-present-value-and-interest/figures/t11a-loan-market-interactive.html" title="Drag the horizontal interest-rate line up or down to see savers' offered current income and borrowers' wanted current income converge on the five-percent rate that clears the loan market." loading="lazy" style="width:100%; max-width:520px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t11a-present-value-and-interest/figures/t11a-loan-market-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t11a-present-value-and-interest/figures/t11a-loan-market.svg">view the static figure</a>.</p></iframe>
 <figcaption><strong>The interest rate is the price of current income, and it settles where borrowing and saving match.</strong> Demand for more current income (from borrowers) slopes down; supply of current income offered (from savers) slopes up. Above the five-percent equilibrium rate, savers offer more than borrowers want and the surplus pushes the rate down; below it, borrowers want more than savers offer and the shortage pushes the rate up. Drag the rate line (or use the arrow keys) to see the gap close at the market-clearing rate. If the frame does not load, <a href="/teaching/microeconomics/t11a-present-value-and-interest/figures/t11a-loan-market-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t11a-present-value-and-interest/figures/t11a-loan-market.svg">view the static figure</a>.</figcaption>
 </figure>
 
-It does not matter whether the current income is wanted for consumption or for investment; both wants press on the same market and help set the same rate. And though we often say that saving equals investment by definition, the economy still has to coordinate the people who save with the people who invest, because they are usually different people acting for different reasons. The saver setting aside money for retirement and the entrepreneur building a plant never meet, yet the interest rate brings their plans into line, coordinating saving and investment and settling at the rate where the two are equal.
+Consumption and investment borrowing both press on credit markets. Although realized saving and investment are linked in national accounting, planned saving and planned investment can differ. Banks, bond markets, equity markets, retained earnings, and international flows help coordinate them; the diagram compresses that network into one price-and-quantity model.
 
-One warning about what interest is not: it is not "the price of money." Printing more money does not push the interest rate down for long; mostly it raises the price level. The interest rate is the price of current versus future income, a real thing, and we are deliberately leaving the money-supply machinery to a later course.
+One warning: interest is not simply “the price of money.” Observed nominal rates price claims across time and can include expected inflation, default, term, liquidity, and administrative components. Monetary policy can affect market rates through several channels, but that macroeconomic analysis is outside this course. Part B handles the rate package needed for microeconomic comparisons.
 
 ## An Annuity Is a Stream, and a Perpetuity Lasts Forever
 
@@ -161,7 +162,7 @@ Most real decisions involve not a single future amount but a *stream* of them: a
 | 20 | 14.88 | 13.59 | 12.46 | 11.47 | 10.59 | 9.82 | 8.51 | 7.47 | 6.26 | 4.87 |
 | 30 | 19.60 | 17.29 | 15.37 | 13.77 | 12.41 | 11.26 | 9.43 | 8.06 | 6.57 | 4.98 |
 
-This one table does enormous work. A three-year annuity of $1,000 at 8 percent is worth $1,000 × 2.58 = $2,580. If your rich uncle buys you fifteen years of $50,000 a year, beginning next year, at a 10 percent rate the gift is worth $50,000 × 7.61 = $380,500 today, not the $750,000 you will eventually collect; that gap between the headline sum and the present value is exactly the point of the exercise, and it is the same gap that turns a no-interest "loan" or a below-market employee-stock loan into a partial gift. The factor also runs in reverse to find an implied rate. If $500,000 today buys you a fifteen-year stream of equal payments and you want to know the built-in interest rate, divide and search the table: $500,000 ÷ 7.61 ≈ $65,700 a year at 10 percent. The same reverse lookup answers questions like "my grandparents sold their house for a stream of payments; what interest rate is built in?", divide the price by the per-dollar annuity factor and read the rate off the table.
+This one table does enormous work. A three-year annuity of $1,000 at 8 percent is worth $1,000 × 2.58 = $2,580. If your rich uncle buys you fifteen years of $50,000 a year, beginning next year, at a 10 percent rate the stream is worth about $380,500 today, not the $750,000 eventually paid. That is not a contradiction: $750,000 is the nominal sum of payments, while $380,500 is their value at one date under the stated rate. The factor also runs in reverse. If $500,000 today finances a fifteen-year level stream at 10 percent, it supports about $65,700 a year. Given a market price and promised payment, search the table to recover the *implied* rate. Then ask whether default risk, fees, taxes, timing, or other contract terms make that rate comparable to the alternative you care about.
 
 The same machinery prices an ordinary loan, and it clears up something most borrowers never notice. Taking out a mortgage or car loan repaid in equal yearly (or monthly) installments means selling the lender an annuity: the loan amount is the present value, and the level payment is whatever annual figure makes that stream's present value equal the sum you borrowed. Run the annuity table in reverse to find it. Borrow $80,000 over twenty years at 5 percent, and the twenty-year, 5 percent annuity factor (about 12.46) says the level payment is roughly $80,000 ÷ 12.46, about $6,400 a year.
 
@@ -195,7 +196,7 @@ Streams need not be level. When the yearly amounts vary, you discount each separ
 | 6 | $1,000 | 0.630 | $630 |
 | **Total** | | | **$9,219** |
 
-This table delivers a deeper lesson: a present value changes the instant expectations about the future change, not when the future arrives. Suppose news today doubles the expected receipts in years five and six to $4,000 and $2,000. The present value jumps immediately from $9,219 to $11,211. Nothing has actually happened yet in years five or six; only the anticipation changed. The same is true of an anticipated future tax cut or any other foreseen change: today's value moves the moment the expectation forms. We will come back to this in Part B, when we talk about politics and about profit.
+This table delivers a deeper lesson: market value can change when expectations change, before the future cash arrives. If news doubles expected receipts in years five and six to $4,000 and $2,000, the calculated present value jumps from $9,219 to $11,211, assuming the rate and other expectations stay fixed. Part B uses that capitalization mechanism for policy and profit.
 
 Now stretch the stream out forever. An annuity that pays a constant amount in every future year, without end, is a *perpetuity*, and it has a simple value:
 
@@ -218,11 +219,11 @@ The present value of a perpetuity is just the annual amount divided by the inter
 | 5% | $18.30 | $1.70 | $20.00 | about 8.5% |
 | 10% | $9.91 | $0.09 | $10.00 | under 1% |
 
-At 10 percent, everything beyond the first fifty years is worth nine cents on a ten-dollar claim. This is why a thousand-year stream is worth barely more than a perpetuity.
+At 10 percent, everything beyond the first fifty years is worth nine cents on a ten-dollar claim. The distant share is much larger at lower rates, which is why the chosen rate matters greatly for long-lived consequences.
 
 ## Interest Is a Cost Even When You Never Borrow
 
-A costly mistake in business is thinking that if you don't borrow, interest costs you nothing. Interest is the cost of *waiting*: the cost of having something later rather than sooner, and that cost is there whether or not a loan is involved.
+A costly mistake is thinking that if you do not borrow, waiting has no cost. **Interest is the cost of *waiting*: the cost of having something later rather than sooner** when the relevant rate measures the return on the best comparable alternative.
 
 Suppose a venture spends $1,000 at the start of year one and collects $1,300 at the end of year two, with nothing left over. Is it profitable? You cannot just subtract $1,000 from $1,300 and declare a $300 profit, because those amounts sit two years apart. You have to capitalize both to a common date using the interest rate. The table below values everything at both dates, start and end, with the same result.
 
@@ -234,7 +235,7 @@ Suppose a venture spends $1,000 at the start of year one and collects $1,300 at 
 | Receipts ($1,300 at end of year 2) | $1,300 ÷ (1.07 × 1.07) = $1,136 | $1,300 |
 | Result | $1,136 − $1,000 = **$136 profit** | $1,300 − $1,145 = **$155 profit** |
 
-At 7 percent the venture earns a profit (the two figures, $136 and $155, are the same profit measured at different dates). But the answer depends on the interest rate. Redo it at 15 percent and the project turns into a loss:
+At a 7 percent opportunity-cost rate the venture earns a profit; $136 and $155 are the same value difference measured at different dates. At a 15 percent rate it becomes a loss:
 
 **The same venture at a 15% interest rate.**
 
@@ -244,7 +245,7 @@ At 7 percent the venture earns a profit (the two figures, $136 and $155, are the
 | Receipts ($1,300 at end of year 2) | $1,300 ÷ (1.15 × 1.15) = $983 | $1,300 |
 | Result | $983 − $1,000 = **$17 loss** | $1,300 − $1,322 = **$22 loss** |
 
-No money was borrowed in either case, yet the interest rate decides whether the venture makes money. This is why a firm flush with its own cash is not immune to interest rates: it can always lend its funds out at the market rate instead of tying them up in a project, so the market rate still binds. Ignore interest and you will count phantom profits by adding up dollars from different years as if they were the same dollars. That is also why a lottery paying "$1,000,000" as $100,000 a year for ten years is not really a million-dollar prize: its present value is smaller, because the later payments are worth less today. Capital value, costs and receipts discounted to one date, is therefore the honest measure of cost in any decision that spans time. (Why this is also the honest measure of *profit*, and what profit precisely means, is a thread we pick up in Part B.)
+No money was borrowed, yet using the firm's own cash still forgoes another use. The relevant hurdle is the expected return on a comparable alternative, adjusted for risk and other differences, not automatically any advertised loan rate. A lottery can truthfully total $1,000,000 in nominal payments while having a present value below $1,000,000. Discounting costs and receipts to one date makes them comparable; the economic judgment still depends on the cash-flow forecast and chosen rate. Part B connects that comparison to profit.
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
@@ -262,9 +263,9 @@ Want to explore the source material? This lecture draws on the following chapter
 <section class="econ-review__section">
 <h3>Key takeaways</h3>
 <ul>
-<li><strong>A present dollar beats a future one.</strong> P × (1 + r) = F compounds forward and P = F ÷ (1 + r) discounts back; present value shrinks the farther off the horizon lies and the higher the rate, and the Rule of 72 tells you roughly how fast a sum doubles.</li>
-<li><strong>Interest is the price of current income.</strong> It comes from the productivity of investment and time preference, and the loan market sets it where saving meets investment.</li>
-<li><strong>A stream has one present value, and waiting has a real cost.</strong> An annuity multiplies the payment by a table factor, a perpetuity is just A ÷ r, a level loan payment splits into interest and principal, and capital value discounted to one date is the honest way to judge a multi-year choice, even when you never borrow.</li>
+<li><strong>Discounting puts dated amounts on one common date.</strong> P × (1 + r) = F compounds and P = F ÷ (1 + r) discounts; with a positive rate, present value shrinks with time and the rate, while the Rule of 72 approximates doubling time.</li>
+<li><strong>Interest prices current against future income.</strong> Productive opportunities and timing preferences generate demand and supply in the benchmark; actual rates can also contain risk, term, liquidity, fees, and expected inflation.</li>
+<li><strong>A stream has a present value, and own funds have an opportunity cost.</strong> Annuity and perpetuity formulas reduce streams to one date; a project's rate must match the comparable alternative and risk.</li>
 </ul>
 </section>
 </div>

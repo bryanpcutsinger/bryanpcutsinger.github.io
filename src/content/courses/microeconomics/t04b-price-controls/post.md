@@ -6,11 +6,13 @@ sessions: ["Fall 2026 — content session 7 (Tue 9/15)"]
 ue_anchors: ["UE 12", "UE 11 (input-price controls Q7/Q8)"]
 be_anchors: []
 ep_anchors: ["E&P Figs 4-7 & 4-8 (ch. 4) — rent reallocation of a fixed stock, incumbent-tenant sublease value, and rent-control shortage"]
-word_target: "3200-3600"
-word_budget: 3475
+word_target: "3000-3600"
+word_budget: 3050
   # word_budget 3600 -> 3662 (+62): For Further Reading section added 2026-07-22
   # word_budget 3662 -> 3320 (-342): BE→A&A redraft 2026-07-24 — systemic-causation H2 deleted → recommended BE 4 card; concentrated/dispersed persistence telling → recommended BE 3 card; rent-control evidence + gas-tank hoarding + Depression hogs/milk → BE 3 cards; persistence H2 re-grounded on UE 12 Q2 (officials gain price-setting authority + credit); be_anchors []. Measured stripped 3,255.
   # word_budget 3320 -> 3517 (+197): 2026-08-08 welfare-layer figure rebuild — all five figcaptions extended (rent-ceiling + oil dissipation bands, floor DWL triangle, routes shared-market arithmetic + drag sentence retired, reallocation tenant-capture band + drag instructions). Headroom 65 preserved. Measured stripped 3,452.
+  # word_budget 3475 -> 3041: UE–E&P targeted audit 2026-08-10; measured body 3452 -> 3018, prior 23-word headroom retained; target floor aligned to leaner body
+  # word_budget 3041 -> 3050: three-block course read 2026-08-10; objective/takeaway aligned with the already-qualified institutional comparison; prior 23-word headroom retained
 status: approved        # scope-reduction R4 done-gate 2026-07-21; prior approval 2026-07-01
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Source-of-truth for T4 session 7 and the second of two T4 posts. Combines price controls, systemic causation, and the political economy of concentrated benefits and dispersed costs. Tax incidence is consolidated in T7."
@@ -21,7 +23,7 @@ note: "Self-contained — assumes no access to the textbooks. Source-of-truth fo
 
 A price does a job. At the *market-clearing price*, the amount people want to buy just matches the amount available; above it sellers cannot find enough buyers, below it buyers cannot find enough goods. The money on the tag is only part of what a trade costs, too. The *full price* of a thing is its money price plus all the nonmoney costs of completing the trade: the searching, the waiting, the hauling, the pulling of strings. Keep both ideas in view, because the story of this post is what happens to each when a law forbids the money price from settling where it would.
 
-That story turns on one distinction. *Scarcity*, the permanent fact that our wants outrun what exists, never goes away and is the reason economics exists at all. A *shortage* is something else: it is the gap that opens when a price is pinned below where trade would otherwise clear, so the amount people want to buy exceeds the amount offered. A *surplus* is its mirror, the gap that opens when a price is pinned above clearing. Both are creatures of law, not of physical lack or plenty.
+That story turns on one distinction. *Scarcity*, the permanent fact that our wants outrun what exists, never goes away. A *shortage* is the gap that opens when a price is pinned below where trade would otherwise clear, so the amount demanded exceeds the amount offered. A *surplus* is its mirror above clearing. In this post, both result from a binding legal price, not physical lack or plenty.
 
 If a shortage is what happens when a price is forbidden to rise, and a surplus is what happens when it is forbidden to fall, what exactly do the laws that do the forbidding accomplish? This post follows the consequences for price ceilings, input caps, and price floors.
 
@@ -29,9 +31,9 @@ If a shortage is what happens when a price is forbidden to rise, and a surplus i
 <p class="econ-callout__label">Learning objectives</p>
 <p>By the end of this post you should be able to:</p>
 <ul>
-<li>Explain why a binding price ceiling creates a shortage and a binding price floor creates a surplus, and why both push competition into nonmoney forms that destroy value rather than merely transfer it.</li>
-<li>Explain why capping the price of an input cannot lower the price of the finished good, and why costs reflect prices more than they set them.</li>
-<li>Explain how a binding control changes the rules by which a scarce good is allocated — shifting competition onto nonmoney margins (queues, favoritism, quality, official discretion) so the full price is not lowered but recomposed — and why officials nonetheless advocate controls: the program hands them the authority to set and enforce the price and the visible credit for a low posted price, even as buyers' nonmoney costs rise.</li>
+<li>Explain why a binding price ceiling creates a shortage and a binding price floor creates a surplus, and distinguish nonmoney responses that transfer value from those that use resources, block trades, alter quality, or serve a screening or distributional aim.</li>
+<li>Under the baseline case of a freely priced final good and no increase in output, explain why capping an input price does not lower the finished-good price, and why input values are jointly determined by final demand and input supply.</li>
+<li>Explain how a binding control redirects competition onto nonmoney margins, and analyze political persistence as a coalition of intended distributional aims, beneficiary support, and official discretion rather than inferring one motive from the control alone.</li>
 </ul>
 </aside>
 
@@ -64,7 +66,7 @@ The incumbent tenant's lease has acquired wealth even though the legal rent is l
 
 So something else does the rationing, and here is the heart of it. A ceiling does not abolish the full price; it changes the *form* in which the full price is paid. Forbidden to compete by offering more money, buyers compete in every other way: they line up, wait, pull strings, offer side payments, befriend the landlord. The full price reappears as time in queues, as "key money" under the table, as the favoritism of whoever controls the good. The one appeal a buyer is forbidden to make under a ceiling is the very one that would clear the market, namely offering more money, so all the other appeals intensify.
 
-These other forms of competition do more than redirect the full price; they destroy part of it outright. When a buyer wins an apartment by waiting in line for hours or sitting on a waiting list for months, that time is simply burned. It does not pass to the landlord, who would much rather have collected the money the tenant would gladly have paid; it produces nothing for anyone and could have gone into work, study, or rest instead. Under a money price the higher payment is a transfer, moving from buyer to seller and leaving the total wealth of the two unchanged. Under nonprice competition the hours in the queue are a pure loss, worth less to the seller than the money would have been and worth nothing to society. This is why economists call nonprice competition wasteful and not merely a redistribution: it converts what could have been a clean transfer into destroyed time and effort. Economists have a name for value lost this way rather than transferred: the *deadweight loss* of the control. It is value that ends up in no one's hands, both in the hours burned competing for the good and in the mutually beneficial trades a binding ceiling prevents from ever happening.
+These other forms of competition can consume value rather than transfer it. When waiting is merely a contest for an apartment, the tenant's hours do not pass to the landlord as a payment; they displace work, study, or rest. A money payment is a transfer between buyer and seller, while wasted search and waiting use real resources. Queues can sometimes screen urgency or convey information, so their entire cost need not always be waste. In the baseline case here, however, the waiting serves only to rank equally eligible buyers. The lost value from such resource-using competition and from mutually beneficial trades the ceiling blocks is part of the control's *deadweight loss*.
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
@@ -73,24 +75,24 @@ These other forms of competition do more than redirect the full price; they dest
 
 Worse, those other appeals reward traits that have nothing to do with willingness to pay. With money competition suppressed, a landlord choosing among a crowd of eager applicants can indulge any preference at no cost to himself, since the rent is the same whomever he picks. He can favor the applicant with the right looks, the right connections, no children, no pets. Every choice is in some sense an act of discrimination; choosing a television by its features rather than its price is still discriminating among options, and there is nothing sinister in the word itself. The point is which criterion gets to do the discriminating. A money price discriminates by willingness to pay; a ceiling hands that power to whichever nonmoney traits the seller favors, and the applicants richer in those traits get the housing while others are shut out. A law sold as helping the vulnerable can end up sorting against them.
 
-The damage does not stop at who gets in. Because the controlled price no longer rewards keeping the property up, quality slides: landlords skimp on maintenance, defer repairs, and let buildings age, since fresh paint earns nothing when the rent is capped and tenants line up regardless. Over time the controlled stock deteriorates and ages relative to uncontrolled housing. The apartment does not vanish; it decays, because the ceiling has switched off the one reward that would have kept it up.
+The response can also appear in quality. A below-market rent weakens the owner's return from some maintenance and improvement, while a waiting list reduces the reward for attracting tenants. Maintenance rules, enforcement, reputation, and long-run asset value can counter that incentive, so deterioration is a prediction to test rather than an automatic result.
 
 A ceiling tends to produce all of these at once: the quantity demanded rises, the quantity supplied falls, quality deteriorates, black markets and side deals spring up, the little services that used to come with the good get stripped away, and the good is misallocated to lower-valued uses.
 
-There is one honest way to ration a fixed supply at a below-market money price without all this chaos, and it proves the point. Issue *tradable ration coupons*: each buyer needs both money and a coupon, and the coupons may be bought and sold. The coupon acquires a market price of its own, and the money price plus the coupon price adds up to exactly what the free-market price would have been. Rationing by coupons does not lower the full price; it splits it into two slips of paper. The full price reflects real scarcity, and no legal trick changes it; the law can only change the form in which it is paid.
+Tradable ration coupons show the same mechanism. Each buyer needs both money and a coupon, and transferable coupons acquire a price. Apart from transaction and enforcement costs, the controlled money price plus the coupon's opportunity cost approaches the clearing price. The rule changes who initially receives the valuable claim, not the scarcity behind it.
 
 ## Holding Down an Input Price Does Not Lower the Output Price
 
 A tempting move during any "crisis" is to attack high consumer prices by capping the inputs that go into the product. If gasoline is dear, cap the price of crude oil; if meat is dear, cap the price of cattle. The move fails, and seeing why is one of the most useful things in this topic.
 
-Capping the price of an input does nothing to increase the supply of the finished good, so it cannot lower the finished good's price. Holding down the price of crude does not put more gasoline on the market; if anything it discourages oil production, leaving less crude to refine. What the cap does is widen the gap between what processors pay for the input and what they get for the output, transferring wealth to whoever is lucky enough to get the cheap input. The consumer at the pump is no better off, and may be worse off if the cap shrinks the supply of crude. Likewise, capping cattle prices to make meat cheaper yields less cattle, no more meat, a wider margin for the packers, and an unchanged or higher price at the butcher.
+In the baseline case, Capping the price of an input does nothing to increase the supply of the finished good. If gasoline remains freely priced and the cap creates no additional output, cheaper crude does not lower gasoline's clearing price; it creates a valuable margin for processors who obtain the controlled input. If the cap discourages extraction, gasoline supply can fall and its price can rise. Market power, contractual pass-through, inventories, or a simultaneous output-price control require separate analysis, but none makes an input cap create more physical output by itself.
 
 <figure class="econ-figure" style="margin:1.5em 0;">
 <iframe src="/teaching/microeconomics/t04b-price-controls/figures/t04b-oil-shortage-interactive.html" title="Drag the price ceiling up or down to see the shortage a supply cut creates, and confirm the cap can't undo the cut once it no longer binds." loading="lazy" style="width:100%; max-width:480px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t04b-price-controls/figures/t04b-oil-shortage-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t04b-price-controls/figures/t04b-oil-shortage.svg">view the static oil-shortage figure</a>.</p></iframe>
 <figcaption><strong>Capping the price can't restore gasoline a supply cut took off the market.</strong> When production falls, supply shifts from S to the reduced S1 and the market-clearing price would rise from P1 to P2. A ceiling set at P3 — above the old clearing price but below the new one — leaves buyers wanting more (Q3) than the reduced supply provides (Q2): the shortage. The shaded band between the cap and the new clearing price is what the queues eat: with money bids forbidden, drivers compete away that value in waiting lines and tie-ins instead. Drag the ceiling line up and down to watch the gap and the band open as the cap bites and close once it rises to the new clearing price. If the frame does not load, <a href="/teaching/microeconomics/t04b-price-controls/figures/t04b-oil-shortage-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t04b-price-controls/figures/t04b-oil-shortage.svg">view the static oil-shortage figure</a>.</figcaption>
 </figure>
 
-Underneath this is a principle that overturns how most people think about prices and costs. We imagine costs come first and determine prices: a thing costs a lot to make, so it sells for a lot. The causation mostly runs the other way. The value of an input is *derived* from the value of the final product it helps make. Land that grows wine grapes commands a high rent because the wine sells for a high price, not the reverse; if the wine became worthless tomorrow, the land's rent would collapse however "expensive" the land had been. So costs reflect prices more than they determine them. When you ask who is responsible for a higher price, the honest answer is often to look in the mirror: it is consumers' own willingness to pay more that bids up the inputs, which then shows up to sellers as higher "costs." Inventories along the chain delay and disguise this, so by the time the higher cost appears, the demand that caused it is several steps and several months removed, and the seller sincerely blames his costs.
+The deeper principle is joint determination. The demand for an input is *derived* from the value of the final product it helps make, while the input's own supply also matters. Land suited to wine grapes commands more when demand for wine rises; if wine became worthless, that use would no longer support the same rent. Input prices then affect which techniques and quantities producers choose. It is therefore incomplete to say either “costs alone set prices” or “consumer demand alone sets costs”: demand for outputs, supply of inputs, substitution, and time interact.
 
 That delay is an inventory buffer at work. Inventories can absorb a temporary demand change while posted prices stay stable; once the buffer is depleted, the price and replacement cost reveal the change. A chosen buffer or brief voluntary queue is therefore not the same thing as the persistent shortage created when law prevents the price from adjusting.
 
@@ -108,7 +110,7 @@ That delay is an inventory buffer at work. Inventories can absorb a temporary de
 
 ## A Price Floor Creates a Surplus, and Sellers Compete It Away in Other Forms
 
-The mirror image of a ceiling is a *price floor*, a legal minimum below which the price may not fall. Set above the clearing price, it creates a surplus: the amount offered exceeds the amount anyone will buy at the propped-up price. Agricultural price supports are the classic example, and so is a minimum wage set above the market wage for low-skilled labor, which produces a surplus of would-be workers we call unemployment.
+The mirror image of a ceiling is a *price floor*, a legal minimum below which the price may not fall. In the competitive baseline the rule is simple. Set above the clearing price, it creates a surplus: the amount offered exceeds the amount demanded. Agricultural price supports are the classic example. A competitive labor-market model gives the same excess-supply prediction for a binding minimum wage; the later labor topic shows why employer wage-setting power can change the employment response.
 
 <aside class="econ-callout econ-termset">
 <p class="econ-callout__label">Key term</p>
@@ -135,11 +137,11 @@ A floor leaves sellers unable to clear the market by cutting the money price, so
 
 If price controls do such damage, why are they so durable? The answer is political economy, and it ties this topic together.
 
-Start with the officials who impose and defend controls. They are not fools, and the durability of controls is no mystery of stubbornness; it follows from what a control hands the people with the power to set it. The power to fix and enforce a price is the power to decide who gets the scarce good, because once the money price is forbidden to do the rationing, someone with authority must do it instead. That is a valuable power, and worth holding onto. A control also lets officials take visible credit for a low posted price, while the costs it creates, the shortages, the lines, the nonmoney costs piled onto buyers, are diffuse, delayed, and easy to blame on someone else: on hoarders, speculators, or greedy sellers. The benefit an official claims is immediate and personal; the damage is real but deniable.
+One persistence mechanism is official discretion. The power to fix and enforce a price is the power to decide who gets the scarce good once money bids are constrained. A low posted price is also visible, while waiting, quality changes, and forgone trades are harder to observe. Those features can reward officials who defend a control. They do not establish anyone's motive. Voters may knowingly prefer the distribution, incumbent beneficiaries may organize to preserve it, administrators may pursue stability or access, and supporters may dispute the predicted magnitude. Political economy identifies these incentives and asks which explanation fits the evidence.
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
-<p>A mayor keeps defending a popular rent cap even as apartments grow scarce and run down. What does the control give the mayor that makes it worth defending, and why are the resulting costs easy to deflect onto someone else?</p>
+<p>A mayor defends a rent cap while tenants report longer searches. Give two rival explanations for the policy's persistence and identify evidence that would help distinguish them.</p>
 </aside>
 
 Through all of it, keep the economist's discipline in view: this is positive analysis, not a verdict. Scarcity always forces some form of competition. If competition by money price is suppressed, competition by force, by waiting, by connections, by political pull takes its place; the competition never stops, only its form changes. Economics can tell you what each form of competition will do, who will gain and who will bear the cost. It cannot tell you which scarce goods *ought* to be rationed by markets and which by some other rule. That choice rests on values you bring to it. What economics offers is the cause and effect, so that whatever you decide, you decide it with your eyes open.
@@ -155,9 +157,20 @@ Want to explore the source material? This lecture draws on the following chapter
 <section class="econ-review__section">
 <h3>Key takeaways</h3>
 <ul>
-<li><strong>A binding ceiling creates a shortage; a binding floor creates a surplus.</strong> Neither abolishes the full price; each shifts competition into queues, favoritism, side deals, or quality competition that destroy value rather than transfer it.</li>
-<li><strong>Capping an input price cannot lower the output price.</strong> A cap on crude or cattle yields no more of the finished good and only widens the processor's margin, because costs reflect prices more than they set them.</li>
-<li><strong>Expect controls to persist.</strong> A binding control does not so much lower the full price as recompose it onto nonmoney margins, and it endures because it hands officials the authority to decide who gets the scarce good and the visible credit for a low posted price, while the costs it piles onto buyers stay diffuse and easy to blame elsewhere.</li>
+<li><strong>A binding ceiling creates a shortage; a binding floor creates a surplus.</strong> Neither abolishes the full price; each redirects competition, so compare transfers, resource-using search and waiting, blocked trades, quality changes, and any screening or distributional benefit.</li>
+<li><strong>An input cap does not create more output.</strong> With a freely priced final good and no output increase, the cap creates a valuable processing margin rather than a lower clearing output price; derived demand and input supply jointly determine costs.</li>
+<li><strong>Controls can create political constituencies.</strong> Official discretion, visible posted prices, incumbent benefits, distributional goals, and harder-to-observe costs can all support persistence; the mechanism alone does not establish which motive dominates.</li>
 </ul>
 </section>
 </div>
+<!-- UE–E&P TARGETED SOURCE AUDIT (2026-08-10)
+Authoritative memo: revision/ue-ep-source-memo-wave-b-2026-08.md.
+
+- Ceiling, floor, full-price, coupon, input-control, and five-figure mechanisms remain.
+- Queue waste and maintenance deterioration now state their maintained conditions.
+- Input-cap objective uses the freely priced-output/no-output-increase baseline and joint
+  determination; the minimum-wage preview points to T10b's monopsony case.
+- Political persistence compares official discretion, beneficiaries, distribution, and
+  stability as evidence-tested mechanisms rather than an inferred motive.
+- Three objectives, five Core and fourteen coverage anchors, and migration routing remain.
+-->

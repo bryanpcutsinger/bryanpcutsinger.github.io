@@ -7,8 +7,9 @@ ue_anchors: ["UE 16"]
 be_anchors: []
 ep_anchors: ["E&P Fig 10-8 (ch. 10, p. 211) — profits competed away by bidding up the responsible input", "E&P Fig 10-3 (ch. 10, p. 205) — total variable cost as the area under marginal cost", "E&P Fig 10-7 (ch. 10, p. 210) — adjustment of supply to a demand shift: short-run overshoot, long-run settle via entry", "E&P ch. 10 (p. 216) — 'sick industries': persistent losses are not market failure"]
 word_target: "3400-3800"
-word_budget: 3861
+word_budget: 3529
   # word_budget 3800 -> 3861 (+61): For Further Reading section added 2026-07-22
+  # word_budget 3861 -> 3529: UE–E&P targeted audit 2026-08-10; measured body 3861 -> 3529, prior zero headroom retained
 status: approved        # scope-reduction R4 done-gate 2026-07-21; E&P integration M5 done-gate 2026-07-20; prior approval 2026-07-01
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Part A of t07-competitive-markets (split at the Exam-2 seam to clear the 6,000-word cap); Part B (t07b-tax-incidence-and-quasi-rent) covers UE 17/18 + BE. Source-of-truth for the T7a deck; section headers are claims that map to slide titles. Assumes T6 (costs, marginal cost, the firm's cost curves) is already taught and does NOT re-derive cost curves."
@@ -26,8 +27,8 @@ We will study the simplest and most important case: a seller so small relative t
 <p>By the end of this post you should be able to:</p>
 <ul>
 <li>Determine a price-taker's profit-maximizing output using the rule to produce until marginal cost rises to price, and use minimum average variable cost and minimum average total cost as the short-run shutdown and long-run break-even thresholds; explain why summing every firm's supply gives an upward-sloping market supply curve.</li>
-<li>Explain why competition drives every firm's marginal cost toward the same number, producing the industry's output at the lowest possible total cost, and why survival, not conscious calculation, is what makes firms behave as if they maximize profit.</li>
-<li>Explain how competition turns profits into costs by capitalizing an asset's earnings into its price, why current value rather than historical cost governs, and how a genuine profit differs from a transfer engineered by blocking competition.</li>
+<li>Under the price-taking benchmark, explain why equal marginal costs minimize the industry's cost of a given output and why entry, exit, and survival pressure firms toward rather than guarantee profit-maximizing behavior.</li>
+<li>Explain how expected earnings capitalize into an asset's current price, and distinguish entrepreneurial profit, scarcity rent, and transfers without assuming observed accounting profit reveals its source.</li>
 </ul>
 </aside>
 
@@ -49,7 +50,7 @@ So the farmer can sell as much or as little as he likes, but only at the one pri
 <figcaption><strong>The market sets the price; the firm just takes it.</strong> Left: market demand meets market supply at the clearing price. Right: that same price is the flat, horizontal demand line facing one price-taking firm, which can sell any quantity at that price, so it chooses a quantity, not a price. Drag the market demand curve up or down and watch the clearing price move, and the firm's flat line move to meet it. If the frame does not load, <a href="/teaching/microeconomics/t07a-competitive-firm/figures/t07a-market-firm-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t07a-competitive-firm/figures/t07a-market-firm.svg">view the static figure</a>.</figcaption>
 </figure>
 
-What makes a seller a price-taker is not the raw number of competitors at any moment; it is two conditions together. First, the product is *homogeneous*: buyers treat one seller's units as interchangeable with another's, so no one can command a premium. Second, entry is quick and cheap, so a price that rose far above cost would draw newcomers in and get competed back down. A market can have only a handful of sellers today and still discipline each like a price-taker, as long as outsiders can jump in fast. Homogeneity plus easy entry, not a head count, is what strips a seller of power over price.
+A seller is a price-taker when its own output is too small, and alternatives too close, for its quantity choice to move the market price materially. Homogeneous products help because buyers readily switch; easy entry disciplines profit over time. Neither condition by itself guarantees a horizontal firm demand curve: a handful of large sellers may affect price even if entry is possible, while many differentiated sellers may retain some pricing discretion. Price-taking is a benchmark about the firm's residual influence, not a literal head-count test.
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
@@ -139,7 +140,7 @@ There is the floor we promised. The firm's marginal-cost curve serves as its sup
 
 One firm's supply curve is its marginal cost above the shutdown point, and a market is full of such firms. To get the supply curve for the whole market, ask at each possible price how much every firm would produce and add those quantities together. That horizontal sum, across all firms, is the market supply curve.
 
-It slopes upward for two reasons. Each firm's marginal cost rises with output, and a higher price draws in firms that were sitting on the sidelines. Picture a price climbing from low to high: at first only the lowest-cost producers find it worth operating; as the price rises, each expands along its marginal-cost curve while higher-cost firms clear their own break-even and switch on, adding fresh marginal-cost curves to the sum. Entry is the market's own margin: the individual firm adjusts its rate, the industry adjusts the number of firms, and both push the same way, so the market offers more as the price rises.
+For a fixed set of firms in the short run, it slopes upward because each firm's marginal cost rises with output and some previously idle capacity begins operating. Entry and exit are separate long-run margins. A higher expected price can draw in firms, but the long-run industry's slope also depends on whether entry bids up input prices, brings costs down, or leaves them unchanged. The horizontal sum is therefore the short-run construction; long-run supply incorporates how the population and costs of firms change.
 
 <figure class="econ-figure" style="margin:1.5em 0;">
 <iframe src="/teaching/microeconomics/t07a-competitive-firm/figures/t07a-market-supply-interactive.html" title="Toggle between the lower and higher demand curve to watch the market-clearing price rise, firm C enter, and the equalized-marginal-cost construction shift from $20 to $30." loading="lazy" style="width:100%; max-width:520px; aspect-ratio:4/5; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t07a-competitive-firm/figures/t07a-market-supply-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t07a-competitive-firm/figures/t07a-market-supply.svg">view the static figure</a>.</p></iframe>
@@ -148,21 +149,21 @@ It slopes upward for two reasons. Each firm's marginal cost rises with output, a
 
 ### Competition Pushes Every Firm's Marginal Cost Toward the Same Number
 
-Here is a quiet marvel that nobody plans. Every price-taker, whatever its circumstances, expands until its own marginal cost equals the one market price. They all face the same price, so they all end up with the same marginal cost, and that uniformity is what produces the industry's total output as cheaply as possible.
+Here is the benchmark result. Every price-taker expands until its own marginal cost equals the one market price. If firms make the same product, face prices reflecting opportunity cost, and create no omitted external effects, their marginal costs converge. That allocation minimizes the measured resource cost of producing the given industry output.
 
-To see why, suppose it were not so. One more unit of some good costs $5 worth of resources in one firm but $6 in another. Then society is wasting something: shift resources from the costlier producer to the cheaper one and get the same output for less. As long as marginal costs differ across producers, that cheap rearrangement is available; resources flow out of the lower-valued use and into the higher-valued one until the marginal cost of one more unit is the same everywhere, and only then is no further saving possible. Competition performs that reshuffling automatically, with no planner computing anything, simply because every firm is independently chasing the same price. The cleanest version of the old idea: competition serves the consumer without anyone intending to.
+Suppose one more identical unit costs $5 in one firm but $6 in another. Shifting production toward the first can deliver the same output for less until marginal costs equalize. Market prices can induce that reshuffling without a planner calculating each move. The conclusion is deliberately narrow: it is cost minimization for a specified output under the benchmark, not proof that the distribution is fair, every cost is priced, or the output itself is normatively best.
 
 ### Survival, Not Conscious Optimizing, Is What Competition Selects For
 
 I have been talking as though each owner equates marginal cost to price on a spreadsheet. Real managers rarely know their costs that precisely; they have hunches about pushing output higher or pulling it back, but the exact marginal cost of the next unit is usually a fog. Does the analysis collapse?
 
-It does not, and the reason is one of the most important ideas in the course. The market does not require anyone to calculate the optimum; it only rewards those who land near it and punishes those who stray far. A firm that consistently produces too much, or carries costs that are too high, fails to cover them and is competitively winnowed out; a firm that happens to operate near the profit-maximizing rate survives and grows. Over time the survivors are the ones behaving roughly as if they had solved the problem, whether or not they ever consciously did. Profit-maximizing is better understood as a result selection produces than as a goal every manager pursues; the marginal conditions describe the firms that last, not the arithmetic each owner performs.
+The market does not require anyone to calculate the optimum. Losses, takeover, entry, and exit pressure firms that stray far from sustainable choices, while firms landing nearer the profitable range are more likely to survive and grow. This is a selection tendency, not a guarantee: luck, finance, regulation, market power, managerial goals, and unpriced effects can preserve departures or eliminate capable firms. Marginal conditions describe a benchmark toward which competition pushes, not arithmetic every manager performs or an assurance that every survivor is best.
 
 ## Profits Turn Into Costs as Rivals Bid for Whatever Earns Them
 
 Now to the engine that drives competitive profits toward an ordinary return. The usual story says competition "competes profits away" but rarely explains the mechanism, which is that profits get converted into costs.
 
-Follow a single machine. An investor pays $10,000 for it, expecting 5,000 units of output at $1 per unit in other inputs, and hopes to sell the product for $3, just covering the machine. Then luck breaks his way and the product sells for $4. Each unit now clears $3 over the other-input cost, so over its life the machine throws off $15,000 instead of the $10,000 it cost, and the owner is sitting on a $5,000 profit. Watch what happens to it. The moment everyone can see the machine earns $15,000, that is what it is worth; anyone who wants the business must pay $15,000. The profit has been *capitalized* into the machine's price, and whoever buys it at $15,000 now earns only an ordinary return, no windfall. The same happens if the resource responsible is a patent, a prime location, or a talented employee: rivals bid up its price or salary until the extra it earns is fully reflected in what it costs to obtain. The owner of that resource grows richer; the firm using it is left with a normal return.
+Follow a single machine. An investor pays $10,000 for it, expecting 5,000 units of output at $1 per unit in other inputs, and hopes to sell the product for $3, just covering the machine. Then luck breaks his way and the product sells for $4. Each unit now clears $3 over the other-input cost, so over its life the machine throws off $15,000 instead of the $10,000 it cost. Once rivals expect that earning stream to persist, they bid for the machine. The profit has been *capitalized* into the machine's price. In this simplified table with no discounting or risk, its value rises to $15,000; a later buyer earns an ordinary return from that price. In practice the bid reflects expected future net earnings, timing, risk, taxes, bargaining, and alternatives, which T11 will make explicit.
 
 The table tracks the machine as the product price moves.
 
@@ -180,7 +181,7 @@ Two lessons live in that table. First, the cost of using the machine is not the 
 <p>A rival claims it can undercut an old firm because that firm is stuck with expensive, outdated equipment. Using the machine example, explain why the old equipment is not a burden, and why what the firm originally paid for it no longer matters.</p>
 </aside>
 
-Be precise about what these profits are. A genuine profit of this kind is an increase in wealth: someone created value worth more than the resources it consumed and for a while captured the difference. That is entirely different from the gain a firm collects by getting the government to block its rivals; money squeezed out of consumers by restricting competition is a transfer engineered by force, not a profit in our sense, and competition cannot erode it because competition has been forbidden. Competition drives to normal only the wealth-creating kind, the kind that draws in imitators precisely because it is real.
+Be precise about sources. *Entrepreneurial profit* is an unanticipated increase in wealth when realized value exceeds the opportunity cost of the resources used. A *scarcity rent* can arise from a scarce location, talent, patent, network, or legal restriction. A policy-created restriction may transfer value to its holder without increasing total output, while an innovation can create value and still confer temporary market power. Accounting profit alone does not reveal which story applies; entry conditions, rights, external effects, and counterfactual output do.
 
 <figure class="econ-figure" style="margin:1.5em 0;">
 <iframe src="/teaching/microeconomics/t07a-competitive-firm/figures/t07a-ep10-8-profits-competed-away-interactive.html" title="Drag firm A's average-cost curve upward, as rivals bid its superior input up, and watch firm A's profit box shrink to zero while the marginal firm B always just breaks even at the same market price." loading="lazy" style="width:100%; max-width:640px; aspect-ratio:16/10; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t07a-competitive-firm/figures/t07a-ep10-8-profits-competed-away-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t07a-competitive-firm/figures/t07a-ep10-8-profits-competed-away.svg">view the static figure</a>.</p></iframe>
@@ -198,9 +199,9 @@ When rivals bid up the price of a profit-earning asset, what they pay for is its
 
 ### Is Producing Where Price Equals Marginal Cost Socially Desirable?
 
-Competition pushes each firm to produce where price equals marginal cost, and economists have long argued this outcome is, in a specific sense, a good one, and the argument can be made entirely in words.
+Competition pushes each firm to produce where price equals marginal cost. Under a specific benchmark, that is productively and allocatively efficient; it is not a complete welfare verdict.
 
-At the competitive output, the last unit produced is worth at least its price to the buyer who takes it, since he was willing to pay that price, and the price equals marginal cost, the worth of the other things society gave up to make that unit. So the last unit is worth as much to the person who gets it as the resources sacrificed to produce it. Push output lower and you skip units buyers value more than they cost; push it higher and you make units that cost more than they are worth to anyone. Producing right where price meets marginal cost is the point where the total personal worth created, across everyone, is as large as it can be — the sense in which the competitive result is efficient.
+If willingness to pay measures marginal personal worth, marginal cost includes every opportunity cost, exchange is voluntary and informed, and no effect falls on outsiders, the last unit is worth as much to the person who gets it as the resources sacrificed. Lower output forgoes units valued above cost; higher output uses resources worth more elsewhere. Distribution, rights, information, public goods, and external effects require additional analysis. The benchmark establishes exhausted gains under its assumptions, not that every competitive outcome is socially best.
 
 ## For Further Reading
 
@@ -214,8 +215,19 @@ Want to explore the source material? This lecture draws on the following chapter
 <h3>Key takeaways</h3>
 <ul>
 <li><strong>The firm's supply curve is its rising marginal cost above the shutdown floor.</strong> A price-taker produces until marginal cost climbs to meet the price; minimum average variable cost is the short-run shutdown floor, minimum average total cost the long-run break-even price, and summing every firm's supply, with entry drawing new firms in as price rises, gives an upward-sloping market supply curve.</li>
-<li><strong>Competition equalizes marginal cost and rewards survival, not calculation.</strong> Every firm expands until its marginal cost meets the one market price, so the industry's output is produced as cheaply as possible with no planner directing it; the market winnows firms that stray far from the profit-maximizing rate and keeps those that land near it, so survivors behave as if they had solved the problem.</li>
-<li><strong>Competition turns profits into costs.</strong> Rivals bid up the price of whatever earns a profit until it is capitalized into a cost, leaving an ordinary return; current value, not historical cost, is what matters, and a genuine profit is created wealth, not a transfer won by blocking competition.</li>
+<li><strong>The price-taking benchmark equalizes marginal cost.</strong> For identical output with priced opportunity costs and no omitted effects, reallocation minimizes industry cost; entry, exit, and losses push toward sustainable choices without guaranteeing perfect optimization.</li>
+<li><strong>Expected earnings capitalize into current value.</strong> Competition bids persistent earnings into asset prices, while timing and risk matter; entrepreneurial profit, scarcity rent, and policy-created transfers are distinct even when accounts label each “profit.”</li>
 </ul>
 </section>
 </div>
+<!-- UE–E&P TARGETED SOURCE AUDIT (2026-08-10)
+Authoritative memo: revision/ue-ep-source-memo-wave-b-2026-08.md.
+
+- Price-taking now rests on negligible residual price influence, not homogeneity/entry
+  as a sufficient two-condition theorem; short-run summation is separated from entry.
+- Equal-MC and P=MC conclusions name their opportunity-cost, information, and
+  external-effect assumptions; selection is pressure, not proof of survivor optimality.
+- Capitalization retains the machine table while adding expectations, timing, and risk;
+  entrepreneurial profit, scarcity rent, and policy-created transfer are distinguished.
+- Three objectives, ten Core/fourteen coverage anchors, four figures, and routing remain.
+-->

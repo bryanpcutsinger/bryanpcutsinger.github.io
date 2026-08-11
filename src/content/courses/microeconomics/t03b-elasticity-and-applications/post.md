@@ -8,7 +8,7 @@ ue_anchors: ["UE 8", "UE 9"]
 be_anchors: []
 ep_anchors: ["E&P Fig 2-4 (ch. 2, p. 23) — marginal revenue as gain minus loss on inframarginal units", "E&P Fig 2-11 (ch. 2, p. 35) — endowment vs substitution effect (relocated from t03a)"]
 word_target: "2800-3600"
-word_budget: 4508
+word_budget: 4524
   # word_budget 3600 -> 3661 (+61): For Further Reading section added 2026-07-22
   # word_budget 3661 -> 4051 (+390): midpoint-formula pass 2026-07-25 (instructor-directed) — formula display + worked example + table recompute prose + ue8-1 figure-intuition paragraph (same-session feedback)
   # word_budget 4051 -> 3959 (-92): ue8-3 rectangular-hyperbola figure cut 2026-07-26 (instructor) — figcaption words removed; headroom preserved
@@ -20,6 +20,8 @@ word_budget: 4508
   # word_budget 4587 -> 4626 (+39): ep2-4 section-alignment pass 2026-07-26 (instructor ruled keep standalone) — echo sentence added tying the MR figure to the earlier elasticity line (same picture, seller's question)
   # word_budget 4626 -> 4734 (+108): ep2-11 redesign 2026-07-26 (instructor) — walkthrough paragraph added (figure now explained in prose) + figcaption rewritten to the two-scenario wealth-vs-substitution framing
   # word_budget 4734 -> 4508 (-226): 2026-08-07 rigor/sequence review — price-elasticity sign convention repaired; later-topic previews compressed and subordinated; 52-word headroom preserved
+  # word_budget 4508 -> 4524 (+16): UE–E&P Wave-C verification 2026-08-10;
+  #   second-law/equal-charge conditions added, prior 56-word headroom preserved
 status: approved        # scope-reduction R4 2026-07-21 (word_budget applied); E&P integration M6 done-gate 2026-07-20; prior approval 2026-07-01
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Source-of-truth for the session-4 deck; section headers are claims that map to slide titles. Verbal-marginal throughout: no indifference curves, no measured surplus triangles; the ONE sanctioned piece of algebra is the midpoint elasticity formula (instructor-directed 2026-07-25). Follows the session-3 demand post and precedes gains from exchange in session 5; a short foundational intro re-establishes the downward-sloping demand curve and marginal worth so this post stands on its own."
@@ -37,7 +39,7 @@ None of this assumes buyers carry a numerical schedule in their heads or do arit
 <p>By the end of this post you should be able to:</p>
 <ul>
 <li>Define price elasticity of demand as the magnitude of the percentage change in quantity demanded divided by the percentage change in price, calculate it between two points with the midpoint formula, tell elastic from inelastic demand, explain why elasticity varies along a straight-line curve rather than equaling its slope, and use it to predict what a price change does to a seller's total revenue.</li>
-<li>State the second law of demand and use the fan of demand curves to explain why demand grows more elastic the longer people have to adjust.</li>
+<li>State the second law of demand and use the fan of demand curves to explain why demand typically grows more elastic when a longer horizon expands the ways people can adjust.</li>
 <li>Explain why a good's real price is its price relative to other goods, so its dollar price can rise while its relative price falls, and apply the Alchian and Allen theorem that adding the same charge to two grades makes the higher grade relatively cheaper wherever it lands.</li>
 </ul>
 </aside>
@@ -118,7 +120,7 @@ The whole thing fits in a small grid.
 | **Price rises** | Total revenue falls | Unchanged | Total revenue rises |
 | **Price falls** | Total revenue rises | Unchanged | Total revenue falls |
 
-So you can never say in the abstract whether a seller should raise or lower price to make more money; the answer depends entirely on where the seller sits on the demand curve. Carry one point forward: a seller raising revenue by exploiting inelastic demand is not the same as buyers being better off.
+So you cannot say in the abstract whether raising or lowering price will increase revenue; the answer depends on where the seller sits on the demand curve. Revenue is not profit, which also depends on costs, and neither measure by itself says buyers are better off.
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
@@ -140,7 +142,7 @@ So always ask first whether you are sliding along a curve or watching one move. 
 
 ## Demand Becomes More Elastic the Longer People Have to Adjust
 
-There is a *second law of demand*, and it concerns time: demand is more elastic the longer the interval since a price change. People need time to find substitutes, rearrange their lives, and replace equipment, so the full response to a price change builds up gradually.
+There is a *second law of demand*, and it concerns time: demand is more elastic the longer the interval since a price change. This is a comparative-horizon tendency: when a longer horizon expands feasible substitutions and other conditions are comparable, more adjustment can occur. It is not a promise that every long-run estimate exceeds every short-run one while technology, income, expectations, policy, and the composition of buyers are also changing.
 
 Gasoline is the standard case. Double the price overnight and consumption falls only a little at first; people still have the same cars and the same commutes. But over a year or three, they buy more efficient cars, move closer to work, carpool, and carmakers redesign their fleets. So consumption falls more after three years than after one. A common objection runs, "a 10 percent gas price rise won't change how much I drive tomorrow, so the law of demand is bogus." It is not. The law never promised an instant or universal response. Some people respond right away, more respond over time, and the market as a whole responds because some people do, even if you personally do not.
 
@@ -179,7 +181,7 @@ A change in a good's own price moves buyers along a demand curve; a change in in
 
 Income is one force that moves the whole curve. A price change can do so too when the buyer owns a large stock of the good whose price changes.
 
-When a good's price changes, two forces can act on an owner. We can separate them in words without adding a new consumer-choice apparatus.
+When a good's price changes, two forces can act on a net owner who can sell the asset or output. We can separate them in words without adding a new consumer-choice apparatus.
 
 The first is the *substitution effect*. When a good gets more expensive relative to others, you lean away from it toward the now-relatively-cheaper alternatives. This force always pushes the same way: a higher own-price means less of the good. The second is the *wealth effect*, and its direction depends on your situation. A higher price for something you buy makes you a bit poorer in real terms, since your money buys less, which usually nudges you toward a little less of most goods. But here is the twist: if you own a lot of the good whose price rose, the higher price makes you richer, and that can push you toward consuming more.
 
@@ -191,7 +193,7 @@ The first is the *substitution effect*. When a good gets more expensive relative
 </dl>
 </aside>
 
-Suppose you own a dairy farm and the price of milk rises. Substitution pushes you toward drinking less because milk is now dearer relative to other drinks. Ownership makes you wealthier and can push toward more. Which force wins is ambiguous for a large owner. For an ordinary shopper without a large stock, the ownership channel is absent and the usual downward-sloping demand relationship remains.
+Suppose you own a dairy farm and the price of milk rises. Substitution pushes you toward drinking less because milk is now dearer relative to other drinks. If you are a net seller with secure sale rights, the higher price raises the value of your output and can push toward more consumption. Which force wins is ambiguous. For a shopper without a large stock, that ownership channel is absent; an ordinary wealth effect can still matter, but substitution usually preserves the downward relationship.
 
 In the figure, the higher milk price moves the farmer along a curve while the added wealth shifts her curve right. Use the buttons to compare a large shift, where the wealth effect wins and Q₂ exceeds Q₁, with a small shift, where substitution wins and Q₂ falls below Q₁. Every curve still slopes down; the unusual result comes from a shift, not from an upward-sloping demand curve.
 
@@ -229,14 +231,14 @@ Here is the puzzle. Why do the regions that grow the best produce so often ship 
 | Choice grapes | $1.00 | $0.50 | $1.50 |
 | Standard grapes | $0.50 | $0.50 | $1.00 |
 
-Look at the relative prices. In California, a pound of choice costs two pounds of standard ($1.00 versus $0.50). In New York, a pound of choice costs only 1.5 pounds of standard ($1.50 versus $1.00). Adding the same dollar charge to both grades has made the choice grapes *relatively cheaper* in New York. By the first law of demand, New Yorkers therefore buy a larger fraction of choice grapes than Californians do, with no appeal to differences in "taste." The fancy stuff gets shipped out because the transport charge lowers its relative price wherever it lands.
+Look at the relative prices. In California, a pound of choice costs two pounds of standard ($1.00 versus $0.50). In New York, a pound of choice costs only 1.5 pounds of standard ($1.50 versus $1.00). Adding the same dollar charge to both grades has made the choice grapes *relatively cheaper* in New York. Holding preferences, incomes, available grades, and other costs fixed, the first law predicts a larger choice-grade share in New York. The mechanism does not require a taste difference, though an observed quality mix alone cannot rule one out.
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
 <p>A $6 steak and a $3 burger each get the same flat $3 shipping charge added. Work out the two new prices and the new ratio between them. Which cut becomes relatively cheaper at the destination, and why does the fixed charge do that?</p>
 </aside>
 
-The mechanism is general: adding a constant amount to a high price and a low price shrinks the ratio between them. High and low meat at $10 and $5 stand in a 2-to-1 ratio; add $10 to each, making $20 and $15, and the ratio falls to 1.33-to-1, so the high grade becomes relatively cheaper. The same arithmetic explains why a couple with infants is more likely to splurge on expensive theater than a childless couple: both face a fixed babysitter cost on top of the ticket, and that common charge shrinks the price ratio between the dear theater and the cheap movie. Whenever a fixed charge rides on top of two options of different quality, it tilts choices toward the higher-quality one.
+The arithmetic is general: adding the same positive amount to a high and a low price shrinks their ratio. High and low meat at $10 and $5 stand in a 2-to-1 ratio; add $10 to each, making $20 and $15, and the ratio falls to 1.33-to-1. A common babysitter charge similarly lowers the price of dear theater relative to a cheap movie. When the charge is truly equal per relevant unit and other determinants are held apart, that relative-price change tends to tilt the chosen mix toward the higher-priced grade.
 
 With the demand tools now in hand, we turn next to exchange: why buyers and sellers can both gain from trading the same good.
 
@@ -252,7 +254,7 @@ Want to explore the source material? This lecture draws on the following chapter
 <h3>Key takeaways</h3>
 <ul>
 <li><strong>Elasticity decides how a price change affects revenue.</strong> It is the absolute value of the percentage change in quantity demanded divided by the percentage change in price, calculated between two points with the midpoint formula; it varies along a straight-line curve rather than equaling the slope. Where demand is elastic a price cut raises total revenue, while where it is inelastic a price cut lowers it, with revenue peaking at unit elasticity.</li>
-<li><strong>Demand grows more elastic the longer people have to adjust.</strong> The second law says the full response builds as people find substitutes and replace equipment, shown by the fan of curves flattening from short run to long run.</li>
+<li><strong>Demand typically grows more elastic when a longer horizon expands adjustment.</strong> The second law's fan shows a larger response as people find substitutes and replace equipment, holding the underlying comparison fixed; changing technology, income, expectations, policy, or buyer composition can complicate an observed short-run/long-run comparison.</li>
 <li><strong>The real price is the relative price.</strong> What you give up in other goods, not the dollar figure, governs your choice, so a good's dollar price can rise while its relative price falls, and adding the same fixed charge to two grades of a good shrinks the ratio between them, making the finer grade relatively cheaper wherever it lands.</li>
 </ul>
 </section>

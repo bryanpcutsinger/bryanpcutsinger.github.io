@@ -17,6 +17,8 @@ note: "Self-contained — assumes no access to the textbooks. Source-of-truth fo
 
 Most people assume economics is about money, the stock market, or getting rich. It has something to say about each of these, but it is really a way of thinking about the world, a small set of tools you will keep using long after you graduate: when you read the news, make your own decisions, or weigh a claim about how the world ought to work.
 
+This course follows three problems. First comes reallocation: who gets existing goods and what gains arise from exchange? Next comes production and organization: how are more goods created, and by whom? Finally come income, time, and uncertainty: who is paid, when, and for bearing what? Throughout, ask what is scarce, what rule allocates it, what margin changes, and who bears the residual after people adapt. We begin with demand because exchange requires knowing what one more unit is worth.
+
 <aside class="econ-callout econ-objectives">
 <p class="econ-callout__label">Learning objectives</p>
 <p>By the end of this post you should be able to:</p>
@@ -76,7 +78,7 @@ A price tag of $0 does not make something free. "Free" parking, "free" beaches, 
 
 A campus has 5,000 students and 2,000 parking spaces. Some students will get a space and some will not. This is not a policy choice but a matter of arithmetic, so the campus needs a rule for deciding who.
 
-Because scarce things cannot satisfy everyone who wants them, people compete for them in every society: competition comes from scarcity itself and would exist with no money, prices, or markets at all. The only thing open to choice is the form competition takes: brute force, political power (whoever the state favors), authority (a committee's judgment), first-come-first-served, or exchange (whoever pays). Political power is on the list because the state holds a near-monopoly on legitimate force, and that monopoly is worth fighting over. It also lets government make and enforce rules, though custom, private arbitration, and a ruined reputation settle far more quarrels than any court.
+Because scarce things cannot satisfy everyone who wants them, people compete for them in every society: competition comes from scarcity itself and would exist with no money, prices, or markets at all. The only thing open to choice is the form competition takes: brute force, political power (whoever the state favors), authority (a committee's judgment), first-come-first-served, or exchange (whoever pays). Political power matters because the state claims distinctive authority to make and enforce rules. Custom, arbitration, contract, and reputation also settle disputes; their performance depends on information, enforcement, and exit.
 
 Every rule on this list discriminates in the plain sense: each picks who gets the scarce thing by some attribute, whether willingness to pay, arrival time, or a committee's favor. Scarcity makes that unavoidable; the objection is to discrimination by race or religion, not discrimination itself. Every rule also carries a real cost, even the ones that look free: first-come-first-served costs you time; a "most deserving" committee costs you the effort of proving you qualify. No method escapes cost; the rules just change who pays and how.
 
@@ -84,7 +86,7 @@ Which forms of competition are even allowed shifts from one arena to another. A 
 
 The rule in force also depends on who controls the scarce thing. A private garage rations parking by charging money, since the owner keeps what drivers pay; a public university rations admission by grades and test scores instead, since no administrator personally pockets a higher bidder's tuition. Whenever you see a scarce thing handed out, ask which rule is running and what it costs people.
 
-This course mostly studies one of these rules: exchange, competitive and cooperative at once. Rivals bid against each other for your business, yet a deal closes only when both sides come out ahead, so the only way a seller can win your business away from rivals is to serve you better: a lower price, a better product, more convenience.
+This course mostly studies one of these rules: exchange, competitive and cooperative at once. In an open market where buyers can walk away and sellers bear the relevant costs, rivals bid for business with lower prices, better products, or more convenience. A deal closes only when both sides expect to gain. Later topics examine what changes when information is poor, entry or exit is restricted, or costs fall on outsiders.
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
@@ -143,7 +145,7 @@ How far out the frontier sits is not fixed. Better tools and technology can push
 <figcaption><strong>Growth shifts the frontier out.</strong> Better tools, technology, and rules that reward investment shift the whole frontier outward, so more food and more clean air become possible together. The new frontier still bounds choices, and every point on it still forces a trade-off.</figcaption>
 </figure>
 
-What pushes the frontier outward is productivity, and productivity tracks a country's rules far more than the resources it happens to start with: secure property, enforceable agreements, the freedom to try new ideas.
+Productivity pushes the frontier outward. Resources matter, but so do knowledge, complementary inputs, public goods, secure claims, enforceable agreements, and room to experiment. Economics links these conditions to investment and production; their relative empirical importance must be investigated.
 
 Being on the frontier still does not tell you which point is best. You might trade food for cleaner air while I trade the other way, and productive efficiency alone cannot crown a winner. It is a no-waste test about production, not a verdict about what is good. Later we will use *Pareto efficiency*, also called *Pareto-optimality*, for a different no-waste test about allocation: whether goods can be rearranged to make someone better off without making anyone worse off. Neither concept tells us which efficient outcome is best.
 
@@ -180,7 +182,7 @@ Be wary of words that smuggle a "should" inside what sounds like fact, like "fai
 <p>Is "a rent ceiling (a legal cap on rent) will reduce the number of apartments available" positive or normative? What extra value judgment would turn it into a normative claim?</p>
 </aside>
 
-Be on guard here against economists themselves, myself included: against their opinions, not their analysis. An economist can trace a policy's likely consequences more reliably than most people, but the moment one tells you to "cut tariffs" or "raise the minimum wage," that advice has crossed from a positive claim to a normative one, no more authoritative than your own for being dressed in a credential. Learning economics buys you a sharper "is," not a better "should."
+Be on guard here against economists themselves, myself included: against presenting a value judgment as if it followed from a model. Economic training can sharpen a prediction about tariffs or minimum wages. Advice to adopt a policy also requires a criterion for judging efficiency, distribution, rights, risk, and error. Expertise can inform both facts and feasible trade-offs; it cannot silently choose the weights you place on them.
 
 ### Economics Clarifies Your Trade-offs; It Doesn't Supply Your Values
 
@@ -188,7 +190,7 @@ The same positive footing marks a limit on what economics can do for you. It can
 
 ## Only Individuals Choose
 
-Only individuals choose, and that fact underlies almost everything we do this term. "The government," "the firm," and "the market" have no minds or goals of their own. The people inside them do. A government is officials, voters, and interest groups, each responding to their own incentives. A firm is owners, managers, and employees. A market is people buying and selling.
+Only individuals choose, and that fact underlies almost everything we do this term. "The government," "the firm," and "the market" have no minds or goals of their own. The people inside them do. Yet institutions matter because voting rules, contracts, authority, norms, and prices combine individual choices into outcomes no one person may have intended. Methodological individualism asks us to explain those rules and incentives rather than treating an organization as a single unexplained chooser.
 
 That is why we keep pushing explanations down to individuals. To understand why "the government" or "a business" does something, we ask what the people inside are rewarded and punished for doing, whether in a market, a political office, or any other setting. That question is the hinge between economics and politics, and we lean on it all term.
 
@@ -218,9 +220,9 @@ Your rights protect the physical thing you own, not its market value: if a bette
 
 The gap between "capitalist" and "socialist" is not whether property rights exist (even the Soviet Union let people own clothes and furniture) but how far private rights extend over productive resources: the factories, farmland, and machines used to make things for others. A fully socialist economy has the state, not any private individual, holding those three powers over productive property; that is what "abolishing private property" means, not that no one can own a toothbrush.
 
-Real economies sit between those poles, and no system is free of compulsion; the difference is who compels whom. The same kinds of people, under different rules, produce very different results: where people can keep and trade what they produce, effort pays off; where they cannot, the same talents produce far less.
+Real economies combine private, common, nonprofit, and governmental rights, and no system fits one pure label. Transferable residual claims can strengthen incentives to invest, maintain, and adapt. Other arrangements may be chosen for public goods, external effects, distribution, mission, or enforcement reasons. The comparison is not a contest of labels; it asks how each arrangement performs on information, incentives, transaction costs, inclusion, and correction of mistakes.
 
-One slogan deserves an answer: "human rights must take priority over property rights." Property has no rights; only people do. A property right is a person's right to use a scarce resource. If a city orders a landlord to rent only to tenants it selects, in the name of housing as a human right, that pits the tenant's claim against the owner's, and both are people; "human rights win" just hides which person loses.
+Property claims are held by people, so calling a dispute “human rights versus property rights” can hide the actual conflict among people. A housing rule may protect a tenant's security while limiting an owner's control, and law may recognize additional duties or claims on either side. Clear analysis identifies whose use, transfer, income, security, and legal standing change; the normative decision then weighs those interests openly.
 
 
 ## For Further Reading
@@ -240,3 +242,12 @@ Want to explore the source material? This lecture draws on the following chapter
 </ul>
 </section>
 </div>
+<!-- UE–E&P TARGETED SOURCE AUDIT (2026-08-10)
+Authoritative memo: revision/ue-ep-source-memo-wave-b-2026-08.md.
+
+- Added the compact three-arc roadmap; no new assessed objective.
+- Qualified broad court/informal-order, productivity, system, and rights comparisons.
+- Open-market exchange now states exit and internalized-cost conditions.
+- Methodological individualism now includes institutional filters and unintended outcomes.
+- Three objectives, eleven Core and nineteen coverage anchors, figures, and budget remain.
+-->
