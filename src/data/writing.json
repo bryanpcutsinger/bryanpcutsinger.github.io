@@ -2,6 +2,14 @@
   "_note": "GENERATED from author RSS feeds by scripts/build_writing.py — do not hand-edit; run `npm run import:writing` (the refresh-writing Action runs it weekly). `essays` is merged from the EconLog and The Daily Economy author feeds, newest first, copied verbatim. `press` is not yet wired to a source (future: CV Selected Media). INTEGRITY: never fabricate a title or URL; the script fails closed if a feed is unreachable.",
   "essays": [
     {
+      "date": "Aug 2026",
+      "isoDate": "2026-08-27",
+      "title": "With Energy Prices Falling, Inflation Has Nowhere to Hide",
+      "outlet": "The Daily Economy",
+      "url": "https://thedailyeconomy.org/article/with-energy-prices-falling-inflation-has-nowhere-to-hide/",
+      "kind": "Commentary"
+    },
+    {
       "date": "Jul 2026",
       "isoDate": "2026-07-31",
       "title": "One Month of Falling Prices Won’t Restore Price Stability",
@@ -231,14 +239,6 @@
       "title": "Remaking the Fed: A Look Back at the Banking Act of 1935",
       "outlet": "The Daily Economy",
       "url": "https://thedailyeconomy.org/article/remaking-the-fed-a-look-back-at-the-banking-act-of-1935/",
-      "kind": "Commentary"
-    },
-    {
-      "date": "Aug 2025",
-      "isoDate": "2025-08-13",
-      "title": "Rate of Inflation Cools in July, Case for Rate Cuts Builds",
-      "outlet": "The Daily Economy",
-      "url": "https://thedailyeconomy.org/article/rate-of-inflation-cools-in-july-case-for-rate-cuts-builds/",
       "kind": "Commentary"
     }
   ],
