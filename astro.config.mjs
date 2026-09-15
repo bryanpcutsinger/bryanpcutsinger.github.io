@@ -53,9 +53,9 @@ export default defineConfig({
     sitemap(),
     starlight({
       title: 'Bryan Cutsinger',
-      // TEMP: keep the site out of search results while it's shared privately with a
-      // colleague (deploy-ready, not a public announcement). Delete this `head` block
-      // to allow search engines to index the site at full public launch.
+      // Site-wide head injections for the Starlight (/ai/) pages: Plausible
+      // analytics. The launch-era `noindex` robots meta was removed 2026-09-15
+      // (public launch) — the site is indexable.
       head: [
         {
           tag: 'script',
@@ -69,7 +69,6 @@ export default defineConfig({
           content:
             'window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()',
         },
-        { tag: 'meta', attrs: { name: 'robots', content: 'noindex, nofollow' } },
       ],
       description:
         'A beginner\'s guide to getting started with Claude Code for teaching and research, plus notes on using AI.',

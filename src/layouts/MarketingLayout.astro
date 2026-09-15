@@ -3,11 +3,11 @@
 // Owns <head>, fonts, brand CSS, and the marketing header/footer. Completely
 // separate from Starlight chrome (which owns /ai/).
 //
-// noindex: these pages do NOT inherit Starlight's global noindex (that's
-// injected only inside Starlight). While the site is shared privately, this
-// layout emits its own robots meta via the `noindex` prop (default true).
-// AT PUBLIC LAUNCH: flip the default below to false AND delete the matching
-// `head` noindex block in astro.config.mjs — lift them together.
+// noindex: these pages do NOT inherit Starlight's head config (that's
+// injected only inside Starlight). The site is INDEXABLE as of 2026-09-15
+// (public launch) — the `noindex` prop defaults to false and the matching
+// robots meta in astro.config.mjs was removed the same day. Pass
+// `noindex={true}` on an individual page to keep it out of search.
 import '@fontsource-variable/besley';
 import '@fontsource-variable/besley/wght-italic.css';
 import '@fontsource-variable/newsreader';
@@ -27,7 +27,7 @@ interface Props {
 const {
   title,
   description,
-  noindex = true, // LAUNCH: set to false (see note above)
+  noindex = false, // site is public + indexable since 2026-09-15 (see note above)
   ogImage,
 } = Astro.props;
 
@@ -43,6 +43,7 @@ const personLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: 'Bryan Cutsinger',
+  alternateName: 'Bryan P. Cutsinger',
   jobTitle: 'Economics Professor',
   url: Astro.site?.href,
   worksFor: { '@type': 'CollegeOrUniversity', name: 'Florida Atlantic University' },

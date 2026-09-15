@@ -90,7 +90,7 @@ completely separate from Starlight (which still owns `/ai/`).
   Mono code (loaded via `SiteTitle.astro`, whose wordmark is now Fraunces). Sentence-case
   headings, minimal hairline tables, lift-on-hover cards, green note-callouts. The **only**
   intentionally-distinct thing is the Starlight docs layout (sidebar/TOC).
-- **LIVE** (redesign deployed 2026-07-01, commit `369cf5f`); still **`noindex`ed**.
+- **LIVE** (redesign deployed 2026-07-01, commit `369cf5f`); **indexable since 2026-09-15**.
 
 **Placeholders Bryan still owes (marked `[PLACEHOLDER]` in code; all `noindex`, but
 publicly viewable by link on the live site):** Web3Forms access key + booking email
@@ -209,9 +209,16 @@ user site `bryanpcutsinger/bryanpcutsinger.github.io`, public).
   builder on every push — it choked on the `.astro` frontmatter and **failed every time**
   (harmless: the Astro workflow is what actually served, but it spammed failure emails).
   **Do NOT switch Pages back to branch mode** or the failing Jekyll builds return.
-- The site is **`noindex`ed** while shared privately: a `head` meta in `astro.config.mjs`
-  (covers `/ai/`) AND `MarketingLayout.astro`'s `noindex` prop default `true` (covers
-  `src/pages/`). **To allow indexing at full launch, lift BOTH** (comment-linked).
+- **The site is INDEXABLE (public launch 2026-09-15).** The two launch-era `noindex`
+  sources were lifted together that day: the robots meta in `astro.config.mjs`'s Starlight
+  `head` (covers `/ai/`) was deleted, and `MarketingLayout.astro`'s `noindex` prop default
+  flipped to `false` (covers `src/pages/`; pass `noindex={true}` per-page to opt out).
+  `public/robots.txt` (added same day) allows all crawlers and points at
+  `https://bryancutsinger.com/sitemap-index.xml`. Off-site: Google Search Console
+  verification + sitemap submission is Bryan's task (see the SEO checklist he was given).
+  `noindex` mentions in the history log below are historical.
+- **Custom domain LIVE: `bryancutsinger.com`** (public/CNAME + `site` in
+  `astro.config.mjs`; Pages reports `https_enforced: true`; github.io redirects here).
 - Non-blocking CI warning: Node 20 sub-actions deprecated (GitHub forces Node 24 ~June
   2026) — bump `withastro/action`/checkout versions later.
 
@@ -852,7 +859,6 @@ Codex review + a 5-adversary red-team; client chose outward-first / design-first
   already installed, so the Node 22+ requirement is met; nothing here uses removed
   APIs (`Astro.glob`, `<ViewTransitions/>`); main work is Zod 3→4 (mostly absorbed
   by Starlight). Plan it as one deliberate step: `astro@6` + latest `@astrojs/starlight`.
-- **Custom domain:** not set up (on github.io). When added, change `site` in
-  `astro.config.mjs` and add `public/CNAME`.
+- **Custom domain:** ✅ DONE — `bryancutsinger.com` live (CNAME + `site` set; see Deploy).
 - **Capstone title:** the integrity post is titled "Trust, Safety & Integrity"
   (the academic "Research" qualifier was dropped in the reframe).
