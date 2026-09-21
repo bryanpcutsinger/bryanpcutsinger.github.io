@@ -2,6 +2,14 @@
   "_note": "GENERATED from author RSS feeds by scripts/build_writing.py — do not hand-edit; run `npm run import:writing` (the refresh-writing Action runs it weekly). `essays` is merged from the EconLog and The Daily Economy author feeds, newest first, copied verbatim. `press` is not yet wired to a source (future: CV Selected Media). INTEGRITY: never fabricate a title or URL; the script fails closed if a feed is unreachable.",
   "essays": [
     {
+      "date": "Sep 2026",
+      "isoDate": "2026-09-21",
+      "title": "The Fed Finally Raised Rates. Now Comes the Hard Part.",
+      "outlet": "The Daily Economy",
+      "url": "https://thedailyeconomy.org/article/the-fed-finally-raised-rates-now-comes-the-hard-part/",
+      "kind": "Commentary"
+    },
+    {
       "date": "Aug 2026",
       "isoDate": "2026-08-27",
       "title": "With Energy Prices Falling, Inflation Has Nowhere to Hide",
@@ -231,14 +239,6 @@
       "title": "Inflation Heats Up in August",
       "outlet": "The Daily Economy",
       "url": "https://thedailyeconomy.org/article/inflation-heats-up-in-august/",
-      "kind": "Commentary"
-    },
-    {
-      "date": "Sep 2025",
-      "isoDate": "2025-09-10",
-      "title": "Remaking the Fed: A Look Back at the Banking Act of 1935",
-      "outlet": "The Daily Economy",
-      "url": "https://thedailyeconomy.org/article/remaking-the-fed-a-look-back-at-the-banking-act-of-1935/",
       "kind": "Commentary"
     }
   ],
