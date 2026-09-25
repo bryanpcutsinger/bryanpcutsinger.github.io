@@ -8,11 +8,14 @@ Three kinds of source feed the `essays` list (all copied VERBATIM, nothing inven
        - EconLog (Econlib):          his monthly Price Theory column
        - The Daily Economy (AIER):   his CPI / Fed commentary
        - Tax Policy Network:         WordPress author feed (verified 2026-09-24)
-  2. SITE-WIDE RSS feeds FILTERED BY BYLINE — the outlet has no author feed, but
-     its feed carries an <author> field, so we keep only items whose byline
-     matches `author_match`:
+  2. SITE-WIDE RSS feeds FILTERED BY BYLINE OR TITLE — the outlet has no author
+     feed, but we can keep only the items that are Bryan's:
        - RealClearEducation: /articles/index.xml (original articles only; ~25-item
-         rolling window). The author page itself blocks scripted fetches (403).
+         rolling window), filtered on its <author> field via `author_match`. The
+         author page itself blocks scripted fetches (403).
+       - Macro Musings (Libsyn podcast RSS, full archive back to 2016), filtered on
+         the episode title via `title_match` — Libsyn titles name the guests. These
+         go to the `press` list, not `essays` (`section: "press"`).
   3. A HAND-CURATED file, src/data/writing-manual.json — for outlets with no
      usable feed at all (National Review, The Hill, City Journal, CapX, one-off
      op-eds) and for pieces that pre-date a feed's window. Bryan adds entries
@@ -29,10 +32,10 @@ byline-filtered feed, zero MATCHING items is normal — Bryan simply hasn't
 published there this window — and is not an error.) Same-URL collisions resolve
 in favor of the fresh feed copy (still verbatim from the outlet).
 
-`press` (interviews / podcast appearances) is NOT fed by these feeds; it is left
-as an empty list for now (a future phase can source it from the CV's Selected
-Media). Run via `npm run import:writing`; the scheduled refresh-writing Action
-runs the same command weekly and commits any change.
+`press` (interviews / podcast appearances) is built the same way — feed entries
+with `section: "press"` plus a `press` list in writing-manual.json — and
+accumulates by URL just like `essays`. Run via `npm run import:writing`; the
+scheduled refresh-writing Action runs the same command weekly and commits any change.
 """
 import json
 import re
@@ -43,8 +46,10 @@ from pathlib import Path
 from xml.etree import ElementTree as ET
 
 # Feed sources. outlet/kind label each source in the site's voice.
-#   author_match (optional): case-insensitive substring; when set, the feed is
-#   site-wide and only items whose <author>/<dc:creator> contains it are kept.
+#   author_match / title_match (optional): case-insensitive substrings; when set,
+#   the feed is site-wide and only items whose <author>/<dc:creator> (resp. <title>)
+#   contains the string are kept.
+#   section (optional): "essays" (default) or "press" — which list the items join.
 FEEDS = [
     {
         "url": "https://www.econlib.org/author/bcutsinger/feed/",
@@ -66,6 +71,13 @@ FEEDS = [
         "outlet": "RealClearEducation",
         "kind": "Op-ed",
         "author_match": "cutsinger",
+    },
+    {
+        "url": "https://macromusings.libsyn.com/rss",
+        "outlet": "Macro Musings with David Beckworth",
+        "kind": "Podcast",
+        "title_match": "cutsinger",
+        "section": "press",
     },
 ]
 
@@ -103,6 +115,7 @@ def parse_feed(feed):
         raise ValueError(f"feed returned zero items: {feed['url']}")
 
     match = (feed.get("author_match") or "").lower()
+    tmatch = (feed.get("title_match") or "").lower()
     items = []
     for it in raw_items:
         title = (it.findtext("title") or "").strip()
@@ -114,6 +127,8 @@ def parse_feed(feed):
             byline = f"{it.findtext('author') or ''} {it.findtext(DC_CREATOR) or ''}".lower()
             if match not in byline:
                 continue
+        if tmatch and tmatch not in title.lower():
+            continue
         dt = parsedate_to_datetime(pub)
         items.append({
             "date": dt.strftime("%b %Y"),          # display, e.g. "Jun 2026"
@@ -123,7 +138,7 @@ def parse_feed(feed):
             "url": link,
             "kind": feed["kind"],
         })
-    if not items and not match:
+    if not items and not (match or tmatch):
         raise ValueError(f"feed returned zero usable items: {feed['url']}")
     return items
 
@@ -131,31 +146,34 @@ def parse_feed(feed):
 REQUIRED = ("date", "isoDate", "title", "outlet", "url")
 
 
-def load_manual():
+SECTIONS = ("essays", "press")
+
+
+def load_manual(section):
     """Hand-curated entries; validated (never silently skipped) so a typo can't publish."""
     if not MANUAL.exists():
         return []
     data = json.loads(MANUAL.read_text(encoding="utf-8"))
-    rows = data.get("essays", [])
+    rows = data.get(section, [])
     for i, r in enumerate(rows):
         missing = [k for k in REQUIRED if not r.get(k)]
         if missing:
-            raise ValueError(f"writing-manual.json essays[{i}] is missing {missing}")
+            raise ValueError(f"writing-manual.json {section}[{i}] is missing {missing}")
         if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", r["isoDate"]):
-            raise ValueError(f"writing-manual.json essays[{i}] isoDate must be YYYY-MM-DD")
+            raise ValueError(f"writing-manual.json {section}[{i}] isoDate must be YYYY-MM-DD")
     return [{k: r[k] for k in (*REQUIRED, "kind") if k in r} for r in rows]
 
 
-def load_existing():
+def load_existing(section):
     """Items already published on the site — the accumulation base."""
     if not OUT.exists():
         return []
     # A corrupt file must abort (caught in main), never silently reset the record.
-    return json.loads(OUT.read_text(encoding="utf-8")).get("essays", [])
+    return json.loads(OUT.read_text(encoding="utf-8")).get(section, [])
 
 
 def main():
-    fresh = []
+    fresh = {sec: [] for sec in SECTIONS}
     for feed in FEEDS:
         try:
             got = parse_feed(feed)
@@ -164,50 +182,50 @@ def main():
             print("  writing.json left unchanged (fail-closed).", file=sys.stderr)
             sys.exit(1)
         print(f"  {feed['outlet']}: {len(got)} items")
-        fresh.extend(got)
+        fresh[feed.get("section", "essays")].extend(got)
 
-    try:
-        manual = load_manual()
-    except Exception as e:  # noqa: BLE001
-        print(f"✗ ABORT: {e}", file=sys.stderr)
-        print("  writing.json left unchanged (fail-closed).", file=sys.stderr)
-        sys.exit(1)
-    print(f"  writing-manual.json: {len(manual)} items")
+    lists = {}
+    counts = {}
+    for sec in SECTIONS:
+        try:
+            manual = load_manual(sec)
+            existing = load_existing(sec)
+        except Exception as e:  # noqa: BLE001
+            print(f"✗ ABORT: {e}", file=sys.stderr)
+            print("  writing.json left unchanged (fail-closed).", file=sys.stderr)
+            sys.exit(1)
+        print(f"  writing-manual.json {sec}: {len(manual)} items")
 
-    try:
-        existing = load_existing()
-    except Exception as e:  # noqa: BLE001
-        print(f"✗ ABORT: existing writing.json is unreadable: {e}", file=sys.stderr)
-        print("  writing.json left unchanged (fail-closed).", file=sys.stderr)
-        sys.exit(1)
+        # Merge by URL. Order of precedence for a same-URL collision: existing copy
+        # is overwritten by a manual entry, which is overwritten by the fresh feed copy.
+        merged = {}
+        for row in [*existing, *manual, *fresh[sec]]:
+            merged[norm_url(row["url"])] = row
+        lists[sec] = sorted(merged.values(), key=lambda r: r["isoDate"], reverse=True)
+        counts[sec] = len(lists[sec]) - len({norm_url(r["url"]) for r in existing})
 
-    # Merge by URL. Order of precedence for a same-URL collision: existing copy is
-    # overwritten by a manual entry, which is overwritten by the fresh feed copy.
-    merged = {}
-    for row in [*existing, *manual, *fresh]:
-        merged[norm_url(row["url"])] = row
-    essays = sorted(merged.values(), key=lambda r: r["isoDate"], reverse=True)
-
-    added = len(essays) - len({norm_url(r["url"]) for r in existing})
     payload = {
         "_note": (
             "GENERATED by scripts/build_writing.py — do not hand-edit; run `npm run "
-            "import:writing` (the refresh-writing Action runs it weekly). `essays` "
-            "ACCUMULATES: author feeds (EconLog, The Daily Economy, Tax Policy "
-            "Network), the RealClearEducation site feed filtered by byline, and the "
-            "hand-curated src/data/writing-manual.json are merged by URL into the "
-            "previous copy, newest first, copied verbatim — nothing is ever dropped "
-            "when it ages out of a feed window. To add a piece from an outlet with no "
-            "feed, add it to writing-manual.json (never here). `press` is not yet "
-            "wired to a source (future: CV Selected Media). INTEGRITY: never "
-            "fabricate a title or URL; the script fails closed if a feed is unreachable."
+            "import:writing` (the refresh-writing Action runs it weekly). Both lists "
+            "ACCUMULATE: `essays` from the author feeds (EconLog, The Daily Economy, "
+            "Tax Policy Network) + RealClearEducation's site feed filtered by byline; "
+            "`press` from the Macro Musings podcast feed filtered by episode title; plus "
+            "the hand-curated src/data/writing-manual.json — all merged by URL into the "
+            "previous copy, newest first, copied verbatim — nothing is ever dropped when "
+            "it ages out of a feed window. To add a piece from an outlet with no feed, "
+            "add it to writing-manual.json (never here). INTEGRITY: never fabricate a "
+            "title or URL; the script fails closed if a feed is unreachable."
         ),
-        "essays": essays,
-        "press": [],
+        "essays": lists["essays"],
+        "press": lists["press"],
     }
 
     OUT.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    print(f"✓ wrote {len(essays)} essays ({added:+d} vs. previous) → {OUT.relative_to(ROOT)}")
+    print(
+        f"✓ wrote {len(lists['essays'])} essays ({counts['essays']:+d}) and "
+        f"{len(lists['press'])} press ({counts['press']:+d}) → {OUT.relative_to(ROOT)}"
+    )
 
 
 if __name__ == "__main__":

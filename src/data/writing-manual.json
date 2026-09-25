@@ -1,5 +1,5 @@
 {
-  "_note": "HAND-CURATED entries for outlets with NO usable author feed (National Review, The Hill, City Journal, CapX, one-off op-eds) and for pieces older than a feed's rolling window. scripts/build_writing.py merges these into writing.json by URL. INTEGRITY: add an entry ONLY after opening the live page and copying the title + URL verbatim; isoDate is the outlet's stated publication date (YYYY-MM-DD). Never add an entry from memory or from a search snippet alone. Fields: date (display, e.g. \"Mar 2026\"), isoDate, title, outlet, url, kind (optional label: Op-ed / Column / Commentary). Per-entry `_verified` fields are provenance notes only (the script ignores them).",
+  "_note": "HAND-CURATED entries for outlets with NO usable author feed (National Review, The Hill, City Journal, CapX, one-off op-eds) and for pieces older than a feed's rolling window. scripts/build_writing.py merges these into writing.json by URL. INTEGRITY: add an entry ONLY after opening the live page and copying the title + URL verbatim; isoDate is the outlet's stated publication date (YYYY-MM-DD). Never add an entry from memory or from a search snippet alone. `press` holds interviews/podcast appearances with no feed, same fields. Fields: date (display, e.g. \"Mar 2026\"), isoDate, title, outlet, url, kind (optional label: Op-ed / Column / Commentary). Per-entry `_verified` fields are provenance notes only (the script ignores them).",
   "essays": [
     {
       "date": "Mar 2026",
@@ -54,5 +54,6 @@
       "kind": "Op-ed",
       "_verified": "2026-09-24 live page: H1 + article:published_time 2022-04-08; bylines Bryan Cutsinger + Alexander William Salter"
     }
-  ]
+  ],
+  "press": []
 }

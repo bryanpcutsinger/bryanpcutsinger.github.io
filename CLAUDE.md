@@ -507,8 +507,17 @@ reaches the site on its own: he publishes at an outlet, and the site picks it up
   Bryan), not authorship, so auto-publishing from it would break the verbatim/no-fabrication
   rule. It stays a notifier for Bryan; the publish path for a feedless outlet is
   `writing-manual.json`.
-- **Known gaps:** `press` (interviews/podcasts) is an empty list — not wired to any
-  source (future: the CV's Selected Media).
+- **`press` (interviews/podcasts) — wired 2026-09-24:** fed by the **Macro Musings**
+  Libsyn podcast RSS (`macromusings.libsyn.com/rss`, a full archive back to 2016) with
+  `title_match: "cutsinger"` and `section: "press"` — Libsyn episode titles name the
+  guests, so this catches every appearance automatically (4 at wiring: 2026, 2025, 2023,
+  and a 2019 Civil-War-seigniorage episode the CV's Selected Media omits). Links are the
+  feed's verbatim Libsyn episode pages (the mercatus.org episode pages block scripted
+  fetches). Accumulates like `essays`; `writing-manual.json` has a matching `press` list
+  for appearances with no feed. The Writing page's "Interviews & media" section renders
+  automatically once `press` is non-empty; the home Recent list does NOT include press.
+- **Known gaps:** none wired for other podcasts/interviews — add a feed entry with
+  `section: "press"` (title- or byline-matched) or a manual `press` entry.
 
 ## Research overview — self-refreshing prose (built 2026-07-15)
 
