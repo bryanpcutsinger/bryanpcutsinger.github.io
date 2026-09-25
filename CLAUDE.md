@@ -446,33 +446,67 @@ source repo, same source-of-truth → import → commit model as the guide/micro
   (real **"Download my CV (PDF)"** button; the request-fallback path is gone). The generated
   PDF is **never hand-edited** — it's owned by the CV repo / import.
 
-## Writing feed — self-updating from RSS (built 2026-07-19)
+## Writing feed — self-updating from RSS (built 2026-07-19; expanded 2026-09-24)
 
 `src/data/writing.json` is **GENERATED — never hand-edit it.** Bryan's popular writing
 reaches the site on its own: he publishes at an outlet, and the site picks it up.
 
-- **Sources of truth = two author-scoped RSS feeds** (verified 2026-07-19): **EconLog**
-  (`econlib.org/author/bcutsinger/feed/` → labeled `Column`) and **The Daily Economy**
-  /AIER (`thedailyeconomy.org/article/article-author/bryan-cutsinger/feed/` → labeled
-  `Commentary`). Adding an outlet = adding an entry to `FEEDS` in the script — but only
-  if it exposes a real author feed; never hand-add an entry to the JSON.
-- **Generator:** `scripts/build_writing.py` (`npm run import:writing`) fetches both
-  feeds, copies title/link/date **VERBATIM**, merges, sorts newest-first, caps at
-  `MAX_ITEMS = 30`. **INTEGRITY: fails closed** — if either feed is unreachable or
-  yields zero items it aborts *without touching* `writing.json`, so an outage can never
-  blank the list or publish a garbled entry. It fabricates nothing.
+- **Sources of truth (all verified live):** three **author-scoped RSS feeds** — **EconLog**
+  (`econlib.org/author/bcutsinger/feed/` → `Column`), **The Daily Economy**/AIER
+  (`thedailyeconomy.org/article/article-author/bryan-cutsinger/feed/` → `Commentary`), and
+  **Tax Policy Network** (`taxpolicynetwork.org/author/bryan-cutsinger/feed/` →
+  `Commentary`, WordPress author feed, added 2026-09-24) — plus one **site-wide feed
+  filtered by byline**: **RealClearEducation** `/articles/index.xml` (original articles,
+  ~25-item / ~5-week rolling window; its `<author>` field is matched case-insensitively
+  on `cutsinger` via the feed's `author_match` key; co-authors render as "A, B" so a
+  substring match catches those too). RCE's author pages 403 every scripted fetch
+  (curl, WebFetch), so the site feed is the only machine path. Adding an outlet = adding
+  a `FEEDS` entry (author feed, or site feed + `author_match`) — never hand-add to the JSON.
+- **Hand-curated fallback: `src/data/writing-manual.json`** (added 2026-09-24) — for
+  outlets with **no usable feed** (National Review, The Hill, City Journal, CapX,
+  Washington Examiner, one-off op-eds) and pieces that pre-date a feed's window. The
+  script validates each entry (required fields, `YYYY-MM-DD` isoDate; a bad entry aborts
+  the run) and merges it in. **INTEGRITY: an entry goes in ONLY after opening the live
+  page and copying title + URL verbatim** — never from memory or a search snippet. Seeded
+  with the one RCE piece older than the feed window (Mar 2026 Gen Z op-ed, verified on
+  the RCE author page in a real browser). **To publish a feedless piece:** add the entry
+  → commit + push `writing-manual.json` → the Action regenerates, commits, and deploys.
+  The CV's "Selected Writing" section lists
+  NR/Hill/City Journal/CapX pieces WITHOUT URLs — those are still **not on the site**
+  until each URL is verified and added here.
+- **Generator:** `scripts/build_writing.py` (`npm run import:writing`) fetches every feed,
+  copies title/link/date **VERBATIM**, and — since 2026-09-24 — **ACCUMULATES**: it merges
+  fresh items into the previous `writing.json` by normalized URL and **never drops** an
+  item that aged out of a feed window (the old version rewrote from live feeds and capped
+  at 30 — a latent loss risk; a check of every committed `writing.json` on 2026-09-24
+  found NO item had actually been lost yet. The cap is gone and the Writing page is now
+  the full record — 55 items at the switch, up from 30). Precedence on a same-URL
+  collision: fresh feed copy > manual entry > previous copy. **Fails closed** — an
+  unreachable/malformed/empty feed or an invalid manual entry aborts *without touching*
+  `writing.json`. (Zero *matching* items on the byline-filtered RCE feed is normal, not an
+  error.) It fabricates nothing.
 - **Schedule:** `.github/workflows/refresh-writing.yml` runs it **Mondays 12:00 UTC**
-  (+ `workflow_dispatch` for a manual run). On a diff it commits as `writing-feed[bot]`
+  (+ `workflow_dispatch` for a manual run, + **on any `main` push touching
+  `writing-manual.json` or the script** — so a hand-curated entry publishes itself
+  instead of waiting for Monday; no loop, the bot commit touches only `writing.json`).
+  On a diff it commits as `writing-feed[bot]`
   and then **explicitly dispatches `deploy.yml`** — a `GITHUB_TOKEN` push does not
   trigger `on: push` workflows, so the dispatch is load-bearing; don't "simplify" it away.
+  **⚠️ Unverified in CI as of 2026-09-24:** whether RCE serves `/articles/index.xml` to
+  GitHub-runner IPs (it serves it to a Mac; its HTML pages 403 bots). If it 403s in CI the
+  run aborts (fail-closed) and *all* weekly updates stall until the RCE entry is fixed or
+  removed — the first `workflow_dispatch` after pushing is the test; check it.
 - **Rendering:** `src/pages/writing.astro` (full list) and `src/pages/index.astro`
   (home **Recent work** — merges these columns with the CV-generated `publications.json`
   and sorts by date; undated working papers are surfaced as a count-link, never
   given an invented date).
+- **Google Alerts — considered, deliberately NOT a publish path (2026-09-24):** Alerts can
+  deliver to an RSS feed, but it detects *mentions* (syndications, quotes, pieces about
+  Bryan), not authorship, so auto-publishing from it would break the verbatim/no-fabrication
+  rule. It stays a notifier for Bryan; the publish path for a feedless outlet is
+  `writing-manual.json`.
 - **Known gaps:** `press` (interviews/podcasts) is an empty list — not wired to any
-  source (future: the CV's Selected Media). Pieces at outlets with no author feed
-  (National Review, The Hill, Washington Examiner, one-off op-eds) have **no path onto
-  the site** today; wiring one up is a real task, not a JSON edit.
+  source (future: the CV's Selected Media).
 
 ## Research overview — self-refreshing prose (built 2026-07-15)
 

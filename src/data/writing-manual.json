@@ -1,0 +1,13 @@
+{
+  "_note": "HAND-CURATED entries for outlets with NO usable author feed (National Review, The Hill, City Journal, CapX, one-off op-eds) and for pieces older than a feed's rolling window. scripts/build_writing.py merges these into writing.json by URL. INTEGRITY: add an entry ONLY after opening the live page and copying the title + URL verbatim; isoDate is the outlet's stated publication date (YYYY-MM-DD). Never add an entry from memory or from a search snippet alone. Fields: date (display, e.g. \"Mar 2026\"), isoDate, title, outlet, url, kind (optional label: Op-ed / Column / Commentary).",
+  "essays": [
+    {
+      "date": "Mar 2026",
+      "isoDate": "2026-03-23",
+      "title": "For Gen Z, Economics May Be the Key to Success in the New AI World",
+      "outlet": "RealClearEducation",
+      "url": "https://www.realcleareducation.com/articles/2026/03/23/for_gen_z_economics_may_be_the_key_to_success_in_the_new_ai_world_1172117.html",
+      "kind": "Op-ed"
+    }
+  ]
+}

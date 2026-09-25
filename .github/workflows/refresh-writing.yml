@@ -1,12 +1,21 @@
 name: Refresh writing feed
 
-# Rebuild src/data/writing.json from Bryan's author RSS feeds (EconLog + The Daily
-# Economy) on a weekly schedule. If anything changed, commit it and kick off the
-# Pages deploy — so newly published columns appear on the site with no manual step.
+# Rebuild src/data/writing.json on a weekly schedule from Bryan's writing feeds
+# (EconLog, The Daily Economy, Tax Policy Network author feeds; RealClearEducation's
+# site feed filtered by byline) plus the hand-curated writing-manual.json. If anything
+# changed, commit it and kick off the Pages deploy — so newly published columns
+# appear on the site with no manual step.
 on:
   schedule:
     - cron: '0 12 * * 1' # Mondays 12:00 UTC
   workflow_dispatch: # allow a manual run from the Actions tab
+  push:
+    branches: [main]
+    paths:
+      # A hand-curated entry should publish itself, not wait for Monday. No loop:
+      # the bot commit below touches only writing.json, never these paths.
+      - src/data/writing-manual.json
+      - scripts/build_writing.py
 
 permissions:
   contents: write # push the regenerated writing.json
@@ -39,7 +48,7 @@ jobs:
           git config user.name  "writing-feed[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add src/data/writing.json
-          git commit -m "writing: refresh feed (EconLog + The Daily Economy)"
+          git commit -m "writing: refresh feed from author RSS feeds"
           git push
           # A GITHUB_TOKEN push won't trigger deploy.yml (on: push), but a
           # workflow_dispatch is exempt from that recursion guard, so trigger it.
