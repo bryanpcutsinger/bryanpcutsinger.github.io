@@ -1,5 +1,5 @@
 {
-  "_note": "HAND-CURATED entries for outlets with NO usable author feed (National Review, The Hill, City Journal, CapX, one-off op-eds) and for pieces older than a feed's rolling window. scripts/build_writing.py merges these into writing.json by URL. INTEGRITY: add an entry ONLY after opening the live page and copying the title + URL verbatim; isoDate is the outlet's stated publication date (YYYY-MM-DD). Never add an entry from memory or from a search snippet alone. Fields: date (display, e.g. \"Mar 2026\"), isoDate, title, outlet, url, kind (optional label: Op-ed / Column / Commentary).",
+  "_note": "HAND-CURATED entries for outlets with NO usable author feed (National Review, The Hill, City Journal, CapX, one-off op-eds) and for pieces older than a feed's rolling window. scripts/build_writing.py merges these into writing.json by URL. INTEGRITY: add an entry ONLY after opening the live page and copying the title + URL verbatim; isoDate is the outlet's stated publication date (YYYY-MM-DD). Never add an entry from memory or from a search snippet alone. Fields: date (display, e.g. \"Mar 2026\"), isoDate, title, outlet, url, kind (optional label: Op-ed / Column / Commentary). Per-entry `_verified` fields are provenance notes only (the script ignores them).",
   "essays": [
     {
       "date": "Mar 2026",
@@ -8,6 +8,51 @@
       "outlet": "RealClearEducation",
       "url": "https://www.realcleareducation.com/articles/2026/03/23/for_gen_z_economics_may_be_the_key_to_success_in_the_new_ai_world_1172117.html",
       "kind": "Op-ed"
+    },
+    {
+      "date": "Mar 2026",
+      "isoDate": "2026-03-17",
+      "title": "AI Won’t Cause a Spending Collapse",
+      "outlet": "National Review",
+      "url": "https://www.nationalreview.com/2026/03/ai-wont-cause-a-spending-collapse/",
+      "kind": "Op-ed",
+      "_verified": "2026-09-24 live page: H1 + article:published_time 2026-03-17; byline Bryan Cutsinger (with Alexander William Salter per CV)"
+    },
+    {
+      "date": "Sep 2025",
+      "isoDate": "2025-09-18",
+      "title": "AI killed the business major? Not so fast.",
+      "outlet": "The Hill",
+      "url": "https://thehill.com/opinion/education/5506364-ai-killed-the-business-major-not-so-fast/",
+      "kind": "Op-ed",
+      "_verified": "2026-09-24 live page: H1 + article:published_time 2025-09-18; JSON-LD author 'Bryan Cutsinger and Alexander Salter, opinion contributors'"
+    },
+    {
+      "date": "Apr 2024",
+      "isoDate": "2024-04-02",
+      "title": "Rachel Reeves’ Inflation Confusion",
+      "outlet": "CapX",
+      "url": "https://www.cato.org/commentary/rachel-reeves-inflation-confusion",
+      "kind": "Op-ed",
+      "_verified": "2026-09-24. Links Cato's copy on purpose: CapX's own page (capx.co/rachel-reeves-inflation-confuson) credits Ryan Bourne alone and misspells the title; Cato's copy is bylined 'By Ryan Bourne and Bryan Cutsinger', dated April 2, 2024, and states 'This article appeared in CapX on April 2, 2024.'"
+    },
+    {
+      "date": "Feb 2024",
+      "isoDate": "2024-02-15",
+      "title": "Price Theory Needs a Revival",
+      "outlet": "City Journal",
+      "url": "https://www.city-journal.org/article/price-theory-needs-a-revival",
+      "kind": "Op-ed",
+      "_verified": "2026-09-24 live page: headline, authors Alexander William Salter + Bryan Cutsinger, dated February 15, 2024"
+    },
+    {
+      "date": "Apr 2022",
+      "isoDate": "2022-04-08",
+      "title": "The Fed’s Dual Mandate Is Redundant",
+      "outlet": "National Review",
+      "url": "https://www.nationalreview.com/2022/04/the-feds-dual-mandate-is-redundant/",
+      "kind": "Op-ed",
+      "_verified": "2026-09-24 live page: H1 + article:published_time 2022-04-08; bylines Bryan Cutsinger + Alexander William Salter"
     }
   ]
 }

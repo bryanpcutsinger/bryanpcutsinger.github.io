@@ -471,9 +471,11 @@ reaches the site on its own: he publishes at an outlet, and the site picks it up
   with the one RCE piece older than the feed window (Mar 2026 Gen Z op-ed, verified on
   the RCE author page in a real browser). **To publish a feedless piece:** add the entry
   → commit + push `writing-manual.json` → the Action regenerates, commits, and deploys.
-  The CV's "Selected Writing" section lists
-  NR/Hill/City Journal/CapX pieces WITHOUT URLs — those are still **not on the site**
-  until each URL is verified and added here.
+  The CV's "Selected Writing" pieces (2× National Review, The Hill, City Journal, CapX)
+  were verified on their live pages in Chrome and added 2026-09-24 (each entry carries a
+  `_verified` provenance note; the CapX piece links Cato's copy because CapX's own page
+  credits Bourne alone). Sites that 403 scripted fetches (NR, The Hill, Cato, RCE) must
+  be verified in a real browser.
 - **Generator:** `scripts/build_writing.py` (`npm run import:writing`) fetches every feed,
   copies title/link/date **VERBATIM**, and — since 2026-09-24 — **ACCUMULATES**: it merges
   fresh items into the previous `writing.json` by normalized URL and **never drops** an

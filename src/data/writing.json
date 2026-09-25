@@ -139,6 +139,14 @@
     },
     {
       "date": "Mar 2026",
+      "isoDate": "2026-03-17",
+      "title": "AI Won’t Cause a Spending Collapse",
+      "outlet": "National Review",
+      "url": "https://www.nationalreview.com/2026/03/ai-wont-cause-a-spending-collapse/",
+      "kind": "Op-ed"
+    },
+    {
+      "date": "Mar 2026",
       "isoDate": "2026-03-11",
       "title": "Inflation Edged Up in February, But Core Price Pressures Ease",
       "outlet": "The Daily Economy",
@@ -256,6 +264,14 @@
       "outlet": "The Daily Economy",
       "url": "https://thedailyeconomy.org/article/miran-follows-a-long-tradition-of-political-appointees-at-the-fed/",
       "kind": "Commentary"
+    },
+    {
+      "date": "Sep 2025",
+      "isoDate": "2025-09-18",
+      "title": "AI killed the business major? Not so fast.",
+      "outlet": "The Hill",
+      "url": "https://thehill.com/opinion/education/5506364-ai-killed-the-business-major-not-so-fast/",
+      "kind": "Op-ed"
     },
     {
       "date": "Sep 2025",
@@ -386,6 +402,22 @@
       "kind": "Commentary"
     },
     {
+      "date": "Apr 2024",
+      "isoDate": "2024-04-02",
+      "title": "Rachel Reeves’ Inflation Confusion",
+      "outlet": "CapX",
+      "url": "https://www.cato.org/commentary/rachel-reeves-inflation-confusion",
+      "kind": "Op-ed"
+    },
+    {
+      "date": "Feb 2024",
+      "isoDate": "2024-02-15",
+      "title": "Price Theory Needs a Revival",
+      "outlet": "City Journal",
+      "url": "https://www.city-journal.org/article/price-theory-needs-a-revival",
+      "kind": "Op-ed"
+    },
+    {
       "date": "Sep 2023",
       "isoDate": "2023-09-05",
       "title": "What’s the Harm in Raising the Inflation Target?",
@@ -440,6 +472,14 @@
       "outlet": "The Daily Economy",
       "url": "https://thedailyeconomy.org/article/putting-aggregate-demand-and-aggregate-supply-to-work/",
       "kind": "Commentary"
+    },
+    {
+      "date": "Apr 2022",
+      "isoDate": "2022-04-08",
+      "title": "The Fed’s Dual Mandate Is Redundant",
+      "outlet": "National Review",
+      "url": "https://www.nationalreview.com/2022/04/the-feds-dual-mandate-is-redundant/",
+      "kind": "Op-ed"
     }
   ],
   "press": []
