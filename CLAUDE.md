@@ -414,6 +414,17 @@ source repo, same source-of-truth → import → commit model as the guide/micro
   Book Chapters → `bookChapters`, Under Review + Working Papers → `workingPapers`
   (under-review first); Book Reviews are deliberately CV-only.
 
+- **Extra paper links (SSRN etc.) live in `src/data/paper-links.json`** (added
+  2026-09-30) — a HAND-MAINTAINED overlay keyed by exact `title`, merged in
+  `research.astro` (title links to the DOI if any, else the first overlay link; each
+  link also shows as a labeled secondary link). Kept out of `publications.json` because
+  the CV sync overwrites that file, and the CV parser deliberately rejects `\href`.
+  **Fails closed:** an overlay title matching no paper breaks the build. URLs go in
+  verbatim from Bryan or a live page (SSRN blocks scripted fetches with a bot check),
+  with a `_verified` note. Alternative if Bryan ever wants the CV PDF itself to carry
+  links: add `\href` support to the parser in the `cv` repo instead.
+- The home page's "N working papers →" link counts **all** `workingPapers` entries,
+  including under-review / R&R (Bryan's call, 2026-09-30).
 - **Source of truth = `bryanpcutsinger/cv`** (private; local `~/Documents/CV`). A
   **self-contained LaTeX CV**: `cutsinger_CV.tex` (`\documentclass[11pt]{article}`, no
   custom `.cls`/inputs/graphics) + its committed compiled **`cutsinger_CV.pdf`**. Editing

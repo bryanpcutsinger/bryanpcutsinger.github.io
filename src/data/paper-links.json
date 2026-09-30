@@ -1,0 +1,41 @@
+{
+  "_note": "HAND-MAINTAINED overlay of extra links (e.g. SSRN pages) for papers in the GENERATED publications.json, which the CV sync overwrites. Keyed by exact `title` — research.astro fails the build if a title matches no paper. INTEGRITY: each `url` is copied verbatim from a source Bryan supplied or a live page opened in a real browser; record where in `_verified`.",
+  "links": [
+    {
+      "title": "Rethinking Deflation and Its Effects: A Cross-Country Analysis of Supply-Driven Deflation",
+      "label": "SSRN",
+      "url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4611943",
+      "_verified": "URL supplied verbatim by Bryan in chat, 2026-09-30"
+    },
+    {
+      "title": "As Good as Gold? A Framework for Analyzing Redeemable Paper Money",
+      "label": "SSRN",
+      "url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4666027",
+      "_verified": "URL supplied verbatim by Bryan in chat, 2026-09-30"
+    },
+    {
+      "title": "Free Banking Reform and the Competitiveness of Antebellum Banking Systems",
+      "label": "SSRN",
+      "url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3934059",
+      "_verified": "URL supplied verbatim by Bryan in chat, 2026-09-30"
+    },
+    {
+      "title": "Democracy, Dictatorship, and the Monetary Commons",
+      "label": "SSRN",
+      "url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3934048",
+      "_verified": "URL supplied verbatim by Bryan in chat, 2026-09-30"
+    },
+    {
+      "title": "Monetary Rules without Romance",
+      "label": "SSRN",
+      "url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3375400",
+      "_verified": "URL supplied verbatim by Bryan in chat, 2026-09-30"
+    },
+    {
+      "title": "Reviewing the Federal Reserve's 2025 Monetary Policy Framework Review",
+      "label": "SSRN",
+      "url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6394999",
+      "_verified": "URL supplied verbatim by Bryan in chat, 2026-09-30"
+    }
+  ]
+}

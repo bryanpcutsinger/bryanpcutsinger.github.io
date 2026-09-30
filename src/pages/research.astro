@@ -6,20 +6,41 @@ import CitationList from '../components/marketing/CitationList.astro';
 import DownloadCard from '../components/marketing/DownloadCard.astro';
 import CloseBand from '../components/marketing/CloseBand.astro';
 import pubs from '../data/publications.json';
+import paperLinks from '../data/paper-links.json';
+
+// Extra links (e.g. SSRN) from the hand-maintained overlay, keyed by exact title.
+// Fail closed: a title that matches no paper (say, after a CV retitle) breaks the
+// build instead of silently dropping the link.
+const allTitles = new Set(
+  [pubs.worksInPress, pubs.articles, pubs.bookChapters, pubs.workingPapers]
+    .flatMap((rows: any[] = []) => rows.map((r) => r.title)),
+);
+const extraLinks = new Map<string, { label: string; href: string }[]>();
+for (const l of paperLinks.links as { title: string; label: string; url: string }[]) {
+  if (!allTitles.has(l.title)) {
+    throw new Error(`paper-links.json: no paper titled "${l.title}" in publications.json`);
+  }
+  extraLinks.set(l.title, [...(extraLinks.get(l.title) ?? []), { label: l.label, href: l.url }]);
+}
 
 // Map the forgiving JSON to CitationList entries. A link renders only for real
-// (non-placeholder) rows with a URL — scaffolds never show an invented DOI.
+// (non-placeholder) rows with a URL — scaffolds never show an invented DOI. The
+// title links to the DOI when there is one, else to the first overlay link.
 const toEntries = (rows: any[]) =>
-  rows.map((r) => ({
-    year: r.year,
-    authors: r.authors,
-    title: r.title,
-    venue: r.venue,
-    detail: r.status,
-    href: !r.placeholder && r.url ? r.url : undefined,
-    links: !r.placeholder && r.url ? [{ label: 'DOI', href: r.url }] : undefined,
-    placeholder: r.placeholder,
-  }));
+  rows.map((r) => {
+    const doi = !r.placeholder && r.url ? [{ label: 'DOI', href: r.url }] : [];
+    const links = [...doi, ...(r.placeholder ? [] : extraLinks.get(r.title) ?? [])];
+    return {
+      year: r.year,
+      authors: r.authors,
+      title: r.title,
+      venue: r.venue,
+      detail: r.status,
+      href: links[0]?.href,
+      links: links.length > 0 ? links : undefined,
+      placeholder: r.placeholder,
+    };
+  });
 
 const worksInPress = toEntries(pubs.worksInPress ?? []);
 const articles = toEntries(pubs.articles ?? []);
