@@ -6,6 +6,7 @@ import sitemap from '@astrojs/sitemap';
 // `npm run import:guide` from the source-of-truth repo (bryanpcutsinger/
 // claude-code-guide); do not hand-edit — edit guide.manifest.json there + re-import.
 import claudeGuideSidebar from './src/data/guide-sidebar.json';
+import { externalLinksScript } from './src/lib/externalLinks.ts';
 
 // Defense-in-depth: strip HTML comments (incl. the `<!-- INSTRUCTOR NOTES -->`
 // block) from imported course posts at render time. The PRIMARY strip is
@@ -69,6 +70,8 @@ export default defineConfig({
           content:
             'window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()',
         },
+        // External links + PDFs open in a new tab (shared with MarketingLayout).
+        { tag: 'script', content: externalLinksScript },
       ],
       description:
         'A beginner\'s guide to getting started with Claude Code for teaching and research, plus notes on using AI.',

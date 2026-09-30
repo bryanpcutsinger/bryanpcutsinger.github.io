@@ -169,6 +169,11 @@ credentials = interim director of the **AIER Sound Money Project**, Associate Ed
   (**wraps** Starlight's default Footer to preserve the pager, then adds an ink
   copyright bar — don't replace it outright), and `HeaderLinks.astro` (registered as
   `SocialIcons`; adds About/Speaking/Contact links back to the marketing site).
+- **External links + PDFs open in a new tab, sitewide (2026-09-30, Bryan's rule).**
+  One inline script, `src/lib/externalLinks.ts`, loaded by `MarketingLayout` and the
+  Starlight `head` in `astro.config.mjs`, sets `target="_blank"` + `rel="noopener"` on
+  any http(s) link to another host and any `.pdf` link. Internal page links are
+  untouched; a link that already sets `target` keeps it. No per-link edits needed.
 - Safety/screenshot callouts use Starlight **asides** (`:::note` / `:::caution` /
   `:::danger`). Screenshot placeholders are `:::note[Screenshot to add]` blocks —
   Bryan still needs to capture and insert real images.

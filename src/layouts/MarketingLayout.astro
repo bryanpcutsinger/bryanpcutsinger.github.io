@@ -17,6 +17,7 @@ import '../styles/site.css';
 import SiteHeader from '../components/marketing/SiteHeader.astro';
 import SiteFooter from '../components/marketing/SiteFooter.astro';
 import PlausibleAnalytics from '../components/analytics/PlausibleAnalytics.astro';
+import { externalLinksScript } from '../lib/externalLinks';
 
 interface Props {
   title: string;
@@ -93,6 +94,8 @@ const personLd = {
       set:html={JSON.stringify(personLd)}
     />
     <PlausibleAnalytics />
+    <!-- External links + PDFs open in a new tab (see src/lib/externalLinks.ts) -->
+    <script is:inline set:html={externalLinksScript} />
   </head>
   <body>
     <a href="#main" class="skip-link">Skip to content</a>
