@@ -297,8 +297,14 @@ live topic index renders all 21. To refresh after an upstream edit, re-run
 in-page TOC from the `##`/`###` headers (nested `TocList.astro`; sticky desktop sidebar
 + a mobile "In this lesson" `<details>` disclosure; a small scroll script highlights
 the current section via `aria-current`), scoped `.prose` CSS (incl. GFM tables +
-figure/caption styling), prev/next pager, back-link, CTABand. The course home lists published topics as an ordered index. Slides are LaTeX and
-on hold upstream → `DownloadCard`s show "Request" until PDFs land in `public/downloads/`.
+figure/caption styling), prev/next pager, back-link, CTABand. The course home lists published topics as an ordered index. Slides and lecture
+recaps (2026-09-30): the source post's `slides: [{label, file}]` renders a `DownloadCard` for
+`/downloads/<file>` (PDFs at `public/downloads/microeconomics/<slug>-slides.pdf`), and
+`recaps: [{label, url}]` renders a "Lecture recaps" link list (pages at
+`public/teaching/microeconomics/<slug>/recaps/recap[-part-N].html`). NEITHER file type flows
+through `import:topic` (both are gitignored in the source repo) — they are copied in by the
+source repo's `recordings/_tools/publish_recaps.py`, then committed here by hand. Live for
+Lectures 1–5 (t01, t03a, t03b, t02, t04a).
 **Note:** in `[topic].astro`, `getStaticPaths()` runs in an isolated scope — keep the
 consts it needs (`COURSE`, helpers) *inside* it; the template re-declares `COURSE`.
 
