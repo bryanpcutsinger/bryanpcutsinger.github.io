@@ -21,6 +21,14 @@ status: approved        # E&P integration M4 done-gate 2026-07-20; prior approva
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Source-of-truth for the T4 session-6 deck; section headers are claims that map to slide titles. First of three T4 session posts; the price-controls post (session 7) and the tax-incidence post (session 8) follow."
 # brief: ../t04-markets-prices-coordination/brief.md
+slides:
+  - label: "Lecture slides: Markets and Coordination"
+    file: "microeconomics/t04a-markets-coordination-slides.pdf"
+recaps:
+  - label: "Part 1 recap: September 17, 2026"
+    url: "/teaching/microeconomics/t04a-markets-coordination/recaps/recap-part-1.html"
+  - label: "Part 2 recap: September 22, 2026"
+    url: "/teaching/microeconomics/t04a-markets-coordination/recaps/recap-part-2.html"
 ---
 
 # Markets and Coordination

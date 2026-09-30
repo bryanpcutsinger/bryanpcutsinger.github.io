@@ -26,6 +26,11 @@ const courses = defineCollection({
     slides: z
       .array(z.object({ label: z.string(), file: z.string() }))
       .default([]),
+    // Lecture recap pages (static HTML under public/teaching/<course>/<slug>/recaps/),
+    // one per class session that covered the topic. Copied in by hand, not by the importer.
+    recaps: z
+      .array(z.object({ label: z.string(), url: z.string() }))
+      .default([]),
   }),
 });
 

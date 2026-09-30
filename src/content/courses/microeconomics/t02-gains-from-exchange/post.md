@@ -23,6 +23,16 @@ word_budget: 4230
 status: approved        # E&P integration M1 sign-off 2026-07-19 (prior: Stage-2 2026-06-15)
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Source-of-truth for the T2 deck; section headers are claims that map to slide titles. UE 4 only (pure reallocation); specialization/comparative advantage move to T6."
+slides:
+  - label: "Lecture slides: Gains from Exchange"
+    file: "microeconomics/t02-gains-from-exchange-slides.pdf"
+recaps:
+  - label: "Part 1 recap: September 10, 2026"
+    url: "/teaching/microeconomics/t02-gains-from-exchange/recaps/recap-part-1.html"
+  - label: "Part 2 recap: September 15, 2026"
+    url: "/teaching/microeconomics/t02-gains-from-exchange/recaps/recap-part-2.html"
+  - label: "Part 3 recap: September 17, 2026"
+    url: "/teaching/microeconomics/t02-gains-from-exchange/recaps/recap-part-3.html"
 ---
 
 # Gains from Exchange

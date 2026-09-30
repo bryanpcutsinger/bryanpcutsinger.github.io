@@ -17,6 +17,14 @@ status: approved        # E&P integration M6 done-gate 2026-07-20; prior approva
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Source-of-truth for session 3. Covers laws of demand, shifts versus movements, marginal personal worth, verbal consumer surplus, demand as a rate, relative price, and demand versus fixed-needs language. UE 7's general total/marginal/average and equimarginal machinery is owned by T6."
 # brief: ../t03-demand-consumer-behavior/brief.md
+slides:
+  - label: "Lecture slides: Demand and Marginal Personal Worth"
+    file: "microeconomics/t03a-demand-and-marginal-tools-slides.pdf"
+recaps:
+  - label: "Part 1 recap: September 1, 2026"
+    url: "/teaching/microeconomics/t03a-demand-and-marginal-tools/recaps/recap-part-1.html"
+  - label: "Part 2 recap: September 3, 2026"
+    url: "/teaching/microeconomics/t03a-demand-and-marginal-tools/recaps/recap-part-2.html"
 ---
 
 # Demand and Marginal Personal Worth

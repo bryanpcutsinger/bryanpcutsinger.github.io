@@ -12,6 +12,12 @@ word_budget: 4000
 status: approved        # M9 done gate 2026-07-20 (§10 A+B PASS); prior Stage-2 2026-06-15
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Source-of-truth for the T1 deck; section headers are claims that map to slide titles."
+slides:
+  - label: "Lecture slides: The Economic Way of Thinking"
+    file: "microeconomics/t01-economic-way-of-thinking-slides.pdf"
+recaps:
+  - label: "Recap: August 27, 2026"
+    url: "/teaching/microeconomics/t01-economic-way-of-thinking/recaps/recap.html"
 ---
 # The Economic Way of Thinking
 

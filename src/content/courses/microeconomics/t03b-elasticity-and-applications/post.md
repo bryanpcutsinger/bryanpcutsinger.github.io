@@ -26,6 +26,16 @@ status: approved        # scope-reduction R4 2026-07-21 (word_budget applied); E
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Source-of-truth for the session-4 deck; section headers are claims that map to slide titles. Verbal-marginal throughout: no indifference curves, no measured surplus triangles; the ONE sanctioned piece of algebra is the midpoint elasticity formula (instructor-directed 2026-07-25). Follows the session-3 demand post and precedes gains from exchange in session 5; a short foundational intro re-establishes the downward-sloping demand curve and marginal worth so this post stands on its own."
 # brief: ../t03-demand-consumer-behavior/brief.md
+slides:
+  - label: "Lecture slides: Elasticity and the Applications of Demand"
+    file: "microeconomics/t03b-elasticity-and-applications-slides.pdf"
+recaps:
+  - label: "Part 1 recap: September 3, 2026"
+    url: "/teaching/microeconomics/t03b-elasticity-and-applications/recaps/recap-part-1.html"
+  - label: "Part 2 recap: September 8, 2026"
+    url: "/teaching/microeconomics/t03b-elasticity-and-applications/recaps/recap-part-2.html"
+  - label: "Part 3 recap: September 10, 2026"
+    url: "/teaching/microeconomics/t03b-elasticity-and-applications/recaps/recap-part-3.html"
 ---
 
 # Elasticity and the Applications of Demand

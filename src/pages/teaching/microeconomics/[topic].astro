@@ -177,6 +177,22 @@ const isDraft = (data.status ?? '').toLowerCase() !== 'approved';
           )
         }
 
+        {
+          data.recaps.length > 0 && (
+            <section class="topic__recaps">
+              <h2 class="topic__slides-h">Lecture recaps</h2>
+              <p class="topic__recaps-note">
+                A summary of what we covered in each class session on this topic.
+              </p>
+              <ul class="topic__recaps-list">
+                {data.recaps.map((r: { label: string; url: string }) => (
+                  <li><a href={r.url}>{r.label}</a></li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+
         <nav class="pager" aria-label="Topics">
           <div class="pager__cell">
             {
@@ -698,6 +714,35 @@ const isDraft = (data.status ?? '').toLowerCase() !== 'approved';
     display: flex;
     flex-direction: column;
     gap: var(--sp-6);
+  }
+
+  /* ---- lecture recaps ----------------------------------------------------- */
+  .topic__recaps {
+    max-width: var(--reading);
+    margin: var(--sp-12) auto 0;
+  }
+  .topic__recaps-note {
+    margin: 0 0 var(--sp-4);
+    color: var(--text-muted);
+  }
+  .topic__recaps-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--hairline);
+  }
+  .topic__recaps-list li {
+    border-bottom: 1px solid var(--hairline);
+    padding: var(--sp-3) 0;
+  }
+  .topic__recaps-list a {
+    color: var(--action);
+    font-family: var(--font-label);
+    font-weight: 600;
+    text-underline-offset: 3px;
+  }
+  .topic__recaps-list a:hover {
+    color: var(--action-hover);
   }
 
   /* ---- prev/next pager + back link ---------------------------------------- */
