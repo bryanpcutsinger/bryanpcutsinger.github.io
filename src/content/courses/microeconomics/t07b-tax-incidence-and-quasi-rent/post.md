@@ -21,7 +21,7 @@ note: "Self-contained — assumes no access to the textbooks. Part B of T7, rebu
 
 In Part A we worked out how a single price-taker behaves and how a market of them fits together. Recall the core results, because this post leans on them. A *price-taker* is a seller too small to move the market price, so it faces a horizontal own-demand at that price and chooses only a quantity, producing where its marginal cost rises to meet the price. Above its shutdown floor, the firm's marginal-cost curve is its supply curve; add up every firm's and you get an upward-sloping market supply. Competition pushes each firm to the same marginal cost and drives profits toward an ordinary return by capitalizing them into the price of whatever earns them.
 
-All of that described a market sitting still. Now we set it in motion to answer one question: when the government drops a tax on a competitive market, who actually ends up paying it? The answer surprises almost everyone and is our main Exam 2 target. First we add time and watch the room to adjust grow. Then we trace who bears a broad tax, find the limiting case in fixed land and the politics that follow from it, contrast that with a tax on a single seller, and follow the burden as it travels over the short and long run. Along the way we name the surplus a resource already in place earns, the quasi-rent. By the end you should be able to predict how a tax's burden splits and shifts over time.
+All of that described a market sitting still. In Lecture 7 you met tax incidence: the wedge, the fact that the legal payer does not decide the split, and elasticity as the rule that does. This post adds time to that result and asks who ends up paying a tax once a competitive market has room to adjust. First we watch the room to adjust grow. Then we review the broad-tax result and its limiting case in fixed land, with the politics that follow from it. Next we contrast a broad tax with a tax on a single seller, and follow the burden as it travels over the short and long run. Along the way we name the surplus a resource already in place earns, the quasi-rent. By the end you should be able to predict how a tax's burden splits and shifts over time.
 
 <aside class="econ-callout econ-objectives">
 <p class="econ-callout__label">Learning objectives</p>
@@ -50,6 +50,8 @@ Longer horizons usually open additional adjustment margins, making demand and su
 
 ## It Doesn't Matter Who Writes the Check
 
+This section reviews Lecture 7.
+
 Now the centerpiece. Suppose the government puts a tax of ten cents on each gallon of gasoline. In the competitive model with the same transactions covered, compliance, and enforcement either way, the surprising answer is that the legal side of the tax does not matter.
 
 Tax sellers and their net return falls by the wedge; tax buyers and their gross cost rises by the same wedge. With identical coverage and enforcement, either version reaches the same quantity, buyer price, and seller net. Statutory design can still affect filing costs, evasion, liquidity, salience, and enforcement. Naming the remitter simply does not by itself settle who ultimately bears the economic burden.
@@ -61,7 +63,7 @@ Tax sellers and their net return falls by the wedge; tax buyers and their gross 
 
 So who ends up paying? In the gasoline example the dime tax raises the price buyers pay by three cents and lowers the price sellers keep by seven cents. The tax splits, with neither side bearing all of it. What sets the split is which side can more easily back away from the deal, the relative responsiveness of demand and supply: the side that can dodge the tax more easily, by cutting back or switching to something else, pushes more of the burden onto the side that is stuck.
 
-That is exactly the error in a case worth remembering. Pittsburgh once put a 20 percent tax on the gross receipts of private parking lots while exempting the city's own lots. The Supreme Court upheld it and reasoned that, because parking was "in short supply," operators could pass the whole tax on to drivers, so customers would bear all of it. The economics is wrong. How much of a tax buyers bear has nothing to do with whether something is called a shortage; it depends on the relative elasticities of demand and supply. If drivers can switch to buses, trolleys, or parking elsewhere, the lot operators cannot pass the full tax along and must eat a share of it.
+A Pittsburgh case shows the same split at work. In *City of Pittsburgh v. Alco Parking Corp.* (1974), the city taxed 20 percent of the gross receipts from nonresidential parking. The city argued that private operators could pass the tax on to their customers. The Pennsylvania Supreme Court replied that competition from the city's own lots, which charged less, kept the private operators from raising prices. The U.S. Supreme Court called that "not a convincing basis" for concluding that the tax was an unconstitutional taking, on the record before it. The economics is the same either way: how much of a tax operators can pass on depends on how easily drivers can go elsewhere, which is the relative elasticity of demand and supply, not on whether parking is called scarce.
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
@@ -73,6 +75,8 @@ One more effect escapes the price split. In the competitive benchmark with no un
 Who finally gains is a separate question. We can say with confidence who pays, but not who gains from the tax until we know what the government does with the money it collects. The revenue might fund a bridge, a tax cut elsewhere, or a giveaway to some favored group, and each spends the proceeds on different people. The same caveat is why we cannot pronounce the whole arrangement a net loss to society: the buyers and the specific-resource owners clearly lose, but whether their loss is outweighed depends entirely on the value of whatever the proceeds buy, which the tax analysis by itself does not tell us.
 
 ## Fixed Land Is the Limiting Case: Its Owner Bears the Whole Tax
+
+This section reviews the fixed-land case from Lecture 7 and adds capitalization and the politics of immobile bases.
 
 The elasticity rule includes a clean extreme. For a permanent, anticipated tax on *pure land rent*, with improvements and alternative uses held separate, the relevant supply is vertical: acreage and the gross rent users pay do not change, so the tax is carved out of the owner's net return. Taxes on buildings, transactions, or particular uses need not share this result.
 

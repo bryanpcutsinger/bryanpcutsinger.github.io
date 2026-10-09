@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive tax wedge: a per-gallon tax opens a gap between what drivers pay and what stations keep</title>
+<!--
+  t04c-wedge-interactive.html — built 2026-10-09 for the t04c post, section "A Tax Opens a Wedge…"; revised the
+  same day after two blind reviews. Family F3 (policy wedge). Teaches the post's first figure: a per-gallon tax opens a
+  wedge between the price drivers pay and the price stations keep, the price rises by LESS than the tax, and WHO writes
+  the check does not change the outcome (supply shifts up by the tax, or demand shifts down by it).
+
+  ECONOMICS (oracle = slides/t04c-numbers-check.py). Weekly gasoline market, Q in millions of gallons:
+    supply  P = Q/2        demand  P = 10 - Q/2        no tax: Q = 10, P = $5
+  Tax t a gallon (default $2):  Q = 10 - t,  drivers pay Pb = 5 + t/2,  stations keep Ps = 5 - t/2.
+    $2 -> 8 million gallons, $6 / $4, state collects t*Q = $16M a week.
+  Mode "stations": supply shifts UP by t  (S + tax).   Mode "drivers": demand shifts DOWN by t (D - tax).
+  Both modes give the SAME Q, Pb, Ps.
+  Mode "test" (the post's step "stations raise the price by the full tax"): the test price is 5 + t, the old price plus
+  the whole tax ($7 at the default $2). Drivers want 2(10 - (5+t)) = 10 - 2t; stations keep 5 and offer 10; 2t sit unsold
+  (4 at $2). A ghost dot shows where the market actually settles, (10 - t, 5 + t/2).
+  Readout numbers are built from the DISPLAYED parts (price rise + stations' fall = the tax, keep = pay - tax); prices
+  show up to three decimals so every $0.25 step adds up exactly.
+
+  GEOMETRY MAP. One SVG, viewBox 0 0 480 600 (exactly 4/5, the t04b exact-fit frame; NOT the standard's 440x540).
+  X(q) = 64 + 17.5q, Y(p) = 400 - 30p.  q: 8 -> 204, 10 -> 239, 20 -> 414.  p: 4 -> 280, 5 -> 250, 6 -> 220.
+  Y-LAYOUT: 8-42 mode buttons | 100..400 plot | 418 foot labels | 440 axis title | 456 separator |
+            470-502 state line (<=2 rows of 17) | 504-556 takeaway (<=3 rows) | 584 hint.
+  Handle: brass knob on the shifted curve (S+tax at q = 11, height 5.5+t; D-tax at q = 3, height 8.5-t); drag, or
+  Up/Right = more tax, Down/Left = less, $0.25 steps, $0-$4.  Left-gutter tags ($5, Pb, Ps) spread apart with leaders.
+  ARCHITECTURE: static base. The script only attaches behaviour and re-lays out; the base <svg> below is the rendered
+  default state, baked in by _build/build_figures.py. window.__fig = test hook. Group switches use display (a child's own
+  visibility attribute would outrank a hidden parent).
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;   /* warm bone background               */
+    --ink:     #1a1c1e;   /* curves + primary labels            */
+    --text:    #16181a;   /* body text                          */
+    --muted:   #5c6066;   /* axes / secondary labels            */
+    --hairline:#e3ddd3;   /* separators                         */
+    --accent:  #b07a2c;   /* brass: the draggable policy handle */
+    --accent-tint: #efe4d2;
+    --drivers: #1f5a96;   /* t04c deck semantics: drivers (demand)  */
+    --stations:#b8510d;   /* stations (supply)                       */
+    --state:   #1e7a64;   /* the state: tax revenue, the wedge       */
+    --lost:    #4a433d;   /* deadweight loss                         */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; overflow: hidden; }
+  body { background: var(--surface); color: var(--text); font-family: var(--font-body);
+         display: grid; place-items: center; -webkit-font-smoothing: antialiased; }
+  .fig { width: 100%; max-width: 480px; min-width: 0; position: relative; }
+  svg { width: 100%; height: auto; display: block; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  .axis   { stroke: var(--muted); stroke-width: 1.4; fill: none; }
+  .curve  { stroke-width: 2.6; fill: none; stroke-linecap: round; }
+  .cD     { stroke: var(--drivers); }
+  .cS     { stroke: var(--stations); }
+  .ref    { stroke-width: 1.5; fill: none; stroke-dasharray: 2 4; stroke-linecap: round; opacity: .75; }
+  .shift  { stroke-width: 2.4; fill: none; stroke-dasharray: 7 4; stroke-linecap: round; }
+  .drop   { stroke: var(--muted); stroke-width: 1.1; fill: none; stroke-dasharray: 4 4; opacity: .6; }
+  .dropB  { stroke: var(--drivers);  stroke-width: 1.2; stroke-dasharray: 4 3; opacity: .8; fill: none; }
+  .dropA  { stroke: var(--stations); stroke-width: 1.2; stroke-dasharray: 4 3; opacity: .8; fill: none; }
+  .wedge  { stroke: var(--state); stroke-width: 2.6; fill: none; stroke-linecap: butt; }
+  .testln { stroke: var(--ink); stroke-width: 1.4; stroke-dasharray: 6 4; fill: none; opacity: .8; }
+  .tk     { fill: none; stroke-width: 1.4; }
+  .tkB    { stroke: var(--drivers); }
+  .tkA    { stroke: var(--stations); }
+  .tk5    { stroke: var(--muted); }
+
+  .f-cs   { fill: var(--drivers);  fill-opacity: .20; }
+  .f-ps   { fill: var(--stations); fill-opacity: .24; }
+  .f-rev  { fill: var(--state);    fill-opacity: .26; stroke: var(--state); stroke-width: 1.2; }
+  .f-dwl  { fill: #6e6862; stroke: var(--lost); stroke-width: 1.2; }
+  .f-cost { fill: none; stroke: var(--state); stroke-width: 2.2; }
+
+  .pt-eq  { fill: var(--ink);       stroke: var(--surface); stroke-width: 1.6; }
+  .pt-B   { fill: var(--drivers);   stroke: var(--surface); stroke-width: 2; }
+  .pt-A   { fill: var(--stations);  stroke: var(--surface); stroke-width: 2; }
+  .ghost  { fill: none; stroke: var(--ink); stroke-width: 1.7; stroke-dasharray: 3 2.5; }
+  .knob   { fill: var(--accent); stroke: var(--surface); stroke-width: 2.4; pointer-events: none; }
+  .lead   { stroke: var(--muted); stroke-width: 1.1; fill: none; }
+
+  .hit      { fill: transparent; stroke: transparent; touch-action: none; cursor: ns-resize; }
+  .hit:focus-visible { outline: none; }
+  .hit:focus-visible + .knob, .grabbing .knob { stroke: var(--ink); stroke-width: 3.2; }
+
+  .lab    { font-size: 13px; font-weight: 700; }
+  .labD   { fill: var(--drivers); }
+  .labS   { fill: var(--stations); }
+  .axlab  { fill: var(--muted); font-size: 12.5px; font-weight: 600; }
+  .qlab   { fill: var(--muted); font-size: 12px; font-weight: 600; }
+  .tagB   { fill: var(--drivers);  font-size: 11.5px; font-weight: 700; }
+  .tagA   { fill: var(--stations); font-size: 11.5px; font-weight: 700; }
+  .tagW   { fill: #14604f; font-size: 12px; font-weight: 700; paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+  .tagX   { fill: var(--ink);      font-size: 11.5px; font-weight: 700; }
+  .small  { fill: var(--muted); font-size: 11.5px; font-weight: 600; }
+  .smallS { fill: var(--stations); font-size: 11px; font-weight: 700; }
+  .smallD { fill: var(--drivers);  font-size: 11px; font-weight: 700; }
+  .inCS   { fill: #17487a; font-size: 11.5px; font-weight: 700; paint-order: stroke; stroke: #e6e4e6; stroke-width: 3px; stroke-linejoin: round; }
+  .inPS   { fill: #8f3f0a; font-size: 11.5px; font-weight: 700; paint-order: stroke; stroke: #ecdccd; stroke-width: 3px; stroke-linejoin: round; }
+  .inRev  { fill: #14604f; font-size: 11.5px; font-weight: 700; paint-order: stroke; stroke: #d7e3dd; stroke-width: 3px; stroke-linejoin: round; }
+  .inDwl  { fill: var(--lost); font-size: 11.5px; font-weight: 700; }
+  .sep    { stroke: var(--hairline); stroke-width: 1; }
+  .r-state{ fill: var(--muted); font-size: 13.5px; }
+  .r-take { fill: #8a5a14; font-size: 13.5px; font-weight: 600; }
+  .hintln { fill: var(--muted); font-size: 12px; }
+  .cap    { fill: var(--muted); font-size: 12px; }
+
+  .btn rect { fill: #fbf9f5; stroke: #cfc5b8; stroke-width: 1.3; cursor: pointer; }
+  .btn text { fill: var(--text); font-size: 12.5px; font-weight: 600; pointer-events: none; }
+  .btn[aria-checked="true"] rect { fill: var(--accent-tint); stroke: var(--accent); stroke-width: 2.2; }
+  .btn[aria-checked="true"] text { font-weight: 700; }
+  .btn:focus-visible { outline: none; }
+  .btn:focus-visible rect { stroke: var(--ink); stroke-width: 3; }
+
+  .fallback { margin: 8px 0 0; color: var(--muted); font-size: 13px; line-height: 1.35; text-align: center; }
+  .fallback a { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="fig">
+  <svg id="fig" viewBox="0 0 480 600" role="group" aria-label="The tax wedge in the gasoline market. Supply slopes up and demand slopes down, crossing at 5 dollars and 10 million gallons. A brass handle sets a per-gallon tax from 0 to 4 dollars. Three buttons choose whether stations pay the tax, drivers pay it, or the old price plus the full tax is tested.">
+    <title>Interactive tax wedge in the gasoline market</title>
+    <defs>
+      <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066"></path>
+      </marker>
+      <marker id="arrowK" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#1a1c1e"></path>
+      </marker>
+    </defs>
+
+    <line id="cS" class="curve cS" x1="99" y1="370" x2="396.5" y2="115"></line><line id="cD" class="curve cD" x1="99" y1="130" x2="396.5" y2="385"></line>
+    <text id="lbS" class="lab labS" text-anchor="start" x="403.5" y="119">S</text><text id="lbD" class="lab labD" text-anchor="end" x="92" y="134" visibility="visible">D</text>
+    <line id="cSs" class="shift cS" visibility="visible" x1="99" y1="310" x2="330" y2="112"></line><line id="cDs" class="shift cD" visibility="hidden"></line>
+    <text id="lbSs" class="smallS" text-anchor="end" visibility="visible" x="330" y="104">S + tax</text><text id="lbDs" class="smallD" text-anchor="start" visibility="hidden">D − tax</text>
+    
+    <line class="axis" x1="64" y1="400" x2="424" y2="400" marker-end="url(#arrow)"></line>
+    <line class="axis" x1="64" y1="400" x2="64" y2="90" marker-end="url(#arrow)"></line>
+    <text class="axlab" x="244" y="440" text-anchor="middle">Quantity (millions of gallons a week)</text>
+    <text class="axlab" x="8" y="250" text-anchor="middle" transform="rotate(-90 8 250)">Price per gallon ($)</text>
+
+    <g id="gTags">
+      <line id="lead5" class="tk tk5" visibility="visible" x1="59" y1="250" x2="63" y2="250"></line><text id="tag5" class="small" text-anchor="end" visibility="visible" x="58" y="254">$5</text>
+      <line id="leadB" class="tk tkB" visibility="visible" x1="59" y1="220" x2="63" y2="220"></line><text id="tagB" class="tagB" text-anchor="end" visibility="visible" x="58" y="224">$6</text>
+      <line id="leadA" class="tk tkA" visibility="visible" x1="59" y1="280" x2="63" y2="280"></line><text id="tagA" class="tagA" text-anchor="end" visibility="visible" x="58" y="284">$4</text>
+      <line id="leadT" class="tk tk5" visibility="hidden"></line><text id="tagT" class="tagX" text-anchor="end" visibility="hidden"></text>
+    </g>
+    <line id="fl10" class="tk tk5" visibility="hidden"></line><line id="flQ" class="tk tk5" visibility="hidden"></line>
+    <text id="foot10" class="small" text-anchor="middle" visibility="visible" x="239" y="418">10</text>
+
+    <g id="gWedge">
+      <line id="dropB" class="dropB" x1="64" y1="220" x2="204" y2="220"></line><line id="dropA" class="dropA" x1="64" y1="280" x2="204" y2="280"></line><line id="dropV" class="drop" x1="204" y1="280" x2="204" y2="400"></line>
+      <path id="wedge" class="wedge" d="M199,220 L209,220 M204,220 L204,280 M199,280 L209,280"></path>
+      <text id="wedgeLab" class="tagW" text-anchor="end" visibility="visible" x="195" y="254">Tax $2</text>
+      <circle id="dotA" class="pt-A" r="5.5" cx="204" cy="280"></circle><circle id="dotB" class="pt-B" r="5.5" cx="204" cy="220"></circle>
+      <text id="footQ" class="qlab" text-anchor="middle" visibility="visible" x="204" y="418">8</text>
+    </g>
+    <g id="gTest" style="display: none;">
+      <line id="testLn" class="testln"></line>
+      <line id="testDropD" class="dropB"></line><line id="testDropS" class="dropA"></line>
+      <circle id="ghost" class="ghost" r="6.5"></circle><line id="ghostArrow" class="lead" marker-end="url(#arrowK)"></line>
+      <circle id="testDotD" class="pt-B" r="5.5"></circle><circle id="testDotS" class="pt-A" r="5.5"></circle>
+      <path id="testBr" class="wedge"></path><text id="testBrLab" class="tagW" text-anchor="middle"></text>
+      <line id="flD" class="tk tkB"></line><line id="flS" class="tk tkA"></line>
+      <text id="testFootD" class="smallD" text-anchor="middle" visibility="hidden"></text><text id="testFootS" class="smallS" text-anchor="middle" visibility="hidden"></text>
+    </g>
+    <circle id="e0" class="pt-eq" r="5" cx="239" cy="250"></circle><text id="e0Lab" class="small" text-anchor="start" x="251" y="254" visibility="visible">No tax</text>
+    <line class="sep" x1="16" y1="456" x2="464" y2="456"></line>
+    <g id="readout" class="ro">
+      <text class="r-state" text-anchor="middle"><tspan id="s1" x="240" y="482">Tax $2 on stations: drivers pay $6, stations keep $4, 8M gallons trade.</tspan><tspan id="s2" x="240" y="499"></tspan></text>
+      <text class="r-take" text-anchor="middle"><tspan id="t1" x="240" y="515.5">The state collects $16M a week. The price rose</tspan><tspan id="t2" x="240" y="532.5">$1, less than the tax, and stations keep $1 less.</tspan><tspan id="t3" x="240" y="549.5"></tspan></text>
+    </g>
+    <text id="hint" class="hintln" x="240" y="584" text-anchor="middle">Drag the brass handle, or use the arrow keys (Up = more tax).</text>
+    <g id="gUI" class="ui" role="radiogroup" aria-label="Choose a view">
+      <g id="btn0" class="btn ui" role="radio" tabindex="0" aria-checked="true"><rect x="15" y="8" width="146" height="34" rx="7"></rect><text id="btnT0" x="88" y="30" text-anchor="middle">Tax on stations</text></g>
+      <g id="btn1" class="btn ui" role="radio" tabindex="-1" aria-checked="false"><rect x="167" y="8" width="146" height="34" rx="7"></rect><text id="btnT1" x="240" y="30" text-anchor="middle">Tax on drivers</text></g>
+      <g id="btn2" class="btn ui" role="radio" tabindex="-1" aria-checked="false"><rect x="319" y="8" width="146" height="34" rx="7"></rect><text id="btnT2" x="392" y="30" text-anchor="middle">Test $7: full tax</text></g>
+    </g>
+    <g class="ui">
+      <circle id="ptFocus" class="hit" r="22" tabindex="0" role="slider" aria-orientation="vertical" aria-label="Tax per gallon" aria-valuemin="0" aria-valuemax="4" aria-valuenow="2" aria-valuetext="Tax $2 on stations: drivers pay $6, stations keep $4, 8M gallons trade. The state collects $16M a week. The price rose $1, less than the tax, and stations keep $1 less." cx="256.5" cy="175"></circle>
+      <circle id="knob" class="knob" r="6.5" cx="256.5" cy="175"></circle>
+    </g>
+    <text id="meas" x="-999" y="-999" class="r-take">xx</text>
+  </svg>
+  <div id="live" class="sr" role="status" aria-live="polite"></div>
+  <noscript>
+    <p class="fallback">JavaScript is off, so this frame is a still image of the gasoline market with a $2 tax: drivers pay $6, stations keep $4, and 8 million gallons trade instead of 10 million. You can also
+      <a href="/teaching/microeconomics/t04c-tax-incidence/figures/t04c-wedge.svg">open the static figure</a>.</p>
+  </noscript>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  // ---- pixel frame: data -> viewBox 0 0 480 600 (see the geometry map above) ----
+  var X0 = 64, SX = 17.5;             // x origin px; px per million gallons
+  var Y0 = 400, SY = 30;              // x-axis foot; px per dollar
+  function X (q) { return X0 + q * SX; }
+  function Y (p) { return Y0 - p * SY; }
+  function toP (yy) { return (Y0 - yy) / SY; }
+  var MAXW = 448, LH = 17;
+
+  var $ = function (id) { return document.getElementById(id); };
+  var svg = $('fig'), meas = $('meas'), live = $('live');
+  function sa (el, o) { for (var k in o) { el.setAttribute(k, o[k]); } }
+  function vis (el, on) { el.setAttribute('visibility', on ? 'visible' : 'hidden'); }
+  function show (el, on) { el.style.display = on ? '' : 'none'; }       // group switch: beats any child's own visibility
+  function ln (el, x1, y1, x2, y2) { sa(el, { x1: x1, y1: y1, x2: x2, y2: y2 }); }
+  function seg (el, q1, p1, q2, p2) { ln(el, X(q1), Y(p1), X(q2), Y(p2)); }
+  function poly (el, arr) { el.setAttribute('points', arr.map(function (v) { return v[0] + ',' + v[1]; }).join(' ')); }
+  function pt (el, q, p) { sa(el, { cx: X(q), cy: Y(p) }); }
+  function txt (el, x, y, s) { el.setAttribute('x', x); el.setAttribute('y', y); if (s !== undefined) { el.textContent = s; } }
+  function clamp (v, lo, hi) { return v < lo ? lo : (v > hi ? hi : v); }
+
+  // ---- number words: prices as $6 / $6.50 / $5.125, quantities as 8 / 9.75, money as $16M ----
+  function r2 (v) { return Math.round(v * 100 + 1e-9) / 100; }
+  function pr (v) {
+    var r = Math.round(v * 1000) / 1000;
+    if (Math.abs(r - Math.round(r)) < 1e-9) { return '$' + Math.round(r); }
+    var s = r.toFixed(3); if (s.charAt(s.length - 1) === '0') { s = s.slice(0, -1); }
+    return '$' + s;
+  }
+  function nn (v) { return String(r2(v)); }
+  function mon (v) { return '$' + nn(v) + 'M'; }
+
+  // ---- text measuring + greedy wrap into at most `rows` lines (balanced) ----
+  function layout (words, w, sp, maxW, rows) {
+    var out = [], line = [], run = 0, wide = 0;
+    function close () { out.push(line.join(' ')); if (run > wide) { wide = run; } }
+    for (var i = 0; i < words.length; i++) {
+      var add = (line.length ? sp : 0) + w[i];
+      if (line.length && run + add > maxW && out.length < rows - 1) { close(); line = [words[i]]; run = w[i]; }
+      else { line.push(words[i]); run += add; }
+    }
+    close();
+    return { lines: out, n: out.length, wide: wide };
+  }
+  function wrap (s, cls, maxW, rows) {
+    meas.setAttribute('class', cls);
+    var words = s.split(' '), w = [], i;
+    for (i = 0; i < words.length; i++) { meas.textContent = words[i]; w.push(meas.getComputedTextLength()); }
+    meas.textContent = 'x x'; var sp = meas.getComputedTextLength();
+    meas.textContent = 'xx'; sp -= meas.getComputedTextLength();
+    var n = layout(words, w, sp, maxW, rows).n, lo = 0, hi = maxW;
+    for (i = 0; i < 12; i++) {
+      var mid = (lo + hi) / 2, trial = layout(words, w, sp, mid, rows);
+      if (trial.n > n || trial.wide > mid + 0.5) { lo = mid; } else { hi = mid; }
+    }
+    return layout(words, w, sp, hi, rows).lines;
+  }
+  function setRows (ids, lines, mid, lh) {
+    var n = lines.length, top = mid - ((n - 1) * lh) / 2;
+    for (var i = 0; i < ids.length; i++) {
+      var el = $(ids[i]); el.textContent = i < n ? lines[i] : ''; el.setAttribute('y', top + i * lh);
+    }
+  }
+  function widthOf (el, s) { el.textContent = s; return el.getComputedTextLength(); }
+  // readout: a muted state line (<= 2 rows) over an accent takeaway (<= takeRows rows); also mirrored to the live region
+  var lastSay = '';
+  function readout (state, take, stateMid, takeMid, takeRows) {
+    setRows(['s1', 's2'], wrap(state, 'r-state', MAXW, 2), stateMid, LH);
+    setRows(['t1', 't2', 't3'], wrap(take, 'r-take', MAXW, takeRows || 3), takeMid, LH);
+    lastSay = state + ' ' + take;
+    return lastSay;
+  }
+  // the live region speaks only on button / mode changes and at the end of a drag, not on every keypress or on load
+  function announce () { live.textContent = lastSay; }
+
+  // ---- left-gutter price tags: spread apart if closer than 15 px; a short leader keeps each tied to its true height ----
+  // items: {t: text el, l: leader el, y: true y, on: bool, s: string}
+  function gutter (items) {
+    var vs = items.filter(function (i) { return i.on; }).sort(function (a, b) { return a.y - b.y; }), p = [], k, sh = 0;
+    for (k = 0; k < vs.length; k++) { p.push(k === 0 ? vs[0].y : Math.max(vs[k].y, p[k - 1] + 15)); sh += vs[k].y - p[k]; }
+    if (vs.length) { sh = 0; for (k = 0; k < vs.length; k++) { sh += vs[k].y - p[k]; } sh /= vs.length; }
+    items.forEach(function (i) { vis(i.t, i.on); vis(i.l, i.on); });
+    vs.forEach(function (i, k2) {
+      var py = p[k2] + sh;
+      i.t.textContent = i.s; sa(i.t, { x: X0 - 6, y: py + 4 });
+      ln(i.l, X0 - 5, py, X0 - 1, i.y);
+    });
+  }
+  // foot labels under the axis: spread apart if closer than 22 px, tied to the true x by a short leader
+  // items: {t: text el, l: leader el (optional), x: true x, on: bool, s: string}
+  function foot (items) {
+    var vs = items.filter(function (i) { return i.on; }).sort(function (a, b) { return a.x - b.x; }), p = [], k, sh = 0;
+    for (k = 0; k < vs.length; k++) { p.push(k === 0 ? vs[0].x : Math.max(vs[k].x, p[k - 1] + 22)); sh += vs[k].x - p[k]; }
+    if (vs.length) { sh /= vs.length; }
+    items.forEach(function (i) { vis(i.t, i.on); if (i.l) { vis(i.l, false); } });
+    vs.forEach(function (i, k2) {
+      var nx = p[k2] + sh; i.t.textContent = i.s; sa(i.t, { x: nx, y: 418 });
+      if (i.l && Math.abs(nx - i.x) > 1.5) { vis(i.l, true); ln(i.l, i.x, 402, nx, 409); }   // leader to the true quantity
+    });
+  }
+
+  // ---- drag (pointer capture, grab offset so the knob never jumps; cancel and lost capture clean up) ----
+  var spt = svg.createSVGPoint();
+  function toSvg (evt) { spt.x = evt.clientX; spt.y = evt.clientY; return spt.matrixTransform(svg.getScreenCTM().inverse()); }
+  function bindDrag (els, knobY, onY, onEnd) {
+    var dragging = false, capEl = null, capId = null, off = 0;
+    function onMove (e) { if (dragging && e.pointerId === capId) { e.preventDefault(); onY(toSvg(e).y - off); } }
+    function onUp (e) {
+      if (e && e.pointerId !== undefined && capId !== null && e.pointerId !== capId) { return; }
+      var was = dragging;
+      dragging = false; svg.classList.remove('grabbing');
+      if (was && onEnd) { onEnd(); }
+      if (capEl && capId !== null) { try { capEl.releasePointerCapture(capId); } catch (x) {} }
+      capEl = null; capId = null;
+      window.removeEventListener('pointermove', onMove); window.removeEventListener('pointerup', onUp);
+      window.removeEventListener('pointercancel', onUp);
+    }
+    function onDown (e) {
+      if (dragging) { return; }
+      e.preventDefault(); dragging = true; svg.classList.add('grabbing');
+      capEl = e.currentTarget; capId = e.pointerId;
+      try { capEl.setPointerCapture(capId); } catch (x) {}
+      off = clamp(toSvg(e).y - knobY(), -26, 26);
+      onY(toSvg(e).y - off);
+      window.addEventListener('pointermove', onMove); window.addEventListener('pointerup', onUp);
+      window.addEventListener('pointercancel', onUp);
+    }
+    els.forEach(function (el) {
+      el.addEventListener('pointerdown', onDown);
+      el.addEventListener('lostpointercapture', onUp);
+    });
+  }
+  // keyboard for a 0..4 slider: Up/Right = more, Down/Left = less; arrows step `step` (default 0.25), Page keys step 1
+  function bindKeys (el, get, set, step) {
+    step = step || 0.25;
+    el.addEventListener('keydown', function (e) {
+      var v = get();
+      if (e.key === 'ArrowUp' || e.key === 'ArrowRight') { v += step; }
+      else if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') { v -= step; }
+      else if (e.key === 'PageUp') { v += 1; }
+      else if (e.key === 'PageDown') { v -= 1; }
+      else if (e.key === 'Home') { v = 0; }
+      else if (e.key === 'End') { v = 4; }
+      else { return; }
+      e.preventDefault(); set(v);
+    });
+  }
+  // SVG radio buttons: click, Enter, Space; arrows move the choice
+  function bindRadio (ids, get, set) {
+    ids.forEach(function (id, i) {
+      var b = $(id);
+      b.addEventListener('click', function () { set(i); });
+      b.addEventListener('keydown', function (e) {
+        var n = ids.length;
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); set(i); }
+        else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); set((i + 1) % n); $(ids[(i + 1) % n]).focus(); }
+        else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); set((i + n - 1) % n); $(ids[(i + n - 1) % n]).focus(); }
+      });
+    });
+  }
+  function showRadio (ids, k) {
+    ids.forEach(function (id, i) { $(id).setAttribute('aria-checked', i === k ? 'true' : 'false'); $(id).setAttribute('tabindex', i === k ? '0' : '-1'); });
+  }
+  // test hook: switches ride in the URL hash (Canvas drops query strings)
+  function hashParam (k, d) {
+    var m = new RegExp('[#&]' + k + '=([^&]*)').exec(location.hash || '');
+    return m ? m[1] : d;
+  }
+
+
+  var MODES = ['stations', 'drivers', 'test'], BTN = ['btn0', 'btn1', 'btn2'];
+  var t = 2, mode = 0;
+  function QH () { return mode === 1 ? 3 : 11; }   // the handle's column on the shifted curve
+
+  function solve (tt) { return { q: 10 - tt, pb: 5 + tt / 2, ps: 5 - tt / 2 }; }
+
+  // fixed curves: supply P = Q/2, demand P = 10 - Q/2, drawn q in [2, 19]
+  seg($('cS'), 2, 1, 19, 9.5);  seg($('cD'), 2, 9, 19, 0.5);
+  txt($('lbS'), X(19) + 7, Y(9.5) + 4);  txt($('lbD'), X(2) - 7, Y(9) + 4);
+
+  function knobPos () { return mode === 1 ? Y(8.5 - t) : Y(5.5 + t); }
+  function valueFromY (y) { var p = toP(y); return mode === 1 ? 8.5 - p : p - 5.5; }
+
+  function render () {
+    var s = solve(t), q = s.q, pb = s.pb, ps = s.ps, on = t > 0.001;
+    var isDrv = mode === 1, isTest = mode === 2;
+    var qe = Math.min(19, 2 * (9.6 - t));
+    var testP = 5 + t;
+
+    // the shifted curve (supply up, or demand down) and its label
+    vis($('cSs'), on && !isDrv); vis($('lbSs'), on && !isDrv);
+    vis($('cDs'), on && isDrv);  vis($('lbDs'), on && isDrv);
+    if (on && !isDrv) { seg($('cSs'), 2, 1 + t, qe, qe / 2 + t); txt($('lbSs'), X(qe), Y(qe / 2 + t) - 8); }
+    if (on && isDrv)  { seg($('cDs'), 2, 9 - t, qe, 10 - t - qe / 2); txt($('lbDs'), X(qe) + 6, Y(10 - t - qe / 2) - 4); }
+
+    vis($('lbD'), !(isTest && t >= 3.5));      // the full-tax dot and line sit on the D label at the top of the range
+    // the no-tax point
+    pt($('e0'), 10, 5); txt($('e0Lab'), X(10) + 12, Y(5) + 4); vis($('e0Lab'), on);
+
+    // the wedge: dots, droplines, bracket
+    var wedgeOn = on && !isTest;
+    show($('gWedge'), wedgeOn);
+    var xq = X(q), yb = Y(pb), ya = Y(ps);
+    if (wedgeOn) {
+      pt($('dotB'), q, pb); pt($('dotA'), q, ps);
+      ln($('dropB'), X0, yb, xq, yb); ln($('dropA'), X0, ya, xq, ya); ln($('dropV'), xq, ya, xq, Y0);
+      $('wedge').setAttribute('d', 'M' + (xq - 5) + ',' + yb + ' L' + (xq + 5) + ',' + yb + ' M' + xq + ',' + yb + ' L' + xq + ',' + ya + ' M' + (xq - 5) + ',' + ya + ' L' + (xq + 5) + ',' + ya);
+      vis($('wedgeLab'), (ya - yb) >= 22);
+      txt($('wedgeLab'), xq - 9, (yb + ya) / 2 + 4, 'Tax ' + pr(t));
+    }
+
+    // the full-tax step
+    show($('gTest'), isTest);
+    var wants = 10 - 2 * t, gap = 2 * t, y7 = Y(testP);
+    if (isTest) {
+      ln($('testLn'), X0, y7, 424, y7);
+      pt($('testDotD'), wants, testP); pt($('testDotS'), 10, testP);
+      ln($('testDropD'), X(wants), y7, X(wants), Y0); ln($('testDropS'), X(10), y7, X(10), Y0);
+      var showGap = gap > 0.01;
+      vis($('testBr'), showGap); vis($('testBrLab'), showGap);
+      var by = y7 - 14;
+      $('testBr').setAttribute('d', 'M' + X(wants) + ',' + (by - 4) + ' L' + X(wants) + ',' + (by + 4) + ' M' + X(wants) + ',' + by + ' L' + X(10) + ',' + by + ' M' + X(10) + ',' + (by - 4) + ' L' + X(10) + ',' + (by + 4));
+      txt($('testBrLab'), (X(wants) + X(10)) / 2, by - 8, nn(gap) + 'M unsold');
+      // where the market actually settles: a ghost dot and a short arrow down to it
+      var yg = Y(pb);
+      sa($('ghost'), { cx: X(q), cy: yg }); vis($('ghost'), showGap);
+      var arrowOk = showGap && (yg - y7) > 24;
+      vis($('ghostArrow'), arrowOk); ln($('ghostArrow'), X(q), y7 + 6, X(q), yg - 9);
+      $('testFootD').textContent = nn(wants); $('testFootS').textContent = nn(10);
+    }
+
+    // left gutter: $5, drivers' price, stations' price, or the test price
+    gutter([
+      { t: $('tag5'), l: $('lead5'), y: Y(5), on: true, s: '$5' },
+      { t: $('tagB'), l: $('leadB'), y: yb, on: wedgeOn, s: pr(pb) },
+      { t: $('tagA'), l: $('leadA'), y: ya, on: wedgeOn, s: pr(ps) },
+      { t: $('tagT'), l: $('leadT'), y: y7, on: isTest && on, s: pr(testP) }
+    ]);
+    // foot labels: the no-tax 10 and the live quantity (or the two quantities of the step)
+    if (isTest) {
+      vis($('foot10'), false); vis($('footQ'), false);
+      vis($('fl10'), false); vis($('flQ'), false);
+      foot([{ t: $('testFootD'), l: $('flD'), x: X(wants), on: gap > 0.01, s: nn(wants) }, { t: $('testFootS'), l: $('flS'), x: X(10), on: true, s: '10' }]);
+    } else {
+      vis($('testFootD'), false); vis($('testFootS'), false);
+      foot([{ t: $('foot10'), l: $('fl10'), x: X(10), on: !on || Math.abs(q - 10) > 0.01, s: '10' },
+            { t: $('footQ'),  l: $('flQ'),  x: xq,    on: wedgeOn, s: nn(q) }]);
+    }
+
+    // handle
+    var ky = knobPos();
+    sa($('knob'), { cx: X(QH()), cy: ky }); sa($('ptFocus'), { cx: X(QH()), cy: ky });
+
+    // readout (every number below is built from displayed parts)
+    var state, take;
+    if (isTest) {
+      state = 'Try ' + pr(testP) + ', the old price plus the full tax: drivers want ' + nn(wants) + 'M gallons; stations, keeping ' + pr(5) + ', offer 10M.';
+      take = gap > 0.01 ? nn(gap) + 'M gallons sit unsold, so stations cut the price until the market clears at ' + pr(pb) + '.'
+                        : 'With no tax, ' + pr(5) + ' already clears the market. Raise the tax to see the step.';
+    } else if (!on) {
+      state = 'No tax: drivers pay ' + pr(5) + ', stations keep ' + pr(5) + ', ' + nn(10) + 'M gallons trade.';
+      take = 'Drag the brass handle up to add a per-gallon tax.';
+    } else if (isDrv) {
+      state = 'Tax ' + pr(t) + ' on drivers: stations get ' + pr(ps) + ' and the state ' + pr(t) + ', so drivers pay ' + pr(pb) + ' in all; ' + nn(q) + 'M gallons.';
+      take = 'Same prices, same quantity, same ' + mon(t * q) + ' as when stations pay. The law picks who mails the check, not who bears the tax.';
+    } else {
+      state = 'Tax ' + pr(t) + ' on stations: drivers pay ' + pr(pb) + ', stations keep ' + pr(ps) + ', ' + nn(q) + 'M gallons trade.';
+      take = 'The state collects ' + mon(t * q) + ' a week. The price rose ' + pr(pb - 5) + ', less than the tax, and stations keep ' + pr(5 - ps) + ' less.';
+    }
+    var say = readout(state, take, 482, 524, 3);
+    $('btnT2').textContent = 'Test ' + pr(testP) + ': full tax';
+    showRadio(BTN, mode);
+    var ptF = $('ptFocus');
+    ptF.setAttribute('aria-valuenow', String(t));
+    ptF.setAttribute('aria-valuetext', say);
+  }
+
+  function setT (v) { t = clamp(Math.round(v * 4) / 4, 0, 4); render(); }
+  function setMode (k) { mode = k; render(); announce(); }
+  bindDrag([$('ptFocus')], knobPos, function (y) { setT(valueFromY(y)); }, announce);
+  bindKeys($('ptFocus'), function () { return t; }, setT);
+  bindRadio(BTN, function () { return mode; }, setMode);
+
+  window.__fig = {
+    set: function (o) { if (o.t !== undefined) { t = clamp(+o.t, 0, 4); } if (o.mode !== undefined) { mode = o.mode; } render(); return window.__fig.get(); },
+    get: function () {
+      var s = solve(t);
+      return { t: t, mode: MODES[mode], q: s.q, pb: s.pb, ps: s.ps, revenue: t * s.q,
+               testPrice: 5 + t, qWanted: 10 - 2 * t, qOffered: 10, unsold: 2 * t };
+    }
+  };
+  var h = hashParam('t', null); if (h !== null) { t = clamp(+h, 0, 4); }
+  var hm = hashParam('mode', null); if (hm !== null) { mode = Math.max(0, MODES.indexOf(hm)); }
+  render();
+
+})();
+</script>
+</body>
+</html>

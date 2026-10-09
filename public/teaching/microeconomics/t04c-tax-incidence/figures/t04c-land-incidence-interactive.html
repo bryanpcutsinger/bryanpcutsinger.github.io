@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive land-tax incidence: a tax on fixed land falls entirely on the owner</title>
+<!--
+  Interactive land-incidence diagram for the t04c-tax-incidence blog post
+  (website-styled warm palette, NOT the FAU slide palette). Self-contained:
+  vanilla SVG + JS, no libraries, no network, no build step.
+
+  BESPOKE / DEFERRED FIGURE: no UE source figure number (grounded in UE Ch 11
+  land-economics prose + this post's expanded land-incidence section). There is
+  NO static .tex/.svg slide-track figure for this one, so there is no <noscript>
+  static-image link -- the <noscript> fallback below explains that the base
+  figure IS the complete still image.
+
+  THE ONE ECONOMIC POINT: land supply is fixed (a vertical S at Q-bar = 50
+  acres). A tax on that fixed thing cannot be passed forward: the market rent
+  users pay (R0 = $500) and the acreage in use (50) never move as the tax rises;
+  the tax is simply carved out of the owner's rent on its way through.
+
+  Family F3 (policy line / wedge): the DRAGGABLE control is the owner's
+  net-receipt line R = R0 - t (a horizontal line). Dragging it down raises the
+  tax t (0..500); dragging up lowers it. The renter/user price line at R0=500
+  and the fixed vertical supply at Q-bar=50 are drawn as part of the static base
+  and NEVER move under the script -- that invariance is the whole lesson.
+
+  ARCHITECTURE: the base figure is REAL SVG markup -- a no-JS reader sees the
+  full still figure (axes, fixed supply S, demand D, the E0 equilibrium dot,
+  the renters'-price line, the owner's-net-receipt line at the default t=150,
+  the shaded tax rectangle, all labels, and the initial readout). The script
+  only ATTACHES behavior (drag the owner line, keyboard, live shading +
+  readouts); it never builds the DOM.
+
+  DATA SPACE: x = land quantity 0..80 acres, y = rent 0..1000 $/acre-yr.
+  PIXEL FRAME: origin (64,360). Data max maps Q=80 -> x=392, R=1000 -> y=44.
+  Axes extend PAST the data max (x to 418, y to 24) so lines never crowd the
+  arrowheads. sx = 328/80 = 4.1 px/acre; sy = 316/1000 = 0.316 px/$.
+
+  Fixed model constants: Q-bar = 50 acres (qx=269); D: R = 1000 - 10*Q, so
+  D passes (0,1000)->(64,44), (50,500)->(269,202)=E0, (80,200)->(392,296.8).
+  R0 = 500 (py=202), the renters' price -- invariant under t.
+  Owner net-receipt R = R0 - t, t in [0,500]; py(R0-t) = 202 + 0.316*t.
+-->
+<style>
+  :root {
+    --surface: #f7f4ef;   /* warm bone background        */
+    --ink:     #1a1c1e;    /* primary curves + headings   */
+    --text:    #16181a;    /* body text                   */
+    --muted:   #5c6066;    /* axes / secondary labels     */
+    --hairline:#e3ddd3;    /* axis muting / droplines     */
+    --accent:  #b07a2c;    /* brass -- tax line + rectangle */
+    --accent-tint: #efe4d2;/* shaded tax slice            */
+    --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .fig { width: 100%; max-width: 480px; min-width: 0; }
+  svg { width: 100%; max-width: 100%; height: auto; display: block;
+        touch-action: pan-y; }
+
+  /* structural strokes */
+  .axis    { stroke: var(--muted); stroke-width: 1.4; }
+  .curve   { stroke: var(--ink); stroke-width: 2.6; fill: none;
+             stroke-linecap: round; }
+  .refline { stroke: var(--ink); stroke-width: 2.2; fill: none;
+             stroke-linecap: round; }
+  .drop    { stroke: var(--hairline); stroke-width: 1.6;
+             stroke-dasharray: 5 4; }
+
+  /* draggable owner-net line + tax rectangle */
+  .taxline { stroke: var(--accent); stroke-width: 2.6; fill: none;
+             stroke-linecap: round; }
+  .taxrect { fill: var(--accent-tint); stroke: var(--accent);
+             stroke-width: 1.2; }
+
+  /* points */
+  .pt-static { fill: var(--ink); stroke: var(--surface); stroke-width: 1.5; }
+  .knob      { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5;
+               pointer-events: none; }
+
+  /* transparent hit targets */
+  .hit      { fill: transparent; stroke: transparent; touch-action: none;
+              cursor: grab; }
+  .hit-line { fill: none; stroke: transparent; stroke-width: 28;
+              touch-action: none; cursor: ns-resize; }
+  .pt-focus:focus-visible { outline: none; }
+  .pt-focus:focus-visible + .knob,
+  .grabbing .knob { stroke: var(--ink); stroke-width: 3.2; }
+
+  /* light "confiscatory" snap emphasis at t = R0 (owner keeps $0) */
+  .confiscatory #ownerLine { stroke-width: 3.4; }
+  .confiscatory #ownerKnob { stroke-width: 3.2; }
+
+  /* text */
+  .lab     { fill: var(--ink); font-size: 13px; font-weight: 600; }
+  .axlab   { fill: var(--muted); font-size: 14px; font-weight: 600; }
+  .qlab    { fill: var(--muted); font-size: 12px; font-weight: 600; }
+  .plab    { fill: var(--muted); font-size: 12.5px; font-weight: 600; }
+  .taxlab  { fill: var(--accent); font-size: 12.5px; font-weight: 700; }
+  .sep     { stroke: var(--hairline); stroke-width: 1; }
+  .readout { font-family: var(--font-body); text-align: center; }
+  .r-hint  { color: var(--muted); font-size: 12.5px; line-height: 1.3;
+             margin-bottom: 5px; }
+  .r-trade { color: var(--accent); font-size: 14px; font-weight: 600;
+             line-height: 1.3; }
+  .fallback {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.35;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="fig">
+  <svg id="fig" viewBox="0 0 440 540" role="group"
+       aria-label="A land-tax incidence diagram. Land supply is fixed at 50 acres no matter the rent. Demand crosses that fixed supply at a market rent of $500 per acre per year. Drag the tax handle on the owner's net-receipt line to raise or lower a tax on land rent: the renters' price stays at $500 and the 50 acres in use never change -- only the owner's share of the rent shrinks as the tax rises.">
+    <title>Interactive land-tax incidence diagram</title>
+    <defs>
+      <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
+              orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066" />
+      </marker>
+    </defs>
+
+    <!-- static droplines (drawn first so the solid S / R0 lines sit on top;
+         they are coincident with those lines -- E0 never moves, so its
+         "feet" ARE the fixed supply line and the renters'-price line) -->
+    <line class="drop" x1="269" y1="202" x2="269" y2="360" />
+    <line class="drop" x1="64"  y1="202" x2="269" y2="202" />
+
+    <!-- axes (drawn before the curves; extended past the data max) -->
+    <line class="axis" x1="64" y1="360" x2="418" y2="360" marker-end="url(#arrow)" />
+    <line class="axis" x1="64" y1="360" x2="64"  y2="24"  marker-end="url(#arrow)" />
+
+    <!-- the tax rectangle (incidence slice), between R0 (top) and R0-t (bottom),
+         Q = 0 .. Q-bar. Default t = 150 -> height 47.4 -->
+    <rect id="taxRect" class="taxrect" x="64" y="202" width="205" height="47.4" />
+
+    <!-- fixed vertical supply S (whole point of the figure): Q-bar = 50 acres,
+         drawn from R=0 up to the top of the plot -->
+    <line class="curve" x1="269" y1="360" x2="269" y2="44" />
+
+    <!-- demand D: R = 1000 - 10*Q, drawn (0,1000) -> (80,200) -->
+    <line class="curve" x1="64" y1="44" x2="392" y2="296.8" />
+
+    <!-- renters'/users' price line at R0 = 500, Q = 0..50 -- NEVER moves -->
+    <line class="refline" x1="64" y1="202" x2="269" y2="202" />
+
+    <!-- the owner's net-receipt line R = R0 - t (draggable), default t = 150 -->
+    <line id="ownerLine" class="taxline" x1="64" y1="249.4" x2="269" y2="249.4" />
+
+    <!-- axis titles -->
+    <text class="axlab" x="241" y="430" text-anchor="middle">Land (acres)</text>
+    <text class="axlab" x="22" y="200" text-anchor="middle"
+          transform="rotate(-90 22 200)">Rent ($/acre-yr)</text>
+
+    <!-- S label (above the whole plot -- never crosses another line) -->
+    <text class="lab" x="269" y="36" text-anchor="middle">S: fixed stock of land</text>
+
+    <!-- D label (two lines, anchored below the line's drawn endpoint (392,
+         296.8) so the segment never reaches into the label's rows) -->
+    <text class="lab" x="392" y="312" text-anchor="end">D: what users</text>
+    <text class="lab" x="392" y="326" text-anchor="end">pay to use the land</text>
+
+    <!-- E0 static equilibrium point -->
+    <circle class="pt-static" cx="269" cy="202" r="4.5" />
+
+    <!-- renters'-price label (static, two lines, centered over its line;
+         terse in-figure wording -- the full sentence lives in the readout) -->
+    <text class="lab" x="166" y="180" text-anchor="middle">Users pay $500</text>
+    <text class="lab" x="166" y="194" text-anchor="middle">(unchanged)</text>
+
+    <!-- owner's-net-receipt label (static text, dynamic vertical position) -->
+    <text id="ownerLabel" class="taxlab" x="166" y="269.4" text-anchor="middle">Owner keeps R<tspan baseline-shift="sub" font-size="9.5">0</tspan> &#8722; t</text>
+
+    <!-- tax-rectangle label (static text, dynamic vertical position, hidden
+         when the rectangle is too thin to hold it) -->
+    <text id="taxLabel" class="taxlab" x="166" y="229.7" text-anchor="middle">Tax = t &#215; Q&#772;</text>
+
+    <!-- axis-foot readouts: Q-bar (static, never moves) + R0 (static) +
+         owner's net rent (dynamic -- the one thing that changes) -->
+    <text class="qlab" x="269" y="377" text-anchor="middle">50</text>
+    <text class="plab" x="55" y="205.5" text-anchor="end">$500</text>
+    <text id="ownerFoot" class="plab" x="55" y="252.9" text-anchor="end">$350</text>
+
+    <!-- fat invisible hit line over the owner line (grab anywhere along it) -->
+    <line id="ownerHit" class="hit-line" x1="64" y1="249.4" x2="269" y2="249.4" />
+    <!-- keyboard proxy (screen-reader slider) beneath the visible knob -->
+    <circle id="ptFocus" class="pt-focus hit" cx="110" cy="249.4" r="22"
+            tabindex="0" role="slider" aria-label="Tax on land rent"
+            aria-valuemin="0" aria-valuemax="500" aria-valuenow="150"
+            aria-valuetext="Tax $150 per acre per year. Users pay $500 (unchanged); owner keeps $350; 50 acres in use (unchanged). The whole tax comes out of the owner's rent -- users pay the same and the same 50 acres stay in use." />
+    <!-- visible drag knob on the owner line -->
+    <circle id="ownerKnob" class="knob" cx="110" cy="249.4" r="6" />
+
+    <!-- readout band: hairline separator, muted STATE line, accent TAKEAWAY
+         line. A foreignObject lets the full-sentence readouts wrap. -->
+    <line class="sep" x1="44" y1="446" x2="396" y2="446" />
+    <foreignObject x="38" y="452" width="364" height="86">
+      <div xmlns="http://www.w3.org/1999/xhtml" class="readout">
+        <div id="rHint"  class="r-hint">Tax $150/acre-yr &#183; Users pay $500 (unchanged) &#183; Owner keeps $350 &#183; 50 acres in use (unchanged)</div>
+        <div id="rTrade" class="r-trade">The whole tax comes out of the owner's rent &#8212; users pay the same and the same 50 acres stay in use.</div>
+      </div>
+    </foreignObject>
+  </svg>
+  <noscript>
+    <p class="fallback">JavaScript is off, so the figure above is a complete still image: land supply fixed at 50 acres, demand crossing it at a $500 market rent, and a $150-per-acre-per-year tax carved entirely out of the owner's rent while renters still pay $500 for the same 50 acres.</p>
+  </noscript>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var svg        = document.getElementById('fig');
+  var ownerLine  = document.getElementById('ownerLine');
+  var ownerHit   = document.getElementById('ownerHit');
+  var ownerKnob  = document.getElementById('ownerKnob');
+  var ptFocus    = document.getElementById('ptFocus');
+  var taxRect    = document.getElementById('taxRect');
+  var taxLabel   = document.getElementById('taxLabel');
+  var ownerLabel = document.getElementById('ownerLabel');
+  var ownerFoot  = document.getElementById('ownerFoot');
+  var rHint      = document.getElementById('rHint');
+  var rTrade     = document.getElementById('rTrade');
+
+  // pixel frame + scale (mirrors the base SVG markup)
+  var QMAX = 80, PMAX = 1000;
+  var X0 = 64, X1 = 392, Y0 = 360, Y1 = 44;
+  var py = function (p) { return Y0 - (p / PMAX) * (Y0 - Y1); };  // rent -> px y
+  var toP = function (yy) { return ((Y0 - yy) / (Y0 - Y1)) * PMAX; };
+
+  // model constants
+  var R0   = 500;   // renters'/users' price -- invariant under the tax
+  var Y_R0 = py(R0); // 202 -- top edge of the tax rectangle, and E0's height
+  var TMIN = 0, TMAX = 500;
+
+  // clamp + gentle "snap to the true endpoint" near t=0 / t=R0 (owner keeps $0)
+  function clampSnap(v) {
+    if (v < TMIN) v = TMIN;
+    if (v > TMAX) v = TMAX;
+    if (v < 6) v = 0;
+    else if (v > 494) v = TMAX;
+    return v;
+  }
+
+  // State in DATA units (t = tax, $/acre-yr).
+  var t = 150; // initial
+
+  // convert a client event to SVG user coords (handles responsive scaling)
+  var spt = svg.createSVGPoint();
+  function toSvg(evt) {
+    spt.x = evt.clientX; spt.y = evt.clientY;
+    return spt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+
+  function render() {
+    var ownerR = R0 - t;
+    var ownerY = py(ownerR);
+
+    // owner line + its hit target, knob, keyboard proxy
+    ownerLine.setAttribute('y1', ownerY); ownerLine.setAttribute('y2', ownerY);
+    ownerHit.setAttribute('y1', ownerY);  ownerHit.setAttribute('y2', ownerY);
+    ownerKnob.setAttribute('cy', ownerY);
+    ptFocus.setAttribute('cy', ownerY);
+
+    // tax rectangle (top edge fixed at R0; bottom edge tracks the owner line)
+    var rectH = ownerY - Y_R0;
+    taxRect.setAttribute('height', Math.max(rectH, 0));
+
+    // tax-rectangle label: shown centered inside once there's room, else hidden
+    if (rectH >= 20) {
+      taxLabel.setAttribute('y', (Y_R0 + ownerY) / 2 + 4);
+      taxLabel.style.visibility = 'visible';
+    } else {
+      taxLabel.style.visibility = 'hidden';
+    }
+
+    // owner-net-receipt label: below the line, clamped clear of the x-axis
+    ownerLabel.setAttribute('y', Math.min(ownerY + 20, 352));
+
+    // owner's-share axis-foot readout (the one thing that moves)
+    var ownerKeeps = Math.round(ownerR);
+    ownerFoot.setAttribute('y', ownerY + 3.5);
+    ownerFoot.textContent = '$' + ownerKeeps;
+
+    // light "confiscatory" emphasis right at t = R0 (owner keeps $0)
+    svg.classList.toggle('confiscatory', t >= TMAX);
+
+    // readout grammar: muted state line + accent takeaway line
+    var taxVal = Math.round(t);
+    var hint, trade;
+    if (t <= 0) {
+      hint  = 'Tax $0  ·  Users pay $500  ·  Owner keeps $500  ·  50 acres in use';
+      trade = 'No tax: the owner collects the full rent; nothing to shift.';
+    } else if (t >= TMAX) {
+      hint  = 'Tax $500/acre-yr  ·  Users pay $500 (unchanged)  ·  Owner keeps $0  ·  50 acres in use (unchanged)';
+      trade = "Even a tax equal to the whole rent leaves the users' price and the acreage untouched — the owner absorbs all of it.";
+    } else {
+      hint  = 'Tax $' + taxVal + '/acre-yr  ·  Users pay $500 (unchanged)  ·  Owner keeps $' +
+              ownerKeeps + '  ·  50 acres in use (unchanged)';
+      trade = "The whole tax comes out of the owner's rent — users pay the same and the same 50 acres stay in use.";
+    }
+    rHint.textContent  = hint;
+    rTrade.textContent = trade;
+
+    ptFocus.setAttribute('aria-valuenow', taxVal);
+    ptFocus.setAttribute('aria-valuetext', hint + ' ' + trade);
+  }
+
+  function setFromPointer(evt) {
+    var p = toSvg(evt);
+    var R = toP(p.y);
+    if (isNaN(R)) return;
+    t = clampSnap(R0 - R);
+    render();
+  }
+
+  // --- drag (pointer events + pointer capture so a fast drag can't get stuck) ---
+  var dragging = false;
+  var capturedEl = null, capturedId = null;
+  function onMove(evt) { if (dragging) { evt.preventDefault(); setFromPointer(evt); } }
+  function onUp() {
+    dragging = false;
+    svg.classList.remove('grabbing');
+    if (capturedEl && capturedId !== null) {
+      try { capturedEl.releasePointerCapture(capturedId); } catch (e) {}
+    }
+    capturedEl = null; capturedId = null;
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+  }
+  function onDown(evt) {
+    evt.preventDefault();
+    dragging = true;
+    svg.classList.add('grabbing');
+    capturedEl = evt.currentTarget; capturedId = evt.pointerId;
+    try { capturedEl.setPointerCapture(capturedId); } catch (e) {}
+    setFromPointer(evt);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }
+  ownerHit.addEventListener('pointerdown', onDown);
+  ptFocus.addEventListener('pointerdown', onDown);
+
+  // --- keyboard: arrows step the tax ($10; Shift = $50) ---
+  ptFocus.addEventListener('keydown', function (evt) {
+    var step = evt.shiftKey ? 50 : 10;
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowUp') { t += step; }
+    else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowDown') { t -= step; }
+    else return;
+    evt.preventDefault();
+    t = clampSnap(t);
+    render();
+  });
+
+  // Debug hook (inert for students): set/get the tax.
+  window.__fig = {
+    set: function (v) { t = clampSnap(+v); render(); },
+    get: function () { return { t: t, ownerKeeps: R0 - t, usersPay: R0, acres: 50 }; }
+  };
+
+  render(); // sync JS state with the static markup on load
+})();
+</script>
+</body>
+</html>

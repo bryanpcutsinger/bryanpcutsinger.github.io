@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="fig" viewBox="0 0 480 600" role="img" aria-label="Tax wedge in the gasoline market (still image)"><style> svg { --surface: #f7f4ef;   /* warm bone background               */ --ink:     #1a1c1e;   /* curves + primary labels            */ --text:    #16181a;   /* body text                          */ --muted:   #5c6066;   /* axes / secondary labels            */ --hairline:#e3ddd3;   /* separators                         */ --accent:  #b07a2c;   /* brass: the draggable policy handle */ --accent-tint: #efe4d2; --drivers: #1f5a96;   /* t04c deck semantics: drivers (demand)  */ --stations:#b8510d;   /* stations (supply)                       */ --state:   #1e7a64;   /* the state: tax revenue, the wedge       */ --lost:    #4a433d;   /* deadweight loss                         */ --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }       .axis   { stroke: var(--muted); stroke-width: 1.4; fill: none; } .curve  { stroke-width: 2.6; fill: none; stroke-linecap: round; } .cD     { stroke: var(--drivers); } .cS     { stroke: var(--stations); } .ref    { stroke-width: 1.5; fill: none; stroke-dasharray: 2 4; stroke-linecap: round; opacity: .75; } .shift  { stroke-width: 2.4; fill: none; stroke-dasharray: 7 4; stroke-linecap: round; } .drop   { stroke: var(--muted); stroke-width: 1.1; fill: none; stroke-dasharray: 4 4; opacity: .6; } .dropB  { stroke: var(--drivers);  stroke-width: 1.2; stroke-dasharray: 4 3; opacity: .8; fill: none; } .dropA  { stroke: var(--stations); stroke-width: 1.2; stroke-dasharray: 4 3; opacity: .8; fill: none; } .wedge  { stroke: var(--state); stroke-width: 2.6; fill: none; stroke-linecap: butt; } .testln { stroke: var(--ink); stroke-width: 1.4; stroke-dasharray: 6 4; fill: none; opacity: .8; } .tk     { fill: none; stroke-width: 1.4; } .tkB    { stroke: var(--drivers); } .tkA    { stroke: var(--stations); } .tk5    { stroke: var(--muted); } .f-cs   { fill: var(--drivers);  fill-opacity: .20; } .f-ps   { fill: var(--stations); fill-opacity: .24; } .f-rev  { fill: var(--state);    fill-opacity: .26; stroke: var(--state); stroke-width: 1.2; } .f-dwl  { fill: #6e6862; stroke: var(--lost); stroke-width: 1.2; } .f-cost { fill: none; stroke: var(--state); stroke-width: 2.2; } .pt-eq  { fill: var(--ink);       stroke: var(--surface); stroke-width: 1.6; } .pt-B   { fill: var(--drivers);   stroke: var(--surface); stroke-width: 2; } .pt-A   { fill: var(--stations);  stroke: var(--surface); stroke-width: 2; } .ghost  { fill: none; stroke: var(--ink); stroke-width: 1.7; stroke-dasharray: 3 2.5; } .knob   { fill: var(--accent); stroke: var(--surface); stroke-width: 2.4; pointer-events: none; } .lead   { stroke: var(--muted); stroke-width: 1.1; fill: none; }    .lab    { font-size: 13px; font-weight: 700; } .labD   { fill: var(--drivers); } .labS   { fill: var(--stations); } .axlab  { fill: var(--muted); font-size: 12.5px; font-weight: 600; } .qlab   { fill: var(--muted); font-size: 12px; font-weight: 600; } .tagB   { fill: var(--drivers);  font-size: 11.5px; font-weight: 700; } .tagA   { fill: var(--stations); font-size: 11.5px; font-weight: 700; } .tagW   { fill: #14604f; font-size: 12px; font-weight: 700; paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; } .tagX   { fill: var(--ink);      font-size: 11.5px; font-weight: 700; } .small  { fill: var(--muted); font-size: 11.5px; font-weight: 600; } .smallS { fill: var(--stations); font-size: 11px; font-weight: 700; } .smallD { fill: var(--drivers);  font-size: 11px; font-weight: 700; } .inCS   { fill: #17487a; font-size: 11.5px; font-weight: 700; paint-order: stroke; stroke: #e6e4e6; stroke-width: 3px; stroke-linejoin: round; } .inPS   { fill: #8f3f0a; font-size: 11.5px; font-weight: 700; paint-order: stroke; stroke: #ecdccd; stroke-width: 3px; stroke-linejoin: round; } .inRev  { fill: #14604f; font-size: 11.5px; font-weight: 700; paint-order: stroke; stroke: #d7e3dd; stroke-width: 3px; stroke-linejoin: round; } .inDwl  { fill: var(--lost); font-size: 11.5px; font-weight: 700; } .sep    { stroke: var(--hairline); stroke-width: 1; } .r-state{ fill: var(--muted); font-size: 13.5px; } .r-take { fill: #8a5a14; font-size: 13.5px; font-weight: 600; } .hintln { fill: var(--muted); font-size: 12px; } .cap    { fill: var(--muted); font-size: 12px; }          svg { font-family: var(--font-body); }</style><rect x="0" y="0" width="480" height="600" fill="#f7f4ef" />
+    <title>Tax wedge in the gasoline market (still image)</title><desc>Still image of the gasoline market with a $2 per-gallon tax on stations. Supply shifts up by $2. Drivers pay $6, stations keep $4, and 8 million gallons trade instead of 10 million. The state collects $16 million a week. The interactive version lets you change the tax and who pays it.</desc>
+    <defs>
+      <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066"></path>
+      </marker>
+      <marker id="arrowK" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#1a1c1e"></path>
+      </marker>
+    </defs>
+
+    <line id="cS" class="curve cS" x1="99" y1="370" x2="396.5" y2="115"></line><line id="cD" class="curve cD" x1="99" y1="130" x2="396.5" y2="385"></line>
+    <text id="lbS" class="lab labS" text-anchor="start" x="403.5" y="119">S</text><text id="lbD" class="lab labD" text-anchor="end" x="92" y="134" visibility="visible">D</text>
+    <line id="cSs" class="shift cS" visibility="visible" x1="99" y1="310" x2="330" y2="112"></line><line id="cDs" class="shift cD" visibility="hidden"></line>
+    <text id="lbSs" class="smallS" text-anchor="end" visibility="visible" x="330" y="104">S + tax</text><text id="lbDs" class="smallD" text-anchor="start" visibility="hidden">D − tax</text>
+    
+    <line class="axis" x1="64" y1="400" x2="424" y2="400" marker-end="url(#arrow)"></line>
+    <line class="axis" x1="64" y1="400" x2="64" y2="90" marker-end="url(#arrow)"></line>
+    <text class="axlab" x="244" y="440" text-anchor="middle">Quantity (millions of gallons a week)</text>
+    <text class="axlab" x="8" y="250" text-anchor="middle" transform="rotate(-90 8 250)">Price per gallon ($)</text>
+
+    <g id="gTags">
+      <line id="lead5" class="tk tk5" visibility="visible" x1="59" y1="250" x2="63" y2="250"></line><text id="tag5" class="small" text-anchor="end" visibility="visible" x="58" y="254">$5</text>
+      <line id="leadB" class="tk tkB" visibility="visible" x1="59" y1="220" x2="63" y2="220"></line><text id="tagB" class="tagB" text-anchor="end" visibility="visible" x="58" y="224">$6</text>
+      <line id="leadA" class="tk tkA" visibility="visible" x1="59" y1="280" x2="63" y2="280"></line><text id="tagA" class="tagA" text-anchor="end" visibility="visible" x="58" y="284">$4</text>
+      <line id="leadT" class="tk tk5" visibility="hidden"></line><text id="tagT" class="tagX" text-anchor="end" visibility="hidden"></text>
+    </g>
+    <line id="fl10" class="tk tk5" visibility="hidden"></line><line id="flQ" class="tk tk5" visibility="hidden"></line>
+    <text id="foot10" class="small" text-anchor="middle" visibility="visible" x="239" y="418">10</text>
+
+    <g id="gWedge">
+      <line id="dropB" class="dropB" x1="64" y1="220" x2="204" y2="220"></line><line id="dropA" class="dropA" x1="64" y1="280" x2="204" y2="280"></line><line id="dropV" class="drop" x1="204" y1="280" x2="204" y2="400"></line>
+      <path id="wedge" class="wedge" d="M199,220 L209,220 M204,220 L204,280 M199,280 L209,280"></path>
+      <text id="wedgeLab" class="tagW" text-anchor="end" visibility="visible" x="195" y="254">Tax $2</text>
+      <circle id="dotA" class="pt-A" r="5.5" cx="204" cy="280"></circle><circle id="dotB" class="pt-B" r="5.5" cx="204" cy="220"></circle>
+      <text id="footQ" class="qlab" text-anchor="middle" visibility="visible" x="204" y="418">8</text>
+    </g>
+    <g id="gTest" style="display: none;">
+      <line id="testLn" class="testln"></line>
+      <line id="testDropD" class="dropB"></line><line id="testDropS" class="dropA"></line>
+      <circle id="ghost" class="ghost" r="6.5"></circle><line id="ghostArrow" class="lead" marker-end="url(#arrowK)"></line>
+      <circle id="testDotD" class="pt-B" r="5.5"></circle><circle id="testDotS" class="pt-A" r="5.5"></circle>
+      <path id="testBr" class="wedge"></path><text id="testBrLab" class="tagW" text-anchor="middle"></text>
+      <line id="flD" class="tk tkB"></line><line id="flS" class="tk tkA"></line>
+      <text id="testFootD" class="smallD" text-anchor="middle" visibility="hidden"></text><text id="testFootS" class="smallS" text-anchor="middle" visibility="hidden"></text>
+    </g>
+    <circle id="e0" class="pt-eq" r="5" cx="239" cy="250"></circle><text id="e0Lab" class="small" text-anchor="start" x="251" y="254" visibility="visible">No tax</text>
+    <line class="sep" x1="16" y1="456" x2="464" y2="456"></line>
+    <g id="readout" class="ro">
+      <text class="r-state" text-anchor="middle"><tspan id="s1" x="240" y="482">Tax $2 on stations: drivers pay $6, stations keep $4, 8M gallons trade.</tspan><tspan id="s2" x="240" y="499"></tspan></text>
+      <text class="r-take" text-anchor="middle"><tspan id="t1" x="240" y="515.5">The state collects $16M a week. The price rose</tspan><tspan id="t2" x="240" y="532.5">$1, less than the tax, and stations keep $1 less.</tspan><tspan id="t3" x="240" y="549.5"></tspan></text>
+    </g>
+    
+    
+    
+    
+  </svg>

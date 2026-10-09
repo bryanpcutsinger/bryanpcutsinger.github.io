@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="fig" viewBox="0 0 480 1800" role="img" aria-label="Who bears a $2 gasoline tax in three markets (still image)"><style> svg { --surface: #f7f4ef;   /* warm bone background               */ --ink:     #1a1c1e;   /* curves + primary labels            */ --text:    #16181a;   /* body text                          */ --muted:   #5c6066;   /* axes / secondary labels            */ --hairline:#e3ddd3;   /* separators                         */ --accent:  #b07a2c;   /* brass: the draggable policy handle */ --accent-tint: #efe4d2; --drivers: #1f5a96;   /* t04c deck semantics: drivers (demand)  */ --stations:#b8510d;   /* stations (supply)                       */ --state:   #1e7a64;   /* the state: tax revenue, the wedge       */ --lost:    #4a433d;   /* deadweight loss                         */ --font-body: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }       .axis   { stroke: var(--muted); stroke-width: 1.4; fill: none; } .curve  { stroke-width: 2.6; fill: none; stroke-linecap: round; } .cD     { stroke: var(--drivers); } .cS     { stroke: var(--stations); } .ref    { stroke-width: 1.5; fill: none; stroke-dasharray: 2 4; stroke-linecap: round; opacity: .75; } .shift  { stroke-width: 2.4; fill: none; stroke-dasharray: 7 4; stroke-linecap: round; } .drop   { stroke: var(--muted); stroke-width: 1.1; fill: none; stroke-dasharray: 4 4; opacity: .6; } .dropB  { stroke: var(--drivers);  stroke-width: 1.2; stroke-dasharray: 4 3; opacity: .8; fill: none; } .dropA  { stroke: var(--stations); stroke-width: 1.2; stroke-dasharray: 4 3; opacity: .8; fill: none; } .wedge  { stroke: var(--state); stroke-width: 2.6; fill: none; stroke-linecap: butt; } .testln { stroke: var(--ink); stroke-width: 1.4; stroke-dasharray: 6 4; fill: none; opacity: .8; } .tk     { fill: none; stroke-width: 1.4; } .tkB    { stroke: var(--drivers); } .tkA    { stroke: var(--stations); } .tk5    { stroke: var(--muted); } .f-cs   { fill: var(--drivers);  fill-opacity: .20; } .f-ps   { fill: var(--stations); fill-opacity: .24; } .f-rev  { fill: var(--state);    fill-opacity: .26; stroke: var(--state); stroke-width: 1.2; } .f-dwl  { fill: #6e6862; stroke: var(--lost); stroke-width: 1.2; } .f-cost { fill: none; stroke: var(--state); stroke-width: 2.2; } .pt-eq  { fill: var(--ink);       stroke: var(--surface); stroke-width: 1.6; } .pt-B   { fill: var(--drivers);   stroke: var(--surface); stroke-width: 2; } .pt-A   { fill: var(--stations);  stroke: var(--surface); stroke-width: 2; } .ghost  { fill: none; stroke: var(--ink); stroke-width: 1.7; stroke-dasharray: 3 2.5; } .knob   { fill: var(--accent); stroke: var(--surface); stroke-width: 2.4; pointer-events: none; } .lead   { stroke: var(--muted); stroke-width: 1.1; fill: none; }    .lab    { font-size: 13px; font-weight: 700; } .labD   { fill: var(--drivers); } .labS   { fill: var(--stations); } .axlab  { fill: var(--muted); font-size: 12.5px; font-weight: 600; } .qlab   { fill: var(--muted); font-size: 12px; font-weight: 600; } .tagB   { fill: var(--drivers);  font-size: 11.5px; font-weight: 700; } .tagA   { fill: var(--stations); font-size: 11.5px; font-weight: 700; } .tagW   { fill: #14604f; font-size: 12px; font-weight: 700; paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; } .tagX   { fill: var(--ink);      font-size: 11.5px; font-weight: 700; } .small  { fill: var(--muted); font-size: 11.5px; font-weight: 600; } .smallS { fill: var(--stations); font-size: 11px; font-weight: 700; } .smallD { fill: var(--drivers);  font-size: 11px; font-weight: 700; } .inCS   { fill: #17487a; font-size: 11.5px; font-weight: 700; paint-order: stroke; stroke: #e6e4e6; stroke-width: 3px; stroke-linejoin: round; } .inPS   { fill: #8f3f0a; font-size: 11.5px; font-weight: 700; paint-order: stroke; stroke: #ecdccd; stroke-width: 3px; stroke-linejoin: round; } .inRev  { fill: #14604f; font-size: 11.5px; font-weight: 700; paint-order: stroke; stroke: #d7e3dd; stroke-width: 3px; stroke-linejoin: round; } .inDwl  { fill: var(--lost); font-size: 11.5px; font-weight: 700; } .sep    { stroke: var(--hairline); stroke-width: 1; } .r-state{ fill: var(--muted); font-size: 13.5px; } .r-take { fill: #8a5a14; font-size: 13.5px; font-weight: 600; } .hintln { fill: var(--muted); font-size: 12px; } .cap    { fill: var(--muted); font-size: 12px; }          svg { font-family: var(--font-body); }</style><rect x="0" y="0" width="480" height="1800" fill="#f7f4ef" /><title>Who bears a $2 gasoline tax in three markets (still image)</title><desc>Still image of the same $2 tax in three gasoline markets that share the no-tax point of $5 and 10 million gallons. Left, the original market: drivers pay $6, stations keep $4, each bears $1. Middle, steeper demand: drivers pay $6.50, stations keep $4.50, drivers bear $1.50 and stations $0.50. Right, steeper supply: drivers pay $5.50, stations keep $3.50, drivers bear $0.50 and stations $1.50.</desc><g transform="translate(0,0)"><text x="240" y="30" text-anchor="middle" fill="#16181a" style="font-size:17px;font-weight:700">Original market</text>
+    
+    <defs>
+      <marker id="arrow" markerWidth="9" markerHeight="9" refX="6" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#5c6066"></path>
+      </marker>
+      <marker id="arrowK" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#1a1c1e"></path>
+      </marker>
+    </defs>
+
+    <line class="ref cD" visibility="hidden"></line><line class="ref cS" visibility="hidden"></line>
+    <text class="small" text-anchor="start" visibility="hidden"></text>
+    <line class="curve cS" x1="99" y1="370" x2="396.5" y2="115"></line><line class="curve cD" x1="99" y1="130" x2="396.5" y2="385"></line>
+    <text class="lab labS" text-anchor="start" x="403.5" y="119">S</text><text class="lab labD" text-anchor="end" x="92" y="134">D</text>
+    <line class="shift cS" x1="99" y1="310" x2="330" y2="112"></line><text class="smallS" text-anchor="end" x="330" y="104">S + tax</text>
+    
+    <line class="axis" x1="64" y1="400" x2="424" y2="400" marker-end="url(#arrow)"></line>
+    <line class="axis" x1="64" y1="400" x2="64" y2="90" marker-end="url(#arrow)"></line>
+    <text class="axlab" x="244" y="440" text-anchor="middle">Quantity (millions of gallons a week)</text>
+    <text class="axlab" x="8" y="250" text-anchor="middle" transform="rotate(-90 8 250)">Price per gallon ($)</text>
+
+    <g>
+      <line class="tk tk5" visibility="visible" x1="59" y1="250" x2="63" y2="250"></line><text class="small" text-anchor="end" visibility="visible" x="58" y="254">$5</text>
+      <line class="tk tkB" visibility="visible" x1="59" y1="220" x2="63" y2="220"></line><text class="tagB" text-anchor="end" visibility="visible" x="58" y="224">$6</text>
+      <line class="tk tkA" visibility="visible" x1="59" y1="280" x2="63" y2="280"></line><text class="tagA" text-anchor="end" visibility="visible" x="58" y="284">$4</text>
+    </g>
+    <line class="tk tk5" visibility="hidden"></line><line class="tk tk5" visibility="hidden"></line>
+    <text class="small" text-anchor="middle" visibility="visible" x="239" y="418">10</text>
+
+    <g>
+      <line class="dropB" x1="64" y1="220" x2="204" y2="220"></line><line class="dropA" x1="64" y1="280" x2="204" y2="280"></line><line class="drop" x1="204" y1="280" x2="204" y2="400"></line>
+      <path class="wedge" d="M199,220 L209,220 M204,220 L204,280 M199,280 L209,280"></path>
+      <circle class="pt-A" r="5.5" cx="204" cy="280"></circle><circle class="pt-B" r="5.5" cx="204" cy="220"></circle>
+      <text class="qlab" text-anchor="middle" visibility="visible" x="204" y="418">8</text>
+    </g>
+    <circle class="pt-eq" r="5" cx="239" cy="250"></circle><text class="small" text-anchor="start" x="251" y="254">No tax</text>
+    <line class="sep" x1="16" y1="456" x2="464" y2="456"></line>
+    <text class="smallD" x="60" y="468" text-anchor="start" style="font-size:12px">Drivers bear</text>
+    <text class="cap" x="240" y="468" text-anchor="middle">of the $2 tax</text>
+    <text class="smallS" x="420" y="468" text-anchor="end" style="font-size:12px">Stations bear</text>
+    <g>
+      <rect x="60" y="474" width="180" height="26" fill="#1f5a96"></rect>
+      <rect x="240" y="474" width="180" height="26" fill="#b8510d"></rect>
+      <text class="barT" x="150" y="492" text-anchor="middle" fill="#ffffff" style="font-size:13.5px;font-weight:700">$1</text>
+      <text class="barT" x="330" y="492" text-anchor="middle" fill="#ffffff" style="font-size:13.5px;font-weight:700">$1</text>
+    </g>
+    <g class="ro">
+      <text class="r-state" text-anchor="middle"><tspan x="240" y="530">Original market: drivers pay $6, stations keep $4, 8M gallons trade.</tspan><tspan x="240" y="547"></tspan></text>
+      <text class="r-take" text-anchor="middle"><tspan x="240" y="565.5">Neither side responds less than the other to a</tspan><tspan x="240" y="582.5">price change, so each bears $1 of the $2 tax.</tspan><tspan x="240" y="599.5" visibility="hidden"></tspan></text>
+    </g>
+    
+    
+  </g><g transform="translate(0,600)"><text x="240" y="30" text-anchor="middle" fill="#16181a" style="font-size:17px;font-weight:700">Steeper demand</text>
+    
+    
+
+    <line class="ref cD" visibility="visible" x1="99" y1="130" x2="396.5" y2="385"></line><line class="ref cS" visibility="hidden"></line>
+    <text class="small" text-anchor="start" visibility="visible" x="372.75" y="353.5">original D</text>
+    <line class="curve cS" x1="99" y1="370" x2="396.5" y2="115"></line><line class="curve cD" x1="185.33333333333334" y1="112" x2="292.6666666666667" y2="388.00000000000006"></line>
+    <text class="lab labS" text-anchor="start" x="403.5" y="119">S</text><text class="lab labD" text-anchor="end" x="178.33333333333334" y="116">D</text>
+    <line class="shift cS" x1="99" y1="310" x2="330" y2="112"></line><text class="smallS" text-anchor="end" x="330" y="104">S + tax</text>
+    
+    <line class="axis" x1="64" y1="400" x2="424" y2="400" marker-end="url(#arrow)"></line>
+    <line class="axis" x1="64" y1="400" x2="64" y2="90" marker-end="url(#arrow)"></line>
+    <text class="axlab" x="244" y="440" text-anchor="middle">Quantity (millions of gallons a week)</text>
+    <text class="axlab" x="8" y="250" text-anchor="middle" transform="rotate(-90 8 250)">Price per gallon ($)</text>
+
+    <g>
+      <line class="tk tk5" visibility="visible" x1="59" y1="250" x2="63" y2="250"></line><text class="small" text-anchor="end" visibility="visible" x="58" y="254">$5</text>
+      <line class="tk tkB" visibility="visible" x1="59" y1="205" x2="63" y2="205"></line><text class="tagB" text-anchor="end" visibility="visible" x="58" y="209">$6.50</text>
+      <line class="tk tkA" visibility="visible" x1="59" y1="265" x2="63" y2="265"></line><text class="tagA" text-anchor="end" visibility="visible" x="58" y="269">$4.50</text>
+    </g>
+    <line class="tk tk5" visibility="visible" x1="239" y1="402" x2="241.25" y2="409"></line><line class="tk tk5" visibility="visible" x1="221.5" y1="402" x2="219.25" y2="409"></line>
+    <text class="small" text-anchor="middle" visibility="visible" x="241.25" y="418">10</text>
+
+    <g>
+      <line class="dropB" x1="64" y1="205" x2="221.5" y2="205"></line><line class="dropA" x1="64" y1="265" x2="221.5" y2="265"></line><line class="drop" x1="221.5" y1="265" x2="221.5" y2="400"></line>
+      <path class="wedge" d="M216.5,205 L226.5,205 M221.5,205 L221.5,265 M216.5,265 L226.5,265"></path>
+      <circle class="pt-A" r="5.5" cx="221.5" cy="265"></circle><circle class="pt-B" r="5.5" cx="221.5" cy="205"></circle>
+      <text class="qlab" text-anchor="middle" visibility="visible" x="219.25" y="418">9</text>
+    </g>
+    <circle class="pt-eq" r="5" cx="239" cy="250"></circle><text class="small" text-anchor="start" x="251" y="254">No tax</text>
+    <line class="sep" x1="16" y1="456" x2="464" y2="456"></line>
+    <text class="smallD" x="60" y="468" text-anchor="start" style="font-size:12px">Drivers bear</text>
+    <text class="cap" x="240" y="468" text-anchor="middle">of the $2 tax</text>
+    <text class="smallS" x="420" y="468" text-anchor="end" style="font-size:12px">Stations bear</text>
+    <g>
+      <rect x="60" y="474" width="270" height="26" fill="#1f5a96"></rect>
+      <rect x="330" y="474" width="90" height="26" fill="#b8510d"></rect>
+      <text class="barT" x="195" y="492" text-anchor="middle" fill="#ffffff" style="font-size:13.5px;font-weight:700">$1.50</text>
+      <text class="barT" x="375" y="492" text-anchor="middle" fill="#ffffff" style="font-size:13.5px;font-weight:700">$0.50</text>
+    </g>
+    <g class="ro">
+      <text class="r-state" text-anchor="middle"><tspan x="240" y="521.5">Steeper demand: drivers pay $6.50,</tspan><tspan x="240" y="538.5">stations keep $4.50, 9M gallons trade.</tspan></text>
+      <text class="r-take" text-anchor="middle"><tspan x="240" y="565.5">Drivers cut back less for a given price rise, so they</tspan><tspan x="240" y="582.5">bear more: $1.50 of the $2 tax, and stations $0.50.</tspan><tspan x="240" y="599.5" visibility="hidden"></tspan></text>
+    </g>
+    
+    
+  </g><g transform="translate(0,1200)"><text x="240" y="30" text-anchor="middle" fill="#16181a" style="font-size:17px;font-weight:700">Steeper supply</text>
+    
+    
+
+    <line class="ref cD" visibility="hidden"></line><line class="ref cS" visibility="visible" x1="99" y1="370" x2="396.5" y2="115"></line>
+    <text class="small" text-anchor="start" visibility="visible" x="372.75" y="154.5">original S</text>
+    <line class="curve cS" x1="185.33333333333334" y1="388" x2="292.6666666666667" y2="111.99999999999994"></line><line class="curve cD" x1="99" y1="130" x2="396.5" y2="385"></line>
+    <text class="lab labS" text-anchor="start" x="299.6666666666667" y="115.99999999999994">S</text><text class="lab labD" text-anchor="end" x="92" y="134">D</text>
+    <line class="shift cS" x1="162" y1="388" x2="269.33333333333337" y2="111.99999999999994"></line><text class="smallS" text-anchor="end" x="269.33333333333337" y="103.99999999999994">S + tax</text>
+    
+    <line class="axis" x1="64" y1="400" x2="424" y2="400" marker-end="url(#arrow)"></line>
+    <line class="axis" x1="64" y1="400" x2="64" y2="90" marker-end="url(#arrow)"></line>
+    <text class="axlab" x="244" y="440" text-anchor="middle">Quantity (millions of gallons a week)</text>
+    <text class="axlab" x="8" y="250" text-anchor="middle" transform="rotate(-90 8 250)">Price per gallon ($)</text>
+
+    <g>
+      <line class="tk tk5" visibility="visible" x1="59" y1="250" x2="63" y2="250"></line><text class="small" text-anchor="end" visibility="visible" x="58" y="254">$5</text>
+      <line class="tk tkB" visibility="visible" x1="59" y1="235" x2="63" y2="235"></line><text class="tagB" text-anchor="end" visibility="visible" x="58" y="239">$5.50</text>
+      <line class="tk tkA" visibility="visible" x1="59" y1="295" x2="63" y2="295"></line><text class="tagA" text-anchor="end" visibility="visible" x="58" y="299">$3.50</text>
+    </g>
+    <line class="tk tk5" visibility="visible" x1="239" y1="402" x2="241.25" y2="409"></line><line class="tk tk5" visibility="visible" x1="221.5" y1="402" x2="219.25" y2="409"></line>
+    <text class="small" text-anchor="middle" visibility="visible" x="241.25" y="418">10</text>
+
+    <g>
+      <line class="dropB" x1="64" y1="235" x2="221.5" y2="235"></line><line class="dropA" x1="64" y1="295" x2="221.5" y2="295"></line><line class="drop" x1="221.5" y1="295" x2="221.5" y2="400"></line>
+      <path class="wedge" d="M216.5,235 L226.5,235 M221.5,235 L221.5,295 M216.5,295 L226.5,295"></path>
+      <circle class="pt-A" r="5.5" cx="221.5" cy="295"></circle><circle class="pt-B" r="5.5" cx="221.5" cy="235"></circle>
+      <text class="qlab" text-anchor="middle" visibility="visible" x="219.25" y="418">9</text>
+    </g>
+    <circle class="pt-eq" r="5" cx="239" cy="250"></circle><text class="small" text-anchor="start" x="251" y="254">No tax</text>
+    <line class="sep" x1="16" y1="456" x2="464" y2="456"></line>
+    <text class="smallD" x="60" y="468" text-anchor="start" style="font-size:12px">Drivers bear</text>
+    <text class="cap" x="240" y="468" text-anchor="middle">of the $2 tax</text>
+    <text class="smallS" x="420" y="468" text-anchor="end" style="font-size:12px">Stations bear</text>
+    <g>
+      <rect x="60" y="474" width="90" height="26" fill="#1f5a96"></rect>
+      <rect x="150" y="474" width="270" height="26" fill="#b8510d"></rect>
+      <text class="barT" x="105" y="492" text-anchor="middle" fill="#ffffff" style="font-size:13.5px;font-weight:700">$0.50</text>
+      <text class="barT" x="285" y="492" text-anchor="middle" fill="#ffffff" style="font-size:13.5px;font-weight:700">$1.50</text>
+    </g>
+    <g class="ro">
+      <text class="r-state" text-anchor="middle"><tspan x="240" y="521.5">Steeper supply: drivers pay $5.50,</tspan><tspan x="240" y="538.5">stations keep $3.50, 9M gallons trade.</tspan></text>
+      <text class="r-take" text-anchor="middle"><tspan x="240" y="565.5">Stations cut back less for a given price change, so</tspan><tspan x="240" y="582.5">they bear more: $1.50 of the $2 tax, and drivers $0.50.</tspan><tspan x="240" y="599.5" visibility="hidden"></tspan></text>
+    </g>
+    
+    
+  </g></svg>

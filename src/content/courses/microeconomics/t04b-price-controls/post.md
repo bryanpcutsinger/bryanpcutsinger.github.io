@@ -17,6 +17,12 @@ status: approved        # scope-reduction R4 done-gate 2026-07-21; prior approva
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Source-of-truth for T4 session 7 and the second of two T4 posts. Combines price controls, systemic causation, and the political economy of concentrated benefits and dispersed costs. Tax incidence is consolidated in T7."
 # brief: ../t04-markets-prices-coordination/brief.md
+slides:
+  - label: "Lecture slides: Price Controls"
+    file: "microeconomics/t04b-price-controls-slides.pdf"
+recaps:
+  - label: "Recap: October 6, 2026"
+    url: "/teaching/microeconomics/t04b-price-controls/recaps/recap.html"
 ---
 
 # Price Controls
