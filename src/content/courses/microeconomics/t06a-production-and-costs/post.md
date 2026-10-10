@@ -2,7 +2,7 @@
 title: "Marginal Analysis, Production, and Costs"
 topic: "T6 — Production, Costs, and Specialization (Part A)"
 course: "Principles of Microeconomics (FAU)"
-sessions: ["Fall 2026 — content session 12 (Thu 10/1)"]
+sessions: ["Fall 2026 — content session 15 (Thu 10/15)"]
 ue_anchors: ["UE 7 (totals, marginals, averages, equimarginal allocation)", "UE 14 (Productivity and Costs)", "UE 18 (rate versus volume, learning curves, common costs of joint products)", "UE 29 (input substitution at the margin; substitutes and complements among inputs) — capital-labor framing only"]
 be_anchors: []
 ep_anchors: ["E&P Figs 7-1 & 7-3 (ch. 7) — producer production-possibility frontiers; marginal cost as the frontier's slope", "E&P ch. 7 'Inefficiency by Authority?' — 1974–1981 crude-oil entitlements program / small-refiner bias vs price coordination (equimarginal), via card EP-EX-07"]
@@ -27,7 +27,7 @@ We make good on both across this two-part topic. Part A first builds the total/m
 <p class="econ-callout__label">Learning objectives</p>
 <p>By the end of this post you should be able to:</p>
 <ul>
-<li>Distinguish totals, marginals, and averages, and use the equimarginal principle to allocate a fixed divisible resource across separable uses under a common objective.</li>
+<li>Distinguish totals, marginals, and averages, and use the equimarginal principle to allocate a fixed resource across separable uses under a common objective.</li>
 <li>Explain why cost is the best alternative given up, not merely the invoice or clock time, and why marginal cost eventually rises when output rate increases with some inputs fixed and variable-input price held constant.</li>
 <li>Apply the marginal stopping rule: a self-producer compares marginal worth with marginal cost, a competitive price-taker compares price with marginal cost, and a price-searcher compares marginal revenue with marginal cost.</li>
 </ul>
@@ -63,16 +63,16 @@ Revenue uses the same arithmetic. Suppose a chair seller can sell one chair for 
 
 The toolkit becomes most useful when a producer has a fixed resource and several places to put it. Suppose ten machine-hours can be split between production lines A and B. Line A's first hours are very productive but its marginal return falls quickly; line B begins lower but declines slowly. Sending every hour to whichever line has the larger *total* return is the wrong comparison. The producer should assign each next hour to the line offering the largest remaining marginal return.
 
-In the worked schedule, the best split assigns four hours to A and six to B. That combination produces a total return of 150.5, more than putting all ten into A (110) or all ten into B (127.5). At the best integer split, the last hours assigned to the two lines have nearly equal returns. Moving an hour from one line to the other would give up more at the source than it adds at the destination.
+In the worked schedule, the best split assigns four hours to A and six to B. That combination produces a total return of 150.5, more than putting all ten into A (110) or all ten into B (127.5). At the best integer split, every hour used earns more than any hour left unused. Moving an hour from one line to the other would give up more at the source than it adds at the destination.
 
 <aside class="econ-callout econ-def">
 <p class="econ-callout__label">Definition</p>
-<p>The equimarginal principle says that a fixed resource produces the largest total return when it is allocated across separable uses so their marginal returns are equal, or as close to equal as indivisible units permit, under a common objective and with no additional constraint binding.</p>
+<p>The equimarginal principle says that a fixed resource produces the largest total return when it is allocated across separable uses by putting each unit where its next return is highest, so that every unit used earns more than any unit left unused, under a common objective and with no additional constraint binding.</p>
 </aside>
 
 <figure class="econ-figure" style="margin:1.5em 0;">
 <iframe src="/teaching/microeconomics/t06a-production-and-costs/figures/t03-equimarginal-interactive.html" title="Drag the split of ten units between two production lines to compare total output and marginal returns." loading="lazy" style="width:100%; max-width:640px; aspect-ratio:16/10; border:1px solid #e3ddd3; border-radius:4px; background:#f7f4ef; display:block; margin:0 auto;"><p><a href="/teaching/microeconomics/t06a-production-and-costs/figures/t03-equimarginal-interactive.html">Open the interactive figure directly</a> or <a href="/teaching/microeconomics/t06a-production-and-costs/figures/t03-equimarginal.svg">view the static figure</a>.</p></iframe>
-<figcaption><strong>Allocate the resource until marginal returns are as equal as the units allow.</strong> Line A starts higher but falls faster, so four units in A and six in B maximize the combined total. Drag the split to see why favoring the larger total or average leaves gains unrealized. The mirror-image cost rule is equally important: a firm minimizes the cost of a fixed output by equalizing marginal cost across its plants.</figcaption>
+<figcaption><strong>Put each unit where its next return is highest.</strong> Line A starts higher but falls faster, so four units in A and six in B maximize the combined total. Drag the split to see why favoring the larger total or average leaves gains unrealized. The mirror-image cost rule is equally important: a firm minimizes the cost of a fixed output by equalizing marginal cost across its plants.</figcaption>
 </figure>
 
 This principle connects a production schedule to a decision. The same scarce hour cannot be in both factories, so its opportunity cost in one use is the marginal return forgone in the other. If uses interact, units differ, or a constraint binds, compare the full incremental effect instead of mechanically equalizing two reported marginals. The general test is unchanged: no feasible reallocation should raise the stated total.
@@ -206,7 +206,7 @@ Want to explore the source material? This lecture draws on the following chapter
 <section class="econ-review__section">
 <h3>Key takeaways</h3>
 <ul>
-<li><strong>Marginals govern the next choice.</strong> Totals accumulate and averages summarize; a fixed divisible resource maximizes a common objective by equalizing marginal returns across separable uses, while interactions or constraints require the full incremental comparison.</li>
+<li><strong>Marginals govern the next choice.</strong> Totals accumulate and averages summarize; a fixed resource maximizes a common objective by going to the use where each unit's next return is highest, so every unit used earns more than any unit left unused, while interactions or constraints require the full incremental comparison.</li>
 <li><strong>Cost is opportunity cost, and fixed inputs eventually make faster production costlier.</strong> Holding technique, input quality, other inputs, and variable-input price fixed, diminishing marginal product raises marginal cost; learning, price changes, and long-run input adjustment are different experiments.</li>
 <li><strong>The relevant marginal benefit meets marginal cost.</strong> A self-producer uses marginal worth, a competitive price-taker uses price, and a price-searcher uses marginal revenue; indivisibilities, fixed commitments, uncertainty, constraints, and spillovers complete the decision.</li>
 </section>

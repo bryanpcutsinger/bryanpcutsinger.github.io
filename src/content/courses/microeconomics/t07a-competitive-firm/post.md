@@ -2,7 +2,7 @@
 title: "The Competitive Firm: How a Price-Taker Decides"
 topic: "T7 — Competitive Markets (Part A)"
 course: "Principles of Microeconomics (FAU)"
-sessions: ["Fall 2026 — content session 14 (Thu 10/8)"]
+sessions: ["Fall 2026 — content session 16 (Tue 10/20)"]
 ue_anchors: ["UE 16"]
 be_anchors: []
 ep_anchors: ["E&P Fig 10-8 (ch. 10, p. 211) — profits competed away by bidding up the responsible input", "E&P Fig 10-3 (ch. 10, p. 205) — total variable cost as the area under marginal cost", "E&P Fig 10-7 (ch. 10, p. 210) — adjustment of supply to a demand shift: short-run overshoot, long-run settle via entry", "E&P ch. 10 (p. 216) — 'sick industries': persistent losses are not market failure"]
@@ -76,7 +76,7 @@ That is precisely what fails for a price-searcher, who must cut its price to mov
 
 Now we can answer the first decision: at a given price, how much should the firm make? Run the marginal logic from T6: as long as one more unit brings in more than it costs, make it. The price-taker's marginal revenue is the price, so the rule becomes keep producing until marginal cost rises to meet the price. Produce less and you leave units on the table that would have earned more than they cost; produce more and each extra unit costs more than it fetches.
 
-Put numbers on it with a single producer's cost schedule, the same figures from T6, now with a market price attached.
+Put numbers on it with a single producer's cost schedule, now with a market price attached.
 
 | Daily rate of production | Marginal cost | Average variable cost | Average total cost |
 |---|---|---|---|
@@ -89,7 +89,7 @@ Put numbers on it with a single producer's cost schedule, the same figures from 
 | 6 | 13 | 8.0 | 9.7 |
 | 7 | 22 | 10.0 | 11.4 |
 | 8 | 30 | 12.5 | 13.8 |
-| 9 | 40 | 15.5 | 16.7 |
+| 9 | 40 | 15.6 | 16.7 |
 | 10 | 51 | 19.1 | 20.1 |
 | 11 | 65 | 23.3 | 24.2 |
 | 12 | 80 | 28.0 | 28.8 |
@@ -129,7 +129,7 @@ The long run is a different decision program, not the same one stretched out. On
 </dl>
 </aside>
 
-There is the floor we promised. The firm's marginal-cost curve serves as its supply curve only above the lowest average variable cost, $7; below that it produces nothing. And the lowest average total cost, $9, is the price below which it will not stay in the industry permanently. Same firm, two break-even prices, because the short run and the long run are two different production plans, each carrying its own cost.
+There is the floor we promised. The firm's marginal-cost curve serves as its supply curve only above the lowest average variable cost, $7; below that it produces nothing. And the lowest average total cost, $9, is the price below which it will not stay in the industry permanently. Same firm, shutdown price $7, break-even price $9, because the short run and the long run are two different production plans, each carrying its own cost.
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
@@ -171,8 +171,8 @@ The table tracks the machine as the product price moves.
 |---|---|---|---|---|---|
 | A | $4.00 | $3.00 | $15,000 | $3.00 | Invest; profit of $5,000 over the $10,000 paid |
 | B | $3.50 | $2.50 | $12,500 | $2.50 | Produce; profit of $2,500 |
-| C | $2.00 | $1.00 | $5,000 | $1.00 | Keep producing; profit of $0 |
-| D | below $1 | near zero | about zero | — | Terminate; the machine is worth scrapping |
+| C | $2.00 | $1.00 | $5,000 | $1.00 | Keep producing; worth $5,000, a sunk $5,000 loss on the $10,000 paid |
+| D | below $1 | negative | below zero | — | Terminate; the machine is worth scrapping |
 
 Two lessons live in that table. First, the cost of using the machine is not the $2 per unit computed from its $10,000 purchase price; it is whatever the machine is currently worth, spread over its output. When the product sells for $4, the true cost of using the machine is $3 a unit, because that is what you sacrifice by using it rather than selling it. The historical price paid is irrelevant; only current value counts. That kills a stubborn fallacy, that new firms can undercut old ones because the old are "burdened" with obsolete equipment. They are not: old equipment is continuously revalued to whatever level lets it keep competing, and at that lower value it competes on equal footing with anything new. What a firm once paid for its capital is dead history.
 

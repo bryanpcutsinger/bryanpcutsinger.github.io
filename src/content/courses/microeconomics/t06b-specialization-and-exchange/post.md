@@ -2,7 +2,7 @@
 title: "Specialization and Exchange"
 topic: "T6 — Production, Costs, and Specialization (Part B)"
 course: "Principles of Microeconomics (FAU)"
-sessions: ["Fall 2026 — content session 13 (Tue 10/6)"]
+sessions: ["Fall 2026 — content session 15 (Thu 10/15)"]
 ue_anchors: ["UE 15 (Specialization and Exchange)"]
 be_anchors: []
 ep_anchors: ["E&P Fig 7-9 (ch. 7, p. 148) — gains from specialized production and exchange at a common market price"]
@@ -136,7 +136,7 @@ So far it is two people. To isolate entry while holding the other conditions fix
 <figcaption><strong>Carter undercuts Baker's third cake.</strong> Carter's rising marginal cost crosses his falling marginal worth (demand) at two cakes — his own self-sufficiency stop — but his third cake still costs him only 0.60Y, below Baker's cost for the same cake, making the newcomer the low-cost supplier of that unit. Drag the output handle (or tap and use the arrow keys) to see the two margins at any output from one to five cakes. If the frame does not load, <a href="/teaching/microeconomics/t06b-specialization-and-exchange/figures/t06b-carter-costs-interactive.html">open the interactive figure directly</a> or <a href="/teaching/microeconomics/t06b-specialization-and-exchange/figures/t06b-carter-costs.svg">view the static figure</a>.</figcaption>
 </figure>
 
-Trace who wins and who loses, because this is where economics earns its reputation for uncomfortable truths. In the stated model, Adam gains: he gets his cake at a lower price. Carter gains: he earns income he did not have before. Baker loses: he is pushed back to two cakes and gives up the income he earned on the third. Part of Adam's gain is a transfer from Baker, one person's loss becoming another's saving. The net addition is the value of what Baker's released resources can produce elsewhere, minus transition, search, transaction, and any omitted quality or spillover costs. It is positive in this numerical example because those costs are assumed away; that does not mean every affected person gains.
+Trace who wins and who loses, because this is where economics earns its reputation for uncomfortable truths. In the stated model, Adam gains: he gets his cake at a lower price. Carter gains: he earns income he did not have before. Baker loses: he is pushed back to two cakes and gives up the income he earned on the third. Part of Adam's gain is a transfer from Baker, one person's loss becoming another's saving. The net addition is the cost saving: Baker's released resources can make 0.80Y of other goods, while Carter's cake uses up only 0.60Y, so the economy gains 0.20Y, minus transition, search, transaction, and any omitted quality or spillover costs. It is positive in this numerical example because those costs are assumed away; that does not mean every affected person gains.
 
 The people who get hurt are always the existing producers, the competitors of the newcomer, and their loss is real. If Baker's freed-up resources are people, they have to find new work, perhaps at lower pay for a while. That is why the next idea is the seed of nearly everything we will say about policy.
 
@@ -152,7 +152,7 @@ There is a political puzzle buried here that runs through the rest of the course
 
 <aside class="econ-callout econ-check">
 <p class="econ-callout__label">Pause and check</p>
-<p>A state lets you sell hair-braiding services only after hundreds of hours of licensed training, and grants a license only when existing salons are judged adequate. Name who this rule helps and who it hurts, and explain why the handful it protects fight harder to keep it than the many it costs fight to repeal it.</p>
+<p>A state lets you sell hair-braiding services only after hundreds of hours of licensed training, and grants a license only when existing salons are judged inadequate. Name who this rule helps and who it hurts, and explain why the handful it protects fight harder to keep it than the many it costs fight to repeal it.</p>
 </aside>
 
 ## Specialization Has Two Meanings, and Both Make Us Richer
