@@ -12,9 +12,9 @@
 
   ARCHITECTURE (family F8 — allocation / two-agent margins): the base figure is
   REAL SVG markup. A no-JS reader sees the FULL back-to-back still — both
-  marginal-payoff lines, both token axes, both optimum dots, the equalized
-  dashed line, and every label the UE source teaches. The script only ATTACHES
-  behavior (drag the split, both dots + droplines + equalized line move, live
+  marginal-payoff lines, both token axes, both optimum dots, the lowest-token-
+  used dashed line, and every label the UE source teaches. The script only ATTACHES
+  behavior (drag the split, both dots + droplines + cutoff line move, live
   readouts, snap-highlight at the optimum); it never builds figure DOM.
 
   GEOMETRY (two-panel back-to-back mirror): viewBox 720 x 460, aspect-ratio
@@ -29,8 +29,13 @@
   payoff = area under each marginal line up to its count:
     A(a) = 21a - a^2 ;  B(b) = 15.25b - 0.25b^2.
   The equimarginal optimum is a = 4, b = 6 (total $150.50): the split that
-  maximizes the aggregate, where the two placed marginals ($14 and $12.50) are
-  as equal as an integer split allows.
+  maximizes the aggregate. It is NOT the split with the most nearly equal placed
+  marginals: 4/6 places $14 and $12.50 (gap $1.50), while 5/5 places $12 and $13
+  (gap $1.00) yet totals only $150. The rule the figure teaches: every token used
+  is worth more than the next token either machine would get. At 4/6 the lowest
+  token used is worth $12.50; the next token in A and in B is worth $12 each.
+  The dashed cutoff line sits at the lowest placed marginal (post correction
+  2026-10-09; it replaced an "Equalized marginal" line at the average).
 -->
 <style>
   :root {
@@ -67,7 +72,7 @@
   .area   { fill: var(--accent-tint); opacity: 0.55; stroke: none; }
   .drop   { stroke: var(--hairline); stroke-width: 1.6; stroke-dasharray: 5 4; }
 
-  /* the equalized-marginal reference line */
+  /* the cutoff line: the worth of the lowest token used */
   .equal-line  { stroke: var(--muted); stroke-width: 1.6; stroke-dasharray: 7 5; }
   .equal-line.opt { stroke: var(--accent); stroke-width: 2; }
 
@@ -104,7 +109,7 @@
 <body>
 <div class="fig">
   <svg id="fig" viewBox="0 0 720 460" role="group"
-       aria-label="Two machines share ten tokens. Machine A's marginal payoff starts higher but falls faster; Machine B's is flatter. Drag the split to change how many tokens go to each machine. The total payoff is largest, and the two placed marginal payoffs are as equal as an integer split allows, when four tokens go to A and six to B.">
+       aria-label="Two machines share ten tokens. Machine A's marginal payoff starts higher but falls faster; Machine B's is flatter. Drag the split to change how many tokens go to each machine. The total payoff is largest when four tokens go to A and six to B: every token used is worth at least $12.50, and the next token in either machine would be worth only $12.">
     <defs>
       <marker id="ax-arrow" markerWidth="9" markerHeight="9" refX="6" refY="4"
               orient="auto" markerUnits="userSpaceOnUse">
@@ -163,18 +168,20 @@
     <!-- A: (t=0,$22)->(t=10,$2), steep; first token reads $20 -->
     <line class="mline" x1="70" y1="56.67" x2="330" y2="323.33" />
     <!-- Label sits in the open upper-left triangle ABOVE the A line and ABOVE the
-         equalized band's highest sweep (y=133.33 at a=0), and its x-span (140-245)
-         clears the centered "Equalized marginal" label (x 306-414). This keeps it
-         from being overrun by the moving equalized line/label when the reader drags
-         the split toward A (was at y=150, inside the band -> text-over-line). -->
+         cutoff line's highest sweep (y=183.33 at the optimum), so the moving
+         line never runs through it. -->
     <text class="linelabel" x="140" y="108" text-anchor="start">Marginal Payoff of A</text>
     <!-- B: (s=0,$15.5)->(s=10,$10.5), shallow -->
     <line class="mline" x1="650" y1="143.33" x2="390" y2="210" />
     <text class="linelabel" x="500" y="118" text-anchor="start">Marginal Payoff of B</text>
 
-    <!-- ===================== equalized-marginal reference ===================== -->
-    <line id="equalLine" class="equal-line opt" x1="60" y1="173.33" x2="660" y2="173.33" />
-    <text id="equalLabel" class="equal-label opt" x="360" y="165" text-anchor="middle">Equalized marginal</text>
+    <!-- ===================== cutoff line: worth of the lowest token used ===================== -->
+    <!-- Runs axis to axis (70-650) so it never touches the $ labels outside the axes.
+         Its label is a FIXED key in the empty top-centre band (no line or label
+         reaches x 290-440, y 60-100 at any split), so it cannot collide as it moves. -->
+    <line id="equalLine" class="equal-line opt" x1="70" y1="183.33" x2="650" y2="183.33" />
+    <line id="equalKey" class="equal-line opt" x1="290" y1="85" x2="318" y2="85" />
+    <text id="equalLabel" class="equal-label opt" x="324" y="89" text-anchor="start">Lowest token used</text>
 
     <!-- persistent target reminder -->
     <text class="opt-note" x="360" y="343" text-anchor="middle">Optimum: 4 in A, 6 in B</text>
@@ -208,19 +215,20 @@
     <circle id="ptFocus" class="pt-focus hit" cx="174" cy="163.33" r="24"
             tabindex="0" role="slider" aria-label="Tokens allocated to Machine A"
             aria-valuemin="0" aria-valuemax="10" aria-valuenow="4"
-            aria-valuetext="Four tokens in Machine A, six in Machine B. The last token in A is worth $14, the last in B $12.50, total $150.50. The marginals are as equal as an integer split allows — this is the equimarginal optimum." />
+            aria-valuetext="4 tokens in A (last worth $14), 6 in B (last worth $12.50). Total $150.50. Moving any token gives up $12.50 or more to gain $12 — this is the best split." />
 
     <!-- ===================== readout band ===================== -->
     <line class="sep" x1="60" y1="404" x2="660" y2="404" />
-    <text id="rHint"  class="r-hint"  x="360" y="426" text-anchor="middle">4 tokens in A (next worth $14), 6 in B (next worth $12.50). Total $150.50.</text>
-    <text id="rTrade" class="r-trade" x="360" y="450" text-anchor="middle">Marginals are as equal as they get — this is the equimarginal optimum.</text>
+    <text id="rHint"  class="r-hint"  x="360" y="426" text-anchor="middle">4 tokens in A (last worth $14), 6 in B (last worth $12.50). Total $150.50.</text>
+    <text id="rTrade" class="r-trade" x="360" y="450" text-anchor="middle">Moving any token gives up $12.50 or more to gain $12 — this is the best split.</text>
   </svg>
 
   <noscript>
     <p class="fallback">JavaScript is off, so this frame is a still image: two
       back-to-back marginal-payoff lines for machines A and B, with the ten-token
-      optimum marked at four tokens in A and six in B, where the placed marginals
-      are as equal as an integer split allows. You can also
+      optimum marked at four tokens in A and six in B, where every token used is
+      worth at least $12.50 and the next token in either machine would be worth
+      only $12. You can also
       <a href="t03-equimarginal.svg">open the static figure</a>.</p>
   </noscript>
 </div>
@@ -239,7 +247,7 @@
   var qA = byId('qA'), pyA = byId('pyA'), qB = byId('qB'), pyB = byId('pyB');
   var hitA = byId('hitA'), hitB = byId('hitB');
   var hitDotA = byId('hitDotA'), hitDotB = byId('hitDotB'), ptFocus = byId('ptFocus');
-  var equalLine = byId('equalLine'), equalLabel = byId('equalLabel');
+  var equalLine = byId('equalLine'), equalLabel = byId('equalLabel'), equalKey = byId('equalKey');
   var rHint = byId('rHint'), rTrade = byId('rTrade');
 
   // --- pixel frame + scale (mirrors the markup above) ---
@@ -273,8 +281,8 @@
   // readout text — the spec's example states verbatim, generic otherwise
   function text(av) {
     var bv = TOTAL - av, va = mpA(av), vb = mpB(bv), tot = payA(av) + payB(bv);
-    if (av === 4)  return { m: '4 tokens in A (next worth $14), 6 in B (next worth $12.50). Total $150.50.',
-                            a: 'Marginals are as equal as they get — this is the equimarginal optimum.' };
+    if (av === 4)  return { m: '4 tokens in A (last worth $14), 6 in B (last worth $12.50). Total $150.50.',
+                            a: 'Moving any token gives up $12.50 or more to gain $12 — this is the best split.' };
     if (av === 5)  return { m: '5 in A ($12), 5 in B ($13). Total $150.',
                             a: "B's marginal still beats A's — move one more token to B." };
     if (av === 10) return { m: '10 in A, 0 in B. Total $110.',
@@ -328,11 +336,13 @@
     areaB.setAttribute('d', 'M' + BX0 + ',' + Y0 + ' L' + BX0 + ',' + yD(mpB(0)).toFixed(2) +
       ' L' + pbx.toFixed(2) + ',' + pby.toFixed(2) + ' L' + pbx.toFixed(2) + ',' + Y0 + ' Z');
 
-    // equalized-marginal reference at the average of the two placed marginals
-    var eqY = yD((va + vb) / 2);
+    // cutoff line at the worth of the lowest token used (a machine with no
+    // tokens has no "last token", so only the other machine counts)
+    var cut = (a === 0) ? vb : (b === 0) ? va : Math.min(va, vb);
+    var eqY = yD(cut);
     equalLine.setAttribute('y1', eqY); equalLine.setAttribute('y2', eqY);
     equalLine.setAttribute('class', opt ? 'equal-line opt' : 'equal-line');
-    equalLabel.setAttribute('y', eqY - 8);
+    equalKey.setAttribute('class', opt ? 'equal-line opt' : 'equal-line');
     equalLabel.setAttribute('class', opt ? 'equal-label opt' : 'equal-label');
 
     // readouts + spoken state

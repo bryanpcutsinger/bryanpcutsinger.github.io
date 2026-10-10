@@ -2,7 +2,7 @@
 title: "Marginal Analysis, Production, and Costs"
 topic: "T6 — Production, Costs, and Specialization (Part A)"
 course: "Principles of Microeconomics (FAU)"
-sessions: ["Fall 2026 — content session 15 (Thu 10/15)"]
+sessions: ["Fall 2026 — class meeting 15 (Thu 10/15)"]
 ue_anchors: ["UE 7 (totals, marginals, averages, equimarginal allocation)", "UE 14 (Productivity and Costs)", "UE 18 (rate versus volume, learning curves, common costs of joint products)", "UE 29 (input substitution at the margin; substitutes and complements among inputs) — capital-labor framing only"]
 be_anchors: []
 ep_anchors: ["E&P Figs 7-1 & 7-3 (ch. 7) — producer production-possibility frontiers; marginal cost as the frontier's slope", "E&P ch. 7 'Inefficiency by Authority?' — 1974–1981 crude-oil entitlements program / small-refiner bias vs price coordination (equimarginal), via card EP-EX-07"]
