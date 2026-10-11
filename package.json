@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "postbuild": "if grep -rl 'INSTRUCTOR NOTES' dist >/dev/null 2>&1; then echo 'SECURITY: INSTRUCTOR NOTES found in build output — failing build' && exit 1; fi",
+    "postbuild": "node scripts/build-markdown.mjs && if grep -rl 'INSTRUCTOR NOTES' dist >/dev/null 2>&1; then echo 'SECURITY: INSTRUCTOR NOTES found in build output — failing build' && exit 1; fi",
     "preview": "astro preview",
     "import:topic": "bash scripts/import-topic.sh",
     "import:guide": "bash scripts/import-guide.sh",
@@ -23,6 +23,9 @@
     "@fontsource/ibm-plex-mono": "^5.2.7",
     "astro": "^5.0.0",
     "katex": "^0.17.0",
-    "sharp": "^0.35.1"
+    "linkedom": "^0.18.9",
+    "sharp": "^0.35.1",
+    "turndown": "^7.2.0",
+    "turndown-plugin-gfm": "^1.0.2"
   }
 }

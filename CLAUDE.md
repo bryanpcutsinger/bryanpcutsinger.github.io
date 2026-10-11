@@ -174,6 +174,18 @@ credentials = interim director of the **AIER Sound Money Project**, Associate Ed
   Starlight `head` in `astro.config.mjs`, sets `target="_blank"` + `rel="noopener"` on
   any http(s) link to another host and any `.pdf` link. Internal page links are
   untouched; a link that already sets `target` keeps it. No per-link edits needed.
+- **Markdown twins for LLMs (2026-10-11, Bryan's ask: "every piece of writing readable
+  by LLMs, not visible to humans").** `scripts/build-markdown.mjs` runs first in
+  `postbuild` (so the INSTRUCTOR NOTES gate also scans its output). It converts each built
+  page's `<main>` (or `<body>` for recaps) to Markdown with turndown and writes
+  `/about/` → `/about.md`, `/` → `/index.md`, `…/recap-part-1.html` → `…/recap-part-1.md`,
+  plus `/llms.txt` (sectioned index, llmstxt.org convention) and `/llms-full.txt` (all
+  pages concatenated); it also injects `<link rel="alternate" type="text/markdown">` into
+  each page's `<head>`. Nothing in the visible UI links to them (robots.txt has a comment
+  pointer). Strips nav/forms/buttons/`[hidden]`/`aria-hidden`; iframes → their title;
+  KaTeX → source TeX via the `data-tex` wrapper in `src/lib/priceTheory.ts`. Skips
+  `404.html` and `figures/`. New pages are covered automatically; a new top-level route
+  only needs a `SECTIONS` entry if it shouldn't land under "Other" in llms.txt.
 - Safety/screenshot callouts use Starlight **asides** (`:::note` / `:::caution` /
   `:::danger`). Screenshot placeholders are `:::note[Screenshot to add]` blocks —
   Bryan still needs to capture and insert real images.

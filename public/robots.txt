@@ -2,3 +2,5 @@ User-agent: *
 Allow: /
 
 Sitemap: https://bryancutsinger.com/sitemap-index.xml
+
+# Markdown versions of every page, for LLMs: https://bryancutsinger.com/llms.txt

@@ -92,11 +92,12 @@ export function renderInlineMath(text: string) {
     const hasClosingDelimiter = i + 1 < pieces.length;
     if (hasClosingDelimiter && shouldRenderMath(candidate)) {
       try {
-        html += katex.renderToString(candidate, {
+        // data-tex keeps the source TeX for the Markdown twin (scripts/build-markdown.mjs).
+        html += `<span data-tex="${escapeHtml(candidate)}">${katex.renderToString(candidate, {
           throwOnError: false,
           strict: false,
           output: 'html',
-        });
+        })}</span>`;
       } catch {
         html += `$${escapeHtml(candidate)}$`;
       }
