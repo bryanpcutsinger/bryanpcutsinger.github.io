@@ -2,7 +2,7 @@
 title: "Property Rights and Externalities"
 topic: "T5 — Property Rights, Externalities, and Public Goods (Part A)"
 course: "Principles of Microeconomics (FAU)"
-sessions: ["Fall 2026 — content session 8 (Thu 9/17)"]
+sessions: ["Fall 2026 — class meeting 14 (Tue 10/13)"]
 ue_anchors: ["UE 13", "UE 3 (externalities section)", "UE 17 (negative-externality section)"]
 be_anchors: []
 ep_anchors: ["E&P Fig 5-1 (ch. 5) — optimal tradeoff between steel and clean water (nonzero optimal pollution)"]
@@ -13,6 +13,12 @@ word_budget: 3465
 status: approved        # M10 done gate 2026-07-20 (tie-in PASS); prior Stage-2 2026-06-15
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Part A of T5: property rights, externalities, environmental trade-offs, Coasean bargaining, and tradable permits. Part B covers public goods, clubs, commons, and institutional choice."
+slides:
+  - label: "Lecture slides: Property Rights and Externalities"
+    file: "microeconomics/t05-property-rights-externalities-slides.pdf"
+recaps:
+  - label: "Recap: October 13, 2026"
+    url: "/teaching/microeconomics/t05-property-rights-externalities/recaps/recap.html"
 ---
 
 # Property Rights and Externalities
