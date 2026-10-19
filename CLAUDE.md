@@ -1,5 +1,16 @@
 # Claude Context: Personal Website (bryanpcutsinger.github.io)
 
+> **⛔ AI SECTION TAKEN DOWN 2026-10-19 (Bryan's call; nothing deleted).** `/ai/` and
+> `/ai/guide/` no longer build. Content is parked in `archive/`: `archive/ai-page/index.astro`
+> (the workshops page), `archive/ai-guide/` (the 18 guide posts + overview),
+> `archive/templates/` (the CLAUDE.md template). The "AI" nav link was removed from
+> `SiteHeader.astro` and `HeaderLinks.astro`; Starlight stays installed with `sidebar: []`
+> and an empty `src/content/docs/` (build warns "No files found" — expected). To restore:
+> `git mv` the three archive pieces back (`src/pages/ai/index.astro`, `src/content/docs/ai/guide/`,
+> `public/templates/`), re-add the nav links, and restore `claudeGuideSidebar` in `astro.config.mjs`.
+> Do NOT run `npm run import:guide` while taken down (it would recreate the live pages).
+> Everything below that describes `/ai/` is the pre-takedown design.
+
 ## What this is
 
 An umbrella website built with **Astro + Starlight** and deployed to **GitHub
