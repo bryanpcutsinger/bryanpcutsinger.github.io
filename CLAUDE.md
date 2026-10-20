@@ -11,6 +11,13 @@
 > Do NOT run `npm run import:guide` while taken down (it would recreate the live pages).
 > Everything below that describes `/ai/` is the pre-takedown design.
 
+> **⛔ ABOUT PAGE TAKEN DOWN 2026-10-19 (Bryan's call; nothing deleted).** `/about/` no
+> longer builds. The page is parked at `archive/about-page/about.astro`; the "About" link
+> was removed from `SiteHeader.astro` and `HeaderLinks.astro`, and `/about/` from the
+> llms.txt section list in `scripts/build-markdown.mjs`. To restore: `git mv` it back to
+> `src/pages/about.astro` and re-add those three entries. Nav descriptions below that list
+> About are pre-takedown.
+
 ## What this is
 
 An umbrella website built with **Astro + Starlight** and deployed to **GitHub

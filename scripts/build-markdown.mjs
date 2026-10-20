@@ -147,7 +147,7 @@ function injectAlternate(html, mdPath) {
 
 // Sections for llms.txt, first match wins. Order = order in the file.
 const SECTIONS = [
-  ['About Bryan Cutsinger', (u) => ['/', '/about/', '/contact/'].includes(u)],
+  ['About Bryan Cutsinger', (u) => ['/', '/contact/'].includes(u)],
   ['Research and writing', (u) => ['/research/', '/writing/'].includes(u)],
   ['Speaking', (u) => u.startsWith('/speaking/')],
   ['AI workshops and consulting', (u) => u === '/ai/'],
