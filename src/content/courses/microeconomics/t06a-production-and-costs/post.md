@@ -15,6 +15,12 @@ status: approved        # E&P integration M7 done-gate 2026-07-20; prior approva
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Part A of T6: UE 7's general marginal toolkit followed by UE 14 production and cost. Part B covers specialization and exchange. UE 17 is owned by T7 and is not pre-taught here."
 # brief: ../t06-production-costs-specialization/brief.md
+slides:
+  - label: "Lecture slides: What Does It Cost? (one deck for Lectures 10 and 11)"
+    file: "microeconomics/t06a-production-and-costs-slides.pdf"
+recaps:
+  - label: "Recap: October 15, 2026"
+    url: "/teaching/microeconomics/t06a-production-and-costs/recaps/recap.html"
 ---
 
 # Marginal Analysis, Production, and Costs

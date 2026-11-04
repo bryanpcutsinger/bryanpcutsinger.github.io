@@ -2,7 +2,7 @@
 title: "Public Goods, Commons, and Institutional Choice"
 topic: "T5 — Property Rights, Externalities, and Public Goods (Part B)"
 course: "Principles of Microeconomics (FAU)"
-sessions: ["Fall 2026 — content session 9 (Tue 9/22)"]
+sessions: ["Fall 2026 — class meeting 14 (Tue 10/13)"]
 ue_anchors: ["UE 13 (public goods, clubs, commons, institutional remedies)"]
 be_anchors: []
 ep_anchors: ["E&P ch. 5 & 18 — vertical summation of public-good values; public-goods rhetoric as subsidy cover; nonprofit/government incentive distortions", "E&P ch. 18 pp. 397–398 — redistribution need not run rich-to-poor: below-cost state tuition, tariffs, and state-created monopoly revenue"]
@@ -14,6 +14,12 @@ status: approved        # M10 done gate 2026-07-20 (§10 A+B PASS); prior Stage-
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Part B of T5: public goods, free riding, clubs and tie-ins, common-pool resources, and the political choice among institutional remedies. Closes the Exam-1 block."
 # brief: ../t05-property-rights-externalities/brief.md
+slides:
+  - label: "Lecture slides: Who Owns It? (one deck for Lectures 8 and 9; public goods and the commons start on page 15)"
+    file: "microeconomics/t05-property-rights-externalities-slides.pdf"
+recaps:
+  - label: "Recap: October 15, 2026"
+    url: "/teaching/microeconomics/t05b-public-goods-and-commons/recaps/recap.html"
 ---
 
 # Public Goods, Commons, and Institutional Choice

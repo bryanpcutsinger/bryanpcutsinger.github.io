@@ -2,7 +2,7 @@
 title: "Specialization and Exchange"
 topic: "T6 — Production, Costs, and Specialization (Part B)"
 course: "Principles of Microeconomics (FAU)"
-sessions: ["Fall 2026 — content session 15 (Thu 10/15)"]
+sessions: ["Fall 2026 — class meeting 15 (Thu 10/15)"]
 ue_anchors: ["UE 15 (Specialization and Exchange)"]
 be_anchors: []
 ep_anchors: ["E&P Fig 7-9 (ch. 7, p. 148) — gains from specialized production and exchange at a common market price"]
@@ -15,6 +15,12 @@ status: approved        # scope-reduction R4 pass 2026-07-21; E&P integration M7
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Part B of T6 core: comparative advantage, the cheaper newcomer, blocking entry via occupational licensing, and the two meanings of specialization plus market size (UE 15). Diseconomies of scale and the firms-specialize/middleman material are lecture-only content in this topic's extensions.md. Part A covers UE 7's marginal toolkit plus UE 14 production/cost and BE 10. UE 17 is owned by T7."
 # brief: ../t06-production-costs-specialization/brief.md
+slides:
+  - label: "Lecture slides: What Does It Cost? (one deck for Lectures 10 and 11)"
+    file: "microeconomics/t06a-production-and-costs-slides.pdf"
+recaps:
+  - label: "Recap: October 20, 2026"
+    url: "/teaching/microeconomics/t06b-specialization-and-exchange/recaps/recap.html"
 ---
 
 # Specialization and Exchange

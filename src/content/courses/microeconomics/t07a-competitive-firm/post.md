@@ -2,7 +2,7 @@
 title: "The Competitive Firm: How a Price-Taker Decides"
 topic: "T7 — Competitive Markets (Part A)"
 course: "Principles of Microeconomics (FAU)"
-sessions: ["Fall 2026 — content session 16 (Tue 10/20)"]
+sessions: ["Fall 2026 — class meeting 16 (Tue 10/20)"]
 ue_anchors: ["UE 16"]
 be_anchors: []
 ep_anchors: ["E&P Fig 10-8 (ch. 10, p. 211) — profits competed away by bidding up the responsible input", "E&P Fig 10-3 (ch. 10, p. 205) — total variable cost as the area under marginal cost", "E&P Fig 10-7 (ch. 10, p. 210) — adjustment of supply to a demand shift: short-run overshoot, long-run settle via entry", "E&P ch. 10 (p. 216) — 'sick industries': persistent losses are not market failure"]
@@ -14,6 +14,16 @@ status: approved        # scope-reduction R4 done-gate 2026-07-21; E&P integrati
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Part A of t07-competitive-markets (split at the Exam-2 seam to clear the 6,000-word cap); Part B (t07b-tax-incidence-and-quasi-rent) covers UE 17/18 + BE. Source-of-truth for the T7a deck; section headers are claims that map to slide titles. Assumes T6 (costs, marginal cost, the firm's cost curves) is already taught and does NOT re-derive cost curves."
 # brief: ../t07-competitive-markets/brief.md
+slides:
+  - label: "Lecture slides: The Competitive Firm"
+    file: "microeconomics/t07a-competitive-firm-slides.pdf"
+  - label: "Lecture 13 slides: Entry, Exit, and Where Profit Goes"
+    file: "microeconomics/t07c-entry-and-exit-slides.pdf"
+recaps:
+  - label: "Recap: October 22, 2026"
+    url: "/teaching/microeconomics/t07a-competitive-firm/recaps/recap.html"
+  - label: "Lecture 13 recap: November 3, 2026 (Entry, Exit, and Where Profit Goes)"
+    url: "/teaching/microeconomics/t07a-competitive-firm/recaps/recap-lecture-13.html"
 ---
 
 # The Competitive Firm: How a Price-Taker Decides
