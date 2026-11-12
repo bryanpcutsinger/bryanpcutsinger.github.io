@@ -2,7 +2,7 @@
 title: "Market Power I: Price-Searchers and How They Price"
 topic: "T8 — Market Power (Part A)"
 course: "Principles of Microeconomics (FAU)"
-sessions: ["Fall 2026 — content session 16 (Thu 10/15)"]
+sessions: ["Fall 2026 — class meeting 20 (Tue 11/3)"]
 ue_anchors: ["UE 19", "UE 20 (Q1–Q6, Q8)", "UE 21", "UE 26 (Q2/Q5/Q6 cartels+stadium)"]
 be_anchors: []
 ep_anchors: ["E&P Fig 13-1 (p. 282) — monopoly rent / Ricardian rent / social loss", "E&P Fig 11-4 (p. 239) — lost consumer value", "E&P ch. 11 pp. 256–257 — Denver versus San Francisco rail rates as demand-based pricing constrained by water competition"]
@@ -15,6 +15,12 @@ status: approved        # one-per-lecture split; approved 2026-07-01 (M3 E&P fig
 audience: students
 note: "Self-contained — assumes no access to the textbooks. First of two market-power posts (session 16); session 17 covers antitrust and regulation."
 # brief: ../t08-market-power/brief.md
+slides:
+  - label: "Lecture slides: Price-Searchers and How They Price"
+    file: "microeconomics/t08a-price-searchers-slides.pdf"
+recaps:
+  - label: "Recap: November 5, 2026"
+    url: "/teaching/microeconomics/t08a-price-searchers/recaps/recap.html"
 ---
 
 # Market Power I: Price-Searchers and How They Price
