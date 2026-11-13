@@ -2,7 +2,7 @@
 title: "Factor Markets and Labor, Part A: What an Extra Worker Is Worth"
 topic: "T10 — Factor Markets and Labor (Part A)"
 course: "Principles of Microeconomics (FAU)"
-sessions: ["Fall 2026 — content session 21 (Tue 11/3)"]
+sessions: ["Fall 2026 — class meeting 23 (Thu 11/12)"]
 ue_anchors: ["UE 29", "UE 39", "UE 22 (Codlandia; National Development)"]
 ep_anchors: ["E&P Fig 8-1 — team marginal products", "E&P Fig 14-6 — demand for labor services"]
 be_anchors: []
@@ -16,6 +16,12 @@ status: approved        # Stage-2 sign-off 2026-06-15
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Part A of the two-part T10 (factor demand, VMP, earnings); Part B (topics/t10b-labor-coalitions-and-constraints) covers unions, the minimum wage, discrimination, and licensing. Source-of-truth for the deck; section headers are claims that map to slide titles."
 # brief: ../t10-factor-markets-labor/brief.md
+slides:
+  - label: "Lecture slides: What an Extra Worker Is Worth"
+    file: "microeconomics/t10a-factor-demand-and-earnings-slides.pdf"
+recaps:
+  - label: "Recap: November 12, 2026"
+    url: "/teaching/microeconomics/t10a-factor-demand-and-earnings/recaps/recap.html"
 ---
 
 # Factor Markets and Labor, Part A: What an Extra Worker Is Worth
