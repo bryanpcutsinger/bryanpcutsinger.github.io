@@ -2,7 +2,7 @@
 title: "Factor Markets and Labor, Part B: Coalitions and Constraints"
 topic: "T10 — Factor Markets and Labor (Part B)"
 course: "Principles of Microeconomics (FAU)"
-sessions: ["Fall 2026 — content session 22 (Thu 11/5)"]
+sessions: ["Fall 2026 — class meeting 23 (Thu 11/12)"]
 ue_anchors: ["UE 20 (analytic monopsony mechanism)", "UE 40", "UE 41", "UE 39 (gender-earnings sections)"]
 be_anchors: []
 ep_anchors: ["E&P 15 — closed monopsony (interns; NCAA) and featherbedding", "E&P 13 — rent dissipation via qualifying", "E&P 17 pp. 369–380 — job search, disguised unemployment, and layoffs versus wage cuts", "E&P Fig 14-7 — wage floor and ceiling"]
@@ -16,6 +16,12 @@ status: approved        # E&P integration M2 sign-off 2026-07-19 (prior: Stage-2
 audience: students
 note: "Self-contained — assumes no access to the textbooks. Part B of the two-part T10 (unions, the minimum wage, discrimination, and licensing); Part A (topics/t10a-factor-demand-and-earnings) builds the VMP engine and covers earnings. Source-of-truth for the deck; section headers are claims that map to slide titles."
 # brief: ../t10-factor-markets-labor/brief.md
+slides:
+  - label: "Lecture slides: Who Gets Hired, and Who Is Kept Out (pages 2 and 3 finish Lecture 17)"
+    file: "microeconomics/t10b-labor-coalitions-and-constraints-slides.pdf"
+recaps:
+  - label: "Recap: November 17, 2026"
+    url: "/teaching/microeconomics/t10b-labor-coalitions-and-constraints/recaps/recap.html"
 ---
 
 # Factor Markets and Labor, Part B: Coalitions and Constraints
